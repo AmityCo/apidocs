@@ -1,0 +1,20 @@
+ReactionResponse:
+  description: Reaction information.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              reactions:
+                type: array
+                items:
+                  $ref: "../../schema/reaction.yaml#/Reaction"
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/ShortUser"

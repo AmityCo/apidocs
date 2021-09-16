@@ -1,0 +1,53 @@
+File:
+  type: object
+  properties:
+    fileId:
+      type: string
+      description: Root file key on cloud storage.
+    fileUrl:
+      type: string
+      description: Http link for download file
+    type:
+      type: enum
+      description: File type.
+      enum:
+        - image
+        - file
+        - video
+    createdAt:
+      type: string
+      description: The date/time when a file is uploaded.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a file is updated.
+      format: date-time
+    attributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: File name.
+        extension:
+          type: string
+          description: File format.
+        size:
+          type: string
+          description: File size.
+        mimeType:
+          type: string
+          description: File mime-type.
+        metadata:
+          type: object
+          description: File image metadata (width, height etc.).
+          properties:
+            exif:
+              type: object
+            gps:
+              type: object
+            height:
+              type: number
+            width:
+              type: number
+            isFull:
+              type: boolean

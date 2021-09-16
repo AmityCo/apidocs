@@ -1,0 +1,66 @@
+NotificationSetting:
+  type: object
+  properties:
+    isPushNotifiable:
+      type: boolean
+      description: on/off notification
+    isUserEnabled:
+      type: boolean
+      description: enable/disable notification from user level(for community level)
+    notifiableEvents:
+      type: array
+      items:
+        type: object
+        properties:
+          name: 
+            type: string
+            enum:
+              - channel.created
+              - channel.joined
+              - conversation-channel.joined
+              - text-message.created
+              - image-message.created
+              - file-message.created
+              - conversation-text-message.created
+              - conversation-image-message.created
+              - conversation-file-message.created
+              - post.created
+              - post.reacted
+              - comment.created
+              - comment.replied
+              - comment.reacted
+          moduleName:
+            type: string
+            enum:
+              - chat
+              - video-streaming
+              - social
+          eventName:
+            type: string
+          isPushNotifiable:
+            type: boolean
+            description: on/off notification of event
+          parameters:
+            type: array
+            items:
+              type: string
+            description: place holders
+          titleTemplate:
+            type: string
+            description: title of template
+          bodyTemplate:
+            type: string
+            description: body of template
+          listenFromRoleIds:
+            type: array
+            items:
+              type: string
+            description: specific roles for get notify by event creator who has roles only
+          ignoreFromRoleIds: 
+            type: array
+            items:
+              type: string
+            description: specific roles for ignore notify by event creator who has roles only
+          isNetworkEnabled:
+            type: boolean
+            description: enable/disable notification from network level(for community level)

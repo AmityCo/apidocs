@@ -1,0 +1,37 @@
+MessageResponse:
+  description: Message information.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              messages:
+                type: array
+                items:
+                  $ref: "../../schema/message.yaml#/Message"
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/User"
+MessageCallbackResponse:
+  description: Message information.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          messages:
+            type: array
+            items:
+              $ref: "../../schema/message.yaml#/MessageForRealtimeEvent"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/User"
+
+    

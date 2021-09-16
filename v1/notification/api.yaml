@@ -1,0 +1,190 @@
+save:
+  summary: Save push notification setting.
+  tags:
+    - Notification
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Save push notification setting.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      Notification setting information to be updated
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            level:
+              type: string
+              enum:
+                - network
+                - user
+                - channel
+                - community
+              description: >
+                level:
+                  * `network` - need to specific network events via notifiableEvents(this level need to have permission).
+                  * `user` - need to specific modules via notifiableEvents.
+                  * `channel` - need to specific channelId.
+                  * `community` - need to specific communityId and community event via notifiableEvents.
+            isPushNotifiable:
+              type: boolean
+            channelId:
+              type: string
+              minLength: 1
+              maxLength: 900
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+            notifiableEvents:
+              type: array
+              minItems: 1
+              maxItems: 14
+              items:
+                type: object
+                properties:
+                  name: 
+                    type: string
+                    enum:
+                      - channel.created
+                      - channel.joined
+                      - conversation-channel.joined
+                      - text-message.created
+                      - image-message.created
+                      - file-message.created
+                      - conversation-text-message.created
+                      - conversation-image-message.created
+                      - conversation-file-message.created
+                      - post.created
+                      - post.reacted
+                      - comment.created
+                      - comment.replied
+                      - comment.reacted
+                      - follow.created
+                      - follow.requested
+                      - follow.accepted
+                  moduleName:
+                    type: string
+                    enum:
+                      - chat
+                      - video-streaming
+                      - social
+                  isPushNotifiable:
+                    type: boolean
+                  titleTemplate:
+                    type: string
+                    maxLength: 1000
+                  bodyTemplate:
+                    type: string
+                    maxLength: 5000
+                  listenFromRoleIds:
+                    type: array
+                    maxItems: 10
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 900
+                    description: specific roles for get notify by event creator who has roles only
+                  ignoreFromRoleIds: 
+                    type: array
+                    maxItems: 10
+                    items:
+                      type: string
+                      minLength: 1
+                      maxLength: 900
+                    description: specific roles for ignore notify by event creator who has roles only
+          required:
+            - level
+  responses:
+    "200000":
+      $ref: "../../global/response.yaml#/SaveApiResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+get:
+  summary: Get push notification setting.
+  tags:
+    - Notification
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get push notification setting.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a notification setting.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            level:
+              type: string
+              enum:
+                - network
+                - user
+                - channel
+                - community
+            channelId:
+              type: string
+              minLength: 1
+              maxLength: 900
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+          required:
+            - level
+  responses:
+    "200000":
+      $ref: "./response.yaml#/NotificationSettingApiResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

@@ -1,0 +1,35 @@
+Reaction:
+  type: object
+  properties:
+    referenceId:
+      type: string
+      description: ID of a document.
+    referenceType:
+      type: string
+      description: Type of document.
+    reactors:
+      type: array
+      description: List of mapping between reaction and reactor ID.
+      items:
+        $ref: "#/Reactor"
+  required:
+    - referenceId
+    - referenceType
+
+Reactor:
+  type: object
+  properties:
+    reactionName:
+      type: string
+      description: Name of reaction such as 'like', 'love' and 'wow'.
+    userId:
+      type: string
+      description: ID of a creator.
+    reactionId:
+      type: string
+      description: ID of a reaction.
+    createdAt:
+      type: string
+      description: The date/time when a reaction is created.
+      format: date-time
+    

@@ -1,0 +1,176 @@
+VideoStreaming:
+  type: object
+  properties:
+    streamId:
+      type: string
+    userId:
+      type: string
+      description: Streaming creator user id
+    thumbnailFileId:
+      type: string
+      description: Thumbnaiil file id
+    title:
+      type: string
+    status:
+      type: string
+      enum: 
+        - idle
+        - live
+        - ended
+        - recorded
+      description: > 
+        Status of livestreaming  
+        * idle - streaming is just created  
+        * live - streamer is streaming now or streamer is reconnecting  
+        * ended - streamer stop streaming or streamer disconnect and not connect back in time period  
+        * recorded - live stream recordings available 
+    isLive:
+      type: boolean
+      description: Deprecated (was used before for checking live status)
+    isDeleted:
+      type: boolean
+      description: Is streaming deleted?
+    description:
+      type: string
+    platform:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+    startedAt:
+      type: string
+      format: date-time
+    endedAt:
+      type: string
+      format: date-time
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    metadata:
+      type: object
+    resolution:
+      type: string
+      enum:
+        - SD
+        - HD
+        - FHD
+      default: SD
+    streamerUrl:
+      type: object
+      properties:
+        url:
+          type: string
+        components:
+          type: object
+          properties:
+            origin:
+              type: string
+            appName:
+              type: string
+            streamName:
+              type: string
+            query:
+              type: string
+    recordings:
+      type: array
+      items:
+        type: object
+        properties:
+          flv:
+            type: object
+            properties:
+              url:
+                type: string
+              duration:
+                type: number
+              startTime:
+                type: number
+              stopTime:
+                type: number
+          mp4:
+            type: object
+            properties:
+              url:
+                type: string
+              duration:
+                type: number
+              startTime:
+                type: number
+              stopTime:
+                type: number
+          m3u8:
+            type: object
+            properties:
+              url:
+                type: string
+              duration:
+                type: number
+              startTime:
+                type: number
+              stopTime:
+                type: number
+
+    watcherUrl:
+      type: object
+      properties:
+        flv:
+          type: object
+          properties:
+            url:
+              type: string
+            components:
+              type: object
+              properties:
+                origin:
+                  type: string
+                appName:
+                  type: string
+                streamName:
+                  type: string
+                query:
+                  type: string
+        hls:
+          type: object
+          properties:
+            url:
+              type: string
+            components:
+              type: object
+              properties:
+                origin:
+                  type: string
+                appName:
+                  type: string
+                streamName:
+                  type: string
+                query:
+                  type: string
+        rtmp:
+          type: object
+          properties:
+            url:
+              type: string
+            components:
+              type: object
+              properties:
+                origin:
+                  type: string
+                appName:
+                  type: string
+                streamName:
+                  type: string
+                query:
+                  type: string
+
+VideoStreamingUrl:
+  type: object
+  properties:
+    url:
+      type: string
+    components:
+      type: object

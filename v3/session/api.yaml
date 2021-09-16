@@ -1,0 +1,67 @@
+create:
+  summary: Register a session
+  tags:
+    - Session
+  parameters:
+    - name: x-api-key
+      in: header
+      required: true
+      schema:
+        type: string
+  description: >
+    Register a session in order to connect to socket endpoint to perform sdk operations.
+  requestBody:
+    description: |
+      Information about user and devices that he/she use to connect to. If displayName is provide, that user display is updated as well.
+
+      If userId doesn't exists, new user will be created.
+
+      authToken need to pass when network option is set to secure
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+              minLength: 1
+              maxLength: 50
+            deviceId:
+              type: string
+              minLength: 1
+              maxLength: 100
+            deviceInfo:
+              type: object
+              properties:
+                kind:
+                  type: string
+                  enum:
+                    - ios
+                    - android
+                    - web
+                    - node
+                model:
+                  type: string
+                sdkVersion:
+                  type: string
+            displayName:
+              type: string
+              maxLength: 50
+            authToken:
+              type: string
+              description: Authentication token from /api/v3/authentication/token
+              minLength: 1
+              maxLength: 100
+          required:
+            - userId
+            - deviceId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/SessionResponse"
+    "400312":
+      $ref: "../../global/error.yaml#/UserIsGlobalBanned"
+    "400100":
+      $ref: "../../global/error.yaml#/UserIsSystemBanned"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

@@ -1,0 +1,208 @@
+createImageMessage:
+  summary: create a message with image in a given channel
+  tags:
+    - Message
+  security:
+    - ApiKeyAuth: []
+  description: >
+    Create a message with image in a given channel.
+  requestBody:
+    description: >
+      information of a message to be created.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            messageId:
+              type: string
+            channelId:
+              type: string
+            caption:
+              type: string
+            file:
+              type: object
+            tags:
+              type: array
+              items:
+                type: string
+            parentId:
+              type: string
+            fullImage:
+              type: string
+          required:
+            - channelId
+            - file
+  responses:
+    "200000":
+      $ref: "../../v2/message/response.yaml#/MessageResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/ChannelNotFoundError"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400304":
+      $ref: "../../global/error.yaml#/UserIsBannedError"
+    "400302":
+      $ref: "../../global/error.yaml#/UserIsMutedError"
+    "400303":
+      $ref: "../../global/error.yaml#/ChannelIsMutedError"
+    "400307":
+      $ref: "../../global/error.yaml#/MaxRepetitionExceed"
+    "400308":
+      $ref: "../../global/error.yaml#/BanWordFoundError"
+    "400309":
+      $ref: "../../global/error.yaml#/LinkNotAllowedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+getImageMessage:
+  summary: get an image message
+  tags:
+    - Message
+  security:
+    - ApiKeyAuth: []
+  description: >
+    Get a message with image in a given channel.
+  requestBody:
+    description: >
+      information of a message to be got.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            messageId:
+              type: string
+            size:
+              type: string
+              enum:
+                - small
+                - medium
+                - large
+                - full
+  responses:
+    "200000":
+      description: An image file
+    "400400":
+      $ref: "../../global/error.yaml#/ChannelNotFoundError"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400304":
+      $ref: "../../global/error.yaml#/UserIsBannedError"
+    "400302":
+      $ref: "../../global/error.yaml#/UserIsMutedError"
+    "400303":
+      $ref: "../../global/error.yaml#/ChannelIsMutedError"
+    "400307":
+      $ref: "../../global/error.yaml#/MaxRepetitionExceed"
+    "400308":
+      $ref: "../../global/error.yaml#/BanWordFoundError"
+    "400309":
+      $ref: "../../global/error.yaml#/LinkNotAllowedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+createFileMessage:
+  summary: create a message with file in a given channel
+  tags:
+    - Message
+  security:
+    - ApiKeyAuth: []
+  description: >
+    Create a message with file in a given channel.
+  requestBody:
+    description: >
+      information of a message to be created.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            messageId:
+              type: string
+            channelId:
+              type: string
+            caption:
+              type: string
+            file:
+              type: object
+            tags:
+              type: array
+              items:
+                type: string
+            parentId:
+              type: string
+          required:
+            - channelId
+            - file
+  responses:
+    "200000":
+      $ref: "../../v2/message/response.yaml#/MessageResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/ChannelNotFoundError"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400304":
+      $ref: "../../global/error.yaml#/UserIsBannedError"
+    "400302":
+      $ref: "../../global/error.yaml#/UserIsMutedError"
+    "400303":
+      $ref: "../../global/error.yaml#/ChannelIsMutedError"
+    "400307":
+      $ref: "../../global/error.yaml#/MaxRepetitionExceed"
+    "400308":
+      $ref: "../../global/error.yaml#/BanWordFoundError"
+    "400309":
+      $ref: "../../global/error.yaml#/LinkNotAllowedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+getFileMessage:
+  summary: get a file message
+  tags:
+    - Message
+  security:
+    - ApiKeyAuth: []
+  description: >
+    Get a message with file in a given channel.
+  requestBody:
+    description: >
+      information of a message to be got.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            messageId:
+              type: string
+  responses:
+    "200000":
+      description: A file
+    "400400":
+      $ref: "../../global/error.yaml#/ChannelNotFoundError"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400304":
+      $ref: "../../global/error.yaml#/UserIsBannedError"
+    "400302":
+      $ref: "../../global/error.yaml#/UserIsMutedError"
+    "400303":
+      $ref: "../../global/error.yaml#/ChannelIsMutedError"
+    "400307":
+      $ref: "../../global/error.yaml#/MaxRepetitionExceed"
+    "400308":
+      $ref: "../../global/error.yaml#/BanWordFoundError"
+    "400309":
+      $ref: "../../global/error.yaml#/LinkNotAllowedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+  

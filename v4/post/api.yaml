@@ -1,0 +1,125 @@
+create:
+  summary: create a post
+  tags:
+    - Post v4
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Create a post
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: |
+      information of a post to be created.
+
+      require text or at least 1 attachments
+
+      ### Custom post
+      When `dataType` is set `data` payload can be anything but it will not support normal data capability (ex. `text` data will not be created)
+      and `data` payload size will be limit to `100kb`
+
+      ### Image, File, Video post
+      - Put `type` with file id in `attachments`
+      - Image and File data can be picked from `fileId` in `data` object in child post
+      - Video fileId for each resolution will be in `videoFileId` in `data` object in child post
+
+      ### Live streaming post
+      - When put `dataType` as `liveStream` and `streamId` in `data`, post will be created as live streaming post
+      - `attachments` will be ignored
+      - Video streaming info will be in `videoStreamings` object in response
+
+      ### Poll post
+      - When put `dataType` as `poll` and `pollId` in `data`, post will be created as poll post
+      - `attachments` will be ignored
+      - Poll info will be in `polls` object in response
+      
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: object
+              properties:
+                text:
+                  type: string
+                  description: data for text in post parent
+                  example: example text
+                streamId:
+                  type: string
+                  description: video streaming id for create live streaming post
+                  example: 81559bcc3a5bb3b6bbd69a83b89d337e
+                pollId:
+                  type: string
+                  description: poll id for create poll post
+                  example: 53a9fd8b5aaa1af6c5a1bbd245ce4a9b1627373735551
+            attachments:
+              type: array
+              items:
+                type: object
+                description: attachment info
+                properties:
+                  fileId:
+                    type: string
+                    example: 57b916d38eaf8010caddfb7759a2d06c
+                    description: file id for attachments
+                  type:
+                    type: string
+                    description: attachment type
+                    enum:
+                      - image
+                      - file
+                      - video
+            dataType:
+              type: string
+              example: upstra.customtype
+              description: Must be in namespace like or system defined format (ex. "upstra.customtype", "com.eko.birthday", "liveStream")
+            targetType:
+              type: string
+              enum:
+                - user
+                - community
+                - content
+              default: user
+              description: where to create post to
+            targetId:
+              type: string
+              example: public_user_id
+              description: Resource public id depends on target type (ex. target type is community, target id will be community public id)
+            metadata:
+              type: object
+              example: {
+                "anything": "you want"
+              }
+            postId:
+              type: string
+              example: postidiwant
+              description: for specify public post id on post creation
+          required:
+            - data
+  responses:
+    "200000":
+      $ref: "../../v3/post/response.yaml#/PostResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

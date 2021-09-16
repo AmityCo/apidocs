@@ -1,0 +1,1201 @@
+get:
+  summary: query communities.
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    query comments.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      condition for querying
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            keyword:
+              type: string
+              minLength: 0
+              maxLength: 100
+            tags:
+              type: array
+              minItems: 1
+              maxItems: 10
+              items:
+                type: string
+                minLength: 1
+                maxLength: 1000
+            filter:
+              type: string
+              enum:
+                - all
+                - member
+                - notMember
+              default: all
+            categoryId:
+              type: string
+              minLength: 1
+              maxLength: 50
+            sortBy:
+              type: string
+              enum:
+                - lastCreated
+                - firstCreated
+                - displayName
+              default: lastCreated
+            isDeleted:
+              type: boolean
+              default: null
+              description: >
+                isDeleted:
+                  * `null(default)` - Show both community is actived and community is inactived.
+                  * `true` - Show community is inactived only.
+                  * `false` - Show community is actived only.
+            hasFlag:
+              type: boolean
+              default: null
+              description: >
+                  hasFlag:
+                    * `null(default)` - Show all communities.
+                    * `true` - Show only community has flagged post(or children post) or has flagged comment.
+                    * `false` - Show only community has no flagged post(and children post) and has no flagged comment.
+            options:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                token:
+                  type: string
+                  minLength: 1
+                  maxLength: 1000
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunityPaginationApiResponse"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+create:
+  summary: create a community.
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      information of a community to be created.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            displayName:
+              type: string
+              minLength: 1
+              maxLength: 1000
+            isPublic:
+              type: boolean
+              default: true
+            isOfficial:
+              type: boolean
+              default: false
+            onlyAdminCanPost:
+              type: boolean
+              default: false
+            description:
+              type: string
+              minLength: 1
+              maxLength: 5000
+            tags:
+              type: array
+              minItems: 1
+              maxItems: 10
+              items:
+                type: string
+                minLength: 1
+                maxLength: 1000
+            metadata:
+              type: object
+            avatarFileId:
+              type: string
+              maxLength: 50
+              minLength: 1
+            userIds:
+              type: array
+              minItems: 1
+              maxItems: 1000
+              items:
+                type: string
+                minLength: 1
+                maxLength: 900
+            categoryIds:
+              type: array
+              minItems: 1
+              maxItems: 10
+              items:
+                type: string
+                minLength: 1
+                maxLength: 50
+            isUniqueDisplayName:
+              type: boolean
+              default: false
+            needApprovalOnPostCreation:
+              type: boolean
+              default: false
+          required:
+            - displayName
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400315":
+      $ref: "../../global/error.yaml#/DuplicateEntryError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+getOne:
+  summary: get a community by ID.
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get a community by ID
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a community.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+          required:
+            - communityId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+update:
+  summary: update a community.
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      community information.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+            displayName:
+              type: string
+              minLength: 1
+              maxLength: 1000
+            isPublic:
+              type: boolean
+            isOfficial:
+              type: boolean
+            onlyAdminCanPost:
+              type: boolean
+            description:
+              type: string
+              minLength: 0
+              maxLength: 5000
+            tags:
+              type: array
+              minItems: 1
+              maxItems: 10
+              items:
+                type: string
+                minLength: 1
+                maxLength: 1000
+            metadata:
+              type: object
+            avatarFileId:
+              type: string
+              maxLength: 50
+              minLength: 1
+            categoryIds:
+              type: array
+              minItems: 1
+              maxItems: 10
+              items:
+                type: string
+                minLength: 1
+                maxLength: 50
+            isUniqueDisplayName:
+              type: boolean
+              default: false
+            needApprovalOnPostCreation:
+              type: boolean
+              default: false
+          required:
+            - communityId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400315":
+      $ref: "../../global/error.yaml#/DuplicateEntryError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+delete:
+  summary: delete a community.
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      community information.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+          required:
+            - communityId
+  responses:
+    "200000":
+      $ref: "../../global/response.yaml#/DeleteApiResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+join:
+  summary: Join a community
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Join community by ID
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a community.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+          required:
+            - communityId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400304":
+      $ref: "../../global/error.yaml#/UserIsBannedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+leave:
+  summary: Leave a community.
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Leave community by ID
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a community.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+          required:
+            - communityId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400100":
+      $ref: "../../global/error.yaml#/UnAuthorizedError"
+    "400304":
+      $ref: "../../global/error.yaml#/UserIsBannedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+getUsers:
+  summary: query community users
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    query community users.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      condition for querying
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+            memberships:
+              type: array
+              description: Membership type to filter (If not filter will return both banned user and member)
+              minItems: 1
+              maxItems: 2
+              items:
+                type: string
+                enum:
+                - banned
+                - member
+            roles:
+              type: array
+              description: Role to filter
+              minItems: 1
+              maxItems: 20
+              items:
+                type: string
+                minLength: 1
+                maxLength: 100
+            sortBy:
+              type: string
+              enum:
+                - lastCreated
+                - firstCreated
+              default: lastCreated
+            options:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                token:
+                  type: string
+                  minLength: 1
+                  maxLength: 1000
+          required:
+            - communityId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunityPaginationApiResponse"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+ban:
+  summary: ban community users
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    ban community users.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      condition for querying
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+            userIds:
+              type: array
+              minItems: 1
+              maxItems: 100
+              items:
+                type: string
+                minLength: 1
+                maxLength: 900
+          required:
+            - communityId
+            - userIds
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400304":
+      $ref: "../../global/error.yaml#/UserIsBannedError"
+    "400306":
+      $ref: "../../global/error.yaml#/ExemptFromBanError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+unban:
+  summary: unban community users
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    unban community users.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      condition for querying
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+            userIds:
+              type: array
+              minItems: 1
+              maxItems: 100
+              items:
+                type: string
+                minLength: 1
+                maxLength: 900
+          required:
+            - communityId
+            - userIds
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400316":
+      $ref: "../../global/error.yaml#/UserIsUnbannedError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+getList:
+  summary: get list of community
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get list of community
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a community.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityIds:
+              type: array
+              minItems: 1
+              maxItems: 100
+              items:
+                type: string
+                minLength: 1
+                maxLength: 50
+          required:
+            - communityIds
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+addUsers:
+  summary: add community users
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    add community users
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a community.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+            userIds:
+              type: array
+              minItems: 1
+              maxItems: 100
+              items:
+                type: string
+                minLength: 1
+                maxLength: 50
+          required:
+            - communityId
+            - userIds
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400304":
+      $ref: "../../global/error.yaml#/UserIsBannedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+removeUsers:
+  summary: remove community users
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    remove community users
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a community.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+            userIds:
+              type: array
+              minItems: 1
+              maxItems: 100
+              items:
+                type: string
+                minLength: 1
+                maxLength: 50
+          required:
+            - communityId
+            - userIds
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+getRecommendedList:
+  summary: get list of recommended community
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get list of recommended community
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a community.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            options:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 5
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+getTopTrendingList:
+  summary: get list of top trend community
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get list of top trend community
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a community.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            options:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 5
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+addRole:
+  summary: Add role to community users
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Add role to community users.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+            role:
+              type: string
+              minLength: 1
+              maxLength: 900
+            userIds:
+              type: array
+              minItems: 1
+              maxItems: 100
+              items:
+                type: string
+                minLength: 1
+                maxLength: 50
+          required:
+            - communityId
+            - userIds
+            - role
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/GenericPermissionDenidedError"
+    "400304":
+      $ref: "../../global/error.yaml#/UserIsBannedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+removeRole:
+  summary: Remove role from community users
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Remove role from community users.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            communityId:
+              type: string
+              minLength: 1
+              maxLength: 900
+            role:
+              type: string
+              minLength: 1
+              maxLength: 900
+            userIds:
+              type: array
+              minItems: 1
+              maxItems: 100
+              items:
+                type: string
+                minLength: 1
+                maxLength: 50
+          required:
+            - communityId
+            - userIds
+            - role
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommunitiesApiResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/GenericPermissionDenidedError"
+    "400304":
+      $ref: "../../global/error.yaml#/UserIsBannedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+getSelfPermission:
+  summary: Get self permission in community
+  tags:
+    - Community
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    query comments.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - in: path
+      name: communityId
+      required: true
+      schema:
+        type: string
+        minimum: 1
+      description: Community public id
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    "200000":
+      description: Communities permission information for this user
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isCreator:
+                type: boolean
+                example: false
+                description: Is this person create this community? 
+              permissions:
+                type: array
+                items:
+                  $ref: "../../schema/role.yaml#/PermissionEnum"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+

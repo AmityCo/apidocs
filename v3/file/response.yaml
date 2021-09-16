@@ -1,0 +1,148 @@
+FileResponse:
+  description: File Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              fileId:
+                type: string
+                description: Root file key on cloud storage.
+              type:
+                type: enum
+                description: File type.
+                enum:
+                  - image
+                  - file
+              createdAt:
+                type: string
+                description: The date/time when a file is uploaded.
+                format: date-time
+              updatedAt:
+                type: string
+                description: The date/time when a file is updated.
+                format: date-time
+              attributes:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: File name.
+                  extension:
+                    type: string
+                    description: File format.
+                  size:
+                    type: string
+                    description: File size.
+                  mimeType:
+                    type: string
+                    description: File mime-type.
+                  metadata:
+                    type: object
+                    description: File image metadata (width, height etc.).
+                    properties:
+                      exif:
+                        type: object
+                      gps:
+                        type: object
+                      height:
+                        type: number
+                      width:
+                        type: number
+                      isFull:
+                        type: boolean
+FileUploadResponse:
+  description: File Upload Result
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+          data:
+            type: array
+            items:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                  description: Root file key on cloud storage.
+                type:
+                  type: enum
+                  description: File type.
+                  enum:
+                    - image
+                    - file
+                createdAt:
+                  type: string
+                  description: The date/time when a file is uploaded.
+                  format: date-time
+                updatedAt:
+                  type: string
+                  description: The date/time when a file is updated.
+                  format: date-time
+                attributes:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: File name.
+                    extension:
+                      type: string
+                      description: File format.
+                    size:
+                      type: string
+                      description: File size.
+                    mimeType:
+                      type: string
+                      description: File mime-type.
+                    metadata:
+                      type: object
+                      description: File image metadata (width, height etc.).
+                      properties:
+                        exif:
+                          type: object
+                        gps:
+                          type: object
+                        height:
+                          type: number
+                        width:
+                          type: number
+                        isFull:
+                          type: boolean
+FileDeleteResponse:
+  description: File Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              fileId:
+                type: string
+                description: Removed file id.
+FilePayloadResponse:
+  description: File data
+  content:
+    application/octet-stream:
+      schema:
+        description: File data
+        type: string
+        format: binary
+  headers:
+    Content-Disposition:
+      schema:
+        type: string
+        example: attachment; filename="<filename>"
+
+       

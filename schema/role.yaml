@@ -1,0 +1,86 @@
+Role:
+  type: object
+  properties:
+    _id:
+      type: string
+    publicId:
+      type: string
+    networkId:
+      type: string
+    permissions:
+      type: array
+      items:
+        type: string
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+
+RoleV3:
+  type: object
+  properties:
+    roleId:
+      type: string
+    displayName:
+      type: string
+    updatedAt:
+      type: string
+      description: The date/time when a role is updated or deleted.
+      format: date-time
+    permissions:
+      type: array
+      items:
+        type: string
+      description: The list of permission for this role. https://github.com/EkoCommunications/UpstraEngineeringGitbook/blob/feature/roles/specification/roles.md#permissions
+    isDeleted:
+      type: boolean
+      default: false
+  required:
+    - roleId
+    - permissions
+    - updatedAt
+    - isDeleted
+
+PermissionEnum:
+  type: string
+  enum:
+    - MUTE_CHANNEL              
+    - CLOSE_CHANNEL             
+    - EDIT_CHANNEL              
+    - EDIT_CHANNEL_RATELIMIT    
+    - EDIT_MESSAGE              
+    - DELETE_MESSAGE            
+    - BAN_USER_FROM_CHANNEL     
+    - MUTE_USER_INSIDE_CHANNEL  
+    - ADD_CHANNEL_USER          
+    - REMOVE_CHANNEL_USER       
+    - EDIT_CHANNEL_USER         
+    - ASSIGN_CHANNEL_USER_ROLE  
+    - BAN_USER                  
+    - EDIT_USER                 
+    - ASSIGN_USER_ROLE          
+    - EDIT_USER_FEED_POST       
+    - DELETE_USER_FEED_POST     
+    - EDIT_USER_FEED_COMMENT    
+    - DELETE_USER_FEED_COMMENT  
+    - ADD_COMMUNITY_USER        
+    - REMOVE_COMMUNITY_USER     
+    - EDIT_COMMUNITY_USER       
+    - BAN_COMMUNITY_USER        
+    - MUTE_COMMUNITY_USER       
+    - EDIT_COMMUNITY            
+    - DELETE_COMMUNITY          
+    - EDIT_COMMUNITY_POST       
+    - DELETE_COMMUNITY_POST     
+    - PIN_COMMUNITY_POST        
+    - EDIT_COMMUNITY_COMMENT    
+    - DELETE_COMMUNITY_COMMENT  
+    - ASSIGN_COMMUNITY_USER_ROLE
+    - CREATE_COMMUNITY_CATEGORY
+    - EDIT_COMMUNITY_CATEGORY  
+    - DELETE_COMMUNITY_CATEGORY
+    - CREATE_ROLE              
+    - EDIT_ROLE                
+    - DELETE_ROLE              

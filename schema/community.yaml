@@ -1,0 +1,146 @@
+Community:
+  type: object
+  properties:
+    communityId:
+      type: string
+      description: ID of a community.
+    channelId:
+      type: string
+      description: ID of a channel.
+    userId:
+      type: string
+      description: ID of a creator.
+    displayName:
+      type: string
+      description: Community name for displaying.
+    avatarFileId:
+      type: string
+      description: ID of a avatar file.
+    description:
+      type: string
+      description: Description of a community.
+    isOfficial:
+      type: boolean
+      description: Is this community officail?
+    isPublic:
+      type: boolean
+      description: Is this community public?
+    onlyAdminCanPost:
+      type: boolean
+      description: Can post by admin only?
+    tags:
+      type: array
+      description: List of tags. They will be used for searching.
+      items:
+        type: string
+    metadata:
+      type: object
+      description: Additional properties to support custom fields.
+    postsCount:
+      type: integer
+      description: Number of posts in community.
+    membersCount:
+      type: integer
+      description: Number of members in community.
+    isJoined:
+      type: boolean
+      description: Is this community joined?
+    categoryIds:
+      type: array
+      items:
+        type: string
+        description: ID of a category.
+    isDeleted:
+      type: boolean
+      default: false
+      description: Is this community deleted?
+    createdAt:
+      type: string
+      description: The date/time when a community is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a community is updated or deleted.
+      format: date-time
+    hasFlaggedComment:
+      type: boolean
+      default: false
+      description: The flag for checking internally that comments inside post is reported or not.
+    hasFlaggedPost:
+      type: boolean
+      default: false
+      description: The flag for checking internally that post inside community is reported or not.
+    needApprovalOnPostCreation:
+      type: boolean
+      default: false
+      description: Determines that this community require an authorize user to review post before post is published
+  required:
+    - communityId
+    - channelId
+    - displayName
+
+CommunityCategory:
+  type: object
+  properties:
+    categoryId:
+      type: string
+      description: ID of a community category.
+    name:
+      type: string
+      description: Community category name for displaying.
+    metadata:
+      type: object
+      description: Additional properties to support custom fields.
+    avatarFileId:
+      type: string
+      description: ID of a avatar file.
+    isDeleted:
+      type: boolean
+      default: false
+      description: Is this community category deleted?
+    createdAt:
+      type: string
+      description: The date/time when a community category is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a community category is updated or deleted.
+      format: date-time
+
+CommunityUser:
+  type: object
+  properties:
+    userId:
+      type: string
+      description: ID of a user.
+    channelId:
+      type: string
+      description: ID of a channel.
+    communityId:
+      type: string
+      description: ID of a community.
+    communityMembership:
+      $ref: "./channel.yaml#/ChannelMembership"
+    isBanned:
+      type: boolean
+      default: false
+    lastActivity:
+      type: string
+      format: date-time
+      description: The date/time when a user last did something related to the community such as add/remove members .
+    roles:
+      type: array
+      items:
+        type: string
+    permissions:
+      type: array
+      items:
+        $ref: "./role.yaml#/PermissionEnum"
+    createdAt:
+      type: string
+      description: The date/time when a community user is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a community user is updated or deleted.
+      format: date-time

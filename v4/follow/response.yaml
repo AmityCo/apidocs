@@ -1,0 +1,67 @@
+FollowResponse:
+  description: Follow Response Object
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          follows:
+            type: array
+            items:
+              $ref: '../../schema/follow.yaml#/Follow'
+
+FollowCountResponse:
+  description: Follow Count
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          followCounts:
+            type: array
+            items:
+              $ref: '../../schema/follow.yaml#/FollowCount'
+
+FollowInformationResponse:
+  description: Follow Information
+  content:
+    application/json:
+      schema:
+        type: object
+        required: ['followCounts']
+        properties:
+          follows:
+            type: array
+            items:
+              $ref: '../../schema/follow.yaml#/Follow'
+          followCounts:
+            type: array
+            items:
+              $ref: '../../schema/follow.yaml#/FollowCount'
+
+FollowPaginationResponse:
+  description: Follows List
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          follows:
+            type: array
+            items:
+              $ref: '../../schema/follow.yaml#/Follow'
+          users:
+            type: array
+            items:
+              $ref: '../../schema/user.yaml#/UserV3'
+          files:
+            type: array
+            items:
+              $ref: '../../schema/file.yaml#/File'
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              prev:
+                type: string

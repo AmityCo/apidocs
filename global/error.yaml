@@ -1,0 +1,339 @@
+Error:
+  type: object
+  properties:
+    status:
+      type: string
+    code:
+      type: string
+    message:
+      type: string
+BadRequestError:
+  description: Bad Request error.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400000
+        message: Bad Request.
+UnexpectedError:
+  description: Unexpected error.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 500000
+        message: Unexpected error
+NotFoundError:
+  description: Resource Not Found error.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400400
+        message: Resource Not Found.
+RateLimitError:
+  description: Error due to a client create the same request with the same parameters exceed the number of time that server limit to.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400311
+        message: RateLimit Exceed.
+PermissionDenidedError:
+  description: Permission denied.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400301
+        message: User is not a member of a channel
+UserIsSystemBanned:
+  description: User is banned from the system.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400100
+        message: User is banned from the system.
+UserIsGlobalBanned:
+  description: User is global banned.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400312
+        message: User is global banned.
+UserIsBannedError:
+  description: User is banned from a channel / community.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400304
+        message: User is banned from a channel / community.
+UserIsUnbannedError:
+  description: User is unbanned from a channel / community.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400316
+        message: User is unbanned from a channel / community.
+UserNotJoinError:
+  description: User is not join community.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400100
+        message: User ${userId} is not join this community ${communityId}
+UserNotAllowedToUpdateError:
+  description: User is not join community.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400100
+        message: Only administrator can update user information.
+ForbiddenError:
+  description: No permission to access this resource.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400300
+        message: Forbidden error.
+NumberOfFlagExceedError:
+  description: Error when too many user is already flagged message.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400300
+        message: Number of flag already exceed.
+GenericPermissionDenidedError:
+  description: Permission denied.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400301
+        message: Permission denied
+FileNotFoundError:
+  description: Given file id is not found.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400400
+        message: File not found ${fileId}.
+ValidationError:
+  description: Put a wrong request parameters.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 500000
+        message: Parameters error.
+PayloadTooLargeError:
+  description: Attached file payload too large.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 500000
+        message: Payload too large.
+ChannelNotFoundError:
+  description: Channel Not Found error.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400400
+        message: Channel Not Found.
+UserIsMutedError:
+  description: User is muted from the channel.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400302
+        message: User is muted from the channel.
+ChannelIsMutedError:
+  description: Channel is muted.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400303
+        message: Channel is muted.
+MaxRepetitionExceed:
+  description: User create too many same messages in short period of times.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400307
+        message: Max Repetition Exceed
+BanWordFoundError:
+  description: Banned word are found in the messages.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400308
+        message: Data contain blacklist word
+LinkNotAllowedError:
+  description: Unallowed link are found in the messages.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400309
+        message: Data contain link that is not in whitelist
+MessageNotFoundError:
+  description: Message Not Found error.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400400
+        message: Message Not Found.
+ForbiddenAvatarError:
+  description: Put file type not image into avatar
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400300
+        message: Avatar must be an image.
+DuplicateEntryError:
+  description: Data already exists
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400315
+        message: Data already exists
+UnAuthorizedError:
+  description: Unauthorized
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400100
+        message: Unauthorized
+ExemptFromBanError:
+  description: Some users cannot be banned
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400306
+        message: Some users cannot be banned
+UserNotFoundError:
+  description: User Not Found error.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400400
+        message: User Not Found.
+PollNotFoundError:
+  description: Poll Found error.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400400
+        message: Poll not found.
+PollForbiddenError:
+  description: No permission to access this resource.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 400300
+        message: Only creator can update poll.
+CustomValidationError:
+  description: Timestamp information mismatch
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        code: 500000,
+        message: Information mismatch
+        status: error
+SignatureValidationError:
+  description: Signature validation error
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        code: 500000,
+        message: Invalid signature
+        status: error

@@ -1,0 +1,33 @@
+UserApiResponse:
+  description: User Information
+  content:
+    application/json:
+      schema:
+        $ref: "../../schema/user.yaml#/User"
+
+UsersPaginationApiResponse:
+  description: Users Information
+  content:
+    application/json:
+      schema:
+        properties:
+          users:
+            type: array
+            items:
+              type: object
+              properties:
+                info:
+                  $ref: "../../schema/user.yaml#/AdminUser"
+                session:
+                  type: object
+          roles:
+            type: array
+            items:
+              $ref: "../../schema/role.yaml#/Role"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              prev:
+                type: string

@@ -1,0 +1,51 @@
+VideoStreamingUserEventRequestBody:
+  description: A group of user activity on startTime, endTime and watchSeconds.
+  required: true
+  content:
+    application/json:
+      schema:
+        required:
+          - signature
+          - nonceStr
+          - timestamp
+          - streams
+        properties:
+          signature:
+            description: check detail signature algorithm at https://ekoapp.atlassian.net/wiki/spaces/UP/pages/1685750282/Billing#Signature-Algorithm%3A
+            type: string
+          nonceStr:
+            description: unique string for each request, max length 50
+            type: string
+          timestamp:
+            description: timestamp string in UTC format
+            type: string
+            example: '2021-03-10T03:07:16.127Z'
+          streams:
+            type: array
+            items:
+              type: object
+              required:
+                - streamId
+                - startTime
+                - endTime
+                - watchSeconds
+                - resolution
+              properties:
+                sessionId:
+                  description: unique sessionId for each user event, max length 50
+                  type: string
+                streamId:
+                  description: streamId of video streaming instance, max length 50
+                  type: string
+                startTime: 
+                  description: timestamp string in UTC format
+                  type: string
+                  example: '2021-03-10T03:07:16.127Z'
+                endTime:
+                  description: timestamp string in UTC format
+                  type: string
+                  example: '2021-03-10T03:07:16.127Z'
+                watchSeconds:
+                  description: user's watching time in seconds
+                  type: number
+                  example: 120

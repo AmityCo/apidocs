@@ -1,0 +1,280 @@
+didUpdate:
+  tags:
+    - Channel
+  security:
+        - SocketAuth: []
+  description: >
+    Publish this event to __every member of channel__ after call the endpoint below:
+      * `update channel displayname`
+      * `update channel tags`
+      * `update channel metadata`
+      * `update channel avatar`
+      * `update channel(v3)`
+  responses:
+    "200000":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              channelId:
+                type: string
+                description: ID of a channel.
+              channel:
+                $ref: "../../schema/channel.yaml#/ChannelV1"
+
+didAddUsers:
+  tags:
+    - Channel
+  security:
+        - SocketAuth: []
+  description: >
+    Publish this event to __every member of channel__ after call the endpoint below:
+      * `add channel users`
+      * `add channel users(v3)`
+  responses:
+    "200000":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              channelId:
+                type: string
+                description: ID of a channel.
+              userIds:
+                ype: array
+                description: List of user Id.
+                items:
+                  type: string
+              memberCount:
+                type: integer
+                description: Number of members in channel.
+              userId:
+                type: string
+                description: caller Id.
+
+didRemoveUsers:
+  tags:
+    - Channel
+  security:
+        - SocketAuth: []
+  description: >
+    Publish this event to __every member of channel__ after call the endpoint below:
+      * `remove channel users`
+      * `remove channel users(v3)`
+  responses:
+    "200000":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              channelId:
+                type: string
+                description: ID of a channel.
+              userIds:
+                ype: array
+                description: List of user Id.
+                items:
+                  type: string
+              memberCount:
+                type: integer
+                description: Number of members in channel.
+              userId:
+                type: string
+                description: caller Id.
+
+didBan:
+  tags:
+    - Channel
+  security:
+        - SocketAuth: []
+  description: >
+    Publish this event to __every member of channel__ and __target userIds__ after call the endpoint below:
+      * `ban channel users`
+      * `ban channel users(v3)`
+  responses:
+    "200000":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              channelId:
+                type: string
+                description: ID of a channel.
+              userIds:
+                ype: array
+                description: List of userId.
+                items:
+                  type: string
+
+didUnban:
+  tags:
+    - Channel
+  security:
+        - SocketAuth: []
+  description: >
+    Publish this event to __every member of channel__ and __target users__ after call the endpoint below:
+      * `unban channel users`
+      * `unban channel users(v3)`
+  responses:
+    "200000":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              channelId:
+                type: string
+                description: ID of a channel.
+              userIds:
+                ype: array
+                description: List of userId.
+                items:
+                  type: string
+
+didCreate:
+  tags:
+    - Channel
+  security:
+        - SocketAuth: []
+  description: >
+    Publish this event to __every member of channel__ after call the endpoint below:
+      * `create channel`
+      * `create conversation channel`
+      * `create channel(v3)`
+      * `create conversation channel(v3)`
+      * `add channel users`
+      * `add channel users(v3)`
+  responses:
+    "200000":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              channelId:
+                type: string
+                description: ID of a channel.
+              userIds:
+                ype: array
+                description: List of userId.
+                items:
+                  type: string
+              memberCount:
+                type: integer
+                description: Number of members in channel.
+              channel:
+                $ref: "../../schema/channel.yaml#/ChannelV1"
+
+didJoin:
+  tags:
+    - Channel
+  security:
+        - SocketAuth: []
+  description: >
+    Publish this event to __target users__ after call the endpoint below:
+      * `join channel`
+      * `join channel(v3)`
+  responses:
+    "200000":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              channelId:
+                type: string
+                description: ID of a channel.
+              userIds:
+                ype: array
+                description: List of userId.
+                items:
+                  type: string
+              memberCount:
+                type: integer
+                description: Number of members in channel.
+              channel:
+                $ref: "../../schema/channel.yaml#/ChannelV1"
+
+didLeave:
+  tags:
+    - Channel
+  security:
+        - SocketAuth: []
+  description: >
+    Publish this event to __target users__  after call the endpoint below:
+      * `leave channel`
+      * `leave channel(v3)`
+      * `remove channel users`
+      * `remove channel users(v3)`
+  responses:
+    "200000":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              channelId:
+                type: string
+                description: ID of a channel.
+              userIds:
+                ype: array
+                description: List of userId.
+                items:
+                  type: string
+              memberCount:
+                type: integer
+                description: Number of members in channel.
+
+didMarkSeen:
+  tags:
+    - Channel
+  security:
+        - SocketAuth: []
+  description: >
+    Publish this event to __caller__  after call the endpoint below:
+      * `startReading`
+      * `startReadings`
+  responses:
+    "200000":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              channelId:
+                type: string
+                description: ID of a channel.
+              readToSegment:
+                type: integer
+
+
+didchannelUserUpdate:
+  tags:
+    - Channel
+  security:
+        - SocketAuth: []
+  description: >
+    Publish this event to __target users__  after call the endpoint below:
+      * `add channelUser role`
+      * `remove channelUser role`
+      * `add channelUser role(v3)`
+      * `remove channelUser role(v3)`
+  responses:
+    "200000":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              channelId:
+                type: string
+                description: ID of a channel.
+              userIds:
+                ype: array
+                description: List of user Id.
+                items:
+                  type: string

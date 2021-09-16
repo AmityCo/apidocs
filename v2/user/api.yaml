@@ -1,0 +1,257 @@
+queryUsers:
+  summary: query users
+  tags:
+    - User
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Query users
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      Query parameters
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            search:
+              type: string
+            filter:
+              type: string
+              enum:
+                - all
+                - flagged
+              default: all
+            pageToken:
+              type: string
+            limit:
+              type: integer
+  responses:
+    "200000":
+      $ref: "./response.yaml#/UsersPaginationApiResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+update:
+  summary: Update user information.
+  tags:
+    - User
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Update user information such as displayName, roles and metadata
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      User information to be updated
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+            displayName:
+              type: string
+            roles:
+              type: array
+              items:
+                type: string
+            metadata:
+              type: object
+  responses:
+    "200000":
+      $ref: "./response.yaml#/UserApiResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+ban:
+  summary: ban a user.
+  tags:
+    - User
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Ban a user
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      User information to be baned
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+          required:
+            - userId
+  responses:
+    "200000":
+      description: OK
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+unban:
+  summary: unban a user.
+  tags:
+    - User
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Unban a user
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      User information to be unbaned
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+          required:
+            - userId
+  responses:
+    "200000":
+      description: OK
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+clearFlag:
+  summary: clear flag a user.
+  tags:
+    - User
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Clear flag a user
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      User information to be clear flag
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+          required:
+            - userId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/UserApiResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+  

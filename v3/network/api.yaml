@@ -1,0 +1,211 @@
+create:
+  summary: create a network
+  tags:
+    - Network
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Create network (with feature toggle)
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      description: Access token from cognito (scope - asc/network.manage)
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information for a network creation    
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            name: 
+              type: string
+              description: network name
+              example: asgfssssfaufiasgf
+            tierHandler: 
+              type: string
+              description: tier handler (in case of we have to do bulk update in the future)
+              example: asc-free
+  responses:
+    "200000":
+      $ref: "./response.yaml#/NetworkCreationResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+issueServerKey:
+  summary: Issue new server key
+  tags:
+    - Network
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Issue new server key (old key will be invoked)  
+
+    Allow only admin to call.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+          
+  responses:
+    "200000":
+      description: Server key
+      content:
+        application/json:
+          schema: 
+            type: string
+            example: "7d47e0acf1a33cebef81ba9c2051698f14c1e8c64ec12270af21abb213bc01f101deff4a726254d6426734df02a89b99c59d3ed5cf2d1bb7249c940aec"
+    "400301":
+      $ref: "../../global/error.yaml#/GenericPermissionDenidedError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+getServerKeyLastUpdated:
+  summary: Get server key last issued data
+  tags:
+    - Network
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorizations
+  description: >
+    Get server key last issued data
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    "200000":
+      $ref: "./response.yaml#/KeyLastUpdateResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/GenericPermissionDenidedError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+getSelfNetwork:
+  summary: Get self network info
+  tags:
+    - Network
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorizations
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    "200000":
+      $ref: "./response.yaml#/NetworkResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/GenericPermissionDenidedError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+updateSelfNetwork:
+  summary: Update self network info
+  tags:
+    - Network
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorizations
+  description: >
+    Update self network info. Only admin can update.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            defaultMessageAutoDeleteEnabled:
+              type: boolean
+              description: Is message in this channel will be deleted when the user flagged until flag limit?
+            defaultAutoDeleteMessageByFlagLimit:
+              type: number
+              min: 1
+              example: 1
+              description: Number of flags that will force a message to be deleted automatically.
+            useSecureAuthentication:
+              type: boolean
+              description: Is this network require secure authentication implementation.
+  responses:
+    "200000":
+      $ref: "./response.yaml#/NetworkResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/GenericPermissionDenidedError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

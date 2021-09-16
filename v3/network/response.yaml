@@ -1,0 +1,44 @@
+NetworkCreationResponse:
+  description: Network information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          apiKey:
+            type: string
+            example: b0eced5e3dd3f66548618d1b010b108b855f84e6bc303b2e
+          network:
+            type: object
+            properties:
+              _id:
+                type: string
+                example: 605478604f07c363ef8465d2
+              name:
+                type: string
+                example: asgfssssfaufiasgf
+          networkSetting:
+            $ref: '../../schema/network-setting.yaml#/NetworkSetting'
+          adminUsername:
+            type: string
+            example: asgfssssfaufiasgf-admin
+
+KeyLastUpdateResponse:
+  description: Key last issued data
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          updatedAt:
+            type: date-time
+          updatedBy:
+            type: string
+            example: John doe
+
+NetworkResponse:
+  description: Network information.
+  content:
+    application/json:
+      schema:
+        $ref: '../../schema/network.yaml#/Network'

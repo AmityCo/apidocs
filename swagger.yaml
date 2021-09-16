@@ -1,718 +1,4364 @@
----
-swagger: "2.0"
+openapi: 3.0.0
 info:
-  description: "This is a sample server Petstore server.  You can find out more about\
-    \ Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).\
-    \  For this sample, you can use the api key `special-key` to test the authorization\
-    \ filters."
-  version: "1.0.5"
-  title: "Swagger Petstore"
-  termsOfService: "http://swagger.io/terms/"
-  contact:
-    email: "apiteam@swagger.io"
-  license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "petstore.swagger.io"
-basePath: "/v2"
-tags:
-- name: "pet"
-  description: "Everything about your Pets"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
-- name: "store"
-  description: "Access to Petstore orders"
-- name: "user"
-  description: "Operations about user"
-  externalDocs:
-    description: "Find out more about our store"
-    url: "http://swagger.io"
-schemes:
-- "https"
-- "http"
+  title: Amity Social Cloud SDK
+  description: |
+    This document describe all information relate to backend endpoint to support Amity SDK. Because Swagger is not support socket endpoint documentation, this document try to differentiate each type of endpoint by the prefix of the path of each endpoint as the following
+    1. Socket Endpoint: represent by endpoints start with /sockets/...
+    2. Socket Event:  represent by endpoints start with /callbacks/...
+    3. REST API Endpoint:  represent by endpoints start with other prefix such as /v1 etc
+    4. GooglePubSub Event: represent by endpoints start with /pubsub/...
+  version: 4.17.0
+servers:
+  - url: https://api.staging.amity.co
+    description: Rest API on staging server
+  - url: wss://api.staging.amity.co
+    description: Socket API on staging server
+  - url: https://api.amity.co
+    description: Rest API on production server
+  - url: wss://api.amity.co
+    description: Socket API on production server
 paths:
-  /pet/{petId}/uploadImage:
-    post:
+  #Authentication
+  /api/v3/authentication/token:
+    get:
+      summary: Get authentication token
       tags:
-      - "pet"
-      summary: "uploads an image"
-      description: ""
-      operationId: "uploadFile"
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
+        - Authentication
+      $ref: './v3/authentication/api.yaml#/getToken'
+  #Session
+  /api/v3/sessions:
+    post:
+      summary: Register a session
+      tags:
+        - Session
+      $ref: './v3/session/api.yaml#/create'
+  #Device
+  /v1/device:
+    post:
+      summary: Register a device.
+      tags:
+        - Device
+      $ref: './v3/session/api.yaml#/create'
+
+  /v1/accessToken:
+    get:
+      summary: Generate AccessToken.
+      tags:
+        - Device
+      security:
+        - ApiKeyAuth: []
+      description: >
+        Generate new Access Token.
       parameters:
-      - name: "petId"
-        in: "path"
-        description: "ID of pet to update"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "additionalMetadata"
-        in: "formData"
-        description: "Additional data to pass to server"
-        required: false
-        type: "string"
-      - name: "file"
-        in: "formData"
-        description: "file to upload"
-        required: false
-        type: "file"
-      responses:
-        200:
-          description: "successful operation"
+        - in: query
+          name: userId
           schema:
-            $ref: "#/definitions/ApiResponse"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-  /pet:
-    post:
-      tags:
-      - "pet"
-      summary: "Add a new pet to the store"
-      description: ""
-      operationId: "addPet"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Pet object that needs to be added to the store"
-        required: true
-        schema:
-          $ref: "#/definitions/Pet"
+            type: string
+          required: true
+        - in: query
+          name: refreshToken
+          schema:
+            type: string
+          required: true
       responses:
-        405:
-          description: "Invalid input"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+        '200000':
+          description: Return new accessToken
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+  #Role
+  /v3/roles:
+    get:
+      summary: Get roles (pagination support)
+      tags:
+        - Role
+      $ref: './v3/role/api.yaml#/query'
+    post:
+      summary: Create role
+      tags:
+        - Role
+      $ref: './v3/role/api.yaml#/create'
+  /v3/roles/:roleId:
+    get:
+      summary: Get role
+      tags:
+        - Role
+      $ref: './v3/role/api.yaml#/get'
     put:
+      summary: Update role
       tags:
-      - "pet"
-      summary: "Update an existing pet"
-      description: ""
-      operationId: "updatePet"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Pet object that needs to be added to the store"
-        required: true
-        schema:
-          $ref: "#/definitions/Pet"
-      responses:
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Pet not found"
-        405:
-          description: "Validation exception"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-  /pet/findByStatus:
-    get:
-      tags:
-      - "pet"
-      summary: "Finds Pets by status"
-      description: "Multiple status values can be provided with comma separated strings"
-      operationId: "findPetsByStatus"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "status"
-        in: "query"
-        description: "Status values that need to be considered for filter"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-          enum:
-          - "available"
-          - "pending"
-          - "sold"
-          default: "available"
-        collectionFormat: "multi"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Pet"
-        400:
-          description: "Invalid status value"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-  /pet/findByTags:
-    get:
-      tags:
-      - "pet"
-      summary: "Finds Pets by tags"
-      description: "Multiple tags can be provided with comma separated strings. Use\
-        \ tag1, tag2, tag3 for testing."
-      operationId: "findPetsByTags"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "tags"
-        in: "query"
-        description: "Tags to filter by"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Pet"
-        400:
-          description: "Invalid tag value"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-      deprecated: true
-  /pet/{petId}:
-    get:
-      tags:
-      - "pet"
-      summary: "Find pet by ID"
-      description: "Returns a single pet"
-      operationId: "getPetById"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "petId"
-        in: "path"
-        description: "ID of pet to return"
-        required: true
-        type: "integer"
-        format: "int64"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Pet"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Pet not found"
-      security:
-      - api_key: []
-    post:
-      tags:
-      - "pet"
-      summary: "Updates a pet in the store with form data"
-      description: ""
-      operationId: "updatePetWithForm"
-      consumes:
-      - "application/x-www-form-urlencoded"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "petId"
-        in: "path"
-        description: "ID of pet that needs to be updated"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "name"
-        in: "formData"
-        description: "Updated name of the pet"
-        required: false
-        type: "string"
-      - name: "status"
-        in: "formData"
-        description: "Updated status of the pet"
-        required: false
-        type: "string"
-      responses:
-        405:
-          description: "Invalid input"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+        - Role
+      $ref: './v3/role/api.yaml#/update'
     delete:
+      summary: Delete role
       tags:
-      - "pet"
-      summary: "Deletes a pet"
-      description: ""
-      operationId: "deletePet"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "petId"
-        in: "path"
-        description: "Pet id to delete"
-        required: true
-        type: "integer"
-        format: "int64"
-      responses:
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Pet not found"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-  /store/order:
-    post:
-      tags:
-      - "store"
-      summary: "Place an order for a pet"
-      description: ""
-      operationId: "placeOrder"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "order placed for purchasing the pet"
-        required: true
-        schema:
-          $ref: "#/definitions/Order"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Order"
-        400:
-          description: "Invalid Order"
-  /store/order/{orderId}:
-    get:
-      tags:
-      - "store"
-      summary: "Find purchase order by ID"
-      description: "For valid response try integer IDs with value >= 1 and <= 10.\
-        \ Other values will generated exceptions"
-      operationId: "getOrderById"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "orderId"
-        in: "path"
-        description: "ID of pet that needs to be fetched"
-        required: true
-        type: "integer"
-        maximum: 10
-        minimum: 1
-        format: "int64"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Order"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Order not found"
-    delete:
-      tags:
-      - "store"
-      summary: "Delete purchase order by ID"
-      description: "For valid response try integer IDs with positive integer value.\
-        \ Negative or non-integer values will generate API errors"
-      operationId: "deleteOrder"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "orderId"
-        in: "path"
-        description: "ID of the order that needs to be deleted"
-        required: true
-        type: "integer"
-        minimum: 1
-        format: "int64"
-      responses:
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Order not found"
-  /store/inventory:
-    get:
-      tags:
-      - "store"
-      summary: "Returns pet inventories by status"
-      description: "Returns a map of status codes to quantities"
-      operationId: "getInventory"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "object"
-            additionalProperties:
-              type: "integer"
-              format: "int32"
-      security:
-      - api_key: []
-  /user/createWithArray:
-    post:
-      tags:
-      - "user"
-      summary: "Creates list of users with given input array"
-      description: ""
-      operationId: "createUsersWithArrayInput"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "List of user object"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/User"
-      responses:
-        default:
-          description: "successful operation"
-  /user/createWithList:
-    post:
-      tags:
-      - "user"
-      summary: "Creates list of users with given input array"
-      description: ""
-      operationId: "createUsersWithListInput"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "List of user object"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/User"
-      responses:
-        default:
-          description: "successful operation"
-  /user/{username}:
-    get:
-      tags:
-      - "user"
-      summary: "Get user by user name"
-      description: ""
-      operationId: "getUserByName"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "The name that needs to be fetched. Use user1 for testing. "
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/User"
-        400:
-          description: "Invalid username supplied"
-        404:
-          description: "User not found"
+        - Role
+      $ref: './v3/role/api.yaml#/delete'
+  #Moderation
+  /v1/blacklist/records:
     put:
+      summary: Refresh black list
       tags:
-      - "user"
-      summary: "Updated user"
-      description: "This can only be done by the logged in user."
-      operationId: "updateUser"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "name that need to be updated"
+        - Moderation
+      security:
+        - ApiKeyAuth: []
+      description: >
+        Refresh the black list
+      requestBody:
+        description: >
+          Regular expression to refresh.
         required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Updated user object"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
-      responses:
-        400:
-          description: "Invalid user supplied"
-        404:
-          description: "User not found"
-    delete:
-      tags:
-      - "user"
-      summary: "Delete user"
-      description: "This can only be done by the logged in user."
-      operationId: "deleteUser"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "The name that needs to be deleted"
-        required: true
-        type: "string"
-      responses:
-        400:
-          description: "Invalid username supplied"
-        404:
-          description: "User not found"
-  /user/login:
-    get:
-      tags:
-      - "user"
-      summary: "Logs user into the system"
-      description: ""
-      operationId: "loginUser"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "username"
-        in: "query"
-        description: "The user name for login"
-        required: true
-        type: "string"
-      - name: "password"
-        in: "query"
-        description: "The password for login in clear text"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          headers:
-            X-Expires-After:
-              type: "string"
-              format: "date-time"
-              description: "date in UTC when token expires"
-            X-Rate-Limit:
-              type: "integer"
-              format: "int32"
-              description: "calls per hour allowed by the user"
-          schema:
-            type: "string"
-        400:
-          description: "Invalid username/password supplied"
-  /user/logout:
-    get:
-      tags:
-      - "user"
-      summary: "Logs out current logged in user session"
-      description: ""
-      operationId: "logoutUser"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters: []
-      responses:
-        default:
-          description: "successful operation"
-  /user:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                regexs:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - regexs
     post:
+      summary: Add rules to black list
       tags:
-      - "user"
-      summary: "Create user"
-      description: "This can only be done by the logged in user."
-      operationId: "createUser"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Created user object"
+        - Moderation
+      security:
+        - ApiKeyAuth: []
+      description: >
+        Add rules to the black list
+      requestBody:
+        description: >
+          Regular expression to add.
         required: true
-        schema:
-          $ref: "#/definitions/User"
-      responses:
-        default:
-          description: "successful operation"
-securityDefinitions:
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
-  petstore_auth:
-    type: "oauth2"
-    authorizationUrl: "https://petstore.swagger.io/oauth/authorize"
-    flow: "implicit"
-    scopes:
-      read:pets: "read your pets"
-      write:pets: "modify pets in your account"
-definitions:
-  ApiResponse:
-    type: "object"
-    properties:
-      code:
-        type: "integer"
-        format: "int32"
-      type:
-        type: "string"
-      message:
-        type: "string"
-  Category:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      name:
-        type: "string"
-    xml:
-      name: "Category"
-  Pet:
-    type: "object"
-    required:
-    - "name"
-    - "photoUrls"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      category:
-        $ref: "#/definitions/Category"
-      name:
-        type: "string"
-        example: "doggie"
-      photoUrls:
-        type: "array"
-        xml:
-          wrapped: true
-        items:
-          type: "string"
-          xml:
-            name: "photoUrl"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                regexs:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - regexs
+    delete:
+      summary: Delete rules from black list
       tags:
-        type: "array"
-        xml:
-          wrapped: true
-        items:
-          xml:
-            name: "tag"
-          $ref: "#/definitions/Tag"
-      status:
-        type: "string"
-        description: "pet status in the store"
-        enum:
-        - "available"
-        - "pending"
-        - "sold"
-    xml:
-      name: "Pet"
-  Tag:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      name:
-        type: "string"
-    xml:
-      name: "Tag"
-  Order:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      petId:
-        type: "integer"
-        format: "int64"
-      quantity:
-        type: "integer"
-        format: "int32"
-      shipDate:
-        type: "string"
-        format: "date-time"
-      status:
-        type: "string"
-        description: "Order Status"
-        enum:
-        - "placed"
-        - "approved"
-        - "delivered"
-      complete:
-        type: "boolean"
-    xml:
-      name: "Order"
-  User:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      username:
-        type: "string"
-      firstName:
-        type: "string"
-      lastName:
-        type: "string"
-      email:
-        type: "string"
-      password:
-        type: "string"
-      phone:
-        type: "string"
-      userStatus:
-        type: "integer"
-        format: "int32"
-        description: "User Status"
-    xml:
-      name: "User"
-externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
+        - Moderation
+      security:
+        - ApiKeyAuth: []
+      description: >
+        Delete rules from the black list
+      requestBody:
+        description: >
+          Regular expression to delete.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ruleIds:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - regexs
+
+  #Admin
+  /api/v2/blacklist/records:
+    get:
+      summary: get rules of blacklist.
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Get rules of blacklist.
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          Condition of querying.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                regexs:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200000':
+          $ref: '#/components/responses/BlacklistRulesResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      summary: refresh rules of blacklist.
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Refresh rules of blacklist.
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          Rules information to be refreshed.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                regexs:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - regexs
+      responses:
+        '200000':
+          description: OK
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+    post:
+      summary: add rules to blacklist.
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Add rules to blacklist
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          Rules information to be added.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                regexs:
+                  type: array
+                  items:
+                    type: string
+                isMatchExactWord:
+                  type: boolean
+              required:
+                - regexs
+      responses:
+        '200000':
+          description: OK
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      summary: delete rules from blacklist
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Delete rule from blacklist
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          Rules information to be deleted.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ruleIds:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - ruleIds
+      responses:
+        '200000':
+          description: OK
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v2/blacklist/records/:ruleId:
+    put:
+      summary: update rule of blacklist.
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Update rule of blacklist.
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          Rules information to be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ruleId:
+                  type: string
+                isEnabled:
+                  type: boolean
+              required:
+                - ruleId
+                - isEnabled
+      responses:
+        '200000':
+          $ref: '#/components/responses/BlacklistRuleResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v2/channels:
+    post:
+      summary: query channels
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#query'
+  /api/v2/channel:
+    post:
+      summary: create a channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#create'
+  /api/v2/channel/displayName:
+    post:
+      summary: change channel displayName
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#setChannelDisplay'
+  /api/v2/channel/:channelId/users/ban:
+    post:
+      summary: ban users in channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#ban'
+  /api/v2/channel/:channelId/users/unban:
+    post:
+      summary: unban users in channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#unban'
+  /api/v2/channels/:channelId/close:
+    post:
+      summary: close channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#close'
+  /api/v2/messages:
+    post:
+      summary: Query messages.
+      tags:
+        - Admin
+      $ref: './v2/message/api.yaml#/query'
+  /api/v2/message:
+    post:
+      summary: create a text message.
+      tags:
+        - Admin
+      $ref: './v2/message/api.yaml#/create'
+  /api/v2/message/:messageId:
+    get:
+      summary: get a message.
+      tags:
+        - Admin
+      $ref: './v2/message/api.yaml#/get'
+    delete:
+      summary: delete a message.
+      tags:
+        - Admin
+      $ref: './v2/message/api.yaml#/delete'
+  /api/v2/messages/images:
+    post:
+      summary: create an image message.
+      tags:
+        - Admin
+      $ref: './v2/message/api.yaml#/createImageMessage'
+  /api/v2/messages/:messageId/images?size:
+    get:
+      summary: get an image message
+      tags:
+        - Admin
+      $ref: './v2/message/api.yaml#/getImageMessage'
+  /api/v2/messages/files:
+    post:
+      summary: create a message with file in a given channel
+      tags:
+        - Admin
+      $ref: './v2/message/api.yaml#/createFileMessage'
+  /api/v2/messages/:messageId/files:
+    get:
+      summary: get a file message
+      tags:
+        - Admin
+      $ref: './v2/message/api.yaml#/getFileMessage'
+  /api/v2/moderation-settings:
+    get:
+      summary: get a moderation setting
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/json
+      description: >
+        Get a moderation setting.
+      responses:
+        '200000':
+          $ref: '#/components/responses/ModerationSettingResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      summary: update a moderation setting
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Update a moderation setting
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          moderation setting information
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                maxRepetition:
+                  type: integer
+                  minimum: 0
+                maxRepetitionTimeout:
+                  type: integer
+                  minimum: 0
+                blacklistMuteTimeout:
+                  type: integer
+                  minimum: 0
+                whitelistMuteTimeout:
+                  type: integer
+                  minimum: 0
+                maxRepetitionMuteTimeout:
+                  type: integer
+                  minimum: 0
+                enableImageModeration:
+                  type: boolean
+                imageModeration:
+                  type: object
+                  properties:
+                    nudity:
+                      type: number
+                      minimum: 0
+                    suggestive:
+                      type: number
+                      minimum: 0
+                    violence:
+                      type: number
+                      minimum: 0
+                    disturbing:
+                      type: number
+                      minimum: 0
+      responses:
+        '200000':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                example:
+                  status: success
+                  code: 200000
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v2/reactions:
+    get:
+      summary: get list of reactions.
+      tags:
+        - Admin
+      $ref: './v2/reaction/api.yaml#/query'
+    post:
+      summary: add reaction to any document.
+      tags:
+        - Admin
+      $ref: './v2/reaction/api.yaml#/create'
+    delete:
+      summary: remove reaction from any document.
+      tags:
+        - Admin
+      $ref: './v2/reaction/api.yaml#/delete'
+  /api/v2/reactions/messages/most:
+    get:
+      summary: Get message ids by the most of reactions.
+      tags:
+        - Admin
+      $ref: './v2/reaction/api.yaml#/most'
+  /api/v2/roles:
+    get:
+      summary: get all roles
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Get all roles
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          Query parameters
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filter:
+                  type: string
+      responses:
+        '200000':
+          $ref: '#/components/responses/RolesResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      summary: add permissions.
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Add permissions
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          Permission information to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                publicIds:
+                  type: array
+                  items:
+                    type: string
+                permissions:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - publicIds
+                - permissions
+      responses:
+        '200000':
+          description: OK
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '400311':
+          $ref: '#/components/responses/RateLimitError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v2/users:
+    get:
+      summary: query users
+      tags:
+        - User
+      $ref: './v2/user/api.yaml#queryUsers'
+    put:
+      summary: Update user information.
+      tags:
+        - User
+      $ref: './v2/user/api.yaml#update'
+  /api/v2/users/ban:
+    post:
+      summary: ban a user.
+      tags:
+        - User
+      $ref: './v2/user/api.yaml#ban'
+  /api/v2/users/unban:
+    post:
+      summary: unban a user.
+      tags:
+        - User
+      $ref: './v2/user/api.yaml#unban'
+  /api/v2/users/:userId/flags:
+    delete:
+      summary: clear flag a user.
+      tags:
+        - User
+      $ref: './v2/user/api.yaml#clearFlag'
+  /api/v2/whitelist/records:
+    get:
+      summary: get rules of whitelist.
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Get rules of whitelist.
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          Condition of querying.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                regexs:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200000':
+          $ref: '#/components/responses/WhitelistRulesResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      summary: refresh rules of whitelist.
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Refresh rules of whitelist.
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          Rules information to be refreshed.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                regexs:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - regexs
+      responses:
+        '200000':
+          description: OK
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+    post:
+      summary: add rules to whitelist.
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Add rules to whitelist
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          Rules information to be added.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                regexs:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - regexs
+      responses:
+        '200000':
+          description: OK
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      summary: delete rules from whitelist
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Delete rule from whitelist
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          Rules information to be deleted.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ruleIds:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - ruleIds
+      responses:
+        '200000':
+          description: OK
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v2/whitelist/records/:ruleId:
+    put:
+      summary: update rule of whitelist.
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Update rule of whitelist.
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          Rules information to be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ruleId:
+                  type: string
+                isEnabled:
+                  type: boolean
+              required:
+                - ruleId
+                - isEnabled
+      responses:
+        '200000':
+          $ref: '#/components/responses/WhitelistRuleResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v3/comments:
+    get:
+      summary: query comments (pagination support).
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/query'
+    post:
+      summary: create a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/create'
+  /api/v3/comments/:commentId:
+    get:
+      summary: get a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/get'
+    put:
+      summary: update a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/update'
+    delete:
+      summary: delete a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/delete'
+  /api/v3/comments/:commentId/flag:
+    post:
+      summary: flag a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/flag'
+  /api/v3/comments/:commentId/isflagbyme:
+    get:
+      summary: Check whether user flag a given comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/isflagbyme'
+  /api/v3/comments/:commentId/unflag:
+    delete:
+      summary: unflag a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/unflag'
+  /api/v3/comments/list:
+    get:
+      summary: get comments by IDs.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/getList'
+  /api/v3/communities:
+    get:
+      summary: query communities.
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/get'
+    post:
+      summary: create a community.
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/create'
+
+  /api/v3/communities/:communityId:
+    get:
+      summary: get a community by ID.
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/getOne'
+    put:
+      summary: update a community.
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/update'
+    delete:
+      summary: delete a community.
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/delete'
+
+  /api/v3/communities/:communityId/join:
+    post:
+      summary: Join a community
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/join'
+
+  /api/v3/communities/:communityId/leave:
+    delete:
+      summary: Leave a community.
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/leave'
+
+  /api/v3/communities/:communityId/users:
+    get:
+      summary: query community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/getUsers'
+    post:
+      summary: add community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/addUsers'
+    delete:
+      summary: remove community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/removeUsers'
+
+  /api/v3/communities/:communityId/users/ban:
+    put:
+      summary: ban community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/ban'
+
+  /api/v3/communities/:communityId/users/unban:
+    put:
+      summary: unban community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/unban'
+
+  /api/v3/communities/:communityId/users/roles:
+    post:
+      summary: Add role to community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/addRole'
+    delete:
+      summary: Remove role from community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/removeRole'
+
+  /api/v3/communities/{communityId}/permissions/me:
+    get:
+      summary: Get self permission in community
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/getSelfPermission'
+
+  /api/v3/community-categories:
+    get:
+      summary: query community categories.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/api.yaml#/query'
+    post:
+      summary: create a community categories.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/api.yaml#/post'
+
+  /api/v3/community-categories/:categoryId:
+    get:
+      summary: get a community category.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/api.yaml#/get'
+    put:
+      summary: update a community categories.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/api.yaml#/put'
+    delete:
+      summary: delete a community category.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/api.yaml#/delete'
+
+  /api/v3/community-feeds/:communityId:
+    get:
+      summary: Get list of posts.
+      tags:
+        - CommunityFeed
+      $ref: './v3/community-feed/api.yaml#get'
+
+  /api/v3/user-feeds/:userId:
+    get:
+      summary: Get list of posts.
+      tags:
+        - UserFeed
+      $ref: './v3/user-feed/api.yaml#get'
+  /sockets/moderation-setting.get:
+    post:
+      summary: get a moderation setting
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/json
+      description: >
+        Get a moderation setting.
+      responses:
+        '200000':
+          $ref: '#/components/responses/ModerationSettingResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+  /sockets/moderation-setting.update:
+    post:
+      summary: update a moderation setting
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Update a moderation setting
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          moderation setting information
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                maxRepetition:
+                  type: integer
+                  minimum: 0
+                maxRepetitionTimeout:
+                  type: integer
+                  minimum: 0
+                blacklistMuteTimeout:
+                  type: integer
+                  minimum: 0
+                whitelistMuteTimeout:
+                  type: integer
+                  minimum: 0
+                maxRepetitionMuteTimeout:
+                  type: integer
+                  minimum: 0
+                enableImageModeration:
+                  type: boolean
+                imageModeration:
+                  type: object
+                  properties:
+                    nudity:
+                      type: number
+                      minimum: 0
+                    suggestive:
+                      type: number
+                      minimum: 0
+                    violence:
+                      type: number
+                      minimum: 0
+                    disturbing:
+                      type: number
+                      minimum: 0
+      responses:
+        '200000':
+          description: Success
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+
+  #User
+  /api/v3/users:
+    get:
+      summary: Get users information.
+      tags:
+        - UserV3
+      $ref: './v3/user/api.yaml#/query'
+    put:
+      summary: Update user information.
+      tags:
+        - UserV3
+      $ref: './v3/user/api.yaml#/update'
+  /sockets/v3/user.query:
+    post:
+      summary: Get users information.
+      tags:
+        - UserV3
+      $ref: './v3/user/socket.yaml#/query'
+  /api/v3/users/list:
+    get:
+      summary: Get users information by public id.
+      tags:
+        - UserV3
+      $ref: './v3/user/api.yaml#/getByPublicId'
+  /sockets/v3/user.getList:
+    post:
+      summary: Get users information by public id.
+      tags:
+        - UserV3
+      $ref: './v3/user/socket.yaml#/getByPublicId'
+  /api/v3/users/:userId:
+    get:
+      summary: Get one user information.
+      tags:
+        - UserV3
+      $ref: './v3/user/api.yaml#/get'
+  /sockets/v3/user.get:
+    post:
+      summary: Get one user information.
+      tags:
+        - UserV3
+      $ref: './v3/user/socket.yaml#/get'
+  /sockets/v3/user.update:
+    post:
+      summary: Update user information.
+      tags:
+        - UserV3
+      $ref: './v3/user/socket.yaml#/update'
+  /sockets/user.update:
+    post:
+      summary: Update user information.
+      tags:
+        - User
+      $ref: './v1/user/socket.yaml#/update'
+  /sockets/user.query:
+    post:
+      summary: query users
+      tags:
+        - User
+      $ref: './v1/user/socket.yaml#/query'
+  /sockets/user.get:
+    post:
+      summary: get users informations base on given userIds
+      tags:
+        - User
+      $ref: './v1/user/socket.yaml#/get'
+  /sockets/user.flag:
+    post:
+      summary: Flag a user.
+      tags:
+        - User
+      $ref: './v1/user/socket.yaml#/flag'
+  /sockets/user.unflag:
+    post:
+      summary: Unflag a user.
+      tags:
+        - User
+      $ref: './v1/user/socket.yaml#/unflag'
+  /sockets/user.isFlagByMe:
+    post:
+      summary: Check whether user flag a given user.
+      tags:
+        - User
+      $ref: './v1/user/socket.yaml#/isFlagByMe'
+  /callbacks/user.didUpdate:
+    get:
+      tags:
+        - User
+      $ref: './v1/user/event.yaml#didUpdate'
+  /callbacks/v3.user.didUpdate:
+    get:
+      tags:
+        - User
+      $ref: './v3/user/event.yaml#didUpdate'
+
+  #Channel
+  /api/v2/channel/:channelId/avatar:
+    post:
+      summary: Set or Remove avatar from channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#setAvatar'
+  /api/v2/channel/:channelId/mute:
+    post:
+      summary: Mute channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#muteChannel'
+  /api/v2/channel/:channelId/users/mute:
+    post:
+      summary: Mute user in channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#muteUserInChannel'
+  /api/v3/channels:
+    get:
+      summary: query channels.
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/query'
+    post:
+      summary: create a channel
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/create'
+  /api/v3/channels/:channelId:
+    get:
+      summary: get a channel by ID.
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/get'
+    put:
+      summary: update a channel
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/update'
+    delete:
+      summary: delete a channel
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/delete'
+  /api/v3/channels/:channelId/join:
+    post:
+      summary: join a channel
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/join'
+  /api/v3/channels/:channelId/leave:
+    delete:
+      summary: leave a channel
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/leave'
+  /api/v3/channels/:channelId/users:
+    get:
+      summary: query channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/queryUsers'
+    post:
+      summary: add channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/addUsers'
+    delete:
+      summary: remove channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/removeUsers'
+  /api/v3/channels/:channelId/users/ban:
+    put:
+      summary: ban channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/ban'
+  /api/v3/channels/:channelId/users/unban:
+    put:
+      summary: unban channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/unban'
+  /api/v3/channels/:channelId/users/roles:
+    post:
+      summary: Add role to channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/addRole'
+    delete:
+      summary: Remove role from channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/removeRole'
+  /api/v3/channels/conversation:
+    post:
+      summary: create a conversation channel
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/createConversation'
+  /api/v3/channels/list:
+    get:
+      summary: get list of channel
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#/getList'
+  /api/v4/channels/:channelId/users:
+    get:
+      summary: query channel users
+      tags:
+        - Channel
+      $ref: './v4/channel/api.yaml#/queryUsers'
+  /sockets/channel.create:
+    post:
+      summary: create a channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#create'
+  /sockets/channel.createConversation:
+    post:
+      summary: create a conversation channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#createConversation'
+  /sockets/channel.query:
+    post:
+      summary: query channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#query'
+  /sockets/channel.queryUsers:
+    post:
+      summary: query channel users
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#queryUsers'
+  /sockets/channel.setAvatar:
+    post:
+      summary: Set or Remove avatar from channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#setAvatar'
+  /sockets/channel.banUsers:
+    post:
+      summary: ban users in channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#ban'
+  /sockets/channel.unbanUsers:
+    post:
+      summary: unban users in channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#unban'
+  /sockets/channel.addRole:
+    post:
+      summary: add user role in channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#addRole'
+  /sockets/channel.removeRole:
+    post:
+      summary: remove user role in channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#removeRole'
+  /sockets/v3/channel.create:
+    post:
+      summary: create a channel
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#create'
+  /sockets/v3/channel.createConversation:
+    post:
+      summary: create a conversation channel
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#createConversation'
+  /sockets/v3/channel.delete:
+    post:
+      summary: delete a channel
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#delete'
+  /sockets/v3/channel.get:
+    post:
+      summary: get a channel by ID.
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#get'
+  /sockets/v3/channel.query:
+    post:
+      summary: query channels.
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#query'
+  /sockets/v3/channel.update:
+    post:
+      summary: update a channel
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#update'
+  /sockets/v3/channel.getList:
+    post:
+      summary: get list of channel
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#getList'
+  /sockets/v3/channel.join:
+    post:
+      summary: join a channel
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#join'
+  /sockets/v3/channel.leave:
+    post:
+      summary: leave a channel
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#leave'
+  /sockets/v3/channel.addUsers:
+    post:
+      summary: add channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#addUsers'
+  /sockets/v3/channel.removeUsers:
+    post:
+      summary: remove channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#removeUsers'
+  /sockets/v3/channel.banUsers:
+    post:
+      summary: ban channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#ban'
+  /sockets/v3/channel.unbanUsers:
+    post:
+      summary: unban channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#unban'
+  /sockets/v3/channel.queryUsers:
+    post:
+      summary: query channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#queryUsers'
+  /sockets/v3/channel.assignRoleToUsers:
+    post:
+      summary: Add role to channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#addRole'
+  /sockets/v3/channel.removeRoleFromUsers:
+    post:
+      summary: Remove role from channel users
+      tags:
+        - Channel
+      $ref: './v3/channel/socket.yaml#removeRole'
+  /sockets/v4/channel.queryUsers:
+    post:
+      summary: query channel users
+      tags:
+        - Channel
+      $ref: './v4/channel/socket.yaml#queryUsers'
+  /callbacks/channel.didUpdate:
+    get:
+      tags:
+        - Channel
+      $ref: './v1/channel/event.yaml#didUpdate'
+  /callbacks/channel.didAddUsers:
+    get:
+      tags:
+        - Channel
+      $ref: './v1/channel/event.yaml#didAddUsers'
+  /callbacks/channel.didRemoveUsers:
+    get:
+      tags:
+        - Channel
+      $ref: './v1/channel/event.yaml#didRemoveUsers'
+  /callbacks/channel.didBan:
+    get:
+      tags:
+        - Channel
+      $ref: './v1/channel/event.yaml#didBan'
+  /callbacks/channel.didUnban:
+    get:
+      tags:
+        - Channel
+      $ref: './v1/channel/event.yaml#didUnban'
+  /callbacks/channel.didCreate:
+    get:
+      tags:
+        - Channel
+      $ref: './v1/channel/event.yaml#didCreate'
+  /callbacks/channel.didJoin:
+    get:
+      tags:
+        - Channel
+      $ref: './v1/channel/event.yaml#didJoin'
+  /callbacks/channel.didLeave:
+    get:
+      tags:
+        - Channel
+      $ref: './v1/channel/event.yaml#didLeave'
+  /callbacks/channel.didMarkSeen:
+    get:
+      tags:
+        - Channel
+      $ref: './v1/channel/event.yaml#didMarkSeen'
+  /callbacks/channelUser.didUpdate:
+    get:
+      tags:
+        - Channel
+      $ref: './v1/channel/event.yaml#didchannelUserUpdate'
+  /callbacks/v3.channel.didUpdate:
+    get:
+      tags:
+        - Channel
+      $ref: './v3/channel/event.yaml#didUpdate'
+  /callbacks/v3.channel.didAddUsers:
+    get:
+      tags:
+        - Channel
+      $ref: './v3/channel/event.yaml#didAddUsers'
+  /callbacks/v3.channel.didRemoveUsers:
+    get:
+      tags:
+        - Channel
+      $ref: './v3/channel/event.yaml#didRemoveUsers'
+  /callbacks/v3.channel.didBan:
+    get:
+      tags:
+        - Channel
+      $ref: './v3/channel/event.yaml#didBan'
+  /callbacks/v3.channel.didUnban:
+    get:
+      tags:
+        - Channel
+      $ref: './v3/channel/event.yaml#didUnban'
+  /callbacks/v3.channel.didCreate:
+    get:
+      tags:
+        - Channel
+      $ref: './v3/channel/event.yaml#didCreate'
+  /callbacks/v3.channel.didJoin:
+    get:
+      tags:
+        - Channel
+      $ref: './v3/channel/event.yaml#didJoin'
+  /callbacks/v3.channel.didLeave:
+    get:
+      tags:
+        - Channel
+      $ref: './v3/channel/event.yaml#didLeave'
+  /callbacks/v3.channel.didMarkSeen:
+    get:
+      tags:
+        - Channel
+      $ref: './v3/channel/event.yaml#didMarkSeen'
+  /callbacks/v3.channelUser.didUpdate:
+    get:
+      tags:
+        - Channel
+      $ref: './v3/channel/event.yaml#didchannelUserUpdate'
+
+  #Message
+  /api/v1/messages/images:
+    post:
+      summary: create a message with image in a given channel
+      tags:
+        - Message
+      $ref: './v1/message/api.yaml#/createImageMessage'
+  /api/v1/messages/:messageId/images?size:
+    get:
+      summary: get an image message
+      tags:
+        - Message
+      $ref: './v1/message/api.yaml#/getImageMessage'
+  /api/v1/messages/files:
+    post:
+      summary: create a message with file in a given channel
+      tags:
+        - Message
+      $ref: './v1/message/api.yaml#/createFileMessage'
+  /api/v1/messages/:messageId/files:
+    get:
+      summary: get a file message
+      tags:
+        - Message
+      $ref: './v1/message/api.yaml#/getImageMessage'
+  /api/v3/messages:
+    get:
+      summary: query messages
+      tags:
+        - Message
+      $ref: './v3/message/api.yaml#/query'
+    post:
+      summary: create a message
+      tags:
+        - Message
+      $ref: './v3/message/api.yaml#/create'
+  /api/v3/messages/list:
+    get:
+      summary: get list of messages
+      tags:
+        - Message
+      $ref: './v3/message/api.yaml#/getList'
+  /api/v3/messages/:messageId:
+    get:
+      summary: get a message
+      tags:
+        - Message
+      $ref: './v3/message/api.yaml#/get'
+    put:
+      summary: update a message
+      tags:
+        - Message
+      $ref: './v3/message/api.yaml#/update'
+    delete:
+      summary: delete a message
+      tags:
+        - Message
+      $ref: './v3/message/api.yaml#/delete'
+  /api/v3/messages/:messageId/flag:
+    post:
+      summary: flag a message
+      tags:
+        - Message
+      $ref: './v3/message/api.yaml#/flag'
+  /api/v3/messages/:messageId/unflag:
+    delete:
+      summary: unflag a message
+      tags:
+        - Message
+      $ref: './v3/message/api.yaml#/unflag'
+  /api/v3/messages/:messageId/clearFlags:
+    delete:
+      summary: clear flags
+      tags:
+        - Message
+      $ref: './v3/message/api.yaml#/clearflag'
+  /api/v3/messages/:messageId/isFlaggedByMe:
+    get:
+      summary: is message flag by me
+      tags:
+        - Message
+      $ref: './v3/message/api.yaml#/isflagbyme'
+  /sockets/message.create:
+    post:
+      summary: create a message in a given channel
+      tags:
+        - Message
+      $ref: './v1/message/socket.yaml#/create'
+  /sockets/message.update:
+    post:
+      summary: update a message information (only creator)
+      tags:
+        - Message
+      $ref: './v1/message/socket.yaml#/update'
+  /sockets/message.updateData:
+    post:
+      summary: update a message data (only creator)
+      tags:
+        - Message
+      $ref: './v1/message/socket.yaml#/updateData'
+  /sockets/message.updateTag:
+    post:
+      summary: update a message tag by anyone
+      tags:
+        - Message
+      $ref: './v1/message/socket.yaml#/updateTag'
+  /sockets/message.flag:
+    post:
+      summary: Flag a message.
+      tags:
+        - Message
+      $ref: './v1/message/socket.yaml#/flag'
+  /sockets/message.get:
+    get:
+      summary: Get messages.
+      tags:
+        - Message
+      $ref: './v1/message/socket.yaml#/get'
+  /sockets/message.unflag:
+    post:
+      summary: Unflag a message
+      tags:
+        - Message
+      $ref: './v1/message/socket.yaml#/unflag'
+  /sockets/message.query:
+    post:
+      summary: Query messages.
+      tags:
+        - Message
+      $ref: './v1/message/socket.yaml#/query'
+  /sockets/message.isFlagByMe:
+    post:
+      summary: Check whether user flag a given message.
+      tags:
+        - Message
+      $ref: './v1/message/socket.yaml#/isFlagByMe'
+  /sockets/v3/message.query:
+    post:
+      summary: query messages
+      tags:
+        - Message
+      $ref: './v3/message/socket.yaml#/query'
+  /sockets/v3/message.create:
+    post:
+      summary: create a message
+      tags:
+        - Message
+      $ref: './v3/message/socket.yaml#/create'
+  /sockets/v3/message.getList:
+    post:
+      summary: get list of messages
+      tags:
+        - Message
+      $ref: './v3/message/socket.yaml#/getList'
+  /sockets/v3/message.get:
+    post:
+      summary: get a message
+      tags:
+        - Message
+      $ref: './v3/message/socket.yaml#/get'
+  /sockets/v3/message.update:
+    post:
+      summary: update a message
+      tags:
+        - Message
+      $ref: './v3/message/socket.yaml#/update'
+  /sockets/v3/message.delete:
+    post:
+      summary: delete a message
+      tags:
+        - Message
+      $ref: './v3/message/socket.yaml#/delete'
+  /sockets/v3/message.flag:
+    post:
+      summary: flag a message
+      tags:
+        - Message
+      $ref: './v3/message/socket.yaml#/flag'
+  /sockets/v3/message.unflag:
+    post:
+      summary: unflag a message
+      tags:
+        - Message
+      $ref: './v3/message/socket.yaml#/unflag'
+  /sockets/v3/message.clearFlags:
+    post:
+      summary: clear flags
+      tags:
+        - Message
+      $ref: './v3/message/socket.yaml#/clearflag'
+  /sockets/v3/message.isFlaggedByMe:
+    post:
+      summary: is message flag by me
+      tags:
+        - Message
+      $ref: './v3/message/socket.yaml#/isflagbyme'
+  /callbacks/message.didCreate:
+    get:
+      tags:
+        - Message
+      security:
+        - SocketAuth: []
+      $ref: './v1/message/callback.yaml#/didCreate'
+  /callbacks/message.didUpdate:
+    get:
+      tags:
+        - Message
+      security:
+        - SocketAuth: []
+      $ref: './v1/message/callback.yaml#/didUpdate'
+  /callbacks/message.didDelete:
+    get:
+      tags:
+        - Message
+      security:
+        - SocketAuth: []
+      $ref: './v1/message/callback.yaml#/didDelete'
+  /callbacks/v3.message.didCreate:
+    get:
+      tags:
+        - Message
+      $ref: './v3/message/event.yaml#didCreate'
+  /callbacks/v3.message.didUpdate:
+    get:
+      tags:
+        - Message
+      $ref: './v3/message/event.yaml#didUpdate'
+  /callbacks/v3.message.didDelete:
+    get:
+      tags:
+        - Message
+      $ref: './v3/message/event.yaml#didDelete'
+
+  #Notification
+  /v1/notification:
+    post:
+      summary: register a device to get push notification
+      tags:
+        - Notification
+      security:
+        - ApiKeyAuth: []
+      description: >
+        Register a device to a notification service provider.
+      requestBody:
+        description: >
+          information of a device to be registered.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deviceId:
+                  type: string
+                platform:
+                  type: string
+                  enum:
+                    - android
+                    - ios
+                token:
+                  type: string
+                userId:
+                  type: string
+                provider:
+                  type: string
+              required:
+                - deviceId
+                - platform
+                - token
+                - userId
+      responses:
+        '200000':
+          $ref: '#/components/responses/SuccessResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+    delete:
+      summary: unregister a device from a notification service provider
+      tags:
+        - Notification
+      security:
+        - ApiKeyAuth: []
+      description: >
+        Unregister a device from a notification service provider.
+      requestBody:
+        description: >
+          information of a device to be registered.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deviceId:
+                  type: string
+                userId:
+                  type: string
+              required:
+                - deviceId
+      responses:
+        '200000':
+          $ref: '#/components/responses/SuccessResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+  /admin/v1/notification/setting:
+    post:
+      summary: Save push notification setting.
+      tags:
+        - Notification
+      $ref: './v1/notification/api.yaml#save'
+    get:
+      summary: Get push notification setting.
+      tags:
+        - Notification
+      $ref: './v1/notification/api.yaml#get'
+  /sockets/notification.getSetting:
+    post:
+      summary: Get push notification setting.
+      tags:
+        - Notification
+      $ref: './v1/notification/socket.yaml#get'
+  /sockets/notification.saveSetting:
+    post:
+      summary: Save push notification setting.
+      tags:
+        - Notification
+      $ref: './v1/notification/socket.yaml#save'
+
+  #GooglePubSub
+  /pubsub/message.didCreate:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send new created message whenever a message got created in a channel
+      responses:
+        '200000':
+          description: messages is messages information. users is list of all user information relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['message.didCreate']
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: './schema/message.yaml#/Message'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /pubsub/message.didDelete:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send deleted message whenever a message got deleted in a channel
+      responses:
+        '200000':
+          description: messages is messages information. users is list of all user information relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['message.didDelete']
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: './schema/message.yaml#/Message'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /pubsub/message.didUpdate:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send updated message whenever a message got updated in a channel
+      responses:
+        '200000':
+          description: messages is messages information. users is list of all user information relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['message.didUpdate']
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: './schema/message.yaml#/Message'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /pubsub/message.didFlag:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send updated message whenever a message got flag
+      responses:
+        '200000':
+          description: messages is messages information. users is list of all user information relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['message.didFlag']
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: './schema/message.yaml#/Message'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /pubsub/message.didUnflag:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send updated message whenever a message flag is removed.
+      responses:
+        '200000':
+          description: messages is messages information. users is list of all user information relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['message.didUnflag']
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: './schema/message.yaml#/Message'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /pubsub/message.didClearflag:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send updated message whenever all message flags are cleared.
+      responses:
+        '200000':
+          description: messages is messages information. users is list of all user information relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['message.didClearflag']
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: './schema/message.yaml#/Message'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /pubsub/channel.didCreate:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send new created channel whenever a channel got create
+      responses:
+        '200000':
+          description: channel is channel information. userIds is a list of userId who is added to channel. users is a list of user information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['channel.didCreate']
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Channel'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userIds:
+                        type: array
+                        items:
+                          type: string
+  /pubsub/channel.didJoin:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send join event information whenever a channel got joined
+      responses:
+        '200000':
+          description: channel is channel information. userIds is a list of joined userId. users is a list of user information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['channel.didJoin']
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Channel'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userIds:
+                        type: array
+                        items:
+                          type: string
+  /pubsub/channel.didAddUsers:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send user added event information whenever new member got added to a channel.
+      responses:
+        '200000':
+          description: channel is channel information. userIds is a list of added userId. adderId is user who add other user to channel users is a list of user information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['channel.didAddUsers']
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Channel'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userIds:
+                        type: array
+                        items:
+                          type: string
+                      adderId:
+                        type: string
+  /pubsub/channel.didClose:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send channel close event information whenever a channel close.
+      responses:
+        '200000':
+          description: channel is channel information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['channel.didClose']
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Channel'
+  /pubsub/channel.didLeave:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send channel leave event information whenever someone leave a channel.
+      responses:
+        '200000':
+          description: channel is channel information. userIds is a list of userId who leave channel. users is a list of userInfo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['channel.didLeave']
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Channel'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userIds:
+                        type: array
+                        items:
+                          type: string
+  /pubsub/channel.didUpdate:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send channel updated event information whenever a channel got updated.
+      responses:
+        '200000':
+          description: channel is channel information. userId is a userId who update channel. users is a list of userInfo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['channel.didUpdate']
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Channel'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userId:
+                        type: string
+  /pubsub/channel.didRemoveUsers:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send user removed event information whenever member got remove from channel.
+      responses:
+        '200000':
+          description: channel is channel information. userIds is a list of removed userId. removerId is userId who remove other users from channel. users is a list of user information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['channel.didRemoveUsers']
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Channel'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userIds:
+                        type: array
+                        items:
+                          type: string
+                      removerId:
+                        type: string
+  /pubsub/channel.didUpdateMeta:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send channel's meta data updated event information whenever a channel's meta data got updated.
+      responses:
+        '200000':
+          description: channel is channel information. userId is a userId who update channel's meta data. users is a list of userInfo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['channel.didUpdateMeta']
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Channel'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userId:
+                        type: string
+  /pubsub/channel.didBan:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send channel banned event whenever a channel got banned.
+      responses:
+        '200000':
+          description: channel is channel information. userIds is a list of userIds who being banned. actorId is userId who ban other user. users is a list of userInfo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['channel.didBan']
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Channel'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      actorId:
+                        type: string
+                      userIds:
+                        type: array
+                        items:
+                          type: string
+  /pubsub/moderation.didBan:
+    get:
+      tags:
+        - GooglePubSub
+      description: Send banned event whenever a system detect message that contain in the blacklist
+      responses:
+        '200000':
+          description: channel is channel information. userId is a userId who send the message. users is a list of userInfo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum: ['moderation.didBan']
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Channel'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userId:
+                        type: string
+  /pubsub/user.didClearFlag:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v1/user/pubsub.yaml#didClearFlag'
+  /pubsub/user.didFlag:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v1/user/pubsub.yaml#didFlag'
+  /pubsub/user.didUnflag:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v1/user/pubsub.yaml#didUnflag'
+  /pubsub/user.didUpdate:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v1/user/pubsub.yaml#didUpdate'
+  /pubsub/v3.community.didCreate:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/community/pubsub.yaml#didCreate'
+  /pubsub/v3.community.didUpdate:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/community/pubsub.yaml#didUpdate'
+  /pubsub/v3.community.didDelete:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/community/pubsub.yaml#didDelete'
+  /pubsub/v3.community.didJoin:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/community/pubsub.yaml#didJoin'
+  /pubsub/v3.community.didLeave:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/community/pubsub.yaml#didLeave'
+  /pubsub/v3.community.didAddUsers:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/community/pubsub.yaml#didAddUsers'
+  /pubsub/v3.community.didRemoveUsers:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/community/pubsub.yaml#didRemoveUsers'
+  /pubsub/v3.community.didBan:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/community/pubsub.yaml#didBan'
+  /pubsub/v3.community.didUnban:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/community/pubsub.yaml#didUnban'
+  /pubsub/v3.post.didCreate:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/post/pubsub.yaml#didCreate'
+  /pubsub/v3.post.didUpdate:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/post/pubsub.yaml#didUpdate'
+  /pubsub/v3.post.didDelete:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/post/pubsub.yaml#didDelete'
+  /pubsub/v3.post.didApprove:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/post/pubsub.yaml#didApprove'
+  /pubsub/v3.post.didDecline:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/post/pubsub.yaml#didDecline'
+  /pubsub/v3.post.didFlag:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/post/pubsub.yaml#didFlag'
+  /pubsub/v3.post.didUnflag:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/post/pubsub.yaml#didUnflag'
+  /pubsub/v3.post.didAddReaction:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/post/pubsub.yaml#didAddReaction'
+  /pubsub/v3.post.didRemoveReaction:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/post/pubsub.yaml#didRemoveReaction'
+  /pubsub/v3.comment.didCreate:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/comment/pubsub.yaml#didCreate'
+  /pubsub/v3.comment.didUpdate:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/comment/pubsub.yaml#didUpdate'
+  /pubsub/v3.comment.didDelete:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/comment/pubsub.yaml#didDelete'
+  /pubsub/v3.comment.didFlag:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/comment/pubsub.yaml#didFlag'
+  /pubsub/v3.comment.didUnflag:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/comment/pubsub.yaml#didUnflag'
+  /pubsub/v3.comment.didAddReaction:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/comment/pubsub.yaml#didAddReaction'
+  /pubsub/v3.comment.didRemoveReaction:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/comment/pubsub.yaml#didRemoveReaction'
+  /pubsub/v3.comment.didReply:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/comment/pubsub.yaml#didReply'
+  /pubsub/poll.didCreate:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/poll/pubsub.yaml#didCreate'
+  /pubsub/poll.didUpdate:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/poll/pubsub.yaml#didUpdate'
+  /pubsub/v3.video-streaming.didRecord:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/video-streaming/pubsub.yaml#didRecord'
+  /pubsub/v3.video-streaming.didStart:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/video-streaming/pubsub.yaml#didStart'
+  /pubsub/v3.video-streaming.didStop:
+    get:
+      tags:
+        - GooglePubSub
+      $ref: './v3/video-streaming/pubsub.yaml#didStop'
+
+  #Reaction
+  /sockets/reaction.add:
+    post:
+      summary: Add reaction to any document.
+      tags:
+        - Reaction
+      $ref: './v1/reaction/socket.yaml#create'
+  /sockets/reaction.query:
+    post:
+      summary: Get list of reactions.
+      tags:
+        - Reaction
+      $ref: './v1/reaction/socket.yaml#query'
+  /sockets/reaction.remove:
+    post:
+      summary: Remove reaction from any document.
+      tags:
+        - Reaction
+      $ref: './v1/reaction/socket.yaml#delete'
+  #Network
+  /admin/v1/network/:network:
+    get:
+      summary: Get a network
+      tags:
+        - Network
+      security:
+        - ApiKeyAuth: []
+      description: >
+        Get a network.
+      requestBody:
+        description: >
+          information of a network to be got.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                networkId:
+                  type: string
+              required:
+                - networkId
+      responses:
+        '200000':
+          $ref: '#/components/responses/NetworkResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+    put:
+      summary: Save network
+      tags:
+        - Network
+      security:
+        - ApiKeyAuth: []
+      description: >
+        save network information
+      requestBody:
+        description: >
+          data for save network
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                networkId:
+                  type: string
+                  description: network id
+                defaultMessageAutoDeleteEnabled:
+                  type: boolean
+                  description: Is message in this channel will be deleted when the user flagged until flag limit?
+                defaultAutoDeleteMessageByFlagLimit:
+                  type: number
+                  min: 1
+                  example: 1
+                  description: Number of flags that will force a message to be deleted automatically.
+                useSecureAuthentication:
+                  type: boolean
+                  description: Is this network require secure authentication implementation.
+              required:
+                - networkId
+                - defaultMessageAutoDeleteEnabled
+                - defaultAutoDeleteMessageByFlagLimit
+      responses:
+        '200000':
+          $ref: '#/components/responses/NetworkResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+  /api/v3/networks/server-key:
+    get:
+      summary: Get server key last issued data
+      tags:
+        - Network
+      $ref: './v3/network/api.yaml#/getServerKeyLastUpdated'
+    post:
+      summary: Issue new server key
+      tags:
+        - Network
+      $ref: './v3/network/api.yaml#/issueServerKey'
+  /api/v3/networks:
+    post:
+      summary: Create network with tier
+      tags:
+        - Network
+      $ref: './v3/network/api.yaml#/create'
+  /api/v3/networks/me:
+    get:
+      summary: Get self network info
+      tags:
+        - Network
+      $ref: './v3/network/api.yaml#/getSelfNetwork'
+    put:
+      summary: Update self network info
+      tags:
+        - Network
+      $ref: './v3/network/api.yaml#/updateSelfNetwork'
+
+  #Post
+  /api/v3/posts:
+    get:
+      summary: query posts
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#query'
+    post:
+      summary: create a post
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/create'
+  /api/v3/posts/:postId:
+    get:
+      summary: get a post by ID
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/get'
+    put:
+      summary: update a post
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/update'
+    delete:
+      summary: delete a post
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/delete'
+  /api/v3/posts/{postId}/approve:
+    post:
+      summary: Approve reviewing post
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/approve'
+  /api/v3/posts/{postId}/decline:
+    post:
+      summary: Decline reviewing post
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/decline'
+  /api/v3/posts/:postId/flag:
+    post:
+      summary: flag a post.
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/flag'
+  /api/v3/posts/:postId/isflagbyme:
+    get:
+      summary: Check whether user flag a given post.
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/isflagbyme'
+  /api/v3/posts/:postId/unflag:
+    delete:
+      summary: unflag a post.
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/unflag'
+  /api/v3/posts/list:
+    get:
+      summary: get list of post
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/getList'
+  /api/v3/posts/:postId/flags:
+    delete:
+      summary: clear flags
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#clearflag'
+  /sockets/v3/post.create:
+    post:
+      summary: create a post
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#create'
+  /sockets/v3/post.update:
+    post:
+      summary: update a post
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#update'
+  /sockets/v3/post.delete:
+    post:
+      summary: delete a post
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#delete'
+  /sockets/v3/post.get:
+    post:
+      summary: get a post by ID
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#get'
+  /sockets/v3/post.flag:
+    post:
+      summary: flag a post.
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#flag'
+  /sockets/v3/post.unflag:
+    post:
+      summary: unflag a post.
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#unflag'
+  /sockets/v3/post.isflagbyme:
+    post:
+      summary: Check whether user flag a given post.
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#isflagbyme'
+  /sockets/v3/post.getList:
+    post:
+      summary: get list of post
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#getList'
+  /sockets/v3/post.clearFlags:
+    post:
+      summary: clear flags
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#clearflag'
+  /sockets/v3/post.query:
+    post:
+      summary: query posts
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#query'
+  /sockets/v3/post.approve:
+    post:
+      summary: Approve reviewing post
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#clearflag'
+  /sockets/v3/post.decline:
+    post:
+      summary: Decline reviewing post
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#query'
+
+  #Postv4
+  /api/v4/posts:
+    post:
+      summary: create a post
+      tags:
+        - Post v4
+      $ref: './v4/post/api.yaml#/create'
+  /sockets/v4/post.create:
+    post:
+      summary: create a post
+      tags:
+        - Post v4
+      $ref: './v4/post/socket.yaml#create'
+
+  #Pollv3
+  /api/v3/polls:
+    post:
+      summary: create a poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/api.yaml#/create'
+
+  /api/v3/polls/{pollId}:
+    put:
+      summary: update status poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/api.yaml#/update'
+  /api/v3/polls/{pollId}/votes:
+    post:
+      summary: vote poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/api.yaml#/vote'
+    delete:
+      summary: delete poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/api.yaml#/delete'
+
+  #UserFeed
+  /api/v3/user-feeds/:userId/count:
+    get:
+      summary: Get number of post.
+      tags:
+        - UserFeed
+      $ref: './v3/user-feed/api.yaml#count'
+
+  /sockets/v3/user-feed.query:
+    post:
+      summary: Get list of posts.
+      tags:
+        - UserFeed
+      $ref: './v3/user-feed/socket.yaml#post'
+  /sockets/v3/user-feed.count:
+    post:
+      summary: Get number of post.
+      tags:
+        - UserFeed
+      $ref: './v3/user-feed/socket.yaml#count'
+
+  #Community Feed
+  /sockets/v3/community-feed.query:
+    post:
+      summary: Get list of posts.
+      tags:
+        - CommunityFeed
+      $ref: './v3/community-feed/socket.yaml#post'
+
+  #Global Feed
+  /sockets/v3/global-feed.query:
+    post:
+      summary: Get global feed.
+      tags:
+        - GlobalFeed
+      $ref: './v3/global-feed/socket.yaml#post'
+
+  /api/v3/global-feeds:
+    get:
+      summary: Get global feed.
+      tags:
+        - GlobalFeed
+      $ref: './v3/global-feed/api.yaml#get'
+
+  #Comment
+  /api/v3/comments/:commentId/flags:
+    delete:
+      summary: clear flags.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/clearflag'
+  /sockets/v3/comment.query:
+    post:
+      summary: query comments.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#query'
+  /sockets/v3/comment.create:
+    post:
+      summary: create a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#create'
+  /sockets/v3/comment.update:
+    post:
+      summary: update a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#update'
+  /sockets/v3/comment.delete:
+    post:
+      summary: delete a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#delete'
+  /sockets/v3/comment.flag:
+    post:
+      summary: flag a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#flag'
+  /sockets/v3/comment.unflag:
+    post:
+      summary: unflag a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#unflag'
+  /sockets/v3/comment.isflagbyme:
+    post:
+      summary: Check whether user flag a given comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#isflagbyme'
+  /sockets/v3/comment.get:
+    post:
+      summary: get a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#get'
+  /sockets/v3/comment.getList:
+    post:
+      summary: get comments by IDs.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#getList'
+  /sockets/v3/comment.clearFlags:
+    post:
+      summary: clear flags.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#clearflag'
+
+  #File
+  /api/v3/files:
+    post:
+      summary: Upload file.
+      tags:
+        - File
+      $ref: './v3/file/api.yaml#upload'
+  /api/v3/files/:fileId:
+    get:
+      summary: Get file info
+      tags:
+        - File
+      $ref: './v3/file/api.yaml#get'
+    delete:
+      summary: Delete file
+      tags:
+        - File
+      $ref: './v3/file/api.yaml#delete'
+  /api/v3/files/:fileId/download:
+    get:
+      summary: Get file
+      tags:
+        - File
+      $ref: './v3/file/api.yaml#download'
+  /sockets/v3/file.get:
+    post:
+      summary: Get file info
+      tags:
+        - File
+      $ref: './v3/file/socket.yaml#get'
+  /sockets/v3/file.delete:
+    post:
+      summary: Delete file
+      tags:
+        - File
+      $ref: './v3/file/socket.yaml#delete'
+
+  #File v4
+  /api/v4/videos:
+    post:
+      summary: Upload video file.
+      tags:
+        - File
+      $ref: './v4/file/api.yaml#uploadVideo'
+
+  #Community
+  /api/v3/communities/list:
+    get:
+      summary: get list of community
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/getList'
+
+  /api/v3/communities/recommended:
+    get:
+      summary: get list of recommended community
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/getRecommendedList'
+
+  /api/v3/communities/top-trending:
+    get:
+      summary: get list of top trend community
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/getTopTrendingList'
+
+  /sockets/v3/community.query:
+    post:
+      summary: query communities.
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/query'
+  /sockets/v3/community.create:
+    post:
+      summary: create a community.
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/create'
+  /sockets/v3/community.update:
+    post:
+      summary: update a community.
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/update'
+  /sockets/v3/community.delete:
+    post:
+      summary: delete a community.
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/delete'
+  /sockets/v3/community.get:
+    post:
+      summary: get a community by ID.
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/get'
+  /sockets/v3/community.join:
+    post:
+      summary: Join community by id
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/join'
+  /sockets/v3/community.leave:
+    post:
+      summary: Leave community by id
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/leave'
+  /sockets/v3/community.queryUsers:
+    post:
+      summary: query community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/queryUsers'
+  /sockets/v3/community.banUsers:
+    post:
+      summary: ban community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/banUsers'
+  /sockets/v3/community.unbanUsers:
+    post:
+      summary: unban community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/unbanUsers'
+  /sockets/v3/community.getList:
+    post:
+      summary: get list of community
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/getList'
+
+  /sockets/v3/community.getRecommendedList:
+    post:
+      summary: get list of recommended community
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/getRecommendedList'
+
+  /sockets/v3/community.getTopTrendingList:
+    post:
+      summary: get list of top trend community
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/getTopTrendingList'
+  /sockets/v3/community.addUsers:
+    post:
+      summary: add community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/addUsers'
+  /sockets/v3/community.removeUsers:
+    post:
+      summary: remove community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/removeUsers'
+
+  /sockets/v3/community.assignRoleToUsers:
+    post:
+      summary: Add role to community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/addRole'
+
+  /sockets/v3/community.removeRoleFromUsers:
+    post:
+      summary: Remove role from community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/removeRole'
+
+  /sockets/v3/community.getSelfPermission:
+    post:
+      summary: Get self permission in community
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/getSelfPermission'
+
+  #Community Category
+  /api/v3/community-categories/list:
+    get:
+      summary: get list of community category.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/api.yaml#/getList'
+  /sockets/v3/community-category.query:
+    post:
+      summary: query community categories.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/socket.yaml#/query'
+  /sockets/v3/community-category.get:
+    post:
+      summary: get a community category.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/socket.yaml#/get'
+  /sockets/v3/community-category.getList:
+    post:
+      summary: get list of community category.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/socket.yaml#/getList'
+
+  #Content Feed
+  /sockets/v3/content-feed.query:
+    post:
+      summary: Get list of contents.
+      tags:
+        - ContentFeed
+      $ref: './v3/content-feed/socket.yaml#query'
+  /api/v3/content-feeds:
+    get:
+      summary: Get list of contents.
+      tags:
+        - ContentFeed
+      $ref: './v3/content-feed/api.yaml#query'
+
+  #Video Streaming
+  /sockets/v3/video-streaming.create:
+    post:
+      summary: create video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/socket.yaml#/create'
+  /sockets/v3/video-streaming.update:
+    post:
+      summary: update video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/socket.yaml#/update'
+  /sockets/v3/video-streaming.delete:
+    post:
+      summary: delete video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/socket.yaml#/delete'
+  /sockets/v3/video-streaming.query:
+    post:
+      summary: get list of video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/socket.yaml#/query'
+  /sockets/v3/video-streaming.get:
+    post:
+      summary: get single video-streaming item
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/socket.yaml#/get'
+  /sockets/v3/video-streaming.dispose:
+    post:
+      summary: dispose video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/socket.yaml#/dispose'
+  /api/v3/video-streaming:
+    post:
+      summary: create video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/api.yaml#/create'
+    get:
+      summary: get list of video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/api.yaml#/query'
+  /api/v3/video-streaming/:streamId:
+    get:
+      summary: get single video-streaming item
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/api.yaml#/get'
+    put:
+      summary: update video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/api.yaml#/update'
+    delete:
+      summary: delete video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/api.yaml#/delete'
+  /api/v3/video-streaming/:streamId/streaming-url:
+    delete:
+      summary: dispose video streaming url
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/api.yaml#/dispose'
+  /callbacks/video-streaming.didStart:
+    get:
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/event.yaml#didStart'
+  /callbacks/video-streaming.didStop:
+    get:
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/event.yaml#didStop'
+  /callbacks/video-streaming.didRecord:
+    get:
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/event.yaml#didRecord'
+
+  #User event
+  /api/v3/user-event/video-streaming:
+    post:
+      summary: create user event for video streaming
+      tags:
+        - UserEvent
+      $ref: './v3/user-event/api.yaml#/create'
+
+  #Follow
+  /api/v4/me/following/:userId:
+    post:
+      summary: Follow user.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/follow'
+    delete:
+      summary: Unfollow or Cancel follow request
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/unfollow'
+  /api/v4/me/followers/:userId:
+    post:
+      summary: Accept follow request.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/accept'
+    delete:
+      summary: Decline follow request or delete followers.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/delete'
+  /api/v4/me/followers:
+    get:
+      summary: Get my follower list.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/getMyFollowerList'
+  /api/v4/users/:userId/followers:
+    get:
+      summary: Get other follower list.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/getOtherFollowerList'
+  /api/v4/me/following:
+    get:
+      summary: Get my following list
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/getMyFollowingList'
+  /api/v4/users/:userId/following:
+    get:
+      summary: Get other following list.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/getOtherFollowingList'
+  /api/v4/me/followInfo:
+    get:
+      summary: Get my follow information.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/getMyFollowInformation'
+  /api/v4/users/:userId/followInfo:
+    get:
+      summary: Get other follow information.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/getOtherFollowInformation'
+  /sockets/v4/following.create:
+    post:
+      summary: Follow user.
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/follow'
+  /sockets/v4/following.delete:
+    post:
+      summary: Unfollow or Cancel follow request
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/unfollow'
+  /sockets/v4/follower.accept:
+    post:
+      summary: Accept follow request.
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/accept'
+  /sockets/v4/follower.delete:
+    post:
+      summary: Decline follow request or delete follower.
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/delete'
+  /sockets/v4/followers.getList:
+    post:
+      summary: Get follower list.
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/getFollowerList'
+  /sockets/v4/following.getList:
+    post:
+      summary: Get following list.
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/getFollowingList'
+  /sockets/v4/followInfo.get:
+    post:
+      summary: Get follow information.
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/getFollowInformation'
+
+  #Global Feed
+  /sockets/v4/global-feed.query:
+    post:
+      summary: Get global feed.
+      tags:
+        - GlobalFeed
+      $ref: './v4/global-feed/socket.yaml#post'
+
+  /api/v4/me/global-feeds:
+    get:
+      summary: Get global feed.
+      tags:
+        - GlobalFeed
+      $ref: './v4/global-feed/api.yaml#get'
+
+  #Network Setting
+  /api/v3/network-settings:
+    put:
+      summary: Update network setting configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateNetworkSetting'
+
+  /api/v3/network-settings/social:
+    put:
+      summary: Update social configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateSocial'
+    get:
+      summary: Get social configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/getSocial'
+  /api/v3/network-settings/webhook:
+    put:
+      summary: Update webhook configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateWebhook'
+    get:
+      summary: Get webhook configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/getWebhook'
+
+  /api/v3/network-settings/chat:
+     put:
+       summary: Update chat network setting configuration.
+       tags:
+         - Network Setting
+       $ref: './v3/network-setting/api.yaml#/updateChatSetting'
+     get:
+       summary: Get chat network setting configuration.
+       tags:
+         - Network Setting
+       $ref: './v3/network-setting/api.yaml#/getChatSetting'
+
+  /sockets/v3/network-settings.getSocial:
+    post:
+      summary: Get social configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/socket.yaml#/getSocial'
+
+  /sockets/v3/network-settings.getChat:
+    post:
+      summary: Get chat network setting configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/socket.yaml#/getChatSetting'
+
+components:
+  schemas:
+    User:
+      $ref: './schema/user.yaml#/User'
+    ChannelType:
+      $ref: './schema/channel.yaml#/ChannelType'
+    ChannelMembership:
+      $ref: './schema/channel.yaml#/ChannelMembership'
+    Channel:
+      type: object
+      properties:
+        channelId:
+          type: string
+          description: ID of a channel.
+        isDistinct:
+          type: boolean
+        metadata:
+          type: object
+          description: Additional properties to support custom fields.
+        type:
+          $ref: '#/components/schemas/ChannelType'
+          description: Type of a channel (standard, conversation, broadcast). This property is not be used for now.
+        tags:
+          type: array
+          description: List of tags. They will be used for searching.
+          items:
+            type: string
+        isMuted:
+          type: boolean
+          description: Is this channel muted? (Computed by using muteTimeout).
+        isRateLimited:
+          type: boolean
+          description: Is this channel limited sending rate? (Computed by using muteTimeout).
+        muteTimeout:
+          type: string
+          description: The date/time to suppress muteness.
+          format: date-time
+        rateLimit:
+          type: integer
+          description: Number of messages within rate limit.
+        rateLimitWindow:
+          type: integer
+          description: Waiting time interval before reset rateLimit to 0.
+        rateLimitTimeout:
+          type: string
+          description: The date/time to suppress limitation of sending rate.
+          format: date-time
+        displayName:
+          type: string
+          description: Channel name for displaying.
+        messageAutoDeleteEnabled:
+          type: boolean
+          description: Is message in this channel will be deleted when the user flagged until flag limit?
+        autoDeleteMessageByFlagLimit:
+          type: number
+          description: Number of flags that will force a message to be deleted automatically.
+        memberCount:
+          type: integer
+          description: Number of members in channel.
+        messageCount:
+          type: integer
+          description: Number of messages in channel.
+        lastActivity:
+          type: string
+          description: The date/time when a user last did something related to the channel such as add/remove members .
+          format: date-time
+        createdAt:
+          type: string
+          description: The date/time when a channel is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a channel is updated.
+          format: date-time
+        avatar:
+          $ref: './schema/file.yaml#/File'
+      required:
+        - channelId
+        - createdAt
+        - updatedAt
+    ChannelUser:
+      type: object
+      properties:
+        channelId:
+          type: string
+        userId:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+        readToSegment:
+          type: integer
+        membership:
+          $ref: '#/components/schemas/ChannelMembership'
+        isBanned:
+          type: boolean
+        isMuted:
+          type: boolean
+        muteTimeout:
+          type: string
+          format: date-time
+        lastActivity:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - userId
+        - channelId
+        - createdAt
+        - updatedAt
+    Comment:
+      $ref: './schema/comment.yaml#/Comment'
+    Community:
+      $ref: './schema/community.yaml#/Community'
+    CommunityUser:
+      $ref: './schema/community.yaml#/CommunityUser'
+    CommunityCategory:
+      $ref: './schema/community.yaml#/CommunityCategory'
+
+    Message:
+      $ref: './schema/message.yaml#/Message'
+    Reaction:
+      $ref: './schema/reaction.yaml#/Reaction'
+    ShortUser:
+      $ref: './schema/user.yaml#/ShortUser'
+    Network:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID of a network.
+        name:
+          type: string
+          description: network name
+        defaultMessageAutoDeleteEnabled:
+          type: boolean
+          description: Is message in this channel will be deleted when the user flagged until flag limit?
+        defaultAutoDeleteMessageByFlagLimit:
+          type: number
+          min: 1
+          example: 1
+          description: Number of flags that will force a message to be deleted automatically.
+        createdAt:
+          type: string
+          description: The date/time when a network is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a network is created.
+          format: date-time
+      required:
+        - referenceId
+        - referenceType
+    BlacklistRule:
+      type: object
+      properties:
+        ruleId:
+          type: string
+        regex:
+          type: string
+          description: Rule of blacklist.
+        isMatchExactWord:
+          type: boolean
+        isEnabled:
+          type: boolean
+          description: A flag to enabled a rule.
+        isDeleted:
+          type: boolean
+          description: A flag to deleted a rule.
+        createdAt:
+          type: string
+          description: The date/time when a rule is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a rule is updated or deleted.
+          format: date-time
+      required:
+        - regex
+    WhitelistRule:
+      type: object
+      properties:
+        ruleId:
+          type: string
+        regex:
+          type: string
+          description: Rule of whitelist.
+        isEnabled:
+          type: boolean
+          description: A flag to enabled a rule.
+        isDeleted:
+          type: boolean
+          description: A flag to deleted a rule.
+        createdAt:
+          type: string
+          description: The date/time when a rule is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a rule is updated or deleted.
+          format: date-time
+      required:
+        - regex
+    Role:
+      type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            type: string
+        publicId:
+          type: string
+      required:
+        - publicId
+    ModerationSetting:
+      type: object
+      properties:
+        maxRepetition:
+          type: integer
+        maxRepetitionTimeout:
+          type: integer
+        blacklistMuteTimeout:
+          type: integer
+        whitelistMuteTimeout:
+          type: integer
+        maxRepetitionMuteTimeout:
+          type: integer
+        enableImageModeration:
+          type: boolean
+        imageModeration:
+          type: object
+          properties:
+            nudity:
+              type: number
+            suggestive:
+              type: number
+            violence:
+              type: number
+            disturbing:
+              type: number
+        createdAt:
+          type: string
+          description: The date/time when a rule is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a rule is updated or deleted.
+          format: date-time
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        code:
+          type: string
+        message:
+          type: string
+    File:
+      $ref: './schema/file.yaml#File'
+    Follow:
+      $ref: './schema/follow.yaml#Follow'
+    FollowCount:
+      $ref: './schema/follow.yaml#FollowCount'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    SocketAuth:
+      type: apiKey
+      in: query
+      name: token
+  responses:
+    SuccessResponse:
+      description: Success response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+    IsFlagByMeResponse:
+      description: Is flag by me response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  isFlagByMe:
+                    type: boolean
+    IsPushNotifiableResponse:
+      description: Is push notifiable response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  isPushNotifiable:
+                    type: boolean
+    ChannelResultsResponse:
+      description: Channels Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        channel:
+                          $ref: '#/components/schemas/Channel'
+                        channelUser:
+                          $ref: '#/components/schemas/ChannelUser'
+    ChannelResultResponse:
+      description: Channel Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  results:
+                    type: object
+                    properties:
+                      channel:
+                        $ref: '#/components/schemas/Channel'
+                      channelUser:
+                        $ref: '#/components/schemas/ChannelUser'
+    ChannelResponse:
+      description: Channel response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isDistinct:
+                type: boolean
+              type:
+                $ref: '#/components/schemas/ChannelType'
+                description: Type of a channel (standard, conversation, broadcast). This property is not be used for now.
+              metadata:
+                type: object
+                description: Additional properties to support custom fields.
+              tags:
+                type: array
+                description: List of tags. They will be used for searching.
+                items:
+                  type: string
+              isMuted:
+                type: boolean
+                description: Is this channel muted? (Computed by using muteTimeout).
+              lastActivity:
+                type: string
+                description: The date/time when a user last did something related to the channel such as add/remove members .
+                format: date-time
+              createdAt:
+                type: string
+                description: The date/time when a channel is created.
+                format: date-time
+              updatedAt:
+                type: string
+                description: The date/time when a channel is updated.
+                format: date-time
+              isRateLimited:
+                type: boolean
+                description: Is this channel limited sending rate? (Computed by using muteTimeout).
+              rateLimitWindow:
+                type: integer
+                description: Waiting time interval before reset rateLimit to 0.
+              channelId:
+                type: string
+                description: ID of a channel.
+              muteTimeout:
+                type: string
+                description: The date/time to suppress muteness.
+                format: date-time
+              rateLimit:
+                type: integer
+                description: Number of messages within rate limit.
+              rateLimitTimeout:
+                type: string
+                description: The date/time to suppress limitation of sending rate.
+                format: date-time
+              displayName:
+                type: string
+                description: Channel name for displaying.
+              messageAutoDeleteEnabled:
+                type: boolean
+                description: Is message in this channel will be deleted when the user flagged until flag limit?
+              autoDeleteMessageByFlagLimit:
+                type: number
+                description: Number of flags that will force a message to be deleted automatically.
+              memberCount:
+                type: integer
+                description: Number of members in channel.
+              messageCount:
+                type: integer
+                description: Number of messages in channel.
+              avatar:
+                $ref: './schema/file.yaml#/File'
+    ChannelUserResponse:
+      description: Channel User response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChannelUser'
+    UsersResponse:
+      description: Users Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+    UserResponse:
+      description: User Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                $ref: '#/components/schemas/User'
+    NetworkResponse:
+      description: Network information.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Network'
+    BlacklistRulesResponse:
+      description: rules of blacklist Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BlacklistRule'
+    BlacklistRuleResponse:
+      description: rule of blacklist Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                $ref: '#/components/schemas/BlacklistRule'
+    WhitelistRulesResponse:
+      description: rules of whitelist Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BlacklistRule'
+    WhitelistRuleResponse:
+      description: rule of whitelist Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                $ref: '#/components/schemas/BlacklistRule'
+    RolesResponse:
+      description: Roles information.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  moderatonSettings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ModerationSetting'
+                  roles:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Role'
+    UserByAdminsResponse:
+      description: Users information.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        info:
+                          type: object
+                          properties:
+                            publicId:
+                              type: string
+                            roleIds:
+                              type: array
+                              items:
+                                type: string
+                            roles:
+                              type: array
+                              items:
+                                type: string
+                            displayName:
+                              type: string
+                            isGlobalBan:
+                              type: boolean
+                            metadata:
+                              type: object
+                            flagCount:
+                              type: integer
+                  roles:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Role'
+    ModerationSettingResponse:
+      description: Moderation Setting Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                $ref: '#/components/schemas/ModerationSetting'
+    UnexpectedError:
+      description: Unexpected error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 500000
+            message: Unexpected error
+    NotFoundError:
+      description: Resource Not Found error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400400
+            message: Resource Not Found.
+    BadRequestError:
+      description: Bad Request error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400000
+            message: Bad Request.
+    ChannelNotFoundError:
+      description: Channel Not Found error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400400
+            message: Channel Not Found.
+    PermissionDenidedError:
+      description: Permission denied.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400301
+            message: User is not a member of a channel
+    UserIsBannedError:
+      description: User is banned from a channel / community.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400304
+            message: User is banned from a channel / community.
+    RateLimitError:
+      description: Error due to a client create the same request with the same parameters exceed the number of time that server limit to.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400311
+            message: RateLimit Exceed.
+    UserNotFoundError:
+      description: User Not Found error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400400
+            message: User Not Found.
+    NumberOfFlagExceedError:
+      description: Error when too many user is already flagged message.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400300
+            message: Number of flag already exceed.
+    ForbiddenAvatarError:
+      description: Put file type not image into avatar
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400300
+            message: Avatar must be an image.
+    UserNotJoinError:
+      description: User is not join community.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400100
+            message: User ${userId} is not join this community ${communityId}
+    UserIsUnbannedError:
+      description: User is unbanned from a channel / community.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400316
+            message: User is unbanned from a channel / community.

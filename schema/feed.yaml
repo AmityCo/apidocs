@@ -1,0 +1,37 @@
+Feed:
+  type: object
+  properties:
+    targetId:
+      type: string
+      description: Target public id (community id or user id)
+    targetType:
+      type: enum
+      description: Target that feed belong to
+      enum:
+        - community
+        - user
+    postCount:
+      type: number
+      description: Post count in feed
+    feedType:
+      type: enum
+      description: |
+        Feed type
+        - published: main feed 
+        - reviewing: feed for things that have to be reviewed
+        - declined: feed for things that is rejected from reviewing
+      enum:
+        - published
+        - reviewing
+        - declined
+    feedId:
+      type: string
+      description: Feed public id
+    createdAt:
+      type: string
+      description: The date/time when a feed is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a feed is updated.
+      format: date-time

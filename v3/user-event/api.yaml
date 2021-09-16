@@ -1,0 +1,31 @@
+create:
+  summary: create a user event for video streaming 
+  tags:
+    - UserEvent
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    $ref: "./request.yaml#/VideoStreamingUserEventRequestBody"
+  responses:
+    "200000":
+      $ref: "./response.yaml#/VideoStreamingUserEventApiResponse"
+    "500000":
+      $ref: "../../global/error.yaml#/CustomValidationError"

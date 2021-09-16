@@ -1,0 +1,167 @@
+upload:
+  summary: Upload file.
+  tags:
+    - File
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: multipart/form-data
+      required: true
+      schema:
+        type: string
+  consumes:
+    - multipart/form-data
+  description: >
+    Upload file to cloud storage
+  requestBody:
+    description: >
+      Information of file to be created. It will be applied to every attachment
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            fullImage:
+              type: boolean
+              optional: true
+  responses:
+    "200":
+      $ref: "./response.yaml#/FileUploadResponse"
+    "413":
+      $ref: "../../global/error.yaml#/PayloadTooLargeError"
+    "500":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+get:
+  summary: Get file info
+  tags:
+    - File
+  description: >
+    Get file info of fileId (ex. type, attributes)
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - in: path
+      name: fileId # Note the name is the same as in the path
+      required: true
+      schema:
+        type: string
+        maxLength: 50
+      description: File id
+  responses:
+    "200":
+      $ref: "./response.yaml#/FileResponse"
+    "400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+delete:
+  summary: Delete file
+  tags:
+    - File
+  security:
+    - SocketAuth: []
+  description: >
+    Delete file (also remove from cloud).
+    Only uploader and admin can remove.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - in: path
+      name: fileId # Note the name is the same as in the path
+      required: true
+      schema:
+        type: string
+        maxLength: 50
+      description: File id to remove
+  responses:
+    "200":
+      $ref: "./response.yaml#/FileDeleteResponse"
+    "403":
+      $ref: "../../global/error.yaml#/GenericPermissionDenidedError"
+    "404":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "422":
+      $ref: "../../global/error.yaml#/ValidationError"
+download:
+  summary: Get file
+  tags:
+    - File
+  security:
+    - SocketAuth: []
+  description: >
+    Get file info of fileId (type, attributes)
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      schema:
+        type: string
+    - name: upstra-access-token
+      in: cookie
+      schema:
+        type: string
+      description: Alternative way to pass authorization token
+    - in: query
+      name: t
+      optional: true
+      schema:
+        type: string
+      description: Access token (for showing image inside img tag on web)
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - in: path
+      name: fileId # Note the name is the same as in the path
+      required: true
+      schema:
+        type: string
+        maxLength: 50
+      description: File id
+    - in: query
+      name: size
+      optional: true
+      schema:
+        type: string
+        enum:
+          - full
+          - large
+          - medium
+          - small
+      description: Size of image to download (no effect on file type 'file')
+  responses:
+    "200":
+      $ref: "./response.yaml#/FileDeleteResponse"
+    "404":
+      $ref: "../../global/error.yaml#/NotFoundError"

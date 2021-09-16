@@ -1,0 +1,243 @@
+ChannelMembership:
+  type: string
+  enum:
+    - none
+    - member
+    - banned
+
+ChannelType:
+  type: string
+  enum:
+    - standard
+    - private
+    - conversation
+    - broadcast
+    - community
+    - live
+  description: >
+    Channel Type:
+      * `standard` - Standard channel (deprecated) is public everyone can search and join this channel.
+      * `private` - Private channel (deprecated) is private only member can search and found this channel.
+      * `conversation` - Conversation channel is direct chat created by both users.
+      * `broadcast` - Broadcast channel is send message by admin only
+      * `community` - rename from Standard channel
+      * `live` - rename from Private channel
+
+ChannelV1:
+  type: object
+  properties:
+    channelId:
+      type: string
+      description: ID of a channel.
+    isDistinct:
+      type: boolean
+    metadata:
+      type: object
+      description: Additional properties to support custom fields.
+    type:
+      $ref: "#/ChannelType"
+    tags:
+      type: array
+      description: List of tags. They will be used for searching.
+      items:
+        type: string
+    isMuted:
+      type: boolean
+      description: Is this channel muted? (Computed by using muteTimeout).
+    isRateLimited:
+      type: boolean
+      description: Is this channel limited sending rate? (Computed by using muteTimeout).
+    muteTimeout:
+      type: string
+      description: The date/time to suppress muteness.
+      format: date-time
+    rateLimit:
+      type: integer
+      description: Number of messages within rate limit.
+    rateLimitWindow:
+      type: integer
+      description: Waiting time interval before reset rateLimit to 0.
+    rateLimitTimeout:
+      type: string
+      description: The date/time to suppress limitation of sending rate.
+      format: date-time
+    displayName:
+      type: string
+      description: Channel name for displaying.
+    messageAutoDeleteEnabled:
+      type: boolean
+      description: Is message in this channel will be deleted when the user flagged until flag limit?
+    autoDeleteMessageByFlagLimit:
+      type: number
+      description: Number of flags that will force a message to be deleted automatically.
+    memberCount:
+      type: integer
+      description: Number of members in channel.
+    messageCount:
+      type: integer
+      description: Number of messages in channel.
+    lastActivity:
+      type: string
+      description: The date/time when a user last did something related to the channel such as add/remove members .
+      format: date-time
+    createdAt:
+      type: string
+      description: The date/time when a channel is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a channel is updated.
+      format: date-time
+    avatar:
+      type: object
+
+ChannelUserV1:
+  type: object
+  properties:
+    userId:
+      type: string
+    channelId:
+      type: string
+    membership:
+      $ref: "#/ChannelMembership"
+    isBanned:
+      type: boolean
+    lastActivity:
+      type: string
+      format: date-time
+    roles:
+      type: array
+      items:
+        type: string
+    readToSegment:
+      type: integer
+    isMuted:
+      type: boolean
+    muteTimeout:
+      type: string
+      format: date-time
+    createdAt:
+      type: string
+      description: The date/time when a channel user is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a channel user is updated.
+      format: date-time
+
+ChannelV3:
+  type: object
+  properties:
+    channelId:
+      type: string
+      description: ID of a channel.
+    isDistinct:
+      type: boolean
+    metadata:
+      type: object
+      description: Additional properties to support custom fields.
+    type:
+      $ref: "#/ChannelType"
+    tags:
+      type: array
+      description: List of tags. They will be used for searching.
+      items:
+        type: string
+    isMuted:
+      type: boolean
+      description: Is this channel muted? (Computed by using muteTimeout).
+    isRateLimited:
+      type: boolean
+      description: Is this channel limited sending rate? (Computed by using muteTimeout).
+    muteTimeout:
+      type: string
+      description: The date/time to suppress muteness.
+      format: date-time
+    rateLimit:
+      type: integer
+      description: Number of messages within rate limit.
+    rateLimitWindow:
+      type: integer
+      description: Waiting time interval before reset rateLimit to 0.
+    rateLimitTimeout:
+      type: string
+      description: The date/time to suppress limitation of sending rate.
+      format: date-time
+    displayName:
+      type: string
+      description: Channel name for displaying.
+    messageAutoDeleteEnabled:
+      type: boolean
+      description: Is message in this channel will be deleted when the user flagged until flag limit?
+    autoDeleteMessageByFlagLimit:
+      type: number
+      description: Number of flags that will force a message to be deleted automatically.
+    memberCount:
+      type: integer
+      description: Number of members in channel.
+    messageCount:
+      type: integer
+      description: Number of messages in channel.
+    lastActivity:
+      type: string
+      description: The date/time when a user last did something related to the channel such as add/remove members .
+      format: date-time
+    createdAt:
+      type: string
+      description: The date/time when a channel is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a channel is updated.
+      format: date-time
+    avatarFileId:
+      type: string
+    isDeleted:
+      type: boolean
+      default: false
+      description: A flag to deleted a channel.
+  required:
+    - channelId
+    - createdAt
+    - updatedAt
+    
+ChannelUserV3:
+  type: object
+  properties:
+    userId:
+      type: string
+    channelId:
+      type: string
+    membership:
+      $ref: "#/ChannelMembership"
+    isBanned:
+      type: boolean
+    lastActivity:
+      type: string
+      format: date-time
+    roles:
+      type: array
+      items:
+        type: string
+    permissions:
+      type: array
+      items:
+        $ref: "./role.yaml#/PermissionEnum"
+    readToSegment:
+      type: integer
+    lastMentionedSegment:
+      type: integer
+    isMuted:
+      type: boolean
+    muteTimeout:
+      type: string
+      format: date-time
+    createdAt:
+      type: string
+      description: The date/time when a channel user is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a channel user is updated.
+      format: date-time
+

@@ -1,0 +1,83 @@
+UserResponse:
+  description: User Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+
+UserPaginationResponse:
+  description: User Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              
+UserSocketResponse:
+  description: User Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/UserV3"
+              files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+
+UserSocketPaginationResponse:
+  description: User Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/UserV3"
+              files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string

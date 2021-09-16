@@ -1,0 +1,567 @@
+query:
+  summary: query comments.
+  tags:
+    - Comment
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    query comments.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      condition for querying
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            referenceId:
+              type: string
+              maxLength: 900
+            referenceType:
+              type: string
+              enum:
+                - post
+                - content
+              default: post
+            filterByParentId:
+              type: boolean
+              default: true
+            parentId:
+              type: string
+              maxLength: 900
+            hasFlag:
+              type: boolean
+              default: false
+            isDeleted:
+              type: boolean
+              default: null
+            sortBy:
+              type: string
+              enum:
+                - firstCreated
+                - lastCreated
+                - lastUpdated
+                - firstUpdated
+              default: lastCreated
+              description: >
+                    type:
+                      * `scrollable(default)` - sort by segment number only.
+                      * `pagination` - can sort by 'lastCreated(default)', 'firstCreated', 'lastUpdated', 'firstUpdated'.
+            options:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - scrollable
+                    - pagination
+                  default: scrollable
+                  description: >
+                    type:
+                      * `scrollable(default)` - 'after', 'first', 'before' and 'last' will be set for page size with direction.
+                      * `pagination` - 'skip' and 'limit' will be the number of records to skip and max records size.
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  description: support pagination type only
+                skip:
+                  type: integer
+                  minimum: 0
+                  maximum: 100
+                  description: support pagination type only
+                after:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  description: support scrollable type only
+                first:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  description: support scrollable type only
+                before:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  description: support scrollable type only
+                last:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  description: support scrollable type only
+                token:
+                  type: string
+                  maxLength: 1000
+          required:
+            - referenceId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommentPaginationApiResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+create:
+  summary: create a comment.
+  tags:
+    - Comment
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      information of a comment to be created.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            referenceId:
+              type: string
+              maxLength: 900
+            referenceType:
+              type: string
+              enum:
+                - post
+                - content
+              default: post
+            data:
+              type: object
+            metadata:
+              type: object
+            commentId:
+              type: string
+              maxLength: 900
+            parentId:
+              type: string
+              maxLength: 900
+          required:
+            - referenceId
+            - data
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommentApiResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+update:
+  summary: update a comment.
+  tags:
+    - Comment
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      comment information.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            commentId:
+              type: string
+              maxLength: 900
+            data:
+              type: object
+            metadata:
+              type: object
+          required:
+            - commentId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommentApiResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+delete:
+  summary: delete a comment.
+  tags:
+    - Comment
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      comment information.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            commentId:
+              type: string
+              maxLength: 900
+          required:
+            - commentId
+  responses:
+    "200000":
+      description: comment information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+flag:
+  summary: flag a comment.
+  tags:
+    - Comment
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      information of a comment to be flagged.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            commentId:
+              type: string
+              maxLength: 900
+          required:
+            - commentId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommentApiResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400300":
+      $ref: "../../global/error.yaml#/NumberOfFlagExceedError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+isflagbyme:
+  summary: Check whether user flag a given comment.
+  tags:
+    - Comment
+  security:
+    - SocketAuth: []
+  description: >
+    Check whether user flag a given comment.
+  requestBody:
+    description: >
+      commentId to be flagged
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            commentId:
+              type: string
+              maxLength: 900
+          required:
+            - commentId
+  responses:
+    "200000":
+      $ref: "../../global/response.yaml#/IsSocialFlagByMeResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+unflag:
+  summary: unflag a comment.
+  tags:
+    - Comment
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      information of a comment to be unflagged.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            commentId:
+              type: string
+              maxLength: 900
+          required:
+            - commentId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommentApiResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+getList:
+  summary: get comments by IDs.
+  tags:
+    - Comment
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    get comments by IDs.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      Get comments by IDs.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            commentIds:
+              type: array
+              maxItems: 100
+              items:
+                type: string
+                maxLength: 50
+          required:
+            - commentIds
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommentApiResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+get:
+  summary: get a comment.
+  tags:
+    - Comment
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    get a comment.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      Get comment by ID.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            commentId:
+              type: string
+              maxLength: 50
+          required:
+            - commentId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommentApiResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+clearflag:
+  summary: clear flags.
+  tags:
+    - Comment
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      information of a comment to be clearflagged.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            commentId:
+              type: string
+              maxLength: 900
+          required:
+            - commentId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CommentApiResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

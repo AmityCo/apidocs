@@ -1,0 +1,72 @@
+ChannelApiResponse:
+  description: Channel Information
+  content:
+    application/json:
+      schema:
+        $ref: "../../schema/channel.yaml#/ChannelV1"
+
+ChannelAndUserApiResponse:
+  description: Channel Information
+  content:
+    application/json:
+      schema:
+        properties:
+          channel:
+            $ref: "../../schema/channel.yaml#/ChannelV1"
+          channelUser:
+            $ref: "../../schema/channel.yaml#/ChannelUserV1"
+
+
+ChannelPaginationApiResponse:
+  description: Channels Information
+  content:
+    application/json:
+      schema:
+        properties:
+          results:
+            type: array
+            items:
+              type: object
+              properties:
+                channel:
+                  $ref: "../../schema/channel.yaml#/ChannelV1"
+                channelUser:
+                  $ref: "../../schema/channel.yaml#/ChannelUserV1"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              prev:
+                type: string
+
+
+ChannelUserPaginationApiResponse:
+  description: Channel Users Information
+  content:
+    application/json:
+      schema:
+        properties:
+          results:
+            type: array
+            items:
+              $ref: "../../schema/channel.yaml#/ChannelUserV1"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              prev:
+                type: string
+
+MuteApiResponse:
+  description: Mute/unmute information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean
+      example:
+        success: true

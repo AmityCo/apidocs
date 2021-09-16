@@ -1,0 +1,46 @@
+post:
+  summary: Register a device.
+  tags:
+    - Device
+  security:
+    - ApiKeyAuth: []
+  description: >
+    Register a user device in order to connect to socket endpoint to perform sdk operations.
+  requestBody:
+    description: >
+      Information about user and devices that he/she use to connect to. If displayName is provide, that user display is updated as well.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+              minLength: 1
+            deviceId:
+              type: string
+            deviceInfo:
+              type: object
+              properties:
+                kind:
+                  type: string
+                  enum:
+                    - ios
+                    - android
+                    - web
+                    - node
+                model:
+                  type: string
+                sdkVersion:
+                  type: string
+            displayName:
+              type: string
+          required:
+            - userId
+            - deviceId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/DeviceResponse"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

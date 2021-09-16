@@ -1,0 +1,94 @@
+queryUsers:
+  summary: query channel users
+  tags:
+    - Channel
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Query channel users
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      Information of channel
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            channelId:
+              type: string
+              minLength: 1
+              maxLength: 900
+            roles:
+              type: array
+              description: Role to filter
+              minItems: 1
+              maxItems: 20
+              items:
+                type: string
+                minLength: 1
+                maxLength: 900
+            memberships:
+              type: array
+              description: Member type to filter
+              minItems: 1
+              maxItems: 3
+              items:
+                type: string
+                enum:
+                  - muted
+                  - banned
+                  - member
+              default: [member]
+            sortBy:
+              type: string
+              enum:
+                - lastCreated
+                - firstCreated
+              default: lastCreated
+            options:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                token:
+                  type: string
+                  maxLength: 1000
+            search:
+              type: string
+              maxLength: 10000       
+          required:
+            - channelId
+
+  responses:
+    "200000":
+      $ref: "./response.yaml#/ChannelPaginationSocketResponse"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

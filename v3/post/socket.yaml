@@ -1,0 +1,652 @@
+create:
+  summary: create a post
+  tags:
+    - Post
+  security:
+    - SocketAuth: []
+  description: >
+    Create a post
+  requestBody:
+    description: |
+      information of a post to be created.
+
+
+      When `dataType` is set `data` payload can be anything but it will not support normal data capability (ex. images and files)
+      and `data` payload size will be limit to 100kb
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            text:
+              type: string
+              deprecated: true
+            data:
+              type: object
+              description: require text or images or files (can't add images with files)
+              properties:
+                text:
+                  type: string
+                images:
+                  type: array
+                  items:
+                    type: string
+                files:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - text
+            dataType:
+              type: string
+              example: upstra.customtype
+              description: must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")
+            targetType:
+              type: string
+              enum:
+                - user
+                - community
+                - content
+              default: user
+            targetId:
+              type: string
+              example: <userId>
+            metadata:
+              type: object
+            postId:
+              type: string
+          required:
+            - data
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PostSocketResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+update:
+  summary: update a post
+  tags:
+    - Post
+  security:
+    - SocketAuth: []
+  description: >
+    Update a post (can't update images and files yet)
+  requestBody:
+    description: >
+      information of a post to be updated.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            postId:
+              type: string
+            text:
+              type: string
+              deprecated: true
+            data:
+              type: object
+              properties:
+                text:
+                  type: string
+                  max: 50000
+                  description: For updating text in the post
+                fileId:
+                  type: string
+                  max: 100
+                  description: Put file id to update file,image inside file, image post (video is not supported yet)
+                streamId:
+                  type: string
+                  max: 100
+                  description: Put stream id to update live streaming post with new streaming
+                thumbnailFileId:
+                  type: string
+                  max: 100
+                  description: Put image file id to update video file thumbnail in video post
+            metadata:
+              type: object
+          required:
+            - postId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PostSocketResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+delete:
+  summary: delete a post
+  tags:
+    - Post
+  security:
+    - SocketAuth: []
+  description: >
+    Delete a post
+  requestBody:
+    description: >
+      information of a post to be deleted.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            postId:
+              type: string
+          required:
+            - postId
+  responses:
+    "200000":
+      description: post information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+get:
+  summary: get a post by ID
+  tags:
+    - Post
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get a post by ID
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a post.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            postId:
+              type: string
+              maxLength: 900
+          required:
+            - postId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PostSocketResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+flag:
+  summary: flag a post.
+  tags:
+    - Post
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      information of a post to be flagged.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            postId:
+              type: string
+              maxLength: 900
+          required:
+            - postId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PostSocketResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400300":
+      $ref: "../../global/error.yaml#/NumberOfFlagExceedError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+unflag:
+  summary: unflag a post.
+  tags:
+    - Post
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      information of a post to be unflagged.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            postId:
+              type: string
+              maxLength: 900
+          required:
+            - postId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PostSocketResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+isflagbyme:
+  summary: Check whether user flag a given post.
+  tags:
+    - Post
+  security:
+    - SocketAuth: []
+  description: >
+    Check whether user flag a given post.
+  requestBody:
+    description: >
+      postId to check if the post is flagged by user.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            postId:
+              type: string
+              maxLength: 900
+          required:
+            - postId
+  responses:
+    "200000":
+      $ref: "../../global/response.yaml#/IsSocialFlagByMeResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+getList:
+  summary: get list of post
+  tags:
+    - Post
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get list of post
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a post.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            postIds:
+              type: array
+              maxItems: 100
+              items:
+                type: string
+                maxLength: 50
+          required:
+            - postIds
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PostSocketResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+clearflag:
+  summary: clear flags
+  tags:
+    - Post
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      information of a post to be clear flagged.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            postId:
+              type: string
+              maxLength: 900
+          required:
+            - postId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PostSocketResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+query:
+  summary: query posts
+  tags:
+    - Post
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Query posts
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      condition for querying
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            targetId:
+              type: string
+              maxLength: 900
+            targetType:
+              type: string
+              enum:
+                - community
+                - user
+                - content
+            sortBy:
+              type: string
+              enum:
+                - lastCreated
+                - firstCreated
+                - lastUpdated
+                - firstUpdated
+              default: lastCreated
+            dataType:
+              type: string
+              example: upstra.customtype
+              description: must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")
+              deprecated: true
+            hasFlag:
+              type: boolean
+              default: null
+              description: >
+                  hasFlag:
+                    * `null(default)` - Show all posts.
+                    * `true` - Show only flagged post(or children) or has flagged comment.
+                    * `false` - Show only no flagged post(and children) and has no flagged comment.
+            isDeleted:
+              type: boolean
+              default: null
+            options:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                token:
+                  type: string
+                  maxLength: 1000
+            feedType:
+              type: string
+              enum:
+                - published
+                - reviewing
+              default: published
+            dataTypes:
+              type: array
+              minItems: 1
+              maxItems: 10
+              items:
+                oneOf:
+                  - type: string
+                    enum:
+                      - video
+                      - image
+                      - file
+                      - liveStream
+                    description: post data type to filter
+                  - type: string
+                    example: upstra.customtype
+                    description: custom post type - must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")
+            matchingOnlyParentPost:
+              type: boolean
+              default: true
+              description: When `true` will filter only parent post
+          required:
+            - targetType
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PostPaginationSocketResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+approve:
+  summary: Approve reviewing post
+  tags:
+    - Post
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Query posts
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            postId:
+              type: string
+              maxLength: 900
+          required:
+            - postId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PostSocketResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+decline:
+  summary: Decline reviewing post
+  tags:
+    - Post
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      condition for querying
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            postId:
+              type: string
+              maxLength: 900
+          required:
+            - postId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PostSocketResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

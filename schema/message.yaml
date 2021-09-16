@@ -1,0 +1,482 @@
+Message:
+  type: object
+  properties:
+    messageId:
+      type: string
+      description: ID of a message.
+    parentId:
+      type: string
+      description: ID of a parent message.
+    childrenNumber:
+      type: integer
+      description: A number of comments in this message.
+    channelId:
+      type: string
+      description: ID of a channel.
+    userId:
+      type: string
+      description: ID of a user.
+    type:
+      type: string
+      description: Type of a message (text, image, video, json).
+    tags:
+      type: array
+      description: List of tags. They will be used for searching.
+      items:
+        type: string
+    data:
+      type: object
+      description: Body of a message.
+    isDeleted:
+      type: boolean
+      description: A flag to hide a message. Unable to show after hiding. It will be set to true when user deletes a message or a channel of this message is banned.
+    channelSegment:
+      type: integer
+      description: A sequence number of a message in channel.
+    createdAt:
+      type: string
+      description: The date/time when a channel is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a channel of this message is banned or this message is deleted.
+      format: date-time
+    editedAt:
+      type: string
+      description: The date/time when a message is deleted or updated.
+      format: date-time
+    flagCount:
+      type: integer
+      description: The number of users that has read this message.
+    hashFlag:
+      type: object
+      description: The flag for checking internally that this message is reported or not.
+      properties:
+        bits:
+          type: integer
+        hashes:
+          type: integer
+        hash:
+          type: array
+          items:
+            type: integer
+    reactions:
+      type: object
+      description: The mapping of reaction with reactionCounter.
+    reactionsCount:
+      type: integer
+      description: The number of all reactions for this messages.
+    myReactions:
+      type: array
+      description: The list of my reactions to this message. This property will not exist when it is triggered from an event 'message.didUpdate'.
+      items:
+        type: string
+    latestReaction:
+      type: object
+      description: The latest reaction. This property will exist when it is triggered from an event 'message.didUpdate'.
+      properties:
+        referenceId:
+          type: string
+          description: ID of a document.
+        referenceType:
+          type: string
+          description: Type of document.
+        reactionName:
+          type: string
+        userId:
+          type: string
+        userDisplayName:
+          type: string
+        reactionId:
+          type: string
+        eventName:
+          type: string
+        createdAt:
+          type: string
+          description: The date/time when a reaction is created.
+          format: date-time
+  required:
+    - messageId
+    - channelId
+    - userId
+    - channelSegment
+    - createdAt
+    - updatedAt
+
+MessageV3:
+  type: object
+  properties:
+    messageId:
+      type: string
+      description: ID of a message.
+    channelId:
+      type: string
+      description: ID of a channel.
+    userId:
+      type: string
+      description: ID of a user.
+    type:
+      type: string
+      enum:
+        - text
+        - image
+        - file
+        - custom
+        - video
+        - audio
+        - imagemap
+    data:
+      type: object
+      description: Body of a message.
+    channelSegment:
+      type: integer
+      description: A sequence number of a message in channel.
+    parentId:
+      type: string
+      description: ID of a parent message.
+    fileId:
+      type: string
+      description: file key on cloud storage.
+    tags:
+      type: array
+      description: List of tags. They will be used for searching.
+      items:
+        type: string
+    metadata:
+      type: object
+      description: Additional properties to support custom fields.
+    flagCount:
+      type: integer
+      description: The number of users that has read this message.
+    hashFlag:
+      type: object
+      description: The flag for checking internally that this message is reported or not.
+      properties:
+        bits:
+          type: integer
+        hashes:
+          type: integer
+        hash:
+          type: array
+          items:
+            type: integer
+    childrenNumber:
+      type: integer
+      description: A number of comments in this message.
+    reactionsCount:
+      type: integer
+      description: The number of all reactions for this messages.
+    reactions:
+      type: object
+      description: The mapping of reaction with reactionCounter.
+    myReactions:
+      type: array
+      description: The list of my reactions to this message. This property will not exist when it is triggered from an event 'message.didUpdate'.
+      items:
+        type: string
+    latestReaction:
+      type: object
+      description: The latest reaction. This property will exist when it is triggered from an event 'message.didUpdate'.
+      properties:
+        referenceId:
+          type: string
+          description: ID of a document.
+        referenceType:
+          type: string
+          description: Type of document.
+        reactionName:
+          type: string
+        userId:
+          type: string
+        userDisplayName:
+          type: string
+        reactionId:
+          type: string
+        eventName:
+          type: string
+        createdAt:
+          type: string
+          description: The date/time when a reaction is created.
+          format: date-time
+    isDeleted:
+      type: boolean
+      description: A flag to hide a message. Unable to show after hiding. It will be set to true when user deletes a message or a channel of this message is banned.
+    createdAt:
+      type: string
+      description: The date/time when a channel is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a channel of this message is banned or this message is deleted.
+      format: date-time
+    editedAt:
+      type: string
+      description: The date/time when a message is deleted or updated.
+      format: date-time
+    mentionees:
+      type: array
+      description: The object of the mentions type and user who get a notification for the message.
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            description: >
+                type:
+                * `user` - need to specific userIds and notification mentions individual user 
+                * `channel` - notification mentions all user in channel
+            enum:
+              - user
+              - channel
+          userIds:
+            type: array
+            description: Array of UserId. if the mention type is a channel, doesn't send userIds
+            items:
+              type: string
+
+MessageForRealtimeEvent:
+  type: object
+  properties:
+    messageId:
+      type: string
+      description: ID of a message.
+    parentId:
+      type: string
+      description: ID of a parent message.
+    childrenNumber:
+      type: integer
+      description: A number of comments in this message.
+    channelId:
+      type: string
+      description: ID of a channel.
+    userId:
+      type: string
+      description: ID of a user.
+    type:
+      type: string
+      description: Type of a message (text, image, video, json).
+    tags:
+      type: array
+      description: List of tags. They will be used for searching.
+      items:
+        type: string
+    data:
+      type: object
+      description: Body of a message.
+    isDeleted:
+      type: boolean
+      description: A flag to hide a message. Unable to show after hiding. It will be set to true when user deletes a message or a channel of this message is banned.
+    channelSegment:
+      type: integer
+      description: A sequence number of a message in channel.
+    createdAt:
+      type: string
+      description: The date/time when a channel is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a channel of this message is banned or this message is deleted.
+      format: date-time
+    editedAt:
+      type: string
+      description: The date/time when a message is deleted or updated.
+      format: date-time
+    flagCount:
+      type: integer
+      description: The number of users that has read this message.
+    hashFlag:
+      type: object
+      description: The flag for checking internally that this message is reported or not.
+      properties:
+        bits:
+          type: integer
+        hashes:
+          type: integer
+        hash:
+          type: array
+          items:
+            type: integer
+    reactions:
+      type: object
+      description: The mapping of reaction with reactionCounter.
+    reactionsCount:
+      type: integer
+      description: The number of all reactions for this messages.
+    latestReaction:
+      type: object
+      description: The latest reaction. This property will exist when it is triggered from an event 'message.didUpdate'.
+      properties:
+        referenceId:
+          type: string
+          description: ID of a document.
+        referenceType:
+          type: string
+          description: Type of document.
+        reactionName:
+          type: string
+        userId:
+          type: string
+        userDisplayName:
+          type: string
+        reactionId:
+          type: string
+        eventName:
+          type: string
+        createdAt:
+          type: string
+          description: The date/time when a reaction is created.
+          format: date-time
+  required:
+    - messageId
+    - channelId
+    - userId
+    - channelSegment
+    - createdAt
+    - updatedAt
+
+MessageV3ForRealtimeEvent:
+  type: object
+  properties:
+    messageId:
+      type: string
+      description: ID of a message.
+    channelId:
+      type: string
+      description: ID of a channel.
+    userId:
+      type: string
+      description: ID of a user.
+    type:
+      type: string
+      enum:
+        - text
+        - image
+        - file
+        - custom
+        - video
+        - audio
+        - imagemap
+    data:
+      type: object
+      description: Body of a message.
+    channelSegment:
+      type: integer
+      description: A sequence number of a message in channel.
+    parentId:
+      type: string
+      description: ID of a parent message.
+    fileId:
+      type: string
+      description: file key on cloud storage.
+    tags:
+      type: array
+      description: List of tags. They will be used for searching.
+      items:
+        type: string
+    metadata:
+      type: object
+      description: Additional properties to support custom fields.
+    flagCount:
+      type: integer
+      description: The number of users that has read this message.
+    hashFlag:
+      type: object
+      description: The flag for checking internally that this message is reported or not.
+      properties:
+        bits:
+          type: integer
+        hashes:
+          type: integer
+        hash:
+          type: array
+          items:
+            type: integer
+    childrenNumber:
+      type: integer
+      description: A number of comments in this message.
+    reactionsCount:
+      type: integer
+      description: The number of all reactions for this messages.
+    reactions:
+      type: object
+      description: The mapping of reaction with reactionCounter.
+    latestReaction:
+      type: object
+      description: The latest reaction. This property will exist when it is triggered from an event 'message.didUpdate'.
+      properties:
+        referenceId:
+          type: string
+          description: ID of a document.
+        referenceType:
+          type: string
+          description: Type of document.
+        reactionName:
+          type: string
+        userId:
+          type: string
+        userDisplayName:
+          type: string
+        reactionId:
+          type: string
+        eventName:
+          type: string
+        createdAt:
+          type: string
+          description: The date/time when a reaction is created.
+          format: date-time
+    isDeleted:
+      type: boolean
+      description: A flag to hide a message. Unable to show after hiding. It will be set to true when user deletes a message or a channel of this message is banned.
+    createdAt:
+      type: string
+      description: The date/time when a channel is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a channel of this message is banned or this message is deleted.
+      format: date-time
+    editedAt:
+      type: string
+      description: The date/time when a message is deleted or updated.
+      format: date-time
+    mentionees:
+      type: array
+      description: The object of the mentions type and user who get a notification for the message.
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            description: >
+                type:
+                * `user` - need to specific userIds and notification mentions individual user 
+                * `channel` - notification mentions all user in channel
+            enum:
+              - user
+              - channel
+          userIds:
+            type: array
+            description: Array of UserId. if the mention type is a channel, doesn't send userIds
+            items:
+              type: string
+
+MentioneesRequest:
+  type: object
+  properties:
+    type:
+      type: string
+      description: >
+        type:
+          * `user` - need to specific userIds and notification mentions individual user 
+          * `channel` - notification mentions all user in channel
+      enum:
+        - user
+        - channel
+    userIds:
+      type: array
+      description: Array of UserId. if the mention type is a channel, doesn't send userIds
+      items:
+        type: string
+      maxItems: 30
+  required:
+    - type

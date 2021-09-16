@@ -1,0 +1,43 @@
+UserFeedResponse:
+  description: UserFeed Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              posts:
+                type: array
+                items:
+                  $ref: "../../schema/post.yaml#/Post"
+              postChildren:
+                type: array
+                items:
+                  $ref: "../../schema/post.yaml#/Post"
+              comments:
+                type: array
+                items:
+                  $ref: "../../schema/comment.yaml#/Comment"
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/UserV3"
+              files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+
+NumberOfPostResponse:
+  description: Number of post information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          postsCount:
+            type: number
+    

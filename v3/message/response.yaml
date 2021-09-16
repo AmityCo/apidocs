@@ -1,0 +1,99 @@
+MessagesApiResponse:
+  description: Messages Information
+  content:
+    application/json:
+      schema:
+        properties:
+          messages:
+            type: array
+            items:
+              $ref: "../../schema/message.yaml#/MessageV3"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+
+MessagePaginationApiResponse:
+  description: Messages Information
+  content:
+    application/json:
+      schema:
+        properties:
+          messages:
+            type: array
+            items:
+              $ref: "../../schema/message.yaml#/MessageV3"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              prev:
+                type: string
+
+MessagesSocketResponse:
+  description: Messages Information
+  content:
+    application/json:
+      schema:
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              messages:
+                type: array
+                items:
+                  $ref: "../../schema/message.yaml#/MessageV3ForRealtimeEvent"
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/UserV3"
+              files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+
+MessagePaginationSocketResponse:
+  description: Messages Information
+  content:
+    application/json:
+      schema:
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              messages:
+                type: array
+                items:
+                  $ref: "../../schema/message.yaml#/MessageV3"
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/UserV3"
+              files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  prev:
+                    type: string

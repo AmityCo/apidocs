@@ -1,0 +1,137 @@
+ShortUser:
+  type: object
+  properties:
+    userId:
+      type: string
+    displayName:
+      type: string
+    metadata:
+      type: object
+UserV3:
+  type: object
+  properties:
+    userId:
+      type: string
+    roles:
+      type: array
+      items:
+        type: string
+    permissions:
+      type: array
+      items:
+        $ref: "./role.yaml#/PermissionEnum"
+    displayName:
+      type: string
+    description:
+      type: string
+    avatarFileId:
+      type: string
+    avatarCustomUrl:
+      type: string
+    flagCount:
+      type: integer
+    hashFlag:
+      type: object
+      properties:
+        bits:
+          type: integer
+        hashes:
+          type: integer
+        hash:
+          type: array
+          items:
+            type: integer
+    metadata:
+      type: object
+    isGlobalBan:
+      type: boolean
+      description: Only administrator can see this flag and it will have this one only banned user
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+  required:
+    - userId
+    - createdAt
+    - updatedAt
+
+User:
+  type: object
+  properties:
+    userId:
+      type: string
+    roles:
+      type: array
+      items:
+        type: string
+    displayName:
+      type: string
+    flagCount:
+      type: integer
+    hashFlag:
+      type: object
+      properties:
+        bits:
+          type: integer
+        hashes:
+          type: integer
+        hash:
+          type: array
+          items:
+            type: integer
+    metadata:
+      type: object
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+  required:
+    - userId
+    - createdAt
+    - updatedAt
+
+ShortUserV3:
+  type: object
+  properties:
+    userId:
+      type: string
+    displayName:
+      type: string
+    metadata:
+      type: object
+    roles:
+      type: array
+      items:
+        type: string
+    avatarFileId:
+      type: string
+    avatarCustomUrl:
+      type: string
+
+AdminUser:
+  type: object
+  properties:
+    _id:
+      type: string
+    publicId:
+      type: string
+    displayName:
+      type: string
+    metadata:
+      type: object
+    roleIds:
+      type: array
+      items:
+        type: string
+    isGlobalBan:
+      type: boolean
+    roles:
+      type: array
+      items:
+        type: string
+    flagCount:
+      type: number

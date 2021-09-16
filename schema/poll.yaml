@@ -1,0 +1,45 @@
+Poll:
+  type: object
+  properties:
+    pollId:
+      type: string
+    userId:
+      type: string
+    question:
+      type: string
+      description: question.
+    answers:
+      type: array
+      maxItems: 10
+      items:
+        type: object
+        properties:
+          dataType:
+            type: string
+            enum:
+              - text
+          data:
+            type: string
+          voteCount:
+            type: number
+            default: 0
+          isVotedByUser:
+            type: boolean
+            default: false
+          id:
+            type: string
+            description: Option id
+    answerType:
+      type: string
+    closedAt:
+      type: string
+    createdAt:
+      type: string
+    isVoted:
+      type: boolean
+      default: false
+    status:
+      type: string
+      default: open
+    closedIn:
+      type: number

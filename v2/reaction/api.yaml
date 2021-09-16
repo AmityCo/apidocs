@@ -1,0 +1,249 @@
+query:
+  summary: get list of reactions.
+  tags:
+    - Admin
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get paginable list of reactions.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      Condition of querying including specified reaction and pagination.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            referenceId:
+              type: string
+              maxLength: 900
+            referenceType:
+              type: string
+              enum: [message, post, comment]
+            reactionName:
+              type: string
+              maxLength: 100
+            options:
+              type: object
+              properties:
+                skip:
+                  type: integer
+                  minimum: 0
+                limit:
+                  type: integer
+                  minimum: 0
+                token:
+                  type: string
+                  maxLength: 1000
+          required:
+            - referenceId
+            - referenceType
+  responses:
+    "200000":
+      $ref: "./response.yaml#/ReactionResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+create:
+  summary: add reaction to any document.
+  tags:
+    - Admin
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Add reaction to a document referenced by ID and type.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      reference ID and type with reaction name
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            referenceId:
+              type: string
+              maxLength: 900
+            referenceType:
+              type: string
+              enum: [message, post, comment]
+            reactionName:
+              type: string
+              maxLength: 100
+          required:
+            - referenceId
+            - referenceType
+            - reactionName
+  responses:
+    "200000":
+      description: "Returns a reaction id is added"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              addedId:
+                type: string
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+delete:
+  summary: remove reaction from any document.
+  tags:
+    - Admin
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Remove reaction from a document referenced by ID and type.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      reference ID and type with reaction name
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            referenceId:
+              type: string
+              maxLength: 900
+            referenceType:
+              type: string
+              enum: [message, post, comment]
+            reactionName:
+              type: string
+              maxLength: 100
+          required:
+            - referenceId
+            - referenceType
+            - reactionName
+  responses:
+    "200000":
+      description: "Returns a reaction id is removed"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              removedId:
+                type: string
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+most:
+  summary: Get message ids by the most of reactions.
+  tags:
+    - Admin
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get message ids by the most of reactions.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      limit and reaction name
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            limit:
+              type: integer
+              minimum: 1
+            reactionName:
+              type: string
+  responses:
+    "200000":
+      description: Message information.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                reactionsCount:
+                  type: integer
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

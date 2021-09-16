@@ -1,0 +1,78 @@
+ChannelSocketResponse:
+  description: Channel Information
+  content:
+    application/json:
+      schema:
+        properties:
+          status:
+            type: string
+          data:
+            $ref: "../../schema/channel.yaml#/ChannelV1"     
+
+ChannelAndUserSocketResponse:
+  description: Channel Information
+  content:
+    application/json:
+      schema:
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              channel:
+                $ref: "../../schema/channel.yaml#/ChannelV1"
+              channelUser:
+                $ref: "../../schema/channel.yaml#/ChannelUserV1"
+
+ChannelPaginationSocketResponse:
+  description: Channels Information
+  content:
+    application/json:
+      schema:
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    channel:
+                      $ref: "../../schema/channel.yaml#/ChannelV1"
+                    channelUser:
+                      $ref: "../../schema/channel.yaml#/ChannelUserV1"
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  prev:
+                    type: string
+
+ChannelUserPaginationSocketResponse:
+  description: Channel Users Information
+  content:
+    application/json:
+      schema:
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: "../../schema/channel.yaml#/ChannelUserV1"
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  prev:
+                    type: string
+              

@@ -1,0 +1,49 @@
+uploadVideo:
+  summary: Upload video.
+  tags:
+    - File
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: multipart/form-data
+      required: true
+      schema:
+        type: string
+  consumes:
+    - multipart/form-data
+  description: |
+    Upload video to cloud storage
+
+    Video size limit: 1,073,741,824 byte
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:            
+          type: object
+          properties:
+            files:
+              type: array
+              items:
+                type: string
+                format: binary
+                description: Video file data
+          required:
+            - files
+  responses:
+    "200":
+      $ref: "./response.yaml#/FileVideoUploadResponse"
+    "413":
+      $ref: "../../global/error.yaml#/PayloadTooLargeError"
+    "500":
+      $ref: "../../global/error.yaml#/UnexpectedError"

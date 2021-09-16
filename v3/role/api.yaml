@@ -1,0 +1,294 @@
+create:
+  summary: Create role
+  tags:
+    - Role
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Create a role
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a role to be created.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            roleId:
+              type: string
+              description: role id
+              minLength: 1
+              maxLength: 100
+            displayName:
+              type: string
+              description: display name of role
+              minLength: 0
+              maxLength: 100
+            permissions:
+              type: array
+              items: 
+                type: string
+              description: The list of permission for this role. https://github.com/EkoCommunications/UpstraEngineeringGitbook/blob/feature/roles/specification/roles.md#permissions
+          required:
+            - roleId
+            - permissions
+  responses:
+    "200000":
+      $ref: "./response.yaml#/RoleResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400301":
+      $ref: "../../global/error.yaml#/GenericPermissionDenidedError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+update:
+  summary: Update role
+  tags:
+    - Role
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Update a role
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a role to be created.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            roleId:
+              type: string
+              description: role id to update
+              minLength: 1
+              maxLength: 100
+            displayName:
+              type: string
+              description: display name of role to update
+              minLength: 0
+              maxLength: 100
+            permissions:
+              type: array
+              items: 
+                type: string
+              description: The list of permission to update. https://github.com/EkoCommunications/UpstraEngineeringGitbook/blob/feature/roles/specification/roles.md#permissions
+          required:
+            - roleId
+            - permissions
+  responses:
+    "200000":
+      $ref: "./response.yaml#/RoleResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/GenericPermissionDenidedError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+delete:
+  summary: Delete role
+  tags:
+    - Role
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Delete a role
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a role to be delete.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            roleId:
+              type: string
+              description: role id to delete
+              minLength: 1
+              maxLength: 100
+          required:
+            - roleId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/RoleResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400301":
+      $ref: "../../global/error.yaml#/GenericPermissionDenidedError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+get:
+  summary: Get role
+  tags:
+    - Role
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get a role
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a role to get.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            roleId:
+              type: string
+              description: role id to get
+              minLength: 1
+              maxLength: 100
+          required:
+            - roleId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/RoleResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+query:
+  summary: Get roles (pagination support)
+  tags:
+    - Role
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get roles (pagination support)
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a role to get.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            keyword:
+              type: string
+              description: search keyword
+              minLength: 0
+              maxLength: 100
+            sortBy:
+              type: string
+              enum:
+                - lastCreated
+                - firstCreated
+                - displayName
+              default: lastCreated
+            options:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                token:
+                  type: string
+                  minLength: 1
+                  maxLength: 1000
+  responses:
+    "200000":
+      $ref: "./response.yaml#/RoleResponse"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

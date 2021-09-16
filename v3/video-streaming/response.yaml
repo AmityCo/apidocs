@@ -1,0 +1,102 @@
+VideoStreamingsApiResponse:
+  description: video streaming information
+  content:
+    application/json:
+      schema:
+        properties:
+          videoStreamings:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+VideoStreamingPaginationApiResponse:
+  description: list of video streaming
+  content:
+    application/json:
+      schema:
+        properties:
+          results:
+            type: object
+            properties:
+              videoStreamings:
+                type: array
+                items:
+                  $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/UserV3"
+              files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              prev:
+                type: string
+VideoStreamingsSocketResponse:
+  description: video streaming information
+  content:
+    application/json:
+      schema:
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              videoStreamings:
+                type: array
+                items:
+                  $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/UserV3"
+              files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+VideoStreamingPaginationSocketResponse:
+  description: list of video streaming
+  content:
+    application/json:
+      schema:
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              results:
+                type: object
+                properties:
+                  videoStreamings:
+                    type: array
+                    items:
+                      $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+                  users:
+                    type: array
+                    items:
+                      $ref: "../../schema/user.yaml#/UserV3"
+                  files:
+                    type: array
+                    items:
+                      $ref: "../../schema/file.yaml#/File"
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  prev:
+                    type: string

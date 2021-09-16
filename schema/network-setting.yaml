@@ -1,0 +1,69 @@
+NetworkSetting:
+  type: object
+  properties:
+    videoStreaming:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+    chat:
+      $ref: '#/ChatNetworkSetting'
+    social:
+      $ref: '#/SocialNetworkSetting'
+    webhook:
+      $ref: '#/WebhookNetworkSetting'
+    moderation:
+      type: object
+      properties:
+        isWhitelistEnabled:
+          type: boolean
+    tierHandler:
+      type: string
+
+SocialNetworkSetting:
+  type: object
+  properties:
+    enabled:
+      type: boolean
+    userPrivacySetting:
+      type: string
+      enum:
+        - public
+        - private
+    isFollowWithRequestEnabled:
+      type: boolean
+      default: false
+    isAllowEditPostWhenReviewingEnabled:
+      type: boolean
+    globalFeed:
+      type: object
+      properties:
+        showOnlyMyFeed:
+          type: boolean
+          default: false
+        showMyPost:
+          type: boolean
+        showEveryonePost:
+          type: boolean
+        showCommunityPost:
+          type: boolean
+        showFollowingPost:
+          type: boolean
+
+WebhookNetworkSetting:
+  type: object
+  properties:
+    enabled:
+      type: boolean
+
+ChatNetworkSetting:
+  type: object
+  properties:
+    enabled:
+      type: boolean
+    mention:
+      type: object
+      properties:
+        isAllowMentionedChannelEnabled:
+          type: boolean  
+          default: true

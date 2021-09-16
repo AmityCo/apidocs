@@ -1,0 +1,177 @@
+query:
+  summary: Get users information
+  tags:
+    - UserV3
+  security:
+    - SocketAuth: []
+  description: >
+    Get users information (pagination supported)
+  requestBody:
+    description: >
+      Request body
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            keyword:
+              type: string
+              maxLength: 100
+            filter:
+              type: string
+              enum:
+                - all
+                - flagged
+              default: all
+            sortBy:
+              type: string
+              enum:
+                - lastCreated
+                - firstCreated
+                - displayName
+              default: displayName
+            options:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                token:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+  responses:
+    "200000":
+      $ref: "./response.yaml#/UserSocketPaginationResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400100":
+      $ref: "../../global/error.yaml#/UserNotAllowedToUpdateError"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+getByPublicId:
+  summary: Get users information by public id.
+  tags:
+    - UserV3
+  security:
+    - SocketAuth: []
+  description: >
+    Get users information by public id.
+  requestBody:
+    description: >
+      Request body
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userIds:
+              require: true
+              type: array
+              maxItems: 100
+              items:
+                type: string
+                minLength: 1
+                maxLength: 900
+  responses:
+    "200000":
+      $ref: "./response.yaml#/UserSocketResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400100":
+      $ref: "../../global/error.yaml#/UserNotAllowedToUpdateError"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+get:
+  summary: Get one user information.
+  tags:
+    - UserV3
+  security:
+    - SocketAuth: []
+  description: >
+    Get one user information.
+  requestBody:
+    description: >
+      Request body
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+              require: true
+              minLength: 1
+              maxLength: 900
+  responses:
+    "200000":
+      $ref: "./response.yaml#/UserSocketResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400100":
+      $ref: "../../global/error.yaml#/UserNotAllowedToUpdateError"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+update:
+  summary: Update user information.
+  tags:
+    - UserV3
+  security:
+    - SocketAuth: []
+  description: >
+    Update user information such as displayName, roles, avatar and metadata
+  requestBody:
+    description: >
+      User information to be updated
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+              maxLength: 50
+            displayName:
+              type: string
+              maxLength: 100
+            roles:
+              type: array
+              maxItems: 100
+              items:
+                type: string
+                maxLength: 100
+            metadata:
+              type: object
+            avatarFileId:
+              type: string
+              maxLength: 50
+            avatarCustomUrl:
+              type: string
+              maxLength: 1000
+            description:
+              type: string
+              maxLength: 500
+  responses:
+    "200000":
+      $ref: "./response.yaml#/UserSocketResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400100":
+      $ref: "../../global/error.yaml#/UserNotAllowedToUpdateError"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

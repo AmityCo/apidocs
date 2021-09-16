@@ -1,0 +1,319 @@
+updateNetworkSetting:
+  summary: Update network setting configuration.
+  tags:
+    - Network Setting
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Update network setting configuration.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information for a network setting
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            networkId:
+              type: string
+            tierHandler:
+              type: string
+              maxLength: 200
+            socialEnabled:
+              type: boolean
+            videoStreamingEnabled:
+              type: boolean
+            chatEnabled:
+              type: boolean
+            isWhitelistEnabled:
+              type: boolean
+  responses:
+    '200000':
+      $ref: './response.yaml#/NetworkSettingApiResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+
+updateSocial:
+  summary: Update social configuration.
+  tags:
+    - Network Setting
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Update social configuration.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information for a network setting
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userPrivacySetting:
+              type: string
+              enum:
+                - public
+                - private
+            isFollowWithRequestEnabled:
+              type: boolean
+              default: false
+            isAllowEditPostWhenReviewingEnabled:
+              type: boolean
+            showOnlyMyFeed:
+              type: boolean
+              default: false
+            showMyPost:
+              type: boolean
+            showEveryonePost:
+              type: boolean
+            showCommunityPost:
+              type: boolean
+            showFollowingPost:
+              type: boolean
+            isAllowMentionedChannelEnabled:
+              type: boolean  
+
+  responses:
+    '200000':
+      $ref: './response.yaml#/SocialNetworkSettingApiResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+
+getSocial:
+  summary: Get social configuration.
+  tags:
+    - Network Setting
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get social configuration.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/SocialNetworkSettingApiResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+
+updateWebhook:
+  summary: Update webhook configuration.
+  tags:
+    - Network Setting
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Update webhook configuration.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information for a network setting
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            webhookEnabled:
+              type: boolean
+              description: |
+                `true` - User can register webhook for network and will receive a webhook.
+                `false` - User won't be able to register webhook and won't receive a webhook.
+
+  responses:
+    '200000':
+      $ref: './response.yaml#/WebhookNetworkSettingApiResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+
+getWebhook:
+  summary: Get webhook configuration.
+  tags:
+    - Network Setting
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get webhook configuration.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/WebhookNetworkSettingApiResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+
+updateChatSetting:
+   summary: Update chat network setting configuration.
+   tags:
+     - Network Setting
+   securityDefinition:
+     ApiKeyAuth:
+       type: apiKey
+       in: header
+       name: Authorization
+   description: >
+     Update chat network setting configuration.
+   parameters:
+     - name: Authorization
+       in: header
+       value: Bearer {{accessToken}}
+       required: true
+       schema:
+         type: string
+     - name: Content-Type
+       in: header
+       value: application/x-www-form-urlencoded
+       required: true
+       schema:
+         type: string
+   consumes:
+     - application/x-www-form-urlencoded
+   requestBody:
+     description: >
+       information for a network setting
+     required: true
+     content:
+       application/json:
+         schema:
+           type: object
+           properties:
+             isAllowMentionedChannelEnabled:
+               type: boolean
+               default: true
+   responses:
+     '200000':
+       $ref: './response.yaml#/ChatNetworkSettingApiResponse'
+     '400000':
+       $ref: '../../global/error.yaml#/BadRequestError'
+     '500000':
+       $ref: '../../global/error.yaml#/UnexpectedError'
+
+getChatSetting:
+   summary: Get chat network setting configuration.
+   tags:
+     - Network Setting
+   securityDefinition:
+     ApiKeyAuth:
+       type: apiKey
+       in: header
+       name: Authorization
+   description: >
+     Get chat network setting configuration.
+   parameters:
+     - name: Authorization
+       in: header
+       value: Bearer {{accessToken}}
+       required: true
+       schema:
+         type: string
+     - name: Content-Type
+       in: header
+       value: application/x-www-form-urlencoded
+       required: true
+       schema:
+         type: string
+   consumes:
+     - application/x-www-form-urlencoded
+   responses:
+     '200000':
+       $ref: './response.yaml#/ChatNetworkSettingApiResponse'
+     '400000':
+       $ref: '../../global/error.yaml#/BadRequestError'
+     '500000':
+       $ref: '../../global/error.yaml#/UnexpectedError'    

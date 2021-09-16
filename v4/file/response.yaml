@@ -1,0 +1,58 @@
+FileVideoUploadResponse:
+  description: File Video Upload Result
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+          data:
+            type: array
+            items:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                  description: Root file key on cloud storage.
+                fileUrl:
+                  type: string
+                  description: url to download the file
+                type:
+                  type: enum
+                  description: File type.
+                  enum:
+                    - image
+                    - file
+                    - video
+                  example: video
+                createdAt:
+                  type: string
+                  description: The date/time when a file is uploaded.
+                  format: date-time
+                updatedAt:
+                  type: string
+                  description: The date/time when a file is updated.
+                  format: date-time
+                attributes:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: File name.
+                      example: big_buck_bunny_720p_2mb.mp4
+                    extension:
+                      type: string
+                      description: File format.
+                      example: mp4
+                    size:
+                      type: string
+                      description: File size.
+                      example: 2107842
+                    mimeType:
+                      type: string
+                      description: File mime-type.
+                      example: video/mp4
+                    metadata:
+                      type: object
+                      description: Video metadata (width, height etc.).

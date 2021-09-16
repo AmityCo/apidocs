@@ -1,0 +1,69 @@
+query:
+  summary: Get list of contents.
+  tags:
+    - ContentFeed
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get paginable list of contents.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: >
+      Condition of querying and pagination.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            sortBy:
+              type: string
+              enum:
+                - lastCreated
+                - firstCreated
+                - lastUpdated
+                - firstUpdated
+              default: lastCreated
+            isDeleted:
+              type: boolean
+              default: null
+            hasFlag:
+              type: boolean
+              default: null
+              description: >
+                  hasFlag:
+                    * `null(default)` - Show all contents.
+                    * `true` - Show only flagged content or has flagged comment.
+                    * `false` - Show only no flagged content and has no flagged comment.
+            options:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                token:
+                  type: string
+  responses:
+    "200000":
+      $ref: "./response.yaml#/ContentFeedResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

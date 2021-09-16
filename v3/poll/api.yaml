@@ -1,0 +1,281 @@
+create:
+  summary: Create a poll
+  tags:
+    - Poll v3
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Create a poll
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      Information of a poll to be created.
+
+      ### Required
+
+      - at least 2 options
+
+      - dataType currently support only `text`
+      
+      - closedIn unit must be `milliseconds`
+
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            text:
+              type: string
+            question:
+              type: string
+              description: question.
+            answers:
+              type: array
+              min: 2
+              maxItems: 10
+              items:
+                type: object
+                properties:
+                  dataType:
+                    description: Datatype of answer (current only string).
+                    type: string
+                    enum:
+                      - text
+                  data:
+                    type: string
+            answerType:
+              description: single or multiple.
+              type: single
+              default: 
+            closedIn:
+              type: number
+              description: Countdown time to close vote (milliseconds)
+          required:
+            - data
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PollResponse"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+update:
+  summary: update poll status
+  tags:
+    - Poll v3
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    update a poll
+  parameters:
+    - name: pollId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      Information of a poll to be updated.
+
+      ### Required
+
+      - currently support only `closed`
+
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            text:
+              type: string
+            status:
+              description: poll status
+              type: string
+              default: closed
+          required:
+            - data
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PollResponse"
+    "400300":
+      $ref: "../../global/error.yaml#/PollForbiddenError"
+    "400400":
+      $ref: "../../global/error.yaml#/PollNotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+delete:
+  summary: delete poll
+  tags:
+    - Poll v3
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    delete a poll
+  parameters:
+    - name: pollId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      Information of a poll to be deleted.
+
+      ### Required
+
+      - required pollId
+
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            text:
+              type: string
+            pollId:
+              description: pollId
+              type: string
+          required:
+            - data
+  responses:
+    "200000":
+      description: poll deleted
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "400400":
+      $ref: "../../global/error.yaml#/PollNotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+vote:
+  summary: Vote poll
+  tags:
+    - Poll v3
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Client vote poll
+  parameters:
+    - name: pollId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      Information of a poll to be voted.
+
+      ### Required
+
+      - answerIds for vote the poll
+
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            text:
+              type: string
+            pollId:
+              description: poll id
+              type: string
+            answerIds:
+              description: poll id
+              type: array
+              items:
+                type: string
+          required:
+            - data
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PollResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400400":
+      $ref: "../../global/error.yaml#/PollNotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

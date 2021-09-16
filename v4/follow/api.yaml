@@ -1,0 +1,465 @@
+getMyFollowerList:
+  summary: Get my follower list
+  tags:
+    - Follow
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get follower information (pagination supported)
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - name: status
+      in: query
+      schema:
+        type: string
+        enum:
+          - all
+          - pending
+          - accepted
+        default: all
+    - name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+    - name: token
+      in: query
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 100
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/FollowPaginationResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+getOtherFollowerList:
+  summary: Get other follower list
+  tags:
+    - Follow
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get follower information (pagination supported)
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 900
+    - name: status
+      in: query
+      schema:
+        type: string
+        enum:
+          - all
+          - pending
+          - accepted
+        default: all
+    - name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+    - name: token
+      in: query
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 100
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/FollowPaginationResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+getMyFollowingList:
+  summary: Get my following list.
+  tags:
+    - Follow
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get following information (pagination supported)
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - name: status
+      in: query
+      schema:
+        type: string
+        enum:
+          - all
+          - pending
+          - accepted
+        default: all
+    - name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+    - name: token
+      in: query
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 100
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/FollowPaginationResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+getOtherFollowingList:
+  summary: Get other following list.
+  tags:
+    - Follow
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get following information (pagination supported)
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 900
+    - name: status
+      in: query
+      schema:
+        type: string
+        enum:
+          - all
+          - pending
+          - accepted
+        default: all
+    - name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+    - name: token
+      in: query
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 100
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/FollowPaginationResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+getMyFollowInformation:
+  summary: Get my follow information.
+  tags:
+    - Follow
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get my follow information.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/FollowCountResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+getOtherFollowInformation:
+  summary: Get other follow information.
+  tags:
+    - Follow
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get other follow information.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 900
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/FollowInformationResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+
+follow:
+  summary: Follow user.
+  tags:
+    - Follow
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Follow user information
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/FollowResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '400400':
+      $ref: '../../global/error.yaml#/NotFoundError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+accept:
+  summary: Accept follow request.
+  tags:
+    - Follow
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Accept follow request.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/FollowResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '400400':
+      $ref: '../../global/error.yaml#/NotFoundError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+unfollow:
+  summary: Unfollow or Cancel follow request
+  tags:
+    - Follow
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Unfollow or Cancel follow request
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/FollowResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '400400':
+      $ref: '../../global/error.yaml#/NotFoundError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+delete:
+  summary: Delete follower.
+  tags:
+    - Follow
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Delete follower.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/FollowResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '400400':
+      $ref: '../../global/error.yaml#/NotFoundError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
