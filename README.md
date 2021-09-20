@@ -1,1 +1,1 @@
-Amity API Docs - visit https://apidocs.amity.co for full information
+Amity API Docs - visit https://api-docs.amity.co for full information
