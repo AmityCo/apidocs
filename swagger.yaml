@@ -2079,6 +2079,79 @@ paths:
           $ref: '#/components/responses/SuccessResponse'
         '400000':
           $ref: '#/components/responses/BadRequestError'
+  /v2/notification:
+    post:
+      summary: register a device to get push notification
+      tags:
+        - Notification
+      security:
+        - ApiKeyAuth: []
+      description: >
+        Register a device to a notification service provider.
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: >
+          information of a device to be registered.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  enum:
+                    - android
+                    - ios
+                token:
+                  type: string
+                provider:
+                  type: string
+              required:
+                - platform
+                - token
+      responses:
+        '200000':
+          $ref: '#/components/responses/SuccessResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+    delete:
+      summary: unregister a device from a notification service provider
+      tags:
+        - Notification
+      security:
+        - ApiKeyAuth: []
+      description: >
+        Unregister a device from a notification service provider.
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: >
+          information of a device to be registered.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+      responses:
+        '200000':
+          $ref: '#/components/responses/SuccessResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
   /admin/v1/notification/setting:
     post:
       summary: Save push notification setting.
