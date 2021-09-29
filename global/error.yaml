@@ -7,6 +7,13 @@ Error:
       type: string
     message:
       type: string
+    data:
+      type: object
+      properties:
+        detail:
+          type: array
+          items: 
+            type: string  
 BadRequestError:
   description: Bad Request error.
   content:
@@ -167,6 +174,11 @@ ValidationError:
         status: error
         code: 500000
         message: Parameters error.
+        data: {
+          detail: [
+            "The 'data.text' field length must be less than or equal to 20000 characters long."
+          ]
+        }
 PayloadTooLargeError:
   description: Attached file payload too large.
   content:
