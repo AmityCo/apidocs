@@ -74,6 +74,14 @@ create:
               type: object
             postId:
               type: string
+            tags:
+              type: array
+              minItems: 0
+              maxItems: 5
+              items:
+                type: string
+                max: 24
+                description: tags
           required:
             - data
   responses:
@@ -197,6 +205,14 @@ update:
                   description: Put image file id to update video file thumbnail in video post
             metadata:
               type: object
+            tags:
+              type: array
+              minItems: 0
+              maxItems: 5
+              items:
+                type: string
+                max: 24
+                description: tags
           required:
             - postId
   responses:
@@ -587,6 +603,14 @@ query:
                   - type: string
                     example: upstra.customtype
                     description: custom post type - must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")
+            tags:
+              type: array
+              minItems: 0
+              maxItems: 5
+              items:
+                type: string
+                max: 24
+                description: tags
             matchingOnlyParentPost:
               type: boolean
               default: true
