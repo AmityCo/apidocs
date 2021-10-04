@@ -2079,7 +2079,7 @@ paths:
           $ref: '#/components/responses/SuccessResponse'
         '400000':
           $ref: '#/components/responses/BadRequestError'
-  /v3/notification:
+  /v2/notification:
     post:
       summary: register a device to get push notification
       tags:
@@ -2113,9 +2113,6 @@ paths:
                   type: string
                 provider:
                   type: string
-                  enum:
-                    - baidu
-                    - fcm
               required:
                 - platform
                 - token
@@ -2141,6 +2138,15 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        description: >
+          information of a device to be registered.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
       responses:
         '200000':
           $ref: '#/components/responses/SuccessResponse'
