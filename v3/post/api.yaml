@@ -76,8 +76,11 @@ create:
               type: string
             tags:
               type: array
+              minItems: 0
+              maxItems: 5
               items:
                 type: string
+                max: 24
                 description: tags
           required:
             - data
@@ -204,6 +207,8 @@ update:
               type: object
             tags:
               type: array
+              minItems: 0
+              maxItems: 5
               items:
                 type: string
                 max: 24
@@ -600,8 +605,11 @@ query:
                     description: custom post type - must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")
             tags:
               type: array
+              minItems: 0
+              maxItems: 5
               items:
                 type: string
+                max: 24
                 description: tags
             matchingOnlyParentPost:
               type: boolean
