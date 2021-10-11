@@ -1063,6 +1063,21 @@ paths:
       tags:
         - Comment
       $ref: './v3/comment/api.yaml#/getList'
+
+  #Comment V4
+  /api/v4/comments/{commentId}:
+    delete:
+      summary: delete a comment.
+      tags:
+        - Comment v4
+      $ref: './v4/comment/api.yaml#/delete'
+  /sockets/v4/comment.delete:
+    post:
+      summary: delete a comment.
+      tags:
+        - Comment v4
+      $ref: './v4/comment/socket.yaml#delete'
+      
   /api/v3/communities:
     get:
       summary: query communities.
