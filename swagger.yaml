@@ -3257,6 +3257,17 @@ paths:
         - Community
       $ref: './v3/community/api.yaml#/getTopTrendingList'
 
+  /api/v4/communities/:communityId/users/roles:
+    post:
+      summary: Add roles to community users
+      tags:
+        - Community
+      $ref: './v4/community/api.yaml#/addRoles'
+    delete:
+      summary: Remove roles from community users
+      tags:
+        - Community
+      $ref: './v4/community/api.yaml#/removeRoles'
   /sockets/v3/community.query:
     post:
       summary: query communities.
@@ -3371,6 +3382,20 @@ paths:
         - Community
       $ref: './v3/community/socket.yaml#/getSelfPermission'
 
+  /sockets/v4/community.assignRolesToUsers:
+    post:
+      summary: Add roles to community users
+      tags:
+        - Community
+      $ref: './v4/community/socket.yaml#/addRoles'
+
+  /sockets/v4/community.removeRolesFromUsers:
+    post:
+      summary: Remove roles from community users
+      tags:
+        - Community
+      $ref: './v4/community/socket.yaml#/removeRoles'
+    
   #Community Category
   /api/v3/community-categories/list:
     get:
