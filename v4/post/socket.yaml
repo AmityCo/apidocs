@@ -104,3 +104,48 @@ create:
       $ref: "../../global/error.yaml#/ForbiddenError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+delete:
+  summary: delete a post
+  tags:
+    - Post v4
+  security:
+    - SocketAuth: []
+  description: >
+    Delete a post
+  requestBody:
+    description: >
+      information of a post to be deleted.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            postId:
+              type: string
+            permanent:
+              type: boolean
+              default: false
+              description: If true data will be deleted from database
+          required:
+            - postId
+  responses:
+    "200000":
+      description: post information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

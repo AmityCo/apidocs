@@ -1063,6 +1063,21 @@ paths:
       tags:
         - Comment
       $ref: './v3/comment/api.yaml#/getList'
+
+  #Comment V4
+  /api/v4/comments/{commentId}:
+    delete:
+      summary: delete a comment.
+      tags:
+        - Comment v4
+      $ref: './v4/comment/api.yaml#/delete'
+  /sockets/v4/comment.delete:
+    post:
+      summary: delete a comment.
+      tags:
+        - Comment v4
+      $ref: './v4/comment/socket.yaml#delete'
+      
   /api/v3/communities:
     get:
       summary: query communities.
@@ -3045,9 +3060,21 @@ paths:
       tags:
         - Post v4
       $ref: './v4/post/api.yaml#/create'
+  /api/v4/posts/{postId}:
+    delete:
+      summary: delete a post
+      tags:
+        - Post v4
+      $ref: './v4/post/api.yaml#/delete'
   /sockets/v4/post.create:
     post:
       summary: create a post
+      tags:
+        - Post v4
+      $ref: './v4/post/socket.yaml#create'
+  /sockets/v4/post.delete:
+    post:
+      summary: delete a post
       tags:
         - Post v4
       $ref: './v4/post/socket.yaml#create'
