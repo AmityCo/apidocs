@@ -1,0 +1,161 @@
+didCreate:
+  tags:
+    - GooglePubSub
+  security:
+    - SocketAuth: []
+  description: >
+    This is called when a user follows another user.
+  responses:
+    '200000':
+      description: Follow Object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              from:
+                type: string
+              to:
+                type: string
+              status:
+                type: string
+                enum:
+                  - accepted
+didRequest:
+  tags:
+    - GooglePubSub
+  security:
+    - SocketAuth: []
+  description: >
+    This is called when a user sends a request to follow another user.
+  responses:
+    '200000':
+      description: Follow Object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              from:
+                type: string
+              to:
+                type: string
+              status:
+                type: string
+                enum:
+                  - pending
+didAcceptRequest:
+  tags:
+    - GooglePubSub
+  security:
+    - SocketAuth: []
+  description: >
+    This is called when a user accepts a follow request from another user.
+  responses:
+    '200000':
+      description: Follow Object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              from:
+                type: string
+              to:
+                type: string
+              status:
+                type: string
+                enum:
+                  - accepted
+didUnfollow:
+  tags:
+    - GooglePubSub
+  security:
+    - SocketAuth: []
+  description: >
+    This is called when a user unfollows another user.
+  responses:
+    '200000':
+      description: Follow Object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              from:
+                type: string
+              to:
+                type: string
+              status:
+                type: string
+                enum:
+                  - none
+didCancelRequest:
+  tags:
+    - GooglePubSub
+  security:
+    - SocketAuth: []
+  description: >
+    This is called when a user cancels a request to follow another user.
+  responses:
+    '200000':
+      description: Follow Object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              from:
+                type: string
+              to:
+                type: string
+              status:
+                type: string
+                enum:
+                  - none
+didDecineRequest:
+  tags:
+    - GooglePubSub
+  security:
+    - SocketAuth: []
+  description: >
+    This is called when a user declines a follow request from another user.
+  responses:
+    '200000':
+      description: Follow Object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              from:
+                type: string
+              to:
+                type: string
+              status:
+                type: string
+                enum:
+                  - none
+didDeleteFollower:
+  tags:
+    - GooglePubSub
+  security:
+    - SocketAuth: []
+  description: >
+    This is called when a user deletes a user from their follower's list.
+  responses:
+    '200000':
+      description: Follow Object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              from:
+                type: string
+              to:
+                type: string
+              status:
+                type: string
+                enum:
+                  - none
