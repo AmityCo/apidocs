@@ -11,7 +11,7 @@ info:
     1. Socket Endpoint: represent by endpoints start with /sockets/...
     2. Socket Event:  represent by endpoints start with /callbacks/...
     3. REST API Endpoint:  represent by endpoints start with other prefix such as /v1 etc
-    4. GooglePubSub Event: represent by endpoints start with /pubsub/...
+    4. Webhook Event: represent by endpoints start with /webhook/...
   version: 4.19.0
 servers:
   - url: https://api.us.amity.co
@@ -2118,11 +2118,11 @@ paths:
         - Notification
       $ref: './v1/notification/socket.yaml#save'
 
-  #GooglePubSub
-  /pubsub/message.didCreate:
+  #WebhookEvent
+  /webhook/message.didCreate:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send new created message whenever a message got created in a channel
       responses:
         '200000':
@@ -2146,10 +2146,10 @@ paths:
                         type: array
                         items:
                           $ref: '#/components/schemas/User'
-  /pubsub/message.didDelete:
+  /webhook/message.didDelete:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send deleted message whenever a message got deleted in a channel
       responses:
         '200000':
@@ -2173,10 +2173,10 @@ paths:
                         type: array
                         items:
                           $ref: '#/components/schemas/User'
-  /pubsub/message.didUpdate:
+  /webhook/message.didUpdate:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send updated message whenever a message got updated in a channel
       responses:
         '200000':
@@ -2200,10 +2200,10 @@ paths:
                         type: array
                         items:
                           $ref: '#/components/schemas/User'
-  /pubsub/message.didFlag:
+  /webhook/message.didFlag:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send updated message whenever a message got flag
       responses:
         '200000':
@@ -2227,10 +2227,10 @@ paths:
                         type: array
                         items:
                           $ref: '#/components/schemas/User'
-  /pubsub/message.didUnflag:
+  /webhook/message.didUnflag:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send updated message whenever a message flag is removed.
       responses:
         '200000':
@@ -2254,10 +2254,10 @@ paths:
                         type: array
                         items:
                           $ref: '#/components/schemas/User'
-  /pubsub/message.didClearflag:
+  /webhook/message.didClearflag:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send updated message whenever all message flags are cleared.
       responses:
         '200000':
@@ -2281,10 +2281,10 @@ paths:
                         type: array
                         items:
                           $ref: '#/components/schemas/User'
-  /pubsub/channel.didCreate:
+  /webhook/channel.didCreate:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send new created channel whenever a channel got create
       responses:
         '200000':
@@ -2312,10 +2312,10 @@ paths:
                         type: array
                         items:
                           type: string
-  /pubsub/channel.didJoin:
+  /webhook/channel.didJoin:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send join event information whenever a channel got joined
       responses:
         '200000':
@@ -2343,10 +2343,10 @@ paths:
                         type: array
                         items:
                           type: string
-  /pubsub/channel.didAddUsers:
+  /webhook/channel.didAddUsers:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send user added event information whenever new member got added to a channel.
       responses:
         '200000':
@@ -2376,10 +2376,10 @@ paths:
                           type: string
                       adderId:
                         type: string
-  /pubsub/channel.didClose:
+  /webhook/channel.didClose:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send channel close event information whenever a channel close.
       responses:
         '200000':
@@ -2399,10 +2399,10 @@ paths:
                         type: array
                         items:
                           $ref: '#/components/schemas/Channel'
-  /pubsub/channel.didLeave:
+  /webhook/channel.didLeave:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send channel leave event information whenever someone leave a channel.
       responses:
         '200000':
@@ -2430,10 +2430,10 @@ paths:
                         type: array
                         items:
                           type: string
-  /pubsub/channel.didUpdate:
+  /webhook/channel.didUpdate:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send channel updated event information whenever a channel got updated.
       responses:
         '200000':
@@ -2459,10 +2459,10 @@ paths:
                           $ref: '#/components/schemas/User'
                       userId:
                         type: string
-  /pubsub/channel.didRemoveUsers:
+  /webhook/channel.didRemoveUsers:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send user removed event information whenever member got remove from channel.
       responses:
         '200000':
@@ -2492,10 +2492,10 @@ paths:
                           type: string
                       removerId:
                         type: string
-  /pubsub/channel.didUpdateMeta:
+  /webhook/channel.didUpdateMeta:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send channel's meta data updated event information whenever a channel's meta data got updated.
       responses:
         '200000':
@@ -2521,10 +2521,10 @@ paths:
                           $ref: '#/components/schemas/User'
                       userId:
                         type: string
-  /pubsub/channel.didBan:
+  /webhook/channel.didBan:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send channel banned event whenever a channel got banned.
       responses:
         '200000':
@@ -2554,10 +2554,10 @@ paths:
                         type: array
                         items:
                           type: string
-  /pubsub/moderation.didBan:
+  /webhook/moderation.didBan:
     get:
       tags:
-        - GooglePubSub
+        - WebhookEvent
       description: Send banned event whenever a system detect message that contain in the blacklist
       responses:
         '200000':
@@ -2583,216 +2583,216 @@ paths:
                           $ref: '#/components/schemas/User'
                       userId:
                         type: string
-  /pubsub/user.didClearFlag:
+  /webhook/user.didClearFlag:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v1/user/pubsub.yaml#didClearFlag'
-  /pubsub/user.didFlag:
+        - WebhookEvent
+      $ref: './v1/user/webhook.yaml#didClearFlag'
+  /webhook/user.didFlag:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v1/user/pubsub.yaml#didFlag'
-  /pubsub/user.didUnflag:
+        - WebhookEvent
+      $ref: './v1/user/webhook.yaml#didFlag'
+  /webhook/user.didUnflag:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v1/user/pubsub.yaml#didUnflag'
-  /pubsub/user.didUpdate:
+        - WebhookEvent
+      $ref: './v1/user/webhook.yaml#didUnflag'
+  /webhook/user.didUpdate:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v1/user/pubsub.yaml#didUpdate'
-  /pubsub/v3.community.didCreate:
+        - WebhookEvent
+      $ref: './v1/user/webhook.yaml#didUpdate'
+  /webhook/v3.community.didCreate:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/community/pubsub.yaml#didCreate'
-  /pubsub/v3.community.didUpdate:
+        - WebhookEvent
+      $ref: './v3/community/webhook.yaml#didCreate'
+  /webhook/v3.community.didUpdate:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/community/pubsub.yaml#didUpdate'
-  /pubsub/v3.community.didDelete:
+        - WebhookEvent
+      $ref: './v3/community/webhook.yaml#didUpdate'
+  /webhook/v3.community.didDelete:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/community/pubsub.yaml#didDelete'
-  /pubsub/v3.community.didJoin:
+        - WebhookEvent
+      $ref: './v3/community/webhook.yaml#didDelete'
+  /webhook/v3.community.didJoin:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/community/pubsub.yaml#didJoin'
-  /pubsub/v3.community.didLeave:
+        - WebhookEvent
+      $ref: './v3/community/webhook.yaml#didJoin'
+  /webhook/v3.community.didLeave:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/community/pubsub.yaml#didLeave'
-  /pubsub/v3.community.didAddUsers:
+        - WebhookEvent
+      $ref: './v3/community/webhook.yaml#didLeave'
+  /webhook/v3.community.didAddUsers:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/community/pubsub.yaml#didAddUsers'
-  /pubsub/v3.community.didRemoveUsers:
+        - WebhookEvent
+      $ref: './v3/community/webhook.yaml#didAddUsers'
+  /webhook/v3.community.didRemoveUsers:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/community/pubsub.yaml#didRemoveUsers'
-  /pubsub/v3.community.didBan:
+        - WebhookEvent
+      $ref: './v3/community/webhook.yaml#didRemoveUsers'
+  /webhook/v3.community.didBan:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/community/pubsub.yaml#didBan'
-  /pubsub/v3.community.didUnban:
+        - WebhookEvent
+      $ref: './v3/community/webhook.yaml#didBan'
+  /webhook/v3.community.didUnban:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/community/pubsub.yaml#didUnban'
-  /pubsub/v3.post.didCreate:
+        - WebhookEvent
+      $ref: './v3/community/webhook.yaml#didUnban'
+  /webhook/v3.post.didCreate:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/post/pubsub.yaml#didCreate'
-  /pubsub/v3.post.didUpdate:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#didCreate'
+  /webhook/v3.post.didUpdate:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/post/pubsub.yaml#didUpdate'
-  /pubsub/v3.post.didDelete:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#didUpdate'
+  /webhook/v3.post.didDelete:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/post/pubsub.yaml#didDelete'
-  /pubsub/v3.post.didApprove:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#didDelete'
+  /webhook/v3.post.didApprove:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/post/pubsub.yaml#didApprove'
-  /pubsub/v3.post.didDecline:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#didApprove'
+  /webhook/v3.post.didDecline:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/post/pubsub.yaml#didDecline'
-  /pubsub/v3.post.didFlag:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#didDecline'
+  /webhook/v3.post.didFlag:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/post/pubsub.yaml#didFlag'
-  /pubsub/v3.post.didUnflag:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#didFlag'
+  /webhook/v3.post.didUnflag:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/post/pubsub.yaml#didUnflag'
-  /pubsub/v3.post.didAddReaction:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#didUnflag'
+  /webhook/v3.post.didAddReaction:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/post/pubsub.yaml#didAddReaction'
-  /pubsub/v3.post.didRemoveReaction:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#didAddReaction'
+  /webhook/v3.post.didRemoveReaction:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/post/pubsub.yaml#didRemoveReaction'
-  /pubsub/v3.comment.didCreate:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#didRemoveReaction'
+  /webhook/v3.comment.didCreate:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/comment/pubsub.yaml#didCreate'
-  /pubsub/v3.comment.didUpdate:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#didCreate'
+  /webhook/v3.comment.didUpdate:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/comment/pubsub.yaml#didUpdate'
-  /pubsub/v3.comment.didDelete:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#didUpdate'
+  /webhook/v3.comment.didDelete:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/comment/pubsub.yaml#didDelete'
-  /pubsub/v3.comment.didFlag:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#didDelete'
+  /webhook/v3.comment.didFlag:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/comment/pubsub.yaml#didFlag'
-  /pubsub/v3.comment.didUnflag:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#didFlag'
+  /webhook/v3.comment.didUnflag:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/comment/pubsub.yaml#didUnflag'
-  /pubsub/v3.comment.didAddReaction:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#didUnflag'
+  /webhook/v3.comment.didAddReaction:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/comment/pubsub.yaml#didAddReaction'
-  /pubsub/v3.comment.didRemoveReaction:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#didAddReaction'
+  /webhook/v3.comment.didRemoveReaction:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/comment/pubsub.yaml#didRemoveReaction'
-  /pubsub/v3.comment.didReply:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#didRemoveReaction'
+  /webhook/v3.comment.didReply:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/comment/pubsub.yaml#didReply'
-  /pubsub/poll.didCreate:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#didReply'
+  /webhook/poll.didCreate:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/poll/pubsub.yaml#didCreate'
-  /pubsub/poll.didUpdate:
+        - WebhookEvent
+      $ref: './v3/poll/webhook.yaml#didCreate'
+  /webhook/poll.didUpdate:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/poll/pubsub.yaml#didUpdate'
-  /pubsub/v3.video-streaming.didRecord:
+        - WebhookEvent
+      $ref: './v3/poll/webhook.yaml#didUpdate'
+  /webhook/v3.video-streaming.didRecord:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/video-streaming/pubsub.yaml#didRecord'
-  /pubsub/v3.video-streaming.didStart:
+        - WebhookEvent
+      $ref: './v3/video-streaming/webhook.yaml#didRecord'
+  /webhook/v3.video-streaming.didStart:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/video-streaming/pubsub.yaml#didStart'
-  /pubsub/v3.video-streaming.didStop:
+        - WebhookEvent
+      $ref: './v3/video-streaming/webhook.yaml#didStart'
+  /webhook/v3.video-streaming.didStop:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v3/video-streaming/pubsub.yaml#didStop'
-  /pubsub/follow.didCreate:
+        - WebhookEvent
+      $ref: './v3/video-streaming/webhook.yaml#didStop'
+  /webhook/follow.didCreate:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v4/follow/pubsub.yaml#didCreate'
-  /pubsub/follow.didRequest:
+        - WebhookEvent
+      $ref: './v4/follow/webhook.yaml#didCreate'
+  /webhook/follow.didRequest:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v4/follow/pubsub.yaml#didRequest'
-  /pubsub/follow.didAcceptRequest:
+        - WebhookEvent
+      $ref: './v4/follow/webhook.yaml#didRequest'
+  /webhook/follow.didAcceptRequest:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v4/follow/pubsub.yaml#didAcceptRequest'
-  /pubsub/follow.didUnfollow:
+        - WebhookEvent
+      $ref: './v4/follow/webhook.yaml#didAcceptRequest'
+  /webhook/follow.didUnfollow:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v4/follow/pubsub.yaml#didUnfollow'
-  /pubsub/follow.didCancelRequest:
+        - WebhookEvent
+      $ref: './v4/follow/webhook.yaml#didUnfollow'
+  /webhook/follow.didCancelRequest:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v4/follow/pubsub.yaml#didCancelRequest'
-  /pubsub/follow.didDecineRequest:
+        - WebhookEvent
+      $ref: './v4/follow/webhook.yaml#didCancelRequest'
+  /webhook/follow.didDecineRequest:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v4/follow/pubsub.yaml#didDecineRequest'
-  /pubsub/follow.didDeleteFollower:
+        - WebhookEvent
+      $ref: './v4/follow/webhook.yaml#didDecineRequest'
+  /webhook/follow.didDeleteFollower:
     get:
       tags:
-        - GooglePubSub
-      $ref: './v4/follow/pubsub.yaml#didDeleteFollower'
+        - WebhookEvent
+      $ref: './v4/follow/webhook.yaml#didDeleteFollower'
 
   #Reaction
   /sockets/reaction.add:
