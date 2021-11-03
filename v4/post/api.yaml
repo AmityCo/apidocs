@@ -48,7 +48,6 @@ create:
       - When put `dataType` as `poll` and `pollId` in `data`, post will be created as poll post
       - `attachments` will be ignored
       - Poll info will be in `polls` object in response
-      
     required: true
     content:
       application/json:
@@ -105,9 +104,7 @@ create:
               description: Resource public id depends on target type (ex. target type is community, target id will be community public id)
             metadata:
               type: object
-              example: {
-                "anything": "you want"
-              }
+              example: { "anything": "you want" }
             postId:
               type: string
               example: postidiwant
@@ -120,11 +117,31 @@ create:
                 type: string
                 description: tags
                 max: 24
+            mentionees:
+              type: array
+              description: The object of the mentions type and user who get a notification from the post.
+              items:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: user
+                    description: >
+                      type:
+                      * `user` - need to specific userIds and notification mentions individual user
+                    enum:
+                      - user
+                  userIds:
+                    type: array
+                    example: ["userId1", "userId2"]
+                    description: Array of UserId. if the mention type is a channel, doesn't send userIds
+                    items:
+                      type: string
           required:
             - data
   responses:
     "200000":
-      $ref: "../../v3/post/response.yaml#/PostResponse"
+      $ref: "../../v4/post/response.yaml#/PostResponse"
     "400000":
       $ref: "../../global/error.yaml#/BadRequestError"
     "400300":
@@ -204,5 +221,106 @@ delete:
                     type: boolean
     "400000":
       $ref: "../../global/error.yaml#/BadRequestError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+update:
+  summary: update a post
+  tags:
+    - Post v4
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Update a post
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information of a post to be updated.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            postId:
+              type: string
+            text:
+              type: string
+              deprecated: true
+            data:
+              type: object
+              properties:
+                text:
+                  type: string
+                  max: 50000
+                  description: For updating text in the post
+                fileId:
+                  type: string
+                  max: 100
+                  description: Put file id to update file,image inside file, image post (video is not supported yet)
+                streamId:
+                  type: string
+                  max: 100
+                  description: Put stream id to update live streaming post with new streaming
+                thumbnailFileId:
+                  type: string
+                  max: 100
+                  description: Put image file id to update video file thumbnail in video post
+            metadata:
+              type: object
+            tags:
+              type: array
+              minItems: 0
+              maxItems: 5
+              items:
+                type: string
+                max: 24
+                description: tags
+            mentionees:
+              type: array
+              description: The object of the mentions type and user who get a notification from the post.
+              items:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: user
+                    description: >
+                      type:
+                      * `user` - need to specific userIds and notification mentions individual user
+                    enum:
+                      - user
+                  userIds:
+                    type: array
+                    example: ["userId1", "userId2"]
+                    description: Array of UserId. if the mention type is a channel, doesn't send userIds
+                    items:
+                      type: string
+          required:
+            - postId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PostResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
