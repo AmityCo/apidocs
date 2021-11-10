@@ -1,0 +1,42 @@
+CommentBase:
+  type: object
+  properties:
+    comments:
+      type: array
+      items:
+        $ref: '../../../schema/comment.yaml#/CommentWithPrivateId'
+    commentChildren:
+      type: array
+      items:
+        $ref: '../../../schema/comment.yaml#/CommentWithPrivateId'
+    users:
+      type: array
+      items:
+        $ref: '../../../schema/user.yaml#/UserV3WithPrivateId'
+    files:
+      type: array
+      items:
+        $ref: '../../../schema/file.yaml#/File'
+
+Comment:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The comment ID.
+        data:
+          $ref: '#/CommentBase'
+    - $ref: '../schema.yaml#/Wrapper'
+
+CommentWithFlag:
+  allOf:
+    - $ref: '#/Comment'
+    - type: object
+      properties:
+        data:
+          type: object
+          properties:
+            flaggedUserId:
+              type: string
+              description: ID of the User has been flagged

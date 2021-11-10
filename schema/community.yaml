@@ -120,7 +120,7 @@ CommunityUser:
       type: string
       description: ID of a community.
     communityMembership:
-      $ref: "./channel.yaml#/ChannelMembership"
+      $ref: './channel.yaml#/ChannelMembership'
     isBanned:
       type: boolean
       default: false
@@ -135,7 +135,7 @@ CommunityUser:
     permissions:
       type: array
       items:
-        $ref: "./role.yaml#/PermissionEnum"
+        $ref: './role.yaml#/PermissionEnum'
     createdAt:
       type: string
       description: The date/time when a community user is created.
@@ -144,3 +144,12 @@ CommunityUser:
       type: string
       description: The date/time when a community user is updated or deleted.
       format: date-time
+
+CommunityWithPrivateId:
+  allOf:
+    - type: object
+      properties:
+        _id:
+          type: string
+          description: Private ID of a community.
+    - $ref: '#/Community'

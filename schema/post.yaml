@@ -21,14 +21,14 @@ Post:
       description: ID of a target.
     targetType:
       type: string
-      enum: 
+      enum:
         - user
         - community
         - content
       description: Type of a target (user, community, content).
     dataType:
       type: string
-      enum: 
+      enum:
         - text
         - image
         - file
@@ -46,7 +46,7 @@ Post:
         fileId:
           type: string
           description: file key on cloud storage (for image, file post).
-        thumbnailFileId: 
+        thumbnailFileId:
           type: string
           description: video thumbnail file id (for video post).
         videoFileId:
@@ -65,7 +65,7 @@ Post:
             high:
               type: string
               description: high video quality file id
-        streamId: 
+        streamId:
           type: string
           description: video streaming id (for video streaming post)
     metadata:
@@ -152,3 +152,12 @@ Post:
     required:
       - postId
       - data
+
+PostWithPrivateId:
+  allOf:
+    - type: object
+      properties:
+        _id:
+          type: string
+          description: Private ID of a post.
+    - $ref: '#/Post'

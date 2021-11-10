@@ -1,0 +1,66 @@
+PostBase:
+  type: object
+  properties:
+    posts:
+      type: array
+      items:
+        $ref: '../../../schema/post.yaml#/PostWithPrivateId'
+    postChildren:
+      type: array
+      items:
+        $ref: '../../../schema/post.yaml#/PostWithPrivateId'
+    comments:
+      type: array
+      items:
+        $ref: '../../../schema/comment.yaml#/CommentWithPrivateId'
+    users:
+      type: array
+      items:
+        $ref: '../../../schema/user.yaml#/UserV3WithPrivateId'
+    files:
+      type: array
+      items:
+        $ref: '../../../schema/file.yaml#/File'
+    communities:
+      type: array
+      items:
+        $ref: '../../../schema/community.yaml#/CommunityWithPrivateId'
+    communityUsers:
+      type: array
+      items:
+        $ref: '../../../schema/community.yaml#/CommunityUser'
+    categories:
+      type: array
+      items:
+        $ref: '../../../schema/community.yaml#/CommunityCategory'
+    feeds:
+      type: array
+      items:
+        $ref: '../../../schema/feed.yaml#/Feed'
+    videoStreamings:
+      type: array
+      items:
+        $ref: '../../../schema/video-streaming.yml#/VideoStreaming'
+
+Post:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The post ID.
+        data:
+          $ref: '#/PostBase'
+    - $ref: '../schema.yaml#/Wrapper'
+
+PostWithFlag:
+  allOf:
+    - $ref: '#/Post'
+    - type: object
+      properties:
+        data:
+          type: object
+          properties:
+            flaggedUserId:
+              type: string
+              description: ID of the User has been flagged
