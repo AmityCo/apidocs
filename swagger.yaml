@@ -1077,7 +1077,7 @@ paths:
       tags:
         - Comment v4
       $ref: './v4/comment/socket.yaml#delete'
-      
+
   /api/v3/communities:
     get:
       summary: query communities.
@@ -3705,6 +3705,64 @@ paths:
       tags:
         - Network Setting
       $ref: './v3/network-setting/socket.yaml#/getChatSetting'
+
+  # Realtime - Community
+  /realtime/community.created:
+    $ref: './v4/realtime/community/event.yaml#/created'
+  /realtime/community.updated:
+    $ref: './v4/realtime/community/event.yaml#/updated'
+  /realtime/community.deleted:
+    $ref: './v4/realtime/community/event.yaml#/deleted'
+  /realtime/community.joined:
+    $ref: './v4/realtime/community/event.yaml#/joined'
+  /realtime/community.left:
+    $ref: './v4/realtime/community/event.yaml#/left'
+  /realtime/community.userAdded:
+    $ref: './v4/realtime/community/event.yaml#/userAdded'
+  /realtime/community.userRemoved:
+    $ref: './v4/realtime/community/event.yaml#/userRemoved'
+  /realtime/community.userBanned:
+    $ref: './v4/realtime/community/event.yaml#/userBanned'
+  /realtime/community.userUnbanned:
+    $ref: './v4/realtime/community/event.yaml#/userUnbanned'
+
+  # Realtime - Post
+  /realtime/post.created:
+    $ref: './v4/realtime/post/event.yaml#/created'
+  /realtime/post.updated:
+    $ref: './v4/realtime/post/event.yaml#/updated'
+  /realtime/post.afterDeleted:
+    $ref: './v4/realtime/post/event.yaml#/afterDeleted'
+  /realtime/post.approved:
+    $ref: './v4/realtime/post/event.yaml#/approved'
+  /realtime/post.declined:
+    $ref: './v4/realtime/post/event.yaml#/declined'
+  /realtime/post.flagged:
+    $ref: './v4/realtime/post/event.yaml#/flagged'
+  /realtime/post.unflagged:
+    $ref: './v4/realtime/post/event.yaml#/unflagged'
+
+  # Realtime - Comment
+  /realtime/comment.created:
+    $ref: './v4/realtime/comment/event.yaml#/created'
+  /realtime/comment.updated:
+    $ref: './v4/realtime/comment/event.yaml#/updated'
+  /realtime/comment.deleted:
+    $ref: './v4/realtime/comment/event.yaml#/deleted'
+  /realtime/comment.flagged:
+    $ref: './v4/realtime/comment/event.yaml#/flagged'
+  /realtime/comment.unflagged:
+    $ref: './v4/realtime/comment/event.yaml#/unflagged'
+
+  # Realtime - User
+  /realtime/user.updated:
+    $ref: './v4/realtime/user/event.yaml#/updated'
+  /realtime/user.flagged:
+    $ref: './v4/realtime/user/event.yaml#/flagged'
+  /realtime/user.unflagged:
+    $ref: './v4/realtime/user/event.yaml#/unflagged'
+  /realtime/user.flagCleared:
+    $ref: './v4/realtime/user/event.yaml#/flagCleared'
 
 components:
   schemas:

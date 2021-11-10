@@ -19,7 +19,7 @@ UserV3:
     permissions:
       type: array
       items:
-        $ref: "./role.yaml#/PermissionEnum"
+        $ref: './role.yaml#/PermissionEnum'
     displayName:
       type: string
     description:
@@ -135,3 +135,12 @@ AdminUser:
         type: string
     flagCount:
       type: number
+
+UserV3WithPrivateId:
+  allOf:
+    - type: object
+      properties:
+        _id:
+          type: string
+          description: Private ID of a user.
+    - $ref: '#/UserV3'

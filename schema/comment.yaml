@@ -84,9 +84,18 @@ Comment:
       items:
         type: string
         description: ID of a children comment.
-    segmentNumber: 
+    segmentNumber:
       type: integer
       example: 1
     required:
       - commentId
       - data
+
+CommentWithPrivateId:
+  allOf:
+    - type: object
+      properties:
+        _id:
+          type: string
+          description: Private ID of a comment.
+    - $ref: '#/Comment'
