@@ -74,3 +74,25 @@ unflagged:
     responses:
       '200000':
         $ref: './response.yaml#/ResponseWithFlag'
+
+addReaction:
+  get:
+    summary: add reaction to post
+    description: >
+      Event has occurred when a reaction is added to post
+    tags:
+      - Realtime
+    responses:
+      '200000':
+        $ref: './response.yaml#/ResponseWithReactor'
+
+removeReaction:
+  get:
+    summary: remove reaction from post
+    description: >
+      Event has occurred when a reaction is removed from post
+    tags:
+      - Realtime
+    responses:
+      '200000':
+        $ref: './response.yaml#/ResponseWithReactor'

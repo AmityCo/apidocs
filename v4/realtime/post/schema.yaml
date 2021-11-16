@@ -64,3 +64,14 @@ PostWithFlag:
             flaggedUserId:
               type: string
               description: ID of the User has been flagged
+
+PostWithReactor:
+  allOf:
+    - $ref: '#/Post'
+    - type: object
+      properties:
+        data:
+          type: object
+          properties:
+            reactor:
+              $ref: '../../../schema/reaction.yaml#/Reactor'
