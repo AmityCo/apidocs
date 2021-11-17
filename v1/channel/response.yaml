@@ -75,4 +75,25 @@ ChannelUserPaginationSocketResponse:
                     type: string
                   prev:
                     type: string
-              
+
+CustomResponse:
+  description: For start/stop readings
+  content:
+    application/json:
+      schema:
+        properties:
+          result:
+            type: array
+            items:
+              type: object
+              properties:
+                channelIds:
+                  type: string
+                status:
+                  type: string
+                message:
+                  type: string
+                  description: Error message
+                code:
+                  type: string
+                  description: Error code
