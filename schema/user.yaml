@@ -10,6 +10,12 @@ ShortUser:
 UserV3:
   type: object
   properties:
+    _id:
+      type: string
+      description: Private ID of a user. (for real-time event)
+    path:
+      type: string
+      description: Path of a user. (for real-time event)
     userId:
       type: string
     roles:
@@ -135,12 +141,3 @@ AdminUser:
         type: string
     flagCount:
       type: number
-
-UserV3WithPrivateId:
-  allOf:
-    - type: object
-      properties:
-        _id:
-          type: string
-          description: Private ID of a user.
-    - $ref: '#/UserV3'
