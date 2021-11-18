@@ -1,6 +1,12 @@
 Comment:
   type: object
   properties:
+    _id:
+      type: string
+      description: Private ID of a comment. (for real-time event)
+    path:
+      type: string
+      description: Path of a comment. (for real-time event)
     commentId:
       type: string
       description: ID of a comment.
@@ -90,12 +96,3 @@ Comment:
     required:
       - commentId
       - data
-
-CommentWithPrivateId:
-  allOf:
-    - type: object
-      properties:
-        _id:
-          type: string
-          description: Private ID of a comment.
-    - $ref: '#/Comment'
