@@ -3101,7 +3101,12 @@ paths:
       tags:
         - Post v4
       $ref: './v4/post/api.yaml#/create'
-  /api/v4/posts/{postId}:
+  /api/v4/posts/:postId:
+    put:
+      summary: update a post
+      tags:
+        - Post v4
+      $ref: './v4/post/api.yaml#/update'
     delete:
       summary: delete a post
       tags:
@@ -3113,12 +3118,18 @@ paths:
       tags:
         - Post v4
       $ref: './v4/post/socket.yaml#create'
+  /sockets/v4/post.update:
+    post:
+      summary: update a post
+      tags:
+        - Post v4
+      $ref: './v4/post/socket.yaml#update'    
   /sockets/v4/post.delete:
     post:
       summary: delete a post
       tags:
         - Post v4
-      $ref: './v4/post/socket.yaml#create'
+      $ref: './v4/post/socket.yaml#delete'
 
   #Pollv3
   /api/v3/polls:

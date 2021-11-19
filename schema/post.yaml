@@ -158,3 +158,185 @@ Post:
     required:
       - postId
       - data
+
+PostWithPrivateId:
+  allOf:
+    - type: object
+      properties:
+        _id:
+          type: string
+          description: Private ID of a post.
+    - $ref: '#/PostV4'
+    
+PostV4:
+  type: object
+  properties:
+    postId:
+      type: string
+      description: ID of a post.
+    parentPostId:
+      type: string
+      description: ID of a parent post.
+    postedUserId:
+      type: string
+      description: ID of a creator.
+    sharedUserId:
+      type: string
+      description: ID of a shared owner.
+    sharedCount:
+      type: integer
+      description: number of shared post.
+    targetId:
+      type: string
+      description: ID of a target.
+    targetType:
+      type: string
+      enum: 
+        - user
+        - community
+        - content
+      description: Type of a target (user, community, content).
+    dataType:
+      type: string
+      enum: 
+        - text
+        - image
+        - file
+        - video
+        - liveStream
+      description: Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).
+      default: text
+    data:
+      type: object
+      description: Body of a post. (It can be anything when dataType is not text, image, file)
+      properties:
+        text:
+          type: string
+          description: post text.
+        fileId:
+          type: string
+          description: file key on cloud storage (for image, file post).
+        thumbnailFileId: 
+          type: string
+          description: video thumbnail file id (for video post).
+        videoFileId:
+          type: object
+          description: video file id for each quality (for video post).
+          properties:
+            original:
+              type: string
+              description: original file id
+            low:
+              type: string
+              description: low video quality file id
+            medium:
+              type: string
+              description: medium video quality file id
+            high:
+              type: string
+              description: high video quality file id
+        streamId: 
+          type: string
+          description: video streaming id (for video streaming post)
+    metadata:
+      type: object
+      description: Additional properties to support custom fields.
+    flagCount:
+      type: integer
+      description: The number of users that has read this post.
+    hashFlag:
+      type: object
+      description: The flag for checking internally that this post is reported or not.
+      properties:
+        bits:
+          type: integer
+        hashes:
+          type: integer
+        hash:
+          type: array
+          items:
+            type: integer
+    editedAt:
+      type: string
+      description: The date/time when text or metadata of post is updated.
+      format: date-time
+    createdAt:
+      type: string
+      description: The date/time when a post is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a post is updated or deleted.
+      format: date-time
+    reactions:
+      type: object
+      description: The mapping of reaction with reactionCounter.
+      example:
+        like: 1
+    reactionsCount:
+      type: integer
+      description: The number of all reactions for this post.
+      example: 1
+    myReactions:
+      type: array
+      items:
+        type: string
+        example: like
+      description: The list of my reactions to this post.
+    commentsCount:
+      type: integer
+      description: The number of all comments for this post.
+      example: 1
+    comments:
+      type: array
+      items:
+        type: string
+        description: ID of a comment.
+    children:
+      type: array
+      items:
+        type: string
+        description: ID of a children post.
+    isDeleted:
+      type: boolean
+      default: false
+      description: A flag to deleted a post.
+    hasFlaggedComment:
+      type: boolean
+      default: false
+      description: The flag for checking internally that comments inside post is reported or not.
+    hasFlaggedChildren:
+      type: boolean
+      default: false
+      description: The flag for checking internally that children post is reported or not.
+    feedId:
+      type: string
+      description: Feed public id
+    tags:
+      type: array
+      minItems: 0
+      maxItems: 5
+      items:
+        type: string
+        max: 24
+    mentionees:
+      type: array
+      description: The object of the mentions type and user who get a notification from the post.
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            description: >
+                type:
+                * `user` - need to specific userIds and notification mentions individual user 
+            enum:
+              - user
+          userIds:
+            type: array
+            description: Array of UserId.
+            items:
+              type: string    
+    required:
+      - postId
+      - data 
