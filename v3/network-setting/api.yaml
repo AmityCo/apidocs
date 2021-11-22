@@ -316,4 +316,53 @@ getChatSetting:
      '400000':
        $ref: '../../global/error.yaml#/BadRequestError'
      '500000':
-       $ref: '../../global/error.yaml#/UnexpectedError'    
+       $ref: '../../global/error.yaml#/UnexpectedError'
+
+updateModeration:
+  summary: Update moderation configuration.
+  tags:
+    - Network Setting
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Update moderation configuration.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information for a network setting
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            isWhitelistEnabled:
+              type: boolean
+              description: |
+                `true` - Enabled whitelist validation.
+                `false` - Disabled whitelist validation.
+
+  responses:
+    '200000':
+      $ref: './response.yaml#/ModerationNetworkSettingApiResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'

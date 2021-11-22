@@ -1,6 +1,12 @@
 Community:
   type: object
   properties:
+    _id:
+      type: string
+      description: Private ID of a community. (for real-time event)
+    path:
+      type: string
+      description: Path of a community. (for real-time event)
     communityId:
       type: string
       description: ID of a community.
@@ -21,7 +27,7 @@ Community:
       description: Description of a community.
     isOfficial:
       type: boolean
-      description: Is this community officail?
+      description: Is this community official?
     isPublic:
       type: boolean
       description: Is this community public?
@@ -120,7 +126,7 @@ CommunityUser:
       type: string
       description: ID of a community.
     communityMembership:
-      $ref: "./channel.yaml#/ChannelMembership"
+      $ref: './channel.yaml#/ChannelMembership'
     isBanned:
       type: boolean
       default: false
@@ -135,7 +141,7 @@ CommunityUser:
     permissions:
       type: array
       items:
-        $ref: "./role.yaml#/PermissionEnum"
+        $ref: './role.yaml#/PermissionEnum'
     createdAt:
       type: string
       description: The date/time when a community user is created.

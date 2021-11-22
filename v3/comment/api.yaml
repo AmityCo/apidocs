@@ -173,6 +173,26 @@ create:
             parentId:
               type: string
               maxLength: 900
+            mentionees:
+              type: array
+              description: The object of the mentions type and user who get a notification from the post.
+              items:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: user
+                    description: >
+                      type:
+                      * `user` - need to specific userIds and notification mentions individual user
+                    enum:
+                      - user
+                  userIds:
+                    type: array
+                    example: ["userId1", "userId2"]
+                    description: Array of UserId. if the mention type is a channel, doesn't send userIds
+                    items:
+                      type: string  
           required:
             - referenceId
             - data
@@ -225,6 +245,26 @@ update:
               type: object
             metadata:
               type: object
+            mentionees:
+              type: array
+              description: The object of the mentions type and user who get a notification from the post.
+              items:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: user
+                    description: >
+                      type:
+                      * `user` - need to specific userIds and notification mentions individual user
+                    enum:
+                      - user
+                  userIds:
+                    type: array
+                    example: ["userId1", "userId2"]
+                    description: Array of UserId. if the mention type is a channel, doesn't send userIds
+                    items:
+                      type: string  
           required:
             - commentId
   responses:

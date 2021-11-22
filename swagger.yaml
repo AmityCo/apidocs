@@ -2,16 +2,27 @@ openapi: 3.0.0
 info:
   title: Amity Social Cloud SDK
   description: |
-    This API Document details all available API Endpoints on Amity Social Cloud. All API except for some authentcation APIs requires access token for
-    authentication and authorization. APIs can be called either in Admin context or in User context. When called in user context you will only be able
-    to fetch data related to that user only. If you're calling this as a server-to-server API calls we recommend you create an Admin Token with the following instruction:
-    https://docs.amity.co/console/settings#admin-api-access-token
+    <h2>Using Amity APIs</h2>
 
-    This document describe all information relate to backend endpoint to support Amity SDK. Because Swagger is not support socket endpoint documentation, this document try to differentiate each type of endpoint by the prefix of the path of each endpoint as the following
-    1. Socket Endpoint: represent by endpoints start with /sockets/...
-    2. Socket Event:  represent by endpoints start with /callbacks/...
-    3. REST API Endpoint:  represent by endpoints start with other prefix such as /v1 etc
-    4. Webhook Event: represent by endpoints start with /webhook/...
+    Our API documentation explains all API endpoints used in Amity Social Cloud. All APIs, with the exception of some
+    authentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin
+    or User context. When used in user context, you will only be able to fetch data related to that user only.
+    For Administrators who are using our API documentation in making server-to-server API calls, you need an Admin
+    Access token to connect to the Amity server. Refer to <a href="https://docs.amity.co/console/settings#admin-api-access-token" target="_blank">this documentation</a>
+    for the instructions on how to generate an admin access token.
+
+    All backend endpoints that support Amity SDK are included here. To easily differentiate the type of each endpoint,
+    we added a prefix in each endpoint’s path.
+
+    1. Socket Endpoint: /sockets/...
+    2. Socket Event: /callbacks/...
+    3. REST API Endpoint: /v1/, /v2/, /v3/, or /v4/...
+    4. Webhook Event: /webhook/...
+
+    <h2>Select Region Endpoint</h2>
+
+    Before making server-to-server API calls, be sure to select the correct API endpoint for your region in
+    the <strong>Servers</strong> dropdown below.
   version: 4.19.0
 servers:
   - url: https://api.us.amity.co
@@ -1077,7 +1088,7 @@ paths:
       tags:
         - Comment v4
       $ref: './v4/comment/socket.yaml#delete'
-      
+
   /api/v3/communities:
     get:
       summary: query communities.
@@ -1586,6 +1597,36 @@ paths:
       tags:
         - Channel
       $ref: './v1/channel/socket.yaml#removeRole'
+  /sockets/channel.markSeen:
+    post:
+      summary: mark user message read position inside channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#markSeen'
+  /sockets/channel.startReading:
+    post:
+      summary: User start reading message inside channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#startReading'
+  /sockets/channel.stopReading:
+    post:
+      summary: User stop reading message inside channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#stopReading'
+  /sockets/channel.startReadings:
+    post:
+      summary: User start reading message in multiple channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#startReadings'
+  /sockets/channel.stopReadings:
+    post:
+      summary: User stop reading message in multiple channel
+      tags:
+        - Channel
+      $ref: './v1/channel/socket.yaml#stopReadings'
   /sockets/v3/channel.create:
     post:
       summary: create a channel
@@ -3060,7 +3101,12 @@ paths:
       tags:
         - Post v4
       $ref: './v4/post/api.yaml#/create'
-  /api/v4/posts/{postId}:
+  /api/v4/posts/:postId:
+    put:
+      summary: update a post
+      tags:
+        - Post v4
+      $ref: './v4/post/api.yaml#/update'
     delete:
       summary: delete a post
       tags:
@@ -3072,12 +3118,18 @@ paths:
       tags:
         - Post v4
       $ref: './v4/post/socket.yaml#create'
+  /sockets/v4/post.update:
+    post:
+      summary: update a post
+      tags:
+        - Post v4
+      $ref: './v4/post/socket.yaml#update'    
   /sockets/v4/post.delete:
     post:
       summary: delete a post
       tags:
         - Post v4
-      $ref: './v4/post/socket.yaml#create'
+      $ref: './v4/post/socket.yaml#delete'
 
   #Pollv3
   /api/v3/polls:
@@ -3284,6 +3336,17 @@ paths:
         - Community
       $ref: './v3/community/api.yaml#/getTopTrendingList'
 
+  /api/v4/communities/:communityId/users/roles:
+    post:
+      summary: Add roles to community users
+      tags:
+        - Community
+      $ref: './v4/community/api.yaml#/addRoles'
+    delete:
+      summary: Remove roles from community users
+      tags:
+        - Community
+      $ref: './v4/community/api.yaml#/removeRoles'
   /sockets/v3/community.query:
     post:
       summary: query communities.
@@ -3398,6 +3461,20 @@ paths:
         - Community
       $ref: './v3/community/socket.yaml#/getSelfPermission'
 
+  /sockets/v4/community.assignRolesToUsers:
+    post:
+      summary: Add roles to community users
+      tags:
+        - Community
+      $ref: './v4/community/socket.yaml#/addRoles'
+
+  /sockets/v4/community.removeRolesFromUsers:
+    post:
+      summary: Remove roles from community users
+      tags:
+        - Community
+      $ref: './v4/community/socket.yaml#/removeRoles'
+    
   #Community Category
   /api/v3/community-categories/list:
     get:
@@ -3692,6 +3769,13 @@ paths:
         - Network Setting
       $ref: './v3/network-setting/api.yaml#/getChatSetting'
 
+  /api/v3/network-settings/moderation:
+    put:
+      summary: Update moderation configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateModeration'
+
   /sockets/v3/network-settings.getSocial:
     post:
       summary: Get social configuration.
@@ -3705,6 +3789,72 @@ paths:
       tags:
         - Network Setting
       $ref: './v3/network-setting/socket.yaml#/getChatSetting'
+
+  # Realtime - Community
+  /realtime/community.created:
+    $ref: './v4/realtime/community/event.yaml#/created'
+  /realtime/community.updated:
+    $ref: './v4/realtime/community/event.yaml#/updated'
+  /realtime/community.deleted:
+    $ref: './v4/realtime/community/event.yaml#/deleted'
+  /realtime/community.joined:
+    $ref: './v4/realtime/community/event.yaml#/joined'
+  /realtime/community.left:
+    $ref: './v4/realtime/community/event.yaml#/left'
+  /realtime/community.userAdded:
+    $ref: './v4/realtime/community/event.yaml#/userAdded'
+  /realtime/community.userRemoved:
+    $ref: './v4/realtime/community/event.yaml#/userRemoved'
+  /realtime/community.userBanned:
+    $ref: './v4/realtime/community/event.yaml#/userBanned'
+  /realtime/community.userUnbanned:
+    $ref: './v4/realtime/community/event.yaml#/userUnbanned'
+
+  # Realtime - Post
+  /realtime/post.created:
+    $ref: './v4/realtime/post/event.yaml#/created'
+  /realtime/post.updated:
+    $ref: './v4/realtime/post/event.yaml#/updated'
+  /realtime/post.afterDeleted:
+    $ref: './v4/realtime/post/event.yaml#/afterDeleted'
+  /realtime/post.approved:
+    $ref: './v4/realtime/post/event.yaml#/approved'
+  /realtime/post.declined:
+    $ref: './v4/realtime/post/event.yaml#/declined'
+  /realtime/post.flagged:
+    $ref: './v4/realtime/post/event.yaml#/flagged'
+  /realtime/post.unflagged:
+    $ref: './v4/realtime/post/event.yaml#/unflagged'
+  /realtime/post.addReaction:
+    $ref: './v4/realtime/post/event.yaml#/addReaction'
+  /realtime/post.removeReaction:
+    $ref: './v4/realtime/post/event.yaml#/removeReaction'
+
+  # Realtime - Comment
+  /realtime/comment.created:
+    $ref: './v4/realtime/comment/event.yaml#/created'
+  /realtime/comment.updated:
+    $ref: './v4/realtime/comment/event.yaml#/updated'
+  /realtime/comment.deleted:
+    $ref: './v4/realtime/comment/event.yaml#/deleted'
+  /realtime/comment.flagged:
+    $ref: './v4/realtime/comment/event.yaml#/flagged'
+  /realtime/comment.unflagged:
+    $ref: './v4/realtime/comment/event.yaml#/unflagged'
+  /realtime/comment.addReaction:
+    $ref: './v4/realtime/comment/event.yaml#/addReaction'
+  /realtime/comment.removeReaction:
+    $ref: './v4/realtime/comment/event.yaml#/removeReaction'
+
+  # Realtime - User
+  /realtime/user.updated:
+    $ref: './v4/realtime/user/event.yaml#/updated'
+  /realtime/user.flagged:
+    $ref: './v4/realtime/user/event.yaml#/flagged'
+  /realtime/user.unflagged:
+    $ref: './v4/realtime/user/event.yaml#/unflagged'
+  /realtime/user.flagCleared:
+    $ref: './v4/realtime/user/event.yaml#/flagCleared'
 
 components:
   schemas:

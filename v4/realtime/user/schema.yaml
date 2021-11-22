@@ -1,0 +1,18 @@
+UserBase:
+  type: object
+  properties:
+    users:
+      type: array
+      items:
+        $ref: '../../../schema/user.yaml#/UserV3'
+
+User:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The user ID.
+        data:
+          $ref: '#/UserBase'
+    - $ref: '../schema.yaml#/Wrapper'

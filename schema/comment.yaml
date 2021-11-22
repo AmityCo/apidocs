@@ -1,6 +1,12 @@
 Comment:
   type: object
   properties:
+    _id:
+      type: string
+      description: Private ID of a comment. (for real-time event)
+    path:
+      type: string
+      description: Path of a comment. (for real-time event)
     commentId:
       type: string
       description: ID of a comment.
@@ -84,9 +90,27 @@ Comment:
       items:
         type: string
         description: ID of a children comment.
-    segmentNumber: 
+    segmentNumber:
       type: integer
       example: 1
+    mentionees:
+      type: array
+      description: The object of the mentions type and user who get a notification from the post.
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            description: >
+              type:
+              * `user` - need to specific userIds and notification mentions individual user
+            enum:
+              - user
+          userIds:
+            type: array
+            description: Array of UserId.
+            items:
+              type: string
     required:
       - commentId
       - data
