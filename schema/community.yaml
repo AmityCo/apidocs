@@ -85,6 +85,90 @@ Community:
     - channelId
     - displayName
 
+CommunityForRealtime:
+  type: object
+  properties:
+    _id:
+      type: string
+      description: Private ID of a community. (for real-time event)
+    path:
+      type: string
+      description: Path of a community. (for real-time event)
+    communityId:
+      type: string
+      description: ID of a community.
+    channelId:
+      type: string
+      description: ID of a channel.
+    userId:
+      type: string
+      description: ID of a creator.
+    displayName:
+      type: string
+      description: Community name for displaying.
+    avatarFileId:
+      type: string
+      description: ID of a avatar file.
+    description:
+      type: string
+      description: Description of a community.
+    isOfficial:
+      type: boolean
+      description: Is this community official?
+    isPublic:
+      type: boolean
+      description: Is this community public?
+    onlyAdminCanPost:
+      type: boolean
+      description: Can post by admin only?
+    tags:
+      type: array
+      description: List of tags. They will be used for searching.
+      items:
+        type: string
+    metadata:
+      type: object
+      description: Additional properties to support custom fields.
+    postsCount:
+      type: integer
+      description: Number of posts in community.
+    membersCount:
+      type: integer
+      description: Number of members in community.
+    categoryIds:
+      type: array
+      items:
+        type: string
+        description: ID of a category.
+    isDeleted:
+      type: boolean
+      default: false
+      description: Is this community deleted?
+    createdAt:
+      type: string
+      description: The date/time when a community is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a community is updated or deleted.
+      format: date-time
+    hasFlaggedComment:
+      type: boolean
+      default: false
+      description: The flag for checking internally that comments inside post is reported or not.
+    hasFlaggedPost:
+      type: boolean
+      default: false
+      description: The flag for checking internally that post inside community is reported or not.
+    needApprovalOnPostCreation:
+      type: boolean
+      default: false
+      description: Determines that this community require an authorize user to review post before post is published
+  required:
+    - communityId
+    - channelId
+    - displayName
+
 CommunityCategory:
   type: object
   properties:
