@@ -7,7 +7,7 @@ UserSocketResponse:
           status:
             type: string
           data:
-            $ref: "../../schema/user.yaml#/User"
+            $ref: '../../schema/user.yaml#/User'
 
 UsersSocketResponse:
   description: Users Information
@@ -20,7 +20,7 @@ UsersSocketResponse:
           data:
             type: array
             items:
-              $ref: "../../schema/user.yaml#/User"
+              $ref: '../../schema/user.yaml#/User'
 
 UsersPaginationSocketResponse:
   description: Users Information
@@ -36,7 +36,7 @@ UsersPaginationSocketResponse:
               results:
                 type: array
                 items:
-                  $ref: "../../schema/user.yaml#/User"
+                  $ref: '../../schema/user.yaml#/User'
               paging:
                 type: object
                 properties:
@@ -54,6 +54,13 @@ UserWebhookResponse:
           status:
             type: string
           data:
-            type: array
-            items:
-              $ref: "../../schema/user.yaml#/User"
+            type: object
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: '../../schema/user.yaml#/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '../../schema/file.yaml#/File'
