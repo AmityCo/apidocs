@@ -1,0 +1,53 @@
+CommentBase:
+  type: object
+  properties:
+    comments:
+      type: array
+      items:
+        $ref: '../../../schema/comment.yaml#/CommentForRealtime'
+    commentChildren:
+      type: array
+      items:
+        $ref: '../../../schema/comment.yaml#/CommentForRealtime'
+    users:
+      type: array
+      items:
+        $ref: '../../../schema/user.yaml#/UserV3'
+    files:
+      type: array
+      items:
+        $ref: '../../../schema/file.yaml#/File'
+
+Comment:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The comment ID.
+        data:
+          $ref: '#/CommentBase'
+    - $ref: '../schema.yaml#/Wrapper'
+
+CommentWithFlag:
+  allOf:
+    - $ref: '#/Comment'
+    - type: object
+      properties:
+        data:
+          type: object
+          properties:
+            flaggedUserId:
+              type: string
+              description: ID of the User has been flagged
+
+CommentWithReactor:
+  allOf:
+    - $ref: '#/Comment'
+    - type: object
+      properties:
+        data:
+          type: object
+          properties:
+            reactor:
+              $ref: '../../../schema/reaction.yaml#/Reactor'

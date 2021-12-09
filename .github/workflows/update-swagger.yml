@@ -33,6 +33,11 @@ jobs:
           sed -i "s|https://petstore.swagger.io/v2/swagger.json|$SWAGGER_YAML|g" index.html
           sed -i "s|href=\"./|href=\"dist/|g" index.html
           sed -i "s|src=\"./|src=\"dist/|g" index.html
+          # Fix title
+          sed -i "s|<title>.*</title>|<title>Amity API</title>|g" index.html
+          # Update favicon
+          cp -f assets/icons/favicon-32x32.png dist/
+          cp -f assets/icons/favicon-16x16.png dist/
           # Update current release
           echo ${{ steps.swagger-ui.outputs.release_tag }} > swagger-ui.version
       - name: Create Pull Request

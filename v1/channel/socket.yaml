@@ -488,3 +488,155 @@ unban:
       $ref: "../../global/error.yaml#/NotFoundError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+markSeen:
+  summary: mark user message read position inside channel
+  tags:
+    - Channel
+  security:
+    - SocketAuth: []
+  description: >
+    Mark user message read position inside channel
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            channelId:
+              type: string
+            readToSegment:
+              type: number
+          required:
+            - channelId
+            - readToSegment
+  responses:
+    "200000":
+      description: OK
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+startReading:
+  summary: User start reading message inside channel
+  tags:
+    - Channel
+  security:
+    - SocketAuth: []
+  description: >
+    User start reading message inside channel
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            channelId:
+              type: string
+          required:
+            - channelId
+  responses:
+    "200000":
+      description: OK
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+stopReading:
+  summary: User stop reading message inside channel
+  tags:
+    - Channel
+  security:
+    - SocketAuth: []
+  description: >
+    User stop reading message inside channel
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            channelId:
+              type: string
+          required:
+            - channelId
+  responses:
+    "200000":
+      description: OK
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+startReadings:
+  summary: Unknown
+  tags:
+    - Channel
+  security:
+    - SocketAuth: []
+  description: >
+    Mark start reading in multiple channel ???
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            channelIds:
+              type: array
+              items: 
+                type: string
+          required:
+            - channelIds
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CustomResponse"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+stopReadings:
+  summary: Unknown
+  tags:
+    - Channel
+  security:
+    - SocketAuth: []
+  description: >
+    Mark stop reading in multiple channel ???
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            channelIds:
+              type: array
+              items: 
+                type: string
+          required:
+            - channelIds
+  responses:
+    "200000":
+      $ref: "./response.yaml#/CustomResponse"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

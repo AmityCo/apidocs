@@ -1,0 +1,81 @@
+PostBase:
+  type: object
+  properties:
+    posts:
+      type: array
+      items:
+        $ref: '../../../schema/post.yaml#/PostForRealtime'
+    postChildren:
+      type: array
+      items:
+        $ref: '../../../schema/post.yaml#/PostForRealtime'
+    comments:
+      type: array
+      items:
+        $ref: '../../../schema/comment.yaml#/Comment'
+    users:
+      type: array
+      items:
+        $ref: '../../../schema/user.yaml#/UserV3'
+    files:
+      type: array
+      items:
+        $ref: '../../../schema/file.yaml#/File'
+    communities:
+      type: array
+      items:
+        $ref: '../../../schema/community.yaml#/Community'
+    communityUsers:
+      type: array
+      items:
+        $ref: '../../../schema/community.yaml#/CommunityUser'
+    categories:
+      type: array
+      items:
+        $ref: '../../../schema/community.yaml#/CommunityCategory'
+    feeds:
+      type: array
+      items:
+        $ref: '../../../schema/feed.yaml#/Feed'
+    videoStreamings:
+      type: array
+      items:
+        $ref: '../../../schema/video-streaming.yml#/VideoStreaming'
+    polls:
+      type: array
+      items:
+        $ref: '../../../schema/poll.yaml#/Poll'
+
+Post:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The post ID.
+        data:
+          $ref: '#/PostBase'
+    - $ref: '../schema.yaml#/Wrapper'
+
+PostWithFlag:
+  allOf:
+    - $ref: '#/Post'
+    - type: object
+      properties:
+        data:
+          type: object
+          properties:
+            flaggedUserId:
+              type: string
+              description: ID of the User has been flagged
+
+PostWithReactor:
+  allOf:
+    - $ref: '#/Post'
+    - type: object
+      properties:
+        data:
+          type: object
+          properties:
+            reactor:
+              $ref: '../../../schema/reaction.yaml#/Reactor'
