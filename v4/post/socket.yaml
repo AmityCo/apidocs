@@ -254,3 +254,136 @@ update:
       $ref: "../../global/error.yaml#/ForbiddenError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+query:
+  summary: query posts
+  tags:
+    - Post v4
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Query posts
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      condition for querying
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            targetId:
+              type: string
+              maxLength: 900
+            targetType:
+              type: string
+              enum:
+                - community
+                - user
+                - content
+            sortBy:
+              type: string
+              enum:
+                - lastCreated
+                - firstCreated
+                - lastUpdated
+                - firstUpdated
+              default: lastCreated
+            dataType:
+              type: string
+              example: upstra.customtype
+              description: must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")
+              deprecated: true
+            hasFlag:
+              type: boolean
+              default: null
+              description: >
+                  hasFlag:
+                    * `null(default)` - Show all posts.
+                    * `true` - Show only flagged post(or children) or has flagged comment.
+                    * `false` - Show only no flagged post(and children) and has no flagged comment.
+            isDeleted:
+              type: boolean
+              default: null
+            options:
+              type: object
+              properties:
+                before:
+                  type: string
+                  maxLength: 24
+                after:
+                  type: string
+                  maxLength: 24
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                token:
+                  type: string
+                  maxLength: 1000
+            feedType:
+              type: string
+              enum:
+                - published
+                - reviewing
+              default: published
+            dataTypes:
+              type: array
+              minItems: 1
+              maxItems: 10
+              items:
+                oneOf:
+                  - type: string
+                    enum:
+                      - video
+                      - image
+                      - file
+                      - liveStream
+                    description: post data type to filter
+                  - type: string
+                    example: upstra.customtype
+                    description: custom post type - must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")
+            matchingOnlyParentPost:
+              type: boolean
+              default: true
+              description: When `true` will filter only parent post
+            tags:
+              type: array
+              minItems: 0
+              maxItems: 5
+              items:
+                type: string
+                max: 24
+                description: tags
+          required:
+            - targetType
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PostPaginationSocketResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
