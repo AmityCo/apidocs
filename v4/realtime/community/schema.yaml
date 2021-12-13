@@ -1,0 +1,38 @@
+CommunityBase:
+  type: object
+  properties:
+    communities:
+      type: array
+      items:
+        $ref: '../../../schema/community.yaml#/CommunityForRealtime'
+    communityUsers:
+      type: array
+      items:
+        $ref: '../../../schema/community.yaml#/CommunityUser'
+    files:
+      type: array
+      items:
+        $ref: '../../../schema/file.yaml#/File'
+    users:
+      type: array
+      items:
+        $ref: '../../../schema/user.yaml#/UserV3'
+    categories:
+      type: array
+      items:
+        $ref: '../../../schema/community.yaml#/CommunityCategory'
+    feeds:
+      type: array
+      items:
+        $ref: '../../../schema/feed.yaml#/Feed'
+
+Community:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The community ID.
+        data:
+          $ref: '#/CommunityBase'
+    - $ref: '../schema.yaml#/Wrapper'

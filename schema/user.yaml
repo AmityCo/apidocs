@@ -10,6 +10,12 @@ ShortUser:
 UserV3:
   type: object
   properties:
+    _id:
+      type: string
+      description: Private ID of a user. (for real-time event)
+    path:
+      type: string
+      description: Path of a user. (for real-time event)
     userId:
       type: string
     roles:
@@ -19,7 +25,7 @@ UserV3:
     permissions:
       type: array
       items:
-        $ref: "./role.yaml#/PermissionEnum"
+        $ref: './role.yaml#/PermissionEnum'
     displayName:
       type: string
     description:

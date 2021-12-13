@@ -1,0 +1,68 @@
+CommunitiesApiResponse:
+  description: Communities Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          communities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          communityUsers:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/CommunityUser"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          categories:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/CommunityCategory"
+          feeds:
+            type: array
+            items:
+              $ref: "../../schema/feed.yaml#/Feed"
+
+CommunitiesSocketResponse:
+  description: Communities Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              communities:
+                type: array
+                items:
+                  $ref: "../../schema/community.yaml#/Community"
+              communityUsers:
+                type: array
+                items:
+                  $ref: "../../schema/community.yaml#/CommunityUser"
+              files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/UserV3"
+              categories:
+                type: array
+                items:
+                  $ref: "../../schema/community.yaml#/CommunityCategory"
+              feeds:
+                type: array
+                items:
+                  $ref: "../../schema/feed.yaml#/Feed"
