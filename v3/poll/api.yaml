@@ -314,44 +314,34 @@ usersRespondent:
       required: true
       schema:
         type: string
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - lastCreated
+          - firstCreated
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          token:
+            type: string
+            maxLength: 1000
+          before:
+            type: string
+            maxLength: 24
+          after:
+            type: string
   consumes:
     - application/json
-  requestBody:
-    description: >
-      List users who vote the poll with specific answer
-
-      ### Required
-
-      - pollId and answerId
-
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            dataType:
-              description: Sort time of users vote.
-              type: string
-              enum:
-                - firstCreated
-                - lastCreated
-            options:
-              type: object
-              properties:
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  default: 10
-                token:
-                  type: string
-                  maxLength: 1000
-                skip:
-                  type: integer
-                  maxLength: 1000
-          required:
-            - data
   responses:
     "200000":
       $ref: "./response.yaml#/PollPaginationResponse"
