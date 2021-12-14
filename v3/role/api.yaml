@@ -190,6 +190,11 @@ get:
   description: >
     Get a role
   parameters:
+    - name: roleId
+      in: path
+      required: true
+      schema:
+        type: string
     - name: Authorization
       in: header
       value: Bearer {{accessToken}}
@@ -204,22 +209,6 @@ get:
         type: string
   consumes:
     - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      information of a role to get.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            roleId:
-              type: string
-              description: role id to get
-              minLength: 1
-              maxLength: 100
-          required:
-            - roleId
   responses:
     "200000":
       $ref: "./response.yaml#/RoleResponse"
@@ -252,41 +241,39 @@ query:
       required: true
       schema:
         type: string
+    - name: keyword
+      in: query
+      required: true
+      schema:
+        type: string
+        minLength: 0
+        maxLength: 100
+      description: search keyword
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - lastCreated
+          - firstCreated
+          - displayName
+        default: lastCreated
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          token:
+            type: string
+            maxLength: 1000
   consumes:
     - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      information of a role to get.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            keyword:
-              type: string
-              description: search keyword
-              minLength: 0
-              maxLength: 100
-            sortBy:
-              type: string
-              enum:
-                - lastCreated
-                - firstCreated
-                - displayName
-              default: lastCreated
-            options:
-              type: object
-              properties:
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  default: 10
-                token:
-                  type: string
-                  minLength: 1
-                  maxLength: 1000
   responses:
     "200000":
       $ref: "./response.yaml#/RoleResponse"
