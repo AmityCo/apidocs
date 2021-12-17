@@ -212,21 +212,15 @@ paths:
           required: true
           schema:
             type: string
+        - name: regexs
+          in: query
+          collectionFormat: multi
+          schema:
+            type: array
+            items:
+              type: string
       consumes:
         - application/x-www-form-urlencoded
-      requestBody:
-        description: >
-          Condition of querying.
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                regexs:
-                  type: array
-                  items:
-                    type: string
       responses:
         '200000':
           $ref: '#/components/responses/BlacklistRulesResponse'
@@ -478,7 +472,7 @@ paths:
       tags:
         - Admin
       $ref: './v2/message/api.yaml#/create'
-  /api/v2/message/:messageId:
+  /api/v2/message/{messageId}:
     get:
       summary: get a message.
       tags:
@@ -495,7 +489,7 @@ paths:
       tags:
         - Admin
       $ref: './v2/message/api.yaml#/createImageMessage'
-  /api/v2/messages/:messageId/images?size:
+  /api/v2/messages/{messageId}/images?size:
     get:
       summary: get an image message
       tags:
@@ -507,7 +501,7 @@ paths:
       tags:
         - Admin
       $ref: './v2/message/api.yaml#/createFileMessage'
-  /api/v2/messages/:messageId/files:
+  /api/v2/messages/{messageId}/files:
     get:
       summary: get a file message
       tags:
@@ -527,11 +521,6 @@ paths:
         - name: Authorization
           in: header
           value: Bearer {{accessToken}}
-          required: true
-          schema:
-            type: string
-        - name: messageId
-          in: path
           required: true
           schema:
             type: string
@@ -678,19 +667,13 @@ paths:
           required: true
           schema:
             type: string
+        - name: filter
+          in: query
+          required: true
+          schema:
+            type: string
       consumes:
         - application/x-www-form-urlencoded
-      requestBody:
-        description: >
-          Query parameters
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                filter:
-                  type: string
       responses:
         '200000':
           $ref: '#/components/responses/RolesResponse'
@@ -807,21 +790,16 @@ paths:
           required: true
           schema:
             type: string
+        - name: regexs
+          in: query
+          required: true
+          collectionFormat: multi
+          schema:
+            type: array
+            items:
+              type: string
       consumes:
         - application/x-www-form-urlencoded
-      requestBody:
-        description: >
-          Condition of querying.
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                regexs:
-                  type: array
-                  items:
-                    type: string
       responses:
         '200000':
           $ref: '#/components/responses/WhitelistRulesResponse'

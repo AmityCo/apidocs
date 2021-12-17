@@ -22,41 +22,43 @@ query:
       required: true
       schema:
         type: string
+    - name: referenceId
+      in: query
+      require: true
+      schema:
+        type: string
+        maxLength: 900
+    - name: referenceType
+      in: query
+      require: true
+      schema:
+        type: string
+        enum:
+          - message
+          - post
+          - comment
+    - name: reactionName
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 0
+          token:
+            type: string
+            maxLength: 1000
+          skip:
+            type: integer
+            minimum: 0
   consumes:
     - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      Condition of querying including specified reaction and pagination.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            referenceId:
-              type: string
-              maxLength: 900
-            referenceType:
-              type: string
-              enum: [message, post, comment]
-            reactionName:
-              type: string
-              maxLength: 100
-            options:
-              type: object
-              properties:
-                skip:
-                  type: integer
-                  minimum: 0
-                limit:
-                  type: integer
-                  minimum: 0
-                token:
-                  type: string
-                  maxLength: 1000
-          required:
-            - referenceId
-            - referenceType
   responses:
     "200000":
       $ref: "./response.yaml#/ReactionResponse"
@@ -212,21 +214,17 @@ most:
       required: true
       schema:
         type: string
+    - name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+    - name: reactionName
+      in: query
+      schema:
+        type: string
   consumes:
     - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      limit and reaction name
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            limit:
-              type: integer
-              minimum: 1
-            reactionName:
-              type: string
   responses:
     "200000":
       description: Message information.

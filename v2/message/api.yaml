@@ -152,6 +152,11 @@ get:
       required: true
       schema:
         type: string
+    - name: messageId
+      in: path
+      required: true
+      schema:
+        type: string
   consumes:
     - application/x-www-form-urlencoded
   responses:
@@ -440,24 +445,6 @@ getImageMessage:
     - application/json
   description: >
     Get a message with image in a given channel.
-  requestBody:
-    description: >
-      information of a message to be got.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            messageId:
-              type: string
-            size:
-              type: string
-            enum:
-              - small
-              - medium
-              - large
-              - full (if fullImage)
   responses:
     "200000":
       description: An image file
@@ -555,17 +542,6 @@ getFileMessage:
     - application/json
   description: >
     Get a message with file in a given channel.
-  requestBody:
-    description: >
-      information of file message to get.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            messageId:
-              type: string
   responses:
     "200000":
       description: A file
