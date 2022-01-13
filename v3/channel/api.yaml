@@ -177,6 +177,11 @@ delete:
       required: true
       schema:
         type: string
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
   consumes:
     - application/json
   requestBody:
@@ -238,22 +243,13 @@ get:
       required: true
       schema:
         type: string
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
   consumes:
     - application/json
-  requestBody:
-    description: >
-      information of a channel.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            channelId:
-              type: string
-              maxLength: 100
-          required:
-            - channelId
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelsApiResponse"
@@ -288,25 +284,18 @@ getList:
       required: true
       schema:
         type: string
+    - name: channelIds
+      in: query
+      collectionFormat: multi
+      required: true
+      schema:
+        type: array
+        maxItems: 10
+        items:
+          type: string
+          maxLength: 50
   consumes:
     - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      information of a channel.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            channelIds:
-              type: array
-              maxItems: 100
-              items:
-                type: string
-                maxLength: 50
-          required:
-            - channelIds
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelsApiResponse"
@@ -339,81 +328,95 @@ query:
       required: true
       schema:
         type: string
-  consumes:
-    - application/json
-  requestBody:
-    description: >
-      condition for querying
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            keyword:
-              type: string
-              maxLength: 100
-            isDeleted:
-              type: boolean
-              default: null
-              description: >
+    - name: keyword
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+    - name: isDeleted
+      in: query
+      schema:
+        type: boolean
+        default: null
+      description: >
                   isDeleted:
                     * `null(default)` - Show both channel is actived and channel is inactived.
                     * `true` - Show channel is inactived only.
                     * `false` - Show channel is actived only.
-            tags:
-              type: array
-              maxItems: 10
-              items:
-                type: string
-                maxLength: 100
-            excludeTags:
-              type: array
-              maxItems: 10
-              items:
-                type: string
-                maxLength: 100
-            filter:
-              type: string
-              enum:
-                - all
-                - member
-                - notMember
-                - flagged
-              default: all
-            types:
-              type: array
-              items:
-                type: string
-                enum:
-                  - standard
-                  - private
-                  - conversation
-                  - broadcast
-                  - live
-                  - community
-            userId:
-              type: string
-              maxLength: 100
-            sortBy:
-              type: string
-              enum:
-                - lastActivity
-                - lastCreated
-                - firstCreated
-                - displayName
-              default: lastActivity
-            options:
-              type: object
-              properties:
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  default: 10
-                token:
-                  type: string
-                  maxLength: 100
+    - name: tags
+      in: query
+      collectionFormat: multi
+      schema:
+        type: array
+        maxItems: 10
+        items:
+          type: string
+          maxLength: 100
+    - name: excludeTags
+      in: query
+      collectionFormat: multi
+      schema:
+        type: array
+        maxItems: 10
+        items:
+          type: string
+          maxLength: 100
+    - name: filter
+      in: query
+      schema:
+        type: string
+        enum:
+          - all
+          - member
+          - notMember
+          - flagged
+        default: all
+    - name: types
+      in: query
+      collectionFormat: multi
+      schema:
+        type: array
+        maxItems: 10
+        items:
+          type: string
+          enum:
+            - standard
+            - private
+            - conversation
+            - broadcast
+            - live
+            - community
+    - name: userId
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - lastActivity
+          - lastCreated
+          - firstCreated
+          - displayName
+        default: lastActivity
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          token:
+            type: string
+            maxLength: 100
+  consumes:
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelPaginationApiResponse"
@@ -445,6 +448,11 @@ update:
     - name: Content-Type
       in: header
       value: application/json
+      required: true
+      schema:
+        type: string
+    - name: channelId
+      in: path
       required: true
       schema:
         type: string
@@ -520,6 +528,11 @@ join:
       required: true
       schema:
         type: string
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
   consumes:
     - application/json
   requestBody:
@@ -575,6 +588,11 @@ leave:
       required: true
       schema:
         type: string
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
   consumes:
     - application/json
   requestBody:
@@ -627,6 +645,11 @@ addUsers:
     - name: Content-Type
       in: header
       value: application/json
+      required: true
+      schema:
+        type: string
+    - name: channelId
+      in: path
       required: true
       schema:
         type: string
@@ -758,6 +781,11 @@ ban:
       required: true
       schema:
         type: string
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
   consumes:
     - application/json
   requestBody:
@@ -819,6 +847,11 @@ unban:
     - name: Content-Type
       in: header
       value: application/json
+      required: true
+      schema:
+        type: string
+    - name: channelId
+      in: path
       required: true
       schema:
         type: string
@@ -886,57 +919,57 @@ queryUsers:
       required: true
       schema:
         type: string
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: roles
+      in: query
+      collectionFormat: multi
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 20
+        items:
+          type: string
+          minLength: 1
+          maxLength: 900
+      description: Role to filter
+    - name: filter
+      in: query
+      schema:
+        type: string
+        enum:
+          - all
+          - muted
+          - banned
+          - member&banned
+        default: all
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - lastCreated
+          - firstCreated
+        default: lastCreated
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          token:
+            type: string
+            maxLength: 100
   consumes:
     - application/json
-  requestBody:
-    description: >
-      Information of channel
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            channelId:
-              type: string
-              minLength: 1
-              maxLength: 900
-            roles:
-              type: array
-              description: Role to filter
-              minItems: 1
-              maxItems: 20
-              items:
-                type: string
-                minLength: 1
-                maxLength: 900
-            filter:
-              type: string
-              enum:
-                - all
-                - muted
-                - banned
-                - member&banned
-              default: all
-            sortBy:
-              type: string
-              enum:
-                - lastCreated
-                - firstCreated
-              default: lastCreated
-            options:
-              type: object
-              properties:
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  default: 10
-                token:
-                  type: string
-                  maxLength: 1000
-          required:
-            - channelId
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelPaginationApiResponse"
@@ -968,6 +1001,11 @@ addRole:
     - name: Content-Type
       in: header
       value: application/json
+      required: true
+      schema:
+        type: string
+    - name: channelId
+      in: path
       required: true
       schema:
         type: string
@@ -1033,6 +1071,11 @@ removeRole:
     - name: Content-Type
       in: header
       value: application/json
+      required: true
+      schema:
+        type: string
+    - name: channelId
+      in: path
       required: true
       schema:
         type: string
