@@ -22,95 +22,102 @@ query:
       required: true
       schema:
         type: string
-  consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      condition for querying
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            referenceId:
-              type: string
-              maxLength: 900
-            referenceType:
-              type: string
-              enum:
-                - post
-                - content
-            filterByParentId:
-              type: boolean
-              default: true
-            parentId:
-              type: string
-              maxLength: 900
-            hasFlag:
-              type: boolean
-              default: false
-            isDeleted:
-              type: boolean
-              default: null
-            sortBy:
-              type: string
-              enum:
-                - firstCreated
-                - lastCreated
-                - lastUpdated
-                - firstUpdated
-              default: lastCreated
-              description: >
+    - name: referenceId
+      required: true
+      in: query
+      schema:
+        type: string
+        maxLength: 900
+    - name: referenceType
+      in: query
+      schema:
+        type: string
+        enum:
+          - post
+          - content
+    - name: filterByParentId
+      in: query
+      schema:
+        type: boolean
+        default: true
+    - name: parentId
+      in: query
+      schema:
+        type: string
+        maxLength: 900
+    - name: hasFlag
+      in: query
+      schema:
+        type: boolean
+        default: false
+    - name: isDeleted
+      in: query
+      schema:
+        type: boolean
+        default: null
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - firstCreated
+          - lastCreated
+          - lastUpdated
+          - firstUpdated
+        default: lastCreated
+      description: >
                     type:
                       * `scrollable(default)` - sort by segment number only.
                       * `pagination` - can sort by 'lastCreated(default)', 'firstCreated', 'lastUpdated', 'firstUpdated'.
-            options:
-              type: object
-              properties:
-                type:
-                  type: string
-                  enum:
-                    - scrollable
-                    - pagination
-                  default: scrollable
-                  description: >
+    - name: options
+      in: query
+      style: deepObject
+      description: >
                     type:
                       * `scrollable(default)` - 'after', 'first', 'before' and 'last' will be set for page size with direction.
                       * `pagination` - 'skip' and 'limit' will be the number of records to skip and max records size.
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  description: support pagination type only
-                skip:
-                  type: integer
-                  minimum: 0
-                  maximum: 100
-                  description: support pagination type only
-                after:
-                  type: integer
-                  minimum: 1
-                  description: support scrollable type only
-                first:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  description: support scrollable type only
-                before:
-                  type: integer
-                  minimum: 1
-                  description: support scrollable type only
-                last:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  description: support scrollable type only
-                token:
-                  type: string
-                  maxLength: 1000
-          required:
-            - referenceId
+                
+                    limit/skip:
+                      * support pagination type only
+
+                    before/after/first/last:
+                      * support scrollable type only
+      schema:
+        type: object
+        properties:
+          type:
+            type: string
+            enum:
+              - scrollable
+              - pagination
+            default: scrollable
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+          skip:
+            type: integer
+            minimum: 0
+            maximum: 100
+          after:
+            type: integer
+            minimum: 1
+          first:
+            type: integer
+            minimum: 1
+            maximum: 100
+          before:
+            type: integer
+            minimum: 1
+          last:
+            type: integer
+            minimum: 1
+            maximum: 100
+          token:
+            type: string
+            maxLength: 1000
+  consumes:
+    - application/x-www-form-urlencoded
   responses:
     "200000":
       $ref: "./response.yaml#/CommentPaginationApiResponse"

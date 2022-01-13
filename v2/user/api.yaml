@@ -22,29 +22,28 @@ queryUsers:
       required: true
       schema:
         type: string
+    - name: search
+      in: query
+      schema:
+        type: string
+    - name: filter
+      in: query
+      schema:
+        type: string
+        enum:
+          - all
+          - flagged
+        default: all
+    - name: pageToken
+      in: query
+      schema:
+        type: string
+    - name: limit
+      in: query
+      schema:
+        type: integer
   consumes:
     - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      Query parameters
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            search:
-              type: string
-            filter:
-              type: string
-              enum:
-                - all
-                - flagged
-              default: all
-            pageToken:
-              type: string
-            limit:
-              type: integer
   responses:
     "200000":
       $ref: "./response.yaml#/UsersPaginationApiResponse"
@@ -230,21 +229,13 @@ clearFlag:
       required: true
       schema:
         type: string
+    - name: userId
+      in: path
+      required: true
+      schema:
+        type: string
   consumes:
     - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      User information to be clear flag
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            userId:
-              type: string
-          required:
-            - userId
   responses:
     "200000":
       $ref: "./response.yaml#/UserApiResponse"
