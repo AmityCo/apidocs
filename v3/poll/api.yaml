@@ -280,7 +280,7 @@ vote:
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
 
-usersRespondent:
+getUsersAnswered:
   summary: List user who vote the poll with specific answer
   tags:
     - Poll v3
@@ -345,6 +345,45 @@ usersRespondent:
   responses:
     "200000":
       $ref: "./response.yaml#/PollPaginationResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/PollNotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+get:
+  summary: Get poll
+  tags:
+    - Poll v3
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    List users who vote the poll with specific answer
+  parameters:
+    - name: pollId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PollResponse"
     "400400":
       $ref: "../../global/error.yaml#/PollNotFoundError"
     "500000":
