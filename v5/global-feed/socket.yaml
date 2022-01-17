@@ -1,0 +1,34 @@
+post:
+  tags:
+    - GlobalFeed
+  summary: Get global feed.
+  security:
+    - SocketAuth: []
+  description: >
+    Get posts from your wall, people you follow and communities you join sorted by custom rannking algorithm
+  requestBody:
+    description: >
+      Condition of querying and pagination.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            options:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                token:
+                  type: string
+  responses:
+    "200000":
+      $ref: "./response.yaml#/GlobalFeedResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
