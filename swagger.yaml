@@ -3324,6 +3324,19 @@ paths:
       $ref: './v3/file/socket.yaml#delete'
 
   #File v4
+
+  /api/v4/images:
+    post:
+      summary: Upload image file.
+      tags:
+        - File
+      $ref: './v4/file/api.yaml#uploadImage'
+  /api/v4/files:
+    post:
+      summary: Upload file.
+      tags:
+        - File
+      $ref: './v4/file/api.yaml#uploadFile'
   /api/v4/videos:
     post:
       summary: Upload video file.
@@ -4168,6 +4181,9 @@ components:
       type: apiKey
       in: query
       name: token
+    BearerAuth:
+      type: http
+      scheme: bearer
   responses:
     SuccessResponse:
       description: Success response.

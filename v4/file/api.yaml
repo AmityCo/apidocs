@@ -1,5 +1,7 @@
 uploadVideo:
   summary: Upload video.
+  security:
+    - BearerAuth: [] 
   tags:
     - File
   securityDefinition:
@@ -8,12 +10,6 @@ uploadVideo:
       in: header
       name: Authorization
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: multipart/form-data
@@ -43,6 +39,88 @@ uploadVideo:
   responses:
     "200":
       $ref: "./response.yaml#/FileVideoUploadResponse"
+    "413":
+      $ref: "../../global/error.yaml#/PayloadTooLargeError"
+    "500":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+uploadImage:
+  summary: Upload image.
+  security:
+    - BearerAuth: [] 
+  tags:
+    - File
+  parameters:
+    - name: Content-Type
+      in: header
+      value: multipart/form-data
+      required: true
+      schema:
+        type: string
+  consumes:
+    - multipart/form-data
+  description: |
+    Upload image to cloud storage
+
+    Image size limit: 1,073,741,824 byte
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:            
+          type: object
+          properties:
+            files:
+              type: array
+              items:
+                type: string
+                format: binary
+                description: Image file data
+          required:
+            - files
+  responses:
+    "200":
+      $ref: "./response.yaml#/FileImageUploadResponse"
+    "413":
+      $ref: "../../global/error.yaml#/PayloadTooLargeError"
+    "500":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+uploadFile:
+  summary: Upload file.
+  security:
+    - BearerAuth: [] 
+  tags:
+    - File
+  parameters:
+    - name: Content-Type
+      in: header
+      value: multipart/form-data
+      required: true
+      schema:
+        type: string
+  consumes:
+    - multipart/form-data
+  description: |
+    Upload file to cloud storage
+
+    File size limit: 1,073,741,824 byte
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:            
+          type: object
+          properties:
+            files:
+              type: array
+              items:
+                type: string
+                format: binary
+                description: file data
+          required:
+            - files
+  responses:
+    "200":
+      $ref: "./response.yaml#/FileUploadResponse"
     "413":
       $ref: "../../global/error.yaml#/PayloadTooLargeError"
     "500":
