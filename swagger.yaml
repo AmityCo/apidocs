@@ -187,6 +187,12 @@ paths:
                 - regexs
 
   #Admin
+  /admin/v1/blacklist/records:
+    get:
+      summary: get rules of blacklist.
+      tags:
+        - Admin
+      $ref: './v1/moderation/api.yaml#get'
   /api/v2/blacklist/records:
     get:
       summary: get rules of blacklist.
@@ -3101,6 +3107,11 @@ paths:
       tags:
         - Post v4
       $ref: './v4/post/api.yaml#/create'
+    get:
+      summary: query a post
+      tags:
+        - Post v4
+      $ref: './v4/post/api.yaml#/query'
   /api/v4/posts/:postId:
     put:
       summary: update a post
@@ -3112,6 +3123,12 @@ paths:
       tags:
         - Post v4
       $ref: './v4/post/api.yaml#/delete'
+  /sockets/v4/post.query:
+    post:
+      summary: query a post
+      tags:
+        - Post v4
+      $ref: './v4/post/socket.yaml#query'
   /sockets/v4/post.create:
     post:
       summary: create a post
@@ -3318,6 +3335,19 @@ paths:
       $ref: './v3/file/socket.yaml#delete'
 
   #File v4
+
+  /api/v4/images:
+    post:
+      summary: Upload image file.
+      tags:
+        - File
+      $ref: './v4/file/api.yaml#uploadImage'
+  /api/v4/files:
+    post:
+      summary: Upload file.
+      tags:
+        - File
+      $ref: './v4/file/api.yaml#uploadFile'
   /api/v4/videos:
     post:
       summary: Upload video file.
@@ -3781,6 +3811,11 @@ paths:
       $ref: './v3/network-setting/api.yaml#/getChatSetting'
 
   /api/v3/network-settings/moderation:
+    get: 
+      summary: Get moderation configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/getModeration'
     put:
       summary: Update moderation configuration.
       tags:
@@ -4162,6 +4197,9 @@ components:
       type: apiKey
       in: query
       name: token
+    BearerAuth:
+      type: http
+      scheme: bearer
   responses:
     SuccessResponse:
       description: Success response.
