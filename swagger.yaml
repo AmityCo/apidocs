@@ -3107,6 +3107,11 @@ paths:
       tags:
         - Post v4
       $ref: './v4/post/api.yaml#/create'
+    get:
+      summary: query a post
+      tags:
+        - Post v4
+      $ref: './v4/post/api.yaml#/query'
   /api/v4/posts/:postId:
     put:
       summary: update a post
@@ -3118,6 +3123,12 @@ paths:
       tags:
         - Post v4
       $ref: './v4/post/api.yaml#/delete'
+  /sockets/v4/post.query:
+    post:
+      summary: query a post
+      tags:
+        - Post v4
+      $ref: './v4/post/socket.yaml#query'
   /sockets/v4/post.create:
     post:
       summary: create a post
