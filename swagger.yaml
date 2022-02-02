@@ -3770,6 +3770,7 @@ paths:
   #Network Setting
   /api/v3/network-settings:
     put:
+      deprecated: true
       summary: Update network setting configuration.
       tags:
         - Network Setting
@@ -3822,6 +3823,13 @@ paths:
         - Network Setting
       $ref: './v3/network-setting/api.yaml#/updateModeration'
 
+  /api/v3/network-settings/tier:
+    put:
+      summary: Update network tier and feature
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateTier'
+      
   /sockets/v3/network-settings.getSocial:
     post:
       summary: Get social configuration.
