@@ -400,3 +400,57 @@ updateModeration:
       $ref: '../../global/error.yaml#/BadRequestError'
     '500000':
       $ref: '../../global/error.yaml#/UnexpectedError'
+
+updateTier:
+  summary: Update network tier and feature
+  tags:
+    - Network Setting
+  security:
+    - BearerAuth: [] 
+  description: |
+    Update network tier and feature
+    # Authorization token is a Cognito client_credentials access token (client is amity-portal and scope is asc/network.write)
+  parameters:
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information for a network setting
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            networkIds:
+              type: array
+              description: Array of networkId
+              min: 1
+              max: 10
+              items:
+                type: string
+            tierHandler:
+              type: string
+              max: 200
+              enum:
+                - asc-basic
+                - asc-advance
+                - asc-max
+                - asc-fixed-term-basic
+                - asc-fixed-term-advance             
+                - asc-fixed-term-max            
+              description: Network tier
+
+  responses:
+    '200000':
+      $ref: './response.yaml#/NetworkSettingApiResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
