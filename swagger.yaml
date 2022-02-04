@@ -23,7 +23,7 @@ info:
 
     Before making server-to-server API calls, be sure to select the correct API endpoint for your region in
     the <strong>Servers</strong> dropdown below.
-  version: 4.20.0
+  version: 4.23.0
 servers:
   - url: https://api.us.amity.co
     description: API Endpoint for US Region
@@ -187,6 +187,12 @@ paths:
                 - regexs
 
   #Admin
+  /admin/v1/blacklist/records:
+    get:
+      summary: get rules of blacklist.
+      tags:
+        - Admin
+      $ref: './v1/moderation/api.yaml#get'
   /api/v2/blacklist/records:
     get:
       summary: get rules of blacklist.
@@ -3079,6 +3085,11 @@ paths:
       tags:
         - Post v4
       $ref: './v4/post/api.yaml#/create'
+    get:
+      summary: query a post
+      tags:
+        - Post v4
+      $ref: './v4/post/api.yaml#/query'
   /api/v4/posts/:postId:
     put:
       summary: update a post
@@ -3090,6 +3101,12 @@ paths:
       tags:
         - Post v4
       $ref: './v4/post/api.yaml#/delete'
+  /sockets/v4/post.query:
+    post:
+      summary: query a post
+      tags:
+        - Post v4
+      $ref: './v4/post/socket.yaml#query'
   /sockets/v4/post.create:
     post:
       summary: create a post
@@ -3123,17 +3140,28 @@ paths:
       tags:
         - Poll v3
       $ref: './v3/poll/api.yaml#/update'
+    get:
+      summary: get poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/api.yaml#/get'
+    delete:
+      summary: delete poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/api.yaml#/delete'
   /api/v3/polls/{pollId}/votes:
     post:
       summary: vote poll
       tags:
         - Poll v3
       $ref: './v3/poll/api.yaml#/vote'
-    delete:
-      summary: delete poll
+  /api/v3/polls/{pollId}/answers/{answerId}:
+    get:
+      summary: List users who vote the poll with specific answer
       tags:
         - Poll v3
-      $ref: './v3/poll/api.yaml#/delete'
+      $ref: './v3/poll/api.yaml#/getUsersAnswered'
 
   #UserFeed
   /api/v3/user-feeds/:userId/count:
@@ -3285,6 +3313,19 @@ paths:
       $ref: './v3/file/socket.yaml#delete'
 
   #File v4
+
+  /api/v4/images:
+    post:
+      summary: Upload image file.
+      tags:
+        - File
+      $ref: './v4/file/api.yaml#uploadImage'
+  /api/v4/files:
+    post:
+      summary: Upload file.
+      tags:
+        - File
+      $ref: './v4/file/api.yaml#uploadFile'
   /api/v4/videos:
     post:
       summary: Upload video file.
@@ -3707,6 +3748,7 @@ paths:
   #Network Setting
   /api/v3/network-settings:
     put:
+      deprecated: true
       summary: Update network setting configuration.
       tags:
         - Network Setting
@@ -3748,12 +3790,24 @@ paths:
       $ref: './v3/network-setting/api.yaml#/getChatSetting'
 
   /api/v3/network-settings/moderation:
+    get:
+      summary: Get moderation configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/getModeration'
     put:
       summary: Update moderation configuration.
       tags:
         - Network Setting
       $ref: './v3/network-setting/api.yaml#/updateModeration'
 
+  /api/v3/network-settings/tier:
+    put:
+      summary: Update network tier and feature
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateTier'
+      
   /sockets/v3/network-settings.getSocial:
     post:
       summary: Get social configuration.
@@ -3835,6 +3889,21 @@ paths:
     $ref: './v4/realtime/user/event.yaml#/unflagged'
   /realtime/user.flagCleared:
     $ref: './v4/realtime/user/event.yaml#/flagCleared'
+
+  #Global Feed
+  /sockets/v5/global-feed.query:
+    post:
+      summary: Get global feed.
+      tags:
+        - GlobalFeed
+      $ref: './v5/global-feed/socket.yaml#post'
+
+  /api/v5/me/global-feeds:
+    get:
+      summary: Get global feed.
+      tags:
+        - GlobalFeed
+      $ref: './v5/global-feed/api.yaml#get'
 
 components:
   schemas:
@@ -4114,6 +4183,9 @@ components:
       type: apiKey
       in: query
       name: token
+    BearerAuth:
+      type: http
+      scheme: bearer
   responses:
     SuccessResponse:
       description: Success response.
