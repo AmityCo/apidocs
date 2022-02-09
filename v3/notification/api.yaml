@@ -1,0 +1,83 @@
+register:
+  summary: register a device to get push notification
+  tags:
+    - Notification
+  security:
+    - BearerAuth: []
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: |
+    Register a device to a notification service provider.
+  parameters:
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: |
+      information of a device to be registered.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            platform:
+              type: string
+              enum:
+                - android
+                - ios
+            token:
+              type: string
+            provider:
+              type: string
+              enum:
+                - baidu
+                - fcm
+          required:
+            - platform
+            - token
+  responses:
+    '200000':
+      $ref: '../../global/response.yaml#/SaveApiResponse'
+    '400301':
+      $ref: '../../global/error.yaml#/PermissionDenidedError'
+    '400311':
+      $ref: '../../global/error.yaml#/RateLimitError'
+    '400400':
+      $ref: '../../global/error.yaml#/NotFoundError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+      
+unregister:
+  summary: Unregister a device from a notification service provider
+  tags:
+    - Notification
+  security:
+    - BearerAuth: []
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: |
+    Unregister a device from a notification service provider.
+  parameters:
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  responses:
+    '200000':
+      $ref: '#/components/responses/SuccessResponse'
+    '400000':
+      $ref: '#/components/responses/BadRequestError'
