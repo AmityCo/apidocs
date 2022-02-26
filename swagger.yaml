@@ -2141,6 +2141,19 @@ paths:
           $ref: '#/components/responses/SuccessResponse'
         '400000':
           $ref: '#/components/responses/BadRequestError'
+
+  /api/v3/notification:
+    post:
+      summary: Register a device to get push notification
+      tags:
+        - Notification
+      $ref: './v3/notification/api.yaml#register'
+    delete:
+      summary: unregister a device from a notification service provider
+      tags:
+        - Notification
+      $ref: './v3/notification/api.yaml#unregister'
+
   /admin/v1/notification/setting:
     post:
       summary: Save push notification setting.
@@ -3844,6 +3857,20 @@ paths:
         - Network Setting
       $ref: './v3/network-setting/socket.yaml#/getChatSetting'
 
+  /api/v3/allowlists:
+    get:
+      summary: Get list of allowed words
+      tags: 
+        - Moderation
+      $ref: './v3/moderation/api.yaml#/queryAllowedlist'
+
+  /api/v3/blocklists:
+    get:
+      summary: Get list of banned words
+      tags: 
+        - Moderation
+      $ref: './v3/moderation/api.yaml#/queryBlockedlist'
+      
   # Realtime - Community
   /realtime/community.created:
     $ref: './v4/realtime/community/event.yaml#/created'
