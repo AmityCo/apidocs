@@ -1,0 +1,87 @@
+queryBlockedlist:
+  summary: Get list of banned words
+  security:
+    - BearerAuth: [] 
+  tags: 
+    - Moderation
+  parameters:
+    - name: regex
+      in: query
+      schema:
+        type: string
+      description: search keyword from start
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - firstCreated
+          - lastCreated
+    - name: options
+      in: query
+      style: deepObject
+      explode: true
+      schema: 
+        type: object
+        properties:
+          after:
+            type: number
+          before:
+            type: number
+          limit: 
+            type: number
+            description: limit amount of result
+          token:
+            type: string
+            description: pagination token
+  responses:
+    "200000":
+      $ref: "./response.yaml#/BlocklistResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+queryAllowedlist:
+  summary: Get list of allowed words
+  security:
+    - BearerAuth: [] 
+  tags: 
+    - Moderation
+  parameters:
+    - name: regex
+      in: query
+      schema:
+        type: string
+      description: search keyword from start
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - firstCreated
+          - lastCreated
+    - name: options
+      in: query
+      style: deepObject
+      explode: true
+      schema: 
+        type: object
+        properties:
+          after:
+            type: number
+          before:
+            type: number
+          limit: 
+            type: number
+            description: limit amount of result
+          token:
+            type: string
+            description: pagination token
+  responses:
+    "200000":
+      $ref: "./response.yaml#/AllowedlistResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
