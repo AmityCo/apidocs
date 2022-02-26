@@ -2141,6 +2141,19 @@ paths:
           $ref: '#/components/responses/SuccessResponse'
         '400000':
           $ref: '#/components/responses/BadRequestError'
+
+  /api/v3/notification:
+    post:
+      summary: Register a device to get push notification
+      tags:
+        - Notification
+      $ref: './v3/notification/api.yaml#register'
+    delete:
+      summary: unregister a device from a notification service provider
+      tags:
+        - Notification
+      $ref: './v3/notification/api.yaml#unregister'
+
   /admin/v1/notification/setting:
     post:
       summary: Save push notification setting.
