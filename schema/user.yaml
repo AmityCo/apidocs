@@ -66,6 +66,12 @@ UserV3:
 User:
   type: object
   properties:
+    _id:
+      type: string
+      description: Private ID of a user. (for real-time event)
+    path:
+      type: string
+      description: Path of a user. (for real-time event)
     userId:
       type: string
     roles:
@@ -95,6 +101,8 @@ User:
     updatedAt:
       type: string
       format: date-time
+    isDeleted:
+      type: boolean
   required:
     - userId
     - createdAt
