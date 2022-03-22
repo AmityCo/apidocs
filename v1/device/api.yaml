@@ -18,13 +18,17 @@ post:
             userId:
               type: string
               minLength: 1
+              maxLength: 50
             deviceId:
               type: string
+              minLength: 1
+              maxLength: 100
             deviceInfo:
               type: object
               properties:
                 kind:
                   type: string
+                  required: true
                   enum:
                     - ios
                     - android
@@ -32,10 +36,13 @@ post:
                     - node
                 model:
                   type: string
+                  maxLength: 100
                 sdkVersion:
                   type: string
+                  maxLength: 30
             displayName:
               type: string
+              maxLength: 100
           required:
             - userId
             - deviceId
