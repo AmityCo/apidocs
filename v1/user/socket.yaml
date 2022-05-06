@@ -15,16 +15,21 @@ update:
         schema:
           type: object
           properties:
+            userId:
+              type: string
+              maxLength: 50
             displayName:
               type: string
+              maxLength: 100
             roles:
               type: array
+              maxItems: 10
               items:
                 type: string
+                maxLength: 100
             metadata:
               type: object
-          required:
-            - userId
+              maxLength: 500
   responses:
     "200000":
       $ref: "./response.yaml#/UserSocketResponse"

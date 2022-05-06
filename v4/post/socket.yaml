@@ -56,7 +56,7 @@ create:
                   fileId:
                     type: string
                     example: 57b916d38eaf8010caddfb7759a2d06c
-                    description: file id for attachments
+                    description: file id for attachment
                   type:
                     type: string
                     description: attachment type
@@ -183,6 +183,12 @@ update:
   requestBody:
     description: >
       information of a post to be updated.
+
+      ### Image, File, Video post update
+      - Put `type` with file id in `attachments`
+      - Image and File data can be picked from `fileId` in `data` object in child post
+      - Video fileId for each resolution will be in `videoFileId` in `data` object in child post
+
     required: true
     content:
       application/json:
@@ -243,6 +249,23 @@ update:
                     description: Array of UserId. if the mention type is a channel, doesn't send userIds
                     items:
                       type: string
+            attachments:
+              type: array
+              items:
+                type: object
+                description: attachment info
+                properties:
+                  fileId:
+                    type: string
+                    example: 57b916d38eaf8010caddfb7759a2d06c
+                    description: file id for attachment
+                  type:
+                    type: string
+                    description: attachment type
+                    enum:
+                      - image
+                      - file
+                      - video
           required:
             - postId
   responses:
