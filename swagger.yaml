@@ -98,7 +98,7 @@ paths:
       tags:
         - Role
       $ref: './v3/role/api.yaml#/create'
-  /v3/roles/:roleId:
+  /v3/roles/{roleId}:
     get:
       summary: Get role
       tags:
@@ -218,21 +218,15 @@ paths:
           required: true
           schema:
             type: string
+        - name: regexs
+          in: query
+          collectionFormat: multi
+          schema:
+            type: array
+            items:
+              type: string
       consumes:
         - application/x-www-form-urlencoded
-      requestBody:
-        description: >
-          Condition of querying.
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                regexs:
-                  type: array
-                  items:
-                    type: string
       responses:
         '200000':
           $ref: '#/components/responses/BlacklistRulesResponse'
@@ -454,19 +448,19 @@ paths:
       tags:
         - Channel
       $ref: './v2/channel/api.yaml#setChannelDisplay'
-  /api/v2/channel/:channelId/users/ban:
+  /api/v2/channel/{channelId}/users/ban:
     post:
       summary: ban users in channel
       tags:
         - Channel
       $ref: './v2/channel/api.yaml#ban'
-  /api/v2/channel/:channelId/users/unban:
+  /api/v2/channel/{channelId}/users/unban:
     post:
       summary: unban users in channel
       tags:
         - Channel
       $ref: './v2/channel/api.yaml#unban'
-  /api/v2/channels/:channelId/close:
+  /api/v2/channels/{channelId}/close:
     post:
       summary: close channel
       tags:
@@ -484,7 +478,7 @@ paths:
       tags:
         - Admin
       $ref: './v2/message/api.yaml#/create'
-  /api/v2/message/:messageId:
+  /api/v2/message/{messageId}:
     get:
       summary: get a message.
       tags:
@@ -501,7 +495,7 @@ paths:
       tags:
         - Admin
       $ref: './v2/message/api.yaml#/createImageMessage'
-  /api/v2/messages/:messageId/images?size:
+  /api/v2/messages/{messageId}/images?size:
     get:
       summary: get an image message
       tags:
@@ -513,7 +507,7 @@ paths:
       tags:
         - Admin
       $ref: './v2/message/api.yaml#/createFileMessage'
-  /api/v2/messages/:messageId/files:
+  /api/v2/messages/{messageId}/files:
     get:
       summary: get a file message
       tags:
@@ -533,11 +527,6 @@ paths:
         - name: Authorization
           in: header
           value: Bearer {{accessToken}}
-          required: true
-          schema:
-            type: string
-        - name: messageId
-          in: path
           required: true
           schema:
             type: string
@@ -684,19 +673,13 @@ paths:
           required: true
           schema:
             type: string
+        - name: filter
+          in: query
+          required: true
+          schema:
+            type: string
       consumes:
         - application/x-www-form-urlencoded
-      requestBody:
-        description: >
-          Query parameters
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                filter:
-                  type: string
       responses:
         '200000':
           $ref: '#/components/responses/RolesResponse'
@@ -782,7 +765,7 @@ paths:
       tags:
         - User
       $ref: './v2/user/api.yaml#unban'
-  /api/v2/users/:userId/flags:
+  /api/v2/users/{userId}/flags:
     delete:
       summary: clear flag a user.
       tags:
@@ -813,21 +796,16 @@ paths:
           required: true
           schema:
             type: string
+        - name: regexs
+          in: query
+          required: true
+          collectionFormat: multi
+          schema:
+            type: array
+            items:
+              type: string
       consumes:
         - application/x-www-form-urlencoded
-      requestBody:
-        description: >
-          Condition of querying.
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                regexs:
-                  type: array
-                  items:
-                    type: string
       responses:
         '200000':
           $ref: '#/components/responses/WhitelistRulesResponse'
@@ -1435,19 +1413,19 @@ paths:
       $ref: './v3/user/event.yaml#didUpdate'
 
   #Channel
-  /api/v2/channel/:channelId/avatar:
+  /api/v2/channel/{channelId}/avatar:
     post:
       summary: Set or Remove avatar from channel
       tags:
         - Channel
       $ref: './v2/channel/api.yaml#setAvatar'
-  /api/v2/channel/:channelId/mute:
+  /api/v2/channel/{channelId}/mute:
     post:
       summary: Mute channel
       tags:
         - Channel
       $ref: './v2/channel/api.yaml#muteChannel'
-  /api/v2/channel/:channelId/users/mute:
+  /api/v2/channel/{channelId}/users/mute:
     post:
       summary: Mute user in channel
       tags:
@@ -1464,7 +1442,7 @@ paths:
       tags:
         - Channel
       $ref: './v3/channel/api.yaml#/create'
-  /api/v3/channels/:channelId:
+  /api/v3/channels/{channelId}:
     get:
       summary: get a channel by ID.
       tags:
@@ -1480,19 +1458,19 @@ paths:
       tags:
         - Channel
       $ref: './v3/channel/api.yaml#/delete'
-  /api/v3/channels/:channelId/join:
+  /api/v3/channels/{channelId}/join:
     post:
       summary: join a channel
       tags:
         - Channel
       $ref: './v3/channel/api.yaml#/join'
-  /api/v3/channels/:channelId/leave:
+  /api/v3/channels/{channelId}/leave:
     delete:
       summary: leave a channel
       tags:
         - Channel
       $ref: './v3/channel/api.yaml#/leave'
-  /api/v3/channels/:channelId/users:
+  /api/v3/channels/{channelId}/users:
     get:
       summary: query channel users
       tags:
@@ -1508,19 +1486,19 @@ paths:
       tags:
         - Channel
       $ref: './v3/channel/api.yaml#/removeUsers'
-  /api/v3/channels/:channelId/users/ban:
+  /api/v3/channels/{channelId}/users/ban:
     put:
       summary: ban channel users
       tags:
         - Channel
       $ref: './v3/channel/api.yaml#/ban'
-  /api/v3/channels/:channelId/users/unban:
+  /api/v3/channels/{channelId}/users/unban:
     put:
       summary: unban channel users
       tags:
         - Channel
       $ref: './v3/channel/api.yaml#/unban'
-  /api/v3/channels/:channelId/users/roles:
+  /api/v3/channels/{channelId}/users/roles:
     post:
       summary: Add role to channel users
       tags:
@@ -1543,7 +1521,7 @@ paths:
       tags:
         - Channel
       $ref: './v3/channel/api.yaml#/getList'
-  /api/v4/channels/:channelId/users:
+  /api/v4/channels/{channelId}/users:
     get:
       summary: query channel users
       tags:
