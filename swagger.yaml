@@ -1085,7 +1085,7 @@ paths:
         - Community
       $ref: './v3/community/api.yaml#/create'
 
-  /api/v3/communities/:communityId:
+  /api/v3/communities/{communityId}:
     get:
       summary: get a community by ID.
       tags:
@@ -1116,7 +1116,7 @@ paths:
         - Community
       $ref: './v3/community/api.yaml#/leave'
 
-  /api/v3/communities/:communityId/users:
+  /api/v3/communities/{communityId}/users:
     get:
       summary: query community users
       tags:
@@ -1178,7 +1178,7 @@ paths:
         - CommunityCategory
       $ref: './v3/community-category/api.yaml#/post'
 
-  /api/v3/community-categories/:categoryId:
+  /api/v3/community-categories/{categoryId}:
     get:
       summary: get a community category.
       tags:
@@ -1195,14 +1195,14 @@ paths:
         - CommunityCategory
       $ref: './v3/community-category/api.yaml#/delete'
 
-  /api/v3/community-feeds/:communityId:
+  /api/v3/community-feeds/{communityId}:
     get:
       summary: Get list of posts.
       tags:
         - CommunityFeed
       $ref: './v3/community-feed/api.yaml#get'
 
-  /api/v3/user-feeds/:userId:
+  /api/v3/user-feeds/{userId}:
     get:
       summary: Get list of posts.
       tags:
@@ -1347,7 +1347,7 @@ paths:
       tags:
         - UserV3
       $ref: './v3/user/socket.yaml#/getByPublicId'
-  /api/v3/users/:userId:
+  /api/v3/users/{userId}:
     get:
       summary: Get one user information.
       tags:
@@ -1821,7 +1821,7 @@ paths:
       tags:
         - Message
       $ref: './v1/message/api.yaml#/createImageMessage'
-  /api/v1/messages/:messageId/images?size:
+  /api/v1/messages/{messageId}/images?size:
     get:
       summary: get an image message
       tags:
@@ -1833,7 +1833,7 @@ paths:
       tags:
         - Message
       $ref: './v1/message/api.yaml#/createFileMessage'
-  /api/v1/messages/:messageId/files:
+  /api/v1/messages/{messageId}/files:
     get:
       summary: get a file message
       tags:
@@ -1856,7 +1856,7 @@ paths:
       tags:
         - Message
       $ref: './v3/message/api.yaml#/getList'
-  /api/v3/messages/:messageId:
+  /api/v3/messages/{messageId}:
     get:
       summary: get a message
       tags:
@@ -1890,7 +1890,7 @@ paths:
       tags:
         - Message
       $ref: './v3/message/api.yaml#/clearflag'
-  /api/v3/messages/:messageId/isFlaggedByMe:
+  /api/v3/messages/{messageId}/isFlaggedByMe:
     get:
       summary: is message flag by me
       tags:
@@ -3177,7 +3177,7 @@ paths:
       $ref: './v3/poll/api.yaml#/getUsersAnswered'
 
   #UserFeed
-  /api/v3/user-feeds/:userId/count:
+  /api/v3/user-feeds/{userId}/count:
     get:
       summary: Get number of post.
       tags:
@@ -3221,7 +3221,7 @@ paths:
       $ref: './v3/global-feed/api.yaml#get'
 
   #Comment
-  /api/v3/comments/:commentId/flags:
+  /api/v3/comments/{commentId}/flags:
     delete:
       summary: clear flags.
       tags:
