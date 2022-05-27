@@ -58,3 +58,69 @@ deleteUser:
       $ref: "../../global/error.yaml#/UserIsAlreadyDeletedError"
     "500":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+flagUser:
+  summary: Report user
+  security:
+    - BearerAuth: [] 
+  tags:
+    - User
+  parameters:
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+    - in: path
+      name: userId
+      required: true
+      schema:
+        type: string
+        minimum: 1
+        maximum: 50
+      description: User public id
+  consumes:
+    - application/json
+  description: |
+    Report user by user id.
+  responses:
+    "200":
+      $ref: "./response.yaml#/FlagUserResponse"
+    "404":
+      $ref: "../../global/error.yaml#/UserNotFoundError"
+    "500":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+unflagUser:
+  summary: Unreported user
+  security:
+    - BearerAuth: [] 
+  tags:
+    - User
+  parameters:
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+    - in: path
+      name: userId
+      required: true
+      schema:
+        type: string
+        minimum: 1
+        maximum: 50
+      description: User public id
+  consumes:
+    - application/json
+  description: |
+    Unreported user by user id.
+  responses:
+    "200":
+      $ref: "./response.yaml#/UnflagUserResponse"
+    "404":
+      $ref: "../../global/error.yaml#/UserNotFoundError"
+    "500":
+      $ref: "../../global/error.yaml#/UnexpectedError"
