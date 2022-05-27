@@ -8,3 +8,33 @@ UserDeleteResponse:
           success:
             type: boolean
             example: true
+
+FlagUserResponse:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+
+UnflagUserResponse:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
