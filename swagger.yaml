@@ -23,7 +23,7 @@ info:
 
     Before making server-to-server API calls, be sure to select the correct API endpoint for your region in
     the <strong>Servers</strong> dropdown below.
-  version: 4.30.0
+  version: 4.31.0
 servers:
   - url: https://api.us.amity.co
     description: API Endpoint for US Region
@@ -3706,6 +3706,18 @@ paths:
       tags:
         - User
       $ref: './v4/user/api.yaml#/deleteUser'
+  /api/v4/me/flag/{userId}:
+    post:
+      summary: Report user (flag user)
+      tags:
+        - User
+      $ref: './v4/user/api.yaml#/flagUser'
+    delete:
+      summary: Unreported user (unflag user)
+      tags:
+        - User
+      $ref: './v4/user/api.yaml#/unflagUser'       
+
   /sockets/v4/following.create:
     post:
       summary: Follow user.
