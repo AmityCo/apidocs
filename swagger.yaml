@@ -2120,18 +2120,6 @@ paths:
         '400000':
           $ref: '#/components/responses/BadRequestError'
 
-  /api/v3/notification:
-    post:
-      summary: Register a device to get push notification
-      tags:
-        - Notification
-      $ref: './v3/notification/api.yaml#register'
-    delete:
-      summary: unregister a device from a notification service provider
-      tags:
-        - Notification
-      $ref: './v3/notification/api.yaml#unregister'
-
   /admin/v1/notification/setting:
     post:
       summary: Save push notification setting.
@@ -2852,7 +2840,7 @@ paths:
         - Reaction
       $ref: './v1/reaction/socket.yaml#delete'
   #Network
-  /admin/v1/network/:network:
+  /admin/v1/network/{networkId}:
     get:
       summary: Get a network
       tags:
@@ -2861,19 +2849,18 @@ paths:
         - ApiKeyAuth: []
       description: >
         Get a network.
-      requestBody:
-        description: >
-          information of a network to be got.
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                networkId:
-                  type: string
-              required:
-                - networkId
+      parameters:
+        - name: Content-Type
+          in: header
+          value: application/json
+          required: true
+          schema:
+            type: string
+        - name: networkId
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200000':
           $ref: '#/components/responses/NetworkResponse'
@@ -2887,6 +2874,18 @@ paths:
         - ApiKeyAuth: []
       description: >
         save network information
+      parameters:
+        - name: Content-Type
+          in: header
+          value: application/json
+          required: true
+          schema:
+            type: string
+        - name: networkId
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         description: >
           data for save network
@@ -2896,9 +2895,6 @@ paths:
             schema:
               type: object
               properties:
-                networkId:
-                  type: string
-                  description: network id
                 defaultMessageAutoDeleteEnabled:
                   type: boolean
                   description: Is message in this channel will be deleted when the user flagged until flag limit?
@@ -2960,7 +2956,7 @@ paths:
       tags:
         - Post
       $ref: './v3/post/api.yaml#/create'
-  /api/v3/posts/:postId:
+  /api/v3/posts/{postId}:
     get:
       summary: get a post by ID
       tags:
@@ -2988,13 +2984,13 @@ paths:
       tags:
         - Post
       $ref: './v3/post/api.yaml#/decline'
-  /api/v3/posts/:postId/flag:
+  /api/v3/posts/{postId}/flag:
     post:
       summary: flag a post.
       tags:
         - Post
       $ref: './v3/post/api.yaml#/flag'
-  /api/v3/posts/:postId/isflagbyme:
+  /api/v3/posts/{postId}/isflagbyme:
     get:
       summary: Check whether user flag a given post.
       tags:
@@ -3295,7 +3291,7 @@ paths:
       tags:
         - File
       $ref: './v3/file/api.yaml#upload'
-  /api/v3/files/:fileId:
+  /api/v3/files/{fileId}:
     get:
       summary: Get file info
       tags:
@@ -3306,7 +3302,7 @@ paths:
       tags:
         - File
       $ref: './v3/file/api.yaml#delete'
-  /api/v3/files/:fileId/download:
+  /api/v3/files/{fileId}/download:
     get:
       summary: Get file
       tags:
@@ -3595,7 +3591,7 @@ paths:
       tags:
         - VideoStreaming
       $ref: './v3/video-streaming/api.yaml#/query'
-  /api/v3/video-streaming/:streamId:
+  /api/v3/video-streaming/{streamId}:
     get:
       summary: get single video-streaming item
       tags:
@@ -3670,7 +3666,7 @@ paths:
       tags:
         - Follow
       $ref: './v4/follow/api.yaml#/getMyFollowerList'
-  /api/v4/users/:userId/followers:
+  /api/v4/users/{userId}/followers:
     get:
       summary: Get other follower list.
       tags:
@@ -3682,7 +3678,7 @@ paths:
       tags:
         - Follow
       $ref: './v4/follow/api.yaml#/getMyFollowingList'
-  /api/v4/users/:userId/following:
+  /api/v4/users/{userId}/following:
     get:
       summary: Get other following list.
       tags:
@@ -3694,7 +3690,7 @@ paths:
       tags:
         - Follow
       $ref: './v4/follow/api.yaml#/getMyFollowInformation'
-  /api/v4/users/:userId/followInfo:
+  /api/v4/users/{userId}/followInfo:
     get:
       summary: Get other follow information.
       tags:
