@@ -220,21 +220,17 @@ update:
   summary: update a comment.
   tags:
     - Comment
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
+      required: true
+      schema:
+        type: string
+    - name: commentId
+      in: path
       required: true
       schema:
         type: string
@@ -295,21 +291,17 @@ delete:
   summary: delete a comment.
   tags:
     - Comment
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
+      required: true
+      schema:
+        type: string
+    - name: commentId
+      in: path
       required: true
       schema:
         type: string
@@ -519,7 +511,7 @@ get:
         type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
@@ -531,7 +523,7 @@ get:
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/CommentApiResponse"
@@ -548,12 +540,6 @@ clearflag:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json

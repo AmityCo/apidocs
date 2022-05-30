@@ -238,24 +238,22 @@ update:
   summary: update a community.
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
       required: true
       schema:
         type: string
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
     - application/json
   requestBody:
@@ -333,24 +331,22 @@ delete:
   summary: delete a community.
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
       required: true
       schema:
         type: string
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
     - application/json
   requestBody:
@@ -745,11 +741,8 @@ addUsers:
   summary: add community users
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     add community users
   parameters:
@@ -765,6 +758,13 @@ addUsers:
       required: true
       schema:
         type: string
+    - in: path
+      name: communityId
+      required: true
+      schema:
+        type: string
+      description: Community public id
+    
   consumes:
     - application/x-www-form-urlencoded
   requestBody:
@@ -809,26 +809,23 @@ removeUsers:
   summary: remove community users
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     remove community users
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/x-www-form-urlencoded
       required: true
       schema:
         type: string
+    - in: path
+      name: communityId
+      required: true
+      schema:
+        type: string
+        minimum: 1
   consumes:
     - application/x-www-form-urlencoded
   requestBody:
@@ -1077,20 +1074,11 @@ getSelfPermission:
   summary: Get self permission in community
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     query comments.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/x-www-form-urlencoded
