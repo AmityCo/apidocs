@@ -57,23 +57,14 @@ getOtherFollowerList:
   summary: Get other follower list
   tags:
     - Follow
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     Get follower information (pagination supported)
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
@@ -106,7 +97,7 @@ getOtherFollowerList:
         minLength: 1
         maxLength: 100
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/FollowPaginationResponse'
@@ -173,23 +164,14 @@ getOtherFollowingList:
   summary: Get other following list.
   tags:
     - Follow
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     Get following information (pagination supported)
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
@@ -222,7 +204,7 @@ getOtherFollowingList:
         minLength: 1
         maxLength: 100
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/FollowPaginationResponse'
@@ -267,23 +249,14 @@ getOtherFollowInformation:
   summary: Get other follow information.
   tags:
     - Follow
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     Get other follow information.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
@@ -294,7 +267,7 @@ getOtherFollowInformation:
         type: string
         maxLength: 900
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/FollowInformationResponse'

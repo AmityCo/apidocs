@@ -96,20 +96,11 @@ getServerKeyLastUpdated:
   summary: Get server key last issued data
   tags:
     - Network
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorizations
+  security:
+    - BearerAuth: [] 
   description: >
     Get server key last issued data
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
@@ -130,18 +121,9 @@ getSelfNetwork:
   summary: Get self network info
   tags:
     - Network
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorizations
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json

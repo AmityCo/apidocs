@@ -44,20 +44,16 @@ upload:
       $ref: "../../global/error.yaml#/UnexpectedError"
 get:
   summary: Get file info
+  security:
+    - BearerAuth: [] 
   tags:
     - File
   description: >
     Get file info of fileId (ex. type, attributes)
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
@@ -78,17 +74,11 @@ delete:
   tags:
     - File
   security:
-    - SocketAuth: []
+    - BearerAuth: []
   description: >
     Delete file (also remove from cloud).
     Only uploader and admin can remove.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/x-www-form-urlencoded
