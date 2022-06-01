@@ -2,58 +2,47 @@ query:
   summary: query community categories.
   tags:
     - CommunityCategory
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     query community categories.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - firstCreated
+          - lastCreated
+          - name
+        default: name
+    - name: isDeleted
+      in: query
+      schema:
+        type: boolean
+        default: null
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          token:
+            type: string
+            maxLength: 1000
   consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      condition for querying
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            sortBy:
-              type: string
-              enum:
-                - lastCreated
-                - firstCreated
-                - name
-              default: name
-            isDeleted:
-              type: boolean
-              default: null
-            options:
-              type: object
-              properties:
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  default: 10
-                token:
-                  type: string
-                  maxLength: 1000
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/CommunityCategoriesResponse"
@@ -68,42 +57,25 @@ get:
   summary: get a community category.
   tags:
     - CommunityCategory
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     get a community category.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
+    - name: categoryId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 50
   consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      information of community category.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            categoryId:
-              type: string
-              maxLength: 50
-          required:
-            - categoryId
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/CommunityCategoriesResponse"
@@ -118,45 +90,28 @@ getList:
   summary: get list of community category.
   tags:
     - CommunityCategory
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get list of community category.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/x-www-form-urlencoded
       required: true
       schema:
         type: string
+    - name: categoryIds
+      in: query
+      collectionFormat: multi
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+          maxLength: 50        
   consumes:
     - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      condition for querying
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            categoryIds:
-              type: array
-              maxItems: 100
-              items:
-                type: string
-                maxLength: 50
-          required:
-            - categoryIds
   responses:
     "200000":
       $ref: "./response.yaml#/CommunityCategoriesResponse"
@@ -224,21 +179,17 @@ put:
   summary: update a community categories.
   tags:
     - CommunityCategory
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
+      required: true
+      schema:
+        type: string
+    - name: categoryId
+      in: path
       required: true
       schema:
         type: string
@@ -280,21 +231,17 @@ delete:
   summary: delete a community category.
   tags:
     - CommunityCategory
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
+      required: true
+      schema:
+        type: string
+    - name: categoryId
+      in: path
       required: true
       schema:
         type: string

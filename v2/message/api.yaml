@@ -418,18 +418,9 @@ getImageMessage:
   summary: get an image message
   tags:
     - Admin
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: messageId
       in: path
       required: true
