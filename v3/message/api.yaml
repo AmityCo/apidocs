@@ -106,24 +106,21 @@ update:
   summary: update a message
   tags:
     - Message
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
       required: true
       schema:
         type: string
+    - name: messageId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 150
   consumes:
     - application/json
   requestBody:
@@ -184,98 +181,100 @@ query:
   summary: query messages
   tags:
     - Message
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
       required: true
       schema:
         type: string
+    - name: channelId
+      required: true
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+    - name: type
+      in: query
+      schema:
+        type: string
+        enum:
+          - text
+          - image
+          - file
+          - custom
+          - video
+          - audio
+          - imagemap
+    - name: parentId
+      in: query
+      schema:
+        type: string
+        maxLength: 150
+    - name: filterByParentId
+      in: query
+      schema:
+        type: boolean
+        default: false
+    - name: hasFlag
+      in: query
+      schema:
+        type: boolean
+    - name: isDeleted
+      in: query
+      schema:
+        type: boolean
+        default: null
+      description: >
+        isDeleted:
+          * `null(default)` - Show both message is actived and message is inactived.
+          * `true` - Show message is inactived only.
+          * `false` - Show message is actived only.
+    - name: tags
+      in: query
+      collectionFormat: multi
+      schema:
+        type: array
+        maxItems: 10
+        items:
+          type: string
+          maxLength: 100 
+    - name: excludeTags
+      in: query
+      collectionFormat: multi
+      schema:
+        type: array
+        maxItems: 10
+        items:
+          type: string
+          maxLength: 100 
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          after:
+            type: integer
+            minimum: 1
+          first:
+            type: integer
+            minimum: 1
+            maximum: 100
+          before:
+            type: integer
+            minimum: 1
+          last:
+            type: integer
+            minimum: 1
+            maximum: 100
+          token:
+            type: string
+            maxLength: 1000
   consumes:
     - application/json
-  requestBody:
-    description: >
-      condition for querying
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            channelId:
-              type: string
-              maxLength: 150
-            type:
-              type: string
-              enum:
-                - text
-                - image
-                - file
-                - custom
-                - video
-                - audio
-                - imagemap
-            parentId:
-              type: string
-              maxLength: 150
-            filterByParentId:
-              type: boolean
-              default: false
-            hasFlag:
-              type: boolean
-            isDeleted:
-              type: boolean
-              default: null
-              description: >
-                  isDeleted:
-                    * `null(default)` - Show both message is actived and message is inactived.
-                    * `true` - Show message is inactived only.
-                    * `false` - Show message is actived only.
-            tags:
-              type: array
-              maxItems: 10
-              items:
-                type: string
-                maxLength: 100
-            excludeTags:
-              type: array
-              maxItems: 10
-              items:
-                type: string
-                maxLength: 100
-            options:
-              type: object
-              properties:
-                after:
-                  type: integer
-                  minimum: 1
-                first:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                before:
-                  type: integer
-                  minimum: 1
-                last:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                token:
-                  type: string
-                  maxLength: 1000
-          required:
-            - channelId
   responses:
     "200000":
       $ref: "./response.yaml#/MessagePaginationApiResponse"
@@ -290,40 +289,23 @@ get:
   summary: get a message
   tags:
     - Message
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
       required: true
       schema:
         type: string
+    - name: messageId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 150
   consumes:
     - application/json
-  requestBody:
-    description: >
-      Information of message
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            messageId:
-              type: string
-              maxLength: 150
-          required:
-            - messageId
   responses:
     "200000":
       $ref: "./response.yaml#/MessagesApiResponse"
@@ -338,43 +320,27 @@ getList:
   summary: get list of messages
   tags:
     - Message
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
       required: true
       schema:
         type: string
+    - name: messageIds
+      in: query
+      required: true
+      collectionFormat: multi
+      schema:
+        type: array
+        maxItems: 10
+        items:
+          type: string
+          maxLength: 150 
   consumes:
     - application/json
-  requestBody:
-    description: >
-      Information of message
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            messageIds:
-              type: array
-              maxItems: 10
-              items:
-                type: string
-                maxLength: 150
-          required:
-            - messageIds
   responses:
     "200000":
       $ref: "./response.yaml#/MessagesApiResponse"
@@ -389,11 +355,8 @@ delete:
   summary: delete a message
   tags:
     - Message
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
     - name: Authorization
       in: header
@@ -407,6 +370,12 @@ delete:
       required: true
       schema:
         type: string
+    - name: messageId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 150
   consumes:
     - application/json
   requestBody:
@@ -598,40 +567,23 @@ isflagbyme:
   summary: is message flag by me
   tags:
     - Message
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
       required: true
       schema:
         type: string
+    - name: messageId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 150
   consumes:
     - application/json
-  requestBody:
-    description: >
-      Information of message
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            messageId:
-              type: string
-              maxLength: 150
-          required:
-            - messageId
   responses:
     "200000":
       $ref: "../../global/response.yaml#/IsSocialFlagByMeResponse"

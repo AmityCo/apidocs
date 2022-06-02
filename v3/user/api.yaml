@@ -2,65 +2,55 @@ query:
   summary: Get users information
   tags:
     - UserV3
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     Get users information (pagination supported)
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
+    - name: keyword
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+    - name: filter
+      in: query
+      schema:
+        type: string
+        enum:
+          - all
+          - flagged
+        default: all
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - firstCreated
+          - lastCreated
+          - displayName
+        default: displayName
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          token:
+            type: string
+            maxLength: 1000
   consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      Request body
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            keyword:
-              type: string
-              maxLength: 100
-            filter:
-              type: string
-              enum:
-                - all
-                - flagged
-              default: all
-            sortBy:
-              type: string
-              enum:
-                - lastCreated
-                - firstCreated
-                - displayName
-              default: displayName
-            options:
-              type: object
-              properties:
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  default: 10
-                token:
-                  type: string
-                  minLength: 1
-                  maxLength: 100
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/UserPaginationResponse"
@@ -74,45 +64,28 @@ getByPublicId:
   summary: Get users information by public id.
   tags:
     - UserV3
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     Get users information by public id.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
+    - name: userIds
+      in: query
+      collectionFormat: multi
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+          maxLength: 900  
   consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      Request body
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            userIds:
-              require: true
-              type: array
-              maxItems: 100
-              items:
-                type: string
-                minLength: 1
-                maxLength: 900
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/UserResponse"
@@ -126,42 +99,26 @@ get:
   summary: Get one user information.
   tags:
     - UserV3
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get one user information.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
+    - name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      Request body
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            userId:
-              type: string
-              require: true
-              minLength: 1
-              maxLength: 900
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/UserResponse"

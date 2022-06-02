@@ -131,54 +131,41 @@ get:
   summary: Get push notification setting.
   tags:
     - Notification
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - ApiKeyAuth: [] 
   description: >
     Get push notification setting.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
+    - name: level
+      required: true
+      in: query
+      schema:
+        type: string
+        enum:
+          - network
+          - user
+          - channel
+          - community
+    - name: channelId
+      in: query
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
+    - name: communityId
+      in: query
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      information of a notification setting.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            level:
-              type: string
-              enum:
-                - network
-                - user
-                - channel
-                - community
-            channelId:
-              type: string
-              minLength: 1
-              maxLength: 900
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 900
-          required:
-            - level
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/NotificationSettingApiResponse"

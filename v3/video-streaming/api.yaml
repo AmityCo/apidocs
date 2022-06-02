@@ -2,18 +2,9 @@ create:
   summary: create a video streaming
   tags:
     - VideoStreaming
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
@@ -66,18 +57,9 @@ update:
   summary: update a video streaming
   tags:
     - VideoStreaming
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
@@ -134,20 +116,11 @@ delete:
   summary: delete a video streaming
   tags:
     - VideoStreaming
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     Delete a video streaming
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/x-www-form-urlencoded
@@ -231,18 +204,9 @@ get:
   summary: get a video streaming
   tags:
     - VideoStreaming
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
@@ -270,94 +234,80 @@ query:
   summary: query list of video streaming
   tags:
     - VideoStreaming
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
       required: true
       schema:
         type: string
+    - name: isLive
+      in: query
+      schema:
+        type: boolean
+        default: false
+    - name: statuses
+      in: query
+      collectionFormat: multi
+      schema:
+        type: array
+        maxItems: 10
+        items:
+          type: string
+          enum: 
+            - idle
+            - live
+            - ended
+            - recorded
+      description: >
+        Status of livestreaming  
+          * idle - streaming is just created  
+          * live - streamer is streaming now or streamer is reconnecting  
+          * ended - streamer stop streaming or streamer disconnect and not connect back in time period  
+          * recorded - live stream recordings available 
+    - name: userPublicIds
+      in: query
+      collectionFormat: multi
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+          maxLength: 50 
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - firstCreated
+          - lastCreated
+    - name: isDeleted
+      in: query
+      schema:
+        type: boolean
+        default: null
+      description: >
+        isDeleted:
+          * `null(default)` - Show both video streaming is activated and video streaming is inactivated.
+          * `true` - Show video streaming is inactivated only.
+          * `false` - Show video streaming is activated only.
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+          skip:
+            type: integer
+          token:
+            type: string
+            maxLength: 1000
   consumes:
     - application/json
-  requestBody:
-    description: >
-      condition for querying
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            isLive:
-              type: boolean
-              default: false
-            statuses:
-              type: array
-              items:
-                type: string
-                enum: 
-                  - idle
-                  - live
-                  - ended
-                  - recorded
-              description: >
-                Status of livestreaming  
-                  * idle - streaming is just created  
-                  * live - streamer is streaming now or streamer is reconnecting  
-                  * ended - streamer stop streaming or streamer disconnect and not connect back in time period  
-                  * recorded - live stream recordings available 
-            userPublicIds:
-              type: array
-              maxItems: 100
-              items:
-                type: string
-                maxLength: 50
-            sortBy:
-              type: string
-              enum:
-                - lastCreated
-                - firstCreated
-            isDeleted:
-              type: boolean
-              default: null
-              description: >
-                  isDeleted:
-                    * `null(default)` - Show both video streaming is activated and video streaming is inactivated.
-                    * `true` - Show video streaming is inactivated only.
-                    * `false` - Show video streaming is activated only.
-            options:
-              type: object
-              properties:
-                after:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                first:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                before:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                last:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                token:
-                  type: string
-                  maxLength: 1000
   responses:
     "200000":
       $ref: "./response.yaml#/VideoStreamingPaginationApiResponse"

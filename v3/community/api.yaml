@@ -2,95 +2,92 @@ get:
   summary: query communities.
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
-    query comments.
+    query communities.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
-  consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      condition for querying
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            keyword:
-              type: string
-              minLength: 0
-              maxLength: 100
-            tags:
-              type: array
-              minItems: 1
-              maxItems: 10
-              items:
-                type: string
-                minLength: 1
-                maxLength: 1000
-            filter:
-              type: string
-              enum:
-                - all
-                - member
-                - notMember
-              default: all
-            categoryId:
-              type: string
-              minLength: 1
-              maxLength: 50
-            sortBy:
-              type: string
-              enum:
-                - lastCreated
-                - firstCreated
-                - displayName
-              default: lastCreated
-            isDeleted:
-              type: boolean
-              default: null
-              description: >
+    - name: keyword
+      in: query
+      schema:
+        type: string
+        minLength: 0
+        maxLength: 100
+    - name: tags
+      in: query
+      collectionFormat: multi
+      schema:
+        type: array
+        maxItems: 10
+        items:
+          type: string
+          minLength: 1
+          maxLength: 1000 
+    - name: filter
+      in: query
+      schema:
+        type: string
+        enum:
+          - all
+          - member
+          - notMember
+        default: all
+    - name: categoryId
+      in: query
+      schema:
+        type: string
+        minLength: 50
+        maxLength: 50
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - firstCreated
+          - lastCreated
+          - displayName
+        default: lastCreated
+    - name: isDeleted
+      in: query
+      schema:
+        type: boolean
+        default: null
+      description: >
                 isDeleted:
                   * `null(default)` - Show both community is actived and community is inactived.
                   * `true` - Show community is inactived only.
                   * `false` - Show community is actived only.
-            hasFlag:
-              type: boolean
-              default: null
-              description: >
-                  hasFlag:
+    - name: hasFlag
+      in: query
+      schema:
+        type: boolean
+        default: null
+      description: >
+                hasFlag:
                     * `null(default)` - Show all communities.
                     * `true` - Show only community has flagged post(or children post) or has flagged comment.
                     * `false` - Show only community has no flagged post(and children post) and has no flagged comment.
-            options:
-              type: object
-              properties:
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  default: 10
-                token:
-                  type: string
-                  minLength: 1
-                  maxLength: 1000
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+          token:
+            type: string
+            maxLength: 1000                    
+  consumes:
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/CommunityPaginationApiResponse"
@@ -207,43 +204,26 @@ getOne:
   summary: get a community by ID.
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     Get a community by ID
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      information of a community.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 900
-          required:
-            - communityId
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/CommunitiesApiResponse"
@@ -258,24 +238,22 @@ update:
   summary: update a community.
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
       required: true
       schema:
         type: string
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
     - application/json
   requestBody:
@@ -353,24 +331,22 @@ delete:
   summary: delete a community.
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/json
       required: true
       schema:
         type: string
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
     - application/json
   requestBody:
@@ -512,83 +488,77 @@ getUsers:
   summary: query community users
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     query community users.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: memberships
+      in: query
+      collectionFormat: multi
+      schema:
+        type: array
+        description: Membership type to filter (If not filter will return both banned user and member)
+        minItems: 1
+        maxItems: 2
+        items:
+          type: string
+          enum:
+            - banned
+            - member
+    - name: roles
+      in: query
+      collectionFormat: multi
+      description: Role to filter
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 20
+        items:
+          type: string
+          minLength: 1
+          maxLength: 100
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - firstCreated
+          - lastCreated
+        default: lastCreated
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          token:
+            type: string
+            minLength: 1
+            maxLength: 1000
+    - name: search
+      in: query
+      schema:
+        type: string
+        maxLength: 10000            
   consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      condition for querying
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 900
-            memberships:
-              type: array
-              description: Membership type to filter (If not filter will return both banned user and member)
-              minItems: 1
-              maxItems: 2
-              items:
-                type: string
-                enum:
-                - banned
-                - member
-            roles:
-              type: array
-              description: Role to filter
-              minItems: 1
-              maxItems: 20
-              items:
-                type: string
-                minLength: 1
-                maxLength: 100
-            sortBy:
-              type: string
-              enum:
-                - lastCreated
-                - firstCreated
-              default: lastCreated
-            options:
-              type: object
-              properties:
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  default: 10
-                token:
-                  type: string
-                  minLength: 1
-                  maxLength: 1000
-            search:
-              type: string
-              maxLength: 10000      
-          required:
-            - communityId
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/CommunityPaginationApiResponse"
@@ -733,47 +703,30 @@ getList:
   summary: get list of community
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     Get list of community
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
+    - name: communityIds
+      in: query
+      required: true
+      collectionFormat: multi
+      schema:
+        type: array
+        minLength: 1
+        maxItems: 100
+        items:
+          type: string
+          maxLength: 50
   consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      information of a community.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            communityIds:
-              type: array
-              minItems: 1
-              maxItems: 100
-              items:
-                type: string
-                minLength: 1
-                maxLength: 50
-          required:
-            - communityIds
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/CommunitiesApiResponse"
@@ -788,11 +741,8 @@ addUsers:
   summary: add community users
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     add community users
   parameters:
@@ -808,6 +758,13 @@ addUsers:
       required: true
       schema:
         type: string
+    - in: path
+      name: communityId
+      required: true
+      schema:
+        type: string
+      description: Community public id
+    
   consumes:
     - application/x-www-form-urlencoded
   requestBody:
@@ -852,26 +809,23 @@ removeUsers:
   summary: remove community users
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     remove community users
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/x-www-form-urlencoded
       required: true
       schema:
         type: string
+    - in: path
+      name: communityId
+      required: true
+      schema:
+        type: string
+        minimum: 1
   consumes:
     - application/x-www-form-urlencoded
   requestBody:
@@ -914,45 +868,30 @@ getRecommendedList:
   summary: get list of recommended community
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get list of recommended community
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 5
   consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      information of a community.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            options:
-              type: object
-              properties:
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  default: 5
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/CommunitiesApiResponse"
@@ -965,45 +904,30 @@ getTopTrendingList:
   summary: get list of top trend community
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get list of top trend community
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 5
   consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      information of a community.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            options:
-              type: object
-              properties:
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  default: 5
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/CommunitiesApiResponse"
@@ -1150,20 +1074,11 @@ getSelfPermission:
   summary: Get self permission in community
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: [] 
   description: >
     query comments.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: Content-Type
       in: header
       value: application/x-www-form-urlencoded
