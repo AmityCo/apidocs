@@ -132,9 +132,6 @@ update:
         schema:
           type: object
           properties:
-            messageId:
-              type: string
-              maxLength: 150
             data:
               type: object
               properties:
@@ -155,8 +152,6 @@ update:
               maxItems: 2
               items:
                 $ref: '../../schema/message.yaml#/MentioneesRequest'
-          required:
-            - messageId
   responses:
     "200000":
       $ref: "./response.yaml#/MessagesApiResponse"
@@ -378,20 +373,6 @@ delete:
         maxLength: 150
   consumes:
     - application/json
-  requestBody:
-    description: >
-      Information of message
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            messageId:
-              type: string
-              maxLength: 150
-          required:
-            - messageId
   responses:
     "200000":
       content:
@@ -437,22 +418,14 @@ flag:
       required: true
       schema:
         type: string
+    - name: messageId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 150
   consumes:
     - application/json
-  requestBody:
-    description: >
-      Information of message
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            messageId:
-              type: string
-              maxLength: 150
-          required:
-            - messageId
   responses:
     "200000":
       $ref: "./response.yaml#/MessagesApiResponse"
@@ -489,22 +462,14 @@ unflag:
       required: true
       schema:
         type: string
+    - name: messageId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 150
   consumes:
     - application/json
-  requestBody:
-    description: >
-      Information of message
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            messageId:
-              type: string
-              maxLength: 150
-          required:
-            - messageId
   responses:
     "200000":
       $ref: "./response.yaml#/MessagesApiResponse"
@@ -537,22 +502,14 @@ clearflag:
       required: true
       schema:
         type: string
+    - name: messageId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 150
   consumes:
     - application/json
-  requestBody:
-    description: >
-      Information of message
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            messageId:
-              type: string
-              maxLength: 150
-          required:
-            - messageId
   responses:
     "200000":
       $ref: "./response.yaml#/MessagesApiResponse"
