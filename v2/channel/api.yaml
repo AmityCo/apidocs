@@ -173,6 +173,11 @@ setChannelDisplay:
       required: true
       schema:
         type: string
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
   consumes:
     - application/x-www-form-urlencoded
   requestBody:
@@ -184,12 +189,9 @@ setChannelDisplay:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
             displayName:
               type: string
           required:
-            - channelId
             - displayName
   responses:
     "200000":
@@ -411,26 +413,10 @@ setAvatar:
         schema:
           type: object
           properties:
-            displayName:
-              type: string
-            type:
-              type: string
-              enum:
-                - standard
-            metadata:
-              type: object
-            tags:
-              type: array
-              items:
-                type: string
-            userIds:
-              type: array
-              items:
-                type: string
             avatarFileId:
               type: string
           required:
-            - type
+            - avatarFileId
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelApiResponse"
