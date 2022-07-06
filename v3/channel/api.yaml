@@ -184,20 +184,6 @@ delete:
         type: string
   consumes:
     - application/json
-  requestBody:
-    description: >
-      channel information.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            channelId:
-              type: string
-              maxLength: 100
-          required:
-            - channelId
   responses:
     "200000":
       content:
@@ -467,9 +453,6 @@ update:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
-              maxLength: 100
             displayName:
               type: string
               maxLength: 100
@@ -490,8 +473,6 @@ update:
               type: number
               min: 1
               max: 100
-          required:
-            - channelId
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelsApiResponse"
@@ -535,21 +516,6 @@ join:
         type: string
   consumes:
     - application/json
-  requestBody:
-    description: >
-      Information of channel to be joined
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            channelId:
-              type: string
-              minLength: 1
-              maxLength: 900
-          required:
-            - channelId
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelsApiResponse"
@@ -595,21 +561,6 @@ leave:
         type: string
   consumes:
     - application/json
-  requestBody:
-    description: >
-      Information of channel to be left
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            channelId:
-              type: string
-              minLength: 1
-              maxLength: 900
-          required:
-            - channelId
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelsApiResponse"
@@ -664,10 +615,6 @@ addUsers:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
-              minLength: 1
-              maxLength: 900
             userIds:
               type: array
               minItems: 1
@@ -677,7 +624,6 @@ addUsers:
                 minLength: 1
                 maxLength: 50
           required:
-            - channelId
             - userIds
   responses:
     "200000":
@@ -717,6 +663,11 @@ removeUsers:
       required: true
       schema:
         type: string
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
   consumes:
     - application/json
   requestBody:
@@ -728,10 +679,6 @@ removeUsers:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
-              minLength: 1
-              maxLength: 900
             userIds:
               type: array
               minItems: 1
@@ -741,7 +688,6 @@ removeUsers:
                 minLength: 1
                 maxLength: 50
           required:
-            - channelId
             - userIds
   responses:
     "200000":
@@ -797,10 +743,6 @@ ban:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
-              minLength: 1
-              maxLength: 900
             userIds:
               type: array
               minItems: 1
@@ -810,7 +752,6 @@ ban:
                 minLength: 1
                 maxLength: 50
           required:
-            - channelId
             - userIds
   responses:
     "200000":
@@ -866,10 +807,6 @@ unban:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
-              minLength: 1
-              maxLength: 900
             userIds:
               type: array
               minItems: 1
@@ -879,7 +816,6 @@ unban:
                 minLength: 1
                 maxLength: 50
           required:
-            - channelId
             - userIds
   responses:
     "200000":
@@ -1018,10 +954,6 @@ addRole:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
-              minLength: 1
-              maxLength: 900
             role:
               type: string
               minLength: 1
@@ -1035,7 +967,6 @@ addRole:
                 minLength: 1
                 maxLength: 50
           required:
-            - channelId
             - userIds
             - role
   responses:
@@ -1088,10 +1019,6 @@ removeRole:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
-              minLength: 1
-              maxLength: 900
             role:
               type: string
               minLength: 1
@@ -1105,7 +1032,6 @@ removeRole:
                 minLength: 1
                 maxLength: 50
           required:
-            - channelId
             - userIds
             - role
   responses:

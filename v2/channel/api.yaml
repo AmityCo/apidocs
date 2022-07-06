@@ -241,8 +241,6 @@ ban:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
             userIds:
               type: array
               minItems: 1
@@ -252,7 +250,6 @@ ban:
                 minLength: 1
                 maxLength: 50
           required:
-            - channelId
             - userIds
   responses:
     "200000":
@@ -308,8 +305,6 @@ unban:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
             userIds:
               type: array
               minItems: 1
@@ -319,7 +314,6 @@ unban:
                 minLength: 1
                 maxLength: 50
           required:
-            - channelId
             - userIds
   responses:
     "200000":
@@ -366,19 +360,6 @@ close:
         type: string
   consumes:
     - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      channelId to be close
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            channelId:
-              type: string
-          required:
-            - channelId
   responses:
     "200000":
       description: OK
@@ -430,8 +411,6 @@ setAvatar:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
             displayName:
               type: string
             type:
@@ -451,7 +430,6 @@ setAvatar:
             avatarFileId:
               type: string
           required:
-            - channelId
             - type
   responses:
     "200000":
@@ -507,13 +485,10 @@ muteChannel:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
             mutePeriod:
               type: number
               description: mute period (milliseconds)
           required:
-            - channelId
             - mutePeriod
   responses:
     "200000":
@@ -565,8 +540,6 @@ muteUserInChannel:
         schema:
           type: object
           properties:
-            channelId:
-              type: string
             userIds:
               type: array
               items:
@@ -577,7 +550,6 @@ muteUserInChannel:
               type: number
               description: mute period (milliseconds)
           required:
-            - channelId
             - userIds
             - mutePeriod
   responses:
