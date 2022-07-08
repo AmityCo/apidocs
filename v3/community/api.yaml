@@ -347,23 +347,6 @@ delete:
         type: string
         minLength: 1
         maxLength: 900
-  consumes:
-    - application/json
-  requestBody:
-    description: >
-      community information.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 900
-          required:
-            - communityId
   responses:
     "200000":
       $ref: "../../global/response.yaml#/DeleteApiResponse"
@@ -400,23 +383,13 @@ join:
       required: true
       schema:
         type: string
-  consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      information of a community.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 900
-          required:
-            - communityId
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   responses:
     "200000":
       $ref: "./response.yaml#/CommunitiesApiResponse"
@@ -453,23 +426,13 @@ leave:
       required: true
       schema:
         type: string
-  consumes:
-    - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      information of a community.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 900
-          required:
-            - communityId
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   responses:
     "200000":
       $ref: "./response.yaml#/CommunitiesApiResponse"
@@ -593,6 +556,13 @@ ban:
       required: true
       schema:
         type: string
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
     - application/x-www-form-urlencoded
   requestBody:
@@ -604,10 +574,6 @@ ban:
         schema:
           type: object
           properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 900
             userIds:
               type: array
               minItems: 1
@@ -617,7 +583,6 @@ ban:
                 minLength: 1
                 maxLength: 900
           required:
-            - communityId
             - userIds
   responses:
     "200000":
@@ -659,6 +624,13 @@ unban:
       required: true
       schema:
         type: string
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
     - application/x-www-form-urlencoded
   requestBody:
@@ -670,10 +642,6 @@ unban:
         schema:
           type: object
           properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 900
             userIds:
               type: array
               minItems: 1
@@ -683,7 +651,6 @@ unban:
                 minLength: 1
                 maxLength: 900
           required:
-            - communityId
             - userIds
   responses:
     "200000":
@@ -776,10 +743,6 @@ addUsers:
         schema:
           type: object
           properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 900
             userIds:
               type: array
               minItems: 1
@@ -789,7 +752,6 @@ addUsers:
                 minLength: 1
                 maxLength: 50
           required:
-            - communityId
             - userIds
   responses:
     "200000":
@@ -837,10 +799,6 @@ removeUsers:
         schema:
           type: object
           properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 900
             userIds:
               type: array
               minItems: 1
@@ -850,7 +808,6 @@ removeUsers:
                 minLength: 1
                 maxLength: 50
           required:
-            - communityId
             - userIds
   responses:
     "200000":
@@ -960,6 +917,13 @@ addRole:
       required: true
       schema:
         type: string
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
     - application/x-www-form-urlencoded
   requestBody:
@@ -969,10 +933,6 @@ addRole:
         schema:
           type: object
           properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 900
             role:
               type: string
               minLength: 1
@@ -986,7 +946,6 @@ addRole:
                 minLength: 1
                 maxLength: 50
           required:
-            - communityId
             - userIds
             - role
   responses:
@@ -1027,6 +986,13 @@ removeRole:
       required: true
       schema:
         type: string
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
     - application/x-www-form-urlencoded
   requestBody:
@@ -1036,10 +1002,6 @@ removeRole:
         schema:
           type: object
           properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 900
             role:
               type: string
               minLength: 1
@@ -1053,7 +1015,6 @@ removeRole:
                 minLength: 1
                 maxLength: 50
           required:
-            - communityId
             - userIds
             - role
   responses:
