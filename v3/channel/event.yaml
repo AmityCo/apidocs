@@ -138,3 +138,15 @@ didchannelUserUpdate:
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelsSocketResponse"
+
+didDelete:
+  tags:
+    - Channel
+  security:
+        - SocketAuth: []
+  description: >
+    Publish this event to __every member of channel__ after call the endpoint below:
+      * `delete channel(v3)`
+  responses:
+    "200000":
+      $ref: "./response.yaml#/ChannelsSocketResponse"

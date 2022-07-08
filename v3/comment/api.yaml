@@ -204,6 +204,11 @@ create:
                     description: Array of UserId. if the mention type is a channel, doesn't send userIds
                     items:
                       type: string  
+            createdAt:
+              type: string
+              description: The date/time when a comment is created.
+              format: date-time
+              example: "2022-07-07T04:24:20.444Z"
           required:
             - referenceId
             - data
@@ -245,9 +250,6 @@ update:
         schema:
           type: object
           properties:
-            commentId:
-              type: string
-              maxLength: 900
             data:
               type: object
               properties:
@@ -276,8 +278,6 @@ update:
                     description: Array of UserId. if the mention type is a channel, doesn't send userIds
                     items:
                       type: string  
-          required:
-            - commentId
   responses:
     "200000":
       $ref: "./response.yaml#/CommentApiResponse"
@@ -307,20 +307,6 @@ delete:
         type: string
   consumes:
     - application/json
-  requestBody:
-    description: >
-      comment information.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            commentId:
-              type: string
-              maxLength: 900
-          required:
-            - commentId
   responses:
     "200000":
       description: comment information
@@ -434,22 +420,13 @@ unflag:
       required: true
       schema:
         type: string
+    - name: commentId
+      in: path
+      required: true
+      schema:
+        type: string
   consumes:
     - application/json
-  requestBody:
-    description: >
-      information of a comment to be unflagged.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            commentId:
-              type: string
-              maxLength: 900
-          required:
-            - commentId
   responses:
     "200000":
       $ref: "./response.yaml#/CommentApiResponse"
@@ -553,20 +530,6 @@ clearflag:
         type: string
   consumes:
     - application/json
-  requestBody:
-    description: >
-      information of a comment to be clearflagged.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            commentId:
-              type: string
-              maxLength: 900
-          required:
-            - commentId
   responses:
     "200000":
       $ref: "./response.yaml#/CommentApiResponse"
