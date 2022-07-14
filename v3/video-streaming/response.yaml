@@ -100,3 +100,20 @@ VideoStreamingPaginationSocketResponse:
                     type: string
                   prev:
                     type: string
+
+VideoStreamingCustomNotificationResponse:
+  description: video streaming information
+  type: object
+  properties:
+    videoStreamings:
+      type: array
+      items:
+        $ref: "../../schema/video-streaming.yml#/VideoStreamingCustom"
+    users:
+      type: array
+      items:
+        $ref: "../../schema/user.yaml#/UserV3"
+    files:
+      type: array
+      items:
+        $ref: "../../schema/file.yaml#/File"
