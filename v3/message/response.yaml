@@ -97,3 +97,20 @@ MessagePaginationSocketResponse:
                     type: string
                   prev:
                     type: string
+
+MessageCustomNotificationResponse:
+  description: Messages Information
+  type: object
+  properties:
+    messages:
+      type: array
+      items:
+        $ref: "../../schema/message.yaml#/MessageV3"
+    users:
+      type: array
+      items:
+        $ref: "../../schema/user.yaml#/UserV3"
+    files:
+      type: array
+      items:
+        $ref: "../../schema/file.yaml#/File"
