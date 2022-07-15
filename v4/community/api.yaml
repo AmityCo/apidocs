@@ -22,6 +22,13 @@ addRoles:
       required: true
       schema:
         type: string
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
     - application/x-www-form-urlencoded
   requestBody:
@@ -31,10 +38,6 @@ addRoles:
         schema:
           type: object
           properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 32
             roles:
               type: array
               minItems: 1
@@ -53,7 +56,6 @@ addRoles:
                 minLength: 1
                 maxLength: 50
           required:
-            - communityId
             - userIds
             - roles
   responses:
@@ -94,6 +96,13 @@ removeRoles:
       required: true
       schema:
         type: string
+    - name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
   consumes:
     - application/x-www-form-urlencoded
   requestBody:
@@ -103,10 +112,6 @@ removeRoles:
         schema:
           type: object
           properties:
-            communityId:
-              type: string
-              minLength: 1
-              maxLength: 32
             roles:
               type: array
               minItems: 1
@@ -125,7 +130,6 @@ removeRoles:
                 minLength: 1
                 maxLength: 50
           required:
-            - communityId
             - userIds
             - roles
   responses:

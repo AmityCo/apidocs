@@ -82,6 +82,11 @@ create:
                 type: string
                 max: 24
                 description: tags
+            createdAt:
+              type: string
+              description: The date/time when a post is created.
+              format: date-time
+              example: "2022-07-07T04:24:20.444Z"
           required:
             - data
   responses:
@@ -264,20 +269,6 @@ flag:
         type: string
   consumes:
     - application/json
-  requestBody:
-    description: >
-      information of a post to be flagged.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            postId:
-              type: string
-              maxLength: 900
-          required:
-            - postId
   responses:
     "200000":
       $ref: "./response.yaml#/PostResponse"
@@ -335,22 +326,14 @@ unflag:
       required: true
       schema:
         type: string
+    - name: postId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 900
   consumes:
     - application/json
-  requestBody:
-    description: >
-      information of a post to be unflagged.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            postId:
-              type: string
-              maxLength: 900
-          required:
-            - postId
   responses:
     "200000":
       $ref: "./response.yaml#/PostResponse"
@@ -417,22 +400,14 @@ clearflag:
       required: true
       schema:
         type: string
+    - name: postId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 900
   consumes:
     - application/json
-  requestBody:
-    description: >
-      information of a post to be clear flagged.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            postId:
-              type: string
-              maxLength: 900
-          required:
-            - postId
   responses:
     "200000":
       $ref: "./response.yaml#/PostResponse"

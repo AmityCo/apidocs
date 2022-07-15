@@ -137,6 +137,11 @@ create:
                     description: Array of UserId. if the mention type is a channel, doesn't send userIds
                     items:
                       type: string
+            createdAt:
+              type: string
+              description: The date/time when a post is created.
+              format: date-time
+              example: "2022-07-07T04:24:20.444Z"
           required:
             - data
   responses:
@@ -187,23 +192,6 @@ delete:
         description: If permanent data will be hard deleted
   consumes:
     - application/x-www-form-urlencoded
-  requestBody:
-    description: >
-      information of a post to be deleted.
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            postId:
-              type: string
-            permanent:
-              type: boolean
-              default: false
-              description: If true data will be deleted from database
-          required:
-            - postId
   responses:
     "200000":
       description: post information
@@ -248,6 +236,11 @@ update:
       required: true
       schema:
         type: string
+    - name: postId
+      in: path
+      required: true
+      schema:
+        type: string
   consumes:
     - application/x-www-form-urlencoded
   requestBody:
@@ -265,8 +258,6 @@ update:
         schema:
           type: object
           properties:
-            postId:
-              type: string
             text:
               type: string
               deprecated: true
@@ -336,8 +327,6 @@ update:
                       - image
                       - file
                       - video
-          required:
-            - postId
   responses:
     "200000":
       $ref: "./response.yaml#/PostResponse"

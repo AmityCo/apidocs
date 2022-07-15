@@ -170,27 +170,6 @@ delete:
         type: string
   consumes:
     - application/json
-  requestBody:
-    description: >
-      Information of a poll to be deleted.
-
-      ### Required
-
-      - required pollId
-
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            text:
-              type: string
-            pollId:
-              description: pollId
-              type: string
-          required:
-            - data
   responses:
     "200000":
       description: poll deleted
@@ -258,11 +237,6 @@ vote:
         schema:
           type: object
           properties:
-            text:
-              type: string
-            pollId:
-              description: poll id
-              type: string
             answerIds:
               description: poll id
               type: array

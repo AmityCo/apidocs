@@ -23,7 +23,7 @@ info:
 
     Before making server-to-server API calls, be sure to select the correct API endpoint for your region in
     the <strong>Servers</strong> dropdown below.
-  version: 4.33.0
+  version: 4.34.0
 servers:
   - url: https://api.us.amity.co
     description: API Endpoint for US Region
@@ -442,7 +442,7 @@ paths:
       tags:
         - Channel
       $ref: './v2/channel/api.yaml#create'
-  /api/v2/channel/displayName:
+  /api/v2/channel/{channelId}/displayName:
     post:
       summary: change channel displayName
       tags:
@@ -1768,6 +1768,11 @@ paths:
       tags:
         - Channel
       $ref: './v3/channel/event.yaml#didUpdate'
+  /callbacks/v3.channel.didDelete:
+    get:
+      tags:
+        - Channel
+      $ref: './v3/channel/event.yaml#didDelete'
   /callbacks/v3.channel.didAddUsers:
     get:
       tags:
@@ -2820,6 +2825,108 @@ paths:
         - WebhookEvent
       $ref: './v4/follow/webhook.yaml#didDeleteFollower'
 
+  #Notification Customization
+  /webhook/push-notification/post.created:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/post.need-reviewing:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/post.approved:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/comment.created:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/comment.replied:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/post.reacted:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/comment.reacted:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/message.created:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/message/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/channel.created:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/channel/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/channel.joined:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/channel/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/follow.created:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v4/follow/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/follow.requested:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v4/follow/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/follow.accepted:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v4/follow/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/mention-post.created:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/mention-user-feed-post.created:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/post/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/mention-comment.created:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/mention-comment.replied:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/mention-user-feed-comment.created:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/mention-user-feed-comment.replied:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
+  /webhook/push-notification/video-streaming.started:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/video-streaming/webhook.yaml#customNotificationCreated'
+
   #Reaction
   /sockets/reaction.add:
     post:
@@ -3712,7 +3819,7 @@ paths:
       summary: Unreported user (unflag user)
       tags:
         - User
-      $ref: './v4/user/api.yaml#/unflagUser'       
+      $ref: './v4/user/api.yaml#/unflagUser'
 
   /sockets/v4/following.create:
     post:
