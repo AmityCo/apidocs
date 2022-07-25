@@ -1,0 +1,63 @@
+query:
+  summary: get list of reactions.
+  tags:
+    - Reaction
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Get paginable list of reactions.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - name: referenceId
+      in: query
+      require: true
+      schema:
+        type: string
+        maxLength: 900
+    - name: referenceType
+      in: query
+      require: true
+      schema:
+        type: string
+        enum:
+          - message
+          - post
+          - comment
+    - name: reactionName
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 0
+          token:
+            type: string
+            maxLength: 200
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    "200000":
+      $ref: "./response.yaml#/ReactionResponse"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
