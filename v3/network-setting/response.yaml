@@ -47,17 +47,15 @@ ModerationNetworkSettingApiResponse:
       schema:
         $ref: '../../schema/network-setting.yaml#/ModerationNetworkSetting'
 
-ContentCheckNetworkSettingApiResponse:
-  description: Content check configuration
+FeedSettingNetworkSettingApiResponse:
+  description: Feed setting check configuration
   content:
     application/json:
       schema:
         description: The content
         type: object
         properties:
-          enabled: 
-            type: boolean
-          contentChecks:
+          feedSettings:
             type: array
             items: 
               type: object
@@ -69,16 +67,16 @@ ContentCheckNetworkSettingApiResponse:
                   items: 
                     type: object  
                     properties:
-                      type: 
+                      contentType: 
                         type: string
                       allowed:
                         type: boolean
-                      maxResolution:
-                        type: string
-                        enum:
-                        - FHD
-                        - HD
-                        - SD
-                        - LD
-                      maxDurationSecond:
+                      maxDurationSeconds:
                         type: number 
+                      transcodeConfig:
+                        type: object
+                        properties:
+                          maxResolution:
+                            type: string
+                          minResolution:
+                            type: string

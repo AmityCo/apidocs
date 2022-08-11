@@ -455,8 +455,8 @@ updateTier:
     '500000':
       $ref: '../../global/error.yaml#/UnexpectedError'
 
-getContentCheck:
-  summary: Get content check configuration.
+getFeedSetting:
+  summary: Get feed setting check configuration.
   tags:
     - Network Setting
   securityDefinition:
@@ -465,7 +465,7 @@ getContentCheck:
       in: header
       name: Authorization
   description: >
-    Using for get network content check configuration.
+    Using for get network feed setting check configuration.
   parameters:
     - name: Authorization
       in: header
@@ -483,14 +483,14 @@ getContentCheck:
     - application/x-www-form-urlencoded
   responses:
     '200000':
-      $ref: './response.yaml#/ContentCheckNetworkSettingApiResponse'
+      $ref: './response.yaml#/FeedSettingNetworkSettingApiResponse'
     '400000':
       $ref: '../../global/error.yaml#/BadRequestError'
     '500000':
       $ref: '../../global/error.yaml#/UnexpectedError'
 
-updateContentCheck:
-  summary: Update content check configuration.
+updateFeedSetting:
+  summary: Update feed setting check configuration.
   tags:
     - Network Setting
   securityDefinition:
@@ -499,7 +499,7 @@ updateContentCheck:
       in: header
       name: Authorization
   description: >
-    Update content check configuration.
+    Update feed setting check configuration.
   parameters:
     - name: Authorization
       in: header
@@ -522,11 +522,11 @@ updateContentCheck:
     content:
       application/json:
         schema:
-          $ref: '../../schema/network-setting.yaml#/ContentCheckNetworkSetting'
+          $ref: '../../schema/network-setting.yaml#/FeedSettingNetworkSetting'
 
   responses:
     '200000':
-      $ref: './response.yaml#/ContentCheckNetworkSettingApiResponse'
+      $ref: './response.yaml#/FeedSettingNetworkSettingApiResponse'
     '400000':
       $ref: '../../global/error.yaml#/BadRequestError'
     '500000':

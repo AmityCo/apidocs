@@ -74,11 +74,9 @@ ModerationNetworkSetting:
     isWhitelistEnabled:
       type: boolean
 
-ContentCheckNetworkSetting:
+FeedSettingNetworkSetting:
   type: object
   properties:
-    enabled:
-      type: boolean
     post:
       description: Feed type post
       type: object
@@ -94,11 +92,18 @@ ContentCheckVideo:
     allowed:
       type: boolean
       optional: true
-    maxResolution:
-      type: string
-      enum: ['FHD', 'HD', 'SD', 'LD']
-      optional: true
-    maxDurationSecond:
+    transcodeConfig:
+      type: object
+      properties:
+        maxResolution:
+          type: string
+          enum: ['1080p', '720p', '480p', '360p']
+          optional: true
+        minResolution:
+          type: string
+          enum: ['1080p', '720p', '480p', '360p']
+          optional: true
+    maxDurationSeconds:
       type: number
       format: int32
       minimum: 1
