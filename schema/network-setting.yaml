@@ -73,3 +73,55 @@ ModerationNetworkSetting:
   properties:
     isWhitelistEnabled:
       type: boolean
+
+FeedSettingNetworkSetting:
+  type: object
+  properties:
+    post:
+      description: Feed type post
+      type: object
+      optional: true
+      properties:
+        video:
+          $ref: '#/ContentCheckVideo'
+    
+ContentCheckVideo:
+  description: Content Check video schema
+  type: object
+  properties:
+    allowed:
+      type: boolean
+      optional: true
+    transcodeConfig:
+      type: object
+      properties:
+        maxResolution:
+          type: string
+          enum: ['1080p', '720p', '480p', '360p']
+          optional: true
+        minResolution:
+          type: string
+          enum: ['1080p', '720p', '480p', '360p']
+          optional: true
+    maxDurationSeconds:
+      type: number
+      format: int32
+      minimum: 1
+      maximum: 7200
+      optional: true
+
+ContentCheckText:
+  description: Content Check text schema
+  type: object
+  properties:
+    allowed:
+      type: boolean
+      optional: true
+
+ContentCheckImage:
+  description: Content Check image schema
+  type: object
+  properties:
+    allowed:
+      type: boolean
+      optional: true      

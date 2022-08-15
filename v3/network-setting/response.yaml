@@ -46,3 +46,37 @@ ModerationNetworkSettingApiResponse:
     application/json:
       schema:
         $ref: '../../schema/network-setting.yaml#/ModerationNetworkSetting'
+
+FeedSettingNetworkSettingApiResponse:
+  description: Feed setting check configuration
+  content:
+    application/json:
+      schema:
+        description: The content
+        type: object
+        properties:
+          feedSettings:
+            type: array
+            items: 
+              type: object
+              properties:
+                feedType:
+                  type: string
+                contentSettings:
+                  type: array
+                  items: 
+                    type: object  
+                    properties:
+                      contentType: 
+                        type: string
+                      allowed:
+                        type: boolean
+                      maxDurationSeconds:
+                        type: number 
+                      transcodeConfig:
+                        type: object
+                        properties:
+                          maxResolution:
+                            type: string
+                          minResolution:
+                            type: string
