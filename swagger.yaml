@@ -1431,34 +1431,6 @@ paths:
       tags:
         - Channel
       $ref: './v2/channel/api.yaml#muteUserInChannel'
-  /api/v2/channels/{channelId}/seen:
-    post:
-      summary: Mark user message read position inside channel
-      tags:
-        - Channel
-      $ref: './v2/channel/api.yaml#markSeen'
-  /api/v2/channels/{channelId}/read:
-    post:
-      summary: User start reading message inside channel
-      tags:
-        - Channel
-      $ref: './v2/channel/api.yaml#startReading'
-    delete:
-      summary: User stop reading message inside channel
-      tags:
-        - Channel
-      $ref: './v2/channel/api.yaml#stopReading'
-  /api/v2/channels/reads:
-    post:
-      summary: User start reading message in multiple channel
-      tags:
-        - Channel
-      $ref: './v2/channel/api.yaml#startReadings'   
-    delete: 
-      summary: User stop reading message in multiple channel
-      tags:
-        - Channel
-      $ref: './v2/channel/api.yaml#stopReadings'
   /api/v3/channels:
     get:
       summary: query channels.
@@ -1549,6 +1521,36 @@ paths:
       tags:
         - Channel
       $ref: './v3/channel/api.yaml#/getList'
+  /api/v3/channels/{channelId}/seen:
+    post:
+      summary: Mark user message read position inside channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#markSeen'
+  /api/v3/channels/startReading:
+    post:
+      summary: User start reading message inside channel
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#startReading'
+  /api/v3/channels/stopReading:
+    post:
+      summary: User stop reading message inside channel
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#stopReading'
+  /api/v3/channels/startReadings:
+    post:
+      summary: User start reading message in multiple channel
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#startReadings'   
+  /api/v3/channels/stopReadings: 
+    post: 
+      summary: User stop reading message in multiple channel
+      tags:
+        - Channel
+      $ref: './v3/channel/api.yaml#stopReadings'
   /api/v4/channels/{channelId}/users:
     get:
       summary: query channel users
