@@ -1047,3 +1047,61 @@ removeRole:
       $ref: "../../global/error.yaml#/NotFoundError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+markSeen:
+  summary: Mark user message read position inside channel
+  tags:
+    - Channel
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Mark user message read position inside channel
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+    - name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      Segment of the message
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            readToSegment:
+              type: number
+          required:
+            - readToSegment
+  responses:
+    "200000":
+      description: OK
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400304":
+      $ref: "../../global/error.yaml#/UserIsBannedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
