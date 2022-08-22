@@ -23,7 +23,7 @@ info:
 
     Before making server-to-server API calls, be sure to select the correct API endpoint for your region in
     the <strong>Servers</strong> dropdown below.
-  version: 4.35.0
+  version: 4.37.0
 servers:
   - url: https://api.us.amity.co
     description: API Endpoint for US Region
@@ -1521,6 +1521,12 @@ paths:
       tags:
         - Channel
       $ref: './v3/channel/api.yaml#/getList'
+  /api/v3/channels/{channelId}/seen:
+    post:
+      summary: Mark user message read position inside channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#markSeen'
   /api/v4/channels/{channelId}/users:
     get:
       summary: query channel users
@@ -2136,6 +2142,17 @@ paths:
       tags:
         - Notification
       $ref: './v1/notification/api.yaml#get'
+  /api/v3/notification/setting:
+    get:
+      summary: Get push notification setting.
+      tags:
+        - Notification
+      $ref: './v3/notification/api.yaml#getSetting'  
+    post:
+      summary: Save push notification setting.
+      tags:
+        - Notification
+      $ref: './v3/notification/api.yaml#saveSetting' 
   /sockets/notification.getSetting:
     post:
       summary: Get push notification setting.
@@ -3946,6 +3963,18 @@ paths:
       tags:
         - Network Setting
       $ref: './v3/network-setting/api.yaml#/updateModeration'
+
+  /api/v3/network-settings/feed-setting:
+    get:
+      summary: Get feed setting check configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/getFeedSetting'
+    put:
+      summary: Update feed setting check configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateFeedSetting'    
 
   /api/v3/network-settings/tier:
     put:

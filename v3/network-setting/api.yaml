@@ -454,3 +454,81 @@ updateTier:
       $ref: '../../global/error.yaml#/BadRequestError'
     '500000':
       $ref: '../../global/error.yaml#/UnexpectedError'
+
+getFeedSetting:
+  summary: Get feed setting check configuration.
+  tags:
+    - Network Setting
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Using for get network feed setting check configuration.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  responses:
+    '200000':
+      $ref: './response.yaml#/FeedSettingNetworkSettingApiResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+
+updateFeedSetting:
+  summary: Update feed setting check configuration.
+  tags:
+    - Network Setting
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    Update feed setting check configuration.
+  parameters:
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/x-www-form-urlencoded
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/x-www-form-urlencoded
+  requestBody:
+    description: >
+      information for a network setting
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../schema/network-setting.yaml#/FeedSettingNetworkSetting'
+
+  responses:
+    '200000':
+      $ref: './response.yaml#/FeedSettingNetworkSettingApiResponse'
+    '400000':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500000':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+    
