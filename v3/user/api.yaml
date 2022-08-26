@@ -205,3 +205,38 @@ update:
       $ref: "../../global/error.yaml#/ForbiddenError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+isFlagByMe:
+  summary: Check whether user flag a given user.
+  description: >
+    Check whether user flag a given user.
+  tags:
+    - UserV3
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+    - name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
+  responses:
+    "200000":
+      description: Is flag by me response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isFlagByMe:
+                type: boolean
+    "400400":
+      $ref: "../../global/error.yaml#/UserNotFoundError"
