@@ -598,22 +598,6 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '500000':
           $ref: '#/components/responses/UnexpectedError'
-  /api/v2/reactions:
-    get:
-      summary: get list of reactions.
-      tags:
-        - Admin
-      $ref: './v2/reaction/api.yaml#/query'
-    post:
-      summary: add reaction to any document.
-      tags:
-        - Admin
-      $ref: './v2/reaction/api.yaml#/create'
-    delete:
-      summary: remove reaction from any document.
-      tags:
-        - Admin
-      $ref: './v2/reaction/api.yaml#/delete'
   /api/v2/reactions/messages/most:
     get:
       summary: Get message ids by the most of reactions.
@@ -2950,6 +2934,22 @@ paths:
       $ref: './v3/video-streaming/webhook.yaml#customNotificationCreated'
 
   #Reaction
+  /api/v2/reactions:
+    get:
+      summary: get list of reactions.
+      tags:
+        - Reaction
+      $ref: './v2/reaction/api.yaml#/query'
+    post:
+      summary: add reaction to any document.
+      tags:
+        - Reaction
+      $ref: './v2/reaction/api.yaml#/create'
+    delete:
+      summary: remove reaction from any document.
+      tags:
+        - Reaction
+      $ref: './v2/reaction/api.yaml#/delete'
   /api/v3/reactions:
     get:
       summary: get list of reactions.
