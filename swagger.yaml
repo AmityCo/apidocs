@@ -23,7 +23,7 @@ info:
 
     Before making server-to-server API calls, be sure to select the correct API endpoint for your region in
     the <strong>Servers</strong> dropdown below.
-  version: 4.37.0
+  version: 4.38.0
 servers:
   - url: https://api.us.amity.co
     description: API Endpoint for US Region
@@ -86,34 +86,6 @@ paths:
                     type: string
         '500000':
           $ref: '#/components/responses/UnexpectedError'
-  #Role
-  /v3/roles:
-    get:
-      summary: Get roles (pagination support)
-      tags:
-        - Role
-      $ref: './v3/role/api.yaml#/query'
-    post:
-      summary: Create role
-      tags:
-        - Role
-      $ref: './v3/role/api.yaml#/create'
-  /v3/roles/{roleId}:
-    get:
-      summary: Get role
-      tags:
-        - Role
-      $ref: './v3/role/api.yaml#/get'
-    put:
-      summary: Update role
-      tags:
-        - Role
-      $ref: './v3/role/api.yaml#/update'
-    delete:
-      summary: Delete role
-      tags:
-        - Role
-      $ref: './v3/role/api.yaml#/delete'
   #Moderation
   /v1/blacklist/records:
     put:
@@ -626,22 +598,6 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '500000':
           $ref: '#/components/responses/UnexpectedError'
-  /api/v2/reactions:
-    get:
-      summary: get list of reactions.
-      tags:
-        - Admin
-      $ref: './v2/reaction/api.yaml#/query'
-    post:
-      summary: add reaction to any document.
-      tags:
-        - Admin
-      $ref: './v2/reaction/api.yaml#/create'
-    delete:
-      summary: remove reaction from any document.
-      tags:
-        - Admin
-      $ref: './v2/reaction/api.yaml#/delete'
   /api/v2/reactions/messages/most:
     get:
       summary: Get message ids by the most of reactions.
@@ -1007,6 +963,33 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '500000':
           $ref: '#/components/responses/UnexpectedError'
+  /api/v3/roles:
+    get:
+      summary: Get roles (pagination support)
+      tags:
+        - Admin
+      $ref: './v3/role/api.yaml#/query'
+    post:
+      summary: Create role
+      tags:
+        - Admin
+      $ref: './v3/role/api.yaml#/create'
+  /api/v3/roles/{roleId}:
+    get:
+      summary: Get role
+      tags:
+        - Admin
+      $ref: './v3/role/api.yaml#/get'
+    put:
+      summary: Update role
+      tags:
+        - Admin
+      $ref: './v3/role/api.yaml#/update'
+    delete:
+      summary: Delete role
+      tags:
+        - Admin
+      $ref: './v3/role/api.yaml#/delete'
   /api/v3/comments:
     get:
       summary: query comments (pagination support).
@@ -1353,6 +1336,12 @@ paths:
       tags:
         - UserV3
       $ref: './v3/user/api.yaml#/get'
+  /api/v3/users/{userId}/isFlagByMe:
+    get:
+      summary: Check whether user flag a given user.
+      tags:
+        - UserV3
+      $ref: './v3/user/api.yaml#/isFlagByMe'
   /sockets/v3/user.get:
     post:
       summary: Get one user information.
@@ -1414,19 +1403,19 @@ paths:
 
   #Channel
   /api/v2/channel/{channelId}/avatar:
-    post:
+    put:
       summary: Set or Remove avatar from channel
       tags:
         - Channel
       $ref: './v2/channel/api.yaml#setAvatar'
   /api/v2/channel/{channelId}/mute:
-    post:
+    put:
       summary: Mute channel
       tags:
         - Channel
       $ref: './v2/channel/api.yaml#muteChannel'
   /api/v2/channel/{channelId}/users/mute:
-    post:
+    put:
       summary: Mute user in channel
       tags:
         - Channel
@@ -2945,6 +2934,22 @@ paths:
       $ref: './v3/video-streaming/webhook.yaml#customNotificationCreated'
 
   #Reaction
+  /api/v2/reactions:
+    get:
+      summary: get list of reactions.
+      tags:
+        - Reaction
+      $ref: './v2/reaction/api.yaml#/query'
+    post:
+      summary: add reaction to any document.
+      tags:
+        - Reaction
+      $ref: './v2/reaction/api.yaml#/create'
+    delete:
+      summary: remove reaction from any document.
+      tags:
+        - Reaction
+      $ref: './v2/reaction/api.yaml#/delete'
   /api/v3/reactions:
     get:
       summary: get list of reactions.
@@ -3307,7 +3312,42 @@ paths:
       tags:
         - Poll v3
       $ref: './v3/poll/api.yaml#/getUsersAnswered'
-
+  /sockets/v3/poll.create:
+    post:
+      summary: create a poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/socket.yaml#/create'
+  /sockets/v3/poll.update:
+    post:
+      summary: update status poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/socket.yaml#/update'
+  /sockets/v3/poll.delete:
+    post:
+      summary: delete poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/socket.yaml#/delete'
+  /sockets/v3/poll.vote:
+    post:
+      summary: vote poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/socket.yaml#/vote'
+  /sockets/v3/poll.get:
+    post:
+      summary: get poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/socket.yaml#/get'
+  /sockets/v3/poll.getList:
+    post:
+      summary: List users who vote the poll with specific answer
+      tags:
+        - Poll v3
+      $ref: './v3/poll/socket.yaml#/getUsersAnswered'
   #UserFeed
   /api/v3/user-feeds/{userId}/count:
     get:
@@ -3838,7 +3878,7 @@ paths:
       tags:
         - User
       $ref: './v4/user/api.yaml#/deleteUser'
-  /api/v4/me/flag/{userId}:
+  /api/v4/me/flags/{userId}:
     post:
       summary: Report user (flag user)
       tags:
