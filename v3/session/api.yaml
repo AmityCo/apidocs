@@ -67,3 +67,22 @@ create:
       $ref: "../../global/error.yaml#/UserIsSystemBanned"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+verifyAccessToken:
+  summary: Register a session
+  tags:
+    - Session
+  description: Verify access token. The caller must add accessToken in header.
+  responses:
+    '200':
+      description: Access token is valid
+    '401':
+      description: Access token is invalid or expired
+    '403':
+      description: User is global banned 
+    '404':
+      description: Not found 
+    '422':
+      description: Parameters validation error 
+  security:
+    - bearerAuth: []
