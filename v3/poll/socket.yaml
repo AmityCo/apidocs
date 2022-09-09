@@ -1,0 +1,252 @@
+create:
+  summary: Create a poll
+  tags:
+    - Poll v3
+  security:
+    - SocketAuth: []
+  description: >
+    Create a poll
+  requestBody:
+    description: >
+      Information of a poll to be created.
+
+      ### Required
+
+      - at least 2 options
+
+      - dataType currently support only `text`
+      
+      - closedIn unit must be `milliseconds`
+
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            text:
+              type: string
+            question:
+              type: string
+              description: question.
+            answers:
+              type: array
+              min: 2
+              maxItems: 10
+              items:
+                type: object
+                properties:
+                  dataType:
+                    description: Datatype of answer (current only string).
+                    type: string
+                    enum:
+                      - text
+                  data:
+                    type: string
+            answerType:
+              description: single or multiple.
+              type: single
+              default: 
+            closedIn:
+              type: number
+              description: Countdown time to close vote (milliseconds)
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PollSocketResponse"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+update:
+  summary: update poll status
+  tags:
+    - Poll v3
+  security:
+    - SocketAuth: []
+  description: >
+    update a poll
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      Information of a poll to be updated.
+
+      ### Required
+
+      - currently support only `closed`
+
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            pollId:
+              type: string
+            text:
+              type: string
+            status:
+              description: poll status
+              type: string
+              default: closed
+          required:
+            - pollId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PollSocketResponse"
+    "400300":
+      $ref: "../../global/error.yaml#/PollForbiddenError"
+    "400400":
+      $ref: "../../global/error.yaml#/PollNotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+delete:
+  summary: delete poll
+  tags:
+    - Poll v3
+  security:
+    - SocketAuth: []
+  description: >
+    delete a poll
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            pollId:
+              type: string
+          required:
+            - pollId
+  consumes:
+    - application/json
+  responses:
+    "200000":
+      description: poll deleted
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+    "400300":
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    "400400":
+      $ref: "../../global/error.yaml#/PollNotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+vote:
+  summary: Vote poll
+  tags:
+    - Poll v3
+  security:
+    - SocketAuth: []
+  description: >
+    Client vote poll
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      Information of a poll to be voted.
+
+      ### Required
+
+      - answerIds for vote the poll
+
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            pollId:
+              type: string
+            answerIds:
+              description: poll id
+              type: array
+              items:
+                type: string
+          required:
+            - pollId
+            - answerIds
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PollSocketResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400400":
+      $ref: "../../global/error.yaml#/PollNotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+getUsersAnswered:
+  summary: List user who vote the poll with specific answer
+  tags:
+    - Poll v3
+  security:
+    - SocketAuth: []
+  description: >
+    List users who vote the poll with specific answer
+  consumes:
+    - application/json
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            pollId:
+              type: string
+            answerId:
+              type: string
+          required:
+            - pollId
+            - answerId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PollPaginationSocketResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/PollNotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+get:
+  summary: Get poll
+  tags:
+    - Poll v3
+  securityDefinition:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  description: >
+    List users who vote the poll with specific answer
+  consumes:
+    - application/json
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            pollId:
+              type: string    
+          required:
+            - pollId
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PollSocketResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/PollNotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
