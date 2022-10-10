@@ -378,6 +378,13 @@ get:
               type: string
               minLength: 1
               maxLength: 900
+            type:
+              type: string
+              enum:
+                - public
+                - internal
+              default: public
+              description: type of communityId 
           required:
             - communityId
   responses:
@@ -433,6 +440,13 @@ getList:
                 type: string
                 minLength: 1
                 maxLength: 50
+            type:
+              type: string
+              enum:
+                - public
+                - internal
+              default: public
+              description: type of communityId 
           required:
             - communityIds
   responses:
@@ -595,7 +609,14 @@ queryUsers:
                   maxLength: 1000
             search:
               type: string
-              maxLength: 10000      
+              maxLength: 10000
+            type:
+              type: string
+              enum:
+                - public
+                - internal
+              default: public
+              description: type of communityId      
           required:
             - communityId
   responses:
