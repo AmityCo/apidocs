@@ -20,64 +20,69 @@ queryUsers:
       required: true
       schema:
         type: string
+    - name: channelId
+      in: query
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
+    - name: role
+      in: query
+      schema:
+        type: array
+        description: Role to filter
+        minItems: 1
+        maxItems: 20
+        items:
+          type: string
+          minLength: 1
+          maxLength: 900
+    - name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - lastCreated
+          - firstCreated
+        default: lastCreated
+    - name: memberships
+      in: query
+      schema:
+        type: array
+        description: Member type to filter
+        minItems: 1
+        maxItems: 3
+        items:
+          type: string
+          enum:
+            - muted
+            - banned
+            - member
+        default: [member]
+    - name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          token:
+            type: string
+            maxLength: 1000
+      description: use updatedAt when sort by first/lastUpdated
+    - name: search
+      in: query
+      schema:
+        type: string
+        minLength: 0
+        maxLength: 10000
   consumes:
     - application/json
-  requestBody:
-    description: >
-      Information of channel
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            channelId:
-              type: string
-              minLength: 1
-              maxLength: 900
-            roles:
-              type: array
-              description: Role to filter
-              minItems: 1
-              maxItems: 20
-              items:
-                type: string
-                minLength: 1
-                maxLength: 900
-            memberships:
-              type: array
-              description: Member type to filter
-              minItems: 1
-              maxItems: 3
-              items:
-                type: string
-                enum:
-                  - muted
-                  - banned
-                  - member
-              default: [member]
-            sortBy:
-              type: string
-              enum:
-                - lastCreated
-                - firstCreated
-              default: lastCreated
-            options:
-              type: object
-              properties:
-                limit:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  default: 10
-                token:
-                  type: string
-                  maxLength: 1000
-            search:
-              type: string
-              maxLength: 10000     
-          required:
-            - channelId
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelPaginationApiResponse"
