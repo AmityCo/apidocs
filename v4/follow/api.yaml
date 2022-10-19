@@ -2,26 +2,11 @@ getMyFollowerList:
   summary: Get my follower list
   tags:
     - Follow
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get follower information (pagination supported)
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: status
       in: query
       schema:
@@ -45,7 +30,7 @@ getMyFollowerList:
         minLength: 1
         maxLength: 100
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/FollowPaginationResponse'
@@ -62,12 +47,6 @@ getOtherFollowerList:
   description: >
     Get follower information (pagination supported)
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: userId
       in: path
       required: true
@@ -109,26 +88,11 @@ getMyFollowingList:
   summary: Get my following list.
   tags:
     - Follow
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get following information (pagination supported)
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: status
       in: query
       schema:
@@ -152,7 +116,7 @@ getMyFollowingList:
         minLength: 1
         maxLength: 100
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/FollowPaginationResponse'
@@ -169,12 +133,6 @@ getOtherFollowingList:
   description: >
     Get following information (pagination supported)
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: userId
       in: path
       required: true
@@ -216,28 +174,12 @@ getMyFollowInformation:
   summary: Get my follow information.
   tags:
     - Follow
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get my follow information.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/FollowCountResponse'
@@ -254,12 +196,6 @@ getOtherFollowInformation:
   description: >
     Get other follow information.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: userId
       in: path
       required: true
@@ -280,33 +216,18 @@ follow:
   summary: Follow user.
   tags:
     - Follow
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Follow user information
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: userId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/FollowResponse'
@@ -320,33 +241,18 @@ accept:
   summary: Accept follow request.
   tags:
     - Follow
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Accept follow request.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: userId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/FollowResponse'
@@ -360,33 +266,18 @@ unfollow:
   summary: Unfollow or Cancel follow request
   tags:
     - Follow
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Unfollow or Cancel follow request
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: userId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/FollowResponse'
@@ -400,33 +291,18 @@ delete:
   summary: Delete follower.
   tags:
     - Follow
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Delete follower.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: userId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/FollowResponse'

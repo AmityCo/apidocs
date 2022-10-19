@@ -7,12 +7,6 @@ query:
   description: >
     query community categories.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: sortBy
       in: query
       schema:
@@ -62,12 +56,6 @@ get:
   description: >
     get a community category.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: categoryId
       in: path
       required: true
@@ -95,12 +83,6 @@ getList:
   description: >
     Get list of community category.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: categoryIds
       in: query
       collectionFormat: multi
@@ -126,24 +108,8 @@ post:
   summary: create a community categories.
   tags:
     - CommunityCategory
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
+  security:
+    - BearerAuth: []
   consumes:
     - application/json
   requestBody:
@@ -182,12 +148,6 @@ put:
   security:
     - BearerAuth: []
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: categoryId
       in: path
       required: true
@@ -234,12 +194,6 @@ delete:
   security:
     - BearerAuth: []
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: categoryId
       in: path
       required: true

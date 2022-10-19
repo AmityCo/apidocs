@@ -2,26 +2,10 @@ create:
   summary: Create a poll
   tags:
     - Poll v3
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Create a poll
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
   consumes:
     - application/json
   requestBody:
@@ -80,11 +64,8 @@ update:
   summary: update poll status
   tags:
     - Poll v3
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     update a poll
   parameters:
@@ -143,11 +124,8 @@ delete:
   summary: delete poll
   tags:
     - Poll v3
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     delete a poll
   parameters:
@@ -196,11 +174,8 @@ vote:
   summary: Vote poll
   tags:
     - Poll v3
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Client vote poll
   parameters:
@@ -258,11 +233,8 @@ getUsersAnswered:
   summary: List user who vote the poll with specific answer
   tags:
     - Poll v3
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     List users who vote the poll with specific answer
   parameters:
@@ -330,11 +302,8 @@ get:
   summary: Get poll
   tags:
     - Poll v3
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     List users who vote the poll with specific answer
   parameters:
