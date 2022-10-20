@@ -222,6 +222,15 @@ getOne:
         type: string
         minLength: 1
         maxLength: 900
+    - name: type
+      in: query
+      schema:
+        type: string
+        enum:
+          - public
+          - internal
+        default: public
+      description: type of communityId
   consumes:
     - application/json
   responses:
@@ -519,7 +528,16 @@ getUsers:
       in: query
       schema:
         type: string
-        maxLength: 10000            
+        maxLength: 10000   
+    - name: type
+      in: query
+      schema:
+        type: string
+        enum:
+          - public
+          - internal
+        default: public
+      description: type of communityId         
   consumes:
     - application/json
   responses:
@@ -692,6 +710,15 @@ getList:
         items:
           type: string
           maxLength: 50
+    - name: type
+      in: query
+      schema:
+        type: string
+        enum:
+          - public
+          - internal
+        default: public
+      description: type of communityId
   consumes:
     - application/json
   responses:
