@@ -12,10 +12,15 @@ upload:
     description: >
       Information of file to be created. It will be applied to every attachment
     content:
-      application/json:
+      multipart/form-data:
         schema:
           type: object
           properties:
+            files:
+              type: array
+              items:
+                type: string
+                format: binary
             fullImage:
               type: boolean
               optional: true
