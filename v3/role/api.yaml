@@ -2,28 +2,12 @@ create:
   summary: Create role
   tags:
     - Role
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Create a role
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information of a role to be created.
@@ -65,28 +49,12 @@ update:
   summary: Update role
   tags:
     - Role
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Update a role
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information of a role to be created.
@@ -128,28 +96,12 @@ delete:
   summary: Delete role
   tags:
     - Role
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Delete a role
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information of a role to be delete.
@@ -182,11 +134,8 @@ get:
   summary: Get role
   tags:
     - Role
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get a role
   parameters:
@@ -195,20 +144,8 @@ get:
       required: true
       schema:
         type: string
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/RoleResponse"
@@ -221,26 +158,11 @@ query:
   summary: Get roles (pagination support)
   tags:
     - Role
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get roles (pagination support)
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: keyword
       in: query
       required: true
@@ -273,7 +195,7 @@ query:
             type: string
             maxLength: 1000
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/RoleResponse"

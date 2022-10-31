@@ -2,26 +2,11 @@ addRoles:
   summary: Add roles to community users
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Add roles to community users.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: communityId
       in: path
       required: true
@@ -30,7 +15,7 @@ addRoles:
         minLength: 1
         maxLength: 900
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     required: true
     content:

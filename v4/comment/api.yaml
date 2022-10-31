@@ -2,24 +2,9 @@ delete:
   summary: delete a comment.
   tags:
     - Comment v4
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: commentId
       in: path
       required: true

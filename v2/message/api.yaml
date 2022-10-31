@@ -2,24 +2,8 @@ query:
   summary: Query messages.
   tags:
     - Admin
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
+  security:
+    - BearerAuth: []
   consumes:
     - application/json
   requestBody:
@@ -69,24 +53,8 @@ create:
   summary: create a text message.
   tags:
     - Admin
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
+  security:
+    - BearerAuth: []
   consumes:
     - application/json
   description: >
@@ -136,26 +104,11 @@ get:
   summary: get a message.
   tags:
     - Admin
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get a message by ID.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: messageId
       in: path
       required: true
@@ -323,18 +276,9 @@ delete:
   summary: delete a message.
   tags:
     - Admin
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      required: true
-      value: Bearer {{accessToken}}
-      schema:
-        type: string
     - name: messageId
       in: path
       required: true
@@ -355,24 +299,8 @@ createImageMessage:
   summary: create an image message.
   tags:
     - Admin
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: multipart/form-data
-      required: true
-      schema:
-        type: string
+  security:
+    - BearerAuth: []
   consumes:
     - multipart/form-data
   description: >
@@ -455,24 +383,8 @@ createFileMessage:
   summary: create a message with file in a given channel
   tags:
     - Admin
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: multipart/form-data
-      required: true
-      schema:
-        type: string
+  security:
+    - BearerAuth: []
   consumes:
     - multipart/form-data
   description: >
@@ -516,18 +428,9 @@ getFileMessage:
   summary: get a file message
   tags:
     - Admin
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
     - name: messageId
       in: path
       required: true
