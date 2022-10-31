@@ -2,28 +2,12 @@ updateNetworkSetting:
   summary: Update network setting configuration.
   tags:
     - Network Setting
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Update network setting configuration.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information for a network setting
@@ -58,28 +42,12 @@ updateSocial:
   summary: Update social configuration.
   tags:
     - Network Setting
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Update social configuration.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information for a network setting
@@ -125,28 +93,12 @@ getSocial:
   summary: Get social configuration.
   tags:
     - Network Setting
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get social configuration.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/SocialNetworkSettingApiResponse'
@@ -159,28 +111,12 @@ updateWebhook:
   summary: Update webhook configuration.
   tags:
     - Network Setting
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Update webhook configuration.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information for a network setting
@@ -208,28 +144,12 @@ getWebhook:
   summary: Get webhook configuration.
   tags:
     - Network Setting
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get webhook configuration.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/WebhookNetworkSettingApiResponse'
@@ -242,28 +162,12 @@ updateChatSetting:
    summary: Update chat network setting configuration.
    tags:
      - Network Setting
-   securityDefinition:
-     ApiKeyAuth:
-       type: apiKey
-       in: header
-       name: Authorization
+   security:
+    - BearerAuth: []
    description: >
      Update chat network setting configuration.
-   parameters:
-     - name: Authorization
-       in: header
-       value: Bearer {{accessToken}}
-       required: true
-       schema:
-         type: string
-     - name: Content-Type
-       in: header
-       value: application/x-www-form-urlencoded
-       required: true
-       schema:
-         type: string
    consumes:
-     - application/x-www-form-urlencoded
+     - application/json
    requestBody:
      description: >
        information for a network setting
@@ -288,28 +192,12 @@ getChatSetting:
    summary: Get chat network setting configuration.
    tags:
      - Network Setting
-   securityDefinition:
-     ApiKeyAuth:
-       type: apiKey
-       in: header
-       name: Authorization
+   security:
+    - BearerAuth: []
    description: >
      Get chat network setting configuration.
-   parameters:
-     - name: Authorization
-       in: header
-       value: Bearer {{accessToken}}
-       required: true
-       schema:
-         type: string
-     - name: Content-Type
-       in: header
-       value: application/x-www-form-urlencoded
-       required: true
-       schema:
-         type: string
    consumes:
-     - application/x-www-form-urlencoded
+     - application/json
    responses:
      '200000':
        $ref: './response.yaml#/ChatNetworkSettingApiResponse'
@@ -322,28 +210,12 @@ getModeration:
   summary: Get moderation configuration.
   tags:
     - Network Setting
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Using for get network moderation configuration.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/ModerationNetworkSettingApiResponse'
@@ -356,28 +228,12 @@ updateModeration:
   summary: Update moderation configuration.
   tags:
     - Network Setting
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Update moderation configuration.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information for a network setting
@@ -413,12 +269,12 @@ updateTier:
   parameters:
     - name: Content-Type
       in: header
-      value: application/x-www-form-urlencoded
+      value: application/json
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information for a network setting
@@ -459,28 +315,12 @@ getFeedSetting:
   summary: Get feed setting check configuration.
   tags:
     - Network Setting
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Using for get network feed setting check configuration.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     '200000':
       $ref: './response.yaml#/FeedSettingNetworkSettingApiResponse'
@@ -493,28 +333,12 @@ updateFeedSetting:
   summary: Update feed setting check configuration.
   tags:
     - Network Setting
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Update feed setting check configuration.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information for a network setting

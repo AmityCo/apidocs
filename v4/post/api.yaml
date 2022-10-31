@@ -2,28 +2,12 @@ create:
   summary: create a post
   tags:
     - Post v4
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Create a post
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: |
       information of a post to be created.
@@ -158,26 +142,11 @@ delete:
   summary: delete a post
   tags:
     - Post v4
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Delete a post
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: postId
       in: path
       required: true
@@ -191,7 +160,7 @@ delete:
         default: false
         description: If permanent data will be hard deleted
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     "200000":
       description: post information
@@ -216,33 +185,18 @@ update:
   summary: update a post
   tags:
     - Post v4
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Update a post
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: postId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information of a post to be updated.
@@ -346,12 +300,6 @@ query:
   description: >
     Query posts
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: targetId
       in: query
       required: true

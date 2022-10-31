@@ -2,29 +2,12 @@ create:
   summary: create a network
   tags:
     - Network
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Create network (with feature toggle)
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      description: Access token from cognito (scope - asc/network.manage)
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information for a network creation    
@@ -54,30 +37,14 @@ issueServerKey:
   summary: Issue new server key
   tags:
     - Network
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Issue new server key (old key will be invoked)  
 
     Allow only admin to call.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
           
   responses:
     "200000":
@@ -100,15 +67,8 @@ getServerKeyLastUpdated:
     - BearerAuth: [] 
   description: >
     Get server key last issued data
-  parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/KeyLastUpdateResponse"
@@ -123,15 +83,8 @@ getSelfNetwork:
     - Network
   security:
     - BearerAuth: [] 
-  parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/NetworkResponse"
@@ -144,28 +97,12 @@ updateSelfNetwork:
   summary: Update self network info
   tags:
     - Network
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorizations
+  security:
+    - BearerAuth: []
   description: >
     Update self network info. Only admin can update.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     required: true
     content:

@@ -2,24 +2,8 @@ create:
   summary: create a message
   tags:
     - Message
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
+  security:
+    - BearerAuth: []
   consumes:
     - application/json
   requestBody:
@@ -109,12 +93,6 @@ update:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: messageId
       in: path
       required: true
@@ -179,12 +157,6 @@ query:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       required: true
       in: query
@@ -287,12 +259,6 @@ get:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: messageId
       in: path
       required: true
@@ -318,12 +284,6 @@ getList:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: messageIds
       in: query
       required: true
@@ -353,18 +313,6 @@ delete:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: messageId
       in: path
       required: true
@@ -400,24 +348,9 @@ flag:
   summary: flag a message
   tags:
     - Message
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: messageId
       in: path
       required: true
@@ -444,24 +377,9 @@ unflag:
   summary: unflag a message
   tags:
     - Message
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: messageId
       in: path
       required: true
@@ -484,24 +402,9 @@ clearflag:
   summary: clear flags
   tags:
     - Message
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: messageId
       in: path
       required: true
@@ -527,12 +430,6 @@ isflagbyme:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: messageId
       in: path
       required: true

@@ -7,12 +7,6 @@ query:
   description: >
     Get users information (pagination supported)
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: keyword
       in: query
       schema:
@@ -69,12 +63,6 @@ getByPublicId:
   description: >
     Get users information by public id.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: userIds
       in: query
       collectionFormat: multi
@@ -104,12 +92,6 @@ get:
   description: >
     Get one user information.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: userId
       in: path
       required: true
@@ -141,28 +123,12 @@ update:
   summary: Update user information.
   tags:
     - UserV3
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Update user information such as displayName, roles, avatar and metadata
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       User information to be updated
@@ -215,12 +181,6 @@ isFlagByMe:
   security:
     - BearerAuth: []
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: userId
       in: path
       required: true

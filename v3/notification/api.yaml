@@ -6,15 +6,8 @@ register:
     - BearerAuth: []
   description: |
     Register a device to a notification service provider.
-  parameters:
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: |
       information of a device to be registered.
@@ -59,13 +52,6 @@ unregister:
     - BearerAuth: []
   description: |
     Unregister a device from a notification service provider.
-  parameters:
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   responses:
     '200000':
       $ref: '../../global/response.yaml#/SaveApiResponse'
@@ -79,12 +65,6 @@ getSetting:
   description: >
     Get push notification setting.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: level
       required: true
       in: query
@@ -126,21 +106,8 @@ saveSetting:
     - BearerAuth: []
   description: >
     Save push notification setting.
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       Notification setting information to be updated

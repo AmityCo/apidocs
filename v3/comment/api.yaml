@@ -132,24 +132,8 @@ create:
   summary: create a comment.
   tags:
     - Comment
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
+  security:
+    - BearerAuth: []
   consumes:
     - application/json
   requestBody:
@@ -228,12 +212,6 @@ update:
   security:
     - BearerAuth: []
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: commentId
       in: path
       required: true
@@ -294,12 +272,6 @@ delete:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: commentId
       in: path
       required: true
@@ -335,18 +307,6 @@ flag:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: commentId
       in: path
       required: true
@@ -382,7 +342,7 @@ isflagbyme:
   tags:
     - Comment
   security:
-    - SocketAuth: []
+    - BearerAuth: []
   parameters:
     - name: commentId
       in: path
@@ -402,24 +362,9 @@ unflag:
   summary: unflag a comment.
   tags:
     - Comment
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: commentId
       in: path
       required: true
@@ -443,12 +388,6 @@ getList:
   description: >
     get comments by IDs.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: commentIds
       in: query
       collectionFormat: multi
@@ -480,18 +419,6 @@ get:
   description: >
     get a comment.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: commentId
       in: path
       required: true
@@ -517,12 +444,6 @@ clearflag:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: commentId
       in: path
       required: true
