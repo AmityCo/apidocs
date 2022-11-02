@@ -2,24 +2,8 @@ create:
   summary: create a channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
+  security:
+    - BearerAuth: []
   consumes:
     - application/json
   requestBody:
@@ -87,24 +71,8 @@ createConversation:
   summary: create a conversation channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
+  security:
+    - BearerAuth: []
   consumes:
     - application/json
   requestBody:
@@ -159,24 +127,9 @@ delete:
   summary: delete a channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
@@ -211,24 +164,9 @@ get:
   summary: get a channel by ID.
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
@@ -250,26 +188,11 @@ getList:
   summary: get list of channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get list of channel
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: channelIds
       in: query
       collectionFormat: multi
@@ -296,24 +219,9 @@ query:
   summary: query channels.
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: keyword
       in: query
       schema:
@@ -419,24 +327,9 @@ update:
   summary: update a channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
@@ -491,24 +384,9 @@ join:
   summary: join a channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
@@ -536,24 +414,9 @@ leave:
   summary: leave a channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
@@ -581,24 +444,9 @@ addUsers:
   summary: add channel users
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
@@ -645,24 +493,9 @@ removeUsers:
   summary: remove channel users
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
@@ -709,24 +542,9 @@ ban:
   summary: ban channel users
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
@@ -773,24 +591,9 @@ unban:
   summary: unban channel users
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
@@ -837,24 +640,9 @@ queryUsers:
   summary: query channel users
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
@@ -922,24 +710,9 @@ addRole:
   summary: Add role to channel users
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
@@ -987,24 +760,9 @@ removeRole:
   summary: Remove role from channel users
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
@@ -1052,33 +810,18 @@ markSeen:
   summary: Mark user message read position inside channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Mark user message read position inside channel
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       Segment of the message

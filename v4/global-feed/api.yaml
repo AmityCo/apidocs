@@ -2,26 +2,11 @@ get:
   summary: Get global feed.
   tags:
     - GlobalFeed
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get paginable list of active posts (not deleted) from users and community.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: limit
       in: query
       schema:

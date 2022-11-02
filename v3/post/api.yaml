@@ -2,28 +2,12 @@ create:
   summary: create a post
   tags:
     - Post
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Create a post
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information of a post to be created.
@@ -107,12 +91,6 @@ get:
   description: >
     Get a post by ID
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: postId
       in: path
       required: true
@@ -120,7 +98,7 @@ get:
         type: string
         maxLength: 900
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/PostResponse"
@@ -141,12 +119,6 @@ update:
   description: >
     Update a post
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: postId
       in: path
       required: true
@@ -216,12 +188,6 @@ delete:
   description: >
     Delete a post
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: postId
       in: path
       required: true
@@ -256,12 +222,6 @@ flag:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: postId
       in: path
       required: true
@@ -287,12 +247,6 @@ isflagbyme:
   description: >
     Check whether user flag a given post.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: postId
       in: path
       required: true
@@ -308,24 +262,9 @@ unflag:
   summary: unflag a post.
   tags:
     - Post
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: postId
       in: path
       required: true
@@ -350,12 +289,6 @@ getList:
   description: >
     Get list of post
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: postIds
       in: query
       collectionFormat: multi
@@ -366,7 +299,7 @@ getList:
           type: string
           maxLength: 50       
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/PostResponse"
@@ -382,24 +315,9 @@ clearflag:
   summary: clear flags
   tags:
     - Post
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: postId
       in: path
       required: true
@@ -426,12 +344,6 @@ query:
   description: >
     Query posts
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: targetId
       in: query
       schema:
@@ -561,26 +473,11 @@ approve:
   summary: Approve reviewing post
   tags:
     - Post
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get a post by ID
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - in: path
       name: postId
       required: true
@@ -589,7 +486,7 @@ approve:
         minimum: 1
       description: Post public id
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/PostResponse"
@@ -605,26 +502,11 @@ decline:
   summary: Decline reviewing post
   tags:
     - Post
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Get a post by ID
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - in: path
       name: postId
       required: true
@@ -633,7 +515,7 @@ decline:
         minimum: 1
       description: Post public id
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     "200000":
       $ref: "./response.yaml#/PostResponse"

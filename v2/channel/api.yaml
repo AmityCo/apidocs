@@ -2,28 +2,12 @@ create:
   summary: create a channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Create a channel
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       Information of channel to be created
@@ -74,28 +58,12 @@ query:
   summary: query channels
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Query channels
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       Query parameters
@@ -153,33 +121,18 @@ setChannelDisplay:
   summary: change channel displayName
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Change a channel's displayName
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       Information of channel to be changed
@@ -207,33 +160,18 @@ ban:
   summary: ban users in channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Ban users in channel
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       channelId and userIds
@@ -271,33 +209,18 @@ unban:
   summary: unban users in channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Unban users in channel
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       channelId and userIds
@@ -335,33 +258,18 @@ close:
   summary: close channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Close channel
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     "200000":
       description: OK
@@ -376,34 +284,19 @@ setAvatar:
   summary: Set or Remove avatar from channel
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Set or Remove avatar from channel.
     Put null inside avatarFileId to remove avatar.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       Information of channel to be created
@@ -435,33 +328,18 @@ muteChannel:
   summary: Mute all users in channel for a specific period of time.
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Mute all users in channel for a specific period of time.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       Information of channel to be muted and period
@@ -490,33 +368,18 @@ muteUserInChannel:
   summary: Mute a user in channel for a specific period of time.
   tags:
     - Channel
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Mute a user in channel for a specific period of time.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: channelId
       in: path
       required: true
       schema:
         type: string
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       Information of channel to be muted and period

@@ -2,24 +2,8 @@ upload:
   summary: Upload file.
   tags:
     - File
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: multipart/form-data
-      required: true
-      schema:
-        type: string
+  security:
+    - BearerAuth: []
   consumes:
     - multipart/form-data
   description: >
@@ -28,10 +12,15 @@ upload:
     description: >
       Information of file to be created. It will be applied to every attachment
     content:
-      application/json:
+      multipart/form-data:
         schema:
           type: object
           properties:
+            files:
+              type: array
+              items:
+                type: string
+                format: binary
             fullImage:
               type: boolean
               optional: true
@@ -51,12 +40,6 @@ get:
   description: >
     Get file info of fileId (ex. type, attributes)
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - in: path
       name: fileId # Note the name is the same as in the path
       required: true
@@ -79,12 +62,6 @@ delete:
     Delete file (also remove from cloud).
     Only uploader and admin can remove.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - in: path
       name: fileId # Note the name is the same as in the path
       required: true

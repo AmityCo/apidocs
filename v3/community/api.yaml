@@ -7,12 +7,6 @@ get:
   description: >
     query communities.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: keyword
       in: query
       schema:
@@ -102,24 +96,8 @@ create:
   summary: create a community.
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-  parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
+  security:
+    - BearerAuth: []
   consumes:
     - application/json
   requestBody:
@@ -209,12 +187,6 @@ getOne:
   description: >
     Get a community by ID
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: communityId
       in: path
       required: true
@@ -250,12 +222,6 @@ update:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: communityId
       in: path
       required: true
@@ -343,12 +309,6 @@ delete:
   security:
     - BearerAuth: [] 
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: communityId
       in: path
       required: true
@@ -372,26 +332,11 @@ join:
   summary: Join a community
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Join community by ID
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: communityId
       in: path
       required: true
@@ -415,26 +360,11 @@ leave:
   summary: Leave a community.
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Leave community by ID
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: communityId
       in: path
       required: true
@@ -465,12 +395,6 @@ getUsers:
   description: >
     query community users.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: communityId
       in: path
       required: true
@@ -525,6 +449,7 @@ getUsers:
             minLength: 1
             maxLength: 1000
     - name: search
+      description: Input text for searching display name and user id 
       in: query
       schema:
         type: string
@@ -554,26 +479,11 @@ ban:
   summary: ban community users
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     ban community users.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: communityId
       in: path
       required: true
@@ -582,7 +492,7 @@ ban:
         minLength: 1
         maxLength: 900
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       condition for querying
@@ -622,26 +532,11 @@ unban:
   summary: unban community users
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     unban community users.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: communityId
       in: path
       required: true
@@ -650,7 +545,7 @@ unban:
         minLength: 1
         maxLength: 900
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       condition for querying
@@ -693,12 +588,6 @@ getList:
   description: >
     Get list of community
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/json
-      required: true
-      schema:
-        type: string
     - name: communityIds
       in: query
       required: true
@@ -740,18 +629,6 @@ addUsers:
   description: >
     add community users
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - in: path
       name: communityId
       required: true
@@ -760,7 +637,7 @@ addUsers:
       description: Community public id
     
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information of a community.
@@ -803,12 +680,6 @@ removeUsers:
   description: >
     remove community users
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - in: path
       name: communityId
       required: true
@@ -816,7 +687,7 @@ removeUsers:
         type: string
         minimum: 1
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     description: >
       information of a community.
@@ -932,18 +803,6 @@ addRole:
   description: >
     Add role to community users.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: communityId
       in: path
       required: true
@@ -952,7 +811,7 @@ addRole:
         minLength: 1
         maxLength: 900
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     required: true
     content:
@@ -993,26 +852,11 @@ removeRole:
   summary: Remove role from community users
   tags:
     - Community
-  securityDefinition:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  security:
+    - BearerAuth: []
   description: >
     Remove role from community users.
   parameters:
-    - name: Authorization
-      in: header
-      value: Bearer {{accessToken}}
-      required: true
-      schema:
-        type: string
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - name: communityId
       in: path
       required: true
@@ -1021,7 +865,7 @@ removeRole:
         minLength: 1
         maxLength: 900
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   requestBody:
     required: true
     content:
@@ -1067,12 +911,6 @@ getSelfPermission:
   description: >
     query comments.
   parameters:
-    - name: Content-Type
-      in: header
-      value: application/x-www-form-urlencoded
-      required: true
-      schema:
-        type: string
     - in: path
       name: communityId
       required: true
@@ -1081,7 +919,7 @@ getSelfPermission:
         minimum: 1
       description: Community public id
   consumes:
-    - application/x-www-form-urlencoded
+    - application/json
   responses:
     "200000":
       description: Communities permission information for this user
