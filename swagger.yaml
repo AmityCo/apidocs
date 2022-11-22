@@ -175,6 +175,22 @@ paths:
                 - regexs
 
   #Admin
+  /admin/v1/token:
+    post:
+      summary: Generate admin token.
+      tags:
+        - Admin
+      $ref: './v1/admin/api.yaml#generate'
+    get:
+      summary: Get admin token.
+      tags:
+        - Admin
+      $ref: './v1/admin/api.yaml#get'
+    delete:
+      summary: revoke admin token.
+      tags:
+        - Admin
+      $ref: './v1/admin/api.yaml#revoke'
   /admin/v1/blacklist/records:
     get:
       summary: get rules of blacklist.

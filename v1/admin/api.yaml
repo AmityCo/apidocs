@@ -1,0 +1,58 @@
+generate:
+  summary: Generate admin token
+  tags:
+    - Admin
+  security:
+    - ApiKeyAuth: []
+  description: >
+    Generate admin token
+  responses:
+    "200000":
+      $ref: "./response.yaml#/AdminTokenResponse"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+get:
+  summary: get admin token
+  tags:
+    - Admin
+  security:
+    - ApiKeyAuth: []
+  description: >
+    Get admin token
+  responses:
+    "200000":
+      $ref: "./response.yaml#/AdminTokenResponse"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+revoke:
+  summary: revoke admin token
+  tags:
+    - Admin
+  security:
+    - ApiKeyAuth: []
+  description: >
+    Revoke admin token:
+      * super-admin can revoke any admin token
+      * admin can revoke own token only
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            username:
+              type: string
+              minLength: 1
+              maxLength: 50
+  responses:
+    "200000":
+      $ref: "./response.yaml#/RevokeAdminTokenResponse"
+    "400400":
+      $ref: "../../global/error.yaml#/UsernameNotFoundError"
+    "400301":
+      $ref: "../../global/error.yaml#/GenericPermissionDenidedError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"

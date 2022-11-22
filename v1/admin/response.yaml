@@ -1,0 +1,25 @@
+AdminTokenResponse:
+  description: Return admin token and expiry
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          adminToken:
+                type: string
+          issuedAt:
+            type: string
+            format: date-time
+          expiresAt:
+            type: string
+            format: date-time
+
+RevokeAdminTokenResponse:
+  description: revoke success
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean
