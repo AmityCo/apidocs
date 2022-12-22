@@ -1,0 +1,70 @@
+getToken:
+  summary: Create authentication token for session creation API
+  tags:
+    - Authentication
+  parameters:
+    - name: x-server-key
+      in: header
+      required: true
+      schema:
+        type: string
+  description: |
+    Create authentication token for session creation API. Token userId need to match userId when using it
+  requestBody: 
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+              description: User id to assign this token
+  responses:
+    "200":
+      description: Response payload
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: s9qne0wEqVb2e05271177748659f574a4e8ab85e08
+            description: Use this token when create sessions
+    "401":
+      description: Unauthorized. Server key is invalid.
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: Unauthorized
+            description: Server key is invalid
+    "403":
+      description: Forbidden. Possibly that secure mode is disabled
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status: 
+                type: string
+              message:
+                type: string
+              code:
+                type: number
+              data:
+                type: object
+                description: error detail
+    "422":
+      description: Parameters validation error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status: 
+                type: string
+              message:
+                type: string
+              code:
+                type: number
+              data:
+                type: object
+                description: error detail
