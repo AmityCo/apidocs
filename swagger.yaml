@@ -23,7 +23,7 @@ info:
 
     Before making server-to-server API calls, be sure to select the correct API endpoint for your region in
     the <strong>Servers</strong> dropdown below.
-  version: 4.43.0
+  version: 4.45.0
 servers:
   - url: https://api.us.amity.co
     description: API Endpoint for US Region
@@ -39,6 +39,12 @@ paths:
       tags:
         - Authentication
       $ref: './v3/authentication/api.yaml#/getToken'
+  /api/v4/authentication/token:
+    post:
+      summary: Create authentication token for session creation API
+      tags:
+        - Authentication
+      $ref: './v4/authentication/api.yaml#/getToken'
   #Session
   /api/v3/sessions:
     post:
