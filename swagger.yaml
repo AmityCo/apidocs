@@ -38,51 +38,51 @@ paths:
       summary: Get authentication token
       tags:
         - Authentication
-      $ref: "./v3/authentication/api.yaml#/getToken"
+      $ref: './v3/authentication/api.yaml#/getToken'
   /api/v4/authentication/token:
     post:
       summary: Create authentication token for session creation API
       tags:
         - Authentication
-      $ref: "./v4/authentication/api.yaml#/getToken"
+      $ref: './v4/authentication/api.yaml#/getToken'
   #Session
   /api/v3/sessions:
     post:
       summary: Register a session
       tags:
         - Session
-      $ref: "./v3/session/api.yaml#/create"
+      $ref: './v3/session/api.yaml#/create'
     get:
       summary: Verify access token
-      tags:
+      tags: 
         - Session
-      $ref: "./v3/session/api.yaml#/verifyAccessToken"
+      $ref: './v3/session/api.yaml#/verifyAccessToken'
   /api/v4/sessions:
     post:
       summary: Register a session
       tags:
         - Session
-      $ref: "./v4/session/api.yaml#/create"
+      $ref: './v4/session/api.yaml#/create'
     delete:
       summary: Revoke access token
-      tags:
+      tags: 
         - Session
-      $ref: "./v4/session/api.yaml#/revokeAccessToken"
-
+      $ref: './v4/session/api.yaml#/revokeAccessToken'
+  
   #Device
   /v1/device:
     post:
       summary: Register a device.
       tags:
         - Device
-      $ref: "./v1/device/api.yaml#/create"
+      $ref: './v1/device/api.yaml#/create'
   /v1/accessToken:
     get:
       summary: Generate AccessToken.
       tags:
         - Device
-      $ref: "./v1/device/api.yaml#/generateAccessToken"
-
+      $ref: './v1/device/api.yaml#/generateAccessToken'
+  
   #Moderation
   /v1/blacklist/records:
     put:
@@ -161,23 +161,23 @@ paths:
       summary: Generate admin token.
       tags:
         - Admin
-      $ref: "./v1/admin/api.yaml#generate"
+      $ref: './v1/admin/api.yaml#generate'
     get:
       summary: Get admin token.
       tags:
         - Admin
-      $ref: "./v1/admin/api.yaml#get"
+      $ref: './v1/admin/api.yaml#get'
     delete:
       summary: Revoke admin token.
       tags:
         - Admin
-      $ref: "./v1/admin/api.yaml#revoke"
+      $ref: './v1/admin/api.yaml#revoke'
   /admin/v1/blacklist/records:
     get:
       summary: get rules of blacklist.
       tags:
         - Admin
-      $ref: "./v1/moderation/api.yaml#get"
+      $ref: './v1/moderation/api.yaml#get'
   /api/v2/blacklist/records:
     get:
       summary: get rules of blacklist.
@@ -213,12 +213,12 @@ paths:
       consumes:
         - application/x-www-form-urlencoded
       responses:
-        "200000":
-          $ref: "#/components/responses/BlacklistRulesResponse"
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '200000':
+          $ref: '#/components/responses/BlacklistRulesResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
     put:
       summary: refresh rules of blacklist.
       tags:
@@ -261,12 +261,12 @@ paths:
               required:
                 - regexs
       responses:
-        "200000":
+        '200000':
           description: OK
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
     post:
       summary: add rules to blacklist.
       tags:
@@ -311,12 +311,12 @@ paths:
               required:
                 - regexs
       responses:
-        "200000":
+        '200000':
           description: OK
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
     delete:
       summary: delete rules from blacklist
       tags:
@@ -359,12 +359,12 @@ paths:
               required:
                 - ruleIds
       responses:
-        "200000":
+        '200000':
           description: OK
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v2/blacklist/records/:ruleId:
     put:
       summary: update rule of blacklist.
@@ -409,59 +409,59 @@ paths:
                 - ruleId
                 - isEnabled
       responses:
-        "200000":
-          $ref: "#/components/responses/BlacklistRuleResponse"
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '200000':
+          $ref: '#/components/responses/BlacklistRuleResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v2/messages:
     post:
       summary: Query messages.
       tags:
         - Admin
-      $ref: "./v2/message/api.yaml#/query"
+      $ref: './v2/message/api.yaml#/query'
   /api/v2/message:
     post:
       summary: create a text message.
       tags:
         - Admin
-      $ref: "./v2/message/api.yaml#/create"
+      $ref: './v2/message/api.yaml#/create'
   /api/v2/message/{messageId}:
     get:
       summary: get a message.
       tags:
         - Admin
-      $ref: "./v2/message/api.yaml#/get"
+      $ref: './v2/message/api.yaml#/get'
     delete:
       summary: delete a message.
       tags:
         - Admin
-      $ref: "./v2/message/api.yaml#/delete"
+      $ref: './v2/message/api.yaml#/delete'
   /api/v2/messages/images:
     post:
       summary: create an image message.
       tags:
         - Admin
-      $ref: "./v2/message/api.yaml#/createImageMessage"
+      $ref: './v2/message/api.yaml#/createImageMessage'
   /api/v2/messages/{messageId}/images:
     get:
       summary: get an image message
       tags:
         - Admin
-      $ref: "./v2/message/api.yaml#/getImageMessage"
+      $ref: './v2/message/api.yaml#/getImageMessage'
   /api/v2/messages/files:
     post:
       summary: create a message with file in a given channel
       tags:
         - Admin
-      $ref: "./v2/message/api.yaml#/createFileMessage"
+      $ref: './v2/message/api.yaml#/createFileMessage'
   /api/v2/messages/{messageId}/files:
     get:
       summary: get a file message
       tags:
         - Admin
-      $ref: "./v2/message/api.yaml#/getFileMessage"
+      $ref: './v2/message/api.yaml#/getFileMessage'
   /api/v2/moderation-settings:
     get:
       summary: get a moderation setting
@@ -484,12 +484,12 @@ paths:
       description: >
         Get a moderation setting.
       responses:
-        "200000":
-          $ref: "#/components/responses/ModerationSettingResponse"
-        "400000":
-          $ref: "#/components/responses/BadRequestError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '200000':
+          $ref: '#/components/responses/ModerationSettingResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
     put:
       summary: update a moderation setting
       tags:
@@ -558,7 +558,7 @@ paths:
                       type: number
                       minimum: 0
       responses:
-        "200000":
+        '200000':
           content:
             application/json:
               schema:
@@ -571,16 +571,16 @@ paths:
                 example:
                   status: success
                   code: 200000
-        "400000":
-          $ref: "#/components/responses/BadRequestError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v2/reactions/messages/most:
     get:
       summary: Get message ids by the most of reactions.
       tags:
         - Admin
-      $ref: "./v2/reaction/api.yaml#/most"
+      $ref: './v2/reaction/api.yaml#/most'
   /api/v2/roles:
     get:
       summary: get all roles
@@ -614,12 +614,12 @@ paths:
       consumes:
         - application/x-www-form-urlencoded
       responses:
-        "200000":
-          $ref: "#/components/responses/RolesResponse"
-        "400000":
-          $ref: "#/components/responses/BadRequestError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '200000':
+          $ref: '#/components/responses/RolesResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
     put:
       summary: add permissions.
       tags:
@@ -667,14 +667,14 @@ paths:
                 - publicIds
                 - permissions
       responses:
-        "200000":
+        '200000':
           description: OK
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
-        "400311":
-          $ref: "#/components/responses/RateLimitError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '400311':
+          $ref: '#/components/responses/RateLimitError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v2/whitelist/records:
     get:
       summary: get rules of whitelist.
@@ -711,12 +711,12 @@ paths:
       consumes:
         - application/x-www-form-urlencoded
       responses:
-        "200000":
-          $ref: "#/components/responses/WhitelistRulesResponse"
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '200000':
+          $ref: '#/components/responses/WhitelistRulesResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
     put:
       summary: refresh rules of whitelist.
       tags:
@@ -759,12 +759,12 @@ paths:
               required:
                 - regexs
       responses:
-        "200000":
+        '200000':
           description: OK
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
     post:
       summary: add rules to whitelist.
       tags:
@@ -807,12 +807,12 @@ paths:
               required:
                 - regexs
       responses:
-        "200000":
+        '200000':
           description: OK
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
     delete:
       summary: delete rules from whitelist
       tags:
@@ -855,12 +855,12 @@ paths:
               required:
                 - ruleIds
       responses:
-        "200000":
+        '200000':
           description: OK
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v2/whitelist/records/:ruleId:
     put:
       summary: update rule of whitelist.
@@ -905,171 +905,171 @@ paths:
                 - ruleId
                 - isEnabled
       responses:
-        "200000":
-          $ref: "#/components/responses/WhitelistRuleResponse"
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '200000':
+          $ref: '#/components/responses/WhitelistRuleResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v3/roles:
     get:
       summary: Get roles (pagination support)
       tags:
         - Admin
-      $ref: "./v3/role/api.yaml#/query"
+      $ref: './v3/role/api.yaml#/query'
     post:
       summary: Create role
       tags:
         - Admin
-      $ref: "./v3/role/api.yaml#/create"
+      $ref: './v3/role/api.yaml#/create'
   /api/v3/roles/{roleId}:
     get:
       summary: Get role
       tags:
         - Admin
-      $ref: "./v3/role/api.yaml#/get"
+      $ref: './v3/role/api.yaml#/get'
     put:
       summary: Update role
       tags:
         - Admin
-      $ref: "./v3/role/api.yaml#/update"
+      $ref: './v3/role/api.yaml#/update'
     delete:
       summary: Delete role
       tags:
         - Admin
-      $ref: "./v3/role/api.yaml#/delete"
-
+      $ref: './v3/role/api.yaml#/delete'
+  
   #User
   /api/v2/users:
     get:
       summary: query users
       tags:
         - User
-      $ref: "./v2/user/api.yaml#queryUsers"
+      $ref: './v2/user/api.yaml#queryUsers'
     put:
       summary: Update user information.
       tags:
         - User
-      $ref: "./v2/user/api.yaml#update"
+      $ref: './v2/user/api.yaml#update'
   /api/v2/users/ban:
     post:
       summary: ban a user.
       tags:
         - User
-      $ref: "./v2/user/api.yaml#ban"
+      $ref: './v2/user/api.yaml#ban'
   /api/v2/users/unban:
     post:
       summary: unban a user.
       tags:
         - User
-      $ref: "./v2/user/api.yaml#unban"
+      $ref: './v2/user/api.yaml#unban'
   /api/v2/users/{userId}/flags:
     delete:
       summary: clear flag a user.
       tags:
         - User
-      $ref: "./v2/user/api.yaml#clearFlag"
+      $ref: './v2/user/api.yaml#clearFlag'
   /sockets/user.query:
     post:
       summary: query users
       tags:
         - User
-      $ref: "./v1/user/socket.yaml#/query"
+      $ref: './v1/user/socket.yaml#/query'
   /sockets/user.get:
     post:
       summary: get users informations base on given userIds
       tags:
         - User
-      $ref: "./v1/user/socket.yaml#/get"
+      $ref: './v1/user/socket.yaml#/get'
   /sockets/user.flag:
     post:
       summary: Flag a user.
       tags:
         - User
-      $ref: "./v1/user/socket.yaml#/flag"
+      $ref: './v1/user/socket.yaml#/flag'
   /sockets/user.unflag:
     post:
       summary: Unflag a user.
       tags:
         - User
-      $ref: "./v1/user/socket.yaml#/unflag"
+      $ref: './v1/user/socket.yaml#/unflag'
   /sockets/user.isFlagByMe:
     post:
       summary: Check whether user flag a given user.
       tags:
         - User
-      $ref: "./v1/user/socket.yaml#/isFlagByMe"
+      $ref: './v1/user/socket.yaml#/isFlagByMe'
   /sockets/user.update:
     post:
       summary: Update user information.
       tags:
         - User
-      $ref: "./v1/user/socket.yaml#/update"
+      $ref: './v1/user/socket.yaml#/update'
   /callbacks/user.didUpdate:
     get:
       tags:
         - User
-      $ref: "./v1/user/event.yaml#didUpdate"
+      $ref: './v1/user/event.yaml#didUpdate'
   /callbacks/v3.user.didUpdate:
     get:
       tags:
         - User
-      $ref: "./v3/user/event.yaml#didUpdate"
+      $ref: './v3/user/event.yaml#didUpdate'
 
-  #User
+#User
   /api/v3/users:
     get:
       summary: Get users information.
       tags:
         - UserV3
-      $ref: "./v3/user/api.yaml#/query"
+      $ref: './v3/user/api.yaml#/query'
     put:
       summary: Update user information.
       tags:
         - UserV3
-      $ref: "./v3/user/api.yaml#/update"
+      $ref: './v3/user/api.yaml#/update'
   /api/v3/users/list:
     get:
       summary: Get users information by public id.
       tags:
         - UserV3
-      $ref: "./v3/user/api.yaml#/getByPublicId"
+      $ref: './v3/user/api.yaml#/getByPublicId'
   /api/v3/users/{userId}:
     get:
       summary: Get one user information.
       tags:
         - UserV3
-      $ref: "./v3/user/api.yaml#/get"
+      $ref: './v3/user/api.yaml#/get'
   /api/v3/users/{userId}/isFlagByMe:
     get:
       summary: Check whether user flag a given user.
       tags:
         - UserV3
-      $ref: "./v3/user/api.yaml#/isFlagByMe"
+      $ref: './v3/user/api.yaml#/isFlagByMe'
   /sockets/v3/user.query:
     post:
       summary: Get users information.
       tags:
         - UserV3
-      $ref: "./v3/user/socket.yaml#/query"
+      $ref: './v3/user/socket.yaml#/query'
   /sockets/v3/user.getList:
     post:
       summary: Get users information by public id.
       tags:
         - UserV3
-      $ref: "./v3/user/socket.yaml#/getByPublicId"
+      $ref: './v3/user/socket.yaml#/getByPublicId'
   /sockets/v3/user.get:
     post:
       summary: Get one user information.
       tags:
         - UserV3
-      $ref: "./v3/user/socket.yaml#/get"
+      $ref: './v3/user/socket.yaml#/get'
   /sockets/v3/user.update:
     post:
       summary: Update user information.
       tags:
         - UserV3
-      $ref: "./v3/user/socket.yaml#/update"
+      $ref: './v3/user/socket.yaml#/update'
 
   #Channel
   /api/v2/channels:
@@ -1077,448 +1077,448 @@ paths:
       summary: query channels
       tags:
         - Channel
-      $ref: "./v2/channel/api.yaml#query"
+      $ref: './v2/channel/api.yaml#query'
   /api/v2/channel:
     post:
       summary: create a channel
       tags:
         - Channel
-      $ref: "./v2/channel/api.yaml#create"
+      $ref: './v2/channel/api.yaml#create'
   /api/v2/channel/{channelId}/displayName:
     post:
       summary: change channel displayName
       tags:
         - Channel
-      $ref: "./v2/channel/api.yaml#setChannelDisplay"
+      $ref: './v2/channel/api.yaml#setChannelDisplay'
   /api/v2/channel/{channelId}/users/ban:
     post:
       summary: ban users in channel
       tags:
         - Channel
-      $ref: "./v2/channel/api.yaml#ban"
+      $ref: './v2/channel/api.yaml#ban'
   /api/v2/channel/{channelId}/users/unban:
     post:
       summary: unban users in channel
       tags:
         - Channel
-      $ref: "./v2/channel/api.yaml#unban"
+      $ref: './v2/channel/api.yaml#unban'
   /api/v2/channels/{channelId}/close:
     post:
       summary: close channel
       tags:
         - Channel
-      $ref: "./v2/channel/api.yaml#close"
+      $ref: './v2/channel/api.yaml#close'
   /api/v2/channel/{channelId}/avatar:
     put:
       summary: Set or Remove avatar from channel
       tags:
         - Channel
-      $ref: "./v2/channel/api.yaml#setAvatar"
+      $ref: './v2/channel/api.yaml#setAvatar'
   /api/v2/channel/{channelId}/mute:
     put:
       summary: Mute channel
       tags:
         - Channel
-      $ref: "./v2/channel/api.yaml#muteChannel"
+      $ref: './v2/channel/api.yaml#muteChannel'
   /api/v2/channel/{channelId}/users/mute:
     put:
       summary: Mute user in channel
       tags:
         - Channel
-      $ref: "./v2/channel/api.yaml#muteUserInChannel"
+      $ref: './v2/channel/api.yaml#muteUserInChannel'
   /api/v3/channels:
     get:
       summary: query channels.
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/query"
+      $ref: './v3/channel/api.yaml#/query'
     post:
       summary: create a channel
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/create"
+      $ref: './v3/channel/api.yaml#/create'
   /api/v3/channels/{channelId}:
     get:
       summary: get a channel by ID.
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/get"
+      $ref: './v3/channel/api.yaml#/get'
     put:
       summary: update a channel
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/update"
+      $ref: './v3/channel/api.yaml#/update'
     delete:
       summary: delete a channel
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/delete"
+      $ref: './v3/channel/api.yaml#/delete'
   /api/v3/channels/{channelId}/join:
     post:
       summary: join a channel
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/join"
+      $ref: './v3/channel/api.yaml#/join'
   /api/v3/channels/{channelId}/leave:
     delete:
       summary: leave a channel
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/leave"
+      $ref: './v3/channel/api.yaml#/leave'
   /api/v3/channels/{channelId}/users:
     get:
       summary: query channel users
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/queryUsers"
+      $ref: './v3/channel/api.yaml#/queryUsers'
     post:
       summary: add channel users
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/addUsers"
+      $ref: './v3/channel/api.yaml#/addUsers'
     delete:
       summary: remove channel users
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/removeUsers"
+      $ref: './v3/channel/api.yaml#/removeUsers'
   /api/v3/channels/{channelId}/users/ban:
     put:
       summary: ban channel users
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/ban"
+      $ref: './v3/channel/api.yaml#/ban'
   /api/v3/channels/{channelId}/users/unban:
     put:
       summary: unban channel users
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/unban"
+      $ref: './v3/channel/api.yaml#/unban'
   /api/v3/channels/{channelId}/users/roles:
     post:
       summary: Add role to channel users
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/addRole"
+      $ref: './v3/channel/api.yaml#/addRole'
     delete:
       summary: Remove role from channel users
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/removeRole"
+      $ref: './v3/channel/api.yaml#/removeRole'
   /api/v3/channels/conversation:
     post:
       summary: create a conversation channel
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/createConversation"
+      $ref: './v3/channel/api.yaml#/createConversation'
   /api/v3/channels/list:
     get:
       summary: get list of channel
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#/getList"
+      $ref: './v3/channel/api.yaml#/getList'
   /api/v3/channels/{channelId}/seen:
     post:
       summary: Mark user message read position inside channel
       tags:
         - Channel
-      $ref: "./v3/channel/api.yaml#markSeen"
+      $ref: './v3/channel/api.yaml#markSeen'
   /api/v4/channels/{channelId}/users:
     get:
       summary: query channel users
       tags:
         - Channel
-      $ref: "./v4/channel/api.yaml#/queryUsers"
+      $ref: './v4/channel/api.yaml#/queryUsers'
   /sockets/channel.create:
     post:
       summary: create a channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#create"
+      $ref: './v1/channel/socket.yaml#create'
   /sockets/channel.createConversation:
     post:
       summary: create a conversation channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#createConversation"
+      $ref: './v1/channel/socket.yaml#createConversation'
   /sockets/channel.query:
     post:
       summary: query channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#query"
+      $ref: './v1/channel/socket.yaml#query'
   /sockets/channel.queryUsers:
     post:
       summary: query channel users
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#queryUsers"
+      $ref: './v1/channel/socket.yaml#queryUsers'
   /sockets/channel.setAvatar:
     post:
       summary: Set or Remove avatar from channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#setAvatar"
+      $ref: './v1/channel/socket.yaml#setAvatar'
   /sockets/channel.banUsers:
     post:
       summary: ban users in channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#ban"
+      $ref: './v1/channel/socket.yaml#ban'
   /sockets/channel.unbanUsers:
     post:
       summary: unban users in channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#unban"
+      $ref: './v1/channel/socket.yaml#unban'
   /sockets/channel.addRole:
     post:
       summary: add user role in channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#addRole"
+      $ref: './v1/channel/socket.yaml#addRole'
   /sockets/channel.removeRole:
     post:
       summary: remove user role in channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#removeRole"
+      $ref: './v1/channel/socket.yaml#removeRole'
   /sockets/channel.markSeen:
     post:
       summary: mark user message read position inside channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#markSeen"
+      $ref: './v1/channel/socket.yaml#markSeen'
   /sockets/channel.startReading:
     post:
       summary: User start reading message inside channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#startReading"
+      $ref: './v1/channel/socket.yaml#startReading'
   /sockets/channel.stopReading:
     post:
       summary: User stop reading message inside channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#stopReading"
+      $ref: './v1/channel/socket.yaml#stopReading'
   /sockets/channel.startReadings:
     post:
       summary: User start reading message in multiple channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#startReadings"
+      $ref: './v1/channel/socket.yaml#startReadings'
   /sockets/channel.stopReadings:
     post:
       summary: User stop reading message in multiple channel
       tags:
         - Channel
-      $ref: "./v1/channel/socket.yaml#stopReadings"
+      $ref: './v1/channel/socket.yaml#stopReadings'
   /sockets/v3/channel.create:
     post:
       summary: create a channel
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#create"
+      $ref: './v3/channel/socket.yaml#create'
   /sockets/v3/channel.createConversation:
     post:
       summary: create a conversation channel
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#createConversation"
+      $ref: './v3/channel/socket.yaml#createConversation'
   /sockets/v3/channel.delete:
     post:
       summary: delete a channel
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#delete"
+      $ref: './v3/channel/socket.yaml#delete'
   /sockets/v3/channel.get:
     post:
       summary: get a channel by ID.
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#get"
+      $ref: './v3/channel/socket.yaml#get'
   /sockets/v3/channel.query:
     post:
       summary: query channels.
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#query"
+      $ref: './v3/channel/socket.yaml#query'
   /sockets/v3/channel.update:
     post:
       summary: update a channel
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#update"
+      $ref: './v3/channel/socket.yaml#update'
   /sockets/v3/channel.getList:
     post:
       summary: get list of channel
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#getList"
+      $ref: './v3/channel/socket.yaml#getList'
   /sockets/v3/channel.join:
     post:
       summary: join a channel
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#join"
+      $ref: './v3/channel/socket.yaml#join'
   /sockets/v3/channel.leave:
     post:
       summary: leave a channel
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#leave"
+      $ref: './v3/channel/socket.yaml#leave'
   /sockets/v3/channel.addUsers:
     post:
       summary: add channel users
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#addUsers"
+      $ref: './v3/channel/socket.yaml#addUsers'
   /sockets/v3/channel.removeUsers:
     post:
       summary: remove channel users
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#removeUsers"
+      $ref: './v3/channel/socket.yaml#removeUsers'
   /sockets/v3/channel.banUsers:
     post:
       summary: ban channel users
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#ban"
+      $ref: './v3/channel/socket.yaml#ban'
   /sockets/v3/channel.unbanUsers:
     post:
       summary: unban channel users
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#unban"
+      $ref: './v3/channel/socket.yaml#unban'
   /sockets/v3/channel.queryUsers:
     post:
       summary: query channel users
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#queryUsers"
+      $ref: './v3/channel/socket.yaml#queryUsers'
   /sockets/v3/channel.assignRoleToUsers:
     post:
       summary: Add role to channel users
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#addRole"
+      $ref: './v3/channel/socket.yaml#addRole'
   /sockets/v3/channel.removeRoleFromUsers:
     post:
       summary: Remove role from channel users
       tags:
         - Channel
-      $ref: "./v3/channel/socket.yaml#removeRole"
+      $ref: './v3/channel/socket.yaml#removeRole'
   /sockets/v4/channel.queryUsers:
     post:
       summary: query channel users
       tags:
         - Channel
-      $ref: "./v4/channel/socket.yaml#queryUsers"
+      $ref: './v4/channel/socket.yaml#queryUsers'
   /callbacks/channel.didUpdate:
     get:
       tags:
         - Channel
-      $ref: "./v1/channel/event.yaml#didUpdate"
+      $ref: './v1/channel/event.yaml#didUpdate'
   /callbacks/channel.didAddUsers:
     get:
       tags:
         - Channel
-      $ref: "./v1/channel/event.yaml#didAddUsers"
+      $ref: './v1/channel/event.yaml#didAddUsers'
   /callbacks/channel.didRemoveUsers:
     get:
       tags:
         - Channel
-      $ref: "./v1/channel/event.yaml#didRemoveUsers"
+      $ref: './v1/channel/event.yaml#didRemoveUsers'
   /callbacks/channel.didBan:
     get:
       tags:
         - Channel
-      $ref: "./v1/channel/event.yaml#didBan"
+      $ref: './v1/channel/event.yaml#didBan'
   /callbacks/channel.didUnban:
     get:
       tags:
         - Channel
-      $ref: "./v1/channel/event.yaml#didUnban"
+      $ref: './v1/channel/event.yaml#didUnban'
   /callbacks/channel.didCreate:
     get:
       tags:
         - Channel
-      $ref: "./v1/channel/event.yaml#didCreate"
+      $ref: './v1/channel/event.yaml#didCreate'
   /callbacks/channel.didJoin:
     get:
       tags:
         - Channel
-      $ref: "./v1/channel/event.yaml#didJoin"
+      $ref: './v1/channel/event.yaml#didJoin'
   /callbacks/channel.didLeave:
     get:
       tags:
         - Channel
-      $ref: "./v1/channel/event.yaml#didLeave"
+      $ref: './v1/channel/event.yaml#didLeave'
   /callbacks/channel.didMarkSeen:
     get:
       tags:
         - Channel
-      $ref: "./v1/channel/event.yaml#didMarkSeen"
+      $ref: './v1/channel/event.yaml#didMarkSeen'
   /callbacks/channelUser.didUpdate:
     get:
       tags:
         - Channel
-      $ref: "./v1/channel/event.yaml#didchannelUserUpdate"
+      $ref: './v1/channel/event.yaml#didchannelUserUpdate'
   /callbacks/v3.channel.didUpdate:
     get:
       tags:
         - Channel
-      $ref: "./v3/channel/event.yaml#didUpdate"
+      $ref: './v3/channel/event.yaml#didUpdate'
   /callbacks/v3.channel.didDelete:
     get:
       tags:
         - Channel
-      $ref: "./v3/channel/event.yaml#didDelete"
+      $ref: './v3/channel/event.yaml#didDelete'
   /callbacks/v3.channel.didAddUsers:
     get:
       tags:
         - Channel
-      $ref: "./v3/channel/event.yaml#didAddUsers"
+      $ref: './v3/channel/event.yaml#didAddUsers'
   /callbacks/v3.channel.didRemoveUsers:
     get:
       tags:
         - Channel
-      $ref: "./v3/channel/event.yaml#didRemoveUsers"
+      $ref: './v3/channel/event.yaml#didRemoveUsers'
   /callbacks/v3.channel.didBan:
     get:
       tags:
         - Channel
-      $ref: "./v3/channel/event.yaml#didBan"
+      $ref: './v3/channel/event.yaml#didBan'
   /callbacks/v3.channel.didUnban:
     get:
       tags:
         - Channel
-      $ref: "./v3/channel/event.yaml#didUnban"
+      $ref: './v3/channel/event.yaml#didUnban'
   /callbacks/v3.channel.didCreate:
     get:
       tags:
         - Channel
-      $ref: "./v3/channel/event.yaml#didCreate"
+      $ref: './v3/channel/event.yaml#didCreate'
   /callbacks/v3.channel.didJoin:
     get:
       tags:
         - Channel
-      $ref: "./v3/channel/event.yaml#didJoin"
+      $ref: './v3/channel/event.yaml#didJoin'
   /callbacks/v3.channel.didLeave:
     get:
       tags:
         - Channel
-      $ref: "./v3/channel/event.yaml#didLeave"
+      $ref: './v3/channel/event.yaml#didLeave'
   /callbacks/v3.channel.didMarkSeen:
     get:
       tags:
         - Channel
-      $ref: "./v3/channel/event.yaml#didMarkSeen"
+      $ref: './v3/channel/event.yaml#didMarkSeen'
   /callbacks/v3.channelUser.didUpdate:
     get:
       tags:
         - Channel
-      $ref: "./v3/channel/event.yaml#didchannelUserUpdate"
+      $ref: './v3/channel/event.yaml#didchannelUserUpdate'
 
   #Message
   /api/v1/messages/images:
@@ -1526,232 +1526,232 @@ paths:
       summary: create a message with image in a given channel
       tags:
         - Message
-      $ref: "./v1/message/api.yaml#/createImageMessage"
+      $ref: './v1/message/api.yaml#/createImageMessage'
   /api/v1/messages/{messageId}/images:
     get:
       summary: get an image message
       tags:
         - Message
-      $ref: "./v1/message/api.yaml#/getImageMessage"
+      $ref: './v1/message/api.yaml#/getImageMessage'
   /api/v1/messages/files:
     post:
       summary: create a message with file in a given channel
       tags:
         - Message
-      $ref: "./v1/message/api.yaml#/createFileMessage"
+      $ref: './v1/message/api.yaml#/createFileMessage'
   /api/v1/messages/{messageId}/files:
     get:
       summary: get a file message
       tags:
         - Message
-      $ref: "./v1/message/api.yaml#/getImageMessage"
+      $ref: './v1/message/api.yaml#/getImageMessage'
   /api/v3/messages:
     get:
       summary: query messages
       tags:
         - Message
-      $ref: "./v3/message/api.yaml#/query"
+      $ref: './v3/message/api.yaml#/query'
     post:
       summary: create a message
       tags:
         - Message
-      $ref: "./v3/message/api.yaml#/create"
+      $ref: './v3/message/api.yaml#/create'
   /api/v3/messages/list:
     get:
       summary: get list of messages
       tags:
         - Message
-      $ref: "./v3/message/api.yaml#/getList"
+      $ref: './v3/message/api.yaml#/getList'
   /api/v3/messages/{messageId}:
     get:
       summary: get a message
       tags:
         - Message
-      $ref: "./v3/message/api.yaml#/get"
+      $ref: './v3/message/api.yaml#/get'
     put:
       summary: update a message
       tags:
         - Message
-      $ref: "./v3/message/api.yaml#/update"
+      $ref: './v3/message/api.yaml#/update'
     delete:
       summary: delete a message
       tags:
         - Message
-      $ref: "./v3/message/api.yaml#/delete"
+      $ref: './v3/message/api.yaml#/delete'
   /api/v3/messages/:messageId/flag:
     post:
       summary: flag a message
       tags:
         - Message
-      $ref: "./v3/message/api.yaml#/flag"
+      $ref: './v3/message/api.yaml#/flag'
   /api/v3/messages/:messageId/unflag:
     delete:
       summary: unflag a message
       tags:
         - Message
-      $ref: "./v3/message/api.yaml#/unflag"
+      $ref: './v3/message/api.yaml#/unflag'
   /api/v3/messages/:messageId/clearFlags:
     delete:
       summary: clear flags
       tags:
         - Message
-      $ref: "./v3/message/api.yaml#/clearflag"
+      $ref: './v3/message/api.yaml#/clearflag'
   /api/v3/messages/{messageId}/isFlaggedByMe:
     get:
       summary: is message flag by me
       tags:
         - Message
-      $ref: "./v3/message/api.yaml#/isflagbyme"
+      $ref: './v3/message/api.yaml#/isflagbyme'
   /sockets/message.create:
     post:
       summary: create a message in a given channel
       tags:
         - Message
-      $ref: "./v1/message/socket.yaml#/create"
+      $ref: './v1/message/socket.yaml#/create'
   /sockets/message.update:
     post:
       summary: update a message information (only creator)
       tags:
         - Message
-      $ref: "./v1/message/socket.yaml#/update"
+      $ref: './v1/message/socket.yaml#/update'
   /sockets/message.updateData:
     post:
       summary: update a message data (only creator)
       tags:
         - Message
-      $ref: "./v1/message/socket.yaml#/updateData"
+      $ref: './v1/message/socket.yaml#/updateData'
   /sockets/message.updateTag:
     post:
       summary: update a message tag by anyone
       tags:
         - Message
-      $ref: "./v1/message/socket.yaml#/updateTag"
+      $ref: './v1/message/socket.yaml#/updateTag'
   /sockets/message.flag:
     post:
       summary: Flag a message.
       tags:
         - Message
-      $ref: "./v1/message/socket.yaml#/flag"
+      $ref: './v1/message/socket.yaml#/flag'
   /sockets/message.get:
     get:
       summary: Get messages.
       tags:
         - Message
-      $ref: "./v1/message/socket.yaml#/get"
+      $ref: './v1/message/socket.yaml#/get'
   /sockets/message.unflag:
     post:
       summary: Unflag a message
       tags:
         - Message
-      $ref: "./v1/message/socket.yaml#/unflag"
+      $ref: './v1/message/socket.yaml#/unflag'
   /sockets/message.query:
     post:
       summary: Query messages.
       tags:
         - Message
-      $ref: "./v1/message/socket.yaml#/query"
+      $ref: './v1/message/socket.yaml#/query'
   /sockets/message.isFlagByMe:
     post:
       summary: Check whether user flag a given message.
       tags:
         - Message
-      $ref: "./v1/message/socket.yaml#/isFlagByMe"
+      $ref: './v1/message/socket.yaml#/isFlagByMe'
   /sockets/v3/message.query:
     post:
       summary: query messages
       tags:
         - Message
-      $ref: "./v3/message/socket.yaml#/query"
+      $ref: './v3/message/socket.yaml#/query'
   /sockets/v3/message.create:
     post:
       summary: create a message
       tags:
         - Message
-      $ref: "./v3/message/socket.yaml#/create"
+      $ref: './v3/message/socket.yaml#/create'
   /sockets/v3/message.getList:
     post:
       summary: get list of messages
       tags:
         - Message
-      $ref: "./v3/message/socket.yaml#/getList"
+      $ref: './v3/message/socket.yaml#/getList'
   /sockets/v3/message.get:
     post:
       summary: get a message
       tags:
         - Message
-      $ref: "./v3/message/socket.yaml#/get"
+      $ref: './v3/message/socket.yaml#/get'
   /sockets/v3/message.update:
     post:
       summary: update a message
       tags:
         - Message
-      $ref: "./v3/message/socket.yaml#/update"
+      $ref: './v3/message/socket.yaml#/update'
   /sockets/v3/message.delete:
     post:
       summary: delete a message
       tags:
         - Message
-      $ref: "./v3/message/socket.yaml#/delete"
+      $ref: './v3/message/socket.yaml#/delete'
   /sockets/v3/message.flag:
     post:
       summary: flag a message
       tags:
         - Message
-      $ref: "./v3/message/socket.yaml#/flag"
+      $ref: './v3/message/socket.yaml#/flag'
   /sockets/v3/message.unflag:
     post:
       summary: unflag a message
       tags:
         - Message
-      $ref: "./v3/message/socket.yaml#/unflag"
+      $ref: './v3/message/socket.yaml#/unflag'
   /sockets/v3/message.clearFlags:
     post:
       summary: clear flags
       tags:
         - Message
-      $ref: "./v3/message/socket.yaml#/clearflag"
+      $ref: './v3/message/socket.yaml#/clearflag'
   /sockets/v3/message.isFlaggedByMe:
     post:
       summary: is message flag by me
       tags:
         - Message
-      $ref: "./v3/message/socket.yaml#/isflagbyme"
+      $ref: './v3/message/socket.yaml#/isflagbyme'
   /callbacks/message.didCreate:
     get:
       tags:
         - Message
       security:
         - SocketAuth: []
-      $ref: "./v1/message/callback.yaml#/didCreate"
+      $ref: './v1/message/callback.yaml#/didCreate'
   /callbacks/message.didUpdate:
     get:
       tags:
         - Message
       security:
         - SocketAuth: []
-      $ref: "./v1/message/callback.yaml#/didUpdate"
+      $ref: './v1/message/callback.yaml#/didUpdate'
   /callbacks/message.didDelete:
     get:
       tags:
         - Message
       security:
         - SocketAuth: []
-      $ref: "./v1/message/callback.yaml#/didDelete"
+      $ref: './v1/message/callback.yaml#/didDelete'
   /callbacks/v3.message.didCreate:
     get:
       tags:
         - Message
-      $ref: "./v3/message/event.yaml#didCreate"
+      $ref: './v3/message/event.yaml#didCreate'
   /callbacks/v3.message.didUpdate:
     get:
       tags:
         - Message
-      $ref: "./v3/message/event.yaml#didUpdate"
+      $ref: './v3/message/event.yaml#didUpdate'
   /callbacks/v3.message.didDelete:
     get:
       tags:
         - Message
-      $ref: "./v3/message/event.yaml#didDelete"
+      $ref: './v3/message/event.yaml#didDelete'
 
   #Notification
   /v1/notification:
@@ -1791,12 +1791,12 @@ paths:
                 - token
                 - userId
       responses:
-        "200000":
-          $ref: "#/components/responses/SuccessResponse"
-        "400000":
-          $ref: "#/components/responses/BadRequestError"
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
+        '200000':
+          $ref: '#/components/responses/SuccessResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
     delete:
       summary: unregister a device from a notification service provider
       tags:
@@ -1821,44 +1821,44 @@ paths:
               required:
                 - deviceId
       responses:
-        "200000":
-          $ref: "#/components/responses/SuccessResponse"
-        "400000":
-          $ref: "#/components/responses/BadRequestError"
+        '200000':
+          $ref: '#/components/responses/SuccessResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
   /admin/v1/notification/setting:
     post:
       summary: Save push notification setting.
       tags:
         - Notification
-      $ref: "./v1/notification/api.yaml#save"
+      $ref: './v1/notification/api.yaml#save'
     get:
       summary: Get push notification setting.
       tags:
         - Notification
-      $ref: "./v1/notification/api.yaml#get"
+      $ref: './v1/notification/api.yaml#get'
   /api/v3/notification/setting:
     get:
       summary: Get push notification setting.
       tags:
         - Notification
-      $ref: "./v3/notification/api.yaml#getSetting"
+      $ref: './v3/notification/api.yaml#getSetting'  
     post:
       summary: Save push notification setting.
       tags:
         - Notification
-      $ref: "./v3/notification/api.yaml#saveSetting"
+      $ref: './v3/notification/api.yaml#saveSetting' 
   /sockets/notification.getSetting:
     post:
       summary: Get push notification setting.
       tags:
         - Notification
-      $ref: "./v1/notification/socket.yaml#get"
+      $ref: './v1/notification/socket.yaml#get'
   /sockets/notification.saveSetting:
     post:
       summary: Save push notification setting.
       tags:
         - Notification
-      $ref: "./v1/notification/socket.yaml#save"
+      $ref: './v1/notification/socket.yaml#save'
 
   #Reaction
   /api/v2/reactions:
@@ -1866,48 +1866,48 @@ paths:
       summary: get list of reactions.
       tags:
         - Reaction
-      $ref: "./v2/reaction/api.yaml#/query"
+      $ref: './v2/reaction/api.yaml#/query'
     post:
       summary: add reaction to any document.
       tags:
         - Reaction
-      $ref: "./v2/reaction/api.yaml#/create"
+      $ref: './v2/reaction/api.yaml#/create'
     delete:
       summary: remove reaction from any document.
       tags:
         - Reaction
-      $ref: "./v2/reaction/api.yaml#/delete"
+      $ref: './v2/reaction/api.yaml#/delete'
   /api/v3/reactions:
     get:
       summary: get list of reactions.
       tags:
         - Reaction
-      $ref: "./v3/reaction/api.yaml#/query"
+      $ref: './v3/reaction/api.yaml#/query'
   /sockets/v3/reaction.query:
     post:
       summary: get list of reactions.
       tags:
         - Reaction
-      $ref: "./v3/reaction/socket.yaml#query"
+      $ref: './v3/reaction/socket.yaml#query'
   /sockets/reaction.add:
     post:
       summary: Add reaction to any document.
       tags:
         - Reaction
-      $ref: "./v1/reaction/socket.yaml#create"
+      $ref: './v1/reaction/socket.yaml#create'
   /sockets/reaction.query:
     post:
       summary: Get list of reactions.
       tags:
         - Reaction
-      $ref: "./v1/reaction/socket.yaml#query"
+      $ref: './v1/reaction/socket.yaml#query'
   /sockets/reaction.remove:
     post:
       summary: Remove reaction from any document.
       tags:
         - Reaction
-      $ref: "./v1/reaction/socket.yaml#delete"
-
+      $ref: './v1/reaction/socket.yaml#delete'
+  
   #Network
   /admin/v1/network/{networkId}:
     get:
@@ -1931,10 +1931,10 @@ paths:
           schema:
             type: string
       responses:
-        "200000":
-          $ref: "#/components/responses/NetworkResponse"
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
+        '200000':
+          $ref: '#/components/responses/NetworkResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
     put:
       summary: Save network
       tags:
@@ -1980,38 +1980,38 @@ paths:
                 - defaultMessageAutoDeleteEnabled
                 - defaultAutoDeleteMessageByFlagLimit
       responses:
-        "200000":
-          $ref: "#/components/responses/NetworkResponse"
-        "400400":
-          $ref: "#/components/responses/NotFoundError"
+        '200000':
+          $ref: '#/components/responses/NetworkResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
   /api/v3/networks/server-key:
     get:
       summary: Get server key last issued data
       tags:
         - Network
-      $ref: "./v3/network/api.yaml#/getServerKeyLastUpdated"
+      $ref: './v3/network/api.yaml#/getServerKeyLastUpdated'
     post:
       summary: Issue new server key
       tags:
         - Network
-      $ref: "./v3/network/api.yaml#/issueServerKey"
+      $ref: './v3/network/api.yaml#/issueServerKey'
   /api/v3/networks:
     post:
       summary: Create network with tier
       tags:
         - Network
-      $ref: "./v3/network/api.yaml#/create"
+      $ref: './v3/network/api.yaml#/create'
   /api/v3/networks/me:
     get:
       summary: Get self network info
       tags:
         - Network
-      $ref: "./v3/network/api.yaml#/getSelfNetwork"
+      $ref: './v3/network/api.yaml#/getSelfNetwork'
     put:
       summary: Update self network info
       tags:
         - Network
-      $ref: "./v3/network/api.yaml#/updateSelfNetwork"
+      $ref: './v3/network/api.yaml#/updateSelfNetwork'
 
   #Post
   /api/v3/posts:
@@ -2019,142 +2019,142 @@ paths:
       summary: query posts
       tags:
         - Post
-      $ref: "./v3/post/api.yaml#query"
+      $ref: './v3/post/api.yaml#query'
     post:
       summary: create a post
       tags:
         - Post
-      $ref: "./v3/post/api.yaml#/create"
+      $ref: './v3/post/api.yaml#/create'
   /api/v3/posts/{postId}:
     get:
       summary: get a post by ID
       tags:
         - Post
-      $ref: "./v3/post/api.yaml#/get"
+      $ref: './v3/post/api.yaml#/get'
     put:
       summary: update a post
       tags:
         - Post
-      $ref: "./v3/post/api.yaml#/update"
+      $ref: './v3/post/api.yaml#/update'
     delete:
       summary: delete a post
       tags:
         - Post
-      $ref: "./v3/post/api.yaml#/delete"
+      $ref: './v3/post/api.yaml#/delete'
   /api/v3/posts/{postId}/approve:
     post:
       summary: Approve reviewing post
       tags:
         - Post
-      $ref: "./v3/post/api.yaml#/approve"
+      $ref: './v3/post/api.yaml#/approve'
   /api/v3/posts/{postId}/decline:
     post:
       summary: Decline reviewing post
       tags:
         - Post
-      $ref: "./v3/post/api.yaml#/decline"
+      $ref: './v3/post/api.yaml#/decline'
   /api/v3/posts/{postId}/flag:
     post:
       summary: flag a post.
       tags:
         - Post
-      $ref: "./v3/post/api.yaml#/flag"
+      $ref: './v3/post/api.yaml#/flag'
   /api/v3/posts/{postId}/isflagbyme:
     get:
       summary: Check whether user flag a given post.
       tags:
         - Post
-      $ref: "./v3/post/api.yaml#/isflagbyme"
+      $ref: './v3/post/api.yaml#/isflagbyme'
   /api/v3/posts/:postId/unflag:
     delete:
       summary: unflag a post.
       tags:
         - Post
-      $ref: "./v3/post/api.yaml#/unflag"
+      $ref: './v3/post/api.yaml#/unflag'
   /api/v3/posts/list:
     get:
       summary: get list of post
       tags:
         - Post
-      $ref: "./v3/post/api.yaml#/getList"
+      $ref: './v3/post/api.yaml#/getList'
   /api/v3/posts/:postId/flags:
     delete:
       summary: clear flags
       tags:
         - Post
-      $ref: "./v3/post/api.yaml#clearflag"
+      $ref: './v3/post/api.yaml#clearflag'
   /sockets/v3/post.create:
     post:
       summary: create a post
       tags:
         - Post
-      $ref: "./v3/post/socket.yaml#create"
+      $ref: './v3/post/socket.yaml#create'
   /sockets/v3/post.update:
     post:
       summary: update a post
       tags:
         - Post
-      $ref: "./v3/post/socket.yaml#update"
+      $ref: './v3/post/socket.yaml#update'
   /sockets/v3/post.delete:
     post:
       summary: delete a post
       tags:
         - Post
-      $ref: "./v3/post/socket.yaml#delete"
+      $ref: './v3/post/socket.yaml#delete'
   /sockets/v3/post.get:
     post:
       summary: get a post by ID
       tags:
         - Post
-      $ref: "./v3/post/socket.yaml#get"
+      $ref: './v3/post/socket.yaml#get'
   /sockets/v3/post.flag:
     post:
       summary: flag a post.
       tags:
         - Post
-      $ref: "./v3/post/socket.yaml#flag"
+      $ref: './v3/post/socket.yaml#flag'
   /sockets/v3/post.unflag:
     post:
       summary: unflag a post.
       tags:
         - Post
-      $ref: "./v3/post/socket.yaml#unflag"
+      $ref: './v3/post/socket.yaml#unflag'
   /sockets/v3/post.isflagbyme:
     post:
       summary: Check whether user flag a given post.
       tags:
         - Post
-      $ref: "./v3/post/socket.yaml#isflagbyme"
+      $ref: './v3/post/socket.yaml#isflagbyme'
   /sockets/v3/post.getList:
     post:
       summary: get list of post
       tags:
         - Post
-      $ref: "./v3/post/socket.yaml#getList"
+      $ref: './v3/post/socket.yaml#getList'
   /sockets/v3/post.clearFlags:
     post:
       summary: clear flags
       tags:
         - Post
-      $ref: "./v3/post/socket.yaml#clearflag"
+      $ref: './v3/post/socket.yaml#clearflag'
   /sockets/v3/post.query:
     post:
       summary: query posts
       tags:
         - Post
-      $ref: "./v3/post/socket.yaml#query"
+      $ref: './v3/post/socket.yaml#query'
   /sockets/v3/post.approve:
     post:
       summary: Approve reviewing post
       tags:
         - Post
-      $ref: "./v3/post/socket.yaml#clearflag"
+      $ref: './v3/post/socket.yaml#clearflag'
   /sockets/v3/post.decline:
     post:
       summary: Decline reviewing post
       tags:
         - Post
-      $ref: "./v3/post/socket.yaml#query"
+      $ref: './v3/post/socket.yaml#query'
 
   #Postv4
   /api/v4/posts:
@@ -2162,47 +2162,47 @@ paths:
       summary: create a post
       tags:
         - Post v4
-      $ref: "./v4/post/api.yaml#/create"
+      $ref: './v4/post/api.yaml#/create'
     get:
       summary: query a post
       tags:
         - Post v4
-      $ref: "./v4/post/api.yaml#/query"
+      $ref: './v4/post/api.yaml#/query'
   /api/v4/posts/:postId:
     put:
       summary: update a post
       tags:
         - Post v4
-      $ref: "./v4/post/api.yaml#/update"
+      $ref: './v4/post/api.yaml#/update'
     delete:
       summary: delete a post
       tags:
         - Post v4
-      $ref: "./v4/post/api.yaml#/delete"
+      $ref: './v4/post/api.yaml#/delete'
   /sockets/v4/post.query:
     post:
       summary: query a post
       tags:
         - Post v4
-      $ref: "./v4/post/socket.yaml#query"
+      $ref: './v4/post/socket.yaml#query'
   /sockets/v4/post.create:
     post:
       summary: create a post
       tags:
         - Post v4
-      $ref: "./v4/post/socket.yaml#create"
+      $ref: './v4/post/socket.yaml#create'
   /sockets/v4/post.update:
     post:
       summary: update a post
       tags:
         - Post v4
-      $ref: "./v4/post/socket.yaml#update"
+      $ref: './v4/post/socket.yaml#update'
   /sockets/v4/post.delete:
     post:
       summary: delete a post
       tags:
         - Post v4
-      $ref: "./v4/post/socket.yaml#delete"
+      $ref: './v4/post/socket.yaml#delete'
 
   #Pollv3
   /api/v3/polls:
@@ -2210,97 +2210,97 @@ paths:
       summary: create a poll
       tags:
         - Poll v3
-      $ref: "./v3/poll/api.yaml#/create"
+      $ref: './v3/poll/api.yaml#/create'
   /api/v3/polls/{pollId}:
     put:
       summary: update status poll
       tags:
         - Poll v3
-      $ref: "./v3/poll/api.yaml#/update"
+      $ref: './v3/poll/api.yaml#/update'
     get:
       summary: get poll
       tags:
         - Poll v3
-      $ref: "./v3/poll/api.yaml#/get"
+      $ref: './v3/poll/api.yaml#/get'
     delete:
       summary: delete poll
       tags:
         - Poll v3
-      $ref: "./v3/poll/api.yaml#/delete"
+      $ref: './v3/poll/api.yaml#/delete'
   /api/v3/polls/{pollId}/votes:
     post:
       summary: vote poll
       tags:
         - Poll v3
-      $ref: "./v3/poll/api.yaml#/vote"
+      $ref: './v3/poll/api.yaml#/vote'
   /api/v3/polls/{pollId}/answers/{answerId}:
     get:
       summary: List users who vote the poll with specific answer
       tags:
         - Poll v3
-      $ref: "./v3/poll/api.yaml#/getUsersAnswered"
+      $ref: './v3/poll/api.yaml#/getUsersAnswered'
   /sockets/v3/poll.create:
     post:
       summary: create a poll
       tags:
         - Poll v3
-      $ref: "./v3/poll/socket.yaml#/create"
+      $ref: './v3/poll/socket.yaml#/create'
   /sockets/v3/poll.update:
     post:
       summary: update status poll
       tags:
         - Poll v3
-      $ref: "./v3/poll/socket.yaml#/update"
+      $ref: './v3/poll/socket.yaml#/update'
   /sockets/v3/poll.delete:
     post:
       summary: delete poll
       tags:
         - Poll v3
-      $ref: "./v3/poll/socket.yaml#/delete"
+      $ref: './v3/poll/socket.yaml#/delete'
   /sockets/v3/poll.vote:
     post:
       summary: vote poll
       tags:
         - Poll v3
-      $ref: "./v3/poll/socket.yaml#/vote"
+      $ref: './v3/poll/socket.yaml#/vote'
   /sockets/v3/poll.get:
     post:
       summary: get poll
       tags:
         - Poll v3
-      $ref: "./v3/poll/socket.yaml#/get"
+      $ref: './v3/poll/socket.yaml#/get'
   /sockets/v3/poll.getList:
     post:
       summary: List users who vote the poll with specific answer
       tags:
         - Poll v3
-      $ref: "./v3/poll/socket.yaml#/getUsersAnswered"
-
+      $ref: './v3/poll/socket.yaml#/getUsersAnswered'
+  
   #UserFeed
   /api/v3/user-feeds/{userId}:
     get:
       summary: Get list of posts.
       tags:
         - UserFeed
-      $ref: "./v3/user-feed/api.yaml#get"
+      $ref: './v3/user-feed/api.yaml#get'
   /api/v3/user-feeds/{userId}/count:
     get:
       summary: Get number of post.
       tags:
         - UserFeed
-      $ref: "./v3/user-feed/api.yaml#count"
+      $ref: './v3/user-feed/api.yaml#count'
   /sockets/v3/user-feed.query:
     post:
       summary: Get list of posts.
       tags:
         - UserFeed
-      $ref: "./v3/user-feed/socket.yaml#post"
+      $ref: './v3/user-feed/socket.yaml#post'
   /sockets/v3/user-feed.count:
     post:
       summary: Get number of post.
       tags:
         - UserFeed
-      $ref: "./v3/user-feed/socket.yaml#count"
+      $ref: './v3/user-feed/socket.yaml#count'
 
   #Community Feed
   /api/v3/community-feeds/{communityId}:
@@ -2308,27 +2308,27 @@ paths:
       summary: Get list of posts.
       tags:
         - CommunityFeed
-      $ref: "./v3/community-feed/api.yaml#get"
+      $ref: './v3/community-feed/api.yaml#get'
   /sockets/v3/community-feed.query:
     post:
       summary: Get list of posts.
       tags:
         - CommunityFeed
-      $ref: "./v3/community-feed/socket.yaml#post"
+      $ref: './v3/community-feed/socket.yaml#post'
 
-    #Global Feed
+  #Global Feed
     /api/v3/global-feeds:
     get:
       summary: Get global feed.
       tags:
         - GlobalFeed
-      $ref: "./v3/global-feed/api.yaml#get"
+      $ref: './v3/global-feed/api.yaml#get'
   /sockets/v3/global-feed.query:
     post:
       summary: Get global feed.
       tags:
         - GlobalFeed
-      $ref: "./v3/global-feed/socket.yaml#post"
+      $ref: './v3/global-feed/socket.yaml#post'
 
   #Comment
   /api/v3/comments:
@@ -2336,118 +2336,118 @@ paths:
       summary: query comments (pagination support).
       tags:
         - Comment
-      $ref: "./v3/comment/api.yaml#/query"
+      $ref: './v3/comment/api.yaml#/query'
     post:
       summary: create a comment.
       tags:
         - Comment
-      $ref: "./v3/comment/api.yaml#/create"
+      $ref: './v3/comment/api.yaml#/create'
   /api/v3/comments/{commentId}:
     get:
       summary: get a comment.
       tags:
         - Comment
-      $ref: "./v3/comment/api.yaml#/get"
+      $ref: './v3/comment/api.yaml#/get'
     put:
       summary: update a comment.
       tags:
         - Comment
-      $ref: "./v3/comment/api.yaml#/update"
+      $ref: './v3/comment/api.yaml#/update'
     delete:
       summary: delete a comment.
       tags:
         - Comment
-      $ref: "./v3/comment/api.yaml#/delete"
+      $ref: './v3/comment/api.yaml#/delete'
   /api/v3/comments/{commentId}/flag:
     post:
       summary: flag a comment.
       tags:
         - Comment
-      $ref: "./v3/comment/api.yaml#/flag"
+      $ref: './v3/comment/api.yaml#/flag'
   /api/v3/comments/{commentId}/isflagbyme:
     get:
       summary: Check whether user flag a given comment.
       tags:
         - Comment
-      $ref: "./v3/comment/api.yaml#/isflagbyme"
+      $ref: './v3/comment/api.yaml#/isflagbyme'
   /api/v3/comments/:commentId/unflag:
     delete:
       summary: unflag a comment.
       tags:
         - Comment
-      $ref: "./v3/comment/api.yaml#/unflag"
+      $ref: './v3/comment/api.yaml#/unflag'
   /api/v3/comments/list:
     get:
       summary: get comments by IDs.
       tags:
         - Comment
-      $ref: "./v3/comment/api.yaml#/getList"
+      $ref: './v3/comment/api.yaml#/getList'
   /api/v3/comments/{commentId}/flags:
     delete:
       summary: clear flags.
       tags:
         - Comment
-      $ref: "./v3/comment/api.yaml#/clearflag"
+      $ref: './v3/comment/api.yaml#/clearflag'
   /sockets/v3/comment.query:
     post:
       summary: query comments.
       tags:
         - Comment
-      $ref: "./v3/comment/socket.yaml#query"
+      $ref: './v3/comment/socket.yaml#query'
   /sockets/v3/comment.create:
     post:
       summary: create a comment.
       tags:
         - Comment
-      $ref: "./v3/comment/socket.yaml#create"
+      $ref: './v3/comment/socket.yaml#create'
   /sockets/v3/comment.update:
     post:
       summary: update a comment.
       tags:
         - Comment
-      $ref: "./v3/comment/socket.yaml#update"
+      $ref: './v3/comment/socket.yaml#update'
   /sockets/v3/comment.delete:
     post:
       summary: delete a comment.
       tags:
         - Comment
-      $ref: "./v3/comment/socket.yaml#delete"
+      $ref: './v3/comment/socket.yaml#delete'
   /sockets/v3/comment.flag:
     post:
       summary: flag a comment.
       tags:
         - Comment
-      $ref: "./v3/comment/socket.yaml#flag"
+      $ref: './v3/comment/socket.yaml#flag'
   /sockets/v3/comment.unflag:
     post:
       summary: unflag a comment.
       tags:
         - Comment
-      $ref: "./v3/comment/socket.yaml#unflag"
+      $ref: './v3/comment/socket.yaml#unflag'
   /sockets/v3/comment.isflagbyme:
     post:
       summary: Check whether user flag a given comment.
       tags:
         - Comment
-      $ref: "./v3/comment/socket.yaml#isflagbyme"
+      $ref: './v3/comment/socket.yaml#isflagbyme'
   /sockets/v3/comment.get:
     post:
       summary: get a comment.
       tags:
         - Comment
-      $ref: "./v3/comment/socket.yaml#get"
+      $ref: './v3/comment/socket.yaml#get'
   /sockets/v3/comment.getList:
     post:
       summary: get comments by IDs.
       tags:
         - Comment
-      $ref: "./v3/comment/socket.yaml#getList"
+      $ref: './v3/comment/socket.yaml#getList'
   /sockets/v3/comment.clearFlags:
     post:
       summary: clear flags.
       tags:
         - Comment
-      $ref: "./v3/comment/socket.yaml#clearflag"
+      $ref: './v3/comment/socket.yaml#clearflag'
 
   #Comment V4
   /api/v4/comments/{commentId}:
@@ -2455,13 +2455,13 @@ paths:
       summary: delete a comment.
       tags:
         - Comment v4
-      $ref: "./v4/comment/api.yaml#/delete"
+      $ref: './v4/comment/api.yaml#/delete'
   /sockets/v4/comment.delete:
     post:
       summary: delete a comment.
       tags:
         - Comment v4
-      $ref: "./v4/comment/socket.yaml#delete"
+      $ref: './v4/comment/socket.yaml#delete'
   /sockets/moderation-setting.get:
     post:
       summary: get a moderation setting
@@ -2489,12 +2489,12 @@ paths:
       description: >
         Get a moderation setting.
       responses:
-        "200000":
-          $ref: "#/components/responses/ModerationSettingResponse"
-        "400000":
-          $ref: "#/components/responses/BadRequestError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '200000':
+          $ref: '#/components/responses/ModerationSettingResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
   /sockets/moderation-setting.update:
     post:
       summary: update a moderation setting
@@ -2564,12 +2564,12 @@ paths:
                       type: number
                       minimum: 0
       responses:
-        "200000":
+        '200000':
           description: Success
-        "400000":
-          $ref: "#/components/responses/BadRequestError"
-        "500000":
-          $ref: "#/components/responses/UnexpectedError"
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
 
   #File
   /api/v3/files:
@@ -2577,36 +2577,36 @@ paths:
       summary: Upload file.
       tags:
         - File
-      $ref: "./v3/file/api.yaml#upload"
+      $ref: './v3/file/api.yaml#upload'
   /api/v3/files/{fileId}:
     get:
       summary: Get file info
       tags:
         - File
-      $ref: "./v3/file/api.yaml#get"
+      $ref: './v3/file/api.yaml#get'
     delete:
       summary: Delete file
       tags:
         - File
-      $ref: "./v3/file/api.yaml#delete"
+      $ref: './v3/file/api.yaml#delete'
   /api/v3/files/{fileId}/download:
     get:
       summary: Get file
       tags:
         - File
-      $ref: "./v3/file/api.yaml#download"
+      $ref: './v3/file/api.yaml#download'
   /sockets/v3/file.get:
     post:
       summary: Get file info
       tags:
         - File
-      $ref: "./v3/file/socket.yaml#get"
+      $ref: './v3/file/socket.yaml#get'
   /sockets/v3/file.delete:
     post:
       summary: Delete file
       tags:
         - File
-      $ref: "./v3/file/socket.yaml#delete"
+      $ref: './v3/file/socket.yaml#delete'
 
   #File v4
   /api/v4/images:
@@ -2614,19 +2614,19 @@ paths:
       summary: Upload image file.
       tags:
         - File
-      $ref: "./v4/file/api.yaml#uploadImage"
+      $ref: './v4/file/api.yaml#uploadImage'
   /api/v4/files:
     post:
       summary: Upload file.
       tags:
         - File
-      $ref: "./v4/file/api.yaml#uploadFile"
+      $ref: './v4/file/api.yaml#uploadFile'
   /api/v4/videos:
     post:
       summary: Upload video file.
       tags:
         - File
-      $ref: "./v4/file/api.yaml#uploadVideo"
+      $ref: './v4/file/api.yaml#uploadVideo'
 
   #Community
   /api/v3/communities:
@@ -2634,234 +2634,234 @@ paths:
       summary: query communities.
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/get"
+      $ref: './v3/community/api.yaml#/get'
     post:
       summary: create a community.
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/create"
+      $ref: './v3/community/api.yaml#/create'
   /api/v3/communities/{communityId}:
     get:
       summary: get a community by ID.
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/getOne"
+      $ref: './v3/community/api.yaml#/getOne'
     put:
       summary: update a community.
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/update"
+      $ref: './v3/community/api.yaml#/update'
     delete:
       summary: delete a community.
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/delete"
+      $ref: './v3/community/api.yaml#/delete'
   /api/v3/communities/:communityId/join:
     post:
       summary: Join a community
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/join"
+      $ref: './v3/community/api.yaml#/join'
   /api/v3/communities/:communityId/leave:
     delete:
       summary: Leave a community.
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/leave"
+      $ref: './v3/community/api.yaml#/leave'
   /api/v3/communities/{communityId}/users:
     get:
       summary: query community users
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/getUsers"
+      $ref: './v3/community/api.yaml#/getUsers'
     post:
       summary: add community users
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/addUsers"
+      $ref: './v3/community/api.yaml#/addUsers'
     delete:
       summary: remove community users
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/removeUsers"
+      $ref: './v3/community/api.yaml#/removeUsers'
   /api/v3/communities/:communityId/users/ban:
     put:
       summary: ban community users
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/ban"
+      $ref: './v3/community/api.yaml#/ban'
   /api/v3/communities/:communityId/users/unban:
     put:
       summary: unban community users
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/unban"
+      $ref: './v3/community/api.yaml#/unban'
   /api/v3/communities/:communityId/users/roles:
     post:
       summary: Add role to community users
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/addRole"
+      $ref: './v3/community/api.yaml#/addRole'
     delete:
       summary: Remove role from community users
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/removeRole"
+      $ref: './v3/community/api.yaml#/removeRole'
   /api/v3/communities/{communityId}/permissions/me:
     get:
       summary: Get self permission in community
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/getSelfPermission"
+      $ref: './v3/community/api.yaml#/getSelfPermission'
   /api/v3/communities/list:
     get:
       summary: get list of community
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/getList"
+      $ref: './v3/community/api.yaml#/getList'
   /api/v3/communities/recommended:
     get:
       summary: get list of recommended community
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/getRecommendedList"
+      $ref: './v3/community/api.yaml#/getRecommendedList'
   /api/v3/communities/top-trending:
     get:
       summary: get list of top trend community
       tags:
         - Community
-      $ref: "./v3/community/api.yaml#/getTopTrendingList"
+      $ref: './v3/community/api.yaml#/getTopTrendingList'
   /api/v4/communities/:communityId/users/roles:
     post:
       summary: Add roles to community users
       tags:
         - Community
-      $ref: "./v4/community/api.yaml#/addRoles"
+      $ref: './v4/community/api.yaml#/addRoles'
     delete:
       summary: Remove roles from community users
       tags:
         - Community
-      $ref: "./v4/community/api.yaml#/removeRoles"
+      $ref: './v4/community/api.yaml#/removeRoles'
   /sockets/v3/community.query:
     post:
       summary: query communities.
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/query"
+      $ref: './v3/community/socket.yaml#/query'
   /sockets/v3/community.create:
     post:
       summary: create a community.
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/create"
+      $ref: './v3/community/socket.yaml#/create'
   /sockets/v3/community.update:
     post:
       summary: update a community.
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/update"
+      $ref: './v3/community/socket.yaml#/update'
   /sockets/v3/community.delete:
     post:
       summary: delete a community.
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/delete"
+      $ref: './v3/community/socket.yaml#/delete'
   /sockets/v3/community.get:
     post:
       summary: get a community by ID.
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/get"
+      $ref: './v3/community/socket.yaml#/get'
   /sockets/v3/community.join:
     post:
       summary: Join community by id
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/join"
+      $ref: './v3/community/socket.yaml#/join'
   /sockets/v3/community.leave:
     post:
       summary: Leave community by id
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/leave"
+      $ref: './v3/community/socket.yaml#/leave'
   /sockets/v3/community.queryUsers:
     post:
       summary: query community users
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/queryUsers"
+      $ref: './v3/community/socket.yaml#/queryUsers'
   /sockets/v3/community.banUsers:
     post:
       summary: ban community users
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/banUsers"
+      $ref: './v3/community/socket.yaml#/banUsers'
   /sockets/v3/community.unbanUsers:
     post:
       summary: unban community users
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/unbanUsers"
+      $ref: './v3/community/socket.yaml#/unbanUsers'
   /sockets/v3/community.getList:
     post:
       summary: get list of community
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/getList"
+      $ref: './v3/community/socket.yaml#/getList'
   /sockets/v3/community.getRecommendedList:
     post:
       summary: get list of recommended community
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/getRecommendedList"
+      $ref: './v3/community/socket.yaml#/getRecommendedList'
   /sockets/v3/community.getTopTrendingList:
     post:
       summary: get list of top trend community
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/getTopTrendingList"
+      $ref: './v3/community/socket.yaml#/getTopTrendingList'
   /sockets/v3/community.addUsers:
     post:
       summary: add community users
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/addUsers"
+      $ref: './v3/community/socket.yaml#/addUsers'
   /sockets/v3/community.removeUsers:
     post:
       summary: remove community users
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/removeUsers"
+      $ref: './v3/community/socket.yaml#/removeUsers'
   /sockets/v3/community.assignRoleToUsers:
     post:
       summary: Add role to community users
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/addRole"
+      $ref: './v3/community/socket.yaml#/addRole'
   /sockets/v3/community.removeRoleFromUsers:
     post:
       summary: Remove role from community users
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/removeRole"
+      $ref: './v3/community/socket.yaml#/removeRole'
   /sockets/v3/community.getSelfPermission:
     post:
       summary: Get self permission in community
       tags:
         - Community
-      $ref: "./v3/community/socket.yaml#/getSelfPermission"
+      $ref: './v3/community/socket.yaml#/getSelfPermission'
   /sockets/v4/community.assignRolesToUsers:
     post:
       summary: Add roles to community users
       tags:
         - Community
-      $ref: "./v4/community/socket.yaml#/addRoles"
+      $ref: './v4/community/socket.yaml#/addRoles'
   /sockets/v4/community.removeRolesFromUsers:
     post:
       summary: Remove roles from community users
       tags:
         - Community
-      $ref: "./v4/community/socket.yaml#/removeRoles"
+      $ref: './v4/community/socket.yaml#/removeRoles'
 
   #Community Category
   /api/v3/community-categories:
@@ -2869,52 +2869,52 @@ paths:
       summary: query community categories.
       tags:
         - CommunityCategory
-      $ref: "./v3/community-category/api.yaml#/query"
+      $ref: './v3/community-category/api.yaml#/query'
     post:
       summary: create a community categories.
       tags:
         - CommunityCategory
-      $ref: "./v3/community-category/api.yaml#/post"
+      $ref: './v3/community-category/api.yaml#/post'
   /api/v3/community-categories/{categoryId}:
     get:
       summary: get a community category.
       tags:
         - CommunityCategory
-      $ref: "./v3/community-category/api.yaml#/get"
+      $ref: './v3/community-category/api.yaml#/get'
     put:
       summary: update a community categories.
       tags:
         - CommunityCategory
-      $ref: "./v3/community-category/api.yaml#/put"
+      $ref: './v3/community-category/api.yaml#/put'
     delete:
       summary: delete a community category.
       tags:
         - CommunityCategory
-      $ref: "./v3/community-category/api.yaml#/delete"
+      $ref: './v3/community-category/api.yaml#/delete'
   /api/v3/community-categories/list:
     get:
       summary: get list of community category.
       tags:
         - CommunityCategory
-      $ref: "./v3/community-category/api.yaml#/getList"
+      $ref: './v3/community-category/api.yaml#/getList'
   /sockets/v3/community-category.query:
     post:
       summary: query community categories.
       tags:
         - CommunityCategory
-      $ref: "./v3/community-category/socket.yaml#/query"
+      $ref: './v3/community-category/socket.yaml#/query'
   /sockets/v3/community-category.get:
     post:
       summary: get a community category.
       tags:
         - CommunityCategory
-      $ref: "./v3/community-category/socket.yaml#/get"
+      $ref: './v3/community-category/socket.yaml#/get'
   /sockets/v3/community-category.getList:
     post:
       summary: get list of community category.
       tags:
         - CommunityCategory
-      $ref: "./v3/community-category/socket.yaml#/getList"
+      $ref: './v3/community-category/socket.yaml#/getList'
 
   #Content Feed
   /api/v3/content-feeds:
@@ -2922,13 +2922,13 @@ paths:
       summary: Get list of contents.
       tags:
         - ContentFeed
-      $ref: "./v3/content-feed/api.yaml#query"
+      $ref: './v3/content-feed/api.yaml#query'
   /sockets/v3/content-feed.query:
     post:
       summary: Get list of contents.
       tags:
         - ContentFeed
-      $ref: "./v3/content-feed/socket.yaml#query"
+      $ref: './v3/content-feed/socket.yaml#query'
 
   #Video Streaming
   /api/v3/video-streaming:
@@ -2936,85 +2936,85 @@ paths:
       summary: create video streaming
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/api.yaml#/create"
+      $ref: './v3/video-streaming/api.yaml#/create'
     get:
       summary: get list of video streaming
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/api.yaml#/query"
+      $ref: './v3/video-streaming/api.yaml#/query'
   /api/v3/video-streaming/{streamId}:
     get:
       summary: get single video-streaming item
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/api.yaml#/get"
+      $ref: './v3/video-streaming/api.yaml#/get'
     put:
       summary: update video streaming
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/api.yaml#/update"
+      $ref: './v3/video-streaming/api.yaml#/update'
     delete:
       summary: delete video streaming
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/api.yaml#/delete"
+      $ref: './v3/video-streaming/api.yaml#/delete'
   /api/v3/video-streaming/:streamId/streaming-url:
     delete:
       summary: dispose video streaming url
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/api.yaml#/dispose"
+      $ref: './v3/video-streaming/api.yaml#/dispose'
   /sockets/v3/video-streaming.create:
     post:
       summary: create video streaming
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/socket.yaml#/create"
+      $ref: './v3/video-streaming/socket.yaml#/create'
   /sockets/v3/video-streaming.update:
     post:
       summary: update video streaming
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/socket.yaml#/update"
+      $ref: './v3/video-streaming/socket.yaml#/update'
   /sockets/v3/video-streaming.delete:
     post:
       summary: delete video streaming
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/socket.yaml#/delete"
+      $ref: './v3/video-streaming/socket.yaml#/delete'
   /sockets/v3/video-streaming.query:
     post:
       summary: get list of video streaming
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/socket.yaml#/query"
+      $ref: './v3/video-streaming/socket.yaml#/query'
   /sockets/v3/video-streaming.get:
     post:
       summary: get single video-streaming item
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/socket.yaml#/get"
+      $ref: './v3/video-streaming/socket.yaml#/get'
   /sockets/v3/video-streaming.dispose:
     post:
       summary: dispose video streaming
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/socket.yaml#/dispose"
+      $ref: './v3/video-streaming/socket.yaml#/dispose'
   /callbacks/video-streaming.didStart:
     get:
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/event.yaml#didStart"
+      $ref: './v3/video-streaming/event.yaml#didStart'
   /callbacks/video-streaming.didStop:
     get:
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/event.yaml#didStop"
+      $ref: './v3/video-streaming/event.yaml#didStop'
   /callbacks/video-streaming.didRecord:
     get:
       tags:
         - VideoStreaming
-      $ref: "./v3/video-streaming/event.yaml#didRecord"
+      $ref: './v3/video-streaming/event.yaml#didRecord'
 
   #User event
   /api/v3/user-event/video-streaming:
@@ -3022,7 +3022,7 @@ paths:
       summary: create user event for video streaming
       tags:
         - UserEvent
-      $ref: "./v3/user-event/api.yaml#/create"
+      $ref: './v3/user-event/api.yaml#/create'
 
   #Follow
   /api/v4/me/following/:userId:
@@ -3030,118 +3030,118 @@ paths:
       summary: Follow user.
       tags:
         - Follow
-      $ref: "./v4/follow/api.yaml#/follow"
+      $ref: './v4/follow/api.yaml#/follow'
     delete:
       summary: Unfollow or Cancel follow request
       tags:
         - Follow
-      $ref: "./v4/follow/api.yaml#/unfollow"
+      $ref: './v4/follow/api.yaml#/unfollow'
   /api/v4/me/followers/:userId:
     post:
       summary: Accept follow request.
       tags:
         - Follow
-      $ref: "./v4/follow/api.yaml#/accept"
+      $ref: './v4/follow/api.yaml#/accept'
     delete:
       summary: Decline follow request or delete followers.
       tags:
         - Follow
-      $ref: "./v4/follow/api.yaml#/delete"
+      $ref: './v4/follow/api.yaml#/delete'
   /api/v4/me/followers:
     get:
       summary: Get my follower list.
       tags:
         - Follow
-      $ref: "./v4/follow/api.yaml#/getMyFollowerList"
+      $ref: './v4/follow/api.yaml#/getMyFollowerList'
   /api/v4/users/{userId}/followers:
     get:
       summary: Get other follower list.
       tags:
         - Follow
-      $ref: "./v4/follow/api.yaml#/getOtherFollowerList"
+      $ref: './v4/follow/api.yaml#/getOtherFollowerList'
   /api/v4/me/following:
     get:
       summary: Get my following list
       tags:
         - Follow
-      $ref: "./v4/follow/api.yaml#/getMyFollowingList"
+      $ref: './v4/follow/api.yaml#/getMyFollowingList'
   /api/v4/users/{userId}/following:
     get:
       summary: Get other following list.
       tags:
         - Follow
-      $ref: "./v4/follow/api.yaml#/getOtherFollowingList"
+      $ref: './v4/follow/api.yaml#/getOtherFollowingList'
   /api/v4/me/followInfo:
     get:
       summary: Get my follow information.
       tags:
         - Follow
-      $ref: "./v4/follow/api.yaml#/getMyFollowInformation"
+      $ref: './v4/follow/api.yaml#/getMyFollowInformation'
   /api/v4/users/{userId}/followInfo:
     get:
       summary: Get other follow information.
       tags:
         - Follow
-      $ref: "./v4/follow/api.yaml#/getOtherFollowInformation"
+      $ref: './v4/follow/api.yaml#/getOtherFollowInformation'
   /api/v4/users/{userId}:
     delete:
       summary: Delete user
       tags:
         - User
-      $ref: "./v4/user/api.yaml#/deleteUser"
+      $ref: './v4/user/api.yaml#/deleteUser'
   /api/v4/me/flags/{userId}:
     post:
       summary: Report user (flag user)
       tags:
         - User
-      $ref: "./v4/user/api.yaml#/flagUser"
+      $ref: './v4/user/api.yaml#/flagUser'
     delete:
       summary: Unreported user (unflag user)
       tags:
         - User
-      $ref: "./v4/user/api.yaml#/unflagUser"
+      $ref: './v4/user/api.yaml#/unflagUser'
   /sockets/v4/following.create:
     post:
       summary: Follow user.
       tags:
         - Follow
-      $ref: "./v4/follow/socket.yaml#/follow"
+      $ref: './v4/follow/socket.yaml#/follow'
   /sockets/v4/following.delete:
     post:
       summary: Unfollow or Cancel follow request
       tags:
         - Follow
-      $ref: "./v4/follow/socket.yaml#/unfollow"
+      $ref: './v4/follow/socket.yaml#/unfollow'
   /sockets/v4/follower.accept:
     post:
       summary: Accept follow request.
       tags:
         - Follow
-      $ref: "./v4/follow/socket.yaml#/accept"
+      $ref: './v4/follow/socket.yaml#/accept'
   /sockets/v4/follower.delete:
     post:
       summary: Decline follow request or delete follower.
       tags:
         - Follow
-      $ref: "./v4/follow/socket.yaml#/delete"
+      $ref: './v4/follow/socket.yaml#/delete'
   /sockets/v4/followers.getList:
     post:
       summary: Get follower list.
       tags:
         - Follow
-      $ref: "./v4/follow/socket.yaml#/getFollowerList"
+      $ref: './v4/follow/socket.yaml#/getFollowerList'
   /sockets/v4/following.getList:
     post:
       summary: Get following list.
       tags:
         - Follow
-      $ref: "./v4/follow/socket.yaml#/getFollowingList"
+      $ref: './v4/follow/socket.yaml#/getFollowingList'
   /sockets/v4/followInfo.get:
     post:
       summary: Get follow information.
       tags:
         - Follow
-      $ref: "./v4/follow/socket.yaml#/getFollowInformation"
+      $ref: './v4/follow/socket.yaml#/getFollowInformation'
 
   #Global Feed
   /api/v4/me/global-feeds:
@@ -3149,14 +3149,14 @@ paths:
       summary: Get global feed.
       tags:
         - GlobalFeed
-      $ref: "./v4/global-feed/api.yaml#get"
+      $ref: './v4/global-feed/api.yaml#get'
   /sockets/v4/global-feed.query:
     post:
       summary: Get global feed.
       tags:
         - GlobalFeed
-      $ref: "./v4/global-feed/socket.yaml#post"
-
+      $ref: './v4/global-feed/socket.yaml#post'
+  
   #Network Setting
   /api/v3/network-settings:
     put:
@@ -3164,160 +3164,160 @@ paths:
       summary: Update network setting configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/api.yaml#/updateNetworkSetting"
+      $ref: './v3/network-setting/api.yaml#/updateNetworkSetting'
   /api/v3/network-settings/social:
     put:
       summary: Update social configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/api.yaml#/updateSocial"
+      $ref: './v3/network-setting/api.yaml#/updateSocial'
     get:
       summary: Get social configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/api.yaml#/getSocial"
+      $ref: './v3/network-setting/api.yaml#/getSocial'
   /api/v3/network-settings/webhook:
     put:
       summary: Update webhook configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/api.yaml#/updateWebhook"
+      $ref: './v3/network-setting/api.yaml#/updateWebhook'
     get:
       summary: Get webhook configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/api.yaml#/getWebhook"
+      $ref: './v3/network-setting/api.yaml#/getWebhook'
   /api/v3/network-settings/chat:
     put:
       summary: Update chat network setting configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/api.yaml#/updateChatSetting"
+      $ref: './v3/network-setting/api.yaml#/updateChatSetting'
     get:
       summary: Get chat network setting configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/api.yaml#/getChatSetting"
+      $ref: './v3/network-setting/api.yaml#/getChatSetting'
   /api/v3/network-settings/moderation:
     get:
       summary: Get moderation configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/api.yaml#/getModeration"
+      $ref: './v3/network-setting/api.yaml#/getModeration'
     put:
       summary: Update moderation configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/api.yaml#/updateModeration"
+      $ref: './v3/network-setting/api.yaml#/updateModeration'
   /api/v3/network-settings/feed-setting:
     get:
       summary: Get feed setting check configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/api.yaml#/getFeedSetting"
+      $ref: './v3/network-setting/api.yaml#/getFeedSetting'
     put:
       summary: Update feed setting check configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/api.yaml#/updateFeedSetting"
+      $ref: './v3/network-setting/api.yaml#/updateFeedSetting'    
   /api/v3/network-settings/tier:
     put:
       summary: Update network tier and feature
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/api.yaml#/updateTier"
+      $ref: './v3/network-setting/api.yaml#/updateTier'
   /api/v3/allowlists:
     get:
       summary: Get list of allowed words
       tags:
         - Moderation
-      $ref: "./v3/moderation/api.yaml#/queryAllowedlist"
+      $ref: './v3/moderation/api.yaml#/queryAllowedlist'
   /api/v3/blocklists:
     get:
       summary: Get list of banned words
       tags:
         - Moderation
-      $ref: "./v3/moderation/api.yaml#/queryBlockedlist"
+      $ref: './v3/moderation/api.yaml#/queryBlockedlist'
   /sockets/v3/network-settings.getSocial:
     post:
       summary: Get social configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/socket.yaml#/getSocial"
+      $ref: './v3/network-setting/socket.yaml#/getSocial'
   /sockets/v3/network-settings.getChat:
     post:
       summary: Get chat network setting configuration.
       tags:
         - Network Setting
-      $ref: "./v3/network-setting/socket.yaml#/getChatSetting"
+      $ref: './v3/network-setting/socket.yaml#/getChatSetting'
 
   # Realtime - Community
   /realtime/community.created:
-    $ref: "./v4/realtime/community/event.yaml#/created"
+    $ref: './v4/realtime/community/event.yaml#/created'
   /realtime/community.updated:
-    $ref: "./v4/realtime/community/event.yaml#/updated"
+    $ref: './v4/realtime/community/event.yaml#/updated'
   /realtime/community.deleted:
-    $ref: "./v4/realtime/community/event.yaml#/deleted"
+    $ref: './v4/realtime/community/event.yaml#/deleted'
   /realtime/community.joined:
-    $ref: "./v4/realtime/community/event.yaml#/joined"
+    $ref: './v4/realtime/community/event.yaml#/joined'
   /realtime/community.left:
-    $ref: "./v4/realtime/community/event.yaml#/left"
+    $ref: './v4/realtime/community/event.yaml#/left'
   /realtime/community.userAdded:
-    $ref: "./v4/realtime/community/event.yaml#/userAdded"
+    $ref: './v4/realtime/community/event.yaml#/userAdded'
   /realtime/community.userRemoved:
-    $ref: "./v4/realtime/community/event.yaml#/userRemoved"
+    $ref: './v4/realtime/community/event.yaml#/userRemoved'
   /realtime/community.userChanged:
-    $ref: "./v4/realtime/community/event.yaml#/userChanged"
+    $ref: './v4/realtime/community/event.yaml#/userChanged'
   /realtime/community.userBanned:
-    $ref: "./v4/realtime/community/event.yaml#/userBanned"
+    $ref: './v4/realtime/community/event.yaml#/userBanned'
   /realtime/community.userUnbanned:
-    $ref: "./v4/realtime/community/event.yaml#/userUnbanned"
+    $ref: './v4/realtime/community/event.yaml#/userUnbanned'
 
   # Realtime - Post
   /realtime/post.created:
-    $ref: "./v4/realtime/post/event.yaml#/created"
+    $ref: './v4/realtime/post/event.yaml#/created'
   /realtime/post.updated:
-    $ref: "./v4/realtime/post/event.yaml#/updated"
+    $ref: './v4/realtime/post/event.yaml#/updated'
   /realtime/post.deleted:
-    $ref: "./v4/realtime/post/event.yaml#/deleted"
+    $ref: './v4/realtime/post/event.yaml#/deleted'
   /realtime/post.approved:
-    $ref: "./v4/realtime/post/event.yaml#/approved"
+    $ref: './v4/realtime/post/event.yaml#/approved'
   /realtime/post.declined:
-    $ref: "./v4/realtime/post/event.yaml#/declined"
+    $ref: './v4/realtime/post/event.yaml#/declined'
   /realtime/post.flagged:
-    $ref: "./v4/realtime/post/event.yaml#/flagged"
+    $ref: './v4/realtime/post/event.yaml#/flagged'
   /realtime/post.unflagged:
-    $ref: "./v4/realtime/post/event.yaml#/unflagged"
+    $ref: './v4/realtime/post/event.yaml#/unflagged'
   /realtime/post.addReaction:
-    $ref: "./v4/realtime/post/event.yaml#/addReaction"
+    $ref: './v4/realtime/post/event.yaml#/addReaction'
   /realtime/post.removeReaction:
-    $ref: "./v4/realtime/post/event.yaml#/removeReaction"
+    $ref: './v4/realtime/post/event.yaml#/removeReaction'
 
   # Realtime - Comment
   /realtime/comment.created:
-    $ref: "./v4/realtime/comment/event.yaml#/created"
+    $ref: './v4/realtime/comment/event.yaml#/created'
   /realtime/comment.updated:
-    $ref: "./v4/realtime/comment/event.yaml#/updated"
+    $ref: './v4/realtime/comment/event.yaml#/updated'
   /realtime/comment.deleted:
-    $ref: "./v4/realtime/comment/event.yaml#/deleted"
+    $ref: './v4/realtime/comment/event.yaml#/deleted'
   /realtime/comment.flagged:
-    $ref: "./v4/realtime/comment/event.yaml#/flagged"
+    $ref: './v4/realtime/comment/event.yaml#/flagged'
   /realtime/comment.unflagged:
-    $ref: "./v4/realtime/comment/event.yaml#/unflagged"
+    $ref: './v4/realtime/comment/event.yaml#/unflagged'
   /realtime/comment.addReaction:
-    $ref: "./v4/realtime/comment/event.yaml#/addReaction"
+    $ref: './v4/realtime/comment/event.yaml#/addReaction'
   /realtime/comment.removeReaction:
-    $ref: "./v4/realtime/comment/event.yaml#/removeReaction"
+    $ref: './v4/realtime/comment/event.yaml#/removeReaction'
 
   # Realtime - User
   /realtime/user.updated:
-    $ref: "./v4/realtime/user/event.yaml#/updated"
+    $ref: './v4/realtime/user/event.yaml#/updated'
   /realtime/user.flagged:
-    $ref: "./v4/realtime/user/event.yaml#/flagged"
+    $ref: './v4/realtime/user/event.yaml#/flagged'
   /realtime/user.unflagged:
-    $ref: "./v4/realtime/user/event.yaml#/unflagged"
+    $ref: './v4/realtime/user/event.yaml#/unflagged'
   /realtime/user.flagCleared:
-    $ref: "./v4/realtime/user/event.yaml#/flagCleared"
+    $ref: './v4/realtime/user/event.yaml#/flagCleared'
 
   #Global Feed
   /api/v5/me/global-feeds:
@@ -3325,14 +3325,14 @@ paths:
       summary: Get global feed.
       tags:
         - GlobalFeed
-      $ref: "./v5/global-feed/api.yaml#get"
+      $ref: './v5/global-feed/api.yaml#get'
   /sockets/v5/global-feed.query:
     post:
       summary: Get global feed.
       tags:
         - GlobalFeed
-      $ref: "./v5/global-feed/socket.yaml#post"
-
+      $ref: './v5/global-feed/socket.yaml#post'
+  
   #WebhookEvent
   /webhook/message.didCreate:
     get:
@@ -3340,7 +3340,7 @@ paths:
         - WebhookEvent
       description: Send new created message whenever a message got created in a channel
       responses:
-        "200000":
+        '200000':
           description: messages is messages information. users is list of all user information relate to this messages
           content:
             application/json:
@@ -3349,25 +3349,25 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["message.didCreate"]
+                    enum: ['message.didCreate']
                   data:
                     type: object
                     properties:
                       messages:
                         type: array
                         items:
-                          $ref: "./schema/message.yaml#/Message"
+                          $ref: './schema/message.yaml#/Message'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
   /webhook/message.didDelete:
     get:
       tags:
         - WebhookEvent
       description: Send deleted message whenever a message got deleted in a channel
       responses:
-        "200000":
+        '200000':
           description: messages is messages information. users is list of all user information relate to this messages
           content:
             application/json:
@@ -3376,25 +3376,25 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["message.didDelete"]
+                    enum: ['message.didDelete']
                   data:
                     type: object
                     properties:
                       messages:
                         type: array
                         items:
-                          $ref: "./schema/message.yaml#/Message"
+                          $ref: './schema/message.yaml#/Message'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
   /webhook/message.didUpdate:
     get:
       tags:
         - WebhookEvent
       description: Send updated message whenever a message got updated in a channel
       responses:
-        "200000":
+        '200000':
           description: messages is messages information. users is list of all user information relate to this messages
           content:
             application/json:
@@ -3403,25 +3403,25 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["message.didUpdate"]
+                    enum: ['message.didUpdate']
                   data:
                     type: object
                     properties:
                       messages:
                         type: array
                         items:
-                          $ref: "./schema/message.yaml#/Message"
+                          $ref: './schema/message.yaml#/Message'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
   /webhook/message.didFlag:
     get:
       tags:
         - WebhookEvent
       description: Send updated message whenever a message got flag
       responses:
-        "200000":
+        '200000':
           description: messages is messages information. users is list of all user information relate to this messages
           content:
             application/json:
@@ -3430,25 +3430,25 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["message.didFlag"]
+                    enum: ['message.didFlag']
                   data:
                     type: object
                     properties:
                       messages:
                         type: array
                         items:
-                          $ref: "./schema/message.yaml#/Message"
+                          $ref: './schema/message.yaml#/Message'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
   /webhook/message.didUnflag:
     get:
       tags:
         - WebhookEvent
       description: Send updated message whenever a message flag is removed.
       responses:
-        "200000":
+        '200000':
           description: messages is messages information. users is list of all user information relate to this messages
           content:
             application/json:
@@ -3457,25 +3457,25 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["message.didUnflag"]
+                    enum: ['message.didUnflag']
                   data:
                     type: object
                     properties:
                       messages:
                         type: array
                         items:
-                          $ref: "./schema/message.yaml#/Message"
+                          $ref: './schema/message.yaml#/Message'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
   /webhook/message.didClearflag:
     get:
       tags:
         - WebhookEvent
       description: Send updated message whenever all message flags are cleared.
       responses:
-        "200000":
+        '200000':
           description: messages is messages information. users is list of all user information relate to this messages
           content:
             application/json:
@@ -3484,25 +3484,25 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["message.didClearflag"]
+                    enum: ['message.didClearflag']
                   data:
                     type: object
                     properties:
                       messages:
                         type: array
                         items:
-                          $ref: "./schema/message.yaml#/Message"
+                          $ref: './schema/message.yaml#/Message'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
   /webhook/channel.didCreate:
     get:
       tags:
         - WebhookEvent
       description: Send new created channel whenever a channel got create
       responses:
-        "200000":
+        '200000':
           description: channel is channel information. userIds is a list of userId who is added to channel. users is a list of user information.
           content:
             application/json:
@@ -3511,18 +3511,18 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["channel.didCreate"]
+                    enum: ['channel.didCreate']
                   data:
                     type: object
                     properties:
                       channel:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Channel"
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
                       userIds:
                         type: array
                         items:
@@ -3533,7 +3533,7 @@ paths:
         - WebhookEvent
       description: Send join event information whenever a channel got joined
       responses:
-        "200000":
+        '200000':
           description: channel is channel information. userIds is a list of joined userId. users is a list of user information.
           content:
             application/json:
@@ -3542,18 +3542,18 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["channel.didJoin"]
+                    enum: ['channel.didJoin']
                   data:
                     type: object
                     properties:
                       channel:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Channel"
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
                       userIds:
                         type: array
                         items:
@@ -3564,7 +3564,7 @@ paths:
         - WebhookEvent
       description: Send user added event information whenever new member got added to a channel.
       responses:
-        "200000":
+        '200000':
           description: channel is channel information. userIds is a list of added userId. adderId is user who add other user to channel users is a list of user information.
           content:
             application/json:
@@ -3573,18 +3573,18 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["channel.didAddUsers"]
+                    enum: ['channel.didAddUsers']
                   data:
                     type: object
                     properties:
                       channel:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Channel"
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
                       userIds:
                         type: array
                         items:
@@ -3597,7 +3597,7 @@ paths:
         - WebhookEvent
       description: Send channel close event information whenever a channel close.
       responses:
-        "200000":
+        '200000':
           description: channel is channel information.
           content:
             application/json:
@@ -3606,21 +3606,21 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["channel.didClose"]
+                    enum: ['channel.didClose']
                   data:
                     type: object
                     properties:
                       channel:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Channel"
+                          $ref: '#/components/schemas/Channel'
   /webhook/channel.didLeave:
     get:
       tags:
         - WebhookEvent
       description: Send channel leave event information whenever someone leave a channel.
       responses:
-        "200000":
+        '200000':
           description: channel is channel information. userIds is a list of userId who leave channel. users is a list of userInfo
           content:
             application/json:
@@ -3629,18 +3629,18 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["channel.didLeave"]
+                    enum: ['channel.didLeave']
                   data:
                     type: object
                     properties:
                       channel:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Channel"
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
                       userIds:
                         type: array
                         items:
@@ -3651,7 +3651,7 @@ paths:
         - WebhookEvent
       description: Send channel updated event information whenever a channel got updated.
       responses:
-        "200000":
+        '200000':
           description: channel is channel information. userId is a userId who update channel. users is a list of userInfo
           content:
             application/json:
@@ -3660,18 +3660,18 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["channel.didUpdate"]
+                    enum: ['channel.didUpdate']
                   data:
                     type: object
                     properties:
                       channel:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Channel"
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
                       userId:
                         type: string
   /webhook/channel.didRemoveUsers:
@@ -3680,7 +3680,7 @@ paths:
         - WebhookEvent
       description: Send user removed event information whenever member got remove from channel.
       responses:
-        "200000":
+        '200000':
           description: channel is channel information. userIds is a list of removed userId. removerId is userId who remove other users from channel. users is a list of user information.
           content:
             application/json:
@@ -3689,18 +3689,18 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["channel.didRemoveUsers"]
+                    enum: ['channel.didRemoveUsers']
                   data:
                     type: object
                     properties:
                       channel:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Channel"
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
                       userIds:
                         type: array
                         items:
@@ -3713,7 +3713,7 @@ paths:
         - WebhookEvent
       description: Send channel's meta data updated event information whenever a channel's meta data got updated.
       responses:
-        "200000":
+        '200000':
           description: channel is channel information. userId is a userId who update channel's meta data. users is a list of userInfo
           content:
             application/json:
@@ -3722,18 +3722,18 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["channel.didUpdateMeta"]
+                    enum: ['channel.didUpdateMeta']
                   data:
                     type: object
                     properties:
                       channel:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Channel"
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
                       userId:
                         type: string
   /webhook/channel.didBan:
@@ -3742,7 +3742,7 @@ paths:
         - WebhookEvent
       description: Send channel banned event whenever a channel got banned.
       responses:
-        "200000":
+        '200000':
           description: channel is channel information. userIds is a list of userIds who being banned. actorId is userId who ban other user. users is a list of userInfo
           content:
             application/json:
@@ -3751,18 +3751,18 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["channel.didBan"]
+                    enum: ['channel.didBan']
                   data:
                     type: object
                     properties:
                       channel:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Channel"
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
                       actorId:
                         type: string
                       userIds:
@@ -3775,7 +3775,7 @@ paths:
         - WebhookEvent
       description: Send banned event whenever a system detect message that contain in the blacklist
       responses:
-        "200000":
+        '200000':
           description: channel is channel information. userId is a userId who send the message. users is a list of userInfo
           content:
             application/json:
@@ -3784,341 +3784,342 @@ paths:
                 properties:
                   event:
                     type: string
-                    enum: ["moderation.didBan"]
+                    enum: ['moderation.didBan']
                   data:
                     type: object
                     properties:
                       channel:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Channel"
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
-                          $ref: "#/components/schemas/User"
+                          $ref: '#/components/schemas/User'
                       userId:
                         type: string
   /webhook/user.didClearFlag:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v1/user/webhook.yaml#didClearFlag"
+      $ref: './v1/user/webhook.yaml#didClearFlag'
   /webhook/user.didFlag:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v1/user/webhook.yaml#didFlag"
+      $ref: './v1/user/webhook.yaml#didFlag'
   /webhook/user.didUnflag:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v1/user/webhook.yaml#didUnflag"
+      $ref: './v1/user/webhook.yaml#didUnflag'
   /webhook/user.didUpdate:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v1/user/webhook.yaml#didUpdate"
+      $ref: './v1/user/webhook.yaml#didUpdate'
   /webhook/v3.community.didCreate:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/community/webhook.yaml#didCreate"
+      $ref: './v3/community/webhook.yaml#didCreate'
   /webhook/v3.community.didUpdate:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/community/webhook.yaml#didUpdate"
+      $ref: './v3/community/webhook.yaml#didUpdate'
   /webhook/v3.community.didDelete:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/community/webhook.yaml#didDelete"
+      $ref: './v3/community/webhook.yaml#didDelete'
   /webhook/v3.community.didJoin:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/community/webhook.yaml#didJoin"
+      $ref: './v3/community/webhook.yaml#didJoin'
   /webhook/v3.community.didLeave:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/community/webhook.yaml#didLeave"
+      $ref: './v3/community/webhook.yaml#didLeave'
   /webhook/v3.community.didAddUsers:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/community/webhook.yaml#didAddUsers"
+      $ref: './v3/community/webhook.yaml#didAddUsers'
   /webhook/v3.community.didRemoveUsers:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/community/webhook.yaml#didRemoveUsers"
+      $ref: './v3/community/webhook.yaml#didRemoveUsers'
   /webhook/v3.community.didBan:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/community/webhook.yaml#didBan"
+      $ref: './v3/community/webhook.yaml#didBan'
   /webhook/v3.community.didUnban:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/community/webhook.yaml#didUnban"
+      $ref: './v3/community/webhook.yaml#didUnban'
   /webhook/v3.post.didCreate:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#didCreate"
+      $ref: './v3/post/webhook.yaml#didCreate'
   /webhook/v3.post.didUpdate:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#didUpdate"
+      $ref: './v3/post/webhook.yaml#didUpdate'
   /webhook/v3.post.didDelete:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#didDelete"
+      $ref: './v3/post/webhook.yaml#didDelete'
   /webhook/v3.post.didApprove:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#didApprove"
+      $ref: './v3/post/webhook.yaml#didApprove'
   /webhook/v3.post.didDecline:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#didDecline"
+      $ref: './v3/post/webhook.yaml#didDecline'
   /webhook/v3.post.didFlag:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#didFlag"
+      $ref: './v3/post/webhook.yaml#didFlag'
   /webhook/v3.post.didUnflag:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#didUnflag"
+      $ref: './v3/post/webhook.yaml#didUnflag'
   /webhook/v3.post.didAddReaction:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#didAddReaction"
+      $ref: './v3/post/webhook.yaml#didAddReaction'
   /webhook/v3.post.didRemoveReaction:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#didRemoveReaction"
+      $ref: './v3/post/webhook.yaml#didRemoveReaction'
   /webhook/v3.comment.didCreate:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#didCreate"
+      $ref: './v3/comment/webhook.yaml#didCreate'
   /webhook/v3.comment.didUpdate:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#didUpdate"
+      $ref: './v3/comment/webhook.yaml#didUpdate'
   /webhook/v3.comment.didDelete:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#didDelete"
+      $ref: './v3/comment/webhook.yaml#didDelete'
   /webhook/v3.comment.didFlag:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#didFlag"
+      $ref: './v3/comment/webhook.yaml#didFlag'
   /webhook/v3.comment.didUnflag:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#didUnflag"
+      $ref: './v3/comment/webhook.yaml#didUnflag'
   /webhook/v3.comment.didAddReaction:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#didAddReaction"
+      $ref: './v3/comment/webhook.yaml#didAddReaction'
   /webhook/v3.comment.didRemoveReaction:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#didRemoveReaction"
+      $ref: './v3/comment/webhook.yaml#didRemoveReaction'
   /webhook/v3.comment.didReply:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#didReply"
+      $ref: './v3/comment/webhook.yaml#didReply'
   /webhook/poll.didCreate:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/poll/webhook.yaml#didCreate"
+      $ref: './v3/poll/webhook.yaml#didCreate'
   /webhook/poll.didUpdate:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/poll/webhook.yaml#didUpdate"
+      $ref: './v3/poll/webhook.yaml#didUpdate'
   /webhook/v3.video-streaming.didRecord:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/video-streaming/webhook.yaml#didRecord"
+      $ref: './v3/video-streaming/webhook.yaml#didRecord'
   /webhook/v3.video-streaming.didStart:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/video-streaming/webhook.yaml#didStart"
+      $ref: './v3/video-streaming/webhook.yaml#didStart'
   /webhook/v3.video-streaming.didStop:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/video-streaming/webhook.yaml#didStop"
+      $ref: './v3/video-streaming/webhook.yaml#didStop'
   /webhook/follow.didCreate:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v4/follow/webhook.yaml#didCreate"
+      $ref: './v4/follow/webhook.yaml#didCreate'
   /webhook/follow.didRequest:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v4/follow/webhook.yaml#didRequest"
+      $ref: './v4/follow/webhook.yaml#didRequest'
   /webhook/follow.didAcceptRequest:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v4/follow/webhook.yaml#didAcceptRequest"
+      $ref: './v4/follow/webhook.yaml#didAcceptRequest'
   /webhook/follow.didUnfollow:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v4/follow/webhook.yaml#didUnfollow"
+      $ref: './v4/follow/webhook.yaml#didUnfollow'
   /webhook/follow.didCancelRequest:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v4/follow/webhook.yaml#didCancelRequest"
+      $ref: './v4/follow/webhook.yaml#didCancelRequest'
   /webhook/follow.didDecineRequest:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v4/follow/webhook.yaml#didDecineRequest"
+      $ref: './v4/follow/webhook.yaml#didDecineRequest'
   /webhook/follow.didDeleteFollower:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v4/follow/webhook.yaml#didDeleteFollower"
+      $ref: './v4/follow/webhook.yaml#didDeleteFollower'
 
   #Notification Customization
   /webhook/push-notification/post.created:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#customNotificationCreated"
+      $ref: './v3/post/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/post.need-reviewing:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#customNotificationCreated"
+      $ref: './v3/post/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/post.approved:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#customNotificationCreated"
+      $ref: './v3/post/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/comment.created:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#customNotificationCreated"
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/comment.replied:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#customNotificationCreated"
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/post.reacted:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#customNotificationCreated"
+      $ref: './v3/post/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/comment.reacted:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#customNotificationCreated"
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/message.created:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/message/webhook.yaml#customNotificationCreated"
+      $ref: './v3/message/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/channel.created:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/channel/webhook.yaml#customNotificationCreated"
+      $ref: './v3/channel/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/channel.joined:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/channel/webhook.yaml#customNotificationCreated"
+      $ref: './v3/channel/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/follow.created:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v4/follow/webhook.yaml#customNotificationCreated"
+      $ref: './v4/follow/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/follow.requested:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v4/follow/webhook.yaml#customNotificationCreated"
+      $ref: './v4/follow/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/follow.accepted:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v4/follow/webhook.yaml#customNotificationCreated"
+      $ref: './v4/follow/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/mention-post.created:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#customNotificationCreated"
+      $ref: './v3/post/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/mention-user-feed-post.created:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/post/webhook.yaml#customNotificationCreated"
+      $ref: './v3/post/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/mention-comment.created:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#customNotificationCreated"
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/mention-comment.replied:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#customNotificationCreated"
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/mention-user-feed-comment.created:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#customNotificationCreated"
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/mention-user-feed-comment.replied:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/comment/webhook.yaml#customNotificationCreated"
+      $ref: './v3/comment/webhook.yaml#customNotificationCreated'
   /webhook/push-notification/video-streaming.started:
     get:
       tags:
         - WebhookEvent
-      $ref: "./v3/video-streaming/webhook.yaml#customNotificationCreated"
+      $ref: './v3/video-streaming/webhook.yaml#customNotificationCreated'
+
 
 components:
   schemas:
     User:
-      $ref: "./schema/user.yaml#/User"
+      $ref: './schema/user.yaml#/User'
     ChannelType:
-      $ref: "./schema/channel.yaml#/ChannelType"
+      $ref: './schema/channel.yaml#/ChannelType'
     ChannelMembership:
-      $ref: "./schema/channel.yaml#/ChannelMembership"
+      $ref: './schema/channel.yaml#/ChannelMembership'
     Channel:
       type: object
       properties:
@@ -4131,7 +4132,7 @@ components:
           type: object
           description: Additional properties to support custom fields.
         type:
-          $ref: "#/components/schemas/ChannelType"
+          $ref: '#/components/schemas/ChannelType'
           description: Type of a channel (standard, conversation, broadcast). This property is not be used for now.
         tags:
           type: array
@@ -4186,7 +4187,7 @@ components:
           description: The date/time when a channel is updated.
           format: date-time
         avatar:
-          $ref: "./schema/file.yaml#/File"
+          $ref: './schema/file.yaml#/File'
       required:
         - channelId
         - createdAt
@@ -4205,7 +4206,7 @@ components:
         readToSegment:
           type: integer
         membership:
-          $ref: "#/components/schemas/ChannelMembership"
+          $ref: '#/components/schemas/ChannelMembership'
         isBanned:
           type: boolean
         isMuted:
@@ -4228,20 +4229,20 @@ components:
         - createdAt
         - updatedAt
     Comment:
-      $ref: "./schema/comment.yaml#/Comment"
+      $ref: './schema/comment.yaml#/Comment'
     Community:
-      $ref: "./schema/community.yaml#/Community"
+      $ref: './schema/community.yaml#/Community'
     CommunityUser:
-      $ref: "./schema/community.yaml#/CommunityUser"
+      $ref: './schema/community.yaml#/CommunityUser'
     CommunityCategory:
-      $ref: "./schema/community.yaml#/CommunityCategory"
+      $ref: './schema/community.yaml#/CommunityCategory'
 
     Message:
-      $ref: "./schema/message.yaml#/Message"
+      $ref: './schema/message.yaml#/Message'
     Reaction:
-      $ref: "./schema/reaction.yaml#/Reaction"
+      $ref: './schema/reaction.yaml#/Reaction'
     ShortUser:
-      $ref: "./schema/user.yaml#/ShortUser"
+      $ref: './schema/user.yaml#/ShortUser'
     Network:
       type: object
       properties:
@@ -4375,11 +4376,11 @@ components:
         message:
           type: string
     File:
-      $ref: "./schema/file.yaml#File"
+      $ref: './schema/file.yaml#File'
     Follow:
-      $ref: "./schema/follow.yaml#Follow"
+      $ref: './schema/follow.yaml#Follow'
     FollowCount:
-      $ref: "./schema/follow.yaml#FollowCount"
+      $ref: './schema/follow.yaml#FollowCount'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
@@ -4450,9 +4451,9 @@ components:
                       type: object
                       properties:
                         channel:
-                          $ref: "#/components/schemas/Channel"
+                          $ref: '#/components/schemas/Channel'
                         channelUser:
-                          $ref: "#/components/schemas/ChannelUser"
+                          $ref: '#/components/schemas/ChannelUser'
     ChannelResultResponse:
       description: Channel Information
       content:
@@ -4469,9 +4470,9 @@ components:
                     type: object
                     properties:
                       channel:
-                        $ref: "#/components/schemas/Channel"
+                        $ref: '#/components/schemas/Channel'
                       channelUser:
-                        $ref: "#/components/schemas/ChannelUser"
+                        $ref: '#/components/schemas/ChannelUser'
     ChannelResponse:
       description: Channel response.
       content:
@@ -4482,7 +4483,7 @@ components:
               isDistinct:
                 type: boolean
               type:
-                $ref: "#/components/schemas/ChannelType"
+                $ref: '#/components/schemas/ChannelType'
                 description: Type of a channel (standard, conversation, broadcast). This property is not be used for now.
               metadata:
                 type: object
@@ -4543,7 +4544,7 @@ components:
                 type: integer
                 description: Number of messages in channel.
               avatar:
-                $ref: "./schema/file.yaml#/File"
+                $ref: './schema/file.yaml#/File'
     ChannelUserResponse:
       description: Channel User response.
       content:
@@ -4554,7 +4555,7 @@ components:
               results:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ChannelUser"
+                  $ref: '#/components/schemas/ChannelUser'
     UsersResponse:
       description: Users Information
       content:
@@ -4570,7 +4571,7 @@ components:
                   results:
                     type: array
                     items:
-                      $ref: "#/components/schemas/User"
+                      $ref: '#/components/schemas/User'
     UserResponse:
       description: User Information
       content:
@@ -4581,13 +4582,13 @@ components:
               status:
                 type: string
               data:
-                $ref: "#/components/schemas/User"
+                $ref: '#/components/schemas/User'
     NetworkResponse:
       description: Network information.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Network"
+            $ref: '#/components/schemas/Network'
     BlacklistRulesResponse:
       description: rules of blacklist Information
       content:
@@ -4603,7 +4604,7 @@ components:
                   results:
                     type: array
                     items:
-                      $ref: "#/components/schemas/BlacklistRule"
+                      $ref: '#/components/schemas/BlacklistRule'
     BlacklistRuleResponse:
       description: rule of blacklist Information
       content:
@@ -4614,7 +4615,7 @@ components:
               status:
                 type: string
               data:
-                $ref: "#/components/schemas/BlacklistRule"
+                $ref: '#/components/schemas/BlacklistRule'
     WhitelistRulesResponse:
       description: rules of whitelist Information
       content:
@@ -4630,7 +4631,7 @@ components:
                   results:
                     type: array
                     items:
-                      $ref: "#/components/schemas/BlacklistRule"
+                      $ref: '#/components/schemas/BlacklistRule'
     WhitelistRuleResponse:
       description: rule of whitelist Information
       content:
@@ -4641,7 +4642,7 @@ components:
               status:
                 type: string
               data:
-                $ref: "#/components/schemas/BlacklistRule"
+                $ref: '#/components/schemas/BlacklistRule'
     RolesResponse:
       description: Roles information.
       content:
@@ -4657,11 +4658,11 @@ components:
                   moderatonSettings:
                     type: array
                     items:
-                      $ref: "#/components/schemas/ModerationSetting"
+                      $ref: '#/components/schemas/ModerationSetting'
                   roles:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Role"
+                      $ref: '#/components/schemas/Role'
     UserByAdminsResponse:
       description: Users information.
       content:
@@ -4703,7 +4704,7 @@ components:
                   roles:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Role"
+                      $ref: '#/components/schemas/Role'
     ModerationSettingResponse:
       description: Moderation Setting Information
       content:
@@ -4714,13 +4715,13 @@ components:
               status:
                 type: string
               data:
-                $ref: "#/components/schemas/ModerationSetting"
+                $ref: '#/components/schemas/ModerationSetting'
     UnexpectedError:
       description: Unexpected error.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             status: error
             code: 500000
@@ -4730,7 +4731,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             status: error
             code: 400400
@@ -4740,7 +4741,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             status: error
             code: 400000
@@ -4750,7 +4751,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             status: error
             code: 400400
@@ -4760,7 +4761,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             status: error
             code: 400301
@@ -4770,7 +4771,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             status: error
             code: 400304
@@ -4780,7 +4781,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             status: error
             code: 400311
@@ -4790,7 +4791,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             status: error
             code: 400400
@@ -4800,7 +4801,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             status: error
             code: 400300
@@ -4810,7 +4811,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             status: error
             code: 400300
@@ -4820,7 +4821,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             status: error
             code: 400100
@@ -4830,7 +4831,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             status: error
             code: 400316
