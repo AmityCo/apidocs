@@ -1,14 +1,22 @@
-post:
-  summary: Register a device.
+create:
+  summary: Register a device
   tags:
     - Device
-  security:
-    - ApiKeyAuth: []
+  parameters:
+    - name: x-api-key
+      in: header
+      required: true
+      schema:
+        type: string
   description: >
-    Register a user device in order to connect to socket endpoint to perform sdk operations.
+    Register a session in order to connect to socket endpoint to perform sdk operations.
   requestBody:
-    description: >
+    description: |
       Information about user and devices that he/she use to connect to. If displayName is provide, that user display is updated as well.
+
+      If userId doesn't exists, new user will be created.
+
+      authToken need to pass when network option is set to secure
     required: true
     content:
       application/json:
@@ -28,7 +36,6 @@ post:
               properties:
                 kind:
                   type: string
-                  required: true
                   enum:
                     - ios
                     - android
@@ -42,6 +49,11 @@ post:
                   maxLength: 30
             displayName:
               type: string
+              maxLength: 50
+            authToken:
+              type: string
+              description: Authentication token from /api/v3/authentication/token
+              minLength: 1
               maxLength: 100
           required:
             - userId
@@ -49,5 +61,41 @@ post:
   responses:
     "200000":
       $ref: "./response.yaml#/DeviceResponse"
+    "400312":
+      $ref: "../../global/error.yaml#/UserIsGlobalBanned"
+    "400100":
+      $ref: "../../global/error.yaml#/UserIsSystemBanned"
     "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
+generateAccessToken:
+  summary: Generate AccessToken.
+  tags:
+    - Device
+  security:
+    - ApiKeyAuth: []
+  description: >
+    Generate new Access Token.
+  parameters:
+    - in: query
+      name: userId
+      schema:
+        type: string
+      required: true
+    - in: query
+      name: refreshToken
+      schema:
+        type: string
+      required: true
+  responses:
+    '200000':
+      description: Return new accessToken
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              accessToken:
+                type: string
+    '500000':
       $ref: "../../global/error.yaml#/UnexpectedError"
