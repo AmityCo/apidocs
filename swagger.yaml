@@ -23,7 +23,7 @@ info:
 
     Before making server-to-server API calls, be sure to select the correct API endpoint for your region in
     the <strong>Servers</strong> dropdown below.
-  version: 4.45.0
+  version: 4.46.0
 servers:
   - url: https://api.us.amity.co
     description: API Endpoint for US Region
@@ -53,9 +53,9 @@ paths:
         - Session
       $ref: './v3/session/api.yaml#/create'
     get:
+      summary: Verify access token
       tags: 
         - Session
-      summary: Verify access token
       $ref: './v3/session/api.yaml#/verifyAccessToken'
   /api/v4/sessions:
     post:
@@ -64,50 +64,25 @@ paths:
         - Session
       $ref: './v4/session/api.yaml#/create'
     delete:
+      summary: Revoke access token
       tags: 
         - Session
-      summary: Revoke access token
       $ref: './v4/session/api.yaml#/revokeAccessToken'
+  
   #Device
   /v1/device:
     post:
       summary: Register a device.
       tags:
         - Device
-      $ref: './v3/session/api.yaml#/create'
-
+      $ref: './v1/device/api.yaml#/create'
   /v1/accessToken:
     get:
       summary: Generate AccessToken.
       tags:
         - Device
-      security:
-        - ApiKeyAuth: []
-      description: >
-        Generate new Access Token.
-      parameters:
-        - in: query
-          name: userId
-          schema:
-            type: string
-          required: true
-        - in: query
-          name: refreshToken
-          schema:
-            type: string
-          required: true
-      responses:
-        '200000':
-          description: Return new accessToken
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  accessToken:
-                    type: string
-        '500000':
-          $ref: '#/components/responses/UnexpectedError'
+      $ref: './v1/device/api.yaml#/generateAccessToken'
+  
   #Moderation
   /v1/blacklist/records:
     put:
@@ -440,42 +415,6 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '500000':
           $ref: '#/components/responses/UnexpectedError'
-  /api/v2/channels:
-    post:
-      summary: query channels
-      tags:
-        - Channel
-      $ref: './v2/channel/api.yaml#query'
-  /api/v2/channel:
-    post:
-      summary: create a channel
-      tags:
-        - Channel
-      $ref: './v2/channel/api.yaml#create'
-  /api/v2/channel/{channelId}/displayName:
-    post:
-      summary: change channel displayName
-      tags:
-        - Channel
-      $ref: './v2/channel/api.yaml#setChannelDisplay'
-  /api/v2/channel/{channelId}/users/ban:
-    post:
-      summary: ban users in channel
-      tags:
-        - Channel
-      $ref: './v2/channel/api.yaml#ban'
-  /api/v2/channel/{channelId}/users/unban:
-    post:
-      summary: unban users in channel
-      tags:
-        - Channel
-      $ref: './v2/channel/api.yaml#unban'
-  /api/v2/channels/{channelId}/close:
-    post:
-      summary: close channel
-      tags:
-        - Channel
-      $ref: './v2/channel/api.yaml#close'
   /api/v2/messages:
     post:
       summary: Query messages.
@@ -736,35 +675,6 @@ paths:
           $ref: '#/components/responses/RateLimitError'
         '500000':
           $ref: '#/components/responses/UnexpectedError'
-  /api/v2/users:
-    get:
-      summary: query users
-      tags:
-        - User
-      $ref: './v2/user/api.yaml#queryUsers'
-    put:
-      summary: Update user information.
-      tags:
-        - User
-      $ref: './v2/user/api.yaml#update'
-  /api/v2/users/ban:
-    post:
-      summary: ban a user.
-      tags:
-        - User
-      $ref: './v2/user/api.yaml#ban'
-  /api/v2/users/unban:
-    post:
-      summary: unban a user.
-      tags:
-        - User
-      $ref: './v2/user/api.yaml#unban'
-  /api/v2/users/{userId}/flags:
-    delete:
-      summary: clear flag a user.
-      tags:
-        - User
-      $ref: './v2/user/api.yaml#clearFlag'
   /api/v2/whitelist/records:
     get:
       summary: get rules of whitelist.
@@ -1028,376 +938,37 @@ paths:
       tags:
         - Admin
       $ref: './v3/role/api.yaml#/delete'
-  /api/v3/comments:
-    get:
-      summary: query comments (pagination support).
-      tags:
-        - Comment
-      $ref: './v3/comment/api.yaml#/query'
-    post:
-      summary: create a comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/api.yaml#/create'
-  /api/v3/comments/{commentId}:
-    get:
-      summary: get a comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/api.yaml#/get'
-    put:
-      summary: update a comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/api.yaml#/update'
-    delete:
-      summary: delete a comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/api.yaml#/delete'
-  /api/v3/comments/{commentId}/flag:
-    post:
-      summary: flag a comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/api.yaml#/flag'
-  /api/v3/comments/{commentId}/isflagbyme:
-    get:
-      summary: Check whether user flag a given comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/api.yaml#/isflagbyme'
-  /api/v3/comments/:commentId/unflag:
-    delete:
-      summary: unflag a comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/api.yaml#/unflag'
-  /api/v3/comments/list:
-    get:
-      summary: get comments by IDs.
-      tags:
-        - Comment
-      $ref: './v3/comment/api.yaml#/getList'
-
-  #Comment V4
-  /api/v4/comments/{commentId}:
-    delete:
-      summary: delete a comment.
-      tags:
-        - Comment v4
-      $ref: './v4/comment/api.yaml#/delete'
-  /sockets/v4/comment.delete:
-    post:
-      summary: delete a comment.
-      tags:
-        - Comment v4
-      $ref: './v4/comment/socket.yaml#delete'
-
-  /api/v3/communities:
-    get:
-      summary: query communities.
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/get'
-    post:
-      summary: create a community.
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/create'
-
-  /api/v3/communities/{communityId}:
-    get:
-      summary: get a community by ID.
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/getOne'
-    put:
-      summary: update a community.
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/update'
-    delete:
-      summary: delete a community.
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/delete'
-
-  /api/v3/communities/:communityId/join:
-    post:
-      summary: Join a community
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/join'
-
-  /api/v3/communities/:communityId/leave:
-    delete:
-      summary: Leave a community.
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/leave'
-
-  /api/v3/communities/{communityId}/users:
-    get:
-      summary: query community users
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/getUsers'
-    post:
-      summary: add community users
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/addUsers'
-    delete:
-      summary: remove community users
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/removeUsers'
-
-  /api/v3/communities/:communityId/users/ban:
-    put:
-      summary: ban community users
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/ban'
-
-  /api/v3/communities/:communityId/users/unban:
-    put:
-      summary: unban community users
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/unban'
-
-  /api/v3/communities/:communityId/users/roles:
-    post:
-      summary: Add role to community users
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/addRole'
-    delete:
-      summary: Remove role from community users
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/removeRole'
-
-  /api/v3/communities/{communityId}/permissions/me:
-    get:
-      summary: Get self permission in community
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/getSelfPermission'
-
-  /api/v3/community-categories:
-    get:
-      summary: query community categories.
-      tags:
-        - CommunityCategory
-      $ref: './v3/community-category/api.yaml#/query'
-    post:
-      summary: create a community categories.
-      tags:
-        - CommunityCategory
-      $ref: './v3/community-category/api.yaml#/post'
-
-  /api/v3/community-categories/{categoryId}:
-    get:
-      summary: get a community category.
-      tags:
-        - CommunityCategory
-      $ref: './v3/community-category/api.yaml#/get'
-    put:
-      summary: update a community categories.
-      tags:
-        - CommunityCategory
-      $ref: './v3/community-category/api.yaml#/put'
-    delete:
-      summary: delete a community category.
-      tags:
-        - CommunityCategory
-      $ref: './v3/community-category/api.yaml#/delete'
-
-  /api/v3/community-feeds/{communityId}:
-    get:
-      summary: Get list of posts.
-      tags:
-        - CommunityFeed
-      $ref: './v3/community-feed/api.yaml#get'
-
-  /api/v3/user-feeds/{userId}:
-    get:
-      summary: Get list of posts.
-      tags:
-        - UserFeed
-      $ref: './v3/user-feed/api.yaml#get'
-  /sockets/moderation-setting.get:
-    post:
-      summary: get a moderation setting
-      tags:
-        - Admin
-      securityDefinition:
-        ApiKeyAuth:
-          type: apiKey
-          in: header
-          name: Authorization
-      parameters:
-        - name: Authorization
-          in: header
-          value: Bearer {{accessToken}}
-          required: true
-          schema:
-            type: string
-        - name: messageId
-          in: path
-          required: true
-          schema:
-            type: string
-      consumes:
-        - application/json
-      description: >
-        Get a moderation setting.
-      responses:
-        '200000':
-          $ref: '#/components/responses/ModerationSettingResponse'
-        '400000':
-          $ref: '#/components/responses/BadRequestError'
-        '500000':
-          $ref: '#/components/responses/UnexpectedError'
-  /sockets/moderation-setting.update:
-    post:
-      summary: update a moderation setting
-      tags:
-        - Admin
-      securityDefinition:
-        ApiKeyAuth:
-          type: apiKey
-          in: header
-          name: Authorization
-      description: >
-        Update a moderation setting
-      parameters:
-        - name: Authorization
-          in: header
-          value: Bearer {{accessToken}}
-          required: true
-          schema:
-            type: string
-        - name: Content-Type
-          in: header
-          value: application/x-www-form-urlencoded
-          required: true
-          schema:
-            type: string
-      consumes:
-        - application/x-www-form-urlencoded
-      requestBody:
-        description: >
-          moderation setting information
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                maxRepetition:
-                  type: integer
-                  minimum: 0
-                maxRepetitionTimeout:
-                  type: integer
-                  minimum: 0
-                blacklistMuteTimeout:
-                  type: integer
-                  minimum: 0
-                whitelistMuteTimeout:
-                  type: integer
-                  minimum: 0
-                maxRepetitionMuteTimeout:
-                  type: integer
-                  minimum: 0
-                enableImageModeration:
-                  type: boolean
-                imageModeration:
-                  type: object
-                  properties:
-                    nudity:
-                      type: number
-                      minimum: 0
-                    suggestive:
-                      type: number
-                      minimum: 0
-                    violence:
-                      type: number
-                      minimum: 0
-                    disturbing:
-                      type: number
-                      minimum: 0
-      responses:
-        '200000':
-          description: Success
-        '400000':
-          $ref: '#/components/responses/BadRequestError'
-        '500000':
-          $ref: '#/components/responses/UnexpectedError'
-
+  
   #User
-  /api/v3/users:
+  /api/v2/users:
     get:
-      summary: Get users information.
+      summary: query users
       tags:
-        - UserV3
-      $ref: './v3/user/api.yaml#/query'
+        - User
+      $ref: './v2/user/api.yaml#queryUsers'
     put:
-      summary: Update user information.
-      tags:
-        - UserV3
-      $ref: './v3/user/api.yaml#/update'
-  /sockets/v3/user.query:
-    post:
-      summary: Get users information.
-      tags:
-        - UserV3
-      $ref: './v3/user/socket.yaml#/query'
-  /api/v3/users/list:
-    get:
-      summary: Get users information by public id.
-      tags:
-        - UserV3
-      $ref: './v3/user/api.yaml#/getByPublicId'
-  /sockets/v3/user.getList:
-    post:
-      summary: Get users information by public id.
-      tags:
-        - UserV3
-      $ref: './v3/user/socket.yaml#/getByPublicId'
-  /api/v3/users/{userId}:
-    get:
-      summary: Get one user information.
-      tags:
-        - UserV3
-      $ref: './v3/user/api.yaml#/get'
-  /api/v3/users/{userId}/isFlagByMe:
-    get:
-      summary: Check whether user flag a given user.
-      tags:
-        - UserV3
-      $ref: './v3/user/api.yaml#/isFlagByMe'
-  /sockets/v3/user.get:
-    post:
-      summary: Get one user information.
-      tags:
-        - UserV3
-      $ref: './v3/user/socket.yaml#/get'
-  /sockets/v3/user.update:
-    post:
-      summary: Update user information.
-      tags:
-        - UserV3
-      $ref: './v3/user/socket.yaml#/update'
-  /sockets/user.update:
-    post:
       summary: Update user information.
       tags:
         - User
-      $ref: './v1/user/socket.yaml#/update'
+      $ref: './v2/user/api.yaml#update'
+  /api/v2/users/ban:
+    post:
+      summary: ban a user.
+      tags:
+        - User
+      $ref: './v2/user/api.yaml#ban'
+  /api/v2/users/unban:
+    post:
+      summary: unban a user.
+      tags:
+        - User
+      $ref: './v2/user/api.yaml#unban'
+  /api/v2/users/{userId}/flags:
+    delete:
+      summary: clear flag a user.
+      tags:
+        - User
+      $ref: './v2/user/api.yaml#clearFlag'
   /sockets/user.query:
     post:
       summary: query users
@@ -1428,6 +999,12 @@ paths:
       tags:
         - User
       $ref: './v1/user/socket.yaml#/isFlagByMe'
+  /sockets/user.update:
+    post:
+      summary: Update user information.
+      tags:
+        - User
+      $ref: './v1/user/socket.yaml#/update'
   /callbacks/user.didUpdate:
     get:
       tags:
@@ -1439,7 +1016,98 @@ paths:
         - User
       $ref: './v3/user/event.yaml#didUpdate'
 
+#User
+  /api/v3/users:
+    get:
+      summary: Get users information.
+      tags:
+        - UserV3
+      $ref: './v3/user/api.yaml#/query'
+    put:
+      summary: Update user information.
+      tags:
+        - UserV3
+      $ref: './v3/user/api.yaml#/update'
+  /api/v3/users/list:
+    get:
+      summary: Get users information by public id.
+      tags:
+        - UserV3
+      $ref: './v3/user/api.yaml#/getByPublicId'
+  /api/v3/users/{userId}:
+    get:
+      summary: Get one user information.
+      tags:
+        - UserV3
+      $ref: './v3/user/api.yaml#/get'
+  /api/v3/users/{userId}/isFlagByMe:
+    get:
+      summary: Check whether user flag a given user.
+      tags:
+        - UserV3
+      $ref: './v3/user/api.yaml#/isFlagByMe'
+  /sockets/v3/user.query:
+    post:
+      summary: Get users information.
+      tags:
+        - UserV3
+      $ref: './v3/user/socket.yaml#/query'
+  /sockets/v3/user.getList:
+    post:
+      summary: Get users information by public id.
+      tags:
+        - UserV3
+      $ref: './v3/user/socket.yaml#/getByPublicId'
+  /sockets/v3/user.get:
+    post:
+      summary: Get one user information.
+      tags:
+        - UserV3
+      $ref: './v3/user/socket.yaml#/get'
+  /sockets/v3/user.update:
+    post:
+      summary: Update user information.
+      tags:
+        - UserV3
+      $ref: './v3/user/socket.yaml#/update'
+
   #Channel
+  /api/v2/channels:
+    post:
+      summary: query channels
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#query'
+  /api/v2/channel:
+    post:
+      summary: create a channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#create'
+  /api/v2/channel/{channelId}/displayName:
+    post:
+      summary: change channel displayName
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#setChannelDisplay'
+  /api/v2/channel/{channelId}/users/ban:
+    post:
+      summary: ban users in channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#ban'
+  /api/v2/channel/{channelId}/users/unban:
+    post:
+      summary: unban users in channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#unban'
+  /api/v2/channels/{channelId}/close:
+    post:
+      summary: close channel
+      tags:
+        - Channel
+      $ref: './v2/channel/api.yaml#close'
   /api/v2/channel/{channelId}/avatar:
     put:
       summary: Set or Remove avatar from channel
@@ -2106,6 +1774,7 @@ paths:
               properties:
                 deviceId:
                   type: string
+                  maxLength: 150
                 platform:
                   type: string
                   enum:
@@ -2113,6 +1782,7 @@ paths:
                     - ios
                 token:
                   type: string
+                  maxLength: 1000
                 userId:
                   type: string
                 provider:
@@ -2157,7 +1827,6 @@ paths:
           $ref: '#/components/responses/SuccessResponse'
         '400000':
           $ref: '#/components/responses/BadRequestError'
-
   /admin/v1/notification/setting:
     post:
       summary: Save push notification setting.
@@ -2193,6 +1862,1479 @@ paths:
         - Notification
       $ref: './v1/notification/socket.yaml#save'
 
+  #Reaction
+  /api/v2/reactions:
+    get:
+      summary: get list of reactions.
+      tags:
+        - Reaction
+      $ref: './v2/reaction/api.yaml#/query'
+    post:
+      summary: add reaction to any document.
+      tags:
+        - Reaction
+      $ref: './v2/reaction/api.yaml#/create'
+    delete:
+      summary: remove reaction from any document.
+      tags:
+        - Reaction
+      $ref: './v2/reaction/api.yaml#/delete'
+  /api/v3/reactions:
+    get:
+      summary: get list of reactions.
+      tags:
+        - Reaction
+      $ref: './v3/reaction/api.yaml#/query'
+  /sockets/v3/reaction.query:
+    post:
+      summary: get list of reactions.
+      tags:
+        - Reaction
+      $ref: './v3/reaction/socket.yaml#query'
+  /sockets/reaction.add:
+    post:
+      summary: Add reaction to any document.
+      tags:
+        - Reaction
+      $ref: './v1/reaction/socket.yaml#create'
+  /sockets/reaction.query:
+    post:
+      summary: Get list of reactions.
+      tags:
+        - Reaction
+      $ref: './v1/reaction/socket.yaml#query'
+  /sockets/reaction.remove:
+    post:
+      summary: Remove reaction from any document.
+      tags:
+        - Reaction
+      $ref: './v1/reaction/socket.yaml#delete'
+  
+  #Network
+  /admin/v1/network/{networkId}:
+    get:
+      summary: Get a network
+      tags:
+        - Network
+      security:
+        - ApiKeyAuth: []
+      description: >
+        Get a network.
+      parameters:
+        - name: Content-Type
+          in: header
+          value: application/json
+          required: true
+          schema:
+            type: string
+        - name: networkId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200000':
+          $ref: '#/components/responses/NetworkResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+    put:
+      summary: Save network
+      tags:
+        - Network
+      security:
+        - ApiKeyAuth: []
+      description: >
+        save network information
+      parameters:
+        - name: Content-Type
+          in: header
+          value: application/json
+          required: true
+          schema:
+            type: string
+        - name: networkId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: >
+          data for save network
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                defaultMessageAutoDeleteEnabled:
+                  type: boolean
+                  description: Is message in this channel will be deleted when the user flagged until flag limit?
+                defaultAutoDeleteMessageByFlagLimit:
+                  type: number
+                  min: 1
+                  example: 1
+                  description: Number of flags that will force a message to be deleted automatically.
+                useSecureAuthentication:
+                  type: boolean
+                  description: Is this network require secure authentication implementation.
+              required:
+                - networkId
+                - defaultMessageAutoDeleteEnabled
+                - defaultAutoDeleteMessageByFlagLimit
+      responses:
+        '200000':
+          $ref: '#/components/responses/NetworkResponse'
+        '400400':
+          $ref: '#/components/responses/NotFoundError'
+  /api/v3/networks/server-key:
+    get:
+      summary: Get server key last issued data
+      tags:
+        - Network
+      $ref: './v3/network/api.yaml#/getServerKeyLastUpdated'
+    post:
+      summary: Issue new server key
+      tags:
+        - Network
+      $ref: './v3/network/api.yaml#/issueServerKey'
+  /api/v3/networks:
+    post:
+      summary: Create network with tier
+      tags:
+        - Network
+      $ref: './v3/network/api.yaml#/create'
+  /api/v3/networks/me:
+    get:
+      summary: Get self network info
+      tags:
+        - Network
+      $ref: './v3/network/api.yaml#/getSelfNetwork'
+    put:
+      summary: Update self network info
+      tags:
+        - Network
+      $ref: './v3/network/api.yaml#/updateSelfNetwork'
+
+  #Post
+  /api/v3/posts:
+    get:
+      summary: query posts
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#query'
+    post:
+      summary: create a post
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/create'
+  /api/v3/posts/{postId}:
+    get:
+      summary: get a post by ID
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/get'
+    put:
+      summary: update a post
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/update'
+    delete:
+      summary: delete a post
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/delete'
+  /api/v3/posts/{postId}/approve:
+    post:
+      summary: Approve reviewing post
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/approve'
+  /api/v3/posts/{postId}/decline:
+    post:
+      summary: Decline reviewing post
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/decline'
+  /api/v3/posts/{postId}/flag:
+    post:
+      summary: flag a post.
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/flag'
+  /api/v3/posts/{postId}/isflagbyme:
+    get:
+      summary: Check whether user flag a given post.
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/isflagbyme'
+  /api/v3/posts/:postId/unflag:
+    delete:
+      summary: unflag a post.
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/unflag'
+  /api/v3/posts/list:
+    get:
+      summary: get list of post
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#/getList'
+  /api/v3/posts/:postId/flags:
+    delete:
+      summary: clear flags
+      tags:
+        - Post
+      $ref: './v3/post/api.yaml#clearflag'
+  /sockets/v3/post.create:
+    post:
+      summary: create a post
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#create'
+  /sockets/v3/post.update:
+    post:
+      summary: update a post
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#update'
+  /sockets/v3/post.delete:
+    post:
+      summary: delete a post
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#delete'
+  /sockets/v3/post.get:
+    post:
+      summary: get a post by ID
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#get'
+  /sockets/v3/post.flag:
+    post:
+      summary: flag a post.
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#flag'
+  /sockets/v3/post.unflag:
+    post:
+      summary: unflag a post.
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#unflag'
+  /sockets/v3/post.isflagbyme:
+    post:
+      summary: Check whether user flag a given post.
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#isflagbyme'
+  /sockets/v3/post.getList:
+    post:
+      summary: get list of post
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#getList'
+  /sockets/v3/post.clearFlags:
+    post:
+      summary: clear flags
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#clearflag'
+  /sockets/v3/post.query:
+    post:
+      summary: query posts
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#query'
+  /sockets/v3/post.approve:
+    post:
+      summary: Approve reviewing post
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#clearflag'
+  /sockets/v3/post.decline:
+    post:
+      summary: Decline reviewing post
+      tags:
+        - Post
+      $ref: './v3/post/socket.yaml#query'
+
+  #Postv4
+  /api/v4/posts:
+    post:
+      summary: create a post
+      tags:
+        - Post v4
+      $ref: './v4/post/api.yaml#/create'
+    get:
+      summary: query a post
+      tags:
+        - Post v4
+      $ref: './v4/post/api.yaml#/query'
+  /api/v4/posts/:postId:
+    put:
+      summary: update a post
+      tags:
+        - Post v4
+      $ref: './v4/post/api.yaml#/update'
+    delete:
+      summary: delete a post
+      tags:
+        - Post v4
+      $ref: './v4/post/api.yaml#/delete'
+  /sockets/v4/post.query:
+    post:
+      summary: query a post
+      tags:
+        - Post v4
+      $ref: './v4/post/socket.yaml#query'
+  /sockets/v4/post.create:
+    post:
+      summary: create a post
+      tags:
+        - Post v4
+      $ref: './v4/post/socket.yaml#create'
+  /sockets/v4/post.update:
+    post:
+      summary: update a post
+      tags:
+        - Post v4
+      $ref: './v4/post/socket.yaml#update'
+  /sockets/v4/post.delete:
+    post:
+      summary: delete a post
+      tags:
+        - Post v4
+      $ref: './v4/post/socket.yaml#delete'
+
+  #Pollv3
+  /api/v3/polls:
+    post:
+      summary: create a poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/api.yaml#/create'
+  /api/v3/polls/{pollId}:
+    put:
+      summary: update status poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/api.yaml#/update'
+    get:
+      summary: get poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/api.yaml#/get'
+    delete:
+      summary: delete poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/api.yaml#/delete'
+  /api/v3/polls/{pollId}/votes:
+    post:
+      summary: vote poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/api.yaml#/vote'
+  /api/v3/polls/{pollId}/answers/{answerId}:
+    get:
+      summary: List users who vote the poll with specific answer
+      tags:
+        - Poll v3
+      $ref: './v3/poll/api.yaml#/getUsersAnswered'
+  /sockets/v3/poll.create:
+    post:
+      summary: create a poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/socket.yaml#/create'
+  /sockets/v3/poll.update:
+    post:
+      summary: update status poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/socket.yaml#/update'
+  /sockets/v3/poll.delete:
+    post:
+      summary: delete poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/socket.yaml#/delete'
+  /sockets/v3/poll.vote:
+    post:
+      summary: vote poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/socket.yaml#/vote'
+  /sockets/v3/poll.get:
+    post:
+      summary: get poll
+      tags:
+        - Poll v3
+      $ref: './v3/poll/socket.yaml#/get'
+  /sockets/v3/poll.getList:
+    post:
+      summary: List users who vote the poll with specific answer
+      tags:
+        - Poll v3
+      $ref: './v3/poll/socket.yaml#/getUsersAnswered'
+  
+  #UserFeed
+  /api/v3/user-feeds/{userId}:
+    get:
+      summary: Get list of posts.
+      tags:
+        - UserFeed
+      $ref: './v3/user-feed/api.yaml#get'
+  /api/v3/user-feeds/{userId}/count:
+    get:
+      summary: Get number of post.
+      tags:
+        - UserFeed
+      $ref: './v3/user-feed/api.yaml#count'
+  /sockets/v3/user-feed.query:
+    post:
+      summary: Get list of posts.
+      tags:
+        - UserFeed
+      $ref: './v3/user-feed/socket.yaml#post'
+  /sockets/v3/user-feed.count:
+    post:
+      summary: Get number of post.
+      tags:
+        - UserFeed
+      $ref: './v3/user-feed/socket.yaml#count'
+
+  #Community Feed
+  /api/v3/community-feeds/{communityId}:
+    get:
+      summary: Get list of posts.
+      tags:
+        - CommunityFeed
+      $ref: './v3/community-feed/api.yaml#get'
+  /sockets/v3/community-feed.query:
+    post:
+      summary: Get list of posts.
+      tags:
+        - CommunityFeed
+      $ref: './v3/community-feed/socket.yaml#post'
+
+  #Global Feed
+    /api/v3/global-feeds:
+    get:
+      summary: Get global feed.
+      tags:
+        - GlobalFeed
+      $ref: './v3/global-feed/api.yaml#get'
+  /sockets/v3/global-feed.query:
+    post:
+      summary: Get global feed.
+      tags:
+        - GlobalFeed
+      $ref: './v3/global-feed/socket.yaml#post'
+
+  #Comment
+  /api/v3/comments:
+    get:
+      summary: query comments (pagination support).
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/query'
+    post:
+      summary: create a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/create'
+  /api/v3/comments/{commentId}:
+    get:
+      summary: get a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/get'
+    put:
+      summary: update a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/update'
+    delete:
+      summary: delete a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/delete'
+  /api/v3/comments/{commentId}/flag:
+    post:
+      summary: flag a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/flag'
+  /api/v3/comments/{commentId}/isflagbyme:
+    get:
+      summary: Check whether user flag a given comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/isflagbyme'
+  /api/v3/comments/:commentId/unflag:
+    delete:
+      summary: unflag a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/unflag'
+  /api/v3/comments/list:
+    get:
+      summary: get comments by IDs.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/getList'
+  /api/v3/comments/{commentId}/flags:
+    delete:
+      summary: clear flags.
+      tags:
+        - Comment
+      $ref: './v3/comment/api.yaml#/clearflag'
+  /sockets/v3/comment.query:
+    post:
+      summary: query comments.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#query'
+  /sockets/v3/comment.create:
+    post:
+      summary: create a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#create'
+  /sockets/v3/comment.update:
+    post:
+      summary: update a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#update'
+  /sockets/v3/comment.delete:
+    post:
+      summary: delete a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#delete'
+  /sockets/v3/comment.flag:
+    post:
+      summary: flag a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#flag'
+  /sockets/v3/comment.unflag:
+    post:
+      summary: unflag a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#unflag'
+  /sockets/v3/comment.isflagbyme:
+    post:
+      summary: Check whether user flag a given comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#isflagbyme'
+  /sockets/v3/comment.get:
+    post:
+      summary: get a comment.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#get'
+  /sockets/v3/comment.getList:
+    post:
+      summary: get comments by IDs.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#getList'
+  /sockets/v3/comment.clearFlags:
+    post:
+      summary: clear flags.
+      tags:
+        - Comment
+      $ref: './v3/comment/socket.yaml#clearflag'
+
+  #Comment V4
+  /api/v4/comments/{commentId}:
+    delete:
+      summary: delete a comment.
+      tags:
+        - Comment v4
+      $ref: './v4/comment/api.yaml#/delete'
+  /sockets/v4/comment.delete:
+    post:
+      summary: delete a comment.
+      tags:
+        - Comment v4
+      $ref: './v4/comment/socket.yaml#delete'
+  /sockets/moderation-setting.get:
+    post:
+      summary: get a moderation setting
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/json
+      description: >
+        Get a moderation setting.
+      responses:
+        '200000':
+          $ref: '#/components/responses/ModerationSettingResponse'
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+  /sockets/moderation-setting.update:
+    post:
+      summary: update a moderation setting
+      tags:
+        - Admin
+      securityDefinition:
+        ApiKeyAuth:
+          type: apiKey
+          in: header
+          name: Authorization
+      description: >
+        Update a moderation setting
+      parameters:
+        - name: Authorization
+          in: header
+          value: Bearer {{accessToken}}
+          required: true
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          value: application/x-www-form-urlencoded
+          required: true
+          schema:
+            type: string
+      consumes:
+        - application/x-www-form-urlencoded
+      requestBody:
+        description: >
+          moderation setting information
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                maxRepetition:
+                  type: integer
+                  minimum: 0
+                maxRepetitionTimeout:
+                  type: integer
+                  minimum: 0
+                blacklistMuteTimeout:
+                  type: integer
+                  minimum: 0
+                whitelistMuteTimeout:
+                  type: integer
+                  minimum: 0
+                maxRepetitionMuteTimeout:
+                  type: integer
+                  minimum: 0
+                enableImageModeration:
+                  type: boolean
+                imageModeration:
+                  type: object
+                  properties:
+                    nudity:
+                      type: number
+                      minimum: 0
+                    suggestive:
+                      type: number
+                      minimum: 0
+                    violence:
+                      type: number
+                      minimum: 0
+                    disturbing:
+                      type: number
+                      minimum: 0
+      responses:
+        '200000':
+          description: Success
+        '400000':
+          $ref: '#/components/responses/BadRequestError'
+        '500000':
+          $ref: '#/components/responses/UnexpectedError'
+
+  #File
+  /api/v3/files:
+    post:
+      summary: Upload file.
+      tags:
+        - File
+      $ref: './v3/file/api.yaml#upload'
+  /api/v3/files/{fileId}:
+    get:
+      summary: Get file info
+      tags:
+        - File
+      $ref: './v3/file/api.yaml#get'
+    delete:
+      summary: Delete file
+      tags:
+        - File
+      $ref: './v3/file/api.yaml#delete'
+  /api/v3/files/{fileId}/download:
+    get:
+      summary: Get file
+      tags:
+        - File
+      $ref: './v3/file/api.yaml#download'
+  /sockets/v3/file.get:
+    post:
+      summary: Get file info
+      tags:
+        - File
+      $ref: './v3/file/socket.yaml#get'
+  /sockets/v3/file.delete:
+    post:
+      summary: Delete file
+      tags:
+        - File
+      $ref: './v3/file/socket.yaml#delete'
+
+  #File v4
+  /api/v4/images:
+    post:
+      summary: Upload image file.
+      tags:
+        - File
+      $ref: './v4/file/api.yaml#uploadImage'
+  /api/v4/files:
+    post:
+      summary: Upload file.
+      tags:
+        - File
+      $ref: './v4/file/api.yaml#uploadFile'
+  /api/v4/videos:
+    post:
+      summary: Upload video file.
+      tags:
+        - File
+      $ref: './v4/file/api.yaml#uploadVideo'
+
+  #Community
+  /api/v3/communities:
+    get:
+      summary: query communities.
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/get'
+    post:
+      summary: create a community.
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/create'
+  /api/v3/communities/{communityId}:
+    get:
+      summary: get a community by ID.
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/getOne'
+    put:
+      summary: update a community.
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/update'
+    delete:
+      summary: delete a community.
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/delete'
+  /api/v3/communities/:communityId/join:
+    post:
+      summary: Join a community
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/join'
+  /api/v3/communities/:communityId/leave:
+    delete:
+      summary: Leave a community.
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/leave'
+  /api/v3/communities/{communityId}/users:
+    get:
+      summary: query community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/getUsers'
+    post:
+      summary: add community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/addUsers'
+    delete:
+      summary: remove community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/removeUsers'
+  /api/v3/communities/:communityId/users/ban:
+    put:
+      summary: ban community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/ban'
+  /api/v3/communities/:communityId/users/unban:
+    put:
+      summary: unban community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/unban'
+  /api/v3/communities/:communityId/users/roles:
+    post:
+      summary: Add role to community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/addRole'
+    delete:
+      summary: Remove role from community users
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/removeRole'
+  /api/v3/communities/{communityId}/permissions/me:
+    get:
+      summary: Get self permission in community
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/getSelfPermission'
+  /api/v3/communities/list:
+    get:
+      summary: get list of community
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/getList'
+  /api/v3/communities/recommended:
+    get:
+      summary: get list of recommended community
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/getRecommendedList'
+  /api/v3/communities/top-trending:
+    get:
+      summary: get list of top trend community
+      tags:
+        - Community
+      $ref: './v3/community/api.yaml#/getTopTrendingList'
+  /api/v4/communities/:communityId/users/roles:
+    post:
+      summary: Add roles to community users
+      tags:
+        - Community
+      $ref: './v4/community/api.yaml#/addRoles'
+    delete:
+      summary: Remove roles from community users
+      tags:
+        - Community
+      $ref: './v4/community/api.yaml#/removeRoles'
+  /sockets/v3/community.query:
+    post:
+      summary: query communities.
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/query'
+  /sockets/v3/community.create:
+    post:
+      summary: create a community.
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/create'
+  /sockets/v3/community.update:
+    post:
+      summary: update a community.
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/update'
+  /sockets/v3/community.delete:
+    post:
+      summary: delete a community.
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/delete'
+  /sockets/v3/community.get:
+    post:
+      summary: get a community by ID.
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/get'
+  /sockets/v3/community.join:
+    post:
+      summary: Join community by id
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/join'
+  /sockets/v3/community.leave:
+    post:
+      summary: Leave community by id
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/leave'
+  /sockets/v3/community.queryUsers:
+    post:
+      summary: query community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/queryUsers'
+  /sockets/v3/community.banUsers:
+    post:
+      summary: ban community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/banUsers'
+  /sockets/v3/community.unbanUsers:
+    post:
+      summary: unban community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/unbanUsers'
+  /sockets/v3/community.getList:
+    post:
+      summary: get list of community
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/getList'
+  /sockets/v3/community.getRecommendedList:
+    post:
+      summary: get list of recommended community
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/getRecommendedList'
+  /sockets/v3/community.getTopTrendingList:
+    post:
+      summary: get list of top trend community
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/getTopTrendingList'
+  /sockets/v3/community.addUsers:
+    post:
+      summary: add community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/addUsers'
+  /sockets/v3/community.removeUsers:
+    post:
+      summary: remove community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/removeUsers'
+  /sockets/v3/community.assignRoleToUsers:
+    post:
+      summary: Add role to community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/addRole'
+  /sockets/v3/community.removeRoleFromUsers:
+    post:
+      summary: Remove role from community users
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/removeRole'
+  /sockets/v3/community.getSelfPermission:
+    post:
+      summary: Get self permission in community
+      tags:
+        - Community
+      $ref: './v3/community/socket.yaml#/getSelfPermission'
+  /sockets/v4/community.assignRolesToUsers:
+    post:
+      summary: Add roles to community users
+      tags:
+        - Community
+      $ref: './v4/community/socket.yaml#/addRoles'
+  /sockets/v4/community.removeRolesFromUsers:
+    post:
+      summary: Remove roles from community users
+      tags:
+        - Community
+      $ref: './v4/community/socket.yaml#/removeRoles'
+
+  #Community Category
+  /api/v3/community-categories:
+    get:
+      summary: query community categories.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/api.yaml#/query'
+    post:
+      summary: create a community categories.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/api.yaml#/post'
+  /api/v3/community-categories/{categoryId}:
+    get:
+      summary: get a community category.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/api.yaml#/get'
+    put:
+      summary: update a community categories.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/api.yaml#/put'
+    delete:
+      summary: delete a community category.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/api.yaml#/delete'
+  /api/v3/community-categories/list:
+    get:
+      summary: get list of community category.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/api.yaml#/getList'
+  /sockets/v3/community-category.query:
+    post:
+      summary: query community categories.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/socket.yaml#/query'
+  /sockets/v3/community-category.get:
+    post:
+      summary: get a community category.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/socket.yaml#/get'
+  /sockets/v3/community-category.getList:
+    post:
+      summary: get list of community category.
+      tags:
+        - CommunityCategory
+      $ref: './v3/community-category/socket.yaml#/getList'
+
+  #Content Feed
+  /api/v3/content-feeds:
+    get:
+      summary: Get list of contents.
+      tags:
+        - ContentFeed
+      $ref: './v3/content-feed/api.yaml#query'
+  /sockets/v3/content-feed.query:
+    post:
+      summary: Get list of contents.
+      tags:
+        - ContentFeed
+      $ref: './v3/content-feed/socket.yaml#query'
+
+  #Video Streaming
+  /api/v3/video-streaming:
+    post:
+      summary: create video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/api.yaml#/create'
+    get:
+      summary: get list of video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/api.yaml#/query'
+  /api/v3/video-streaming/{streamId}:
+    get:
+      summary: get single video-streaming item
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/api.yaml#/get'
+    put:
+      summary: update video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/api.yaml#/update'
+    delete:
+      summary: delete video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/api.yaml#/delete'
+  /api/v3/video-streaming/:streamId/streaming-url:
+    delete:
+      summary: dispose video streaming url
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/api.yaml#/dispose'
+  /sockets/v3/video-streaming.create:
+    post:
+      summary: create video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/socket.yaml#/create'
+  /sockets/v3/video-streaming.update:
+    post:
+      summary: update video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/socket.yaml#/update'
+  /sockets/v3/video-streaming.delete:
+    post:
+      summary: delete video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/socket.yaml#/delete'
+  /sockets/v3/video-streaming.query:
+    post:
+      summary: get list of video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/socket.yaml#/query'
+  /sockets/v3/video-streaming.get:
+    post:
+      summary: get single video-streaming item
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/socket.yaml#/get'
+  /sockets/v3/video-streaming.dispose:
+    post:
+      summary: dispose video streaming
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/socket.yaml#/dispose'
+  /callbacks/video-streaming.didStart:
+    get:
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/event.yaml#didStart'
+  /callbacks/video-streaming.didStop:
+    get:
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/event.yaml#didStop'
+  /callbacks/video-streaming.didRecord:
+    get:
+      tags:
+        - VideoStreaming
+      $ref: './v3/video-streaming/event.yaml#didRecord'
+
+  #User event
+  /api/v3/user-event/video-streaming:
+    post:
+      summary: create user event for video streaming
+      tags:
+        - UserEvent
+      $ref: './v3/user-event/api.yaml#/create'
+
+  #Follow
+  /api/v4/me/following/:userId:
+    post:
+      summary: Follow user.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/follow'
+    delete:
+      summary: Unfollow or Cancel follow request
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/unfollow'
+  /api/v4/me/followers/:userId:
+    post:
+      summary: Accept follow request.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/accept'
+    delete:
+      summary: Decline follow request or delete followers.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/delete'
+  /api/v4/me/followers:
+    get:
+      summary: Get my follower list.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/getMyFollowerList'
+  /api/v4/users/{userId}/followers:
+    get:
+      summary: Get other follower list.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/getOtherFollowerList'
+  /api/v4/me/following:
+    get:
+      summary: Get my following list
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/getMyFollowingList'
+  /api/v4/users/{userId}/following:
+    get:
+      summary: Get other following list.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/getOtherFollowingList'
+  /api/v4/me/followInfo:
+    get:
+      summary: Get my follow information.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/getMyFollowInformation'
+  /api/v4/users/{userId}/followInfo:
+    get:
+      summary: Get other follow information.
+      tags:
+        - Follow
+      $ref: './v4/follow/api.yaml#/getOtherFollowInformation'
+  /api/v4/users/{userId}:
+    delete:
+      summary: Delete user
+      tags:
+        - User
+      $ref: './v4/user/api.yaml#/deleteUser'
+  /api/v4/me/flags/{userId}:
+    post:
+      summary: Report user (flag user)
+      tags:
+        - User
+      $ref: './v4/user/api.yaml#/flagUser'
+    delete:
+      summary: Unreported user (unflag user)
+      tags:
+        - User
+      $ref: './v4/user/api.yaml#/unflagUser'
+  /sockets/v4/following.create:
+    post:
+      summary: Follow user.
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/follow'
+  /sockets/v4/following.delete:
+    post:
+      summary: Unfollow or Cancel follow request
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/unfollow'
+  /sockets/v4/follower.accept:
+    post:
+      summary: Accept follow request.
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/accept'
+  /sockets/v4/follower.delete:
+    post:
+      summary: Decline follow request or delete follower.
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/delete'
+  /sockets/v4/followers.getList:
+    post:
+      summary: Get follower list.
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/getFollowerList'
+  /sockets/v4/following.getList:
+    post:
+      summary: Get following list.
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/getFollowingList'
+  /sockets/v4/followInfo.get:
+    post:
+      summary: Get follow information.
+      tags:
+        - Follow
+      $ref: './v4/follow/socket.yaml#/getFollowInformation'
+
+  #Global Feed
+  /api/v4/me/global-feeds:
+    get:
+      summary: Get global feed.
+      tags:
+        - GlobalFeed
+      $ref: './v4/global-feed/api.yaml#get'
+  /sockets/v4/global-feed.query:
+    post:
+      summary: Get global feed.
+      tags:
+        - GlobalFeed
+      $ref: './v4/global-feed/socket.yaml#post'
+  
+  #Network Setting
+  /api/v3/network-settings:
+    put:
+      deprecated: true
+      summary: Update network setting configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateNetworkSetting'
+  /api/v3/network-settings/social:
+    put:
+      summary: Update social configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateSocial'
+    get:
+      summary: Get social configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/getSocial'
+  /api/v3/network-settings/webhook:
+    put:
+      summary: Update webhook configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateWebhook'
+    get:
+      summary: Get webhook configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/getWebhook'
+  /api/v3/network-settings/chat:
+    put:
+      summary: Update chat network setting configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateChatSetting'
+    get:
+      summary: Get chat network setting configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/getChatSetting'
+  /api/v3/network-settings/moderation:
+    get:
+      summary: Get moderation configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/getModeration'
+    put:
+      summary: Update moderation configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateModeration'
+  /api/v3/network-settings/feed-setting:
+    get:
+      summary: Get feed setting check configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/getFeedSetting'
+    put:
+      summary: Update feed setting check configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateFeedSetting'    
+  /api/v3/network-settings/tier:
+    put:
+      summary: Update network tier and feature
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/api.yaml#/updateTier'
+  /api/v3/allowlists:
+    get:
+      summary: Get list of allowed words
+      tags:
+        - Moderation
+      $ref: './v3/moderation/api.yaml#/queryAllowedlist'
+  /api/v3/blocklists:
+    get:
+      summary: Get list of banned words
+      tags:
+        - Moderation
+      $ref: './v3/moderation/api.yaml#/queryBlockedlist'
+  /sockets/v3/network-settings.getSocial:
+    post:
+      summary: Get social configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/socket.yaml#/getSocial'
+  /sockets/v3/network-settings.getChat:
+    post:
+      summary: Get chat network setting configuration.
+      tags:
+        - Network Setting
+      $ref: './v3/network-setting/socket.yaml#/getChatSetting'
+
+  # Realtime - Community
+  /realtime/community.created:
+    $ref: './v4/realtime/community/event.yaml#/created'
+  /realtime/community.updated:
+    $ref: './v4/realtime/community/event.yaml#/updated'
+  /realtime/community.deleted:
+    $ref: './v4/realtime/community/event.yaml#/deleted'
+  /realtime/community.joined:
+    $ref: './v4/realtime/community/event.yaml#/joined'
+  /realtime/community.left:
+    $ref: './v4/realtime/community/event.yaml#/left'
+  /realtime/community.userAdded:
+    $ref: './v4/realtime/community/event.yaml#/userAdded'
+  /realtime/community.userRemoved:
+    $ref: './v4/realtime/community/event.yaml#/userRemoved'
+  /realtime/community.userChanged:
+    $ref: './v4/realtime/community/event.yaml#/userChanged'
+  /realtime/community.userBanned:
+    $ref: './v4/realtime/community/event.yaml#/userBanned'
+  /realtime/community.userUnbanned:
+    $ref: './v4/realtime/community/event.yaml#/userUnbanned'
+
+  # Realtime - Post
+  /realtime/post.created:
+    $ref: './v4/realtime/post/event.yaml#/created'
+  /realtime/post.updated:
+    $ref: './v4/realtime/post/event.yaml#/updated'
+  /realtime/post.deleted:
+    $ref: './v4/realtime/post/event.yaml#/deleted'
+  /realtime/post.approved:
+    $ref: './v4/realtime/post/event.yaml#/approved'
+  /realtime/post.declined:
+    $ref: './v4/realtime/post/event.yaml#/declined'
+  /realtime/post.flagged:
+    $ref: './v4/realtime/post/event.yaml#/flagged'
+  /realtime/post.unflagged:
+    $ref: './v4/realtime/post/event.yaml#/unflagged'
+  /realtime/post.addReaction:
+    $ref: './v4/realtime/post/event.yaml#/addReaction'
+  /realtime/post.removeReaction:
+    $ref: './v4/realtime/post/event.yaml#/removeReaction'
+
+  # Realtime - Comment
+  /realtime/comment.created:
+    $ref: './v4/realtime/comment/event.yaml#/created'
+  /realtime/comment.updated:
+    $ref: './v4/realtime/comment/event.yaml#/updated'
+  /realtime/comment.deleted:
+    $ref: './v4/realtime/comment/event.yaml#/deleted'
+  /realtime/comment.flagged:
+    $ref: './v4/realtime/comment/event.yaml#/flagged'
+  /realtime/comment.unflagged:
+    $ref: './v4/realtime/comment/event.yaml#/unflagged'
+  /realtime/comment.addReaction:
+    $ref: './v4/realtime/comment/event.yaml#/addReaction'
+  /realtime/comment.removeReaction:
+    $ref: './v4/realtime/comment/event.yaml#/removeReaction'
+
+  # Realtime - User
+  /realtime/user.updated:
+    $ref: './v4/realtime/user/event.yaml#/updated'
+  /realtime/user.flagged:
+    $ref: './v4/realtime/user/event.yaml#/flagged'
+  /realtime/user.unflagged:
+    $ref: './v4/realtime/user/event.yaml#/unflagged'
+  /realtime/user.flagCleared:
+    $ref: './v4/realtime/user/event.yaml#/flagCleared'
+
+  #Global Feed
+  /api/v5/me/global-feeds:
+    get:
+      summary: Get global feed.
+      tags:
+        - GlobalFeed
+      $ref: './v5/global-feed/api.yaml#get'
+  /sockets/v5/global-feed.query:
+    post:
+      summary: Get global feed.
+      tags:
+        - GlobalFeed
+      $ref: './v5/global-feed/socket.yaml#post'
+  
   #WebhookEvent
   /webhook/message.didCreate:
     get:
@@ -2817,7 +3959,12 @@ paths:
     get:
       tags:
         - WebhookEvent
-      $ref: './v3/poll/webhook.yaml#didUpdate'
+      $ref: './v3/poll/webhook.yaml#didUpdate'   
+  /webhook/poll.didVote:
+    get:
+      tags:
+        - WebhookEvent
+      $ref: './v3/poll/webhook.yaml#didVote'
   /webhook/v3.video-streaming.didRecord:
     get:
       tags:
@@ -2971,1206 +4118,6 @@ paths:
         - WebhookEvent
       $ref: './v3/video-streaming/webhook.yaml#customNotificationCreated'
 
-  #Reaction
-  /api/v2/reactions:
-    get:
-      summary: get list of reactions.
-      tags:
-        - Reaction
-      $ref: './v2/reaction/api.yaml#/query'
-    post:
-      summary: add reaction to any document.
-      tags:
-        - Reaction
-      $ref: './v2/reaction/api.yaml#/create'
-    delete:
-      summary: remove reaction from any document.
-      tags:
-        - Reaction
-      $ref: './v2/reaction/api.yaml#/delete'
-  /api/v3/reactions:
-    get:
-      summary: get list of reactions.
-      tags:
-        - Reaction
-      $ref: './v3/reaction/api.yaml#/query'
-  /sockets/v3/reaction.query:
-    post:
-      summary: get list of reactions.
-      tags:
-        - Reaction
-      $ref: './v3/reaction/socket.yaml#query'
-  /sockets/reaction.add:
-    post:
-      summary: Add reaction to any document.
-      tags:
-        - Reaction
-      $ref: './v1/reaction/socket.yaml#create'
-  /sockets/reaction.query:
-    post:
-      summary: Get list of reactions.
-      tags:
-        - Reaction
-      $ref: './v1/reaction/socket.yaml#query'
-  /sockets/reaction.remove:
-    post:
-      summary: Remove reaction from any document.
-      tags:
-        - Reaction
-      $ref: './v1/reaction/socket.yaml#delete'
-  #Network
-  /admin/v1/network/{networkId}:
-    get:
-      summary: Get a network
-      tags:
-        - Network
-      security:
-        - ApiKeyAuth: []
-      description: >
-        Get a network.
-      parameters:
-        - name: Content-Type
-          in: header
-          value: application/json
-          required: true
-          schema:
-            type: string
-        - name: networkId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200000':
-          $ref: '#/components/responses/NetworkResponse'
-        '400400':
-          $ref: '#/components/responses/NotFoundError'
-    put:
-      summary: Save network
-      tags:
-        - Network
-      security:
-        - ApiKeyAuth: []
-      description: >
-        save network information
-      parameters:
-        - name: Content-Type
-          in: header
-          value: application/json
-          required: true
-          schema:
-            type: string
-        - name: networkId
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: >
-          data for save network
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                defaultMessageAutoDeleteEnabled:
-                  type: boolean
-                  description: Is message in this channel will be deleted when the user flagged until flag limit?
-                defaultAutoDeleteMessageByFlagLimit:
-                  type: number
-                  min: 1
-                  example: 1
-                  description: Number of flags that will force a message to be deleted automatically.
-                useSecureAuthentication:
-                  type: boolean
-                  description: Is this network require secure authentication implementation.
-              required:
-                - networkId
-                - defaultMessageAutoDeleteEnabled
-                - defaultAutoDeleteMessageByFlagLimit
-      responses:
-        '200000':
-          $ref: '#/components/responses/NetworkResponse'
-        '400400':
-          $ref: '#/components/responses/NotFoundError'
-  /api/v3/networks/server-key:
-    get:
-      summary: Get server key last issued data
-      tags:
-        - Network
-      $ref: './v3/network/api.yaml#/getServerKeyLastUpdated'
-    post:
-      summary: Issue new server key
-      tags:
-        - Network
-      $ref: './v3/network/api.yaml#/issueServerKey'
-  /api/v3/networks:
-    post:
-      summary: Create network with tier
-      tags:
-        - Network
-      $ref: './v3/network/api.yaml#/create'
-  /api/v3/networks/me:
-    get:
-      summary: Get self network info
-      tags:
-        - Network
-      $ref: './v3/network/api.yaml#/getSelfNetwork'
-    put:
-      summary: Update self network info
-      tags:
-        - Network
-      $ref: './v3/network/api.yaml#/updateSelfNetwork'
-
-  #Post
-  /api/v3/posts:
-    get:
-      summary: query posts
-      tags:
-        - Post
-      $ref: './v3/post/api.yaml#query'
-    post:
-      summary: create a post
-      tags:
-        - Post
-      $ref: './v3/post/api.yaml#/create'
-  /api/v3/posts/{postId}:
-    get:
-      summary: get a post by ID
-      tags:
-        - Post
-      $ref: './v3/post/api.yaml#/get'
-    put:
-      summary: update a post
-      tags:
-        - Post
-      $ref: './v3/post/api.yaml#/update'
-    delete:
-      summary: delete a post
-      tags:
-        - Post
-      $ref: './v3/post/api.yaml#/delete'
-  /api/v3/posts/{postId}/approve:
-    post:
-      summary: Approve reviewing post
-      tags:
-        - Post
-      $ref: './v3/post/api.yaml#/approve'
-  /api/v3/posts/{postId}/decline:
-    post:
-      summary: Decline reviewing post
-      tags:
-        - Post
-      $ref: './v3/post/api.yaml#/decline'
-  /api/v3/posts/{postId}/flag:
-    post:
-      summary: flag a post.
-      tags:
-        - Post
-      $ref: './v3/post/api.yaml#/flag'
-  /api/v3/posts/{postId}/isflagbyme:
-    get:
-      summary: Check whether user flag a given post.
-      tags:
-        - Post
-      $ref: './v3/post/api.yaml#/isflagbyme'
-  /api/v3/posts/:postId/unflag:
-    delete:
-      summary: unflag a post.
-      tags:
-        - Post
-      $ref: './v3/post/api.yaml#/unflag'
-  /api/v3/posts/list:
-    get:
-      summary: get list of post
-      tags:
-        - Post
-      $ref: './v3/post/api.yaml#/getList'
-  /api/v3/posts/:postId/flags:
-    delete:
-      summary: clear flags
-      tags:
-        - Post
-      $ref: './v3/post/api.yaml#clearflag'
-  /sockets/v3/post.create:
-    post:
-      summary: create a post
-      tags:
-        - Post
-      $ref: './v3/post/socket.yaml#create'
-  /sockets/v3/post.update:
-    post:
-      summary: update a post
-      tags:
-        - Post
-      $ref: './v3/post/socket.yaml#update'
-  /sockets/v3/post.delete:
-    post:
-      summary: delete a post
-      tags:
-        - Post
-      $ref: './v3/post/socket.yaml#delete'
-  /sockets/v3/post.get:
-    post:
-      summary: get a post by ID
-      tags:
-        - Post
-      $ref: './v3/post/socket.yaml#get'
-  /sockets/v3/post.flag:
-    post:
-      summary: flag a post.
-      tags:
-        - Post
-      $ref: './v3/post/socket.yaml#flag'
-  /sockets/v3/post.unflag:
-    post:
-      summary: unflag a post.
-      tags:
-        - Post
-      $ref: './v3/post/socket.yaml#unflag'
-  /sockets/v3/post.isflagbyme:
-    post:
-      summary: Check whether user flag a given post.
-      tags:
-        - Post
-      $ref: './v3/post/socket.yaml#isflagbyme'
-  /sockets/v3/post.getList:
-    post:
-      summary: get list of post
-      tags:
-        - Post
-      $ref: './v3/post/socket.yaml#getList'
-  /sockets/v3/post.clearFlags:
-    post:
-      summary: clear flags
-      tags:
-        - Post
-      $ref: './v3/post/socket.yaml#clearflag'
-  /sockets/v3/post.query:
-    post:
-      summary: query posts
-      tags:
-        - Post
-      $ref: './v3/post/socket.yaml#query'
-  /sockets/v3/post.approve:
-    post:
-      summary: Approve reviewing post
-      tags:
-        - Post
-      $ref: './v3/post/socket.yaml#clearflag'
-  /sockets/v3/post.decline:
-    post:
-      summary: Decline reviewing post
-      tags:
-        - Post
-      $ref: './v3/post/socket.yaml#query'
-
-  #Postv4
-  /api/v4/posts:
-    post:
-      summary: create a post
-      tags:
-        - Post v4
-      $ref: './v4/post/api.yaml#/create'
-    get:
-      summary: query a post
-      tags:
-        - Post v4
-      $ref: './v4/post/api.yaml#/query'
-  /api/v4/posts/:postId:
-    put:
-      summary: update a post
-      tags:
-        - Post v4
-      $ref: './v4/post/api.yaml#/update'
-    delete:
-      summary: delete a post
-      tags:
-        - Post v4
-      $ref: './v4/post/api.yaml#/delete'
-  /sockets/v4/post.query:
-    post:
-      summary: query a post
-      tags:
-        - Post v4
-      $ref: './v4/post/socket.yaml#query'
-  /sockets/v4/post.create:
-    post:
-      summary: create a post
-      tags:
-        - Post v4
-      $ref: './v4/post/socket.yaml#create'
-  /sockets/v4/post.update:
-    post:
-      summary: update a post
-      tags:
-        - Post v4
-      $ref: './v4/post/socket.yaml#update'
-  /sockets/v4/post.delete:
-    post:
-      summary: delete a post
-      tags:
-        - Post v4
-      $ref: './v4/post/socket.yaml#delete'
-
-  #Pollv3
-  /api/v3/polls:
-    post:
-      summary: create a poll
-      tags:
-        - Poll v3
-      $ref: './v3/poll/api.yaml#/create'
-
-  /api/v3/polls/{pollId}:
-    put:
-      summary: update status poll
-      tags:
-        - Poll v3
-      $ref: './v3/poll/api.yaml#/update'
-    get:
-      summary: get poll
-      tags:
-        - Poll v3
-      $ref: './v3/poll/api.yaml#/get'
-    delete:
-      summary: delete poll
-      tags:
-        - Poll v3
-      $ref: './v3/poll/api.yaml#/delete'
-  /api/v3/polls/{pollId}/votes:
-    post:
-      summary: vote poll
-      tags:
-        - Poll v3
-      $ref: './v3/poll/api.yaml#/vote'
-  /api/v3/polls/{pollId}/answers/{answerId}:
-    get:
-      summary: List users who vote the poll with specific answer
-      tags:
-        - Poll v3
-      $ref: './v3/poll/api.yaml#/getUsersAnswered'
-  /sockets/v3/poll.create:
-    post:
-      summary: create a poll
-      tags:
-        - Poll v3
-      $ref: './v3/poll/socket.yaml#/create'
-  /sockets/v3/poll.update:
-    post:
-      summary: update status poll
-      tags:
-        - Poll v3
-      $ref: './v3/poll/socket.yaml#/update'
-  /sockets/v3/poll.delete:
-    post:
-      summary: delete poll
-      tags:
-        - Poll v3
-      $ref: './v3/poll/socket.yaml#/delete'
-  /sockets/v3/poll.vote:
-    post:
-      summary: vote poll
-      tags:
-        - Poll v3
-      $ref: './v3/poll/socket.yaml#/vote'
-  /sockets/v3/poll.get:
-    post:
-      summary: get poll
-      tags:
-        - Poll v3
-      $ref: './v3/poll/socket.yaml#/get'
-  /sockets/v3/poll.getList:
-    post:
-      summary: List users who vote the poll with specific answer
-      tags:
-        - Poll v3
-      $ref: './v3/poll/socket.yaml#/getUsersAnswered'
-  #UserFeed
-  /api/v3/user-feeds/{userId}/count:
-    get:
-      summary: Get number of post.
-      tags:
-        - UserFeed
-      $ref: './v3/user-feed/api.yaml#count'
-
-  /sockets/v3/user-feed.query:
-    post:
-      summary: Get list of posts.
-      tags:
-        - UserFeed
-      $ref: './v3/user-feed/socket.yaml#post'
-  /sockets/v3/user-feed.count:
-    post:
-      summary: Get number of post.
-      tags:
-        - UserFeed
-      $ref: './v3/user-feed/socket.yaml#count'
-
-  #Community Feed
-  /sockets/v3/community-feed.query:
-    post:
-      summary: Get list of posts.
-      tags:
-        - CommunityFeed
-      $ref: './v3/community-feed/socket.yaml#post'
-
-  #Global Feed
-  /sockets/v3/global-feed.query:
-    post:
-      summary: Get global feed.
-      tags:
-        - GlobalFeed
-      $ref: './v3/global-feed/socket.yaml#post'
-
-  /api/v3/global-feeds:
-    get:
-      summary: Get global feed.
-      tags:
-        - GlobalFeed
-      $ref: './v3/global-feed/api.yaml#get'
-
-  #Comment
-  /api/v3/comments/{commentId}/flags:
-    delete:
-      summary: clear flags.
-      tags:
-        - Comment
-      $ref: './v3/comment/api.yaml#/clearflag'
-  /sockets/v3/comment.query:
-    post:
-      summary: query comments.
-      tags:
-        - Comment
-      $ref: './v3/comment/socket.yaml#query'
-  /sockets/v3/comment.create:
-    post:
-      summary: create a comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/socket.yaml#create'
-  /sockets/v3/comment.update:
-    post:
-      summary: update a comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/socket.yaml#update'
-  /sockets/v3/comment.delete:
-    post:
-      summary: delete a comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/socket.yaml#delete'
-  /sockets/v3/comment.flag:
-    post:
-      summary: flag a comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/socket.yaml#flag'
-  /sockets/v3/comment.unflag:
-    post:
-      summary: unflag a comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/socket.yaml#unflag'
-  /sockets/v3/comment.isflagbyme:
-    post:
-      summary: Check whether user flag a given comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/socket.yaml#isflagbyme'
-  /sockets/v3/comment.get:
-    post:
-      summary: get a comment.
-      tags:
-        - Comment
-      $ref: './v3/comment/socket.yaml#get'
-  /sockets/v3/comment.getList:
-    post:
-      summary: get comments by IDs.
-      tags:
-        - Comment
-      $ref: './v3/comment/socket.yaml#getList'
-  /sockets/v3/comment.clearFlags:
-    post:
-      summary: clear flags.
-      tags:
-        - Comment
-      $ref: './v3/comment/socket.yaml#clearflag'
-
-  #File
-  /api/v3/files:
-    post:
-      summary: Upload file.
-      tags:
-        - File
-      $ref: './v3/file/api.yaml#upload'
-  /api/v3/files/{fileId}:
-    get:
-      summary: Get file info
-      tags:
-        - File
-      $ref: './v3/file/api.yaml#get'
-    delete:
-      summary: Delete file
-      tags:
-        - File
-      $ref: './v3/file/api.yaml#delete'
-  /api/v3/files/{fileId}/download:
-    get:
-      summary: Get file
-      tags:
-        - File
-      $ref: './v3/file/api.yaml#download'
-  /sockets/v3/file.get:
-    post:
-      summary: Get file info
-      tags:
-        - File
-      $ref: './v3/file/socket.yaml#get'
-  /sockets/v3/file.delete:
-    post:
-      summary: Delete file
-      tags:
-        - File
-      $ref: './v3/file/socket.yaml#delete'
-
-  #File v4
-
-  /api/v4/images:
-    post:
-      summary: Upload image file.
-      tags:
-        - File
-      $ref: './v4/file/api.yaml#uploadImage'
-  /api/v4/files:
-    post:
-      summary: Upload file.
-      tags:
-        - File
-      $ref: './v4/file/api.yaml#uploadFile'
-  /api/v4/videos:
-    post:
-      summary: Upload video file.
-      tags:
-        - File
-      $ref: './v4/file/api.yaml#uploadVideo'
-
-  #Community
-  /api/v3/communities/list:
-    get:
-      summary: get list of community
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/getList'
-
-  /api/v3/communities/recommended:
-    get:
-      summary: get list of recommended community
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/getRecommendedList'
-
-  /api/v3/communities/top-trending:
-    get:
-      summary: get list of top trend community
-      tags:
-        - Community
-      $ref: './v3/community/api.yaml#/getTopTrendingList'
-
-  /api/v4/communities/:communityId/users/roles:
-    post:
-      summary: Add roles to community users
-      tags:
-        - Community
-      $ref: './v4/community/api.yaml#/addRoles'
-    delete:
-      summary: Remove roles from community users
-      tags:
-        - Community
-      $ref: './v4/community/api.yaml#/removeRoles'
-  /sockets/v3/community.query:
-    post:
-      summary: query communities.
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/query'
-  /sockets/v3/community.create:
-    post:
-      summary: create a community.
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/create'
-  /sockets/v3/community.update:
-    post:
-      summary: update a community.
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/update'
-  /sockets/v3/community.delete:
-    post:
-      summary: delete a community.
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/delete'
-  /sockets/v3/community.get:
-    post:
-      summary: get a community by ID.
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/get'
-  /sockets/v3/community.join:
-    post:
-      summary: Join community by id
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/join'
-  /sockets/v3/community.leave:
-    post:
-      summary: Leave community by id
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/leave'
-  /sockets/v3/community.queryUsers:
-    post:
-      summary: query community users
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/queryUsers'
-  /sockets/v3/community.banUsers:
-    post:
-      summary: ban community users
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/banUsers'
-  /sockets/v3/community.unbanUsers:
-    post:
-      summary: unban community users
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/unbanUsers'
-  /sockets/v3/community.getList:
-    post:
-      summary: get list of community
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/getList'
-
-  /sockets/v3/community.getRecommendedList:
-    post:
-      summary: get list of recommended community
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/getRecommendedList'
-
-  /sockets/v3/community.getTopTrendingList:
-    post:
-      summary: get list of top trend community
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/getTopTrendingList'
-  /sockets/v3/community.addUsers:
-    post:
-      summary: add community users
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/addUsers'
-  /sockets/v3/community.removeUsers:
-    post:
-      summary: remove community users
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/removeUsers'
-
-  /sockets/v3/community.assignRoleToUsers:
-    post:
-      summary: Add role to community users
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/addRole'
-
-  /sockets/v3/community.removeRoleFromUsers:
-    post:
-      summary: Remove role from community users
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/removeRole'
-
-  /sockets/v3/community.getSelfPermission:
-    post:
-      summary: Get self permission in community
-      tags:
-        - Community
-      $ref: './v3/community/socket.yaml#/getSelfPermission'
-
-  /sockets/v4/community.assignRolesToUsers:
-    post:
-      summary: Add roles to community users
-      tags:
-        - Community
-      $ref: './v4/community/socket.yaml#/addRoles'
-
-  /sockets/v4/community.removeRolesFromUsers:
-    post:
-      summary: Remove roles from community users
-      tags:
-        - Community
-      $ref: './v4/community/socket.yaml#/removeRoles'
-
-  #Community Category
-  /api/v3/community-categories/list:
-    get:
-      summary: get list of community category.
-      tags:
-        - CommunityCategory
-      $ref: './v3/community-category/api.yaml#/getList'
-  /sockets/v3/community-category.query:
-    post:
-      summary: query community categories.
-      tags:
-        - CommunityCategory
-      $ref: './v3/community-category/socket.yaml#/query'
-  /sockets/v3/community-category.get:
-    post:
-      summary: get a community category.
-      tags:
-        - CommunityCategory
-      $ref: './v3/community-category/socket.yaml#/get'
-  /sockets/v3/community-category.getList:
-    post:
-      summary: get list of community category.
-      tags:
-        - CommunityCategory
-      $ref: './v3/community-category/socket.yaml#/getList'
-
-  #Content Feed
-  /sockets/v3/content-feed.query:
-    post:
-      summary: Get list of contents.
-      tags:
-        - ContentFeed
-      $ref: './v3/content-feed/socket.yaml#query'
-  /api/v3/content-feeds:
-    get:
-      summary: Get list of contents.
-      tags:
-        - ContentFeed
-      $ref: './v3/content-feed/api.yaml#query'
-
-  #Video Streaming
-  /sockets/v3/video-streaming.create:
-    post:
-      summary: create video streaming
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/socket.yaml#/create'
-  /sockets/v3/video-streaming.update:
-    post:
-      summary: update video streaming
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/socket.yaml#/update'
-  /sockets/v3/video-streaming.delete:
-    post:
-      summary: delete video streaming
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/socket.yaml#/delete'
-  /sockets/v3/video-streaming.query:
-    post:
-      summary: get list of video streaming
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/socket.yaml#/query'
-  /sockets/v3/video-streaming.get:
-    post:
-      summary: get single video-streaming item
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/socket.yaml#/get'
-  /sockets/v3/video-streaming.dispose:
-    post:
-      summary: dispose video streaming
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/socket.yaml#/dispose'
-  /api/v3/video-streaming:
-    post:
-      summary: create video streaming
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/api.yaml#/create'
-    get:
-      summary: get list of video streaming
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/api.yaml#/query'
-  /api/v3/video-streaming/{streamId}:
-    get:
-      summary: get single video-streaming item
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/api.yaml#/get'
-    put:
-      summary: update video streaming
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/api.yaml#/update'
-    delete:
-      summary: delete video streaming
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/api.yaml#/delete'
-  /api/v3/video-streaming/:streamId/streaming-url:
-    delete:
-      summary: dispose video streaming url
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/api.yaml#/dispose'
-  /callbacks/video-streaming.didStart:
-    get:
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/event.yaml#didStart'
-  /callbacks/video-streaming.didStop:
-    get:
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/event.yaml#didStop'
-  /callbacks/video-streaming.didRecord:
-    get:
-      tags:
-        - VideoStreaming
-      $ref: './v3/video-streaming/event.yaml#didRecord'
-
-  #User event
-  /api/v3/user-event/video-streaming:
-    post:
-      summary: create user event for video streaming
-      tags:
-        - UserEvent
-      $ref: './v3/user-event/api.yaml#/create'
-
-  #Follow
-  /api/v4/me/following/:userId:
-    post:
-      summary: Follow user.
-      tags:
-        - Follow
-      $ref: './v4/follow/api.yaml#/follow'
-    delete:
-      summary: Unfollow or Cancel follow request
-      tags:
-        - Follow
-      $ref: './v4/follow/api.yaml#/unfollow'
-  /api/v4/me/followers/:userId:
-    post:
-      summary: Accept follow request.
-      tags:
-        - Follow
-      $ref: './v4/follow/api.yaml#/accept'
-    delete:
-      summary: Decline follow request or delete followers.
-      tags:
-        - Follow
-      $ref: './v4/follow/api.yaml#/delete'
-  /api/v4/me/followers:
-    get:
-      summary: Get my follower list.
-      tags:
-        - Follow
-      $ref: './v4/follow/api.yaml#/getMyFollowerList'
-  /api/v4/users/{userId}/followers:
-    get:
-      summary: Get other follower list.
-      tags:
-        - Follow
-      $ref: './v4/follow/api.yaml#/getOtherFollowerList'
-  /api/v4/me/following:
-    get:
-      summary: Get my following list
-      tags:
-        - Follow
-      $ref: './v4/follow/api.yaml#/getMyFollowingList'
-  /api/v4/users/{userId}/following:
-    get:
-      summary: Get other following list.
-      tags:
-        - Follow
-      $ref: './v4/follow/api.yaml#/getOtherFollowingList'
-  /api/v4/me/followInfo:
-    get:
-      summary: Get my follow information.
-      tags:
-        - Follow
-      $ref: './v4/follow/api.yaml#/getMyFollowInformation'
-  /api/v4/users/{userId}/followInfo:
-    get:
-      summary: Get other follow information.
-      tags:
-        - Follow
-      $ref: './v4/follow/api.yaml#/getOtherFollowInformation'
-  /api/v4/users/{userId}:
-    delete:
-      summary: Delete user
-      tags:
-        - User
-      $ref: './v4/user/api.yaml#/deleteUser'
-  /api/v4/me/flags/{userId}:
-    post:
-      summary: Report user (flag user)
-      tags:
-        - User
-      $ref: './v4/user/api.yaml#/flagUser'
-    delete:
-      summary: Unreported user (unflag user)
-      tags:
-        - User
-      $ref: './v4/user/api.yaml#/unflagUser'
-
-  /sockets/v4/following.create:
-    post:
-      summary: Follow user.
-      tags:
-        - Follow
-      $ref: './v4/follow/socket.yaml#/follow'
-  /sockets/v4/following.delete:
-    post:
-      summary: Unfollow or Cancel follow request
-      tags:
-        - Follow
-      $ref: './v4/follow/socket.yaml#/unfollow'
-  /sockets/v4/follower.accept:
-    post:
-      summary: Accept follow request.
-      tags:
-        - Follow
-      $ref: './v4/follow/socket.yaml#/accept'
-  /sockets/v4/follower.delete:
-    post:
-      summary: Decline follow request or delete follower.
-      tags:
-        - Follow
-      $ref: './v4/follow/socket.yaml#/delete'
-  /sockets/v4/followers.getList:
-    post:
-      summary: Get follower list.
-      tags:
-        - Follow
-      $ref: './v4/follow/socket.yaml#/getFollowerList'
-  /sockets/v4/following.getList:
-    post:
-      summary: Get following list.
-      tags:
-        - Follow
-      $ref: './v4/follow/socket.yaml#/getFollowingList'
-  /sockets/v4/followInfo.get:
-    post:
-      summary: Get follow information.
-      tags:
-        - Follow
-      $ref: './v4/follow/socket.yaml#/getFollowInformation'
-
-  #Global Feed
-  /sockets/v4/global-feed.query:
-    post:
-      summary: Get global feed.
-      tags:
-        - GlobalFeed
-      $ref: './v4/global-feed/socket.yaml#post'
-
-  /api/v4/me/global-feeds:
-    get:
-      summary: Get global feed.
-      tags:
-        - GlobalFeed
-      $ref: './v4/global-feed/api.yaml#get'
-
-  #Network Setting
-  /api/v3/network-settings:
-    put:
-      deprecated: true
-      summary: Update network setting configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/api.yaml#/updateNetworkSetting'
-
-  /api/v3/network-settings/social:
-    put:
-      summary: Update social configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/api.yaml#/updateSocial'
-    get:
-      summary: Get social configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/api.yaml#/getSocial'
-  /api/v3/network-settings/webhook:
-    put:
-      summary: Update webhook configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/api.yaml#/updateWebhook'
-    get:
-      summary: Get webhook configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/api.yaml#/getWebhook'
-
-  /api/v3/network-settings/chat:
-    put:
-      summary: Update chat network setting configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/api.yaml#/updateChatSetting'
-    get:
-      summary: Get chat network setting configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/api.yaml#/getChatSetting'
-
-  /api/v3/network-settings/moderation:
-    get:
-      summary: Get moderation configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/api.yaml#/getModeration'
-    put:
-      summary: Update moderation configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/api.yaml#/updateModeration'
-
-  /api/v3/network-settings/feed-setting:
-    get:
-      summary: Get feed setting check configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/api.yaml#/getFeedSetting'
-    put:
-      summary: Update feed setting check configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/api.yaml#/updateFeedSetting'    
-
-  /api/v3/network-settings/tier:
-    put:
-      summary: Update network tier and feature
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/api.yaml#/updateTier'
-
-  /sockets/v3/network-settings.getSocial:
-    post:
-      summary: Get social configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/socket.yaml#/getSocial'
-
-  /sockets/v3/network-settings.getChat:
-    post:
-      summary: Get chat network setting configuration.
-      tags:
-        - Network Setting
-      $ref: './v3/network-setting/socket.yaml#/getChatSetting'
-
-  /api/v3/allowlists:
-    get:
-      summary: Get list of allowed words
-      tags:
-        - Moderation
-      $ref: './v3/moderation/api.yaml#/queryAllowedlist'
-
-  /api/v3/blocklists:
-    get:
-      summary: Get list of banned words
-      tags:
-        - Moderation
-      $ref: './v3/moderation/api.yaml#/queryBlockedlist'
-
-  # Realtime - Community
-  /realtime/community.created:
-    $ref: './v4/realtime/community/event.yaml#/created'
-  /realtime/community.updated:
-    $ref: './v4/realtime/community/event.yaml#/updated'
-  /realtime/community.deleted:
-    $ref: './v4/realtime/community/event.yaml#/deleted'
-  /realtime/community.joined:
-    $ref: './v4/realtime/community/event.yaml#/joined'
-  /realtime/community.left:
-    $ref: './v4/realtime/community/event.yaml#/left'
-  /realtime/community.userAdded:
-    $ref: './v4/realtime/community/event.yaml#/userAdded'
-  /realtime/community.userRemoved:
-    $ref: './v4/realtime/community/event.yaml#/userRemoved'
-  /realtime/community.userChanged:
-    $ref: './v4/realtime/community/event.yaml#/userChanged'
-  /realtime/community.userBanned:
-    $ref: './v4/realtime/community/event.yaml#/userBanned'
-  /realtime/community.userUnbanned:
-    $ref: './v4/realtime/community/event.yaml#/userUnbanned'
-
-  # Realtime - Post
-  /realtime/post.created:
-    $ref: './v4/realtime/post/event.yaml#/created'
-  /realtime/post.updated:
-    $ref: './v4/realtime/post/event.yaml#/updated'
-  /realtime/post.deleted:
-    $ref: './v4/realtime/post/event.yaml#/deleted'
-  /realtime/post.approved:
-    $ref: './v4/realtime/post/event.yaml#/approved'
-  /realtime/post.declined:
-    $ref: './v4/realtime/post/event.yaml#/declined'
-  /realtime/post.flagged:
-    $ref: './v4/realtime/post/event.yaml#/flagged'
-  /realtime/post.unflagged:
-    $ref: './v4/realtime/post/event.yaml#/unflagged'
-  /realtime/post.addReaction:
-    $ref: './v4/realtime/post/event.yaml#/addReaction'
-  /realtime/post.removeReaction:
-    $ref: './v4/realtime/post/event.yaml#/removeReaction'
-
-  # Realtime - Comment
-  /realtime/comment.created:
-    $ref: './v4/realtime/comment/event.yaml#/created'
-  /realtime/comment.updated:
-    $ref: './v4/realtime/comment/event.yaml#/updated'
-  /realtime/comment.deleted:
-    $ref: './v4/realtime/comment/event.yaml#/deleted'
-  /realtime/comment.flagged:
-    $ref: './v4/realtime/comment/event.yaml#/flagged'
-  /realtime/comment.unflagged:
-    $ref: './v4/realtime/comment/event.yaml#/unflagged'
-  /realtime/comment.addReaction:
-    $ref: './v4/realtime/comment/event.yaml#/addReaction'
-  /realtime/comment.removeReaction:
-    $ref: './v4/realtime/comment/event.yaml#/removeReaction'
-
-  # Realtime - User
-  /realtime/user.updated:
-    $ref: './v4/realtime/user/event.yaml#/updated'
-  /realtime/user.flagged:
-    $ref: './v4/realtime/user/event.yaml#/flagged'
-  /realtime/user.unflagged:
-    $ref: './v4/realtime/user/event.yaml#/unflagged'
-  /realtime/user.flagCleared:
-    $ref: './v4/realtime/user/event.yaml#/flagCleared'
-
-  #Global Feed
-  /sockets/v5/global-feed.query:
-    post:
-      summary: Get global feed.
-      tags:
-        - GlobalFeed
-      $ref: './v5/global-feed/socket.yaml#post'
-
-  /api/v5/me/global-feeds:
-    get:
-      summary: Get global feed.
-      tags:
-        - GlobalFeed
-      $ref: './v5/global-feed/api.yaml#get'
 
 components:
   schemas:
