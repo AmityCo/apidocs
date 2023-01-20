@@ -59,7 +59,7 @@ save:
             notifiableEvents:
               type: array
               minItems: 1
-              maxItems: 14
+              maxItems: 24
               items:
                 type: object
                 properties:
@@ -70,15 +70,26 @@ save:
                       - channel.joined
                       - conversation-channel.joined
                       - message.created
+                      - text-mention-message.created
                       - conversation-message.created
                       - post.created
                       - post.reacted
+                      - post.approved
+                      - post.need-reviewing
                       - comment.created
                       - comment.replied
                       - comment.reacted
                       - follow.created
                       - follow.requested
                       - follow.accepted
+                      - text-mention-post.created
+                      - text-mention-user-feed-post.created
+                      - text-mention-comment.created
+                      - text-mention-user-feed-comment.created
+                      - text-mention-comment.replied
+                      - text-mention-user-feed-comment.replied
+                      - community.roleAdded   
+                      - community.updated
                   moduleName:
                     type: string
                     enum:
