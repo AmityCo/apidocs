@@ -56,3 +56,19 @@ revoke:
       $ref: "../../global/error.yaml#/GenericPermissionDenidedError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+lastActivityReport:
+  summary: Download last activity user report..
+  tags:
+    - Admin
+  parameters:
+    - name: Cookie
+      in: cookie
+      schema:
+        type: string
+      description: Alternative way to pass authorization token
+  description: >
+    Download last activity user report.
+  responses:
+    "200000":
+      $ref: "./response.yaml#/LastActivityReportResponse"
