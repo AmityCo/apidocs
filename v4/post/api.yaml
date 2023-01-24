@@ -15,8 +15,9 @@ create:
       require text or at least 1 attachments
 
       ### Custom post
-      When `dataType` is set `data` payload can be anything but it will not support normal data capability (ex. `text` data will not be created)
+      - When `dataType` is set as the custom name (dot separated string format, see the `dataType` field section), `data` payload can be anything but it will not support normal data capability (ex. `text` data will not be created)
       and `data` payload size will be limit to `100kb`
+      - `attachments` will be ignored, users need to keep them in `data` field and handle the file info by themselves
 
       ### Image, File, Video post
       - Put `type` with file id in `attachments`
@@ -73,7 +74,7 @@ create:
             dataType:
               type: string
               example: upstra.customtype
-              description: Must be in namespace like or system defined format (ex. "upstra.customtype", "com.eko.birthday", "liveStream")
+              description: Must be in dot separated string format or system defined format (ex. "upstra.customtype", "com.eko.birthday", "liveStream")
             targetType:
               type: string
               enum:
