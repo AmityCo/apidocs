@@ -54,7 +54,7 @@ paths:
       $ref: './v3/session/api.yaml#/create'
     get:
       summary: Verify access token
-      tags: 
+      tags:
         - Session
       $ref: './v3/session/api.yaml#/verifyAccessToken'
   /api/v4/sessions:
@@ -65,10 +65,10 @@ paths:
       $ref: './v4/session/api.yaml#/create'
     delete:
       summary: Revoke access token
-      tags: 
+      tags:
         - Session
       $ref: './v4/session/api.yaml#/revokeAccessToken'
-  
+
   #Device
   /v1/device:
     post:
@@ -82,7 +82,7 @@ paths:
       tags:
         - Device
       $ref: './v1/device/api.yaml#/generateAccessToken'
-  
+
   #Moderation
   /v1/blacklist/records:
     put:
@@ -1758,6 +1758,360 @@ paths:
       tags:
         - Message
       $ref: './v3/message/event.yaml#didDelete'
+  #messagesV5
+  /api/v5/messages:
+    post:
+      tags:
+        - message
+      summary: Add a new message in message feed
+      description: Add a new message
+      operationId: addMessage
+      requestBody:
+        $ref: './v5/messages/requestBodies.yaml#CreateMessage'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: './schema/message.yaml#MessagesCreated_payload'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - asc_auth:
+            - write:messages
+            - read:messages
+    get:
+      tags:
+        - message
+      summary: Finds messages by message feed id and multiple conditions
+      description: Multiple conditions can be provided by query string
+      operationId: findMessagesByConditions
+      parameters:
+        - $ref: './v5/messages/parameters.yaml#Message_messageFeedId'
+        - $ref: './v5/messages/parameters.yaml#Message_parentId'
+        - $ref: './v5/messages/parameters.yaml#Message_isDeleted'
+        - $ref: './v5/messages/parameters.yaml#Generic_includeTags'
+        - $ref: './v5/messages/parameters.yaml#Generic_excludeTags'
+        - $ref: './v5/messages/parameters.yaml#Message_hasFlags'
+        - $ref: './v5/messages/parameters.yaml#Message_dataType'
+        - $ref: './v5/messages/parameters.yaml#Message_pageOptions'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: './schema/message.yaml#Messages_payload'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - asc_auth:
+            - write:messages
+            - read:messages
+  /api/v5/messages/{messageId}:
+    delete:
+      tags:
+        - message
+      summary: Deletes a message
+      description: Deletes a message
+      operationId: deleteMessage
+      parameters:
+        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
+        - $ref: './v5/messages/parameters.yaml#Generic_permanent'
+      responses:
+        '200':
+          description: Successful operation
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - asc_auth:
+            - write:messages
+            - read:messages
+    get:
+      tags:
+        - message
+      summary: Find message by ID
+      description: Returns a single message
+      operationId: getMessageById
+      parameters:
+        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: './schema/message.yaml#Messages_payload'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - apiKey: []
+        - asc_auth:
+            - write:messages
+            - read:messages
+    put:
+      tags:
+        - message
+      summary: Updates a message
+      description: Updates a message
+      operationId: updateMessageWithForm
+      parameters:
+        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
+      requestBody:
+        $ref: './v5/messages/requestBodies.yaml#UpdateMessage'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: './schema/message.yaml#Messages_payload'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - asc_auth:
+            - write:messages
+            - read:messages
+  /api/v5/messages/{messageId}/flags/all:
+    delete:
+      tags:
+        - message
+      summary: Deletes all flags in message
+      description: Deletes all flags in message
+      operationId: deleteAllFlagsInMessage
+      parameters:
+        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    description: The list of message
+                    type: array
+                    items:
+                      $ref: './schema/message.yaml#Message'
+                  files:
+                    description: The list of file
+                    type: array
+                    items:
+                      $ref: './schema/file.yaml#File'
+                  users:
+                    description: The list of user
+                    type: array
+                    items:
+                      $ref: './schema/user.yaml#User'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - asc_auth:
+            - write:messages
+            - read:messages
+  /api/v5/messages/{messageId}/flags:
+    delete:
+      tags:
+        - message
+      summary: Deletes my flag in a message
+      description: Deletes my flag in a message
+      operationId: deleteMyFlagInMessage
+      parameters:
+        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    description: The list of message
+                    type: array
+                    items:
+                      $ref: './schema/message.yaml#Message'
+                  files:
+                    description: The list of file
+                    type: array
+                    items:
+                      $ref: './schema/file.yaml#File'
+                  users:
+                    description: The list of user
+                    type: array
+                    items:
+                      $ref: './schema/user.yaml#User'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - asc_auth:
+            - write:messages
+            - read:messages
+    get:
+      tags:
+        - message
+      summary: Find my flag in message by ID
+      description: Returns my flag in message
+      operationId: getMyFlagInMessage
+      parameters:
+        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: './schema/message.yaml#Message_hasFlags'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - apiKey: []
+        - asc_auth:
+            - write:messages
+            - read:messages
+    post:
+      tags:
+        - message
+      summary: Creates my flag in a message
+      description: Creates my flag in a message
+      operationId: createMyFlagInMessage
+      parameters:
+        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    description: The list of message
+                    type: array
+                    items:
+                      $ref: './schema/message.yaml#Message'
+                  files:
+                    description: The list of file
+                    type: array
+                    items:
+                      $ref: './schema/file.yaml#File'
+                  users:
+                    description: The list of user
+                    type: array
+                    items:
+                      $ref: './schema/user.yaml#User'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - asc_auth:
+            - write:messages
+            - read:messages
+  /api/v5/messages/list:
+    get:
+      tags:
+        - message
+      summary: Finds messages by message id (max=10)
+      description: Multiple message id values can be provided with array format
+      operationId: findMessagesByIds
+      parameters:
+        - $ref: './v5/messages/parameters.yaml#Message_messageIds'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    description: The list of message
+                    type: array
+                    items:
+                      $ref: './schema/message.yaml#Message'
+                  files:
+                    description: The list of file
+                    type: array
+                    items:
+                      $ref: './schema/file.yaml#File'
+                  users:
+                    description: The list of user
+                    type: array
+                    items:
+                      $ref: './schema/user.yaml#User'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - asc_auth:
+            - write:messages
+            - read:messages
+  /api/v5/messages/user/{creatorId}:
+    get:
+      tags:
+        - message
+      summary: Finds messages by creatorId and multiple conditions
+      description: Multiple conditions can be provided by query string
+      operationId: findMessagesByCreatorId
+      parameters:
+        - $ref: './v5/messages/parameters.yaml#Message_creatorIdPath'
+        - $ref: './v5/messages/parameters.yaml#Message_isDeleted'
+        - $ref: './v5/messages/parameters.yaml#Message_hasFlags'
+        - $ref: './v5/messages/parameters.yaml#Message_pageOptions'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    description: The list of message
+                    type: array
+                    items:
+                      $ref: './schema/message.yaml#Message'
+                  files:
+                    description: The list of file
+                    type: array
+                    items:
+                      $ref: './schema/file.yaml#File'
+                  users:
+                    description: The list of user
+                    type: array
+                    items:
+                      $ref: './schema/user.yaml#User'
+                  paging:
+                    allOf:
+                      - $ref: './schema/message.yaml#Generic_paging'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - asc_auth:
+            - write:messages
+            - read:messages
 
   #Notification
   /v1/notification:
@@ -1849,12 +2203,12 @@ paths:
       summary: Get push notification setting.
       tags:
         - Notification
-      $ref: './v3/notification/api.yaml#getSetting'  
+      $ref: './v3/notification/api.yaml#getSetting'
     post:
       summary: Save push notification setting.
       tags:
         - Notification
-      $ref: './v3/notification/api.yaml#saveSetting' 
+      $ref: './v3/notification/api.yaml#saveSetting'
   /sockets/notification.getSetting:
     post:
       summary: Get push notification setting.
@@ -1915,7 +2269,7 @@ paths:
       tags:
         - Reaction
       $ref: './v1/reaction/socket.yaml#delete'
-  
+
   #Network
   /admin/v1/network/{networkId}:
     get:
@@ -2283,7 +2637,7 @@ paths:
       tags:
         - Poll v3
       $ref: './v3/poll/socket.yaml#/getUsersAnswered'
-  
+
   #UserFeed
   /api/v3/user-feeds/{userId}:
     get:
@@ -3164,7 +3518,7 @@ paths:
       tags:
         - GlobalFeed
       $ref: './v4/global-feed/socket.yaml#post'
-  
+
   #Network Setting
   /api/v3/network-settings:
     put:
@@ -3227,7 +3581,7 @@ paths:
       summary: Update feed setting check configuration.
       tags:
         - Network Setting
-      $ref: './v3/network-setting/api.yaml#/updateFeedSetting'    
+      $ref: './v3/network-setting/api.yaml#/updateFeedSetting'
   /api/v3/network-settings/tier:
     put:
       summary: Update network tier and feature
@@ -3340,7 +3694,7 @@ paths:
       tags:
         - GlobalFeed
       $ref: './v5/global-feed/socket.yaml#post'
-  
+
   #WebhookEvent
   /webhook/message.didCreate:
     get:
@@ -3368,7 +3722,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
   /webhook/message.didDelete:
     get:
       tags:
@@ -3395,7 +3749,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
   /webhook/message.didUpdate:
     get:
       tags:
@@ -3422,7 +3776,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
   /webhook/message.didFlag:
     get:
       tags:
@@ -3449,7 +3803,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
   /webhook/message.didUnflag:
     get:
       tags:
@@ -3476,7 +3830,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
   /webhook/message.didClearflag:
     get:
       tags:
@@ -3503,7 +3857,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
   /webhook/channel.didCreate:
     get:
       tags:
@@ -3526,11 +3880,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userIds:
                         type: array
                         items:
@@ -3557,11 +3911,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userIds:
                         type: array
                         items:
@@ -3588,11 +3942,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userIds:
                         type: array
                         items:
@@ -3621,7 +3975,7 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
   /webhook/channel.didLeave:
     get:
       tags:
@@ -3644,11 +3998,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userIds:
                         type: array
                         items:
@@ -3675,11 +4029,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userId:
                         type: string
   /webhook/channel.didRemoveUsers:
@@ -3704,11 +4058,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userIds:
                         type: array
                         items:
@@ -3737,11 +4091,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userId:
                         type: string
   /webhook/channel.didBan:
@@ -3766,11 +4120,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       actorId:
                         type: string
                       userIds:
@@ -3799,11 +4153,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userId:
                         type: string
   /webhook/user.didClearFlag:
@@ -3965,7 +4319,7 @@ paths:
     get:
       tags:
         - WebhookEvent
-      $ref: './v3/poll/webhook.yaml#didUpdate'   
+      $ref: './v3/poll/webhook.yaml#didUpdate'
   /webhook/poll.didVote:
     get:
       tags:
@@ -4145,7 +4499,7 @@ components:
           type: object
           description: Additional properties to support custom fields.
         type:
-          $ref: '#/components/schemas/ChannelType'
+          $ref: './schema/message.yaml#ChannelType'
           description: Type of a channel (standard, conversation, broadcast). This property is not be used for now.
         tags:
           type: array
@@ -4219,7 +4573,7 @@ components:
         readToSegment:
           type: integer
         membership:
-          $ref: '#/components/schemas/ChannelMembership'
+          $ref: './schema/message.yaml#ChannelMembership'
         isBanned:
           type: boolean
         isMuted:
@@ -4464,9 +4818,9 @@ components:
                       type: object
                       properties:
                         channel:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                         channelUser:
-                          $ref: '#/components/schemas/ChannelUser'
+                          $ref: './schema/message.yaml#ChannelUser'
     ChannelResultResponse:
       description: Channel Information
       content:
@@ -4483,9 +4837,9 @@ components:
                     type: object
                     properties:
                       channel:
-                        $ref: '#/components/schemas/Channel'
+                        $ref: './schema/message.yaml#Channel'
                       channelUser:
-                        $ref: '#/components/schemas/ChannelUser'
+                        $ref: './schema/message.yaml#ChannelUser'
     ChannelResponse:
       description: Channel response.
       content:
@@ -4496,7 +4850,7 @@ components:
               isDistinct:
                 type: boolean
               type:
-                $ref: '#/components/schemas/ChannelType'
+                $ref: './schema/message.yaml#ChannelType'
                 description: Type of a channel (standard, conversation, broadcast). This property is not be used for now.
               metadata:
                 type: object
@@ -4568,7 +4922,7 @@ components:
               results:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ChannelUser'
+                  $ref: './schema/message.yaml#ChannelUser'
     UsersResponse:
       description: Users Information
       content:
@@ -4584,7 +4938,7 @@ components:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/User'
+                      $ref: './schema/user.yaml#User'
     UserResponse:
       description: User Information
       content:
@@ -4595,13 +4949,13 @@ components:
               status:
                 type: string
               data:
-                $ref: '#/components/schemas/User'
+                $ref: './schema/user.yaml#User'
     NetworkResponse:
       description: Network information.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Network'
+            $ref: './schema/message.yaml#Network'
     BlacklistRulesResponse:
       description: rules of blacklist Information
       content:
@@ -4617,7 +4971,7 @@ components:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/BlacklistRule'
+                      $ref: './schema/message.yaml#BlacklistRule'
     BlacklistRuleResponse:
       description: rule of blacklist Information
       content:
@@ -4628,7 +4982,7 @@ components:
               status:
                 type: string
               data:
-                $ref: '#/components/schemas/BlacklistRule'
+                $ref: './schema/message.yaml#BlacklistRule'
     WhitelistRulesResponse:
       description: rules of whitelist Information
       content:
@@ -4644,7 +4998,7 @@ components:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/BlacklistRule'
+                      $ref: './schema/message.yaml#BlacklistRule'
     WhitelistRuleResponse:
       description: rule of whitelist Information
       content:
@@ -4655,7 +5009,7 @@ components:
               status:
                 type: string
               data:
-                $ref: '#/components/schemas/BlacklistRule'
+                $ref: './schema/message.yaml#BlacklistRule'
     RolesResponse:
       description: Roles information.
       content:
@@ -4671,11 +5025,11 @@ components:
                   moderatonSettings:
                     type: array
                     items:
-                      $ref: '#/components/schemas/ModerationSetting'
+                      $ref: './schema/message.yaml#ModerationSetting'
                   roles:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Role'
+                      $ref: './schema/message.yaml#Role'
     UserByAdminsResponse:
       description: Users information.
       content:
@@ -4717,7 +5071,7 @@ components:
                   roles:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Role'
+                      $ref: './schema/message.yaml#Role'
     ModerationSettingResponse:
       description: Moderation Setting Information
       content:
@@ -4728,13 +5082,13 @@ components:
               status:
                 type: string
               data:
-                $ref: '#/components/schemas/ModerationSetting'
+                $ref: './schema/message.yaml#ModerationSetting'
     UnexpectedError:
       description: Unexpected error.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 500000
@@ -4744,7 +5098,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400400
@@ -4754,7 +5108,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400000
@@ -4764,7 +5118,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400400
@@ -4774,7 +5128,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400301
@@ -4784,7 +5138,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400304
@@ -4794,7 +5148,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400311
@@ -4804,7 +5158,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400400
@@ -4814,7 +5168,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400300
@@ -4824,7 +5178,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400300
@@ -4834,7 +5188,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400100
@@ -4844,7 +5198,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400316

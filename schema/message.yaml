@@ -109,7 +109,7 @@ Message:
             type: string
             description: >
                 type:
-                * `user` - need to specific userIds and notification mentions individual user 
+                * `user` - need to specific userIds and notification mentions individual user
                 * `channel` - notification mentions all user in channel
             enum:
               - user
@@ -251,7 +251,7 @@ MessageV3:
             type: string
             description: >
                 type:
-                * `user` - need to specific userIds and notification mentions individual user 
+                * `user` - need to specific userIds and notification mentions individual user
                 * `channel` - notification mentions all user in channel
             enum:
               - user
@@ -368,7 +368,7 @@ MessageForRealtimeEvent:
             type: string
             description: >
                 type:
-                * `user` - need to specific userIds and notification mentions individual user 
+                * `user` - need to specific userIds and notification mentions individual user
                 * `channel` - notification mentions all user in channel
             enum:
               - user
@@ -505,7 +505,7 @@ MessageV3ForRealtimeEvent:
             type: string
             description: >
                 type:
-                * `user` - need to specific userIds and notification mentions individual user 
+                * `user` - need to specific userIds and notification mentions individual user
                 * `channel` - notification mentions all user in channel
             enum:
               - user
@@ -523,7 +523,7 @@ MentioneesRequest:
       type: string
       description: >
         type:
-          * `user` - need to specific userIds and notification mentions individual user 
+          * `user` - need to specific userIds and notification mentions individual user
           * `channel` - notification mentions all user in channel
       enum:
         - user
@@ -536,3 +536,409 @@ MentioneesRequest:
       maxItems: 30
   required:
     - type
+
+MessagesV5:
+  description: The messages V5
+  type: object
+  properties:
+    messageId:
+      allOf: 
+        - $ref: './schema/message.yaml#Message_messageId'
+    networkId:
+      allOf: 
+          - $ref: './schema/message.yaml#Message_networkId'
+      channelId:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_channelId'
+      channelType:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_channelType'
+      messageFeedId:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_messageFeedId'
+      segment:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_segment'
+      dataType:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_dataType'
+      data:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_data'
+      fileId:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_fileId'
+      thumbnailFileId:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_thumbnailFileId'
+      metadata:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_metadata'
+      tags:
+        allOf: 
+          - $ref: './schema/message.yaml#Generic_tags'
+      creatorId:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_creatorId'
+      mentionedUsers:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_mentionedUsers'
+      reactions:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_reactions'
+      reactionCount:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_reactionCount'
+      parentId:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_parentId'
+      path:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_path'
+      flagCount:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_flagCount'
+      childCount:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_childCount'
+      isDeleted:
+        allOf: 
+          - $ref: './schema/message.yaml#Generic_isDeleted'
+      editedAt:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_editedAt'
+      createdAt:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_createdAt'
+      updatedAt:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_updatedAt'
+      myReactions:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_myReactions'
+  Message_childCount:
+    description: The number of children message
+    type: number
+    format: int32
+  Message_messageId:
+    description: A message ID
+    type: string
+    maxLength: 30
+    example: a85dca058f5b585f86a29f14
+  Message_messageIds:
+    description: A list of message ID
+    type: array
+    items:
+      type: string
+      maxLength: 30
+    maxItems: 10
+    example: [a85dca058f5b585f86a29f14]
+  Message_channelId:
+    description: Channel id of message
+    type: string
+    maxLength: 30
+    example: abc665aed9dbb8d036037eed
+  Message_channelType:
+    description: Channel type of message
+    type: string
+    enum:
+      - broadcast
+      - community
+      - conversation
+      - live
+    example: community
+  Message_createdAt:
+    description: A created date/time of message 
+    type: string
+    format: date-time
+  Message_creatorId:
+    description: A creator ID
+    type: string
+    maxLength: 30
+    example: 8aa313c8dbb00af911b07672
+  Message_data:
+    description: A custom object for storing message. The size of this object must be less than 10 kb.
+    type: object
+    example: { text: 'test'}
+  Message_dataType:
+    description: Type of data
+    type: string
+    maxLength: 20
+    example: text
+  Message_editedAt:
+    description: The latest date/time of changes in message data 
+    type: string
+    format: date-time
+  Message_fileId:
+    description: File id
+    type: string
+    maxLength: 30
+    example: 76bfe68974157a114053364d
+  Message_flagCount:
+    description: The number of flags
+    type: number
+    format: int32
+  Message_hasFlags:
+    description: A flag to filter only flagged message
+    type: object
+    properties:
+      result: 
+        type: boolean
+  Message_mentionedUsers:
+    description: List of mentioned users
+    type: array
+    items:
+      type: object
+      properties:
+        type:
+          type: string
+          maxLength: 20
+          default: user
+          enum: 
+            - channel
+            - user
+        userIds:
+          type: array
+          maxItems: 50
+          items:
+            type: string
+            maxLength: 24
+          example: [3cac302ab992aa17b215ba21, adb34ec2aeedca03a38e1d54]
+        userPublicIds:
+          type: array
+          maxItems: 50
+          items:
+            type: string
+            maxLength: 30
+          example: [99ac302abaa2aa17b215kalr, 69b34ec2abb39a03a38eppek]
+  Message_messageFeedId:
+    description: Message feed id of message
+    type: string
+    maxLength: 30
+    example: abc665aed9dbb8d036037eec
+  Message_metadata:
+    description: A custom object for storing the other data. The size of this object must be less than 20 kb.
+    type: object
+    example: { refId: 'd601c27c0675baa2103ec573'}
+  Message_networkId:
+    description: A network ID
+    type: string
+    maxLength: 30
+    example: 9530b11ec8de87db22b06b27
+  Message_pageOptions:
+    description: Page options by using cursor
+    type: object
+    properties:
+      after:
+        type: string
+        maxLength: 30
+      before:
+        type: string
+        maxLength: 30
+      limit:
+        type: number
+        format: int32
+        default: 10
+        minimum: 1
+        maximum: 100
+      sortBy:
+        type: string
+        default: segmentDesc
+        enum:
+          - segmentAsc
+          - segmentDesc
+      token:
+        type: string
+        maxLength: 100
+  Message_parentId:
+    description: Parent id of message
+    type: string
+    maxLength: 30
+    example: abc665afd7dbb8d036037eea
+  Message_path:
+    description: Object path
+    type: string
+    maxLength: 200
+    example: 12cba9779cc479e1fcefd1de/chat/f00ab16cbd27d4a9525aea6d/32b468ae0b1bd0cc7976719d/0a003482f0ac53a71e7c9239
+  Message_reactions:
+    description: List of reactions
+    type: object
+    items:
+      type: object
+      additionalProperties:
+        type: number
+    example: { like: 1, love: 2 }
+  Message_reactionCount:
+    description: Total number of reactions
+    type: number
+    format: int32
+  Message_referenceId:
+    description: A reference ID
+    type: string
+    maxLength: 30
+    example: 1530b11ec8df87da22b06b27
+  Message_segment:
+    description: Segment of message in sub feed
+    type: number
+    format: int32
+  Message_thumbnailFileId:
+    description: Thumbnail file id
+    type: string
+    maxLength: 30
+    example: 76bfe68974157a114053364e
+  Generic_tags:
+    description: List of tags for searching
+    type: array
+    maxItems: 10
+    default: []
+    items:
+      type: string
+      maxLength: 30
+    example: [tag1, tag2]
+  Message_updatedAt:
+    description: A updated date/time of message 
+    type: string
+    format: date-time
+  Message_myReactions:
+    description: List of reactions of the actor
+    type: array
+    maxItems: 10
+    default: []
+    items:
+      type: string
+      maxLength: 30
+    example: [like, love]
+  Messages_payload:
+    description: The returned payload of message(s)
+    type: object
+    properties:
+      messages:
+        description: The list of message
+        type: array
+        items:
+          $ref: './schema/message.yaml#MessagesV5'
+      files:
+        description: The list of file
+        type: array
+        items:
+          $ref: './schema/file.yaml#File'
+      users:
+        description: The list of user
+        type: array
+        items:
+          $ref: './schema/message.yaml#User'
+  MessageCreated_referenceId:
+    type: object
+    properties:
+      referenceId:
+        allOf: 
+          - $ref: './schema/message.yaml#Message_referenceId'
+  MessagesCreated_payload:
+    description: The returned payload of created message(s)
+    type: object
+    properties:
+      messages:
+        description: The list of created message
+        type: array
+        items:
+          allOf:
+            - $ref: './schema/message.yaml#MessageCreated_referenceId'
+            - $ref: './schema/message.yaml#MessagesV5'
+      files:
+        description: The list of file
+        type: array
+        items:
+          $ref: './schema/file.yaml#File'
+      users:
+        description: The list of user
+        type: array
+        items:
+          $ref: './schema/message.yaml#User'
+  Generic_permanent:
+    description: A flag to confirm permanent deletion
+    default: false
+  Generic_isDeleted:
+    description: A flag to confirm temporary deletion
+    default: false
+    type: boolean
+  Generic_paging:
+    description: Paging response
+    type: object
+    properties:
+      next:
+        type: string
+        description: token for getting the data next page
+        maxLength: 100
+      previous:
+        type: string
+        description: token for getting the data previous page
+        maxLength: 100
+      total:
+        type: number
+        format: int32
+  User:
+    description: A user information
+    type: object
+    properties:
+      _id:
+        type: string
+        maxLength: 30
+      path:
+        type: string
+        maxLength: 200
+      userId:
+        type: string
+        maxLength: 50
+      roles:
+        type: array
+        items:
+          type: string
+          maxLength: 100
+        maxItems: 10
+        example: ["moderator"]
+      permissions:
+        type: array
+        items:
+          type: string
+          maxLength: 50
+        example: ["MUTE_CHANNEL"]
+      displayName:
+        type: string
+        maxLength: 100
+        example: John Smith
+      description:
+        type: string
+        maxLength: 500
+        example: Normal User
+      avatarFileId:
+        type: string
+        maxLength: 50
+      avatarCustomUrl:
+        type: string
+        maxLength: 1000
+      flagCount:
+        type: number
+      hashflag:
+        description: A list of file attributes
+        type: object
+        properties:
+          bits:
+            type: number
+          hashes:
+            type: number
+          hash:
+            type: array
+            items:
+              type: number
+      metadata: 
+        type: object
+      isGlobalBan:
+        type: boolean
+      createdAt:
+        description: A created date/time of file 
+        type: string
+        format: date-time
+      updatedAt:
+        description: A updated date/time of file 
+        type: string
+        format: date-time
