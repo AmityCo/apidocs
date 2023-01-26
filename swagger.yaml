@@ -23,7 +23,7 @@ info:
 
     Before making server-to-server API calls, be sure to select the correct API endpoint for your region in
     the <strong>Servers</strong> dropdown below.
-  version: 4.46.0
+  version: 4.47.0
 servers:
   - url: https://api.us.amity.co
     description: API Endpoint for US Region
@@ -939,6 +939,12 @@ paths:
         - Admin
       $ref: './v3/role/api.yaml#/delete'
   
+  /admin/v1/reports/user-last-activity:
+    get:
+      summary: Download last activity user report.
+      tags:
+        - Admin
+      $ref: './v1/admin/api.yaml#lastActivityReport'
   #User
   /api/v2/users:
     get:
