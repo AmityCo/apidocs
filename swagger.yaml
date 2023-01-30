@@ -1758,361 +1758,6 @@ paths:
       tags:
         - Message
       $ref: './v3/message/event.yaml#didDelete'
-  #messagesV5
-  /api/v5/messages:
-    post:
-      tags:
-        - message
-      summary: Add a new message in message feed
-      description: Add a new message
-      operationId: addMessage
-      requestBody:
-        $ref: './v5/messages/requestBodies.yaml#CreateMessage'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: './schema/message.yaml#MessagesCreated_payload'
-        '404':
-          description: Not found error
-        '422':
-          description: Parameters validation error
-      security:
-        - asc_auth:
-            - write:messages
-            - read:messages
-    get:
-      tags:
-        - message
-      summary: Finds messages by message feed id and multiple conditions
-      description: Multiple conditions can be provided by query string
-      operationId: findMessagesByConditions
-      parameters:
-        - $ref: './v5/messages/parameters.yaml#Message_messageFeedId'
-        - $ref: './v5/messages/parameters.yaml#Message_parentId'
-        - $ref: './v5/messages/parameters.yaml#Message_isDeleted'
-        - $ref: './v5/messages/parameters.yaml#Generic_includeTags'
-        - $ref: './v5/messages/parameters.yaml#Generic_excludeTags'
-        - $ref: './v5/messages/parameters.yaml#Message_hasFlags'
-        - $ref: './v5/messages/parameters.yaml#Message_dataType'
-        - $ref: './v5/messages/parameters.yaml#Message_pageOptions'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: './schema/message.yaml#Messages_payload'
-        '404':
-          description: Not found error
-        '422':
-          description: Parameters validation error
-      security:
-        - asc_auth:
-            - write:messages
-            - read:messages
-  /api/v5/messages/{messageId}:
-    delete:
-      tags:
-        - message
-      summary: Deletes a message
-      description: Deletes a message
-      operationId: deleteMessage
-      parameters:
-        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
-        - $ref: './v5/messages/parameters.yaml#Generic_permanent'
-      responses:
-        '200':
-          description: Successful operation
-        '404':
-          description: Not found error
-        '422':
-          description: Parameters validation error
-      security:
-        - asc_auth:
-            - write:messages
-            - read:messages
-    get:
-      tags:
-        - message
-      summary: Find message by ID
-      description: Returns a single message
-      operationId: getMessageById
-      parameters:
-        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: './schema/message.yaml#Messages_payload'
-        '404':
-          description: Not found error
-        '422':
-          description: Parameters validation error
-      security:
-        - apiKey: []
-        - asc_auth:
-            - write:messages
-            - read:messages
-    put:
-      tags:
-        - message
-      summary: Updates a message
-      description: Updates a message
-      operationId: updateMessageWithForm
-      parameters:
-        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
-      requestBody:
-        $ref: './v5/messages/requestBodies.yaml#UpdateMessage'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: './schema/message.yaml#Messages_payload'
-        '404':
-          description: Not found error
-        '422':
-          description: Parameters validation error
-      security:
-        - asc_auth:
-            - write:messages
-            - read:messages
-  /api/v5/messages/{messageId}/flags/all:
-    delete:
-      tags:
-        - message
-      summary: Deletes all flags in message
-      description: Deletes all flags in message
-      operationId: deleteAllFlagsInMessage
-      parameters:
-        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  messages:
-                    description: The list of message
-                    type: array
-                    items:
-                      $ref: './schema/message.yaml#Message'
-                  files:
-                    description: The list of file
-                    type: array
-                    items:
-                      $ref: './schema/file.yaml#File'
-                  users:
-                    description: The list of user
-                    type: array
-                    items:
-                      $ref: './schema/user.yaml#User'
-        '404':
-          description: Not found error
-        '422':
-          description: Parameters validation error
-      security:
-        - asc_auth:
-            - write:messages
-            - read:messages
-  /api/v5/messages/{messageId}/flags:
-    delete:
-      tags:
-        - message
-      summary: Deletes my flag in a message
-      description: Deletes my flag in a message
-      operationId: deleteMyFlagInMessage
-      parameters:
-        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  messages:
-                    description: The list of message
-                    type: array
-                    items:
-                      $ref: './schema/message.yaml#Message'
-                  files:
-                    description: The list of file
-                    type: array
-                    items:
-                      $ref: './schema/file.yaml#File'
-                  users:
-                    description: The list of user
-                    type: array
-                    items:
-                      $ref: './schema/user.yaml#User'
-        '404':
-          description: Not found error
-        '422':
-          description: Parameters validation error
-      security:
-        - asc_auth:
-            - write:messages
-            - read:messages
-    get:
-      tags:
-        - message
-      summary: Find my flag in message by ID
-      description: Returns my flag in message
-      operationId: getMyFlagInMessage
-      parameters:
-        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: './schema/message.yaml#Message_hasFlags'
-        '404':
-          description: Not found error
-        '422':
-          description: Parameters validation error
-      security:
-        - apiKey: []
-        - asc_auth:
-            - write:messages
-            - read:messages
-    post:
-      tags:
-        - message
-      summary: Creates my flag in a message
-      description: Creates my flag in a message
-      operationId: createMyFlagInMessage
-      parameters:
-        - $ref: './v5/messages/parameters.yaml#Message_messageIdPath'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  messages:
-                    description: The list of message
-                    type: array
-                    items:
-                      $ref: './schema/message.yaml#Message'
-                  files:
-                    description: The list of file
-                    type: array
-                    items:
-                      $ref: './schema/file.yaml#File'
-                  users:
-                    description: The list of user
-                    type: array
-                    items:
-                      $ref: './schema/user.yaml#User'
-        '404':
-          description: Not found error
-        '422':
-          description: Parameters validation error
-      security:
-        - asc_auth:
-            - write:messages
-            - read:messages
-  /api/v5/messages/list:
-    get:
-      tags:
-        - message
-      summary: Finds messages by message id (max=10)
-      description: Multiple message id values can be provided with array format
-      operationId: findMessagesByIds
-      parameters:
-        - $ref: './v5/messages/parameters.yaml#Message_messageIds'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  messages:
-                    description: The list of message
-                    type: array
-                    items:
-                      $ref: './schema/message.yaml#Message'
-                  files:
-                    description: The list of file
-                    type: array
-                    items:
-                      $ref: './schema/file.yaml#File'
-                  users:
-                    description: The list of user
-                    type: array
-                    items:
-                      $ref: './schema/user.yaml#User'
-        '404':
-          description: Not found error
-        '422':
-          description: Parameters validation error
-      security:
-        - asc_auth:
-            - write:messages
-            - read:messages
-  /api/v5/messages/user/{creatorId}:
-    get:
-      tags:
-        - message
-      summary: Finds messages by creatorId and multiple conditions
-      description: Multiple conditions can be provided by query string
-      operationId: findMessagesByCreatorId
-      parameters:
-        - $ref: './v5/messages/parameters.yaml#Message_creatorIdPath'
-        - $ref: './v5/messages/parameters.yaml#Message_isDeleted'
-        - $ref: './v5/messages/parameters.yaml#Message_hasFlags'
-        - $ref: './v5/messages/parameters.yaml#Message_pageOptions'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  messages:
-                    description: The list of message
-                    type: array
-                    items:
-                      $ref: './schema/message.yaml#Message'
-                  files:
-                    description: The list of file
-                    type: array
-                    items:
-                      $ref: './schema/file.yaml#File'
-                  users:
-                    description: The list of user
-                    type: array
-                    items:
-                      $ref: './schema/user.yaml#User'
-                  paging:
-                    allOf:
-                      - $ref: './schema/message.yaml#Generic_paging'
-        '404':
-          description: Not found error
-        '422':
-          description: Parameters validation error
-      security:
-        - asc_auth:
-            - write:messages
-            - read:messages
-
   #Notification
   /v1/notification:
     post:
@@ -3736,6 +3381,79 @@ paths:
         - Message Feed
       summary: Finds message feeds by creatorId and multiple conditions
       $ref: './v5/message-feed/api.yaml#getByCreatorId'
+
+  # messagesV5
+  /api/v5/messages:
+    post:
+      tags:
+        - Message V5
+      summary: Create a new message in message feed
+      $ref: './v5/message/api.yaml#/create'
+    get:
+      tags:
+        - Message V5
+      summary: Find message by message feed id and multiple conditions
+      $ref: './v5/message/api.yaml#/query'
+
+  /api/v5/messages/{messageId}:
+    delete:
+      tags:
+        - Message V5
+      summary: Delete a message
+      $ref: './v5/message/api.yaml#/delete'
+
+    get:
+      tags:
+        - Message V5
+      summary: Find message by ID
+      $ref: './v5/message/api.yaml#/get'
+
+    put:
+      tags:
+        - Message V5
+      summary: Update a message
+      $ref: './v5/message/api.yaml#/update'
+
+  /api/v5/messages/{messageId}/flags/all:
+    delete:
+      tags:
+        - Message V5
+      summary: Delete all flags in message
+      $ref: './v5/message/api.yaml#/clearFlag'
+
+  /api/v5/messages/{messageId}/flags:
+    delete:
+      tags:
+        - Message V5
+      summary: Delete my flag in a message
+      $ref: './v5/message/api.yaml#/unflag'
+
+    get:
+      tags:
+        - Message V5
+      summary: Find my flag in message by ID
+      $ref: './v5/message/api.yaml#/findMyFlag'
+
+    post:
+      tags:
+        - Message V5
+      summary: Create my flag in a message
+      $ref: './v5/message/api.yaml#/flag'
+
+  /api/v5/messages/list:
+    get:
+      tags:
+        - Message V5
+      summary: Find messages by message id (max=10)
+      $ref: './v5/message/api.yaml#/getList'
+
+  /api/v5/messages/user/{creatorId}:
+    get:
+      tags:
+        - Message V5
+      summary: Find messages by creatorId and multiple conditions
+      $ref: './v5/message/api.yaml#/findByCreatorId'
+
   #WebhookEvent
   /webhook/message.didCreate:
     get:

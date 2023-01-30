@@ -541,65 +541,65 @@ MessageV5:
   type: object
   properties:
     messageId:
-      $ref: '#/Message_messageId'
+      $ref: '#/MessageV5_messageId'
     networkId:
-      $ref: '#/Message_networkId'
+      $ref: '#/MessageV5_networkId'
     channelId:
-      $ref: '#/Message_channelId'
+      $ref: '#/MessageV5_channelId'
     channelType:
-      $ref: '#/Message_channelType'
+      $ref: '#/MessageV5_channelType'
     messageFeedId:
-      $ref: '#/Message_messageFeedId'
+      $ref: '#/MessageV5_messageFeedId'
     segment:
-      $ref: '#/Message_segment'
+      $ref: '#/MessageV5_segment'
     dataType:
-      $ref: '#/Message_dataType'
+      $ref: '#/MessageV5_dataType'
     data:
-      $ref: '#/Message_data'
+      $ref: '#/MessageV5_data'
     fileId:
-      $ref: '#/Message_fileId'
+      $ref: '#/MessageV5_fileId'
     thumbnailFileId:
-      $ref: '#/Message_thumbnailFileId'
+      $ref: '#/MessageV5_thumbnailFileId'
     metadata:
-      $ref: '#/Message_metadata'
+      $ref: '#/MessageV5_metadata'
     tags:
-      $ref: '#/Generic_tags'
+      $ref: './generic.yaml#/Generic_tags'
     creatorId:
-      $ref: '#/Message_creatorId'
+      $ref: '#/MessageV5_creatorId'
     mentionedUsers:
-      $ref: '#/Message_mentionedUsers'
+      $ref: '#/MessageV5_mentionedUsers'
     reactions:
-      $ref: '#/Message_reactions'
+      $ref: '#/MessageV5_reactions'
     reactionCount:
-      $ref: '#/Message_reactionCount'
+      $ref: '#/MessageV5_reactionCount'
     parentId:
-      $ref: '#/Message_parentId'
+      $ref: '#/MessageV5_parentId'
     path:
-      $ref: '#/Message_path'
+      $ref: '#/MessageV5_path'
     flagCount:
-      $ref: '#/Message_flagCount'
+      $ref: '#/MessageV5_flagCount'
     childCount:
-      $ref: '#/Message_childCount'
+      $ref: '#/MessageV5_childCount'
     isDeleted:
       $ref: './generic.yaml#/Generic_isDeleted'
     editedAt:
-      $ref: '#/Message_editedAt'
+      $ref: '#/MessageV5_editedAt'
     createdAt:
-      $ref: '#/Message_createdAt'
+      $ref: '#/MessageV5_createdAt'
     updatedAt:
-      $ref: '#/Message_updatedAt'
+      $ref: '#/MessageV5_updatedAt'
     myReactions:
-      $ref: '#/Message_myReactions'
-Message_childCount:
+      $ref: '#/MessageV5_myReactions'
+MessageV5_childCount:
   description: The number of children message
   type: number
   format: int32
-Message_messageId:
+MessageV5_messageId:
   description: A message ID
   type: string
   maxLength: 30
   example: a85dca058f5b585f86a29f14
-Message_messageIds:
+MessageV5_messageIds:
   description: A list of message ID
   type: array
   items:
@@ -607,12 +607,12 @@ Message_messageIds:
     maxLength: 30
   maxItems: 10
   example: [a85dca058f5b585f86a29f14]
-Message_channelId:
+MessageV5_channelId:
   description: Channel id of message
   type: string
   maxLength: 30
   example: abc665aed9dbb8d036037eed
-Message_channelType:
+MessageV5_channelType:
   description: Channel type of message
   type: string
   enum:
@@ -621,44 +621,44 @@ Message_channelType:
     - conversation
     - live
   example: community
-Message_createdAt:
+MessageV5_createdAt:
   description: A created date/time of message
   type: string
   format: date-time
-Message_creatorId:
+MessageV5_creatorId:
   description: A creator ID
   type: string
   maxLength: 30
   example: 8aa313c8dbb00af911b07672
-Message_data:
+MessageV5_data:
   description: A custom object for storing message. The size of this object must be less than 10 kb.
   type: object
   example: { text: 'test' }
-Message_dataType:
+MessageV5_dataType:
   description: Type of data
   type: string
   maxLength: 20
   example: text
-Message_editedAt:
+MessageV5_editedAt:
   description: The latest date/time of changes in message data
   type: string
   format: date-time
-Message_fileId:
+MessageV5_fileId:
   description: File id
   type: string
   maxLength: 30
   example: 76bfe68974157a114053364d
-Message_flagCount:
+MessageV5_flagCount:
   description: The number of flags
   type: number
   format: int32
-Message_hasFlags:
+MessageV5_hasFlags:
   description: A flag to filter only flagged message
   type: object
   properties:
     result:
       type: boolean
-Message_mentionedUsers:
+MessageV5_mentionedUsers:
   description: List of mentioned users
   type: array
   items:
@@ -685,21 +685,21 @@ Message_mentionedUsers:
           type: string
           maxLength: 30
         example: [99ac302abaa2aa17b215kalr, 69b34ec2abb39a03a38eppek]
-Message_messageFeedId:
+MessageV5_messageFeedId:
   description: Message feed id of message
   type: string
   maxLength: 30
   example: abc665aed9dbb8d036037eec
-Message_metadata:
+MessageV5_metadata:
   description: A custom object for storing the other data. The size of this object must be less than 20 kb.
   type: object
   example: { refId: 'd601c27c0675baa2103ec573' }
-Message_networkId:
+MessageV5_networkId:
   description: A network ID
   type: string
   maxLength: 30
   example: 9530b11ec8de87db22b06b27
-Message_pageOptions:
+MessageV5_pageOptions:
   description: Page options by using cursor
   type: object
   properties:
@@ -724,17 +724,17 @@ Message_pageOptions:
     token:
       type: string
       maxLength: 100
-Message_parentId:
+MessageV5_parentId:
   description: Parent id of message
   type: string
   maxLength: 30
   example: abc665afd7dbb8d036037eea
-Message_path:
+MessageV5_path:
   description: Object path
   type: string
   maxLength: 200
   example: 12cba9779cc479e1fcefd1de/chat/f00ab16cbd27d4a9525aea6d/32b468ae0b1bd0cc7976719d/0a003482f0ac53a71e7c9239
-Message_reactions:
+MessageV5_reactions:
   description: List of reactions
   type: object
   items:
@@ -742,38 +742,29 @@ Message_reactions:
     additionalProperties:
       type: number
   example: { like: 1, love: 2 }
-Message_reactionCount:
+MessageV5_reactionCount:
   description: Total number of reactions
   type: number
   format: int32
-Message_referenceId:
+MessageV5_referenceId:
   description: A reference ID
   type: string
   maxLength: 30
   example: 1530b11ec8df87da22b06b27
-Message_segment:
+MessageV5_segment:
   description: Segment of message in sub feed
   type: number
   format: int32
-Message_thumbnailFileId:
+MessageV5_thumbnailFileId:
   description: Thumbnail file id
   type: string
   maxLength: 30
   example: 76bfe68974157a114053364e
-Generic_tags:
-  description: List of tags for searching
-  type: array
-  maxItems: 10
-  default: []
-  items:
-    type: string
-    maxLength: 30
-  example: [tag1, tag2]
-Message_updatedAt:
+MessageV5_updatedAt:
   description: A updated date/time of message
   type: string
   format: date-time
-Message_myReactions:
+MessageV5_myReactions:
   description: List of reactions of the actor
   type: array
   maxItems: 10
@@ -801,11 +792,6 @@ Messages_payload:
       type: array
       items:
         $ref: '#/User'
-MessageCreated_referenceId:
-  type: object
-  properties:
-    referenceId:
-      $ref: '#/Message_referenceId'
 
 MessagesCreated_payload:
   description: The returned payload of created message(s)

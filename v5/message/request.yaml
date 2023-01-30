@@ -1,0 +1,48 @@
+CreateMessage:
+  description: Message object that needs to be added
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - referenceId
+          - dataType
+          - messageFeedId
+        properties:
+          messageFeedId:
+            $ref: '../../schema/message.yaml#MessageV5_messageFeedId'
+          parentId:
+            $ref: '../../schema/message.yaml#MessageV5_parentId'
+          referenceId:
+            $ref: '../../schema/message.yaml#MessageV5_referenceId'
+          dataType:
+            $ref: '../../schema/message.yaml#MessageV5_dataType'
+          data:
+            $ref: '../../schema/message.yaml#MessageV5_data'
+          fileId:
+            $ref: '../../schema/message.yaml#MessageV5_fileId'
+          metadata:
+            $ref: '../../schema/message.yaml#MessageV5_metadata'
+          tags:
+            $ref: '../../schema/generic.yaml#Generic_tags'
+          mentionedUsers:
+            $ref: '../../schema/message.yaml#MessageV5_mentionedUsers'
+          createdAt:
+            $ref: '../../schema/message.yaml#MessageV5_createdAt'
+UpdateMessage:
+  description: Message object that needs to be updated
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          data:
+            $ref: '../../schema/message.yaml#MessageV5_data'
+          fileId:
+            $ref: '../../schema/message.yaml#MessageV5_fileId'
+          metadata:
+            $ref: '../../schema/message.yaml#MessageV5_metadata'
+          tags:
+            $ref: '../../schema/generic.yaml#Generic_tags'
+          mentionedUsers:
+            $ref: '../../schema/message.yaml#MessageV5_mentionedUsers'
