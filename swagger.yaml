@@ -12,7 +12,7 @@ info:
     for the instructions on how to generate an admin access token.
 
     All backend endpoints that support Amity SDK are included here. To easily differentiate the type of each endpoint,
-    we added a prefix in each endpoint’s path.
+    we added a prefix in each endpoint's path.
 
     1. Socket Endpoint: /sockets/...
     2. Socket Event: /callbacks/...
@@ -938,7 +938,7 @@ paths:
       tags:
         - Admin
       $ref: './v3/role/api.yaml#/delete'
-  
+
   /admin/v1/reports/user-last-activity:
     get:
       summary: Download last activity user report.
@@ -1022,7 +1022,7 @@ paths:
         - User
       $ref: './v3/user/event.yaml#didUpdate'
 
-#User
+  #User
   /api/v3/users:
     get:
       summary: Get users information.
@@ -2678,7 +2678,7 @@ paths:
         - CommunityFeed
       $ref: './v3/community-feed/socket.yaml#post'
 
-  #Global Feed
+    #Global Feed
     /api/v3/global-feeds:
     get:
       summary: Get global feed.
@@ -3695,6 +3695,47 @@ paths:
         - GlobalFeed
       $ref: './v5/global-feed/socket.yaml#post'
 
+  # message feed v5
+  /api/v5/message-feeds:
+    post:
+      tags:
+        - Message Feed
+      summary: Add a new message feed
+      $ref: './v5/message-feed/api.yaml#create'
+  /api/v5/message-feeds/{messageFeedId}:
+    delete:
+      tags:
+        - Message Feed
+      summary: Delete a message feed
+      $ref: './v5/message-feed/api.yaml#delete'
+    put:
+      tags:
+        - Message Feed
+      summary: Update a message feed
+      $ref: './v5/message-feed/api.yaml#update'
+    get:
+      tags:
+        - Message Feed
+      summary: Find a message feed by ID
+      $ref: './v5/message-feed/api.yaml#get'
+  /api/v5/message-feeds/channel/{channelId}:
+    get:
+      tags:
+        - Message Feed
+      summary: Finds message feeds by channelId and multiple conditions
+      $ref: './v5/message-feed/api.yaml#query'
+  /api/v5/message-feeds/list:
+    get:
+      tags:
+        - Message Feed
+      summary: Find message feeds by list of ID's
+      $ref: './v5/message-feed/api.yaml#getList'
+  /api/v5/message-feeds/user/{creatorId}:
+    get:
+      tags:
+        - Message Feed
+      summary: Finds message feeds by creatorId and multiple conditions
+      $ref: './v5/message-feed/api.yaml#getByCreatorId'
   #WebhookEvent
   /webhook/message.didCreate:
     get:
@@ -4477,7 +4518,6 @@ paths:
       tags:
         - WebhookEvent
       $ref: './v3/video-streaming/webhook.yaml#customNotificationCreated'
-
 
 components:
   schemas:

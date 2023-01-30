@@ -1,0 +1,28 @@
+CreateMessageFeed:
+  description: Payload for creating a new message feed
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - channelId
+          - name
+        properties:
+          name:
+            $ref: '../../schema/message-feed.yaml#/MessageFeed_name'
+          channelId:
+            $ref: '../../schema/message-feed.yaml#/MessageFeed_channelId'
+          createdAt:
+            $ref: '../../schema/message-feed.yaml#/MessageFeed_createdAt'
+
+UpdateMessageFeed:
+  description: Payload for updating an existing message feed Message feed object that needs to be added
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - name
+        properties:
+          name:
+            $ref: '../../schema/message-feed.yaml#/MessageFeed_name'
