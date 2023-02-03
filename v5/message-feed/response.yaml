@@ -1,0 +1,47 @@
+MessageFeedPayload:
+  content:
+    application/json:
+      schema:
+        description: The returned payload of message feed(s)
+        type: object
+        properties:
+          messageFeeds:
+            description: List of message feeds
+            type: array
+            items:
+              $ref: '../../schema/message-feed.yaml#/MessageFeed'
+          messages:
+            description: List of last messages in each message feed
+            type: array
+            items:
+              $ref: '../../schema/message.yaml#/MessageV5'
+          users:
+            description: List of related users
+            type: array
+            items:
+              $ref: '../../schema/user.yaml#/UserV3'
+
+PaginatedMessageFeedPayload:
+  content:
+    application/json:
+      schema:
+        description: The returned payload of message feed(s)
+        type: object
+        properties:
+          messageFeeds:
+            description: List of message feeds
+            type: array
+            items:
+              $ref: '../../schema/message-feed.yaml#/MessageFeed'
+          messages:
+            description: List of last messages in each message feed
+            type: array
+            items:
+              $ref: '../../schema/message.yaml#/MessageV5'
+          users:
+            description: List of related users
+            type: array
+            items:
+              $ref: '../../schema/user.yaml#/UserV3'
+          paging:
+            $ref: '../../schema/generic.yaml#/Generic_paging'
