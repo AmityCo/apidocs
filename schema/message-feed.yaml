@@ -1,0 +1,138 @@
+MessageFeed:
+  type: object
+  properties:
+    messageFeedId:
+      $ref: '#/MessageFeed_messageFeedId'
+    channelId:
+      $ref: '#/MessageFeed_channelId'
+    channelPublicId:
+      $ref: '#/MessageFeed_channelPublicId'
+    channelType:
+      $ref: '#/MessageFeed_channelType'
+    name:
+      $ref: '#/MessageFeed_name'
+    lastMessageId:
+      $ref: '#/MessageFeed_lastMessageId'
+    lastMessageTimestamp:
+      $ref: '#/MessageFeed_lastMessageTimestamp'
+    creatorId:
+      $ref: '#/MessageFeed_creatorId'
+    path:
+      $ref: '#/MessageFeed_path'
+    childCount:
+      $ref: '#/MessageFeed_childCount'
+    isDeleted:
+      $ref: './generic.yaml#/Generic_isDeleted'
+    editedAt:
+      $ref: '#/MessageFeed_editedAt'
+    createdAt:
+      $ref: '#/MessageFeed_createdAt'
+    updatedAt:
+      $ref: '#/MessageFeed_updatedAt'
+  required:
+    - messageFeedId
+    - channelId
+    - channelPublicId
+    - channelType
+    - name
+    - creatorId
+    - path
+    - childCount
+    - isDeleted
+    - createdAt
+    - updatedAt
+
+MessageFeed_channelPublicId:
+  description: ID of the channel that the message feed belongs to
+  type: string
+  maxLength: 30
+  example: abc665aed9dbb8d036037eeb
+MessageFeed_channelId:
+  description: Internal ID of the channel that the message feed belongs to
+  type: string
+  maxLength: 30
+  example: abc665aed9dbb8d036037eeb
+MessageFeed_channelType:
+  description: Type of the channel that the message feed belongs to
+  type: string
+  enum:
+    - broadcast
+    - community
+    - conversation
+    - live
+  example: community
+MessageFeed_childCount:
+  description: The number of messages inside the message feed
+  type: number
+  format: int32
+MessageFeed_messageFeedId:
+  description: The ID of the message feed
+  type: string
+  maxLength: 30
+  example: a85dca058f5b585f86a29f14
+MessageFeed_messageFeedIds:
+  description: List of message feed IDs
+  type: array
+  items:
+    type: string
+    maxLength: 30
+  maxItems: 10
+  example: [a85dca058f5b585f86a29f14]
+MessageFeed_createdAt:
+  description: The created timestamp of the message feed
+  type: string
+  format: date-time
+MessageFeed_creatorId:
+  description: Creator's ID
+  type: string
+  maxLength: 30
+  example: 8aa313c8dbb00af911b07672
+MessageFeed_editedAt:
+  description: The edited timestamp of the message feed data
+  type: string
+  format: date-time
+MessageFeed_lastMessageId:
+  description: The ID of the last message created in the message feed
+  type: string
+  maxLength: 30
+  example: 9530b11ec8de87db22b06b21
+MessageFeed_lastMessageTimestamp:
+  description: The created timestamp of the the last message created in the message feed
+  type: string
+  format: date-time
+MessageFeed_name:
+  description: The name of the message feed
+  type: string
+  maxLength: 100
+  example: text
+MessageFeed_pageOptions:
+  description: Page options by using cursor
+  type: object
+  properties:
+    after:
+      type: string
+      maxLength: 30
+    before:
+      type: string
+      maxLength: 30
+    limit:
+      type: number
+      format: int32
+    sortBy:
+      type: string
+      default: lastMessageTimestampDesc
+      enum:
+        - lastMessageTimestampAsc
+        - lastMessageTimestampDesc
+    token:
+      type: string
+      maxLength: 100
+MessageFeed_path:
+  description: Object path
+  type: string
+  maxLength: 200
+  example: 12cba9779cc479e1fcefd1de/chat/f00ab16cbd27d4a9525aea6d/32b468ae0b1bd0cc7976719d/0a003482f0ac53a71e7c9239
+MessageFeed_updatedAt:
+  description: The updated timestamp of the message feed
+  type: string
+  format: date-time

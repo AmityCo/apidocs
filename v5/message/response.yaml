@@ -1,0 +1,75 @@
+CreateMessagePayload:
+  content:
+    application/json:
+      schema:
+        description: The returned payload of created message(s)
+        type: object
+        properties:
+          messages:
+            description: The list of created message
+            type: array
+            items:
+              allOf:
+                - type: object
+                  properties:
+                    referenceId:
+                      $ref: '../../schema/message.yaml#/MessageV5_referenceId'
+                - $ref: '../../schema/message.yaml#/MessageV5'
+          files:
+            description: The list of file
+            type: array
+            items:
+              $ref: '../../schema/file.yaml#File'
+          users:
+            description: The list of user
+            type: array
+            items:
+              $ref: '../../schema/user.yaml#/User'
+
+MessagePayload:
+  content:
+    application/json:
+      schema:
+        description: The returned payload of message(s)
+        type: object
+        properties:
+          messages:
+            description: The list of message
+            type: array
+            items:
+              $ref: '../../schema/message.yaml#/MessageV5'
+          files:
+            description: The list of file
+            type: array
+            items:
+              $ref: '../../schema/file.yaml#File'
+          users:
+            description: The list of user
+            type: array
+            items:
+              $ref: '../../schema/user.yaml#/User'
+
+PaginatedMessagePayload:
+  content:
+    application/json:
+      schema:
+        description: The returned payload of message(s)
+        type: object
+        properties:
+          messages:
+            description: The list of message
+            type: array
+            items:
+              $ref: '../../schema/message.yaml#/MessageV5'
+          files:
+            description: The list of file
+            type: array
+            items:
+              $ref: '../../schema/file.yaml#File'
+          users:
+            description: The list of user
+            type: array
+            items:
+              $ref: '../../schema/user.yaml#/User'
+          paging:
+            $ref: '../../schema/generic.yaml#/Generic_paging'
