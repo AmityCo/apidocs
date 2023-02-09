@@ -12,7 +12,7 @@ info:
     for the instructions on how to generate an admin access token.
 
     All backend endpoints that support Amity SDK are included here. To easily differentiate the type of each endpoint,
-    we added a prefix in each endpoint’s path.
+    we added a prefix in each endpoint's path.
 
     1. Socket Endpoint: /sockets/...
     2. Socket Event: /callbacks/...
@@ -23,7 +23,7 @@ info:
 
     Before making server-to-server API calls, be sure to select the correct API endpoint for your region in
     the <strong>Servers</strong> dropdown below.
-  version: 4.47.0
+  version: 4.48.0
 servers:
   - url: https://api.us.amity.co
     description: API Endpoint for US Region
@@ -54,7 +54,7 @@ paths:
       $ref: './v3/session/api.yaml#/create'
     get:
       summary: Verify access token
-      tags: 
+      tags:
         - Session
       $ref: './v3/session/api.yaml#/verifyAccessToken'
   /api/v4/sessions:
@@ -65,10 +65,10 @@ paths:
       $ref: './v4/session/api.yaml#/create'
     delete:
       summary: Revoke access token
-      tags: 
+      tags:
         - Session
       $ref: './v4/session/api.yaml#/revokeAccessToken'
-  
+
   #Device
   /v1/device:
     post:
@@ -82,7 +82,7 @@ paths:
       tags:
         - Device
       $ref: './v1/device/api.yaml#/generateAccessToken'
-  
+
   #Moderation
   /v1/blacklist/records:
     put:
@@ -938,7 +938,7 @@ paths:
       tags:
         - Admin
       $ref: './v3/role/api.yaml#/delete'
-  
+
   /admin/v1/reports/user-last-activity:
     get:
       summary: Download last activity user report.
@@ -1022,7 +1022,7 @@ paths:
         - User
       $ref: './v3/user/event.yaml#didUpdate'
 
-#User
+  #User
   /api/v3/users:
     get:
       summary: Get users information.
@@ -1758,7 +1758,6 @@ paths:
       tags:
         - Message
       $ref: './v3/message/event.yaml#didDelete'
-
   #Notification
   /v1/notification:
     post:
@@ -1849,12 +1848,12 @@ paths:
       summary: Get push notification setting.
       tags:
         - Notification
-      $ref: './v3/notification/api.yaml#getSetting'  
+      $ref: './v3/notification/api.yaml#getSetting'
     post:
       summary: Save push notification setting.
       tags:
         - Notification
-      $ref: './v3/notification/api.yaml#saveSetting' 
+      $ref: './v3/notification/api.yaml#saveSetting'
   /sockets/notification.getSetting:
     post:
       summary: Get push notification setting.
@@ -1915,7 +1914,7 @@ paths:
       tags:
         - Reaction
       $ref: './v1/reaction/socket.yaml#delete'
-  
+
   #Network
   /admin/v1/network/{networkId}:
     get:
@@ -2283,7 +2282,7 @@ paths:
       tags:
         - Poll v3
       $ref: './v3/poll/socket.yaml#/getUsersAnswered'
-  
+
   #UserFeed
   /api/v3/user-feeds/{userId}:
     get:
@@ -2324,7 +2323,7 @@ paths:
         - CommunityFeed
       $ref: './v3/community-feed/socket.yaml#post'
 
-  #Global Feed
+    #Global Feed
     /api/v3/global-feeds:
     get:
       summary: Get global feed.
@@ -3164,7 +3163,7 @@ paths:
       tags:
         - GlobalFeed
       $ref: './v4/global-feed/socket.yaml#post'
-  
+
   #Network Setting
   /api/v3/network-settings:
     put:
@@ -3227,7 +3226,7 @@ paths:
       summary: Update feed setting check configuration.
       tags:
         - Network Setting
-      $ref: './v3/network-setting/api.yaml#/updateFeedSetting'    
+      $ref: './v3/network-setting/api.yaml#/updateFeedSetting'
   /api/v3/network-settings/tier:
     put:
       summary: Update network tier and feature
@@ -3340,7 +3339,121 @@ paths:
       tags:
         - GlobalFeed
       $ref: './v5/global-feed/socket.yaml#post'
-  
+
+  # message feed v5
+  /api/v5/message-feeds:
+    post:
+      tags:
+        - Message Feed
+      summary: Add a new message feed
+      $ref: './v5/message-feed/api.yaml#create'
+  /api/v5/message-feeds/{messageFeedId}:
+    delete:
+      tags:
+        - Message Feed
+      summary: Delete a message feed
+      $ref: './v5/message-feed/api.yaml#delete'
+    put:
+      tags:
+        - Message Feed
+      summary: Update a message feed
+      $ref: './v5/message-feed/api.yaml#update'
+    get:
+      tags:
+        - Message Feed
+      summary: Find a message feed by ID
+      $ref: './v5/message-feed/api.yaml#get'
+  /api/v5/message-feeds/channel/{channelId}:
+    get:
+      tags:
+        - Message Feed
+      summary: Finds message feeds by channelId and multiple conditions
+      $ref: './v5/message-feed/api.yaml#query'
+  /api/v5/message-feeds/list:
+    get:
+      tags:
+        - Message Feed
+      summary: Find message feeds by list of ID's
+      $ref: './v5/message-feed/api.yaml#getList'
+  /api/v5/message-feeds/user/{creatorId}:
+    get:
+      tags:
+        - Message Feed
+      summary: Finds message feeds by creatorId and multiple conditions
+      $ref: './v5/message-feed/api.yaml#getByCreatorId'
+
+  # messagesV5
+  /api/v5/messages:
+    post:
+      tags:
+        - Message V5
+      summary: Create a new message in message feed
+      $ref: './v5/message/api.yaml#/create'
+    get:
+      tags:
+        - Message V5
+      summary: Find message by message feed id and multiple conditions
+      $ref: './v5/message/api.yaml#/query'
+
+  /api/v5/messages/{messageId}:
+    delete:
+      tags:
+        - Message V5
+      summary: Delete a message
+      $ref: './v5/message/api.yaml#/delete'
+
+    get:
+      tags:
+        - Message V5
+      summary: Find message by ID
+      $ref: './v5/message/api.yaml#/get'
+
+    put:
+      tags:
+        - Message V5
+      summary: Update a message
+      $ref: './v5/message/api.yaml#/update'
+
+  /api/v5/messages/{messageId}/flags/all:
+    delete:
+      tags:
+        - Message V5
+      summary: Delete all flags in message
+      $ref: './v5/message/api.yaml#/clearFlag'
+
+  /api/v5/messages/{messageId}/flags:
+    delete:
+      tags:
+        - Message V5
+      summary: Delete my flag in a message
+      $ref: './v5/message/api.yaml#/unflag'
+
+    get:
+      tags:
+        - Message V5
+      summary: Find my flag in message by ID
+      $ref: './v5/message/api.yaml#/findMyFlag'
+
+    post:
+      tags:
+        - Message V5
+      summary: Create my flag in a message
+      $ref: './v5/message/api.yaml#/flag'
+
+  /api/v5/messages/list:
+    get:
+      tags:
+        - Message V5
+      summary: Find messages by message id (max=10)
+      $ref: './v5/message/api.yaml#/getList'
+
+  /api/v5/messages/user/{creatorId}:
+    get:
+      tags:
+        - Message V5
+      summary: Find messages by creatorId and multiple conditions
+      $ref: './v5/message/api.yaml#/findByCreatorId'
+
   #WebhookEvent
   /webhook/message.didCreate:
     get:
@@ -3368,7 +3481,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
   /webhook/message.didDelete:
     get:
       tags:
@@ -3395,7 +3508,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
   /webhook/message.didUpdate:
     get:
       tags:
@@ -3422,7 +3535,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
   /webhook/message.didFlag:
     get:
       tags:
@@ -3449,7 +3562,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
   /webhook/message.didUnflag:
     get:
       tags:
@@ -3476,7 +3589,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
   /webhook/message.didClearflag:
     get:
       tags:
@@ -3503,7 +3616,7 @@ paths:
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
   /webhook/channel.didCreate:
     get:
       tags:
@@ -3526,11 +3639,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userIds:
                         type: array
                         items:
@@ -3557,11 +3670,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userIds:
                         type: array
                         items:
@@ -3588,11 +3701,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userIds:
                         type: array
                         items:
@@ -3621,7 +3734,7 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
   /webhook/channel.didLeave:
     get:
       tags:
@@ -3644,11 +3757,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userIds:
                         type: array
                         items:
@@ -3675,11 +3788,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userId:
                         type: string
   /webhook/channel.didRemoveUsers:
@@ -3704,11 +3817,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userIds:
                         type: array
                         items:
@@ -3737,11 +3850,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userId:
                         type: string
   /webhook/channel.didBan:
@@ -3766,11 +3879,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       actorId:
                         type: string
                       userIds:
@@ -3799,11 +3912,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                       users:
                         type: array
                         items:
-                          $ref: '#/components/schemas/User'
+                          $ref: './schema/user.yaml#User'
                       userId:
                         type: string
   /webhook/user.didClearFlag:
@@ -3965,7 +4078,7 @@ paths:
     get:
       tags:
         - WebhookEvent
-      $ref: './v3/poll/webhook.yaml#didUpdate'   
+      $ref: './v3/poll/webhook.yaml#didUpdate'
   /webhook/poll.didVote:
     get:
       tags:
@@ -4124,7 +4237,6 @@ paths:
         - WebhookEvent
       $ref: './v3/video-streaming/webhook.yaml#customNotificationCreated'
 
-
 components:
   schemas:
     User:
@@ -4145,7 +4257,7 @@ components:
           type: object
           description: Additional properties to support custom fields.
         type:
-          $ref: '#/components/schemas/ChannelType'
+          $ref: './schema/message.yaml#ChannelType'
           description: Type of a channel (standard, conversation, broadcast). This property is not be used for now.
         tags:
           type: array
@@ -4219,7 +4331,7 @@ components:
         readToSegment:
           type: integer
         membership:
-          $ref: '#/components/schemas/ChannelMembership'
+          $ref: './schema/message.yaml#ChannelMembership'
         isBanned:
           type: boolean
         isMuted:
@@ -4464,9 +4576,9 @@ components:
                       type: object
                       properties:
                         channel:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#Channel'
                         channelUser:
-                          $ref: '#/components/schemas/ChannelUser'
+                          $ref: './schema/message.yaml#ChannelUser'
     ChannelResultResponse:
       description: Channel Information
       content:
@@ -4483,9 +4595,9 @@ components:
                     type: object
                     properties:
                       channel:
-                        $ref: '#/components/schemas/Channel'
+                        $ref: './schema/message.yaml#Channel'
                       channelUser:
-                        $ref: '#/components/schemas/ChannelUser'
+                        $ref: './schema/message.yaml#ChannelUser'
     ChannelResponse:
       description: Channel response.
       content:
@@ -4496,7 +4608,7 @@ components:
               isDistinct:
                 type: boolean
               type:
-                $ref: '#/components/schemas/ChannelType'
+                $ref: './schema/message.yaml#ChannelType'
                 description: Type of a channel (standard, conversation, broadcast). This property is not be used for now.
               metadata:
                 type: object
@@ -4568,7 +4680,7 @@ components:
               results:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ChannelUser'
+                  $ref: './schema/message.yaml#ChannelUser'
     UsersResponse:
       description: Users Information
       content:
@@ -4584,7 +4696,7 @@ components:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/User'
+                      $ref: './schema/user.yaml#User'
     UserResponse:
       description: User Information
       content:
@@ -4595,13 +4707,13 @@ components:
               status:
                 type: string
               data:
-                $ref: '#/components/schemas/User'
+                $ref: './schema/user.yaml#User'
     NetworkResponse:
       description: Network information.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Network'
+            $ref: './schema/message.yaml#Network'
     BlacklistRulesResponse:
       description: rules of blacklist Information
       content:
@@ -4617,7 +4729,7 @@ components:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/BlacklistRule'
+                      $ref: './schema/message.yaml#BlacklistRule'
     BlacklistRuleResponse:
       description: rule of blacklist Information
       content:
@@ -4628,7 +4740,7 @@ components:
               status:
                 type: string
               data:
-                $ref: '#/components/schemas/BlacklistRule'
+                $ref: './schema/message.yaml#BlacklistRule'
     WhitelistRulesResponse:
       description: rules of whitelist Information
       content:
@@ -4644,7 +4756,7 @@ components:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/BlacklistRule'
+                      $ref: './schema/message.yaml#BlacklistRule'
     WhitelistRuleResponse:
       description: rule of whitelist Information
       content:
@@ -4655,7 +4767,7 @@ components:
               status:
                 type: string
               data:
-                $ref: '#/components/schemas/BlacklistRule'
+                $ref: './schema/message.yaml#BlacklistRule'
     RolesResponse:
       description: Roles information.
       content:
@@ -4671,11 +4783,11 @@ components:
                   moderatonSettings:
                     type: array
                     items:
-                      $ref: '#/components/schemas/ModerationSetting'
+                      $ref: './schema/message.yaml#ModerationSetting'
                   roles:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Role'
+                      $ref: './schema/message.yaml#Role'
     UserByAdminsResponse:
       description: Users information.
       content:
@@ -4717,7 +4829,7 @@ components:
                   roles:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Role'
+                      $ref: './schema/message.yaml#Role'
     ModerationSettingResponse:
       description: Moderation Setting Information
       content:
@@ -4728,13 +4840,13 @@ components:
               status:
                 type: string
               data:
-                $ref: '#/components/schemas/ModerationSetting'
+                $ref: './schema/message.yaml#ModerationSetting'
     UnexpectedError:
       description: Unexpected error.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 500000
@@ -4744,7 +4856,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400400
@@ -4754,7 +4866,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400000
@@ -4764,7 +4876,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400400
@@ -4774,7 +4886,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400301
@@ -4784,7 +4896,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400304
@@ -4794,7 +4906,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400311
@@ -4804,7 +4916,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400400
@@ -4814,7 +4926,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400300
@@ -4824,7 +4936,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400300
@@ -4834,7 +4946,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400100
@@ -4844,7 +4956,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: './schema/message.yaml#Error'
           example:
             status: error
             code: 400316

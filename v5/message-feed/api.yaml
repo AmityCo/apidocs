@@ -1,0 +1,150 @@
+create:
+  tags:
+    - Message Feed
+  summary: Add a new message feed
+  security:
+    - BearerAuth: []
+  description: Add a new message feed
+  requestBody:
+    $ref: './request.yaml#/CreateMessageFeed'
+  responses:
+    '200':
+      description: Successful operation
+      $ref: './response.yaml#/MessageFeedPayload'
+    '404':
+      description: Not found error
+    '422':
+      description: Parameters validation error
+
+delete:
+  tags:
+    - Message Feed
+  summary: Delete a message feed
+  security:
+    - BearerAuth: []
+  description: Delete an existing message feed except the default message feed
+  parameters:
+    - $ref: './parameter.yaml#/MessageFeedId'
+    - name: permanent
+      in: query
+      $ref: '../../schema/generic.yaml#/Generic_permanent'
+  responses:
+    '200':
+      description: Successful operation
+    '403':
+      description: Fobidden error
+    '404':
+      description: Not found error
+    '422':
+      description: Parameters validation error
+
+get:
+  tags:
+    - Message Feed
+  summary: Find a message feed by ID
+  security:
+    - BearerAuth: []
+  description: Return a single message feed
+  parameters:
+    - $ref: './parameter.yaml#/MessageFeedId'
+  responses:
+    '200':
+      description: Successful operation
+      $ref: './response.yaml#/MessageFeedPayload'
+    '404':
+      description: Not found error
+    '422':
+      description: Parameters validation error
+
+update:
+  tags:
+    - Message Feed
+  summary: Update a message feed
+  description: Update an existing message feed except the default message feed
+  security:
+    - BearerAuth: []
+  parameters:
+    - $ref: './parameter.yaml#/MessageFeedId'
+  requestBody:
+    $ref: './request.yaml#/UpdateMessageFeed'
+  responses:
+    '200':
+      description: Successful operation
+      $ref: './response.yaml#/MessageFeedPayload'
+    '403':
+      description: Forbidden error
+    '404':
+      description: Not found error
+    '422':
+      description: Parameters validation error
+
+query:
+  tags:
+    - Message Feed
+  summary: Finds message feeds by channelId and multiple conditions
+  description: Multiple conditions can be provided by query string
+  security:
+    - BearerAuth: []
+  operationId: findMessageFeedsByConditions
+  parameters:
+    - name: channelId
+      in: path
+      required: true
+      description: channel ID of message feed that needs to be find
+      schema:
+        $ref: '../../schema/Message Feed.yaml#/MessageFeed_channelId'
+    - $ref: './parameter.yaml#/IsDeleted'
+    - $ref: './parameter.yaml#/PagingOptions'
+  responses:
+    '200':
+      description: successful operation
+      $ref: './response.yaml#/PaginatedMessageFeedPayload'
+    '404':
+      description: Not found error
+    '422':
+      description: Parameters validation error
+
+getList:
+  tags:
+    - Message Feed
+  summary: Find message feeds by list of ID's
+  description: Multiple message feed id values can be provided with array format
+  parameters:
+    - name: messageFeedIds
+      in: query
+      required: true
+      description: List of message feed ID that needs to find (max=10) [messageFeedIds[]=messageFeedId1&messageFeedIds[]=messageFeedId2]
+      schema:
+        $ref: '../../schema/Message Feed.yaml#/MessageFeed_messageFeedIds'
+  responses:
+    '200':
+      description: Successful operation
+      $ref: './response.yaml#/MessageFeedPayload'
+    '404':
+      description: Not found error
+    '422':
+      description: Parameters validation error
+
+getByCreatorId:
+  tags:
+    - Message Feed
+  summary: Finds message feeds by creatorId and multiple conditions
+  description: Conditions can be provided in query string
+  operationId: findMessageFeedsByCreatorId
+  parameters:
+    - name: creatorId
+      in: path
+      required: true
+      description: ID of message feed creator
+      schema:
+        $ref: ../../schema/Message Feed.yaml#/MessageFeed_creatorId'
+    - $ref: './parameter.yaml#/IsDeleted'
+    - $ref: './parameter.yaml#/PagingOptions'
+  responses:
+    '200':
+      description: Successful operation
+      $ref: './response.yaml#/MessageFeedPayload'
+    '404':
+      description: Not found error
+    '422':
+      description: Parameters validation error
