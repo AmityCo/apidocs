@@ -1,0 +1,82 @@
+MessageBase:
+  type: object
+  properties:
+    messages:
+      description: The list of message
+      type: array
+      items:
+        $ref: '../../../schema/message.yaml#/MessageV5ForRealtimeEvent'
+    files:
+      description: The list of file
+      type: array
+      items:
+        $ref: '../../../schema/file.yaml#File'
+    users:
+      description: The list of user
+      type: array
+      items:
+        $ref: '../../../schema/user.yaml#/User'
+
+MessageCreatedBase:
+  type: object
+  properties:
+    messages:
+      description: The list of message
+      type: array
+      items:
+        $ref: '../../../schema/message.yaml#/MessageV5CreatedForRealtimeEvent'
+    files:
+      description: The list of file
+      type: array
+      items:
+        $ref: '../../../schema/file.yaml#File'
+    users:
+      description: The list of user
+      type: array
+      items:
+        $ref: '../../../schema/user.yaml#/User'
+
+MessageWithReactionBase:
+  allOf:
+    - $ref: '#/MessageBase'
+    - type: object
+      properties:
+        reactions:
+          description: The reaction added/removed to the message
+          type: array
+          items:
+            $ref: '../../../schema/reaction.yaml#/Reactor'
+    
+
+MessageCreated:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The message ID.
+        data:
+          $ref: '#/MessageCreatedBase'
+    - $ref: '../schema.yaml#/Wrapper'
+
+Message:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The message ID.
+        data:
+          $ref: '#/MessageBase'
+    - $ref: '../schema.yaml#/Wrapper'
+
+MessageWithReaction:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The message ID.
+        data:
+          $ref: '#/MessageWithReactionBase'
+    - $ref: '../schema.yaml#/Wrapper'
