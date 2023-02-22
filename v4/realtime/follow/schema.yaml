@@ -1,0 +1,25 @@
+FollowBase:
+  type: object
+  properties:
+    follows:
+      type: array
+      items:
+        $ref: '../../../schema/follow.yaml#/Follow'
+    users:
+      type: array
+      items:
+        $ref: '../../../schema/user.yaml#/UserV3'
+    files:
+      type: array
+      items:
+        $ref: '../../../schema/file.yaml#/File'
+
+Follow:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+        data:
+          $ref: '#/FollowBase'
+    - $ref: '../schema.yaml#/Wrapper'
