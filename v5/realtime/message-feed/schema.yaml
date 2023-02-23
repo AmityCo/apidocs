@@ -1,0 +1,34 @@
+MessageFeedBase:
+  type: object
+  properties:
+    messageFeeds:
+      description: the list of message feed
+      type: array
+      items:
+        $ref: '../../../schema/message-feed.yaml#/MessageFeed'
+    messages:
+      description: The list of message
+      type: array
+      items:
+        $ref: '../../../schema/message.yaml#/MessageV5ForRealtimeEvent'
+    files:
+      description: The list of file
+      type: array
+      items:
+        $ref: '../../../schema/file.yaml#File'
+    users:
+      description: The list of user
+      type: array
+      items:
+        $ref: '../../../schema/user.yaml#/User'
+
+MessageFeed:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The message feed ID.
+        data:
+          $ref: '#/MessageFeedBase'
+    - $ref: '../schema.yaml#/Wrapper'
