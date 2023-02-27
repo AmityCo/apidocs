@@ -31,6 +31,9 @@ servers:
     description: API Endpoint for EU Region
   - url: https://api.sg.amity.co
     description: API Endpoint for SG Region
+tags:
+  - name: Realtime
+    description: The realtime event received from MQTT, not from socket or API
 paths:
   #Authentication
   /api/v3/authentication/token:
@@ -3325,6 +3328,66 @@ paths:
     $ref: './v4/realtime/user/event.yaml#/unflagged'
   /realtime/user.flagCleared:
     $ref: './v4/realtime/user/event.yaml#/flagCleared'
+
+  # Realtime - Follow
+  /realtime/follow.created:
+    $ref: './v4/realtime/follow/event.yaml#/created'
+  /realtime/follow.requested:
+    $ref: './v4/realtime/follow/event.yaml#/requested'
+  /realtime/follow.accepted:
+    $ref: './v4/realtime/follow/event.yaml#/accepted'
+  /realtime/follow.unfollowed:
+    $ref: './v4/realtime/follow/event.yaml#/unfollowed'
+  /realtime/follow.requestCanceled:
+    $ref: './v4/realtime/follow/event.yaml#/requestCanceled'
+  /realtime/follow.followerDeleted:
+    $ref: './v4/realtime/follow/event.yaml#/followerDeleted'
+  /realtime/follow.requestDeclined:
+    $ref: './v4/realtime/follow/event.yaml#/requestDeclined'
+
+  # Realtime - Message
+  /realtime/message.created:
+    $ref: './v5/realtime/message/event.yaml#/created'
+  /realtime/message.updated:
+    $ref: './v5/realtime/message/event.yaml#/updated'
+  /realtime/message.deleted:
+    $ref: './v5/realtime/message/event.yaml#/deleted'
+  /realtime/message.flagged:
+    $ref: './v5/realtime/message/event.yaml#/flagged'
+  /realtime/message.unflagged:
+    $ref: './v5/realtime/message/event.yaml#/unflagged'
+  /realtime/message.reactionAdded:
+    $ref: './v5/realtime/message/event.yaml#/reactionAdded'
+  /realtime/message.reactionRemoved:
+    $ref: './v5/realtime/message/event.yaml#/reactionRemoved'
+
+  # Realtime - Message Feed
+  /realtime/message-feed.created:
+    $ref: './v5/realtime/message-feed/event.yaml#/created'
+  /realtime/message-feed.updated:
+    $ref: './v5/realtime/message-feed/event.yaml#/updated'
+  /realtime/message-feed.deleted:
+    $ref: './v5/realtime/message-feed/event.yaml#/deleted'
+
+  # Realtime - Channel
+  /realtime/channel.created:
+    $ref: './v3/realtime/channel/event.yaml#/created'
+  /realtime/channel.updated:
+    $ref: './v3/realtime/channel/event.yaml#/updated'
+  /realtime/channel.deleted:
+    $ref: './v3/realtime/channel/event.yaml#/deleted'
+  /realtime/channel.joined:
+    $ref: './v3/realtime/channel/event.yaml#/joined'
+  /realtime/channel.left:
+    $ref: './v3/realtime/channel/event.yaml#/left'
+  /realtime/channel.membersAdded:
+    $ref: './v3/realtime/channel/event.yaml#/membersAdded'
+  /realtime/channel.membersRemoved:
+    $ref: './v3/realtime/channel/event.yaml#/membersRemoved'
+  /realtime/channel.banned:
+    $ref: './v3/realtime/channel/event.yaml#/banned'
+  /realtime/channel.unbanned:
+    $ref: './v3/realtime/channel/event.yaml#/unbanned'
 
   #Global Feed
   /api/v5/me/global-feeds:
