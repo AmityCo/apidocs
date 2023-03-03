@@ -116,6 +116,30 @@ query:
           token:
             type: string
             maxLength: 1000
+    - name: dataTypes
+      in: query
+      style: deepObject
+      description: >
+            Option to set how the returned comments dataTypes will be contained:
+              * `values`: the dataTypes values want to be contained in the comment (available values: `text`, `image`)
+              * `matchType`: how the dataTypes must be contained in the comment
+                * `any`: the dataTypes could match only partial of the provided field
+                * `exact`: the dataTypes must contain exactly the same as provided in values
+            
+            Example query params: `GET /api/v3/comments?dataTypes[values][]=text&dataTypes[values][]=image&dataTypes[matchType]=any`
+      schema:
+        type: object
+        properties:
+          values:
+            type: array
+            items:
+              type: string
+          matchType:
+            type: string
+            enum:
+              - any
+              - exact
+
   consumes:
     - application/x-www-form-urlencoded
   responses:
@@ -193,12 +217,19 @@ create:
               description: The date/time when a comment is created.
               format: date-time
               example: "2022-07-07T04:24:20.444Z"
+            attachments:
+              type: array
+              description: The attachments/medias to be included in the comment
+              items:
+                $ref: "../../schema/comment.yaml#/CommentAttachment"
+                  
           required:
             - referenceId
-            - data
   responses:
     "200000":
       $ref: "./response.yaml#/CommentApiResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
     "400400":
       $ref: "../../global/error.yaml#/NotFoundError"
     "400311":
@@ -256,9 +287,16 @@ update:
                     description: Array of UserId. if the mention type is a channel, doesn't send userIds
                     items:
                       type: string  
+            attachments:
+              type: array
+              description: The attachments/medias to be included in the comment
+              items:
+                $ref: "../../schema/comment.yaml#/CommentAttachment"
   responses:
     "200000":
       $ref: "./response.yaml#/CommentApiResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
     "400400":
       $ref: "../../global/error.yaml#/NotFoundError"
     "400311":
