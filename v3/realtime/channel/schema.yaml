@@ -1,0 +1,34 @@
+ChannelBase:
+  type: object
+  properties:
+    channels:
+      description: The list of channels
+      type: array
+      items:
+        $ref: '../../../schema/channel.yaml#/ChannelV3'
+    channelUsers:
+      description: The list of channel users
+      type: array
+      items:
+        $ref: '../../../schema/channel.yaml#/ChannelUserV3'
+    users:
+      description: The list of users
+      type: array
+      items:
+        $ref: '../../../schema/user.yaml#/User'
+    files:
+      description: The list of files
+      type: array
+      items:
+        $ref: '../../../schema/file.yaml#File'
+
+Channel:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The message ID.
+        data:
+          $ref: '#/ChannelBase'
+    - $ref: '../../../schema/realtime.yaml#/Wrapper'
