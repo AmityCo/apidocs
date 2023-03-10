@@ -1,6 +1,10 @@
-UserBase:
+FollowBase:
   type: object
   properties:
+    follows:
+      type: array
+      items:
+        $ref: '../../../schema/follow.yaml#/Follow'
     users:
       type: array
       items:
@@ -10,13 +14,12 @@ UserBase:
       items:
         $ref: '../../../schema/file.yaml#/File'
 
-User:
+Follow:
   allOf:
     - type: object
       properties:
         id:
           type: string
-          description: The user ID.
         data:
-          $ref: '#/UserBase'
+          $ref: '#/FollowBase'
     - $ref: '../../../schema/realtime.yaml#/Wrapper'

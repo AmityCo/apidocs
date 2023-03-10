@@ -30,7 +30,15 @@ Comment:
       description: Type of a reference (post/content).
     dataType:
       type: string
-      description: Type of a comment (text).
+      description: Type of a comment (deprecated in new SDK version, will be fixed as "text").
+    dataTypes:
+      type: array
+      description: Types of a comment (a comment can contain multiple types)
+      items:
+        type: string
+        enum:
+          - text
+          - image
     data:
       type: object
       description: Body of a comment.
@@ -111,9 +119,14 @@ Comment:
             description: Array of UserId.
             items:
               type: string
+    attachments:
+      type: array
+      description: The attachments/medias to be included in the comment
+      items:
+        $ref: "#/CommentAttachment"
   required:
     - commentId
-    - data
+
 CommentForRealtime:
   type: object
   properties:
@@ -146,7 +159,15 @@ CommentForRealtime:
       description: Type of a reference (post/content).
     dataType:
       type: string
-      description: Type of a comment (text).
+      description: Type of a comment (deprecated in new SDK version, will be fixed as "text").
+    dataTypes:
+      type: array
+      description: Types of a comment (a comment can contain multiple types)
+      items:
+        type: string
+        enum:
+          - text
+          - image
     data:
       type: object
       description: Body of a comment.
@@ -221,7 +242,23 @@ CommentForRealtime:
             description: Array of UserId.
             items:
               type: string
+    attachments:
+      type: array
+      description: The attachments/medias to be included in the comment
+      items:
+        $ref: "#/CommentAttachment"
   required:
     - commentId
-    - data
 
+CommentAttachment:
+  type: object
+  properties:
+    type:
+      type: string
+      enum:
+        - image
+    fileId:
+      type: string
+  required:
+    - type
+    - fileId
