@@ -31,9 +31,6 @@ servers:
     description: API Endpoint for EU Region
   - url: https://api.sg.amity.co
     description: API Endpoint for SG Region
-tags:
-  - name: Realtime
-    description: The realtime event received from MQTT, not from socket or API
 paths:
   #Authentication
   /api/v3/authentication/token:
@@ -3560,55 +3557,55 @@ paths:
   # # Realtime - Channel
   /realtime/channel.created:
     get:
-      summary: message feed deleted
+      summary: channel created
       tags:
         - Realtime
       $ref: './v3/realtime/channel/event.yaml#/created'
   /realtime/channel.updated:
     get:
-      summary: message feed deleted
+      summary: channel updated
       tags:
         - Realtime
       $ref: './v3/realtime/channel/event.yaml#/updated'
   /realtime/channel.deleted:
     get:
-      summary: message feed deleted
+      summary: channel deleted
       tags:
         - Realtime
       $ref: './v3/realtime/channel/event.yaml#/deleted'
   /realtime/channel.joined:
     get:
-      summary: message feed deleted
+      summary: user joined the channel
       tags:
         - Realtime
       $ref: './v3/realtime/channel/event.yaml#/joined'
   /realtime/channel.left:
     get:
-      summary: message feed deleted
+      summary: user left the channel
       tags:
         - Realtime
       $ref: './v3/realtime/channel/event.yaml#/left'
   /realtime/channel.membersAdded:
     get:
-      summary: message feed deleted
+      summary: users were added to the channel
       tags:
         - Realtime
       $ref: './v3/realtime/channel/event.yaml#/membersAdded'
   /realtime/channel.membersRemoved:
     get:
-      summary: message feed deleted
+      summary: users were removed from the channel
       tags:
         - Realtime
       $ref: './v3/realtime/channel/event.yaml#/membersRemoved'
   /realtime/channel.banned:
     get:
-      summary: message feed deleted
+      summary: user is banned from the channel
       tags:
         - Realtime
       $ref: './v3/realtime/channel/event.yaml#/banned'
   /realtime/channel.unbanned:
     get:
-      summary: message feed deleted
+      summary: user is unbanned from the channel
       tags:
         - Realtime
       $ref: './v3/realtime/channel/event.yaml#/unbanned'
