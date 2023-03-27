@@ -34,11 +34,9 @@ servers:
 paths:
   #Authentication
   /api/v3/authentication/token:
-    get:
-      summary: Get authentication token
-      tags:
-        - Authentication
-      $ref: './v3/authentication/api.yaml#/getToken'
+    $ref: './v3/authentication/api.yaml#/components/paths/getToken'
+
+
   /api/v4/authentication/token:
     post:
       summary: Create authentication token for session creation API
@@ -193,31 +191,26 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
         - name: regexs
           in: query
-          collectionFormat: multi
           schema:
             type: array
             items:
               type: string
-      consumes:
-        - application/x-www-form-urlencoded
       responses:
-        '200000':
+        '200':
           $ref: '#/components/responses/BlacklistRulesResponse'
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
     put:
       summary: refresh rules of blacklist.
@@ -233,18 +226,14 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
-      consumes:
-        - application/x-www-form-urlencoded
       requestBody:
         description: >
           Rules information to be refreshed.
@@ -261,11 +250,11 @@ paths:
               required:
                 - regexs
       responses:
-        '200000':
+        '200':
           description: OK
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
     post:
       summary: add rules to blacklist.
@@ -281,18 +270,14 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
-      consumes:
-        - application/x-www-form-urlencoded
       requestBody:
         description: >
           Rules information to be added.
@@ -311,11 +296,11 @@ paths:
               required:
                 - regexs
       responses:
-        '200000':
+        '200':
           description: OK
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
     delete:
       summary: delete rules from blacklist
@@ -331,18 +316,14 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
-      consumes:
-        - application/x-www-form-urlencoded
       requestBody:
         description: >
           Rules information to be deleted.
@@ -359,11 +340,11 @@ paths:
               required:
                 - ruleIds
       responses:
-        '200000':
+        '200':
           description: OK
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v2/blacklist/records/:ruleId:
     put:
@@ -380,18 +361,14 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
-      consumes:
-        - application/x-www-form-urlencoded
       requestBody:
         description: >
           Rules information to be updated.
@@ -409,11 +386,11 @@ paths:
                 - ruleId
                 - isEnabled
       responses:
-        '200000':
+        '200':
           $ref: '#/components/responses/BlacklistRuleResponse'
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v2/messages:
     post:
@@ -475,7 +452,6 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
@@ -484,11 +460,11 @@ paths:
       description: >
         Get a moderation setting.
       responses:
-        '200000':
+        '200':
           $ref: '#/components/responses/ModerationSettingResponse'
-        '400000':
+        '400':
           $ref: '#/components/responses/BadRequestError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
     put:
       summary: update a moderation setting
@@ -504,18 +480,14 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
-      consumes:
-        - application/x-www-form-urlencoded
       requestBody:
         description: >
           moderation setting information
@@ -558,7 +530,7 @@ paths:
                       type: number
                       minimum: 0
       responses:
-        '200000':
+        '200':
           content:
             application/json:
               schema:
@@ -571,9 +543,9 @@ paths:
                 example:
                   status: success
                   code: 200000
-        '400000':
+        '400':
           $ref: '#/components/responses/BadRequestError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v2/reactions/messages/most:
     get:
@@ -596,13 +568,11 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
@@ -611,14 +581,12 @@ paths:
           required: true
           schema:
             type: string
-      consumes:
-        - application/x-www-form-urlencoded
       responses:
-        '200000':
+        '200':
           $ref: '#/components/responses/RolesResponse'
-        '400000':
+        '400':
           $ref: '#/components/responses/BadRequestError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
     put:
       summary: add permissions.
@@ -634,18 +602,14 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
-      consumes:
-        - application/x-www-form-urlencoded
       requestBody:
         description: >
           Permission information to be added
@@ -667,13 +631,13 @@ paths:
                 - publicIds
                 - permissions
       responses:
-        '200000':
+        '200':
           description: OK
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
-        '400311':
+        '429':
           $ref: '#/components/responses/RateLimitError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v2/whitelist/records:
     get:
@@ -690,33 +654,28 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
         - name: regexs
           in: query
           required: true
-          collectionFormat: multi
           schema:
             type: array
             items:
               type: string
-      consumes:
-        - application/x-www-form-urlencoded
       responses:
-        '200000':
+        '200':
           $ref: '#/components/responses/WhitelistRulesResponse'
-        '400400':
-          $ref: '#/components/responses/NotFoundError'
-        '500000':
-          $ref: '#/components/responses/UnexpectedError'
+        '404':
+          $ref: './global/error.yaml#/NotFoundError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
     put:
       summary: refresh rules of whitelist.
       tags:
@@ -731,18 +690,14 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
-      consumes:
-        - application/x-www-form-urlencoded
       requestBody:
         description: >
           Rules information to be refreshed.
@@ -759,11 +714,11 @@ paths:
               required:
                 - regexs
       responses:
-        '200000':
+        '200':
           description: OK
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
     post:
       summary: add rules to whitelist.
@@ -779,18 +734,14 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
-      consumes:
-        - application/x-www-form-urlencoded
       requestBody:
         description: >
           Rules information to be added.
@@ -807,11 +758,11 @@ paths:
               required:
                 - regexs
       responses:
-        '200000':
+        '200':
           description: OK
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
     delete:
       summary: delete rules from whitelist
@@ -827,18 +778,14 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
-      consumes:
-        - application/x-www-form-urlencoded
       requestBody:
         description: >
           Rules information to be deleted.
@@ -855,11 +802,11 @@ paths:
               required:
                 - ruleIds
       responses:
-        '200000':
+        '200':
           description: OK
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v2/whitelist/records/:ruleId:
     put:
@@ -876,18 +823,14 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
-      consumes:
-        - application/x-www-form-urlencoded
       requestBody:
         description: >
           Rules information to be updated.
@@ -905,11 +848,11 @@ paths:
                 - ruleId
                 - isEnabled
       responses:
-        '200000':
+        '200':
           $ref: '#/components/responses/WhitelistRuleResponse'
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/roles:
     get:
@@ -1798,11 +1741,11 @@ paths:
                 - token
                 - userId
       responses:
-        '200000':
+        '200':
           $ref: '#/components/responses/SuccessResponse'
-        '400000':
+        '400':
           $ref: '#/components/responses/BadRequestError'
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
     delete:
       summary: unregister a device from a notification service provider
@@ -1828,9 +1771,9 @@ paths:
               required:
                 - deviceId
       responses:
-        '200000':
+        '200':
           $ref: '#/components/responses/SuccessResponse'
-        '400000':
+        '400':
           $ref: '#/components/responses/BadRequestError'
   /admin/v1/notification/setting:
     post:
@@ -1938,9 +1881,9 @@ paths:
           schema:
             type: string
       responses:
-        '200000':
+        '200':
           $ref: '#/components/responses/NetworkResponse'
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
     put:
       summary: Save network
@@ -1987,9 +1930,9 @@ paths:
                 - defaultMessageAutoDeleteEnabled
                 - defaultAutoDeleteMessageByFlagLimit
       responses:
-        '200000':
+        '200':
           $ref: '#/components/responses/NetworkResponse'
-        '400400':
+        '404':
           $ref: '#/components/responses/NotFoundError'
   /api/v3/networks/server-key:
     get:
@@ -2482,7 +2425,6 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
@@ -2496,11 +2438,11 @@ paths:
       description: >
         Get a moderation setting.
       responses:
-        '200000':
+        '200':
           $ref: '#/components/responses/ModerationSettingResponse'
-        '400000':
+        '400':
           $ref: '#/components/responses/BadRequestError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
   /sockets/moderation-setting.update:
     post:
@@ -2517,18 +2459,14 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          value: Bearer {{accessToken}}
           required: true
           schema:
             type: string
         - name: Content-Type
           in: header
-          value: application/x-www-form-urlencoded
           required: true
           schema:
             type: string
-      consumes:
-        - application/x-www-form-urlencoded
       requestBody:
         description: >
           moderation setting information
@@ -2571,11 +2509,11 @@ paths:
                       type: number
                       minimum: 0
       responses:
-        '200000':
+        '200':
           description: Success
-        '400000':
+        '400':
           $ref: '#/components/responses/BadRequestError'
-        '500000':
+        '500':
           $ref: '#/components/responses/UnexpectedError'
 
   #File
@@ -3745,7 +3683,7 @@ paths:
         - WebhookEvent
       description: Send new created message whenever a message got created in a channel
       responses:
-        '200000':
+        '200':
           description: messages is messages information. users is list of all user information relate to this messages
           content:
             application/json:
@@ -3772,7 +3710,7 @@ paths:
         - WebhookEvent
       description: Send deleted message whenever a message got deleted in a channel
       responses:
-        '200000':
+        '200':
           description: messages is messages information. users is list of all user information relate to this messages
           content:
             application/json:
@@ -3799,7 +3737,7 @@ paths:
         - WebhookEvent
       description: Send updated message whenever a message got updated in a channel
       responses:
-        '200000':
+        '200':
           description: messages is messages information. users is list of all user information relate to this messages
           content:
             application/json:
@@ -3826,7 +3764,7 @@ paths:
         - WebhookEvent
       description: Send updated message whenever a message got flag
       responses:
-        '200000':
+        '200':
           description: messages is messages information. users is list of all user information relate to this messages
           content:
             application/json:
@@ -3853,7 +3791,7 @@ paths:
         - WebhookEvent
       description: Send updated message whenever a message flag is removed.
       responses:
-        '200000':
+        '200':
           description: messages is messages information. users is list of all user information relate to this messages
           content:
             application/json:
@@ -3880,7 +3818,7 @@ paths:
         - WebhookEvent
       description: Send updated message whenever all message flags are cleared.
       responses:
-        '200000':
+        '200':
           description: messages is messages information. users is list of all user information relate to this messages
           content:
             application/json:
@@ -3907,7 +3845,7 @@ paths:
         - WebhookEvent
       description: Send new created channel whenever a channel got create
       responses:
-        '200000':
+        '200':
           description: channel is channel information. userIds is a list of userId who is added to channel. users is a list of user information.
           content:
             application/json:
@@ -3938,7 +3876,7 @@ paths:
         - WebhookEvent
       description: Send join event information whenever a channel got joined
       responses:
-        '200000':
+        '200':
           description: channel is channel information. userIds is a list of joined userId. users is a list of user information.
           content:
             application/json:
@@ -3969,7 +3907,7 @@ paths:
         - WebhookEvent
       description: Send user added event information whenever new member got added to a channel.
       responses:
-        '200000':
+        '200':
           description: channel is channel information. userIds is a list of added userId. adderId is user who add other user to channel users is a list of user information.
           content:
             application/json:
@@ -4002,7 +3940,7 @@ paths:
         - WebhookEvent
       description: Send channel close event information whenever a channel close.
       responses:
-        '200000':
+        '200':
           description: channel is channel information.
           content:
             application/json:
@@ -4025,7 +3963,7 @@ paths:
         - WebhookEvent
       description: Send channel leave event information whenever someone leave a channel.
       responses:
-        '200000':
+        '200':
           description: channel is channel information. userIds is a list of userId who leave channel. users is a list of userInfo
           content:
             application/json:
@@ -4056,7 +3994,7 @@ paths:
         - WebhookEvent
       description: Send channel updated event information whenever a channel got updated.
       responses:
-        '200000':
+        '200':
           description: channel is channel information. userId is a userId who update channel. users is a list of userInfo
           content:
             application/json:
@@ -4085,7 +4023,7 @@ paths:
         - WebhookEvent
       description: Send user removed event information whenever member got remove from channel.
       responses:
-        '200000':
+        '200':
           description: channel is channel information. userIds is a list of removed userId. removerId is userId who remove other users from channel. users is a list of user information.
           content:
             application/json:
@@ -4118,7 +4056,7 @@ paths:
         - WebhookEvent
       description: Send channel's meta data updated event information whenever a channel's meta data got updated.
       responses:
-        '200000':
+        '200':
           description: channel is channel information. userId is a userId who update channel's meta data. users is a list of userInfo
           content:
             application/json:
@@ -4147,7 +4085,7 @@ paths:
         - WebhookEvent
       description: Send channel banned event whenever a channel got banned.
       responses:
-        '200000':
+        '200':
           description: channel is channel information. userIds is a list of userIds who being banned. actorId is userId who ban other user. users is a list of userInfo
           content:
             application/json:
@@ -4180,7 +4118,7 @@ paths:
         - WebhookEvent
       description: Send banned event whenever a system detect message that contain in the blacklist
       responses:
-        '200000':
+        '200':
           description: channel is channel information. userId is a userId who send the message. users is a list of userInfo
           content:
             application/json:
@@ -5040,7 +4978,7 @@ components:
                   results:
                     type: array
                     items:
-                      $ref: './schema/message.yaml#BlacklistRule'
+                      $ref: '#/components/schemas/BlacklistRule'
     WhitelistRuleResponse:
       description: rule of whitelist Information
       content:
@@ -5130,7 +5068,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Error'
+            $ref: './global/error.yaml#Error'
           example:
             status: error
             code: 500000
@@ -5140,7 +5078,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Error'
+            $ref: './global/error.yaml#Error'
           example:
             status: error
             code: 400400
@@ -5150,7 +5088,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Error'
+            $ref: './global/error.yaml#Error'
           example:
             status: error
             code: 400000
@@ -5160,7 +5098,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Error'
+            $ref: './global/error.yaml#Error'
           example:
             status: error
             code: 400400
@@ -5170,7 +5108,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Error'
+            $ref: './global/error.yaml#Error'
           example:
             status: error
             code: 400301
@@ -5180,7 +5118,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Error'
+            $ref: './global/error.yaml#Error'
           example:
             status: error
             code: 400304
@@ -5190,7 +5128,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Error'
+            $ref: './global/error.yaml#Error'
           example:
             status: error
             code: 400311
@@ -5200,7 +5138,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Error'
+            $ref: './global/error.yaml#Error'
           example:
             status: error
             code: 400400
@@ -5210,7 +5148,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Error'
+            $ref: './global/error.yaml#Error'
           example:
             status: error
             code: 400300
@@ -5220,7 +5158,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Error'
+            $ref: './global/error.yaml#Error'
           example:
             status: error
             code: 400300
@@ -5230,7 +5168,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Error'
+            $ref: './global/error.yaml#Error'
           example:
             status: error
             code: 400100
@@ -5240,7 +5178,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Error'
+            $ref: './global/error.yaml#Error'
           example:
             status: error
             code: 400316
