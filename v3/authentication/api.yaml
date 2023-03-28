@@ -1,4 +1,4 @@
-getToken:
+AuthenticationToken:
   get:
     summary: Get authentication token
     tags:
@@ -18,13 +18,13 @@ getToken:
           require: true
         description: User id to get token for
     responses:
-      "200":
+      "200000":
         content:
           application/json:
             schema:
               type: string
               example: s9qne0wEqVb2e05271177748659f574a4e8ab85e08
-      "403":
+      "400300":
         $ref: "../../global/error.yaml#/ForbiddenError"
-      "500":
+      "50000":
         $ref: "../../global/error.yaml#/ValidationError"
