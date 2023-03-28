@@ -447,3 +447,457 @@ isflagbyme:
       $ref: "../../global/error.yaml#/NotFoundError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+Messages:
+  get:
+    summary: 'query messages'
+    tags:
+      - 'Message'
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: 'channelId'
+        required: true
+        in: 'query'
+        schema:
+          type: 'string'
+          maxLength: 100
+      - name: 'type'
+        in: 'query'
+        schema:
+          type: 'string'
+          enum:
+            - 'text'
+            - 'image'
+            - 'file'
+            - 'custom'
+            - 'video'
+            - 'audio'
+            - 'imagemap'
+      - name: 'parentId'
+        in: 'query'
+        schema:
+          type: 'string'
+          maxLength: 150
+      - name: 'filterByParentId'
+        in: 'query'
+        schema:
+          type: 'boolean'
+          default: false
+      - name: 'hasFlag'
+        in: 'query'
+        schema:
+          type: 'boolean'
+      - name: 'isDeleted'
+        in: 'query'
+        schema:
+          type: 'boolean'
+          default: null
+        description: "isDeleted:\n  * `null(default)` - Show both message is actived and message is inactived.\n  * `true` - Show message is inactived only.\n  * `false` - Show message is actived only.\n"
+      - name: 'tags'
+        in: 'query'
+        collectionFormat: 'multi'
+        schema:
+          type: 'array'
+          maxItems: 10
+          items:
+            type: 'string'
+            maxLength: 100
+      - name: 'excludeTags'
+        in: 'query'
+        collectionFormat: 'multi'
+        schema:
+          type: 'array'
+          maxItems: 10
+          items:
+            type: 'string'
+            maxLength: 100
+      - name: 'options'
+        in: 'query'
+        style: 'deepObject'
+        schema:
+          type: 'object'
+          properties:
+            after:
+              type: 'integer'
+              minimum: 1
+            first:
+              type: 'integer'
+              minimum: 1
+              maximum: 100
+            before:
+              type: 'integer'
+              minimum: 1
+            last:
+              type: 'integer'
+              minimum: 1
+              maximum: 100
+            token:
+              type: 'string'
+              maxLength: 1000
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        $ref: './response.yaml#/MessagePaginationApiResponse'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+  post:
+    summary: 'create a message'
+    tags:
+      - 'Message'
+    security:
+      - BearerAuth: []
+    consumes:
+      - 'application/json'
+    requestBody:
+      description: "Information of message to be created\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              channelId:
+                type: 'string'
+                maxLength: 150
+              messageId:
+                type: 'string'
+                maxLength: 150
+              type:
+                type: 'string'
+                enum:
+                  - 'text'
+                  - 'image'
+                  - 'file'
+                  - 'custom'
+                  - 'video'
+                  - 'audio'
+                  - 'imagemap'
+                default: 'text'
+              data:
+                type: 'object'
+                properties:
+                  text:
+                    type: 'string'
+                    maxLength: 20000
+              fileId:
+                type: 'string'
+                maxLength: 50
+              parentId:
+                type: 'string'
+                maxLength: 150
+              metadata:
+                type: 'object'
+              tags:
+                type: 'array'
+                maxItems: 10
+                items:
+                  type: 'string'
+                  maxLength: 100
+              mentionees:
+                type: 'array'
+                description: 'The object of the mentions type and user who get a notification for the message.'
+                maxItems: 2
+                items:
+                  $ref: '../../schema/message.yaml#/MentioneesRequest'
+            required:
+              - 'channelId'
+    responses:
+      '200000':
+        $ref: './response.yaml#/MessagesApiResponse'
+      '400300':
+        $ref: '../../global/error.yaml#/ForbiddenAvatarError'
+      '400301':
+        $ref: '../../global/error.yaml#/PermissionDenidedError'
+      '400302':
+        $ref: '../../global/error.yaml#/UserIsMutedError'
+      '400303':
+        $ref: '../../global/error.yaml#/ChannelIsMutedError'
+      '400304':
+        $ref: '../../global/error.yaml#/UserIsBannedError'
+      '400307':
+        $ref: '../../global/error.yaml#/MaxRepetitionExceed'
+      '400308':
+        $ref: '../../global/error.yaml#/BanWordFoundError'
+      '400309':
+        $ref: '../../global/error.yaml#/LinkNotAllowedError'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/ValidationError'
+
+
+MessagesList:
+  get:
+    summary: 'get list of messages'
+    tags:
+      - 'Message'
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: 'messageIds'
+        in: 'query'
+        required: true
+        collectionFormat: 'multi'
+        schema:
+          type: 'array'
+          maxItems: 10
+          items:
+            type: 'string'
+            maxLength: 150
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        $ref: './response.yaml#/MessagesApiResponse'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+MessagesMessageId:
+  get:
+    summary: 'get a message'
+    tags:
+      - 'Message'
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: 'messageId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+          maxLength: 150
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        $ref: './response.yaml#/MessagesApiResponse'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+  put:
+    summary: 'update a message'
+    tags:
+      - 'Message'
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: 'messageId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+          maxLength: 150
+    consumes:
+      - 'application/json'
+    requestBody:
+      description: "Information of message to be updated\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              data:
+                type: 'object'
+                properties:
+                  text:
+                    type: 'string'
+                    maxLength: 20000
+              metadata:
+                type: 'object'
+              tags:
+                type: 'array'
+                maxItems: 10
+                items:
+                  type: 'string'
+                  maxLength: 100
+              mentionees:
+                type: 'array'
+                description: 'The object of the mentions type and user who get a notification for the message.'
+                maxItems: 2
+                items:
+                  $ref: '../../schema/message.yaml#/MentioneesRequest'
+    responses:
+      '200000':
+        $ref: './response.yaml#/MessagesApiResponse'
+      '400300':
+        $ref: '../../global/error.yaml#/ForbiddenAvatarError'
+      '400301':
+        $ref: '../../global/error.yaml#/PermissionDenidedError'
+      '400307':
+        $ref: '../../global/error.yaml#/MaxRepetitionExceed'
+      '400308':
+        $ref: '../../global/error.yaml#/BanWordFoundError'
+      '400309':
+        $ref: '../../global/error.yaml#/LinkNotAllowedError'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/ValidationError'
+  delete:
+    summary: 'delete a message'
+    tags:
+      - 'Message'
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: 'messageId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+          maxLength: 150
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                status:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    success:
+                      type: 'boolean'
+      '400301':
+        $ref: '../../global/error.yaml#/PermissionDenidedError'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+MessagesmessageIdFlag:
+  post:
+    summary: 'flag a message'
+    tags:
+      - 'Message'
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: 'messageId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+          maxLength: 150
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        $ref: './response.yaml#/MessagesApiResponse'
+      '400300':
+        $ref: '../../global/error.yaml#/ForbiddenError'
+      '400301':
+        $ref: '../../global/error.yaml#/PermissionDenidedError'
+      '400304':
+        $ref: '../../global/error.yaml#/UserIsBannedError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+MessagesmessageIdUnflag:
+  delete:
+    summary: 'unflag a message'
+    tags:
+      - 'Message'
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: 'messageId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+          maxLength: 150
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        $ref: './response.yaml#/MessagesApiResponse'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+MessagesmessageIdClearFlags:
+  delete:
+    summary: 'clear flags'
+    tags:
+      - 'Message'
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: 'messageId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+          maxLength: 150
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        $ref: './response.yaml#/MessagesApiResponse'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+MessagesMessageIdIsFlaggedByMe:
+  get:
+    summary: 'is message flag by me'
+    tags:
+      - 'Message'
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: 'messageId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+          maxLength: 150
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        $ref: '../../global/response.yaml#/IsSocialFlagByMeResponse'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'

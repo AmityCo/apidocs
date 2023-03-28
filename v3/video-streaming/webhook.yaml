@@ -82,3 +82,93 @@ customNotificationCreated:
                 allOf:
                   - $ref: "./response.yaml#/VideoStreamingCustomNotificationResponse"
                   
+
+WebhookVvideoStreamingdidRecord:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when video streaming recordings is ready.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/VideoStreamingsApiResponse'
+
+
+WebhookVvideoStreamingdidStart:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when video streaming start.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/VideoStreamingsApiResponse'
+
+
+WebhookVvideoStreamingdidStop:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when video streaming stop.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/VideoStreamingsApiResponse'
+
+
+WebhookPushNotificationVideoStreamingstarted:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when video-streaming is started\n"
+    responses:
+      '200000':
+        description: 'video-streaming is started'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: true
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/VideoStreamingCustomNotificationResponse'

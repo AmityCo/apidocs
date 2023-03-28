@@ -201,3 +201,199 @@ query:
       $ref: "./response.yaml#/RoleResponse"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+Roles:
+  get:
+    summary: 'Get roles (pagination support)'
+    tags:
+      - 'Admin'
+    security:
+      - BearerAuth: []
+    description: "Get roles (pagination support)\n"
+    parameters:
+      - name: 'keyword'
+        in: 'query'
+        required: true
+        schema:
+          type: 'string'
+          minLength: 0
+          maxLength: 100
+        description: 'search keyword'
+      - name: 'sortBy'
+        in: 'query'
+        schema:
+          type: 'string'
+          enum:
+            - 'lastCreated'
+            - 'firstCreated'
+            - 'displayName'
+          default: 'lastCreated'
+      - name: 'options'
+        in: 'query'
+        style: 'deepObject'
+        schema:
+          type: 'object'
+          properties:
+            limit:
+              type: 'integer'
+              minimum: 1
+              maximum: 100
+              default: 10
+            token:
+              type: 'string'
+              maxLength: 1000
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        $ref: './response.yaml#/RoleResponse'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+  post:
+    summary: 'Create role'
+    tags:
+      - 'Admin'
+    security:
+      - BearerAuth: []
+    description: "Create a role\n"
+    consumes:
+      - 'application/json'
+    requestBody:
+      description: "information of a role to be created.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              roleId:
+                type: 'string'
+                description: 'role id'
+                minLength: 1
+                maxLength: 100
+              displayName:
+                type: 'string'
+                description: 'display name of role'
+                minLength: 0
+                maxLength: 100
+              permissions:
+                type: 'array'
+                items:
+                  type: 'string'
+                description: 'The list of permission for this role. https://github.com/EkoCommunications/UpstraEngineeringGitbook/blob/feature/roles/specification/roles.md#permissions'
+            required:
+              - 'roleId'
+              - 'permissions'
+    responses:
+      '200000':
+        $ref: './response.yaml#/RoleResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400301':
+        $ref: '../../global/error.yaml#/GenericPermissionDenidedError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+RolesRoleId:
+  get:
+    summary: 'Get role'
+    tags:
+      - 'Admin'
+    security:
+      - BearerAuth: []
+    description: "Get a role\n"
+    parameters:
+      - name: 'roleId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        $ref: './response.yaml#/RoleResponse'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+  put:
+    summary: 'Update role'
+    tags:
+      - 'Admin'
+    security:
+      - BearerAuth: []
+    description: "Update a role\n"
+    consumes:
+      - 'application/json'
+    requestBody:
+      description: "information of a role to be created.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              roleId:
+                type: 'string'
+                description: 'role id to update'
+                minLength: 1
+                maxLength: 100
+              displayName:
+                type: 'string'
+                description: 'display name of role to update'
+                minLength: 0
+                maxLength: 100
+              permissions:
+                type: 'array'
+                items:
+                  type: 'string'
+                description: 'The list of permission to update. https://github.com/EkoCommunications/UpstraEngineeringGitbook/blob/feature/roles/specification/roles.md#permissions'
+            required:
+              - 'roleId'
+              - 'permissions'
+    responses:
+      '200000':
+        $ref: './response.yaml#/RoleResponse'
+      '400301':
+        $ref: '../../global/error.yaml#/GenericPermissionDenidedError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+  delete:
+    summary: 'Delete role'
+    tags:
+      - 'Admin'
+    security:
+      - BearerAuth: []
+    description: "Delete a role\n"
+    consumes:
+      - 'application/json'
+    requestBody:
+      description: "information of a role to be delete.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              roleId:
+                type: 'string'
+                description: 'role id to delete'
+                minLength: 1
+                maxLength: 100
+            required:
+              - 'roleId'
+    responses:
+      '200000':
+        $ref: './response.yaml#/RoleResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400301':
+        $ref: '../../global/error.yaml#/GenericPermissionDenidedError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'

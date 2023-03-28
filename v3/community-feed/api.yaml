@@ -77,3 +77,80 @@ get:
       $ref: "../../global/error.yaml#/UnAuthorizedError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+
+CommunityFeedsCommunityId:
+  get:
+    summary: 'Get list of posts.'
+    tags:
+      - 'CommunityFeed'
+    security:
+      - BearerAuth: []
+    description: "Get paginable list of posts.\n"
+    parameters:
+      - name: 'communityId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'sortBy'
+        in: 'query'
+        schema:
+          type: 'string'
+          enum:
+            - 'firstCreated'
+            - 'lastCreated'
+            - 'lastUpdated'
+            - 'firstUpdated'
+          default: 'lastCreated'
+      - name: 'hasFlag'
+        in: 'query'
+        schema:
+          type: 'boolean'
+          default: false
+        description: "hasFlag:\n  * `null(default)` - Show all posts.\n  * `true` - Show only flagged post(or children) or has flagged comment.\n  * `false` - Show only no flagged post(and children) and has no flagged comment.\n"
+      - name: 'isDeleted'
+        in: 'query'
+        schema:
+          type: 'boolean'
+          default: null
+      - name: 'options'
+        in: 'query'
+        style: 'deepObject'
+        schema:
+          type: 'object'
+          properties:
+            limit:
+              type: 'integer'
+              minimum: 1
+              maximum: 100
+              default: 10
+            token:
+              type: 'string'
+              maxLength: 1000
+      - name: 'dataTypes'
+        in: 'query'
+        collectionFormat: 'multi'
+        schema:
+          type: 'array'
+          minItems: 1
+          maxItems: 4
+          items:
+            type: 'string'
+            enum:
+              - 'video'
+              - 'image'
+              - 'file'
+              - 'liveStream'
+          description: 'post data type to filter'
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        $ref: './response.yaml#/CommunityFeedResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400100':
+        $ref: '../../global/error.yaml#/UnAuthorizedError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'

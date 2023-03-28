@@ -365,3 +365,376 @@ delete:
       $ref: '../../global/error.yaml#/NotFoundError'
     '500000':
       $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+Followingcreate:
+  post:
+    summary: 'Follow user.'
+    tags:
+      - 'Follow'
+    securityDefinition:
+      ApiKeyAuth:
+        type: 'apiKey'
+        in: 'header'
+        name: 'Authorization'
+    description: "Follow user information\n"
+    parameters:
+      - name: 'Authorization'
+        in: 'header'
+        value: 'Bearer {{accessToken}}'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'Content-Type'
+        in: 'header'
+        value: 'application/x-www-form-urlencoded'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/x-www-form-urlencoded'
+    requestBody:
+      description: "User to be follow.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              userId:
+                type: 'string'
+                maxLength: 900
+            required:
+              - 'userId'
+    responses:
+      '200000':
+        $ref: './response.yaml#/FollowResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+Followingdelete:
+  post:
+    summary: 'Unfollow or Cancel follow request'
+    tags:
+      - 'Follow'
+    securityDefinition:
+      ApiKeyAuth:
+        type: 'apiKey'
+        in: 'header'
+        name: 'Authorization'
+    description: "Unfollow or Cancel follow request\n"
+    parameters:
+      - name: 'Authorization'
+        in: 'header'
+        value: 'Bearer {{accessToken}}'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'Content-Type'
+        in: 'header'
+        value: 'application/x-www-form-urlencoded'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/x-www-form-urlencoded'
+    requestBody:
+      description: "User to be unfollow or cancel follow request.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              userId:
+                type: 'string'
+                maxLength: 900
+            required:
+              - 'userId'
+    responses:
+      '200000':
+        $ref: './response.yaml#/FollowResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+Followeraccept:
+  post:
+    summary: 'Accept follow request.'
+    tags:
+      - 'Follow'
+    securityDefinition:
+      ApiKeyAuth:
+        type: 'apiKey'
+        in: 'header'
+        name: 'Authorization'
+    description: "Accept follow request.\n"
+    parameters:
+      - name: 'Authorization'
+        in: 'header'
+        value: 'Bearer {{accessToken}}'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'Content-Type'
+        in: 'header'
+        value: 'application/x-www-form-urlencoded'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/x-www-form-urlencoded'
+    requestBody:
+      description: "User to be accepted.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              userId:
+                type: 'string'
+                maxLength: 900
+            required:
+              - 'userId'
+    responses:
+      '200000':
+        $ref: './response.yaml#/FollowResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+Followerdelete:
+  post:
+    summary: 'Delete follower.'
+    tags:
+      - 'Follow'
+    securityDefinition:
+      ApiKeyAuth:
+        type: 'apiKey'
+        in: 'header'
+        name: 'Authorization'
+    description: "Delete follower.\n"
+    parameters:
+      - name: 'Authorization'
+        in: 'header'
+        value: 'Bearer {{accessToken}}'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'Content-Type'
+        in: 'header'
+        value: 'application/x-www-form-urlencoded'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/x-www-form-urlencoded'
+    requestBody:
+      description: "User of follower to be deleted\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              userId:
+                type: 'string'
+                maxLength: 900
+            required:
+              - 'userId'
+    responses:
+      '200000':
+        $ref: './response.yaml#/FollowResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+FollowersgetList:
+  post:
+    summary: 'Get follower list'
+    tags:
+      - 'Follow'
+    securityDefinition:
+      ApiKeyAuth:
+        type: 'apiKey'
+        in: 'header'
+        name: 'Authorization'
+    description: "Get follower information (pagination supported)\n"
+    parameters:
+      - name: 'Authorization'
+        in: 'header'
+        value: 'Bearer {{accessToken}}'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'Content-Type'
+        in: 'header'
+        value: 'application/x-www-form-urlencoded'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/x-www-form-urlencoded'
+    requestBody:
+      description: "Request body\n"
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              userId:
+                type: 'string'
+                maxLength: 900
+              status:
+                type: 'string'
+                enum:
+                  - 'all'
+                  - 'pending'
+                  - 'accepted'
+                default: 'all'
+              options:
+                type: 'object'
+                properties:
+                  limit:
+                    type: 'integer'
+                    minimum: 1
+                    maximum: 100
+                    default: 10
+                  token:
+                    type: 'string'
+                    minLength: 1
+                    maxLength: 100
+    responses:
+      '200000':
+        $ref: './response.yaml#/FollowPaginationResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+FollowinggetList:
+  post:
+    summary: 'Get following list.'
+    tags:
+      - 'Follow'
+    securityDefinition:
+      ApiKeyAuth:
+        type: 'apiKey'
+        in: 'header'
+        name: 'Authorization'
+    description: "Get following information (pagination supported)\n"
+    parameters:
+      - name: 'Authorization'
+        in: 'header'
+        value: 'Bearer {{accessToken}}'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'Content-Type'
+        in: 'header'
+        value: 'application/x-www-form-urlencoded'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/x-www-form-urlencoded'
+    requestBody:
+      description: "Request body\n"
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              userId:
+                type: 'string'
+                maxLength: 900
+              status:
+                type: 'string'
+                enum:
+                  - 'all'
+                  - 'pending'
+                  - 'accepted'
+                default: 'all'
+              options:
+                type: 'object'
+                properties:
+                  limit:
+                    type: 'integer'
+                    minimum: 1
+                    maximum: 100
+                    default: 10
+                  token:
+                    type: 'string'
+                    minLength: 1
+                    maxLength: 100
+    responses:
+      '200000':
+        $ref: './response.yaml#/FollowPaginationResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+FollowInfoget:
+  post:
+    summary: 'Get follow information.'
+    tags:
+      - 'Follow'
+    securityDefinition:
+      ApiKeyAuth:
+        type: 'apiKey'
+        in: 'header'
+        name: 'Authorization'
+    description: "Get other follow information.\n"
+    parameters:
+      - name: 'Authorization'
+        in: 'header'
+        value: 'Bearer {{accessToken}}'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'Content-Type'
+        in: 'header'
+        value: 'application/x-www-form-urlencoded'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/x-www-form-urlencoded'
+    requestBody:
+      description: "User to be get follow information\n"
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              userId:
+                type: 'string'
+                maxLength: 900
+    responses:
+      '200000':
+        $ref: './response.yaml#/FollowInformationResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'

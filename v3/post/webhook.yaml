@@ -150,3 +150,440 @@ customNotificationCreated:
                 allOf:
                   - $ref: "./response.yaml#/PostCustomNotificationResponse"
                   
+
+WebhookVpostdidCreate:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/PostWebhookResponse'
+
+
+WebhookVpostdidUpdate:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is updated\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/PostWebhookResponse'
+
+
+WebhookVpostdidDelete:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is deleted\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/PostWebhookResponse'
+
+
+WebhookVpostdidApprove:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is approved\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/PostWebhookResponse'
+
+
+WebhookVpostdidDecline:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is declined\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/PostWebhookResponse'
+
+
+WebhookVpostdidFlag:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is flagged.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/PostWithFlagWebhookResponse'
+
+
+WebhookVpostdidUnflag:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is unflagged.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/PostWithFlagWebhookResponse'
+
+
+WebhookVpostdidAddReaction:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when reaction of post is added.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/PostWithReactorWebhookResponse'
+
+
+WebhookVpostdidRemoveReaction:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when reaction of post is removed.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/PostWithReactorWebhookResponse'
+
+
+WebhookPushNotificationPostcreated:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      '200000':
+        description: 'post created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/PostCustomNotificationResponse'
+
+
+WebhookPushNotificationPostneedReviewing:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      '200000':
+        description: 'post created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/PostCustomNotificationResponse'
+
+
+WebhookPushNotificationPostapproved:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      '200000':
+        description: 'post created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/PostCustomNotificationResponse'
+
+
+WebhookPushNotificationPostreacted:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      '200000':
+        description: 'post created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/PostCustomNotificationResponse'
+
+
+WebhookPushNotificationMentionPostcreated:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      '200000':
+        description: 'post created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/PostCustomNotificationResponse'
+
+
+WebhookPushNotificationMentionUserFeedPostcreated:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      '200000':
+        description: 'post created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/PostCustomNotificationResponse'

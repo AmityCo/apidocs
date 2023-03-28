@@ -150,3 +150,135 @@ didDelete:
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelsSocketResponse"
+
+
+CallbacksVchanneldidUpdate:
+  get:
+    tags:
+      - 'Channel'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __every member of channel__ after call the endpoint below:\n  * `update channel displayname`\n  * `update channel tags`\n  * `update channel metadata`\n  * `update channel avatar`\n  * `update channel(v3)`\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/ChannelsSocketResponse'
+
+
+CallbacksVchanneldidDelete:
+  get:
+    tags:
+      - 'Channel'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __every member of channel__ after call the endpoint below:\n  * `delete channel(v3)`\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/ChannelsSocketResponse'
+
+
+CallbacksVchanneldidAddUsers:
+  get:
+    tags:
+      - 'Channel'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __every member of channel__ after call the endpoint below:\n  * `add channel users`\n  * `add channel users(v3)`\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/ChannelsSocketResponse'
+
+
+CallbacksVchanneldidRemoveUsers:
+  get:
+    tags:
+      - 'Channel'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __every member of channel__ after call the endpoint below:\n  * `remove channel users`\n  * `remove channel users(v3)`\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/ChannelsSocketResponse'
+
+
+CallbacksVchanneldidBan:
+  get:
+    tags:
+      - 'Channel'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __every member of channel__ and __target userIds__ after call the endpoint below:\n  * `ban channel users`\n  * `ban channel users(v3)`\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/ChannelsSocketResponse'
+
+
+CallbacksVchanneldidUnban:
+  get:
+    tags:
+      - 'Channel'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __every member of channel__ and __target users__ after call the endpoint below:\n  * `unban channel users`\n  * `unban channel users(v3)`\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/ChannelsSocketResponse'
+
+
+CallbacksVchanneldidCreate:
+  get:
+    tags:
+      - 'Channel'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __every member of channel__ after call the endpoint below:\n  * `create channel`\n  * `create conversation channel`\n  * `create channel(v3)`\n  * `create conversation channel(v3)`\n  * `add channel users`\n  * `add channel users(v3)`\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/ChannelsSocketResponse'
+
+
+CallbacksVchanneldidJoin:
+  get:
+    tags:
+      - 'Channel'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __target users__ after call the endpoint below:\n  * `join channel`\n  * `join channel(v3)`\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/ChannelsSocketResponse'
+
+
+CallbacksVchanneldidLeave:
+  get:
+    tags:
+      - 'Channel'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __target users__  after call the endpoint below:\n  * `leave channel`\n  * `leave channel(v3)`\n  * `remove channel users`\n  * `remove channel users(v3)`\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/ChannelsSocketResponse'
+
+
+CallbacksVchanneldidMarkSeen:
+  get:
+    tags:
+      - 'Channel'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __caller__  after call the endpoint below:\n  * `startReading`\n  * `startReadings`\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/ChannelsSocketResponse'
+
+
+CallbacksVchannelUserdidUpdate:
+  get:
+    tags:
+      - 'Channel'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __target users__  after call the endpoint below:\n  * `add channelUser role`\n  * `remove channelUser role`\n  * `add channelUser role(v3)`\n  * `remove channelUser role(v3)`\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/ChannelsSocketResponse'

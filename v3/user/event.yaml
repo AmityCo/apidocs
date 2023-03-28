@@ -10,3 +10,14 @@ didUpdate:
   responses:
     "200000":
       $ref: "./response.yaml#/UserSocketResponse"
+
+CallbacksVuserdidUpdate:
+  get:
+    tags:
+      - 'User'
+    security:
+      - SocketAuth: []
+    description: "Publish this event following endpoint below:\n  * `update user`\n  * `update user(v3)`\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/UserSocketResponse'

@@ -63,3 +63,69 @@ query:
       $ref: "./response.yaml#/ReactionResponse"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+
+Reactionquery:
+  post:
+    summary: 'get list of reactions.'
+    tags:
+      - 'Reaction'
+    securityDefinition:
+      ApiKeyAuth:
+        type: 'apiKey'
+        in: 'header'
+        name: 'Authorization'
+    description: "Get paginable list of reactions.\n"
+    parameters:
+      - name: 'Authorization'
+        in: 'header'
+        value: 'Bearer {{accessToken}}'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'Content-Type'
+        in: 'header'
+        value: 'application/x-www-form-urlencoded'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/x-www-form-urlencoded'
+    requestBody:
+      description: "condition for querying\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              referenceId:
+                type: 'string'
+                maxLength: 900
+              referenceType:
+                type: 'string'
+                enum:
+                  - 'message'
+                  - 'post'
+                  - 'comment'
+              reactionName:
+                type: 'string'
+                maxLength: 100
+              options:
+                type: 'object'
+                properties:
+                  limit:
+                    type: 'integer'
+                    minimum: 1
+                    default: 20
+                  token:
+                    type: 'string'
+                    maxLength: 200
+            required:
+              - 'referenceType'
+              - 'referenceId'
+    responses:
+      '200000':
+        $ref: './response.yaml#/ReactionResponse'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'

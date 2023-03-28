@@ -424,3 +424,394 @@ query:
       $ref: "../../global/error.yaml#/RateLimitError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+Posts:
+  post:
+    summary: 'create a post'
+    tags:
+      - 'Post v4'
+    security:
+      - BearerAuth: []
+    description: "Create a post\n"
+    consumes:
+      - 'application/json'
+    requestBody:
+      description: "information of a post to be created.\n\nrequire text or at least 1 attachments\n\n### Custom post\n- When `dataType` is set as the custom name (dot separated string format, see the `dataType` field section), `data` payload can be anything but it will not support normal data capability (ex. `text` data will not be created)\nand `data` payload size will be limit to `100kb`\n- `attachments` will be ignored, users need to keep them in `data` field and handle the file info by themselves\n\n### Image, File, Video post\n- Put `type` with file id in `attachments`\n- Image and File data can be picked from `fileId` in `data` object in child post\n- Video fileId for each resolution will be in `videoFileId` in `data` object in child post\n\n### Live streaming post\n- When put `dataType` as `liveStream` and `streamId` in `data`, post will be created as live streaming post\n- `attachments` will be ignored\n- Video streaming info will be in `videoStreamings` object in response\n\n### Poll post\n- When put `dataType` as `poll` and `pollId` in `data`, post will be created as poll post\n- `attachments` will be ignored\n- Poll info will be in `polls` object in response\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              data:
+                type: 'object'
+                properties:
+                  text:
+                    type: 'string'
+                    description: 'data for text in post parent'
+                    example: 'example text'
+                  streamId:
+                    type: 'string'
+                    description: 'video streaming id for create live streaming post'
+                    example: '81559bcc3a5bb3b6bbd69a83b89d337e'
+                  pollId:
+                    type: 'string'
+                    description: 'poll id for create poll post'
+                    example: '53a9fd8b5aaa1af6c5a1bbd245ce4a9b1627373735551'
+              attachments:
+                type: 'array'
+                items:
+                  type: 'object'
+                  description: 'attachment info'
+                  properties:
+                    fileId:
+                      type: 'string'
+                      example: '57b916d38eaf8010caddfb7759a2d06c'
+                      description: 'file id for attachment'
+                    type:
+                      type: 'string'
+                      description: 'attachment type'
+                      enum:
+                        - 'image'
+                        - 'file'
+                        - 'video'
+              dataType:
+                type: 'string'
+                example: 'upstra.customtype'
+                description: 'Must be in dot separated string format or system defined format (ex. "upstra.customtype", "com.eko.birthday", "liveStream")'
+              targetType:
+                type: 'string'
+                enum:
+                  - 'user'
+                  - 'community'
+                  - 'content'
+                default: 'user'
+                description: 'where to create post to'
+              targetId:
+                type: 'string'
+                example: 'public_user_id'
+                description: 'Resource public id depends on target type (ex. target type is community, target id will be community public id)'
+              metadata:
+                type: 'object'
+                example:
+                  anything: 'you want'
+              postId:
+                type: 'string'
+                example: 'postidiwant'
+                description: 'for specify public post id on post creation'
+              tags:
+                type: 'array'
+                minItems: 0
+                maxItems: 5
+                items:
+                  type: 'string'
+                  description: 'tags'
+                  max: 24
+              mentionees:
+                type: 'array'
+                description: 'The object of the mentions type and user who get a notification from the post.'
+                items:
+                  type: 'object'
+                  properties:
+                    type:
+                      type: 'string'
+                      example: 'user'
+                      description: "type: * `user` - need to specific userIds and notification mentions individual user\n"
+                      enum:
+                        - 'user'
+                    userIds:
+                      type: 'array'
+                      example:
+                        - 'userId1'
+                        - 'userId2'
+                      description: 'Array of UserId. if the mention type is a channel, doesn''t send userIds'
+                      items:
+                        type: 'string'
+              createdAt:
+                type: 'string'
+                description: 'The date/time when a post is created.'
+                format: 'date-time'
+                example: '2022-07-07T04:24:20.444Z'
+            required:
+              - 'data'
+    responses:
+      '200000':
+        $ref: '../../v4/post/response.yaml#/PostResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400300':
+        $ref: '../../global/error.yaml#/ForbiddenError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+  get:
+    summary: 'query posts'
+    tags:
+      - 'Post v4'
+    security:
+      - BearerAuth: []
+    description: "Query posts\n"
+    parameters:
+      - name: 'targetId'
+        in: 'query'
+        required: true
+        schema:
+          type: 'string'
+          maxLength: 900
+      - name: 'targetType'
+        in: 'query'
+        schema:
+          type: 'string'
+          enum:
+            - 'community'
+            - 'user'
+            - 'content'
+      - name: 'sortBy'
+        in: 'query'
+        schema:
+          type: 'string'
+          enum:
+            - 'lastCreated'
+            - 'firstCreated'
+            - 'lastUpdated'
+            - 'firstUpdated'
+          default: 'lastCreated'
+      - name: 'hasFlag'
+        in: 'query'
+        schema:
+          type: 'boolean'
+          default: null
+        description: "hasFlag:\n  * `null(default)` - Show all posts.\n  * `true` - Show only flagged post(or children) or has flagged comment.\n  * `false` - Show only no flagged post(and children) and has no flagged comment.\n"
+      - name: 'isDeleted'
+        in: 'query'
+        schema:
+          type: 'boolean'
+          default: null
+      - name: 'options'
+        in: 'query'
+        style: 'deepObject'
+        schema:
+          type: 'object'
+          properties:
+            limit:
+              type: 'integer'
+              minimum: 1
+              maximum: 100
+              default: 10
+            token:
+              type: 'string'
+              maxLength: 1000
+            before:
+              type: 'string'
+              maxLength: 24
+            after:
+              type: 'string'
+              maxLength: 24
+            updatedAt:
+              type: 'string'
+              maxLength: 100
+        description: 'use updatedAt when sort by first/lastUpdated'
+      - name: 'feedType'
+        in: 'query'
+        collectionFormat: 'multi'
+        schema:
+          type: 'array'
+          minItems: 1
+          maxItems: 4
+          items:
+            type: 'string'
+            enum:
+              - 'reviewing'
+              - 'published'
+          default: 'published'
+      - name: 'dataTypes'
+        in: 'query'
+        collectionFormat: 'multi'
+        schema:
+          type: 'array'
+          minItems: 1
+          maxItems: 4
+          items:
+            type: 'string'
+            maxLength: 100
+            enum:
+              - 'video'
+              - 'image'
+              - 'file'
+              - 'liveStream'
+              - 'poll'
+        description: 'post data type to filter'
+      - name: 'tags'
+        in: 'query'
+        collectionFormat: 'multi'
+        schema:
+          type: 'array'
+          minItems: 0
+          maxItems: 5
+          items:
+            type: 'string'
+            max: 24
+        description: 'tags'
+      - name: 'matchingOnlyParentPost'
+        in: 'query'
+        schema:
+          type: 'boolean'
+          default: true
+        description: 'When `true` will filter only parent post'
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        $ref: './response.yaml#/PostPaginationApiResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+PostspostId:
+  put:
+    summary: 'update a post'
+    tags:
+      - 'Post v4'
+    security:
+      - BearerAuth: []
+    description: "Update a post\n"
+    parameters:
+      - name: 'postId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/json'
+    requestBody:
+      description: "information of a post to be updated.\n### Image, File, Video post update - Put `type` with file id in `attachments` - Image and File data can be picked from `fileId` in `data` object in child post - Video fileId for each resolution will be in `videoFileId` in `data` object in child post\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              text:
+                type: 'string'
+                deprecated: true
+              data:
+                type: 'object'
+                properties:
+                  text:
+                    type: 'string'
+                    max: 50000
+                    description: 'For updating text in the post'
+                  fileId:
+                    type: 'string'
+                    max: 100
+                    description: 'Put file id to update file,image inside file, image post (video is not supported yet)'
+                  streamId:
+                    type: 'string'
+                    max: 100
+                    description: 'Put stream id to update live streaming post with new streaming'
+                  thumbnailFileId:
+                    type: 'string'
+                    max: 100
+                    description: 'Put image file id to update video file thumbnail in video post'
+              metadata:
+                type: 'object'
+              tags:
+                type: 'array'
+                minItems: 0
+                maxItems: 5
+                items:
+                  type: 'string'
+                  max: 24
+                  description: 'tags'
+              mentionees:
+                type: 'array'
+                description: 'The object of the mentions type and user who get a notification from the post.'
+                items:
+                  type: 'object'
+                  properties:
+                    type:
+                      type: 'string'
+                      example: 'user'
+                      description: "type: * `user` - need to specific userIds and notification mentions individual user\n"
+                      enum:
+                        - 'user'
+                    userIds:
+                      type: 'array'
+                      example:
+                        - 'userId1'
+                        - 'userId2'
+                      description: 'Array of UserId. if the mention type is a channel, doesn''t send userIds'
+                      items:
+                        type: 'string'
+              attachments:
+                type: 'array'
+                items:
+                  type: 'object'
+                  description: 'attachment info'
+                  properties:
+                    fileId:
+                      type: 'string'
+                      example: '57b916d38eaf8010caddfb7759a2d06c'
+                      description: 'file id for attachment'
+                    type:
+                      type: 'string'
+                      description: 'attachment type'
+                      enum:
+                        - 'image'
+                        - 'file'
+                        - 'video'
+    responses:
+      '200000':
+        $ref: './response.yaml#/PostResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400300':
+        $ref: '../../global/error.yaml#/ForbiddenError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+  delete:
+    summary: 'delete a post'
+    tags:
+      - 'Post v4'
+    security:
+      - BearerAuth: []
+    description: "Delete a post\n"
+    parameters:
+      - name: 'postId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'permanent'
+        in: 'query'
+        value: 'application/json'
+        schema:
+          type: 'boolean'
+          default: false
+          description: 'If permanent data will be hard deleted'
+    consumes:
+      - 'application/json'
+    responses:
+      '200000':
+        description: 'post information'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                status:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    success:
+                      type: 'boolean'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'

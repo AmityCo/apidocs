@@ -166,3 +166,172 @@ getList:
       $ref: "../../global/error.yaml#/RateLimitError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+
+CommunityCategoryquery:
+  post:
+    summary: 'query community categories.'
+    tags:
+      - 'CommunityCategory'
+    securityDefinition:
+      ApiKeyAuth:
+        type: 'apiKey'
+        in: 'header'
+        name: 'Authorization'
+    description: "query community categories.\n"
+    parameters:
+      - name: 'Authorization'
+        in: 'header'
+        value: 'Bearer {{accessToken}}'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'Content-Type'
+        in: 'header'
+        value: 'application/x-www-form-urlencoded'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/x-www-form-urlencoded'
+    requestBody:
+      description: "condition for querying\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              sortBy:
+                type: 'string'
+                enum:
+                  - 'lastCreated'
+                  - 'firstCreated'
+                  - 'name'
+                default: 'name'
+              isDeleted:
+                type: 'boolean'
+                default: null
+              options:
+                type: 'object'
+                properties:
+                  limit:
+                    type: 'integer'
+                    minimum: 1
+                    maximum: 100
+                    default: 10
+                  token:
+                    type: 'string'
+                    maxLength: 1000
+    responses:
+      '200000':
+        $ref: './response.yaml#/CommunityCategoriesResponse'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+CommunityCategoryget:
+  post:
+    summary: 'get a community category.'
+    tags:
+      - 'CommunityCategory'
+    securityDefinition:
+      ApiKeyAuth:
+        type: 'apiKey'
+        in: 'header'
+        name: 'Authorization'
+    description: "Get a community category.\n"
+    parameters:
+      - name: 'Authorization'
+        in: 'header'
+        value: 'Bearer {{accessToken}}'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'Content-Type'
+        in: 'header'
+        value: 'application/x-www-form-urlencoded'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/x-www-form-urlencoded'
+    requestBody:
+      description: "information of a community category.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              categoryId:
+                type: 'string'
+                maxLength: 50
+            required:
+              - 'categoryId'
+    responses:
+      '200000':
+        $ref: './response.yaml#/CommunityCategoriesResponse'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+CommunityCategorygetList:
+  post:
+    summary: 'get list of community category.'
+    tags:
+      - 'CommunityCategory'
+    securityDefinition:
+      ApiKeyAuth:
+        type: 'apiKey'
+        in: 'header'
+        name: 'Authorization'
+    description: "Get list of community category.\n"
+    parameters:
+      - name: 'Authorization'
+        in: 'header'
+        value: 'Bearer {{accessToken}}'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'Content-Type'
+        in: 'header'
+        value: 'application/x-www-form-urlencoded'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/x-www-form-urlencoded'
+    requestBody:
+      description: "information of community category.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              categoryIds:
+                type: 'array'
+                maxItems: 100
+                items:
+                  type: 'string'
+                  maxLength: 50
+            required:
+              - 'categoryIds'
+    responses:
+      '200000':
+        $ref: './response.yaml#/CommunityCategoriesResponse'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'

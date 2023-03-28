@@ -72,3 +72,74 @@ lastActivityReport:
   responses:
     "200000":
       $ref: "./response.yaml#/LastActivityReportResponse"
+
+
+AdminToken:
+  post:
+    summary: 'Generate admin token.'
+    tags:
+      - 'Admin'
+    security:
+      - ApiKeyAuth: []
+    description: "Generate admin token\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/AdminTokenResponse'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+  get:
+    summary: 'Get admin token.'
+    tags:
+      - 'Admin'
+    security:
+      - ApiKeyAuth: []
+    description: "Get admin token\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/AdminTokenResponse'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+  delete:
+    summary: 'Revoke admin token.'
+    tags:
+      - 'Admin'
+    security:
+      - ApiKeyAuth: []
+    description: "Revoke admin token:\n  * super-admin can revoke any admin token\n  * admin can revoke own token only\n"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              username:
+                type: 'string'
+                minLength: 1
+                maxLength: 50
+    responses:
+      '200000':
+        $ref: './response.yaml#/RevokeAdminTokenResponse'
+      '400301':
+        $ref: '../../global/error.yaml#/GenericPermissionDenidedError'
+      '400400':
+        $ref: '../../global/error.yaml#/UsernameNotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+AdminReportsUserLastActivity:
+  get:
+    summary: 'Download last activity user report..'
+    tags:
+      - 'Admin'
+    parameters:
+      - name: 'Cookie'
+        in: 'cookie'
+        schema:
+          type: 'string'
+        description: 'Alternative way to pass authorization token'
+    description: "Download last activity user report.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/LastActivityReportResponse'

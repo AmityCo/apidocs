@@ -29,3 +29,37 @@ getChatSetting:
       $ref: "../../global/error.yaml#/BadRequestError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+
+NetworkSettingsgetSocial:
+  post:
+    summary: 'Get social configuration.'
+    tags:
+      - 'Network Setting'
+    security:
+      - SocketAuth: []
+    description: "Get social configuration.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/SocialNetworkSettingSocketResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+NetworkSettingsgetChat:
+  post:
+    summary: 'Get chat network setting configuration.'
+    tags:
+      - 'Network Setting'
+    security:
+      - SocketAuth: []
+    description: "Get chat network setting configuration.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/ChatNetworkSettingSocketResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'

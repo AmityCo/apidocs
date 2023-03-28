@@ -138,3 +138,483 @@ customNotificationCreated:
                     type: string
                 allOf:
                   - $ref: "./response.yaml#/CommentCustomNotificationResponse"
+
+WebhookVcommentdidCreate:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/CommentWebhookResponse'
+
+
+WebhookVcommentdidUpdate:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is updated\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/CommentWebhookResponse'
+
+
+WebhookVcommentdidDelete:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is deleted\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/CommentWebhookResponse'
+
+
+WebhookVcommentdidFlag:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is flagged.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/CommentWithFlagWebhookResponse'
+
+
+WebhookVcommentdidUnflag:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is unflagged.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/CommentWithFlagWebhookResponse'
+
+
+WebhookVcommentdidAddReaction:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when reaction of comment is added.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/CommentWithReactorWebhookResponse'
+
+
+WebhookVcommentdidRemoveReaction:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when reaction of comment is removed.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/CommentWithReactorWebhookResponse'
+
+
+WebhookVcommentdidReply:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is replied.\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/CommentWebhookResponse'
+
+
+WebhookPushNotificationCommentcreated:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      '200000':
+        description: 'comment created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/CommentCustomNotificationResponse'
+
+
+WebhookPushNotificationCommentreplied:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      '200000':
+        description: 'comment created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/CommentCustomNotificationResponse'
+
+
+WebhookPushNotificationCommentreacted:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      '200000':
+        description: 'comment created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/CommentCustomNotificationResponse'
+
+
+WebhookPushNotificationMentionCommentcreated:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      '200000':
+        description: 'comment created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/CommentCustomNotificationResponse'
+
+
+WebhookPushNotificationMentionCommentreplied:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      '200000':
+        description: 'comment created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/CommentCustomNotificationResponse'
+
+
+WebhookPushNotificationMentionUserFeedCommentcreated:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      '200000':
+        description: 'comment created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/CommentCustomNotificationResponse'
+
+
+WebhookPushNotificationMentionUserFeedCommentreplied:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      '200000':
+        description: 'comment created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/CommentCustomNotificationResponse'

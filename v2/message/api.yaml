@@ -101,202 +101,6 @@ create:
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
 
-Message:
-  get:
-    summary: get a message.
-    tags:
-      - Admin
-    security:
-      - BearerAuth: []
-    description: >
-      Get a message by ID.
-    parameters:
-      - name: messageId
-        in: path
-        required: true
-        schema:
-          type: string
-    consumes:
-      - application/x-www-form-urlencoded
-    responses:
-      "200000":
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                channel:
-                  type: object
-                  properties:
-                    isDistinct:
-                      type: boolean
-                    type:
-                      $ref: "../../schema/channel.yaml#/ChannelType"
-                      description: Type of a channel (standard, conversation, broadcast). This property is not be used for now.
-                    metadata:
-                      type: object
-                      description: Additional properties to support custom fields.
-                    tags:
-                      type: array
-                      description: List of tags. They will be used for searching.
-                      items:
-                        type: string
-                    isMuted:
-                      type: boolean
-                      description: Is this channel muted? (Computed by using muteTimeout).
-                    lastActivity:
-                      type: string
-                      description: The date/time when a user last did something related to the channel such as add/remove members .
-                      format: date-time
-                    createdAt:
-                      type: string
-                      description: The date/time when a channel is created.
-                      format: date-time
-                    updatedAt:
-                      type: string
-                      description: The date/time when a channel is updated.
-                      format: date-time
-                    isRateLimited:
-                      type: boolean
-                      description: Is this channel limited sending rate? (Computed by using muteTimeout).
-                    rateLimitWindow:
-                      type: integer
-                      description: Waiting time interval before reset rateLimit to 0.
-                    channelId:
-                      type: string
-                      description: ID of a channel.
-                    muteTimeout:
-                      type: string
-                      description: The date/time to suppress muteness.
-                      format: date-time
-                    rateLimit:
-                      type: integer
-                      description: Number of messages within rate limit.
-                    rateLimitTimeout:
-                      type: string
-                      description: The date/time to suppress limitation of sending rate.
-                      format: date-time
-                    displayName:
-                      type: string
-                      description: Channel name for displaying.
-                    messageAutoDeleteEnabled:
-                      type: boolean
-                      description: Is message in this channel will be deleted when the user flagged until flag limit?
-                    autoDeleteMessageByFlagLimit:
-                      type: number
-                      description: Number of flags that will force a message to be deleted automatically.
-                    memberCount:
-                      type: integer
-                      description: Number of members in channel.
-                    messageCount:
-                      type: integer
-                      description: Number of messages in channel.
-                    avatar:
-                      $ref: "../../schema/file.yaml#/File"
-                message:
-                  type: object
-                  properties:
-                    messageId:
-                      type: string
-                      description: ID of a message.
-                    parentId:
-                      type: string
-                      description: ID of a parent message.
-                    childrenNumber:
-                      type: integer
-                      description: A number of comments in this message.
-                    channelId:
-                      type: string
-                      description: ID of a channel.
-                    userId:
-                      type: string
-                      description: ID of a user.
-                    type:
-                      type: string
-                      description: Type of a message (text, image, video, json).
-                    tags:
-                      type: array
-                      description: List of tags. They will be used for searching.
-                      items:
-                        type: string
-                    data:
-                      type: object
-                      description: Body of a message.
-                    isDeleted:
-                      type: boolean
-                      description: A flag to hide a message. Unable to show after hiding. It will be set to true when user deletes a message or a channel of this message is banned.
-                    channelSegment:
-                      type: integer
-                      description: A sequence number of a message in channel.
-                    createdAt:
-                      type: string
-                      description: The date/time when a channel is created.
-                      format: date-time
-                    updatedAt:
-                      type: string
-                      description: The date/time when a channel of this message is banned or this message is deleted.
-                      format: date-time
-                    editedAt:
-                      type: string
-                      description: The date/time when a message is deleted or updated.
-                      format: date-time
-                    flagCount:
-                      type: integer
-                      description: The number of users that has read this message.
-                    hashFlag:
-                      type: object
-                      description: The flag for checking internally that this message is reported or not.
-                      properties:
-                        bits:
-                          type: integer
-                        hashes:
-                          type: integer
-                        hash:
-                          type: array
-                          items:
-                            type: integer
-                    reactions:
-                      type: object
-                      description: The mapping of reaction with reactionCounter.
-                    reactionsCount:
-                      type: integer
-                      description: The number of all reactions for this messages.
-                    myReactions:
-                      type: array
-                      description: The list of my reactions to this message. This property will not exist when it is triggered from an event 'message.didUpdate'.
-                      items:
-                        type: string
-                user:
-                  $ref: "../../schema/user.yaml#/User"
-      "400400":
-        $ref: "../../global/error.yaml#/NotFoundError"
-      "400311":
-        $ref: "../../global/error.yaml#/RateLimitError"
-      "500000":
-        $ref: "../../global/error.yaml#/UnexpectedError"
-  delete:
-    summary: delete a message.
-    tags:
-      - Admin
-    security:
-      - BearerAuth: []
-    parameters:
-      - name: messageId
-        in: path
-        required: true
-        schema:
-          type: string
-    description: >
-      Delete a message in a given channel.
-    responses:
-      "200000":
-        description: Success
-      "400301":
-        $ref: "../../global/error.yaml#/PermissionDenidedError"
-      "400311":
-        $ref: "../../global/error.yaml#/RateLimitError"
-      "500000":
-        $ref: "../../global/error.yaml#/UnexpectedError"
 createImageMessage:
   summary: create an image message.
   tags:
@@ -454,3 +258,269 @@ getFileMessage:
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
   
+
+Messages:
+  post:
+    summary: 'Query messages.'
+    tags:
+      - 'Admin'
+    security:
+      - BearerAuth: []
+    consumes:
+      - 'application/json'
+    requestBody:
+      description: "condition for querying\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              channelId:
+                type: 'string'
+              parentId:
+                type: 'string'
+              filterByParentId:
+                type: 'boolean'
+              tags:
+                type: 'array'
+                description: 'List of including tags. They will be used for searching.'
+                items:
+                  type: 'string'
+              excludeTags:
+                type: 'array'
+                description: 'List of excluding tags. They will be used for searching.'
+                items:
+                  type: 'string'
+              options:
+                type: 'object'
+                properties:
+                  after:
+                    type: 'number'
+                  first:
+                    type: 'number'
+                  before:
+                    type: 'number'
+                  last:
+                    type: 'number'
+                  token:
+                    type: 'string'
+            required:
+              - 'channelId'
+    responses:
+      '200000':
+        $ref: './response.yaml#/MessageResponse'
+
+
+Message:
+  post:
+    summary: 'create a text message.'
+    tags:
+      - 'Admin'
+    security:
+      - BearerAuth: []
+    consumes:
+      - 'application/json'
+    description: "Create a text message in a given channel.\n"
+    requestBody:
+      description: "Information of message to be created.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              channelId:
+                type: 'string'
+              type:
+                type: 'string'
+                value: 'text'
+              data:
+                type: 'object'
+                properties:
+                  caption:
+                    type: 'string'
+                    maxLength: 1000
+              tags:
+                type: 'array'
+                items:
+                  type: 'string'
+              parentId:
+                type: 'string'
+            required:
+              - 'channelId'
+              - 'type'
+              - 'data'
+    responses:
+      '200000':
+        $ref: './response.yaml#/MessageResponse'
+      '400301':
+        $ref: '../../global/error.yaml#/PermissionDenidedError'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/ChannelNotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+MessagesImages:
+  post:
+    summary: 'create an image message.'
+    tags:
+      - 'Admin'
+    security:
+      - BearerAuth: []
+    consumes:
+      - 'multipart/form-data'
+    description: "Create a image message in a given channel.\n"
+    requestBody:
+      description: "Information of message to be created.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              channelId:
+                type: 'string'
+              caption:
+                type: 'string'
+              file:
+                type: 'object'
+              tags:
+                type: 'array'
+                items:
+                  type: 'string'
+              parentId:
+                type: 'string'
+              fullImage:
+                type: 'string'
+            required:
+              - 'channelId'
+              - 'file'
+    responses:
+      '200000':
+        $ref: './response.yaml#/MessageResponse'
+      '400301':
+        $ref: '../../global/error.yaml#/PermissionDenidedError'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/ChannelNotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+MessagesMessageIdImages:
+  get:
+    summary: 'get an image message'
+    tags:
+      - 'Admin'
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: 'messageId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+      - name: 'size'
+        in: 'query'
+        required: true
+        schema:
+          type: 'string'
+          enum:
+            - 'small'
+            - 'medium'
+            - 'large'
+            - 'full (if fullImage)'
+    consumes:
+      - 'application/json'
+    description: "Get a message with image in a given channel.\n"
+    responses:
+      '200000':
+        description: 'An image file'
+      '400301':
+        $ref: '../../global/error.yaml#/PermissionDenidedError'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/ChannelNotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+MessagesFiles:
+  post:
+    summary: 'create a message with file in a given channel'
+    tags:
+      - 'Admin'
+    security:
+      - BearerAuth: []
+    consumes:
+      - 'multipart/form-data'
+    description: "Create a message with file in a given channel.\n"
+    requestBody:
+      description: "information of a message to be created.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              channelId:
+                type: 'string'
+              caption:
+                type: 'string'
+              file:
+                type: 'object'
+              tags:
+                type: 'array'
+                items:
+                  type: 'string'
+              parentId:
+                type: 'string'
+            required:
+              - 'channelId'
+              - 'file'
+    responses:
+      '200000':
+        $ref: './response.yaml#/MessageResponse'
+      '400301':
+        $ref: '../../global/error.yaml#/PermissionDenidedError'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/ChannelNotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+MessagesMessageIdFiles:
+  get:
+    summary: 'get a file message'
+    tags:
+      - 'Admin'
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: 'messageId'
+        in: 'path'
+        required: true
+        schema:
+          type: 'string'
+    consumes:
+      - 'application/json'
+    description: "Get a message with file in a given channel.\n"
+    responses:
+      '200000':
+        description: 'A file'
+      '400301':
+        $ref: '../../global/error.yaml#/PermissionDenidedError'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/ChannelNotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
