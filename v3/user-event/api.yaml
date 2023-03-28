@@ -13,3 +13,21 @@ create:
       $ref: "./response.yaml#/VideoStreamingUserEventApiResponse"
     "500000":
       $ref: "../../global/error.yaml#/CustomValidationError"
+
+
+UserEventVideoStreaming:
+  post:
+    summary: 'create a user event for video streaming'
+    tags:
+      - 'UserEvent'
+    security:
+      - BearerAuth: []
+    consumes:
+      - 'application/json'
+    requestBody:
+      $ref: './request.yaml#/VideoStreamingUserEventRequestBody'
+    responses:
+      '200000':
+        $ref: './response.yaml#/VideoStreamingUserEventApiResponse'
+      '500000':
+        $ref: '../../global/error.yaml#/CustomValidationError'

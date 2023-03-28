@@ -50,3 +50,57 @@ customNotificationCreated:
                     type: string
                 allOf:
                   - $ref: "./response.yaml#/MessageCustomNotificationResponse"
+
+WebhookPushNotificationMessagecreated:
+  get:
+    tags:
+      - 'WebhookEvent'
+    security:
+      - SocketAuth: []
+    description: "This is called when message is created\n"
+    responses:
+      '200000':
+        description: 'message created'
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                eventType:
+                  type: 'string'
+                  enum:
+                    - 'push-notification.created'
+                id:
+                  type: 'string'
+                networkId:
+                  type: 'string'
+                path:
+                  type: 'string'
+                senderId:
+                  type: 'string'
+                sentTime:
+                  type: 'string'
+                  format: 'date-time'
+                version:
+                  type: 'string'
+                data:
+                  type: 'object'
+                  properties:
+                    eventName:
+                      type: 'string'
+                    isBroadcast:
+                      type: 'boolean'
+                      default: false
+                    targetIds:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    notify:
+                      type: 'boolean'
+                      description: 'should notify to user targetIds'
+                    title:
+                      type: 'string'
+                    body:
+                      type: 'string'
+                  allOf:
+                    - $ref: './response.yaml#/MessageCustomNotificationResponse'

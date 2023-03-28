@@ -318,3 +318,331 @@ isFlagByMe:
       $ref: "../../global/response.yaml#/IsFlagByMeResponse"
     "400400":
       $ref: "../../global/error.yaml#/MessageNotFoundError" 
+
+Messagecreate:
+  post:
+    summary: 'create a message in a given channel'
+    tags:
+      - 'Message'
+    security:
+      - SocketAuth: []
+    description: "Create a message in a given channel.\n"
+    requestBody:
+      description: "information of a message to be created.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              messageId:
+                type: 'string'
+              channelId:
+                type: 'string'
+              type:
+                type: 'string'
+              data:
+                type: 'object'
+              tags:
+                type: 'array'
+                items:
+                  type: 'string'
+              parentId:
+                type: 'string'
+            required:
+              - 'channelId'
+              - 'type'
+              - 'data'
+    responses:
+      '200000':
+        $ref: '../../v2/message/response.yaml#/MessageResponse'
+      '400301':
+        $ref: '../../global/error.yaml#/PermissionDenidedError'
+      '400302':
+        $ref: '../../global/error.yaml#/UserIsMutedError'
+      '400303':
+        $ref: '../../global/error.yaml#/ChannelIsMutedError'
+      '400304':
+        $ref: '../../global/error.yaml#/UserIsBannedError'
+      '400307':
+        $ref: '../../global/error.yaml#/MaxRepetitionExceed'
+      '400308':
+        $ref: '../../global/error.yaml#/BanWordFoundError'
+      '400309':
+        $ref: '../../global/error.yaml#/LinkNotAllowedError'
+      '400311':
+        $ref: '../../global/error.yaml#/RateLimitError'
+      '400400':
+        $ref: '../../global/error.yaml#/ChannelNotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+Messageupdate:
+  post:
+    summary: 'update a message information (only creator)'
+    tags:
+      - 'Message'
+    security:
+      - SocketAuth: []
+    description: "Update a message. Now we support updating tags & content by creator only.\n"
+    requestBody:
+      description: "information of a message to be updated.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              messageId:
+                type: 'string'
+              data:
+                type: 'object'
+              tags:
+                type: 'array'
+                items:
+                  type: 'string'
+            required:
+              - 'messageId'
+    responses:
+      '200000':
+        $ref: '../../v2/message/response.yaml#/MessageResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400301':
+        $ref: '../../global/error.yaml#/PermissionDenidedError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+MessageupdateData:
+  post:
+    summary: 'update a message data (only creator)'
+    tags:
+      - 'Message'
+    security:
+      - SocketAuth: []
+    description: "Update a message data (only creator).\n"
+    requestBody:
+      description: "information of a message data.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              messageId:
+                type: 'string'
+              data:
+                type: 'object'
+            required:
+              - 'messageId'
+    responses:
+      '200000':
+        $ref: '../../v2/message/response.yaml#/MessageResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+MessageupdateTag:
+  post:
+    summary: 'update a message tag by anyone'
+    tags:
+      - 'Message'
+    security:
+      - SocketAuth: []
+    description: "Update a message tag by anyone.\n"
+    requestBody:
+      description: "information of a message tags.\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              messageId:
+                type: 'string'
+              tags:
+                type: 'array'
+                items:
+                  type: 'string'
+            required:
+              - 'messageId'
+    responses:
+      '200000':
+        $ref: '../../v2/message/response.yaml#/MessageResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '400400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+Messageflag:
+  post:
+    summary: 'Flag a message.'
+    tags:
+      - 'Message'
+    security:
+      - SocketAuth: []
+    description: "Flag a message. If a user already flagged the message, flag count will not increase\n"
+    requestBody:
+      description: "messageId to be flagged\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              messageId:
+                type: 'string'
+            required:
+              - 'messageId'
+    responses:
+      '200000':
+        $ref: '../../v2/message/response.yaml#/MessageResponse'
+      '400300':
+        $ref: '../../global/error.yaml#/NumberOfFlagExceedError'
+      '400400':
+        $ref: '../../global/error.yaml#/MessageNotFoundError'
+
+
+Messageget:
+  get:
+    summary: 'Get messages.'
+    tags:
+      - 'Message'
+    security:
+      - SocketAuth: []
+    description: "Get messages by ids.\n"
+    requestBody:
+      description: "condition for get\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              messageIds:
+                type: 'array'
+                description: 'List of message ids.'
+                items:
+                  type: 'string'
+            required:
+              - 'messageIds'
+    responses:
+      '200000':
+        $ref: '../../v2/message/response.yaml#/MessageResponse'
+
+
+Messageunflag:
+  post:
+    summary: 'Unflag a message'
+    tags:
+      - 'Message'
+    security:
+      - SocketAuth: []
+    description: "unflag a message.\n"
+    requestBody:
+      description: "messageId to be flagged\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              messageId:
+                type: 'string'
+            required:
+              - 'messageId'
+    responses:
+      '200000':
+        $ref: '../../v2/message/response.yaml#/MessageResponse'
+      '400400':
+        $ref: '../../global/error.yaml#/MessageNotFoundError'
+
+
+Messagequery:
+  post:
+    summary: 'Query messages.'
+    tags:
+      - 'Message'
+    security:
+      - SocketAuth: []
+    description: "Query messages by a given condition.\n"
+    requestBody:
+      description: "condition for querying\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              channelId:
+                type: 'string'
+              parentId:
+                type: 'string'
+              filterByParentId:
+                type: 'boolean'
+              tags:
+                type: 'array'
+                description: 'List of including tags. They will be used for searching.'
+                items:
+                  type: 'string'
+              excludeTags:
+                type: 'array'
+                description: 'List of excluding tags. They will be used for searching.'
+                items:
+                  type: 'string'
+              options:
+                type: 'object'
+                properties:
+                  after:
+                    type: 'number'
+                  first:
+                    type: 'number'
+                  before:
+                    type: 'number'
+                  last:
+                    type: 'number'
+                  token:
+                    type: 'string'
+            required:
+              - 'channelId'
+    responses:
+      '200000':
+        $ref: '../../v2/message/response.yaml#/MessageResponse'
+
+
+MessageisFlagByMe:
+  post:
+    summary: 'Check whether user flag a given message.'
+    tags:
+      - 'Message'
+    security:
+      - SocketAuth: []
+    description: "Check whether user flag a given message.\n"
+    requestBody:
+      description: "messageId to be flagged\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: 'object'
+            properties:
+              messageId:
+                type: 'string'
+            required:
+              - 'messageId'
+    responses:
+      '200000':
+        $ref: '../../global/response.yaml#/IsFlagByMeResponse'
+      '400400':
+        $ref: '../../global/error.yaml#/MessageNotFoundError'

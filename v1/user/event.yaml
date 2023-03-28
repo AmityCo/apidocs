@@ -17,3 +17,21 @@ didUpdate:
               userId:
                 type: string
                 description: ID of a user.
+
+CallbacksUserdidUpdate:
+  get:
+    tags:
+      - 'User'
+    security:
+      - SocketAuth: []
+    description: "Publish this event following endpoint below:\n  * `update user`\n  * `update user(v3)`\n"
+    responses:
+      '200000':
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                userId:
+                  type: 'string'
+                  description: 'ID of a user.'

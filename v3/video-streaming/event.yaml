@@ -30,3 +30,39 @@ didRecord:
   responses:
     "200000":
       $ref: "./response.yaml#/VideoStreamingsSocketResponse"
+
+
+CallbacksVideoStreamingdidStart:
+  get:
+    tags:
+      - 'VideoStreaming'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __every user of network__ after a streamer started streaming\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/VideoStreamingsSocketResponse'
+
+
+CallbacksVideoStreamingdidStop:
+  get:
+    tags:
+      - 'VideoStreaming'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __every user of network__ after a streamer stopped streaming\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/VideoStreamingsSocketResponse'
+
+
+CallbacksVideoStreamingdidRecord:
+  get:
+    tags:
+      - 'VideoStreaming'
+    security:
+      - SocketAuth: []
+    description: "Publish this event to __every user of network__ after a streaming is recorded\n"
+    responses:
+      '200000':
+        $ref: './response.yaml#/VideoStreamingsSocketResponse'

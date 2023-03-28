@@ -132,3 +132,139 @@ download:
       $ref: "./response.yaml#/FileDeleteResponse"
     "404":
       $ref: "../../global/error.yaml#/NotFoundError"
+
+Files:
+  post:
+    summary: 'Upload file.'
+    tags:
+      - 'File'
+    security:
+      - BearerAuth: []
+    consumes:
+      - 'multipart/form-data'
+    description: "Upload file to cloud storage\n"
+    requestBody:
+      description: "Information of file to be created. It will be applied to every attachment\n"
+      content:
+        multipart/form-data:
+          schema:
+            type: 'object'
+            properties:
+              files:
+                type: 'array'
+                items:
+                  type: 'string'
+                  format: 'binary'
+              fullImage:
+                type: 'boolean'
+                optional: true
+    responses:
+      '200':
+        $ref: './response.yaml#/FileUploadResponse'
+      '413':
+        $ref: '../../global/error.yaml#/PayloadTooLargeError'
+      '500':
+        $ref: '../../global/error.yaml#/UnexpectedError'
+
+
+FilesFileId:
+  get:
+    summary: 'Get file info'
+    security:
+      - BearerAuth: []
+    tags:
+      - 'File'
+    description: "Get file info of fileId (ex. type, attributes)\n"
+    parameters:
+      - in: 'path'
+        name: 'fileId'
+        required: true
+        schema:
+          type: 'string'
+          maxLength: 50
+        description: 'File id'
+    responses:
+      '200':
+        $ref: './response.yaml#/FileResponse'
+      '400':
+        $ref: '../../global/error.yaml#/NotFoundError'
+  delete:
+    summary: 'Delete file'
+    tags:
+      - 'File'
+    security:
+      - BearerAuth: []
+    description: "Delete file (also remove from cloud). Only uploader and admin can remove.\n"
+    parameters:
+      - in: 'path'
+        name: 'fileId'
+        required: true
+        schema:
+          type: 'string'
+          maxLength: 50
+        description: 'File id to remove'
+    responses:
+      '200':
+        $ref: './response.yaml#/FileDeleteResponse'
+      '403':
+        $ref: '../../global/error.yaml#/GenericPermissionDenidedError'
+      '404':
+        $ref: '../../global/error.yaml#/NotFoundError'
+      '422':
+        $ref: '../../global/error.yaml#/ValidationError'
+
+
+FilesFileIdDownload:
+  get:
+    summary: 'Get file'
+    tags:
+      - 'File'
+    security:
+      - SocketAuth: []
+    description: "Get file info of fileId (type, attributes)\n"
+    parameters:
+      - name: 'Authorization'
+        in: 'header'
+        value: 'Bearer {{accessToken}}'
+        schema:
+          type: 'string'
+      - name: 'upstra-access-token'
+        in: 'cookie'
+        schema:
+          type: 'string'
+        description: 'Alternative way to pass authorization token'
+      - in: 'query'
+        name: 't'
+        optional: true
+        schema:
+          type: 'string'
+        description: 'Access token (for showing image inside img tag on web)'
+      - name: 'Content-Type'
+        in: 'header'
+        value: 'application/x-www-form-urlencoded'
+        required: true
+        schema:
+          type: 'string'
+      - in: 'path'
+        name: 'fileId'
+        required: true
+        schema:
+          type: 'string'
+          maxLength: 50
+        description: 'File id'
+      - in: 'query'
+        name: 'size'
+        optional: true
+        schema:
+          type: 'string'
+          enum:
+            - 'full'
+            - 'large'
+            - 'medium'
+            - 'small'
+        description: 'Size of image to download (no effect on file type ''file'')'
+    responses:
+      '200':
+        $ref: './response.yaml#/FileDeleteResponse'
+      '404':
+        $ref: '../../global/error.yaml#/NotFoundError'

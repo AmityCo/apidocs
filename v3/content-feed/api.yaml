@@ -53,3 +53,56 @@ query:
       $ref: "../../global/error.yaml#/BadRequestError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
+
+
+ContentFeeds:
+  get:
+    summary: 'Get list of contents.'
+    tags:
+      - 'ContentFeed'
+    security:
+      - BearerAuth: []
+    description: "Get paginable list of contents.\n"
+    parameters:
+      - name: 'sortBy'
+        in: 'query'
+        schema:
+          type: 'string'
+          enum:
+            - 'firstCreated'
+            - 'lastCreated'
+            - 'lastUpdated'
+            - 'firstUpdated'
+          default: 'lastCreated'
+      - name: 'hasFlag'
+        in: 'query'
+        schema:
+          type: 'boolean'
+          default: null
+        description: "hasFlag:\n  * `null(default)` - Show all contents.\n  * `true` - Show only flagged content or has flagged comment.\n  * `false` - Show only no flagged content and has no flagged comment.\n"
+      - name: 'isDeleted'
+        in: 'query'
+        schema:
+          type: 'boolean'
+          default: null
+      - name: 'options'
+        in: 'query'
+        style: 'deepObject'
+        schema:
+          type: 'object'
+          properties:
+            limit:
+              type: 'integer'
+              minimum: 1
+              maximum: 100
+              default: 10
+            token:
+              type: 'string'
+              maxLength: 1000
+    responses:
+      '200000':
+        $ref: './response.yaml#/ContentFeedResponse'
+      '400000':
+        $ref: '../../global/error.yaml#/BadRequestError'
+      '500000':
+        $ref: '../../global/error.yaml#/UnexpectedError'
