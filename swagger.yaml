@@ -3852,7 +3852,7 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: './schema/message.yaml#Channel'
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
@@ -3883,7 +3883,7 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: './schema/message.yaml#Channel'
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
@@ -3914,7 +3914,7 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: './schema/message.yaml#Channel'
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
@@ -3947,7 +3947,7 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: './schema/message.yaml#Channel'
+                          $ref: '#/components/schemas/Channel'
   /webhook/channel.didLeave:
     get:
       tags:
@@ -3970,7 +3970,7 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: './schema/message.yaml#Channel'
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
@@ -4001,7 +4001,7 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: './schema/message.yaml#Channel'
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
@@ -4030,7 +4030,7 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: './schema/message.yaml#Channel'
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
@@ -4063,7 +4063,7 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: './schema/message.yaml#Channel'
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
@@ -4092,11 +4092,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: './schema/message.yaml#Channel'
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
-                          $ref: './schema/user.yaml#User'
+                          $ref: '#/components/schemas/User'
                       actorId:
                         type: string
                       userIds:
@@ -4125,11 +4125,11 @@ paths:
                       channel:
                         type: array
                         items:
-                          $ref: './schema/message.yaml#Channel'
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: array
                         items:
-                          $ref: './schema/user.yaml#User'
+                          $ref: '#/components/schemas/User'
                       userId:
                         type: string
   /webhook/user.didClearFlag:
@@ -4470,7 +4470,7 @@ components:
           type: object
           description: Additional properties to support custom fields.
         type:
-          $ref: './schema/message.yaml#ChannelType'
+          $ref: '#/components/schemas/ChannelType'
           description: Type of a channel (standard, conversation, broadcast). This property is not be used for now.
         tags:
           type: array
@@ -4544,7 +4544,7 @@ components:
         readToSegment:
           type: integer
         membership:
-          $ref: './schema/message.yaml#ChannelMembership'
+          $ref: '#/components/schemas/ChannelMembership'
         isBanned:
           type: boolean
         isMuted:
@@ -4789,9 +4789,9 @@ components:
                       type: object
                       properties:
                         channel:
-                          $ref: './schema/message.yaml#Channel'
+                          $ref: '#/components/schemas/Channel'
                         channelUser:
-                          $ref: './schema/message.yaml#ChannelUser'
+                          $ref: '#/components/schemas/ChannelUser'
     ChannelResultResponse:
       description: Channel Information
       content:
@@ -4808,9 +4808,9 @@ components:
                     type: object
                     properties:
                       channel:
-                        $ref: './schema/message.yaml#Channel'
+                        $ref: '#/components/schemas/Channel'
                       channelUser:
-                        $ref: './schema/message.yaml#ChannelUser'
+                        $ref: '#/components/schemas/ChannelUser'
     ChannelResponse:
       description: Channel response.
       content:
@@ -4821,7 +4821,7 @@ components:
               isDistinct:
                 type: boolean
               type:
-                $ref: './schema/message.yaml#ChannelType'
+                $ref: '#/components/schemas/ChannelType'
                 description: Type of a channel (standard, conversation, broadcast). This property is not be used for now.
               metadata:
                 type: object
@@ -4893,7 +4893,7 @@ components:
               results:
                 type: array
                 items:
-                  $ref: './schema/message.yaml#ChannelUser'
+                  $ref: '#/components/schemas/ChannelUser'
     UsersResponse:
       description: Users Information
       content:
@@ -4926,7 +4926,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schema/message.yaml#Network'
+            $ref: '#/components/schemas/Network'
     BlacklistRulesResponse:
       description: rules of blacklist Information
       content:
@@ -4942,7 +4942,7 @@ components:
                   results:
                     type: array
                     items:
-                      $ref: './schema/message.yaml#BlacklistRule'
+                      $ref: '#/components/schemas/BlacklistRule'
     BlacklistRuleResponse:
       description: rule of blacklist Information
       content:
@@ -4953,7 +4953,7 @@ components:
               status:
                 type: string
               data:
-                $ref: './schema/message.yaml#BlacklistRule'
+                $ref: '#/components/schemas/BlacklistRule'
     WhitelistRulesResponse:
       description: rules of whitelist Information
       content:
@@ -4980,7 +4980,7 @@ components:
               status:
                 type: string
               data:
-                $ref: './schema/message.yaml#BlacklistRule'
+                $ref: '#/components/schemas/BlacklistRule'
     RolesResponse:
       description: Roles information.
       content:
@@ -4996,11 +4996,11 @@ components:
                   moderatonSettings:
                     type: array
                     items:
-                      $ref: './schema/message.yaml#ModerationSetting'
+                      $ref: '#/components/schemas/ModerationSetting'
                   roles:
                     type: array
                     items:
-                      $ref: './schema/message.yaml#Role'
+                      $ref: '#/components/schemas/Role'
     UserByAdminsResponse:
       description: Users information.
       content:
@@ -5042,7 +5042,7 @@ components:
                   roles:
                     type: array
                     items:
-                      $ref: './schema/message.yaml#Role'
+                      $ref: '#/components/schemas/Role'
     ModerationSettingResponse:
       description: Moderation Setting Information
       content:
@@ -5053,7 +5053,7 @@ components:
               status:
                 type: string
               data:
-                $ref: './schema/message.yaml#ModerationSetting'
+                $ref: '#/components/schemas/ModerationSetting'
     UnexpectedError:
       description: Unexpected error.
       content:
