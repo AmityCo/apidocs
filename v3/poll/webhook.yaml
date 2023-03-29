@@ -30,39 +30,3 @@ didVote:
   responses:
     "200000":
       $ref: "./response.yaml#/PollResponse"
-
-
-WebhookPolldidCreate:
-  get:
-    tags:
-      - 'WebhookEvent'
-    security:
-      - SocketAuth: []
-    description: "This is called when poll is created\n"
-    responses:
-      '200000':
-        $ref: './response.yaml#/PollResponse'
-
-
-WebhookPolldidUpdate:
-  get:
-    tags:
-      - 'WebhookEvent'
-    security:
-      - SocketAuth: []
-    description: "This is called when poll is updated\n"
-    responses:
-      '200000':
-        $ref: './response.yaml#/PollResponse'
-
-
-WebhookPolldidVote:
-  get:
-    tags:
-      - 'WebhookEvent'
-    security:
-      - SocketAuth: []
-    description: "This is called when vote is created in poll\n"
-    responses:
-      '200000':
-        $ref: './response.yaml#/PollResponse'

@@ -45,39 +45,3 @@ didDelete:
   responses:
     "200000":
       $ref: "../../v2/message/response.yaml#/MessageCallbackResponse"
-
-
-CallbacksMessagedidCreate:
-  get:
-    tags:
-      - 'Message'
-    security:
-      - SocketAuth: []
-    description: "Publish this event to __every member of channel__ after call the endpoint below:\n  * `create message`\n  * `create message(v3)`\n"
-    responses:
-      '200000':
-        $ref: '../../v2/message/response.yaml#/MessageCallbackResponse'
-
-
-CallbacksMessagedidUpdate:
-  get:
-    tags:
-      - 'Message'
-    security:
-      - SocketAuth: []
-    description: "Publish this event to __every member of channel__ after call the endpoint below:\n  * `update message`\n  * `update data of message`\n  * `update tags of message`\n  * `update message(v3)`\n  * `flag message`\n  * `flag message(v3)`\n  * `unflag message`\n  * `unflag message(v3)`\n  * `clear flags(v3)`\n  * `add reaction`\n  * `remove reaction`\n"
-    responses:
-      '200000':
-        $ref: '../../v2/message/response.yaml#/MessageCallbackResponse'
-
-
-CallbacksMessagedidDelete:
-  get:
-    tags:
-      - 'Message'
-    security:
-      - SocketAuth: []
-    description: "Publish this event to __every member of channel__ and __target users__ after call the endpoint below:\n  * `delete message`\n  * `delete message(v3)`\n"
-    responses:
-      '200000':
-        $ref: '../../v2/message/response.yaml#/MessageCallbackResponse'

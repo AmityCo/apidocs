@@ -29,36 +29,3 @@ get:
       $ref: "../../global/error.yaml#/BadRequestError"
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
-
-
-MeGlobalFeeds:
-  get:
-    summary: 'Get global feed.'
-    tags:
-      - 'GlobalFeed'
-    security:
-      - BearerAuth: []
-    description: "Get posts from your wall, people you follow and communities you join sorted by custom rannking algorithm\n"
-    parameters:
-      - name: 'limit'
-        in: 'query'
-        schema:
-          type: 'integer'
-          minimum: 1
-          maximum: 100
-          default: 10
-      - name: 'token'
-        in: 'query'
-        schema:
-          type: 'string'
-          minLength: 1
-          maxLength: 1000
-    consumes:
-      - 'application/json'
-    responses:
-      '200000':
-        $ref: './response.yaml#/GlobalFeedResponse'
-      '400000':
-        $ref: '../../global/error.yaml#/BadRequestError'
-      '500000':
-        $ref: '../../global/error.yaml#/UnexpectedError'
