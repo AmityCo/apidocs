@@ -3501,7 +3501,7 @@ paths:
         - BearerAuth: []
       parameters:
         - name: 'channelId'
-          in: 'query'
+          in: 'path'
           required: true
           schema:
             type: 'string'
@@ -8157,14 +8157,6 @@ paths:
               token:
                 type: 'string'
                 maxLength: 1000
-        - name: 'sortBy'
-          in: 'query'
-          schema:
-            type: 'string'
-            enum:
-              - 'published'
-              - 'reviewing'
-            default: 'published'
         - name: 'dataTypes'
           in: 'query'
           description: "oneOf:\n  * video\n  * image\n  * file\n  * liveStream\n  * string\nexample: upstra.customtype - custom post type - must be in namespace like format (ex. \"upstra.customtype\", \"com.eko.birthday\")\n"
@@ -9444,7 +9436,7 @@ paths:
               enum:
                 - 'reviewing'
                 - 'published'
-            default: 'published'
+            example: ['published']
         - name: 'dataTypes'
           in: 'query'
           schema:
