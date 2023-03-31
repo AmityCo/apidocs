@@ -381,6 +381,9 @@ paths:
                     type: 'string'
               required:
                 - 'regexs'
+      responses:
+        '200':
+          description: OK
     post:
       summary: 'Add rules to black list'
       tags:
@@ -402,6 +405,9 @@ paths:
                     type: 'string'
               required:
                 - 'regexs'
+      responses:
+        '200':
+          description: OK
     delete:
       summary: 'Delete rules from black list'
       tags:
@@ -423,6 +429,9 @@ paths:
                     type: 'string'
               required:
                 - 'regexs'
+      responses:
+        '200':
+          description: OK
   /admin/v1/token:
     post:
       summary: 'Generate admin token.'
@@ -496,7 +505,6 @@ paths:
             type: 'string'
         - name: 'regexs'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             items:
@@ -827,8 +835,7 @@ paths:
         - 'Admin'
       security:
         - BearerAuth: []
-      consumes:
-        - 'multipart/form-data'
+
       description: "Create a image message in a given channel.\n"
       requestBody:
         description: "Information of message to be created.\n"
@@ -908,8 +915,7 @@ paths:
         - 'Admin'
       security:
         - BearerAuth: []
-      consumes:
-        - 'multipart/form-data'
+
       description: "Create a message with file in a given channel.\n"
       requestBody:
         description: "information of a message to be created.\n"
@@ -1488,6 +1494,12 @@ paths:
       security:
         - BearerAuth: []
       description: "Update a role\n"
+      parameters:
+        - name: 'roleId'
+          in: 'path'
+          required: true
+          schema:
+            type: 'string'
       requestBody:
         description: "information of a role to be created.\n"
         required: true
@@ -1530,6 +1542,12 @@ paths:
       security:
         - BearerAuth: []
       description: "Delete a role\n"
+      parameters:
+        - name: 'roleId'
+          in: 'path'
+          required: true
+          schema:
+            type: 'string'
       requestBody:
         description: "information of a role to be delete.\n"
         required: true
@@ -1654,8 +1672,6 @@ paths:
       security:
         - ApiKeyAuth: []
       description: "Ban a user\n"
-      consumes:
-        - 'applicationjson'
       requestBody:
         description: "User information to be baned\n"
         required: true
@@ -1926,6 +1942,7 @@ paths:
       description: "Publish this event following endpoint below:\n  * `update user`\n  * `update user(v3)`\n"
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -2057,7 +2074,6 @@ paths:
       parameters:
         - name: 'userIds'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             maxItems: 100
@@ -2206,7 +2222,6 @@ paths:
               type: 'object'
               properties:
                 userIds:
-                  require: true
                   type: 'array'
                   maxItems: 100
                   items:
@@ -2242,7 +2257,6 @@ paths:
               properties:
                 userId:
                   type: 'string'
-                  require: true
                   minLength: 1
                   maxLength: 900
       responses:
@@ -2409,9 +2423,9 @@ paths:
         '200':
           $ref: './v2/channel/response.yaml#/ChannelAndUserApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -2596,9 +2610,9 @@ paths:
         '200':
           $ref: './v2/channel/response.yaml#/ChannelApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -2705,7 +2719,6 @@ paths:
           description: "isDeleted:\n  * `null(default)` - Show both channel is actived and channel is inactived.\n  * `true` - Show channel is inactived only.\n  * `false` - Show channel is actived only.\n"
         - name: 'tags'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             maxItems: 10
@@ -2714,7 +2727,6 @@ paths:
               maxLength: 100
         - name: 'excludeTags'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             maxItems: 10
@@ -2733,7 +2745,6 @@ paths:
             default: 'all'
         - name: 'types'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             maxItems: 10
@@ -2836,15 +2847,15 @@ paths:
                   type: 'boolean'
                 autoDeleteMessageByFlagLimit:
                   type: 'number'
-                  min: 1
-                  max: 100
+                  minimum: 1
+                  maximum: 100
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -2911,15 +2922,15 @@ paths:
                   type: 'boolean'
                 autoDeleteMessageByFlagLimit:
                   type: 'number'
-                  min: 1
-                  max: 100
+                  minimum: 1
+                  maximum: 100
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -2977,9 +2988,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
@@ -3005,9 +3016,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
@@ -3031,7 +3042,6 @@ paths:
             type: 'string'
         - name: 'roles'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             minItems: 1
@@ -3118,9 +3128,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
@@ -3163,9 +3173,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
@@ -3209,9 +3219,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
@@ -3255,9 +3265,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
@@ -3405,9 +3415,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3425,7 +3435,6 @@ paths:
       parameters:
         - name: 'channelIds'
           in: 'query'
-          collectionFormat: 'multi'
           required: true
           schema:
             type: 'array'
@@ -3617,9 +3626,9 @@ paths:
         '200':
           $ref: './v1/channel/response.yaml#/ChannelAndUserSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3810,9 +3819,9 @@ paths:
         '200':
           $ref: './v1/channel/response.yaml#/ChannelSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '404':
           $ref: './global/error.yaml#/FileNotFoundError'
         '500':
@@ -4205,9 +4214,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -4270,9 +4279,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -4518,9 +4527,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -4608,9 +4617,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
@@ -4656,9 +4665,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
@@ -4713,9 +4722,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
@@ -4770,9 +4779,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
@@ -4827,9 +4836,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
@@ -4884,9 +4893,9 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
@@ -5789,7 +5798,6 @@ paths:
           description: "isDeleted:\n  * `null(default)` - Show both message is actived and message is inactived.\n  * `true` - Show message is inactived only.\n  * `false` - Show message is actived only.\n"
         - name: 'tags'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             maxItems: 10
@@ -5798,7 +5806,6 @@ paths:
               maxLength: 100
         - name: 'excludeTags'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             maxItems: 10
@@ -5900,9 +5907,9 @@ paths:
         '200':
           $ref: './v3/message/response.yaml#/MessagesApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400302':
           $ref: './global/error.yaml#/UserIsMutedError'
         '400303':
@@ -5932,7 +5939,6 @@ paths:
         - name: 'messageIds'
           in: 'query'
           required: true
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             maxItems: 10
@@ -6016,9 +6022,9 @@ paths:
         '200':
           $ref: './v3/message/response.yaml#/MessagesApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400307':
           $ref: './global/error.yaml#/MaxRepetitionExceed'
         '400308':
@@ -6084,9 +6090,9 @@ paths:
         '200':
           $ref: './v3/message/response.yaml#/MessagesApiResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '404':
@@ -6620,9 +6626,9 @@ paths:
         '200':
           $ref: './v3/message/response.yaml#/MessagesSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400302':
           $ref: './global/error.yaml#/UserIsMutedError'
         '400303':
@@ -6749,9 +6755,9 @@ paths:
         '200':
           $ref: './v3/message/response.yaml#/MessagesSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenAvatarError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenAvatarError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400307':
           $ref: './global/error.yaml#/MaxRepetitionExceed'
         '400308':
@@ -6832,9 +6838,9 @@ paths:
         '200':
           $ref: './v3/message/response.yaml#/MessagesSocketResponse'
         '403':
-          allOf:
-            - $ref: './global/error.yaml#/ForbiddenError'
-            - $ref: './global/error.yaml#/PermissionDenidedError'
+          $ref: './global/error.yaml#/ForbiddenError'
+        '400301':
+          $ref: './global/error.yaml#/PermissionDenidedError'
         '400304':
           $ref: './global/error.yaml#/UserIsBannedError'
         '404':
@@ -7510,13 +7516,13 @@ paths:
       parameters:
         - name: 'referenceId'
           in: 'query'
-          require: true
+          required: true
           schema:
             type: 'string'
             maxLength: 900
         - name: 'referenceType'
           in: 'query'
-          require: true
+          required: true
           schema:
             type: 'string'
             enum:
@@ -7657,13 +7663,13 @@ paths:
       parameters:
         - name: 'referenceId'
           in: 'query'
-          require: true
+          required: true
           schema:
             type: 'string'
             maxLength: 900
         - name: 'referenceType'
           in: 'query'
-          require: true
+          required: true
           schema:
             type: 'string'
             enum:
@@ -8047,7 +8053,7 @@ paths:
                   description: 'Is message in this channel will be deleted when the user flagged until flag limit?'
                 defaultAutoDeleteMessageByFlagLimit:
                   type: 'number'
-                  min: 1
+                  minimum: 1
                   example: 1
                   description: 'Number of flags that will force a message to be deleted automatically.'
                 useSecureAuthentication:
@@ -8136,7 +8142,6 @@ paths:
             default: 'published'
         - name: 'dataTypes'
           in: 'query'
-          collectionFormat: 'multi'
           description: "oneOf:\n  * video\n  * image\n  * file\n  * liveStream\n  * string\nexample: upstra.customtype - custom post type - must be in namespace like format (ex. \"upstra.customtype\", \"com.eko.birthday\")\n"
           schema:
             type: 'array'
@@ -8155,7 +8160,6 @@ paths:
                   description: 'custom post type - must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")'
         - name: 'tags'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             minItems: 0
@@ -8238,7 +8242,7 @@ paths:
                   maxItems: 5
                   items:
                     type: 'string'
-                    max: 24
+                    maximum: 24
                     description: 'tags'
                 createdAt:
                   type: 'string'
@@ -8312,19 +8316,19 @@ paths:
                   properties:
                     text:
                       type: 'string'
-                      max: 50000
+                      maximum: 50000
                       description: 'For updating text in the post'
                     fileId:
                       type: 'string'
-                      max: 100
+                      maximum: 100
                       description: 'Put file id to update file,image inside file, image post (video is not supported yet)'
                     streamId:
                       type: 'string'
-                      max: 100
+                      maximum: 100
                       description: 'Put stream id to update live streaming post with new streaming'
                     thumbnailFileId:
                       type: 'string'
-                      max: 100
+                      maximum: 100
                       description: 'Put image file id to update video file thumbnail in video post'
                 metadata:
                   type: 'object'
@@ -8334,7 +8338,7 @@ paths:
                   maxItems: 5
                   items:
                     type: 'string'
-                    max: 24
+                    maximum: 24
                     description: 'tags'
               required:
                 - 'postId'
@@ -8508,7 +8512,6 @@ paths:
       parameters:
         - name: 'postIds'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             maxItems: 100
@@ -8608,7 +8611,7 @@ paths:
                   maxItems: 5
                   items:
                     type: 'string'
-                    max: 24
+                    maximum: 24
                     description: 'tags'
               required:
                 - 'data'
@@ -8647,19 +8650,19 @@ paths:
                   properties:
                     text:
                       type: 'string'
-                      max: 50000
+                      maximum: 50000
                       description: 'For updating text in the post'
                     fileId:
                       type: 'string'
-                      max: 100
+                      maximum: 100
                       description: 'Put file id to update file,image inside file, image post (video is not supported yet)'
                     streamId:
                       type: 'string'
-                      max: 100
+                      maximum: 100
                       description: 'Put stream id to update live streaming post with new streaming'
                     thumbnailFileId:
                       type: 'string'
-                      max: 100
+                      maximum: 100
                       description: 'Put image file id to update video file thumbnail in video post'
                 metadata:
                   type: 'object'
@@ -8669,7 +8672,7 @@ paths:
                   maxItems: 5
                   items:
                     type: 'string'
-                    max: 24
+                    maximum: 24
                     description: 'tags'
               required:
                 - 'postId'
@@ -9053,7 +9056,7 @@ paths:
                   maxItems: 5
                   items:
                     type: 'string'
-                    max: 24
+                    maximum: 24
                     description: 'tags'
               required:
                 - 'targetType'
@@ -9207,7 +9210,7 @@ paths:
                   maxItems: 5
                   items:
                     type: 'string'
-                    max: 24
+                    maximum: 24
                     description: 'tags'
               required:
                 - 'targetType'
@@ -9301,7 +9304,7 @@ paths:
                   items:
                     type: 'string'
                     description: 'tags'
-                    max: 24
+                    maximum: 24
                 mentionees:
                   type: 'array'
                   description: 'The object of the mentions type and user who get a notification from the post.'
@@ -9407,7 +9410,6 @@ paths:
           description: 'use updatedAt when sort by first/lastUpdated'
         - name: 'feedType'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             minItems: 1
@@ -9420,7 +9422,6 @@ paths:
             default: 'published'
         - name: 'dataTypes'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             minItems: 1
@@ -9437,14 +9438,13 @@ paths:
           description: 'post data type to filter'
         - name: 'tags'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             minItems: 0
             maxItems: 5
             items:
               type: 'string'
-              max: 24
+              maximum: 24
           description: 'tags'
         - name: 'matchingOnlyParentPost'
           in: 'query'
@@ -9493,19 +9493,19 @@ paths:
                   properties:
                     text:
                       type: 'string'
-                      max: 50000
+                      maximum: 50000
                       description: 'For updating text in the post'
                     fileId:
                       type: 'string'
-                      max: 100
+                      maximum: 100
                       description: 'Put file id to update file,image inside file, image post (video is not supported yet)'
                     streamId:
                       type: 'string'
-                      max: 100
+                      maximum: 100
                       description: 'Put stream id to update live streaming post with new streaming'
                     thumbnailFileId:
                       type: 'string'
-                      max: 100
+                      maximum: 100
                       description: 'Put image file id to update video file thumbnail in video post'
                 metadata:
                   type: 'object'
@@ -9515,7 +9515,7 @@ paths:
                   maxItems: 5
                   items:
                     type: 'string'
-                    max: 24
+                    maximum: 24
                     description: 'tags'
                 mentionees:
                   type: 'array'
@@ -9702,7 +9702,7 @@ paths:
                   maxItems: 5
                   items:
                     type: 'string'
-                    max: 24
+                    maximum: 24
                     description: 'tags'
               required:
                 - 'targetType'
@@ -9795,7 +9795,7 @@ paths:
                   maxItems: 5
                   items:
                     type: 'string'
-                    max: 24
+                    maximum: 24
                     description: 'tags'
                 mentionees:
                   type: 'array'
@@ -9854,19 +9854,19 @@ paths:
                   properties:
                     text:
                       type: 'string'
-                      max: 50000
+                      maximum: 50000
                       description: 'For updating text in the post'
                     fileId:
                       type: 'string'
-                      max: 100
+                      maximum: 100
                       description: 'Put file id to update file,image inside file, image post (video is not supported yet)'
                     streamId:
                       type: 'string'
-                      max: 100
+                      maximum: 100
                       description: 'Put stream id to update live streaming post with new streaming'
                     thumbnailFileId:
                       type: 'string'
-                      max: 100
+                      maximum: 100
                       description: 'Put image file id to update video file thumbnail in video post'
                 metadata:
                   type: 'object'
@@ -9876,7 +9876,7 @@ paths:
                   maxItems: 5
                   items:
                     type: 'string'
-                    max: 24
+                    maximum: 24
                     description: 'tags'
                 mentionees:
                   type: 'array'
@@ -9992,7 +9992,7 @@ paths:
                   description: 'question.'
                 answers:
                   type: 'array'
-                  min: 2
+                  minimum: 2
                   maxItems: 10
                   items:
                     type: 'object'
@@ -10277,7 +10277,7 @@ paths:
                   description: 'question.'
                 answers:
                   type: 'array'
-                  min: 2
+                  minimum: 2
                   maxItems: 10
                   items:
                     type: 'object'
@@ -10517,7 +10517,6 @@ paths:
                 maxLength: 1000
         - name: 'dataTypes'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             minItems: 1
@@ -10708,7 +10707,6 @@ paths:
                 maxLength: 1000
         - name: 'dataTypes'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             minItems: 1
@@ -10811,7 +10809,6 @@ paths:
             type: 'boolean'
         - name: 'dataTypes'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             minItems: 1
@@ -11305,7 +11302,6 @@ paths:
       parameters:
         - name: 'commentIds'
           in: 'query'
-          collectionFormat: 'multi'
           required: true
           schema:
             type: 'array'
@@ -12071,8 +12067,7 @@ paths:
         - 'File'
       security:
         - BearerAuth: []
-      consumes:
-        - 'multipart/form-data'
+
       description: "Upload file to cloud storage\n"
       requestBody:
         description: "Information of file to be created. It will be applied to every attachment\n"
@@ -12257,12 +12252,10 @@ paths:
       parameters:
         - name: 'Content-Type'
           in: 'header'
-          value: 'multipart/form-data'
           required: true
           schema:
             type: 'string'
-      consumes:
-        - 'multipart/form-data'
+
       description: "Upload image to cloud storage\n\nImage size limit: 1,073,741,824 byte\n"
       requestBody:
         content:
@@ -12295,12 +12288,10 @@ paths:
       parameters:
         - name: 'Content-Type'
           in: 'header'
-          value: 'multipart/form-data'
           required: true
           schema:
             type: 'string'
-      consumes:
-        - 'multipart/form-data'
+
       description: "Upload file to cloud storage\n\nFile size limit: 1,073,741,824 byte\n"
       requestBody:
         content:
@@ -12333,12 +12324,10 @@ paths:
       parameters:
         - name: 'Content-Type'
           in: 'header'
-          value: 'multipart/form-data'
           required: true
           schema:
             type: 'string'
-      consumes:
-        - 'multipart/form-data'
+
       description: "Upload video to cloud storage\n\nVideo size limit: 1,073,741,824 byte\n"
       requestBody:
         content:
@@ -12380,7 +12369,6 @@ paths:
             maxLength: 100
         - name: 'tags'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             maxItems: 10
@@ -12742,7 +12730,6 @@ paths:
             type: 'string'
         - name: 'memberships'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             description: 'Membership type to filter (If not filter will return both banned user and member)'
@@ -12755,7 +12742,6 @@ paths:
                 - 'member'
         - name: 'roles'
           in: 'query'
-          collectionFormat: 'multi'
           description: 'Role to filter'
           schema:
             type: 'array'
@@ -13147,7 +13133,6 @@ paths:
         - name: 'communityIds'
           in: 'query'
           required: true
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             minLength: 1
@@ -14688,7 +14673,6 @@ paths:
       parameters:
         - name: 'categoryIds'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             maxItems: 100
@@ -15004,7 +14988,6 @@ paths:
             default: false
         - name: 'statuses'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             maxItems: 10
@@ -15018,7 +15001,6 @@ paths:
           description: "Status of livestreaming  \n  * idle - streaming is just created  \n  * live - streamer is streaming now or streamer is reconnecting  \n  * ended - streamer stop streaming or streamer disconnect and not connect back in time period  \n  * recorded - live stream recordings available \n"
         - name: 'userPublicIds'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             maxItems: 100
@@ -16211,7 +16193,6 @@ paths:
             maxLength: 100
         - name: 'dataTypes'
           in: 'query'
-          collectionFormat: 'multi'
           schema:
             type: 'array'
             minItems: 1
@@ -19835,7 +19816,7 @@ components:
           description: 'Is message in this channel will be deleted when the user flagged until flag limit?'
         defaultAutoDeleteMessageByFlagLimit:
           type: 'number'
-          min: 1
+          minimum: 1
           example: 1
           description: 'Number of flags that will force a message to be deleted automatically.'
         createdAt:
