@@ -4,7 +4,7 @@ create:
   summary: Create a new message in message feed
   description: Create a new message
   requestBody:
-    $ref: './request.yaml#CreateMessage'
+    $ref: './request.yaml#/CreateMessage'
   responses:
     '200':
       description: Successful operation
@@ -32,7 +32,7 @@ query:
   responses:
     '200':
       description: successful operation
-      $ref: './response.yaml#PaginatedMessagePayload'
+      $ref: './response.yaml#/PaginatedMessagePayload'
     '404':
       description: Not found error
     '422':
@@ -64,7 +64,7 @@ get:
   summary: Find message by ID
   description: Returns a single message
   parameters:
-    - $ref: './parameter.yaml#MessageId'
+    - $ref: './parameter.yaml#/MessageId'
   responses:
     '200':
       description: successful operation
@@ -88,7 +88,7 @@ update:
   responses:
     '200':
       description: Successful operation
-      $ref: './response.yaml#MessagePayload'
+      $ref: './response.yaml#/MessagePayload'
     '404':
       description: Not found error
     '422':
@@ -102,11 +102,11 @@ clearFlag:
   summary: Delete all flags in message
   description: Delete all flags in message
   parameters:
-    - $ref: './parameter.yaml#MessageId'
+    - $ref: './parameter.yaml#/MessageId'
   responses:
     '200':
       description: Successful operation
-      $ref: './response.yaml#MessagePayload'
+      $ref: './response.yaml#/MessagePayload'
     '404':
       description: Not found error
     '422':
@@ -120,11 +120,11 @@ unflag:
   summary: Delete my flag in a message
   description: Delete my flag in a message
   parameters:
-    - $ref: './parameter.yaml#MessageId'
+    - $ref: './parameter.yaml#/MessageId'
   responses:
     '200':
       description: Successful operation
-      $ref: './response.yaml#MessagePayload'
+      $ref: './response.yaml#/MessagePayload'
     '404':
       description: Not found error
     '422':
@@ -138,7 +138,7 @@ findMyFlag:
   summary: Find my flag in message by ID
   description: Return my flag in message
   parameters:
-    - $ref: './parameter.yaml#MessageId'
+    - $ref: './parameter.yaml#/MessageId'
   responses:
     '200':
       description: successful operation
@@ -148,7 +148,7 @@ findMyFlag:
             type: object
             properties:
               result:
-                $ref: '../../schema/message.yaml#MessageV5_hasFlags'
+                $ref: '../../schema/message.yaml#/MessageV5_hasFlags'
     '404':
       description: Not found error
     '422':
@@ -162,11 +162,11 @@ flag:
   summary: Flag a message
   description: Flag a message
   parameters:
-    - $ref: './parameter.yaml#MessageId'
+    - $ref: './parameter.yaml#/MessageId'
   responses:
     '200':
       description: Successful operation
-      $ref: './response.yaml#MessagePayload'
+      $ref: './response.yaml#/MessagePayload'
     '404':
       description: Not found error
     '422':
@@ -180,11 +180,11 @@ getList:
   summary: Find messages by message id (max=10)
   description: Multiple message id values can be provided with array format
   parameters:
-    - $ref: './parameter.yaml#MessageIds'
+    - $ref: './parameter.yaml#/MessageIds'
   responses:
     '200':
       description: successful operation
-      $ref: './response.yaml#MessagePayload'
+      $ref: './response.yaml#/MessagePayload'
     '404':
       description: Not found error
     '422':
@@ -198,14 +198,14 @@ findByCreatorId:
   summary: Find messages by creatorId and multiple conditions
   description: Multiple conditions can be provided by query string
   parameters:
-    - $ref: './parameter.yaml#CreatorId'
-    - $ref: './parameter.yaml#IsDeleted'
-    - $ref: './parameter.yaml#HasFlags'
-    - $ref: './parameter.yaml#PagingOptions'
+    - $ref: './parameter.yaml#/CreatorId'
+    - $ref: './parameter.yaml#/IsDeleted'
+    - $ref: './parameter.yaml#/HasFlags'
+    - $ref: './parameter.yaml#/PagingOptions'
   responses:
     '200':
       description: successful operation
-      $ref: './response.yaml#PaginatedMessagePayload'
+      $ref: './response.yaml#/PaginatedMessagePayload'
     '404':
       description: Not found error
     '422':
