@@ -15781,6 +15781,28 @@ paths:
           $ref: './global/error.yaml#/BadRequestError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
+  /api/v5/users/{userId}/followInfo:
+    get:
+      summary: 'Get other follow information.'
+      tags:
+        - 'Follow'
+      security:
+        - BearerAuth: []
+      description: "Get other follow information.\n"
+      parameters:
+        - name: 'userId'
+          in: 'path'
+          required: true
+          schema:
+            type: 'string'
+            maxLength: 900
+      responses:
+        '200':
+          $ref: './v5/follow/response.yaml#/FollowInformationResponse'
+        '400':
+          $ref: './global/error.yaml#/BadRequestError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
   /api/v4/users/{userId}:
     delete:
       summary: 'Delete user'
@@ -15872,6 +15894,76 @@ paths:
       responses:
         '200':
           $ref: './v4/user/response.yaml#/UnflagUserResponse'
+        '404':
+          $ref: './global/error.yaml#/UserNotFoundError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+  /api/v4/me/user-blocks:
+    get:
+      summary: Get list of blocked users
+      description: "Get list of blocked users\n"
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: token
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: './v4/user/response.yaml#/GetBlockedUserListResponse'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+  /api/v4/me/user-blocks/{userId}:
+    post:
+      summary: Block a user.
+      tags:
+        - User
+      description: "Blocking a user\n"
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: './v4/user/response.yaml#/BlockUserResponse'
+        '400':
+          $ref: './global/error.yaml#/BadRequestError'
+        '404':
+          $ref: './global/error.yaml#/UserNotFoundError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+    delete:
+      summary: Unblock a user
+      tags:
+        - User
+      description: "Unblocking a user\n"
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: './v4/user/response.yaml#/UnblockUserResponse'
+        '400':
+          $ref: './global/error.yaml#/BadRequestError'
         '404':
           $ref: './global/error.yaml#/UserNotFoundError'
         '500':

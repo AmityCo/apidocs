@@ -1,0 +1,16 @@
+FollowInformationResponse:
+  description: Follow Information
+  content:
+    application/json:
+      schema:
+        type: object
+        required: ['followCounts']
+        properties:
+          follows:
+            type: array
+            items:
+              $ref: '../../schema/follow.yaml#/FollowV5'
+          followCounts:
+            type: array
+            items:
+              $ref: '../../schema/follow.yaml#/FollowCount'
