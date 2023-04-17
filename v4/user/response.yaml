@@ -38,3 +38,72 @@ UnflagUserResponse:
                 type: array
                 items:
                   $ref: "../../schema/file.yaml#/File"
+
+BlockUserResponse:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - follows
+          - followCounts
+        properties:
+          follows:
+            type: array
+            items:
+              $ref: '../../schema/follow.yaml#/FollowV5'
+          followCounts:
+            type: array
+            items:
+              $ref: '../../schema/follow.yaml#/FollowCount'
+
+UnblockUserResponse:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - follows
+          - followCounts
+        properties:
+          follows:
+            type: array
+            items:
+              $ref: '../../schema/follow.yaml#/FollowV5'
+          followCounts:
+            type: array
+            items:
+              $ref: '../../schema/follow.yaml#/FollowCount' 
+
+GetBlockedUserListResponse:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          follows:
+            type: array
+            items:
+              $ref: "../../schema/follow.yaml#/FollowV5"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+                description: token for getting the next page of data
+                maxLength: 100
+              previous:
+                type: string
+                description: token for getting the previous page of data        
+                maxLength: 100
+              total:
+                type: number
+                description: total number of blockers      
