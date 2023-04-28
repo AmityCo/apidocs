@@ -16704,27 +16704,7 @@ paths:
       security:
         - BearerAuth: []
       requestBody:
-        description: >
-          Information of a prehook to be updated.
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                enabled:
-                  type: boolean
-                callbackUrl:
-                  type: string
-                  maxLength: 900
-                defaultAction:
-                  type: string
-                  enum:
-                    - allow
-                    - deny
-                regenerateKey:
-                  type: boolean
-                  description: An option for regenerating the secret key.
+        $ref: './v3/network-setting/request.yaml#/UpdatePrehookSetting'
       responses:
         "200":
           $ref: './v3/network-setting/response.yaml#/UpdatePrehookSettingApiResponse'
