@@ -64,6 +64,29 @@ PermissionDenidedError:
         status: error
         code: 400301
         message: User is not a member of a channel
+UserIsBannedErrorExample:
+  summary: User is banned from a channel / community.
+  value: 
+    {
+      "status": "error",
+      "code": 400304,
+      "message": "User is banned from a channel / community."
+    }
+PermissionDenidedErrorExample:
+  summary: Permission denied.
+  value: 
+    {
+      "status": "error",
+      "code": 400301,
+      "message": "User is not a member of a channel"
+    }
+Error400301_400304:
+  description: 400301 (PermissionDenided), 400304 (UserIsBanned)
+  content:
+    application/json:
+      examples:
+      - $ref: "#/PermissionDenidedErrorExample"
+      - $ref: "#/UserIsBannedErrorExample"
 UserIsSystemBanned:
   description: User is banned from the system.
   content:
