@@ -131,4 +131,27 @@ ContentCheckImage:
   properties:
     allowed:
       type: boolean
-      optional: true      
+      optional: true
+
+PrehookSetting:
+  description: Prehook Setting
+  type: object
+  properties:
+    enabled:
+      type: boolean
+    callbackUrl:
+      type: string
+    defaultAction:
+      type: string
+      enum:
+        - allow
+        - deny
+
+PrehookSettingWithSecretKey:
+  allOf:
+    - $ref: "#/PrehookSetting"
+    - type: object
+      properties:
+        secretKey:
+          type: string
+          description: This will be available only when regenerateKey or enable the feature for the first time
