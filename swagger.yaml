@@ -143,7 +143,7 @@ paths:
           $ref: './v3/session/response.yaml#/SessionResponse'
         '401':
           $ref: './global/error.yaml#/UserIsSystemBanned'
-        '400312':
+        '403':
           $ref: './global/error.yaml#/UserIsGlobalBanned'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
@@ -225,7 +225,7 @@ paths:
           $ref: './v4/session/response.yaml#/SessionResponse'
         '401':
           $ref: './global/error.yaml#/UserIsSystemBanned'
-        '400312':
+        '403':
           $ref: './global/error.yaml#/UserIsGlobalBanned'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
@@ -258,12 +258,12 @@ paths:
                   success:
                     type: 'boolean'
                     default: true
+        "404":
+          $ref: "./global/error.yaml#/UserIdNotFoundError"
+        "403":
+          $ref: "./global/error.yaml#/UserIsGlobalBanned"
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-        'UserIdNotFound: 404':
-          $ref: './global/error.yaml#/UserIdNotFoundError'
-        'SessionNotFound: 404':
-          description: 'User is global banned'
   /v1/device:
     post:
       summary: 'Register a device.'
@@ -324,7 +324,7 @@ paths:
           $ref: './v1/device/response.yaml#/DeviceResponse'
         '401':
           $ref: './global/error.yaml#/UserIsSystemBanned'
-        '400312':
+        '403':
           $ref: './global/error.yaml#/UserIsGlobalBanned'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
@@ -2424,9 +2424,14 @@ paths:
         '200':
           $ref: './v2/channel/response.yaml#/ChannelAndUserApiResponse'
         '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: './global/error-example.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -2503,10 +2508,15 @@ paths:
       responses:
         '200':
           description: 'OK'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: './global/error-example.yaml#/PermissionDenidedError'
+                UserIsBannedError:
+                  $ref: './global/error-example.yaml#/UserIsBannedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -2548,12 +2558,17 @@ paths:
       responses:
         '200':
           description: 'OK'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
-        '400316':
-          $ref: './global/error.yaml#/UserIsUnbannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsUnbannedError:
+                  $ref: "./global/error-example.yaml#/UserIsUnbannedError"
         '404':
           $ref: './global/error.yaml#/NotFoundError'
         '500':
@@ -2611,9 +2626,14 @@ paths:
         '200':
           $ref: './v2/channel/response.yaml#/ChannelApiResponse'
         '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: './global/error-example.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -2854,9 +2874,14 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
         '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: './global/error-example.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -2929,9 +2954,14 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
         '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: './global/error-example.yaml#/PermissionDenidedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -2990,11 +3020,16 @@ paths:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
         '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: './global/error-example.yaml#/ForbiddenError'
+                PermissionDenidedError:
+                  $ref: './global/error-example.yaml#/PermissionDenidedError'
+                UserIsBannedError:
+                  $ref: './global/error-example.yaml#/UserIsBannedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3017,12 +3052,17 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3129,12 +3169,17 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3174,12 +3219,17 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3220,12 +3270,17 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3266,12 +3321,17 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3316,10 +3376,15 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3363,10 +3428,15 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3416,10 +3486,15 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3482,10 +3557,15 @@ paths:
       responses:
         '200':
           description: 'OK'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3627,10 +3707,15 @@ paths:
       responses:
         '200':
           $ref: './v1/channel/response.yaml#/ChannelAndUserSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3820,10 +3905,15 @@ paths:
       responses:
         '200':
           $ref: './v1/channel/response.yaml#/ChannelSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
         '404':
           $ref: './global/error.yaml#/FileNotFoundError'
         '500':
@@ -3867,10 +3957,15 @@ paths:
       responses:
         '200':
           description: 'OK'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3916,12 +4011,17 @@ paths:
       responses:
         '200':
           description: 'OK'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsUnbannedError:
+                  $ref: "./global/error-example.yaml#/UserIsUnbannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
-        '400316':
-          $ref: './global/error.yaml#/UserIsUnbannedError'
         '404':
           $ref: './global/error.yaml#/NotFoundError'
         '500':
@@ -3957,10 +4057,15 @@ paths:
       responses:
         '200':
           description: 'OK'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -3998,10 +4103,15 @@ paths:
       responses:
         '200':
           description: 'OK'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -4215,10 +4325,15 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -4280,10 +4395,15 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -4529,10 +4649,15 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -4619,12 +4744,17 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -4667,12 +4797,17 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -4724,12 +4859,17 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -4781,12 +4921,17 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -4838,12 +4983,17 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -4895,12 +5045,17 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -5033,10 +5188,15 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -5092,10 +5252,15 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -5585,20 +5750,25 @@ paths:
       responses:
         '200':
           $ref: './v2/message/response.yaml#/MessageResponse'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400302':
-          $ref: './global/error.yaml#/UserIsMutedError'
-        '400303':
-          $ref: './global/error.yaml#/ChannelIsMutedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
-        '400307':
-          $ref: './global/error.yaml#/MaxRepetitionExceed'
-        '400308':
-          $ref: './global/error.yaml#/BanWordFoundError'
-        '400309':
-          $ref: './global/error.yaml#/LinkNotAllowedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsMutedError:
+                  $ref: "./global/error-example.yaml#/UserIsMutedError"
+                ChannelIsMutedError:
+                  $ref: "./global/error-example.yaml#/ChannelIsMutedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
+                MaxRepetitionExceed:
+                  $ref: "./global/error-example.yaml#/MaxRepetitionExceed"
+                BanWordFoundError:
+                  $ref: "./global/error-example.yaml#/BanWordFoundError"
+                LinkNotAllowedError:
+                  $ref: "./global/error-example.yaml#/LinkNotAllowedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -5636,20 +5806,25 @@ paths:
       responses:
         '200':
           description: 'An image file'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400302':
-          $ref: './global/error.yaml#/UserIsMutedError'
-        '400303':
-          $ref: './global/error.yaml#/ChannelIsMutedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
-        '400307':
-          $ref: './global/error.yaml#/MaxRepetitionExceed'
-        '400308':
-          $ref: './global/error.yaml#/BanWordFoundError'
-        '400309':
-          $ref: './global/error.yaml#/LinkNotAllowedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsMutedError:
+                  $ref: "./global/error-example.yaml#/UserIsMutedError"
+                ChannelIsMutedError:
+                  $ref: "./global/error-example.yaml#/ChannelIsMutedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
+                MaxRepetitionExceed:
+                  $ref: "./global/error-example.yaml#/MaxRepetitionExceed"
+                BanWordFoundError:
+                  $ref: "./global/error-example.yaml#/BanWordFoundError"
+                LinkNotAllowedError:
+                  $ref: "./global/error-example.yaml#/LinkNotAllowedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -5693,19 +5868,24 @@ paths:
         '200':
           $ref: './v2/message/response.yaml#/MessageResponse'
         '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400302':
-          $ref: './global/error.yaml#/UserIsMutedError'
-        '400303':
-          $ref: './global/error.yaml#/ChannelIsMutedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
-        '400307':
-          $ref: './global/error.yaml#/MaxRepetitionExceed'
-        '400308':
-          $ref: './global/error.yaml#/BanWordFoundError'
-        '400309':
-          $ref: './global/error.yaml#/LinkNotAllowedError'
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: './global/error-example.yaml#/PermissionDenidedError'
+                UserIsMutedError:
+                  $ref: './global/error-example.yaml#/UserIsMutedError'
+                ChannelIsMutedError:
+                  $ref: './global/error-example.yaml#/ChannelIsMutedError'
+                UserIsBannedError:
+                  $ref: './global/error-example.yaml#/UserIsBannedError'
+                MaxRepetitionExceed:
+                  $ref: './global/error-example.yaml#/MaxRepetitionExceed'
+                BanWordFoundError:
+                  $ref: './global/error-example.yaml#/BanWordFoundError'
+                LinkNotAllowedError:
+                  $ref: './global/error-example.yaml#/LinkNotAllowedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -5743,20 +5923,25 @@ paths:
       responses:
         '200':
           description: 'An image file'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400302':
-          $ref: './global/error.yaml#/UserIsMutedError'
-        '400303':
-          $ref: './global/error.yaml#/ChannelIsMutedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
-        '400307':
-          $ref: './global/error.yaml#/MaxRepetitionExceed'
-        '400308':
-          $ref: './global/error.yaml#/BanWordFoundError'
-        '400309':
-          $ref: './global/error.yaml#/LinkNotAllowedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsMutedError:
+                  $ref: "./global/error-example.yaml#/UserIsMutedError"
+                ChannelIsMutedError:
+                  $ref: "./global/error-example.yaml#/ChannelIsMutedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
+                MaxRepetitionExceed:
+                  $ref: "./global/error-example.yaml#/MaxRepetitionExceed"
+                BanWordFoundError:
+                  $ref: "./global/error-example.yaml#/BanWordFoundError"
+                LinkNotAllowedError:
+                  $ref: "./global/error-example.yaml#/LinkNotAllowedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -5919,22 +6104,27 @@ paths:
       responses:
         '200':
           $ref: './v3/message/response.yaml#/MessagesApiResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400302':
-          $ref: './global/error.yaml#/UserIsMutedError'
-        '400303':
-          $ref: './global/error.yaml#/ChannelIsMutedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
-        '400307':
-          $ref: './global/error.yaml#/MaxRepetitionExceed'
-        '400308':
-          $ref: './global/error.yaml#/BanWordFoundError'
-        '400309':
-          $ref: './global/error.yaml#/LinkNotAllowedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsMutedError:
+                  $ref: "./global/error-example.yaml#/UserIsMutedError"
+                ChannelIsMutedError:
+                  $ref: "./global/error-example.yaml#/ChannelIsMutedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
+                MaxRepetitionExceed:
+                  $ref: "./global/error-example.yaml#/MaxRepetitionExceed"
+                BanWordFoundError:
+                  $ref: "./global/error-example.yaml#/BanWordFoundError"
+                LinkNotAllowedError:
+                  $ref: "./global/error-example.yaml#/LinkNotAllowedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -6034,16 +6224,21 @@ paths:
       responses:
         '200':
           $ref: './v3/message/response.yaml#/MessagesApiResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400307':
-          $ref: './global/error.yaml#/MaxRepetitionExceed'
-        '400308':
-          $ref: './global/error.yaml#/BanWordFoundError'
-        '400309':
-          $ref: './global/error.yaml#/LinkNotAllowedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                MaxRepetitionExceed:
+                  $ref: "./global/error-example.yaml#/MaxRepetitionExceed"
+                BanWordFoundError:
+                  $ref: "./global/error-example.yaml#/BanWordFoundError"
+                LinkNotAllowedError:
+                  $ref: "./global/error-example.yaml#/LinkNotAllowedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -6103,12 +6298,17 @@ paths:
       responses:
         '200':
           $ref: './v3/message/response.yaml#/MessagesApiResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '404':
           $ref: './global/error.yaml#/NotFoundError'
         '500':
@@ -6219,20 +6419,25 @@ paths:
       responses:
         '200':
           $ref: './v2/message/response.yaml#/MessageResponse'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400302':
-          $ref: './global/error.yaml#/UserIsMutedError'
-        '400303':
-          $ref: './global/error.yaml#/ChannelIsMutedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
-        '400307':
-          $ref: './global/error.yaml#/MaxRepetitionExceed'
-        '400308':
-          $ref: './global/error.yaml#/BanWordFoundError'
-        '400309':
-          $ref: './global/error.yaml#/LinkNotAllowedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsMutedError:
+                  $ref: "./global/error-example.yaml#/UserIsMutedError"
+                ChannelIsMutedError:
+                  $ref: "./global/error-example.yaml#/ChannelIsMutedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
+                MaxRepetitionExceed:
+                  $ref: "./global/error-example.yaml#/MaxRepetitionExceed"
+                BanWordFoundError:
+                  $ref: "./global/error-example.yaml#/BanWordFoundError"
+                LinkNotAllowedError:
+                  $ref: "./global/error-example.yaml#/LinkNotAllowedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -6639,22 +6844,27 @@ paths:
       responses:
         '200':
           $ref: './v3/message/response.yaml#/MessagesSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400302':
-          $ref: './global/error.yaml#/UserIsMutedError'
-        '400303':
-          $ref: './global/error.yaml#/ChannelIsMutedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
-        '400307':
-          $ref: './global/error.yaml#/MaxRepetitionExceed'
-        '400308':
-          $ref: './global/error.yaml#/BanWordFoundError'
-        '400309':
-          $ref: './global/error.yaml#/LinkNotAllowedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsMutedError:
+                  $ref: "./global/error-example.yaml#/UserIsMutedError"
+                ChannelIsMutedError:
+                  $ref: "./global/error-example.yaml#/ChannelIsMutedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
+                MaxRepetitionExceed:
+                  $ref: "./global/error-example.yaml#/MaxRepetitionExceed"
+                BanWordFoundError:
+                  $ref: "./global/error-example.yaml#/BanWordFoundError"
+                LinkNotAllowedError:
+                  $ref: "./global/error-example.yaml#/LinkNotAllowedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -6768,16 +6978,21 @@ paths:
       responses:
         '200':
           $ref: './v3/message/response.yaml#/MessagesSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenAvatarError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400307':
-          $ref: './global/error.yaml#/MaxRepetitionExceed'
-        '400308':
-          $ref: './global/error.yaml#/BanWordFoundError'
-        '400309':
-          $ref: './global/error.yaml#/LinkNotAllowedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenAvatarError:
+                  $ref: './global/error-example.yaml#/ForbiddenAvatarError'
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                MaxRepetitionExceed:
+                  $ref: "./global/error-example.yaml#/MaxRepetitionExceed"
+                BanWordFoundError:
+                  $ref: "./global/error-example.yaml#/BanWordFoundError"
+                LinkNotAllowedError:
+                  $ref: "./global/error-example.yaml#/LinkNotAllowedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -6852,12 +7067,17 @@ paths:
       responses:
         '200':
           $ref: './v3/message/response.yaml#/MessagesSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
-        '400301':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '404':
           $ref: './global/error.yaml#/NotFoundError'
         '500':
@@ -10023,7 +10243,10 @@ paths:
                         type: 'string'
                 answerType:
                   description: 'single or multiple.'
-                  type: 'single'
+                  type: 'string'
+                  enum:
+                    - single
+                    - multiple
                   default: null
                 closedIn:
                   type: 'number'
@@ -10308,7 +10531,10 @@ paths:
                         type: 'string'
                 answerType:
                   description: 'single or multiple.'
-                  type: 'single'
+                  type: 'string'
+                  enum:
+                    - 'single'
+                    - 'multiple'
                   default: null
                 closedIn:
                   type: 'number'
@@ -12523,12 +12749,17 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesApiResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                DuplicateEntryError:
+                  $ref: "./global/error-example.yaml#/DuplicateEntryError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
-        '400315':
-          $ref: './global/error.yaml#/DuplicateEntryError'
         '404':
           $ref: './global/error.yaml#/NotFoundError'
         '500':
@@ -12640,12 +12871,17 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesApiResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                DuplicateEntryError:
+                  $ref: "./global/error-example.yaml#/DuplicateEntryError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
-        '400315':
-          $ref: './global/error.yaml#/DuplicateEntryError'
         '404':
           $ref: './global/error.yaml#/NotFoundError'
         '500':
@@ -12694,7 +12930,7 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesApiResponse'
-        '400304':
+        '403':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
@@ -12723,7 +12959,7 @@ paths:
           $ref: './v3/community/response.yaml#/CommunitiesApiResponse'
         '401':
           $ref: './global/error.yaml#/UnAuthorizedError'
-        '400304':
+        '403':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
@@ -12850,10 +13086,15 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesApiResponse'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -12940,12 +13181,17 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesApiResponse'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
-        '400306':
-          $ref: './global/error.yaml#/ExemptFromBanError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                ExemptFromBanError:
+                  $ref: "./global/error-example.yaml#/ExemptFromBanError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -12989,12 +13235,17 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesApiResponse'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsUnbannedError:
+                  $ref: "./global/error-example.yaml#/UserIsUnbannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
-        '400316':
-          $ref: './global/error.yaml#/UserIsUnbannedError'
         '404':
           $ref: './global/error.yaml#/NotFoundError'
         '500':
@@ -13040,10 +13291,15 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesApiResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -13090,10 +13346,15 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesApiResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -13285,10 +13546,15 @@ paths:
       responses:
         '200':
           $ref: './v4/community/response.yaml#/CommunitiesApiResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -13350,10 +13616,15 @@ paths:
       responses:
         '200':
           $ref: './v4/community/response.yaml#/CommunitiesApiResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -13524,12 +13795,17 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                DuplicateEntryError:
+                  $ref: "./global/error-example.yaml#/DuplicateEntryError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
-        '400315':
-          $ref: './global/error.yaml#/DuplicateEntryError'
         '404':
           $ref: './global/error.yaml#/NotFoundError'
         '500':
@@ -13607,12 +13883,17 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/ForbiddenError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                ForbiddenError:
+                  $ref: "./global/error-example.yaml#/ForbiddenError"
+                DuplicateEntryError:
+                  $ref: "./global/error-example.yaml#/DuplicateEntryError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
-        '400315':
-          $ref: './global/error.yaml#/DuplicateEntryError'
         '404':
           $ref: './global/error.yaml#/NotFoundError'
         '500':
@@ -13732,7 +14013,7 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesSocketResponse'
-        '400304':
+        '403':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
@@ -13765,7 +14046,7 @@ paths:
           $ref: './v3/community/response.yaml#/CommunitiesSocketResponse'
         '401':
           $ref: './global/error.yaml#/UnAuthorizedError'
-        '400304':
+        '403':
           $ref: './global/error.yaml#/UserIsBannedError'
         '429':
           $ref: './global/error.yaml#/RateLimitError'
@@ -13907,12 +14188,17 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
-        '400306':
-          $ref: './global/error.yaml#/ExemptFromBanError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                ExemptFromBanError:
+                  $ref: "./global/error-example.yaml#/ExemptFromBanError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -13964,12 +14250,17 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsUnbannedError:
+                  $ref: "./global/error-example.yaml#/UserIsUnbannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
-        '400316':
-          $ref: './global/error.yaml#/UserIsUnbannedError'
         '404':
           $ref: './global/error.yaml#/NotFoundError'
         '500':
@@ -14143,10 +14434,15 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                PermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/PermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -14242,10 +14538,15 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -14301,10 +14602,15 @@ paths:
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -14414,10 +14720,15 @@ paths:
       responses:
         '200':
           $ref: './v4/community/response.yaml#/CommunitiesSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -14478,10 +14789,15 @@ paths:
       responses:
         '200':
           $ref: './v4/community/response.yaml#/CommunitiesSocketResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '400304':
-          $ref: './global/error.yaml#/UserIsBannedError'
+        "403":
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDenidedError:
+                  $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+                UserIsBannedError:
+                  $ref: "./global/error-example.yaml#/UserIsBannedError"
         '429':
           $ref: './global/error.yaml#/RateLimitError'
         '404':
@@ -20515,7 +20831,7 @@ components:
             $ref: './global/error.yaml#/Error'
           example:
             status: 'error'
-            code: 400304
+            code: 403
             message: 'User is banned from a channel / community.'
     RateLimitError:
       description: 'Error due to a client create the same request with the same parameters exceed the number of time that server limit to.'
