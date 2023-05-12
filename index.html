@@ -12,7 +12,6 @@
   <script src="https://unpkg.com/@stoplight/elements/web-components.min.js"></script>
   <script src="https://raw.githubusercontent.com/AmityCo/apidocs/master/js-yaml.min.js"></script>
   <script src="https://raw.githubusercontent.com/AmityCo/apidocs/master/horsey.min.js"></script>
-
   <script type="text/javascript">
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'https://raw.githubusercontent.com/AmityCo/apidocs/master/swagger.yaml', true);
@@ -45,6 +44,10 @@
           getValue: 'value',
           limit: 7,
           debounce: 500,
+          noMatches: "0 Result matched",
+          filter(query, suggestion) {
+            if (suggestion.text.indexOf(query) > -1) return suggestion;
+          },
           renderItem: function (li, suggestion) {
             li.innerHTML = `
               <div class="sl-pt-1 sl-pb-1 sl-border-b">
@@ -62,7 +65,6 @@
     };
     xhr.send();
 
-
   </script>
   <link rel="stylesheet" href="https://unpkg.com/@stoplight/elements/styles.min.css">
 </head>
@@ -71,7 +73,8 @@
   <div class="h-TopNav sl-flex sl-items-center sl-w-full sl-pr-4 sl-pl-4 sl-border-b">
     <div class="sl-flex-grow">
       <div class="sl-flex sl-items-center sl-h-full">
-        <input class="sl-w-full sl-h-full sl-text-lg sl-pr-12 sl-bg-transparent" id="search" type="text" placeholder="Search API...">
+        <input class="sl-w-full sl-h-full sl-text-lg sl-pr-12 sl-bg-transparent" id="search" type="text"
+          placeholder="Search API...">
       </div>
     </div>
   </div>
