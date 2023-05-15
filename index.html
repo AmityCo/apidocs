@@ -61,6 +61,15 @@
             `
           }
         });
+
+        document.querySelector('input#search').disabled = false;
+
+        addEventListener("hashchange", (event) => { });
+        onhashchange = (event) => {
+          const searchInput = document.querySelector('input#search');
+          searchInput.value = '';
+          searchInput.blur();
+        };
       }
     };
     xhr.send();
@@ -73,7 +82,7 @@
   <div class="h-TopNav sl-flex sl-items-center sl-w-full sl-pr-4 sl-pl-4 sl-border-b">
     <div class="sl-flex-grow">
       <div class="sl-flex sl-items-center sl-h-full">
-        <input class="sl-w-full sl-h-full sl-text-lg sl-pr-12 sl-bg-transparent" id="search" type="text"
+        <input class="sl-w-full sl-h-full sl-text-lg sl-pr-12 sl-bg-transparent" id="search" type="text" disabled
           placeholder="Search API...">
       </div>
     </div>
