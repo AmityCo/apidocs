@@ -7,13 +7,12 @@
 
   <title>Amity API</title>
   <!-- Embed elements Elements via Web Component -->
-  <link rel="stylesheet" type="text/css" href="dist/horsey.min.css">
-  <link rel="stylesheet" type="text/css" href="dist/style.css">
   <link rel="stylesheet" href="https://unpkg.com/@stoplight/elements/styles.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-theme-classic" />
+  <link rel="stylesheet" type="text/css" href="dist/style.css">
   <script src="dist/js-yaml.min.js"></script>
-  <script src="dist/horsey.min.js"></script>
   <script src="https://unpkg.com/@stoplight/elements/web-components.min.js"></script>
-  
+  <script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-js"></script>
   <script type="text/javascript">
     window.onload = function () {
 
@@ -21,6 +20,8 @@
       xhr.open('GET', 'https://raw.githubusercontent.com/AmityCo/apidocs/develop/swagger.yaml', true);
       xhr.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
+          const { autocomplete } = window['@algolia/autocomplete-js'];
+
           const yamlData = this.responseText;
           const parsedData = jsyaml.load(yamlData);
 
@@ -40,40 +41,49 @@
             }
           }
 
-          horsey(document.querySelector('input#search'), {
-            source: [{
-              list: index
-            }],
-            getText: 'text',
-            getValue: 'value',
-            limit: 7,
-            debounce: 500,
-            noMatches: "0 Result matched",
-            filter(query, suggestion) {
-              if (suggestion.text.indexOf(query) > -1) return suggestion;
+          const autocompleteInstance = autocomplete({
+            container: '#search',
+            placeholder: 'Search API...',
+            getSources({ query }) {
+              return [
+                {
+                  sourceId: 'links',
+                  getItems({ query }) {
+                    return index.filter(function ({ text }) {
+                      if (this.count < 10 && text.indexOf(query) > -1) {
+                        this.count++;
+                        return true;
+                      }
+                      return false;
+                    }, { count: 0 });
+                  },
+                  getItemUrl({ item }) {
+                    return item.value;
+                  },
+                  templates: {
+                    item({ item, html }) {
+                      return html`<div class="sl-pt-1 sl-pb-1">
+                        <a href="${item.value}">
+                          <div class="sl-flex sl-items-center">
+                            <div class="sl-flex-1 sl-text-lg sl-font-medium sl-overflow-ellipsis sl-mx-2">${item.text}</div>
+                          </div>
+                          <div class="sl-text-sm sl-mt-1 sl-ml-2 sl-mr-2 sl-text-muted">${item.description}</div>
+                        </a>
+                      </div>`;
+                    },
+                  },
+                },
+              ];
             },
-            renderItem: function (li, suggestion) {
-              li.innerHTML = `
-              <div class="sl-pt-1 sl-pb-1 sl-border-b">
-                <a href="${suggestion.value}">
-                <div class="sl-flex sl-items-center">
-                  <div class="sl-flex-1 sl-text-lg sl-font-medium sl-overflow-ellipsis sl-mx-2">${suggestion.text}</div>
-                </div>
-                <div class="sl-text-sm sl-mt-1 sl-ml-2 sl-mr-2 sl-text-muted">${suggestion.description}</div>
-                </a>
-              </div>
-            `
-            }
           });
-
-          document.querySelector('input#search').disabled = false;
 
           addEventListener("hashchange", (event) => { });
           onhashchange = (event) => {
-            const searchInput = document.querySelector('input#search');
-            searchInput.value = '';
-            searchInput.blur();
+            autocompleteInstance.setQuery('');
+            document.documentElement.scrollTop = 0;
           };
+
+          document.documentElement.scrollTop = 0;
         }
       };
       xhr.send();
@@ -82,18 +92,10 @@
 </head>
 
 <body>
-  <div class="h-TopNav sl-flex sl-items-center sl-w-full sl-pr-4 sl-pl-4 sl-border-b">
-    <div class="sl-flex-grow">
-      <div class="sl-flex sl-items-center sl-h-full">
-        <input class="sl-w-full sl-h-full sl-text-lg sl-pr-12 sl-bg-transparent" id="search" type="text" disabled
-          placeholder="Search API...">
-      </div>
-    </div>
-  </div>
+  <div id="search"></div>
   <elements-api apiDescriptionUrl="https://raw.githubusercontent.com/AmityCo/apidocs/develop/swagger.yaml" router="hash"
     layout="sidebar">
   </elements-api>
-
 </body>
 
 </html>
