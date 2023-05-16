@@ -12,7 +12,84 @@ servers:
     description: 'API Endpoint for SG Region'
 paths:
   /api/v3/authentication/token:
-    $ref: './v3/authentication/api.yaml#/AuthenticationToken'
+    get:
+      summary: Get authentication token
+      tags:
+        - Authentication
+      parameters:
+        - name: x-server-key
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 150
+        - in: query
+          name: userId
+          schema:
+            type: string
+            maxLength: 100
+          description: User id to get token for
+      responses:
+        '500':
+          description: Put a wrong request parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          type: string
+              example:
+                status: error
+                code: 500000
+                message: Parameters error.
+                data:
+                  detail:
+                    - >-
+                      The 'data.text' field length must be less than or equal to
+                      20000 characters long.
+        '200':
+          description: Return string
+          content:
+            application/json:
+              schema:
+                type: string
+                example: s9qne0wEqVb2e05271177748659f574a4e8ab85e08
+        '403':
+          description: No permission to access this resource.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          type: string
+              example:
+                status: error
+                code: 400300
+                message: Forbidden error.
   /api/v4/authentication/token:
     post:
       summary: 'Create authentication token for session creation API'
@@ -827,7 +904,458 @@ paths:
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
   /api/v2/message/{messageId}:
-    $ref: './v2/message/api.yaml#/Message'
+    get:
+      summary: get a message.
+      tags:
+        - Admin
+      security:
+        - BearerAuth: []
+      description: |
+        Get a message by ID.
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Return message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  channel:
+                    type: object
+                    properties:
+                      isDistinct:
+                        type: boolean
+                      type:
+                        type: string
+                        enum:
+                          - standard
+                          - private
+                          - conversation
+                          - broadcast
+                          - community
+                          - live
+                        description: >-
+                          Type of a channel (standard, conversation, broadcast).
+                          This property is not be used for now.
+                      metadata:
+                        type: object
+                        description: Additional properties to support custom fields.
+                      tags:
+                        type: array
+                        description: List of tags. They will be used for searching.
+                        items:
+                          type: string
+                      isMuted:
+                        type: boolean
+                        description: >-
+                          Is this channel muted? (Computed by using
+                          muteTimeout).
+                      lastActivity:
+                        type: string
+                        description: >-
+                          The date/time when a user last did something related
+                          to the channel such as add/remove members .
+                        format: date-time
+                      createdAt:
+                        type: string
+                        description: The date/time when a channel is created.
+                        format: date-time
+                      updatedAt:
+                        type: string
+                        description: The date/time when a channel is updated.
+                        format: date-time
+                      isRateLimited:
+                        type: boolean
+                        description: >-
+                          Is this channel limited sending rate? (Computed by
+                          using muteTimeout).
+                      rateLimitWindow:
+                        type: integer
+                        description: Waiting time interval before reset rateLimit to 0.
+                      channelId:
+                        type: string
+                        description: ID of a channel.
+                      muteTimeout:
+                        type: string
+                        description: The date/time to suppress muteness.
+                        format: date-time
+                      rateLimit:
+                        type: integer
+                        description: Number of messages within rate limit.
+                      rateLimitTimeout:
+                        type: string
+                        description: The date/time to suppress limitation of sending rate.
+                        format: date-time
+                      displayName:
+                        type: string
+                        description: Channel name for displaying.
+                      messageAutoDeleteEnabled:
+                        type: boolean
+                        description: >-
+                          Is message in this channel will be deleted when the
+                          user flagged until flag limit?
+                      autoDeleteMessageByFlagLimit:
+                        type: number
+                        description: >-
+                          Number of flags that will force a message to be
+                          deleted automatically.
+                      memberCount:
+                        type: integer
+                        description: Number of members in channel.
+                      messageCount:
+                        type: integer
+                        description: Number of messages in channel.
+                      avatar:
+                        type: object
+                        properties:
+                          fileId:
+                            type: string
+                            description: Root file key on cloud storage.
+                          fileUrl:
+                            type: string
+                            description: Http link for download file
+                          type:
+                            type: string
+                            description: File type.
+                            enum:
+                              - image
+                              - file
+                              - video
+                          createdAt:
+                            type: string
+                            description: The date/time when a file is uploaded.
+                            format: date-time
+                          updatedAt:
+                            type: string
+                            description: The date/time when a file is updated.
+                            format: date-time
+                          attributes:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: File name.
+                              extension:
+                                type: string
+                                description: File format.
+                              size:
+                                type: string
+                                description: File size.
+                              mimeType:
+                                type: string
+                                description: File mime-type.
+                              metadata:
+                                type: object
+                                description: File image metadata (width, height etc.).
+                                properties:
+                                  exif:
+                                    type: object
+                                  gps:
+                                    type: object
+                                  height:
+                                    type: number
+                                  width:
+                                    type: number
+                                  isFull:
+                                    type: boolean
+                  message:
+                    type: object
+                    properties:
+                      messageId:
+                        type: string
+                        description: ID of a message.
+                      parentId:
+                        type: string
+                        description: ID of a parent message.
+                      childrenNumber:
+                        type: integer
+                        description: A number of comments in this message.
+                      channelId:
+                        type: string
+                        description: ID of a channel.
+                      userId:
+                        type: string
+                        description: ID of a user.
+                      type:
+                        type: string
+                        description: Type of a message (text, image, video, json).
+                      tags:
+                        type: array
+                        description: List of tags. They will be used for searching.
+                        items:
+                          type: string
+                      data:
+                        type: object
+                        description: Body of a message.
+                      isDeleted:
+                        type: boolean
+                        description: >-
+                          A flag to hide a message. Unable to show after hiding.
+                          It will be set to true when user deletes a message or
+                          a channel of this message is banned.
+                      channelSegment:
+                        type: integer
+                        description: A sequence number of a message in channel.
+                      createdAt:
+                        type: string
+                        description: The date/time when a channel is created.
+                        format: date-time
+                      updatedAt:
+                        type: string
+                        description: >-
+                          The date/time when a channel of this message is banned
+                          or this message is deleted.
+                        format: date-time
+                      editedAt:
+                        type: string
+                        description: The date/time when a message is deleted or updated.
+                        format: date-time
+                      flagCount:
+                        type: integer
+                        description: The number of users that has read this message.
+                      hashFlag:
+                        type: object
+                        description: >-
+                          The flag for checking internally that this message is
+                          reported or not.
+                        properties:
+                          bits:
+                            type: integer
+                          hashes:
+                            type: integer
+                          hash:
+                            type: array
+                            items:
+                              type: integer
+                      reactions:
+                        type: object
+                        description: The mapping of reaction with reactionCounter.
+                      reactionsCount:
+                        type: integer
+                        description: The number of all reactions for this messages.
+                      myReactions:
+                        type: array
+                        description: >-
+                          The list of my reactions to this message. This
+                          property will not exist when it is triggered from an
+                          event 'message.didUpdate'.
+                        items:
+                          type: string
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        description: Private ID of a user. (for real-time event)
+                      path:
+                        type: string
+                        description: Path of a user. (for real-time event)
+                      userId:
+                        type: string
+                      roles:
+                        type: array
+                        items:
+                          type: string
+                      displayName:
+                        type: string
+                      flagCount:
+                        type: integer
+                      hashFlag:
+                        type: object
+                        properties:
+                          bits:
+                            type: integer
+                          hashes:
+                            type: integer
+                          hash:
+                            type: array
+                            items:
+                              type: integer
+                      metadata:
+                        type: object
+                      createdAt:
+                        type: string
+                        format: date-time
+                      updatedAt:
+                        type: string
+                        format: date-time
+                      isDeleted:
+                        type: boolean
+                    required:
+                      - userId
+                      - createdAt
+                      - updatedAt
+        '429':
+          description: >-
+            Error due to a client create the same request with the same
+            parameters exceed the number of time that server limit to.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          type: string
+              example:
+                status: error
+                code: 400311
+                message: RateLimit Exceed.
+        '404':
+          description: Resource Not Found error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          type: string
+              example:
+                status: error
+                code: 400400
+                message: Resource Not Found.
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          type: string
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+    delete:
+      summary: delete a message.
+      tags:
+        - Admin
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+      description: |
+        Delete a message in a given channel.
+      responses:
+        '200':
+          description: Success
+        '403':
+          description: Permission denied.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          type: string
+              example:
+                status: error
+                code: 400301
+                message: User is not a member of a channel
+        '429':
+          description: >-
+            Error due to a client create the same request with the same
+            parameters exceed the number of time that server limit to.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          type: string
+              example:
+                status: error
+                code: 400311
+                message: RateLimit Exceed.
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          type: string
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
   /api/v2/messages/images:
     post:
       summary: 'create an image message.'
