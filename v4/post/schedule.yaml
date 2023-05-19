@@ -142,7 +142,7 @@ getRespBody:
 post:
   summary: 'schedule a post'
   tags:
-    - 'Post v4'
+    - 'Schedule'
   security:
     - BearerAuth: []
   description: "Schedule a post at specfic date/time but the scheduled time need to be within next 1 days and next 30 days\n"
@@ -173,16 +173,16 @@ post:
     '200':
       description: 'ok, not returning any data'
     '400':
-      $ref: '../../global/error.yaml#/BadRequestError'
+      $ref: '../../global/error.yaml#/badrequesterror'
     '403':
-      $ref: '../../global/error.yaml#/ForbiddenRrror'
+      $ref: '../../global/error.yaml#/forbiddenerror'
     '500':
-      $ref: '../../global/error.yaml#/UnexpectedError'
+      $ref: '../../global/error.yaml#/unexpectederror'
 
 delete:
   summary: 'delete scheduled post'
   tags:
-    - 'Post v4'
+    - 'Schedule'
   security:
     - BearerAuth: []
   description: "Delete scheduled post"
@@ -214,7 +214,7 @@ delete:
 get: 
   summary: 'get all scheduled post'
   tags: 
-    - 'Post v4'
+    - 'Schedule'
   security:
     - BearerAuth: []
   description: "Get all scheduled post"
