@@ -218,9 +218,21 @@ get:
   security:
     - BearerAuth: []
   description: "Get all scheduled post"
+  requestBody:
+    description: ""
+    required: true
+    content:
+      application/json:
+        schema:
+          type: 'object'
+          properties:
+            notPostedOnly:
+              type: 'boolean'
+              description: 'to get only scheduled post that not posted yet'
+              default: false
   responses:
     '200':
-      description: 'Return all scheduled post informations'
+      description: 'Return all scheduled post informations or only scheduled post that not posted yet'
       content:
         application/json:
           schema:
