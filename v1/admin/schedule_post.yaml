@@ -173,9 +173,7 @@ post:
     '200':
       description: 'ok, not returning any data'
     '400':
-      $ref: '../../global/error.yaml#/BadRequestRrror'
-    '403':
-      $ref: '../../global/error.yaml#/ForbiddenRrror'
+      $ref: '../../global/error.yaml#/BadRequestError'
     '500':
       $ref: '../../global/error.yaml#/UnexpectedError'
 
@@ -204,10 +202,8 @@ delete:
   responses:
     '200':
       description: 'ok, not returning any data'
-    '400':
-      $ref: '../../global/error.yaml#/BadRequestError'
-    '403':
-      $ref: '../../global/error.yaml#/ForbiddenRrror'
+    '404':
+      $ref: '../../global/error.yaml#/NotFoundError'
     '500':
       $ref: '../../global/error.yaml#/UnexpectedError'
 
@@ -237,10 +233,6 @@ get:
         application/json:
           schema:
             $ref: '#/getRespBody'
-    '400':
-      $ref: '../../global/error.yaml#/BadRequestError'
-    '403':
-      $ref: '../../global/error.yaml#/ForbiddenRrror'
     '500':
       $ref: '../../global/error.yaml#/UnexpectedError'
     
