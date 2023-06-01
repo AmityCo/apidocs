@@ -13,6 +13,7 @@
   <script src="dist/js-yaml.min.js"></script>
   <script src="https://unpkg.com/@stoplight/elements/web-components.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
   <script type="text/javascript">
     window.onload = function () {
 
@@ -41,6 +42,19 @@
             }
           }
 
+          const fuse = new Fuse(index, {
+            minMatchCharLength: 2,
+            includeScore: true,
+            keys: [{
+              name: 'text',
+              weight: 0.9
+            },
+            {
+              name: 'description',
+              weight: 0.2
+            }]
+          });
+
           const autocompleteInstance = autocomplete({
             container: '#search',
             placeholder: 'Search API...',
@@ -49,13 +63,8 @@
                 {
                   sourceId: 'links',
                   getItems({ query }) {
-                    return index.filter(function ({ text }) {
-                      if (this.count < 10 && text.indexOf(query) > -1) {
-                        this.count++;
-                        return true;
-                      }
-                      return false;
-                    }, { count: 0 });
+                    const results = fuse.search(query, { limit: 20 });
+                    return results.map(r => r.item);
                   },
                   getItemUrl({ item }) {
                     return item.value;
