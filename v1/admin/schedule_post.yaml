@@ -1,0 +1,246 @@
+postReqBody: 
+  type: 'object'
+  properties: 
+    data:
+      type: 'object'
+      properties:
+        text:
+          type: 'string'
+          description: 'data for text in post parent'
+          example: 'example text'
+        streamId:
+          type: 'string'
+          description: 'video streaming id for create live streaming post'
+          example: '81559bcc3a5bb3b6bbd69a83b89d337e'
+        pollId:
+          type: 'string'
+          description: 'poll id for create poll post'
+          example: '53a9fd8b5aaa1af6c5a1bbd245ce4a9b1627373735551'
+    attachments:
+      type: 'array'
+      items:
+        type: 'object'
+        description: 'attachment info'
+        properties:
+          fileId:
+            type: 'string'
+            example: '57b916d38eaf8010caddfb7759a2d06c'
+            description: 'file id for attachment'
+          type:
+            type: 'string'
+            description: 'attachment type'
+            enum:
+              - 'image'
+              - 'file'
+              - 'video'
+    dataType:
+      type: 'string'
+      example: 'upstra.customtype'
+      description: 'Must be in dot separated string format or system defined format (ex. "upstra.customtype", "com.eko.birthday", "liveStream")'
+    targetType:
+      type: 'string'
+      enum:
+        - 'user'
+        - 'community'
+        - 'content'
+      default: 'user'
+      description: 'where to create post to'
+    targetId:
+      type: 'string'
+      example: 'public_user_id'
+      description: 'Resource public id depends on target type (ex. target type is community, target id will be community public id)'
+    metadata:
+      type: 'object'
+      example:
+        anything: 'you want'
+    postId:
+      type: 'string'
+      example: 'postidiwant'
+      description: 'for specify public post id on post creation'
+    tags:
+      type: 'array'
+      minItems: 0
+      maxItems: 5
+      items:
+        type: 'string'
+        description: 'tags'
+        maximum: 24
+    mentionees:
+      type: 'array'
+      description: 'The object of the mentions type and user who get a notification from the post.'
+      items:
+        type: 'object'
+        properties:
+          type:
+            type: 'string'
+            example: 'user'
+            description: "type: * `user` - need to specific userIds and notification mentions individual user\n"
+            enum:
+              - 'user'
+          userIds:
+            type: 'array'
+            example:
+              - 'userId1'
+              - 'userId2'
+            description: 'Array of UserId. if the mention type is a channel, doesn''t send userIds'
+            items:
+              type: 'string'
+    createdAt:
+      type: 'string'
+      description: 'The date/time when a post is created.'
+      format: 'date-time'
+      example: '2022-07-07T04:24:20.444Z'
+
+schema:
+  type: 'object'
+  properties:
+    postData: 
+      $ref: '#/postReqBody'
+    scheduledAt: 
+      type: 'string'
+      description: 'The date/time when a post is scheduled. Need to be within next 1 days and next 30 days.'
+      format: 'date-time'
+      example: '2022-07-07T04:24:20.444Z'
+  required:
+    - 'data'
+
+getRespBody:
+  type: 'array'
+  items:
+    type: 'object'
+    description: 'list of scheduled post'
+    properties:
+      _id: 
+        type: 'string'
+        description: 'scheduled post id'
+        example: '60e4b1b4b3b2b5c4c4b3b2b5'
+      scheduledAt: 
+        $ref: '#/schema/properties/scheduledAt'
+      status:
+        type: 'object'
+        description: 'status of scheduled post'
+        properties:
+          type:
+            type: 'string'
+            description: 'status type'
+            enum:
+              - 'scheduled'
+              - 'posted'
+              - 'failed'
+          desc:
+            type: 'string'
+            description: 'description of status'
+            example: 'post failed because of ...'
+      postData: # maybe need to change this
+        $ref: '#/postReqBody'
+      createdAt:
+        type: 'string'
+        description: 'The date/time when this scheduled post is created.'
+        format: 'date-time'
+        example: '2022-07-07T04:24:20.444Z'
+      paging:
+        type: 'object'
+        properties:
+          next: 
+            type: 'string'
+          previous: 
+            type: 'string'
+
+
+post:
+  summary: 'schedule a post'
+  tags: 
+    - 'Admin'
+  security:
+    - BearerAuth: []
+  description: "Schedule a post at specfic date/time but the scheduled time need to be within next 1 days and next 30 days\n"
+  requestBody:
+    description: "
+      Information of a Post to be Created\n\n
+      Require text or at least 1 attachment.
+
+
+      ### Custom Post
+
+      - When `dataType` is set as the custom name (dot-separated string format, see the `dataType` field section), the `data` payload can be anything, but it will not support normal data capability (e.g., `text` data will not be created).\n
+      - The `data` payload size will be limited to 100 KB.\n
+      - `attachments` will be ignored. Users need to include them in the `data` field and handle the file info themselves.\n
+
+      ### Image, File, Video Post
+
+      - Put `type` with file ID in `attachments`.
+      - Image and File data can be picked from `fileId` in `data` object in the child post.\n
+      - Video fileId for each resolution will be in `videoFileId` in `data` object in the child post.\n
+    "
+    required: true
+    content:
+      application/json:
+        schema: 
+          $ref: '#/schema'
+  responses:
+    '200':
+      description: 'ok, not returning any data'
+    '400':
+      $ref: '../../global/error.yaml#/BadRequestError'
+    '500':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+
+delete:
+  summary: 'delete scheduled post'
+  tags: 
+    - 'Admin'
+  security:
+    - BearerAuth: []
+  description: "Delete scheduled post"
+  requestBody:
+    description: ""
+    required: true
+    content:
+      application/json:
+        schema:
+          type: 'object'
+          properties:
+            id:
+              type: 'string'
+              description: 'to specify which scheduled post to delete'
+          required:
+            - 'id'
+
+      description: 'Ok, not returning any data'
+  responses:
+    '200':
+      description: 'ok, not returning any data'
+    '404':
+      $ref: '../../global/error.yaml#/NotFoundError'
+    '500':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+
+get: 
+  summary: 'get all scheduled post'
+  tags: 
+    - 'Admin'
+  security:
+    - BearerAuth: []
+  description: "Get all scheduled post"
+  requestBody:
+    description: ""
+    required: true
+    content:
+      application/json:
+        schema:
+          type: 'object'
+          properties:
+            notPostedOnly:
+              type: 'boolean'
+              description: 'to get only scheduled post that not posted yet'
+              default: false
+  responses:
+    '200':
+      description: 'Return all scheduled post informations or only scheduled post that not posted yet'
+      content:
+        application/json:
+          schema:
+            $ref: '#/getRespBody'
+    '500':
+      $ref: '../../global/error.yaml#/UnexpectedError'
+    
