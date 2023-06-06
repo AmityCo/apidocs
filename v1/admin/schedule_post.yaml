@@ -105,46 +105,49 @@ schema:
     - 'data'
 
 getRespBody:
-  type: 'array'
-  items:
-    type: 'object'
-    description: 'list of scheduled post'
-    properties:
-      _id: 
-        type: 'string'
-        description: 'scheduled post id'
-        example: '60e4b1b4b3b2b5c4c4b3b2b5'
-      scheduledAt: 
-        $ref: '#/schema/properties/scheduledAt'
-      status:
+  type: 'object'
+  properties: 
+    data:
+      type: 'array'
+      items:
         type: 'object'
-        description: 'status of scheduled post'
+        description: 'list of scheduled post'
         properties:
-          type:
+          _id: 
             type: 'string'
-            description: 'status type'
-            enum:
-              - 'scheduled'
-              - 'posted'
-              - 'failed'
-          desc:
+            description: 'scheduled post id'
+            example: '60e4b1b4b3b2b5c4c4b3b2b5'
+          scheduledAt: 
+            $ref: '#/schema/properties/scheduledAt'
+          status:
+            type: 'object'
+            description: 'status of scheduled post'
+            properties:
+              type:
+                type: 'string'
+                description: 'status type'
+                enum:
+                  - 'scheduled'
+                  - 'posted'
+                  - 'failed'
+              desc:
+                type: 'string'
+                description: 'description of status'
+                example: 'post failed because of ...'
+          postData: # maybe need to change this
+            $ref: '#/postReqBody'
+          createdAt:
             type: 'string'
-            description: 'description of status'
-            example: 'post failed because of ...'
-      postData: # maybe need to change this
-        $ref: '#/postReqBody'
-      createdAt:
-        type: 'string'
-        description: 'The date/time when this scheduled post is created.'
-        format: 'date-time'
-        example: '2022-07-07T04:24:20.444Z'
-      paging:
-        type: 'object'
-        properties:
-          next: 
-            type: 'string'
-          previous: 
-            type: 'string'
+            description: 'The date/time when this scheduled post is created.'
+            format: 'date-time'
+            example: '2022-07-07T04:24:20.444Z'
+    paging:
+      type: 'object'
+      properties:
+        next: 
+          type: 'string'
+        previous: 
+          type: 'string'
 
 
 post:
@@ -216,12 +219,12 @@ delete:
       $ref: '../../global/error.yaml#/UnexpectedError'
 
 get: 
-  summary: 'get all scheduled post'
+  summary: 'get scheduled post'
   tags: 
     - 'Admin'
   security:
     - BearerAuth: []
-  description: "Get all scheduled post"
+  description: "Get scheduled post"
   requestBody:
     description: ""
     required: true
@@ -234,6 +237,36 @@ get:
               type: 'boolean'
               description: 'to get only scheduled post that not posted yet'
               default: false
+            options: 
+              type: 'object'
+              style: 'deepObject'
+              properties:
+                limit:
+                  type: 'integer'
+                  minimum: 1
+                  maximum: 100
+                  default: 10
+                token:
+                  type: 'string'
+                  maxLength: 1000
+                before:
+                  type: 'string'
+                  maxLength: 24
+                after:
+                  type: 'string'
+                  maxLength: 24
+                updatedAt:
+                  type: 'string'
+                  maxLength: 100
+              description: 'use updatedAt when sort by first/lastUpdated'
+            sortBy:
+              type: 'string'
+              enum:
+                - 'lastCreated'
+                - 'firstCreated'
+                - 'lastUpdated'
+                - 'firstUpdated'
+              default: 'lastCreated'
   responses:
     '200':
       description: 'Return all scheduled post informations or only scheduled post that not posted yet'
