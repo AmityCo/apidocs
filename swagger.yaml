@@ -10230,14 +10230,90 @@ paths:
           $ref: './global/error.yaml#/UnexpectedError'
   /admin/v1/posts/schedule:
     post: 
-      $ref: 'v1/admin/schedule_post.yaml#/post'
+      summary: 'schedule a post'
+      tags: 
+        - 'Admin'
+      security:
+        - BearerAuth: []
+      description: "Schedule a post at specfic date/time but the scheduled time need to be within next 1 days and next 30 days\n"
+      requestBody:
+        $ref: './v1/admin/schedule_post.yaml#/postReqBody'
+      responses:
+        '200':
+          description: 'ok, not returning any data'
+        '400':
+          $ref: './global/error.yaml#/BadRequestError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
     delete:
-      $ref: 'v1/admin/schedule_post.yaml#/delete'
+      summary: 'delete scheduled post'
+      tags: 
+        - 'Admin'
+      security:
+        - BearerAuth: []
+      description: "Delete scheduled post"
+      requestBody:
+        $ref: './v1/admin/schedule_post.yaml#/deleteReqBody'
+      responses:
+        '200':
+          description: 'ok, not returning any data'
+        '404':
+          $ref: './global/error.yaml#/NotFoundError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
     get:
-      $ref: 'v1/admin/schedule_post.yaml#/get'
+      summary: 'get scheduled post'
+      tags: 
+        - 'Admin'
+      security:
+        - BearerAuth: []
+      description: "Get scheduled post"
+      requestBody:
+        $ref: 
+      responses:
+        '200':
+          description: 'Return all scheduled post informations or only scheduled post that not posted yet'
+          content:
+            application/json:
+              schema:
+                $ref: '#/getRespBody'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+
   /internal/posts/schedule: 
     post:
-      $ref: 'v1/internal/schedule_post.yaml#/post'
+      'x-internal': true
+      summary: 'create a post'
+      tags: 
+        - 'Internal'
+      security:
+        - BearerAuth: []
+      description: "
+        The purpose of this functionality is to create scheduled posts, and it should only be called from the Lambda function. It allows for the creation of a post using provided information and assigns a specific user (identified by the userId) as the owner of the post.
+      "
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties: 
+                id: 
+                  type: 'string'
+                  description: 'MongoDB document id'
+                userId: 
+                  type: 'string'
+                  description: 'User id'
+                networkId:
+                  type: 'string'
+                  description: 'Network id'
+      responses:
+        '200':
+          description: 'ok, not returning any data'
+        '500':
+          $ref: '../../global/error.yaml#/UnexpectedError'
+
   /api/v4/posts/:postId:
     put:
       summary: 'update a post'

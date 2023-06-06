@@ -149,131 +149,84 @@ getRespBody:
         previous: 
           type: 'string'
 
-
-post:
-  summary: 'schedule a post'
-  tags: 
-    - 'Admin'
-  security:
-    - BearerAuth: []
-  description: "Schedule a post at specfic date/time but the scheduled time need to be within next 1 days and next 30 days\n"
-  requestBody:
-    description: "
-      Information of a Post to be Created\n\n
-      Require text or at least 1 attachment.
+postReqBody:
+  description: "
+    Information of a Post to be Created\n\n
+    Require text or at least 1 attachment.
 
 
-      ### Custom Post
+    ### Custom Post
 
-      - When `dataType` is set as the custom name (dot-separated string format, see the `dataType` field section), the `data` payload can be anything, but it will not support normal data capability (e.g., `text` data will not be created).\n
-      - The `data` payload size will be limited to 100 KB.\n
-      - `attachments` will be ignored. Users need to include them in the `data` field and handle the file info themselves.\n
+    - When `dataType` is set as the custom name (dot-separated string format, see the `dataType` field section), the `data` payload can be anything, but it will not support normal data capability (e.g., `text` data will not be created).\n
+    - The `data` payload size will be limited to 100 KB.\n
+    - `attachments` will be ignored. Users need to include them in the `data` field and handle the file info themselves.\n
 
-      ### Image, File, Video Post
+    ### Image, File, Video Post
 
-      - Put `type` with file ID in `attachments`.
-      - Image and File data can be picked from `fileId` in `data` object in the child post.\n
-      - Video fileId for each resolution will be in `videoFileId` in `data` object in the child post.\n
-    "
-    required: true
-    content:
-      application/json:
-        schema: 
-          $ref: '#/schema'
-  responses:
-    '200':
-      description: 'ok, not returning any data'
-    '400':
-      $ref: '../../global/error.yaml#/BadRequestError'
-    '500':
-      $ref: '../../global/error.yaml#/UnexpectedError'
+    - Put `type` with file ID in `attachments`.
+    - Image and File data can be picked from `fileId` in `data` object in the child post.\n
+    - Video fileId for each resolution will be in `videoFileId` in `data` object in the child post.\n
+  "
+  required: true
+  content:
+    application/json:
+      schema: 
+        $ref: '#/schema'
 
-delete:
-  summary: 'delete scheduled post'
-  tags: 
-    - 'Admin'
-  security:
-    - BearerAuth: []
-  description: "Delete scheduled post"
-  requestBody:
-    description: ""
-    required: true
-    content:
-      application/json:
-        schema:
-          type: 'object'
-          properties:
-            id:
-              type: 'string'
-              description: 'to specify which scheduled post to delete'
-          required:
-            - 'id'
+deleteReqBody:
+  description: ""
+  required: true
+  content:
+    application/json:
+      schema:
+        type: 'object'
+        properties:
+          id:
+            type: 'string'
+            description: 'to specify which scheduled post to delete'
+        required:
+          - 'id'
+    description: 'Ok, not returning any data'
 
-      description: 'Ok, not returning any data'
-  responses:
-    '200':
-      description: 'ok, not returning any data'
-    '404':
-      $ref: '../../global/error.yaml#/NotFoundError'
-    '500':
-      $ref: '../../global/error.yaml#/UnexpectedError'
-
-get: 
-  summary: 'get scheduled post'
-  tags: 
-    - 'Admin'
-  security:
-    - BearerAuth: []
-  description: "Get scheduled post"
-  requestBody:
-    description: ""
-    required: true
-    content:
-      application/json:
-        schema:
-          type: 'object'
-          properties:
-            notPostedOnly:
-              type: 'boolean'
-              description: 'to get only scheduled post that not posted yet'
-              default: false
-            options: 
-              type: 'object'
-              style: 'deepObject'
-              properties:
-                limit:
-                  type: 'integer'
-                  minimum: 1
-                  maximum: 100
-                  default: 10
-                token:
-                  type: 'string'
-                  maxLength: 1000
-                before:
-                  type: 'string'
-                  maxLength: 24
-                after:
-                  type: 'string'
-                  maxLength: 24
-                updatedAt:
-                  type: 'string'
-                  maxLength: 100
-              description: 'use updatedAt when sort by first/lastUpdated'
-            sortBy:
-              type: 'string'
-              enum:
-                - 'lastCreated'
-                - 'firstCreated'
-                - 'lastUpdated'
-                - 'firstUpdated'
-              default: 'lastCreated'
-  responses:
-    '200':
-      description: 'Return all scheduled post informations or only scheduled post that not posted yet'
-      content:
-        application/json:
-          schema:
-            $ref: '#/getRespBody'
-    '500':
-      $ref: '../../global/error.yaml#/UnexpectedError'
-    
+getReqBody:
+  description: ""
+  required: true
+  content:
+    application/json:
+      schema:
+        type: 'object'
+        properties:
+          notPostedOnly:
+            type: 'boolean'
+            description: 'to get only scheduled post that not posted yet'
+            default: false
+          options: 
+            type: 'object'
+            style: 'deepObject'
+            properties:
+              limit:
+                type: 'integer'
+                minimum: 1
+                maximum: 100
+                default: 10
+              token:
+                type: 'string'
+                maxLength: 1000
+              before:
+                type: 'string'
+                maxLength: 24
+              after:
+                type: 'string'
+                maxLength: 24
+              updatedAt:
+                type: 'string'
+                maxLength: 100
+            description: 'use updatedAt when sort by first/lastUpdated'
+          sortBy:
+            type: 'string'
+            enum:
+              - 'lastCreated'
+              - 'firstCreated'
+              - 'lastUpdated'
+              - 'firstUpdated'
+            default: 'lastCreated'
