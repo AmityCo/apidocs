@@ -1,4 +1,4 @@
-postReqBody: 
+postData: 
   type: 'object'
   properties: 
     data:
@@ -8,6 +8,7 @@ postReqBody:
           type: 'string'
           description: 'data for text in post parent'
           example: 'example text'
+          x-faker: 'lorem.sentences'
         streamId:
           type: 'string'
           description: 'video streaming id for create live streaming post'
@@ -91,19 +92,6 @@ postReqBody:
       format: 'date-time'
       example: '2022-07-07T04:24:20.444Z'
 
-schema:
-  type: 'object'
-  properties:
-    postData: 
-      $ref: '#/postReqBody'
-    scheduledAt: 
-      type: 'string'
-      description: 'The date/time when a post is scheduled. Need to be within next 1 days and next 30 days.'
-      format: 'date-time'
-      example: '2022-07-07T04:24:20.444Z'
-  required:
-    - 'data'
-
 getRespBody:
   type: 'object'
   properties: 
@@ -118,7 +106,7 @@ getRespBody:
             description: 'scheduled post id'
             example: '60e4b1b4b3b2b5c4c4b3b2b5'
           scheduledAt: 
-            $ref: '#/schema/properties/scheduledAt'
+            $ref: '#/postReqSchema/properties/scheduledAt'
           status:
             type: 'object'
             description: 'status of scheduled post'
@@ -127,15 +115,15 @@ getRespBody:
                 type: 'string'
                 description: 'status type'
                 enum:
-                  - 'scheduled'
-                  - 'posted'
-                  - 'failed'
+                  - 'WAIT'
+                  - 'DONE'
+                  - 'FAIL'
               desc:
                 type: 'string'
                 description: 'description of status'
-                example: 'post failed because of ...'
-          postData: # maybe need to change this
-            $ref: '#/postReqBody'
+                example: 'waiting to be posted'
+          postData: 
+            $ref: '#/postData'
           createdAt:
             type: 'string'
             description: 'The date/time when this scheduled post is created.'
@@ -146,8 +134,25 @@ getRespBody:
       properties:
         next: 
           type: 'string'
+          example: 'eyJiZWZvcmUiOiI2NDgxNzYxNmU0ZDgzODgxMTFhNDMwZjUiLCJsaW1pdCI6Mn0'
         previous: 
           type: 'string'
+          example: 'eyJhZnRlciI6IjY0ODE3NjE2ZTRkODM4ODExMWE0MzBmMCIsImxpbWl0IjoyfQ=='
+
+postReqSchema: 
+  type: 'object'
+  properties:
+    postData: 
+      $ref: '#/postData'
+    scheduledAt: 
+      type: 'string'
+      description: 'The date/time when a post is scheduled. Need to be within next 1 days and next 30 days.'
+      format: 'date-time'
+      example: '2022-07-07T04:24:20.444Z'
+  required:
+    - 'postData'
+    - 'scheduledAt'
+
 
 postReqBody:
   description: "
@@ -165,16 +170,14 @@ postReqBody:
 
     - Put `type` with file ID in `attachments`.
     - Image and File data can be picked from `fileId` in `data` object in the child post.\n
-    - Video fileId for each resolution will be in `videoFileId` in `data` object in the child post.\n
-  "
+    - Video fileId for each resolution will be in `videoFileId` in `data` object in the child post.\n "
   required: true
   content:
     application/json:
       schema: 
-        $ref: '#/schema'
+        $ref: '#/postReqSchema' 
 
 deleteReqBody:
-  description: ""
   required: true
   content:
     application/json:
@@ -186,10 +189,9 @@ deleteReqBody:
             description: 'to specify which scheduled post to delete'
         required:
           - 'id'
-    description: 'Ok, not returning any data'
+        description: 'Ok, not returning any data'
 
 getReqBody:
-  description: ""
   required: true
   content:
     application/json:
