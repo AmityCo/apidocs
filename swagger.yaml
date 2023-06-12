@@ -18361,7 +18361,10 @@ paths:
       description: 'Delete an existing message feed except the default message feed'
       parameters:
         - $ref: './v5/message-feed/parameter.yaml#/MessageFeedId'
-        - $ref: './schema/generic.yaml#/Generic_permanent'
+        - name: permanent
+          in: query
+          schema:
+            $ref: './schema/generic.yaml#/Generic_permanent'
       responses:
         '200':
           description: 'Successful operation'
