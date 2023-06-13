@@ -18641,7 +18641,12 @@ paths:
       summary: 'Find my flag in message by ID'
       description: 'Return my flag in message'
       parameters:
-        - $ref: './v5/message/parameter.yaml#/MessageId'
+        - name: messageId
+          in: path
+          required: true
+          description: ID of a message
+          schema:
+            $ref: './schema/message.yaml#/MessageV5_messageId'
       responses:
         '200':
           description: 'successful operation'
@@ -18664,7 +18669,12 @@ paths:
       summary: 'Create my flag in a message'
       description: 'Flag a message'
       parameters:
-        - $ref: './v5/message/parameter.yaml#/MessageId'
+        - name: messageId
+          in: path
+          required: true
+          description: ID of a message
+          schema:
+            $ref: './schema/message.yaml#/MessageV5_messageId'
       responses:
         '200':
           $ref: './v5/message/response.yaml#/MessagePayload'
