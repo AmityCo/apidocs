@@ -241,7 +241,7 @@ paths:
         '422':
           description: 'Parameters validation error'
       security:
-        - bearerAuth: []
+        - BearerAuth: []
   /api/v4/sessions:
     post:
       summary: 'Register a session'
@@ -313,17 +313,14 @@ paths:
       security:
         - BearerAuth: []
       description: 'Revoke all userId''s access token by admin'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                userId:
-                  type: 'string'
-                  minLength: 1
-                  maxLength: 50
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 50
+          description: User id for revocation
       responses:
         '200':
           description: 'Revoke access token success'
@@ -2183,7 +2180,6 @@ paths:
                     maxLength: 100
                 metadata:
                   type: 'object'
-                  maxLength: 500
       responses:
         '200':
           $ref: './v2/user/response.yaml#/UserApiResponse'
@@ -2452,7 +2448,6 @@ paths:
                     maxLength: 100
                 metadata:
                   type: 'object'
-                  maxLength: 500
       responses:
         '200':
           $ref: './v1/user/response.yaml#/UserSocketResponse'
@@ -2573,7 +2568,6 @@ paths:
                     maxLength: 100
                 metadata:
                   type: 'object'
-                  maxLength: 500
                 avatarFileId:
                   type: 'string'
                   maxLength: 50
@@ -2829,7 +2823,6 @@ paths:
                     maxLength: 100
                 metadata:
                   type: 'object'
-                  maxLength: 500
                 avatarFileId:
                   type: 'string'
                   maxLength: 50
@@ -14026,7 +14019,7 @@ paths:
           required: true
           schema:
             type: 'array'
-            minLength: 1
+            minItems: 1
             maxItems: 100
             items:
               type: 'string'
