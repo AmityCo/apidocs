@@ -489,20 +489,14 @@ paths:
       security:
         - ApiKeyAuth: []
       description: "Delete rules from the black list\n"
-      requestBody:
-        description: "Regular expression to delete.\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                ruleIds:
-                  type: 'array'
-                  items:
-                    type: 'string'
-              required:
-                - 'regexs'
+      parameters:
+        - in: query
+          name: ruleIds
+          description: "Regular expression to delete.\n"
+          schema:
+            type: 'array'
+            items:
+              type: 'string'
       responses:
         '200':
           description: OK
@@ -538,17 +532,14 @@ paths:
       security:
         - ApiKeyAuth: []
       description: "Revoke admin token:\n  * super-admin can revoke any admin token\n  * admin can revoke own token only\n"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                username:
-                  type: 'string'
-                  minLength: 1
-                  maxLength: 50
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 50
+          description: User id for revocation
       responses:
         '200':
           $ref: './v1/admin/response.yaml#/RevokeAdminTokenResponse'
@@ -742,20 +733,13 @@ paths:
           required: true
           schema:
             type: 'string'
-      requestBody:
-        description: "Rules information to be deleted.\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                ruleIds:
-                  type: 'array'
-                  items:
-                    type: 'string'
-              required:
-                - 'ruleIds'
+        - in: query
+          name: ruleIds
+          description: "Rules information to be deleted.\n"
+          schema:
+            type: 'array'
+            items:
+              type: 'string'
       responses:
         '200':
           description: 'OK'
@@ -1843,20 +1827,13 @@ paths:
           required: true
           schema:
             type: 'string'
-      requestBody:
-        description: "Rules information to be deleted.\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                ruleIds:
-                  type: 'array'
-                  items:
-                    type: 'string'
-              required:
-                - 'ruleIds'
+        - in: query
+          name: ruleIds
+          description: "Rules information to be deleted.\n"
+          schema:
+            type: 'array'
+            items:
+              type: 'string'
       responses:
         '200':
           description: 'OK'
@@ -2074,21 +2051,13 @@ paths:
           required: true
           schema:
             type: 'string'
-      requestBody:
-        description: "information of a role to be delete.\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                roleId:
-                  type: 'string'
-                  description: 'role id to delete'
-                  minLength: 1
-                  maxLength: 100
-              required:
-                - 'roleId'
+        - in: query
+          name: roleId
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+          description: role id to delete
       responses:
         '200':
           $ref: './v3/role/response.yaml#/RoleResponse'
@@ -3719,24 +3688,17 @@ paths:
           required: true
           schema:
             type: 'string'
-      requestBody:
-        description: "Information of channel\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                userIds:
-                  type: 'array'
-                  minItems: 1
-                  maxItems: 100
-                  items:
-                    type: 'string'
-                    minLength: 1
-                    maxLength: 50
-              required:
-                - 'userIds'
+        - in: query
+          name: userIds
+          schema:
+            type: 'array'
+            minItems: 1
+            maxItems: 100
+            items:
+              type: 'string'
+              minLength: 1
+              maxLength: 50
+          description: list of user id
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
@@ -3924,28 +3886,24 @@ paths:
           required: true
           schema:
             type: 'string'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                role:
-                  type: 'string'
-                  minLength: 1
-                  maxLength: 900
-                userIds:
-                  type: 'array'
-                  minItems: 1
-                  maxItems: 100
-                  items:
-                    type: 'string'
-                    minLength: 1
-                    maxLength: 50
-              required:
-                - 'userIds'
-                - 'role'
+        - in: query
+          name: userIds
+          schema:
+            type: 'array'
+            minItems: 1
+            maxItems: 100
+            items:
+              type: 'string'
+              minLength: 1
+              maxLength: 50
+          description: list of user id
+        - in: query
+          name: role
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 900
+          description: User id for revocation
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
@@ -6802,7 +6760,7 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/messages/:messageId/flag:
+  /api/v3/messages/{messageId}/flag:
     post:
       summary: 'flag a message'
       tags:
@@ -6834,7 +6792,7 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/messages/:messageId/unflag:
+  /api/v3/messages/{messageId}/unflag:
     delete:
       summary: 'unflag a message'
       tags:
@@ -6857,7 +6815,7 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/messages/:messageId/clearFlags:
+  /api/v3/messages/{messageId}/clearFlags:
     delete:
       summary: 'clear flags'
       tags:
@@ -7094,7 +7052,7 @@ paths:
         '404':
           $ref: './global/error.yaml#/MessageNotFoundError'
   /sockets/message.get:
-    get:
+    post:
       summary: 'Get messages.'
       tags:
         - 'Message'
@@ -7803,20 +7761,19 @@ paths:
       security:
         - ApiKeyAuth: []
       description: "Unregister a device from a notification service provider.\n"
-      requestBody:
-        description: "information of a device to be registered.\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                deviceId:
-                  type: 'string'
-                userId:
-                  type: 'string'
-              required:
-                - 'deviceId'
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+            minLength: 1
+          description: user id
+        - in: query
+          name: deviceId
+          schema:
+            type: string
+            minLength: 1
+          description: device id
       responses:
         '200':
           $ref: '#/components/responses/SuccessResponse'
@@ -8367,33 +8324,40 @@ paths:
       security:
         - BearerAuth: []
       description: "Remove reaction from a document referenced by ID and type.\n"
-      requestBody:
-        description: "reference ID and type with reaction name\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                referenceId:
-                  type: 'string'
-                  maxLength: 900
-                referenceType:
-                  type: 'string'
-                  enum:
-                    - 'message'
-                    - 'post'
-                    - 'comment'
-                reactionName:
-                  type: 'string'
-                  maxLength: 100
-                referenceVersion:
-                  description: 'The API version of the document (Ex. If using with message v5, the referenceVersion will be 5)'
-                  type: 'integer'
-              required:
-                - 'referenceId'
-                - 'referenceType'
-                - 'reactionName'
+      parameters:
+        - in: query
+          name: referenceId
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 900
+          description: Reference id
+        - in: query
+          name: referenceType
+          required: true
+          schema:
+            type: string
+            enum:
+              - 'message'
+              - 'post'
+              - 'comment'
+            minLength: 1
+            maxLength: 900
+          description: Reference type
+        - in: query
+          name: reactionName
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+          description: Reaction name
+        - in: query
+          name: referenceVersion
+          schema:
+            type: integer
+          description: 'The API version of the document (Ex. If using with message v5, the referenceVersion will be 5)'
       responses:
         '200':
           description: 'Returns a reaction id is removed'
@@ -9238,7 +9202,7 @@ paths:
           $ref: './global/response.yaml#/IsSocialFlagByMeResponse'
         '404':
           $ref: './global/error.yaml#/NotFoundError'
-  /api/v3/posts/:postId/unflag:
+  /api/v3/posts/{postId}/unflag:
     delete:
       summary: 'unflag a post.'
       tags:
@@ -9287,7 +9251,7 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/posts/:postId/flags:
+  /api/v3/posts/{postId}/flags:
     delete:
       summary: 'clear flags'
       tags:
@@ -10245,8 +10209,13 @@ paths:
       security:
         - BearerAuth: []
       description: "Delete scheduled post"
-      requestBody:
-        $ref: './v1/admin/schedule_post.yaml#/deleteReqBody'
+      parameters:
+      - in: query
+        name: id
+        required: true
+        schema:
+          type: string
+        description: 'to specify which scheduled post to delete'
       responses:
         '200':
           description: 'ok, not returning any data'
@@ -10261,8 +10230,46 @@ paths:
       security:
         - BearerAuth: []
       description: "Get scheduled post"
-      requestBody:
-        $ref: './v1/admin/schedule_post.yaml#/getReqBody'
+      parameters:
+        - name: 'notPostedOnly'
+          in: 'query'
+          schema:
+            type: 'boolean'
+            default: false
+        - name: 'sortBy'
+          in: 'query'
+          schema:
+            type: 'string'
+            enum:
+              - 'lastCreated'
+              - 'firstCreated'
+              - 'lastUpdated'
+              - 'firstUpdated'
+            default: 'lastCreated'
+        - name: 'options'
+          in: 'query'
+          style: 'deepObject'
+          schema:
+            type: 'object'
+            properties:
+              limit:
+                type: 'integer'
+                minimum: 1
+                maximum: 100
+                default: 10
+              token:
+                type: 'string'
+                maxLength: 1000
+              before:
+                type: 'string'
+                maxLength: 24
+              after:
+                type: 'string'
+                maxLength: 24
+              updatedAt:
+                type: 'string'
+                maxLength: 100
+          description: 'use updatedAt when sort by first/lastUpdated'
       responses:
         '200':
           description: 'Return all scheduled post informations or only scheduled post that not posted yet'
@@ -10306,7 +10313,7 @@ paths:
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
 
-  /api/v4/posts/:postId:
+  /api/v4/posts/{postId}:
     put:
       summary: 'update a post'
       tags:
@@ -10853,6 +10860,7 @@ paths:
                   enum:
                     - single
                     - multiple
+                    - null
                   default: null
                 closedIn:
                   type: 'number'
@@ -11141,6 +11149,7 @@ paths:
                   enum:
                     - 'single'
                     - 'multiple'
+                    - null
                   default: null
                 closedIn:
                   type: 'number'
@@ -12120,7 +12129,7 @@ paths:
           $ref: './global/response.yaml#/IsSocialFlagByMeResponse'
         '404':
           $ref: './global/error.yaml#/NotFoundError'
-  /api/v3/comments/:commentId/unflag:
+  /api/v3/comments/{commentId}/unflag:
     delete:
       summary: 'unflag a comment.'
       tags:
@@ -12831,7 +12840,7 @@ paths:
           schema:
             type: 'string'
         - name: 'messageId'
-          in: 'path'
+          in: 'query'
           required: true
           schema:
             type: 'string'
@@ -13517,7 +13526,7 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/communities/:communityId/join:
+  /api/v3/communities/{communityId}/join:
     post:
       summary: 'Join a community'
       tags:
@@ -13544,7 +13553,7 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/communities/:communityId/leave:
+  /api/v3/communities/{communityId}/leave:
     delete:
       summary: 'Leave a community.'
       tags:
@@ -13721,24 +13730,18 @@ paths:
           schema:
             type: 'string'
             minimum: 1
-      requestBody:
-        description: "information of a community.\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                userIds:
-                  type: 'array'
-                  minItems: 1
-                  maxItems: 100
-                  items:
-                    type: 'string'
-                    minLength: 1
-                    maxLength: 50
-              required:
-                - 'userIds'
+        - in: query
+          name: userIds
+          required: true
+          schema:
+            type: 'array'
+            minItems: 1
+            maxItems: 100
+            items:
+              type: 'string'
+              minLength: 1
+              maxLength: 50
+          description: list of user id
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesApiResponse'
@@ -13750,7 +13753,7 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/communities/:communityId/users/ban:
+  /api/v3/communities/{communityId}/users/ban:
     put:
       summary: 'ban community users'
       tags:
@@ -13804,7 +13807,7 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/communities/:communityId/users/unban:
+  /api/v3/communities/{communityId}/users/unban:
     put:
       summary: 'unban community users'
       tags:
@@ -13856,7 +13859,7 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/communities/:communityId/users/roles:
+  /api/v3/communities/{communityId}/users/roles:
     post:
       summary: 'Add role to community users'
       tags:
@@ -13927,28 +13930,25 @@ paths:
             type: 'string'
             minLength: 1
             maxLength: 900
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                role:
-                  type: 'string'
-                  minLength: 1
-                  maxLength: 900
-                userIds:
-                  type: 'array'
-                  minItems: 1
-                  maxItems: 100
-                  items:
-                    type: 'string'
-                    minLength: 1
-                    maxLength: 50
-              required:
-                - 'userIds'
-                - 'role'
+        - in: query
+          name: userIds
+          required: true
+          schema:
+            type: 'array'
+            minItems: 1
+            maxItems: 100
+            items:
+              type: 'string'
+              minLength: 1
+              maxLength: 50
+          description: list of user id
+        - in: query
+          name: role
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 900
       responses:
         '200':
           $ref: './v3/community/response.yaml#/CommunitiesApiResponse'
@@ -14106,7 +14106,7 @@ paths:
           $ref: './global/error.yaml#/RateLimitError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v4/communities/:communityId/users/roles:
+  /api/v4/communities/{communityId}/users/roles:
     post:
       summary: 'Add roles to community users'
       tags:
@@ -14192,33 +14192,31 @@ paths:
             type: 'string'
             minLength: 1
             maxLength: 900
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                roles:
-                  type: 'array'
-                  minItems: 1
-                  maxItems: 100
-                  items:
-                    description: 'Role id'
-                    type: 'string'
-                    minLength: 1
-                    maxLength: 100
-                userIds:
-                  type: 'array'
-                  minItems: 1
-                  maxItems: 100
-                  items:
-                    type: 'string'
-                    minLength: 1
-                    maxLength: 50
-              required:
-                - 'userIds'
-                - 'roles'
+        - in: query
+          name: roles
+          required: true
+          schema:
+            type: 'array'
+            minItems: 1
+            maxItems: 100
+            items:
+              type: 'string'
+              description: 'Role id'
+              minLength: 1
+              maxLength: 100
+          description: list of role id
+        - in: query
+          name: userIds
+          required: true
+          schema:
+            type: 'array'
+            minItems: 1
+            maxItems: 100
+            items:
+              type: 'string'
+              minLength: 1
+              maxLength: 50
+          description: list of user id
       responses:
         '200':
           $ref: './v4/community/response.yaml#/CommunitiesApiResponse'
@@ -15567,19 +15565,14 @@ paths:
           required: true
           schema:
             type: 'string'
-      requestBody:
-        description: "community category information.\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                categoryId:
-                  type: 'string'
-                  maxLength: 50
-              required:
-                - 'categoryId'
+        - in: query
+          name: categoryId
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 50
+          description: Category id
       responses:
         '200':
           description: 'community category information'
@@ -16084,7 +16077,7 @@ paths:
           $ref: './global/error.yaml#/BadRequestError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/video-streaming/:streamId/streaming-url:
+  /api/v3/video-streaming/{streamId}/streaming-url:
     delete:
       summary: 'dispose video streaming url'
       tags:
@@ -16412,7 +16405,7 @@ paths:
           $ref: './v3/user-event/response.yaml#/VideoStreamingUserEventApiResponse'
         '500':
           $ref: './global/error.yaml#/CustomValidationError'
-  /api/v4/me/following/:userId:
+  /api/v4/me/following/{userId}:
     post:
       summary: 'Follow user.'
       tags:
@@ -16457,7 +16450,7 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v4/me/followers/:userId:
+  /api/v4/me/followers/{userId}:
     post:
       summary: 'Accept follow request.'
       tags:
@@ -16741,29 +16734,31 @@ paths:
             minimum: 1
             maximum: 50
           description: 'User public id'
+        - in: query
+          name: deleteAll
+          schema:
+            type: 'boolean'
+            default: false
+          description: 'true - it will hard delete this user created channels, messages, comments, posts, polls, reactions after user is deleted.'
+        - in: query
+          name: markMessageDeleted
+          schema:
+            type: 'boolean'
+            default: false
+          description: 'true - it will hard delete this user messages after user is deleted.'
+        - in: query
+          name: hardDeletePost
+          schema:
+            type: 'boolean'
+            default: false
+          description: 'true - it will hard delete this user posts after user is deleted.'
+        - in: query
+          name: hardDeleteComment
+          schema:
+            type: 'boolean'
+            default: false
+          description: 'true - it will hard delete this user comments after user is deleted.'
       description: "Delete user from system. User display name will be replaced with \"Deleted user\".\n\nContent that is created from the user will be able to be wiped depend on the options.\n\n**This API allow only admin user to call**\n"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                deleteAll:
-                  type: 'boolean'
-                  description: 'true - it will hard delete this user created channels, messages, comments, posts, polls, reactions after user is deleted.'
-                  default: false
-                markMessageDeleted:
-                  type: 'boolean'
-                  description: 'true - it will hard delete this user messages after user is deleted.'
-                  default: false
-                hardDeletePost:
-                  type: 'boolean'
-                  description: 'true - it will hard delete this user posts after user is deleted.'
-                  default: false
-                hardDeleteComment:
-                  type: 'boolean'
-                  description: 'true - it will hard delete this user comments after user is deleted.'
-                  default: false
       responses:
         '200':
           $ref: './v4/user/response.yaml#/UserDeleteResponse'
@@ -18353,7 +18348,12 @@ paths:
         - BearerAuth: []
       description: 'Delete an existing message feed except the default message feed'
       parameters:
-        - $ref: './v5/message-feed/parameter.yaml#/MessageFeedId'
+        - name: messageFeedId
+          in: path
+          required: true
+          description: Message feed ID
+          schema:
+            $ref: './schema/message-feed.yaml#/MessageFeed_messageFeedId'
         - name: permanent
           in: query
           schema:
@@ -18375,7 +18375,12 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: './v5/message-feed/parameter.yaml#/MessageFeedId'
+        - name: messageFeedId
+          in: path
+          required: true
+          description: Message feed ID
+          schema:
+            $ref: './schema/message-feed.yaml#/MessageFeed_messageFeedId'
       requestBody:
         $ref: './v5/message-feed/request.yaml#/UpdateMessageFeed'
       responses:
@@ -18395,7 +18400,12 @@ paths:
         - BearerAuth: []
       description: 'Return a single message feed'
       parameters:
-        - $ref: './v5/message-feed/parameter.yaml#/MessageFeedId'
+        - name: messageFeedId
+          in: path
+          required: true
+          description: Message feed ID
+          schema:
+            $ref: './schema/message-feed.yaml#/MessageFeed_messageFeedId'
       responses:
         '200':
           $ref: './v5/message-feed/response.yaml#/MessageFeedPayload'
@@ -18521,7 +18531,12 @@ paths:
       summary: 'Delete a message'
       description: 'Delete a message'
       parameters:
-        - $ref: './v5/message/parameter.yaml#/MessageId'
+        - name: messageId
+          in: path
+          required: true
+          description: ID of a message
+          schema:
+            $ref: './schema/message.yaml#/MessageV5_messageId'
         - $ref: './v5/message/parameter.yaml#/Permanent'
       responses:
         '200':
@@ -18538,7 +18553,12 @@ paths:
       summary: 'Find message by ID'
       description: 'Returns a single message'
       parameters:
-        - $ref: './v5/message/parameter.yaml#/MessageId'
+        - name: messageId
+          in: path
+          required: true
+          description: ID of a message
+          schema:
+            $ref: './schema/message.yaml#/MessageV5_messageId'
       responses:
         '200':
           $ref: './v5/message/response.yaml#/MessagePayload'
@@ -18554,7 +18574,12 @@ paths:
       summary: 'Update a message'
       description: 'Update a message'
       parameters:
-        - $ref: './v5/message/parameter.yaml#/MessageId'
+        - name: messageId
+          in: path
+          required: true
+          description: ID of a message
+          schema:
+            $ref: './schema/message.yaml#/MessageV5_messageId'
       requestBody:
         $ref: './v5/message/request.yaml#/UpdateMessage'
       responses:
@@ -18573,7 +18598,12 @@ paths:
       summary: 'Delete all flags in message'
       description: 'Delete all flags in message'
       parameters:
-        - $ref: './v5/message/parameter.yaml#/MessageId'
+        - name: messageId
+          in: path
+          required: true
+          description: ID of a message
+          schema:
+            $ref: './schema/message.yaml#/MessageV5_messageId'
       responses:
         '200':
           $ref: './v5/message/response.yaml#/MessagePayload'
@@ -18590,7 +18620,12 @@ paths:
       summary: 'Delete my flag in a message'
       description: 'Delete my flag in a message'
       parameters:
-        - $ref: './v5/message/parameter.yaml#/MessageId'
+        - name: messageId
+          in: path
+          required: true
+          description: ID of a message
+          schema:
+            $ref: './schema/message.yaml#/MessageV5_messageId'
       responses:
         '200':
           $ref: './v5/message/response.yaml#/MessagePayload'
@@ -18663,7 +18698,12 @@ paths:
       summary: 'Find messages by creatorId and multiple conditions'
       description: 'Multiple conditions can be provided by query string'
       parameters:
-        - $ref: './v5/message/parameter.yaml#/CreatorId'
+        - name: creatorId
+          in: path
+          required: true
+          description: creator ID of message that needs to be find
+          schema:
+            $ref: './schema/message.yaml#/MessageV5_creatorId'
         - $ref: './v5/message/parameter.yaml#/IsDeleted'
         - $ref: './v5/message/parameter.yaml#/HasFlags'
         - $ref: './v5/message/parameter.yaml#/PagingOptions'
