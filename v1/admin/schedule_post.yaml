@@ -83,6 +83,14 @@ postData:
       format: 'date-time'
       example: '2022-07-07T04:24:20.444Z'
 
+postRespBody:
+  type: object
+  properties:
+    id:
+      type: string
+      description: id of the scheduled post
+      example: 60e4b1b4b3b2b5c4c4b3b2b5
+
 getRespBody:
   type: 'object'
   properties: 
@@ -150,7 +158,7 @@ postReqSchema:
       $ref: '#/postData'
     scheduledAt: 
       type: 'string'
-      description: 'The date/time when a post is scheduled. Need to be within next 1 days and next 30 days.'
+      description: 'The date/time when a post is scheduled. Need to be within next hour and next 30 days.'
       format: 'date-time'
       example: '2022-07-07T04:24:20.444Z'
   required:
