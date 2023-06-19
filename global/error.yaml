@@ -4,16 +4,18 @@ Error:
     status:
       type: string
     code:
-      type: string
+      type: number
     message:
       type: string
     data:
       type: object
       properties:
         detail:
-          type: array
-          items: 
-            type: string  
+          oneOf:
+            - type: array
+              items: 
+                type: string  
+            - type: object
 BadRequestError:
   description: Bad Request error.
   content:
