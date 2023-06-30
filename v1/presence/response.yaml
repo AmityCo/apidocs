@@ -1,0 +1,88 @@
+GetPresenceSettingResponse:
+  description: Get presence feature setting response
+  content:
+    application/json:
+      schema:
+        description: Presence feature setting
+        type: object
+        properties:
+          user: 
+            $ref: '../../schema/presence.yaml#/PresenceUserSetting'
+          network: 
+            $ref: '../../schema/presence.yaml#/PresenceNetworkSettingWithoutEnabled'
+      
+UpdatePresenceUserSettingResponse:
+  description: Update presence user setting response
+  content:
+    application/json:
+      schema:
+        $ref: '../../schema/presence.yaml#/PresenceUserSetting'
+
+GetPresenceNetworkSettingResponse:
+  description: Get presence network setting response
+  content:
+    application/json:
+      schema:
+        $ref: '../../schema/presence.yaml#/PresenceNetworkSetting'
+
+UpdatePresenceNetworkSettingResponse:
+  description: Update presence network setting response
+  content:
+    application/json:
+      schema:
+        $ref: '../../schema/presence.yaml#/PresenceNetworkSetting'
+
+GetUserPresenceListResponse:
+  description: Get user presence list response
+  content:
+    application/json:
+      schema:
+        description: List of user presence
+        type: object
+        properties:
+          presences:
+            type: array
+            items:
+              $ref: '../../schema/presence.yaml#/Presence'
+
+GetOnlineUsersResponse:
+  description: Get online users presence response
+  content:
+    application/json:
+      schema:
+        description: List of user presence
+        type: object
+        properties:
+          presences:
+            type: array
+            items:
+              $ref: '../../schema/presence.yaml#/Presence'
+
+GetOnlineUsersCountReponse:
+  description: Get online users count response
+  content:
+    application/json:
+      schema:
+        description: Online users count
+        type: object
+        properties:
+          count:
+            type: integer
+          referenceTimeStamp:
+            type: string
+        required:
+          - count
+          - referenceTimeStamp
+
+SendHeartbeatResponse:
+  description: Send heartbeat response
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean
+        required:
+          - success
+          
