@@ -18792,6 +18792,8 @@ paths:
           $ref: "./v1/presence/response.yaml#/GetPresenceNetworkSettingResponse"
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
+      security:
+        - BearerAuth: []
     put:
       summary: Update presence feature setting on network level
       description: Update presence feature setting on network level. Only admin is allowed to update this.
@@ -18822,6 +18824,8 @@ paths:
                 message: Only administrator can do this
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
+      security:
+        - BearerAuth: []
   /api/v1/presence/users/list:
     get:
       summary: Get presence state of provided user list
