@@ -1,0 +1,54 @@
+Presence:
+  description: Presence Object
+  type: object
+  properties:
+    userId:
+      type: string
+    lastHeartbeat:
+      type: string
+      format: date-time
+  required:
+    - userId
+
+PresenceUserSetting:
+  description: Presence user setting
+  type: object
+  properties:
+    enabled:
+      type: boolean
+    enabledAt:
+      type: string
+      format: date-time
+  required:
+    - enabled
+
+PresenceNetworkSettingWithoutEnabled:
+  description: Presence network setting without enabled
+  type: object
+  properties:
+    heartbeatInterval:
+      description: the time interval for sending heartbeat for client
+      type: integer
+      minimum: 20
+      maximum: 50
+    presenceSyncInterval:
+      description: the time interval for syncing the user list presence for client
+      type: integer
+      minimum: 20
+      maximum: 50
+    updatedAt:
+      type: string
+      format: date-time
+  required:
+    - heartbeatInterval
+    - presenceSyncInterval
+
+PresenceNetworkSetting:
+  description: Presence network setting from v3/network-setting API
+  type: object
+  properties:
+    enabled:
+      type: boolean
+  required:
+    - enabled
+      
