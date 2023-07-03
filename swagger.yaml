@@ -10204,6 +10204,8 @@ paths:
                 $ref: './v1/admin/schedule_post.yaml#/postRespBody'
         '400':
           $ref: './global/error.yaml#/BadRequestError'
+        '422':
+          $ref: './global/error.yaml#/UnProcessableError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
     delete:
@@ -10225,6 +10227,8 @@ paths:
           description: 'ok, not returning any data'
         '404':
           $ref: './global/error.yaml#/NotFoundError'
+        '422':
+          $ref: './global/error.yaml#/UnProcessableError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
     get:
@@ -10272,7 +10276,7 @@ paths:
                 maxLength: 24
               updatedAt:
                 type: 'string'
-                maxLength: 100
+                maxLength: 30
           description: 'use updatedAt when sort by first/lastUpdated'
       responses:
         '200':
@@ -10281,6 +10285,8 @@ paths:
             application/json:
               schema:
                 $ref: './v1/admin/schedule_post.yaml#/getRespBody'
+        '422':
+          $ref: './global/error.yaml#/UnProcessableError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
 
