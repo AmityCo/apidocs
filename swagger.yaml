@@ -18787,51 +18787,6 @@ paths:
           $ref: './global/error.yaml#/UnexpectedError'
       security:
         - BearerAuth: []
-  /api/v3/network-settings/presence:
-    get:
-      summary: Get presence feature setting on network level
-      description: Get presence feature setting on network level.
-      tags:
-        - Presence
-      responses:
-        "200":
-          $ref: "./v1/presence/response.yaml#/GetPresenceNetworkSettingResponse"
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-      security:
-        - BearerAuth: []
-    put:
-      summary: Update presence feature setting on network level
-      description: Update presence feature setting on network level. Only admin is allowed to update this.
-      tags:
-        - Presence
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                enabled:
-                  type: boolean
-              required:
-                - enabled
-      responses:
-        "200":
-          $ref: './v1/presence/response.yaml#/UpdatePresenceNetworkSettingResponse'
-        "403":
-          description: Permission denied.
-          content:
-            application/json:
-              schema:
-                $ref: './global/error.yaml#/PermissionDenidedError'
-              example:
-                status: error
-                code: 400301
-                message: Only administrator can do this
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-      security:
-        - BearerAuth: []
   /api/v1/presence/users/list:
     get:
       summary: Get presence state of provided user list
