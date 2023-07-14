@@ -10185,149 +10185,133 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /admin/v1/posts/schedule:
-    post: 
-      summary: 'schedule a post'
-      tags: 
-        - 'Admin'
-      security:
-        - BearerAuth: []
-      description: "Schedule a post at specfic date/time but the scheduled time need to be within next 1 days and next 30 days\n"
-      requestBody:
-        $ref: './v1/admin/schedule_post.yaml#/postReqBody'
-      responses:
-        '200':
-          description: 'ok'
-          content:
-            application/json:
-              schema:
-                $ref: './v1/admin/schedule_post.yaml#/postRespBody'
-        '400':
-          $ref: './global/error.yaml#/BadRequestError'
-        '422':
-          $ref: './global/error.yaml#/UnProcessableError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-    delete:
-      summary: 'delete scheduled post'
-      tags: 
-        - 'Admin'
-      security:
-        - BearerAuth: []
-      description: "Delete scheduled post"
-      parameters:
-      - in: query
-        name: id
-        required: true
-        schema:
-          type: string
-        description: 'to specify which scheduled post to delete'
-      responses:
-        '200':
-          description: 'ok, not returning any data'
-        '404':
-          $ref: './global/error.yaml#/NotFoundError'
-        '422':
-          $ref: './global/error.yaml#/UnProcessableError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-    get:
-      summary: 'get scheduled post'
-      tags: 
-        - 'Admin'
-      security:
-        - BearerAuth: []
-      description: "Get scheduled post"
-      parameters:
-        - name: 'notPostedOnly'
-          in: 'query'
-          schema:
-            type: 'boolean'
-            default: false
-        - name: 'sortBy'
-          in: 'query'
-          schema:
-            type: 'string'
-            enum:
-              - 'lastCreated'
-              - 'firstCreated'
-              - 'lastUpdated'
-              - 'firstUpdated'
-            default: 'lastCreated'
-        - name: 'options'
-          in: 'query'
-          style: 'deepObject'
-          schema:
-            type: 'object'
-            properties:
-              limit:
-                type: 'integer'
-                minimum: 1
-                maximum: 100
-                default: 10
-              token:
-                type: 'string'
-                maxLength: 1000
-              before:
-                type: 'string'
-                maxLength: 24
-              after:
-                type: 'string'
-                maxLength: 24
-              updatedAt:
-                type: 'string'
-                maxLength: 30
-          description: 'use updatedAt when sort by first/lastUpdated'
-      responses:
-        '200':
-          description: 'Return all scheduled post informations or only scheduled post that not posted yet'
-          content:
-            application/json:
-              schema:
-                $ref: './v1/admin/schedule_post.yaml#/getRespBody'
-        '422':
-          $ref: './global/error.yaml#/UnProcessableError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-
-  /internal/v1/posts/schedule: 
-    post:
-      'x-internal': true
-      summary: 'create a post'
-      tags: 
-        - 'Internal'
-      security:
-        - BasicAuth: []
-      description: "
-        The purpose of this functionality is to create scheduled posts, and it should only be called from the Lambda function. It allows for the creation of a post using provided information and assigns a specific user (identified by the userId) as the owner of the post."
-      requestBody:
-        description: ""
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties: 
-                id: 
-                  type: 'string'
-                  pattern: '^[a-f\d]{24}$'
-                  description: 'MongoDB document id'
-                userId: 
-                  type: 'string'
-                  pattern: '^[a-f\d]{24}$'
-                  description: 'User id'
-                networkId:
-                  type: 'string'
-                  pattern: '^[a-f\d]{24}$'
-                  description: 'Network id'
-      responses:
-        '200':
-          description: 'ok, not returning any data'
-        '422':
-          $ref: './global/error.yaml#/ValidationError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-
+            #  /admin/v1/posts/schedule:
+            #    post: 
+            #      summary: 'schedule a post'
+            #      tags: 
+            #        - 'Admin'
+            #      security:
+            #        - BearerAuth: []
+            #      description: "Schedule a post at specfic date/time but the scheduled time need to be within next 1 days and next 30 days\n"
+            #      requestBody:
+            #        $ref: './v1/admin/schedule_post.yaml#/postReqBody'
+            #      responses:
+            #        '200':
+            #          description: 'ok, not returning any data'
+            #        '400':
+            #          $ref: './global/error.yaml#/BadRequestError'
+            #        '500':
+            #          $ref: './global/error.yaml#/UnexpectedError'
+            #    delete:
+            #      summary: 'delete scheduled post'
+            #      tags: 
+            #        - 'Admin'
+            #      security:
+            #        - BearerAuth: []
+            #      description: "Delete scheduled post"
+            #      parameters:
+            #      - in: query
+            #        name: id
+            #        required: true
+            #        schema:
+            #          type: string
+            #        description: 'to specify which scheduled post to delete'
+            #      responses:
+            #        '200':
+            #          description: 'ok, not returning any data'
+            #        '404':
+            #          $ref: './global/error.yaml#/NotFoundError'
+            #        '500':
+            #          $ref: './global/error.yaml#/UnexpectedError'
+            #    get:
+            #      summary: 'get scheduled post'
+            #      tags: 
+            #        - 'Admin'
+            #      security:
+            #        - BearerAuth: []
+            #      description: "Get scheduled post"
+            #      parameters:
+            #        - name: 'notPostedOnly'
+            #          in: 'query'
+            #          schema:
+            #            type: 'boolean'
+            #            default: false
+            #        - name: 'sortBy'
+            #          in: 'query'
+            #          schema:
+            #            type: 'string'
+            #            enum:
+            #              - 'lastCreated'
+            #              - 'firstCreated'
+            #              - 'lastUpdated'
+            #              - 'firstUpdated'
+            #            default: 'lastCreated'
+            #        - name: 'options'
+            #          in: 'query'
+            #          style: 'deepObject'
+            #          schema:
+            #            type: 'object'
+            #            properties:
+            #              limit:
+            #                type: 'integer'
+            #                minimum: 1
+            #                maximum: 100
+            #                default: 10
+            #              token:
+            #                type: 'string'
+            #                maxLength: 1000
+            #              before:
+            #                type: 'string'
+            #                maxLength: 24
+            #              after:
+            #                type: 'string'
+            #                maxLength: 24
+            #              updatedAt:
+            #                type: 'string'
+            #                maxLength: 100
+            #          description: 'use updatedAt when sort by first/lastUpdated'
+            #      responses:
+            #        '200':
+            #          description: 'Return all scheduled post informations or only scheduled post that not posted yet'
+            #          content:
+            #            application/json:
+            #              schema:
+            #                $ref: './v1/admin/schedule_post.yaml#/getRespBody'
+            #        '500':
+            #          $ref: './global/error.yaml#/UnexpectedError'
+            #
+            #  /internal/posts/schedule: 
+            #    post:
+            #      'x-internal': true
+            #      summary: 'create a post'
+            #      tags: 
+            #        - 'Internal'
+            #      security:
+            #        - BearerAuth: []
+            #      description: "
+            #        The purpose of this functionality is to create scheduled posts, and it should only be called from the Lambda function. It allows for the creation of a post using provided information and assigns a specific user (identified by the userId) as the owner of the post."
+            #      requestBody:
+            #        description: ""
+            #        required: true
+            #        content:
+            #          application/json:
+            #            schema:
+            #              type: 'object'
+            #              properties: 
+            #                id: 
+            #                  type: 'string'
+            #                  description: 'MongoDB document id'
+            #                userId: 
+            #                  type: 'string'
+            #                  description: 'User id'
+            #                networkId:
+            #                  type: 'string'
+            #                  description: 'Network id'
+            #      responses:
+            #        '200':
+            #          description: 'ok, not returning any data'
+            #        '500':
+            #          $ref: './global/error.yaml#/UnexpectedError'
   /api/v4/posts/{postId}:
     put:
       summary: 'update a post'
