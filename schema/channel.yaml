@@ -134,11 +134,15 @@ ChannelV3:
   properties:
     _id:
       type: string
-    path: 
+    path:
       type: string
     channelId:
       type: string
       description: ID of a channel.
+    channelInternalId:
+      type: string
+    channelPublicId:
+      type: string
     isDistinct:
       type: boolean
     metadata:
@@ -208,13 +212,21 @@ ChannelV3:
     - channelId
     - createdAt
     - updatedAt
-    
+
 ChannelUserV3:
   type: object
   properties:
     userId:
       type: string
+    userInternalId:
+      type: string
+    userPublicId:
+      type: string
     channelId:
+      type: string
+    channelInternalId:
+      type: string
+    channelPublicId:
       type: string
     membership:
       $ref: "#/ChannelMembership"
@@ -248,4 +260,3 @@ ChannelUserV3:
       type: string
       description: The date/time when a channel user is updated.
       format: date-time
-
