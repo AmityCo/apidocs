@@ -2,7 +2,7 @@ openapi: '3.0.0'
 info:
   title: 'Amity Social Cloud SDK'
   description: "<h2>Using Amity APIs</h2>\n\nOur API documentation explains all API endpoints used in Amity Social Cloud. All APIs, with the exception of some\nauthentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin\nor User context. When used in user context, you will only be able to fetch data related to that user only.\nFor Administrators who are using our API documentation in making server-to-server API calls, you need an Admin\nAccess token to connect to the Amity server. Refer to <a href=\"https://docs.amity.co/console/settings#admin-api-access-token\" target=\"_blank\">this documentation</a>\nfor the instructions on how to generate an admin access token.\n\nAll backend endpoints that support Amity SDK are included here. To easily differentiate the type of each endpoint,\nwe added a prefix in each endpoint's path.\n\n1. Socket Endpoint: /sockets/...\n2. Socket Event: /callbacks/...\n3. REST API Endpoint: /v1/, /v2/, /v3/, or /v4/...\n4. Webhook Event: /webhook/...\n\n<h2>Select Region Endpoint</h2>\n\nBefore making server-to-server API calls, be sure to select the correct API endpoint for your region in\nthe <strong>Servers</strong> dropdown below.\n"
-  version: '4.56.0'
+  version: '4.59.0'
 servers:
   - url: 'https://api.us.amity.co'
     description: 'API Endpoint for US Region'
@@ -10185,133 +10185,163 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-            #  /admin/v1/posts/schedule:
-            #    post: 
-            #      summary: 'schedule a post'
-            #      tags: 
-            #        - 'Admin'
-            #      security:
-            #        - BearerAuth: []
-            #      description: "Schedule a post at specfic date/time but the scheduled time need to be within next 1 days and next 30 days\n"
-            #      requestBody:
-            #        $ref: './v1/admin/schedule_post.yaml#/postReqBody'
-            #      responses:
-            #        '200':
-            #          description: 'ok, not returning any data'
-            #        '400':
-            #          $ref: './global/error.yaml#/BadRequestError'
-            #        '500':
-            #          $ref: './global/error.yaml#/UnexpectedError'
-            #    delete:
-            #      summary: 'delete scheduled post'
-            #      tags: 
-            #        - 'Admin'
-            #      security:
-            #        - BearerAuth: []
-            #      description: "Delete scheduled post"
-            #      parameters:
-            #      - in: query
-            #        name: id
-            #        required: true
-            #        schema:
-            #          type: string
-            #        description: 'to specify which scheduled post to delete'
-            #      responses:
-            #        '200':
-            #          description: 'ok, not returning any data'
-            #        '404':
-            #          $ref: './global/error.yaml#/NotFoundError'
-            #        '500':
-            #          $ref: './global/error.yaml#/UnexpectedError'
-            #    get:
-            #      summary: 'get scheduled post'
-            #      tags: 
-            #        - 'Admin'
-            #      security:
-            #        - BearerAuth: []
-            #      description: "Get scheduled post"
-            #      parameters:
-            #        - name: 'notPostedOnly'
-            #          in: 'query'
-            #          schema:
-            #            type: 'boolean'
-            #            default: false
-            #        - name: 'sortBy'
-            #          in: 'query'
-            #          schema:
-            #            type: 'string'
-            #            enum:
-            #              - 'lastCreated'
-            #              - 'firstCreated'
-            #              - 'lastUpdated'
-            #              - 'firstUpdated'
-            #            default: 'lastCreated'
-            #        - name: 'options'
-            #          in: 'query'
-            #          style: 'deepObject'
-            #          schema:
-            #            type: 'object'
-            #            properties:
-            #              limit:
-            #                type: 'integer'
-            #                minimum: 1
-            #                maximum: 100
-            #                default: 10
-            #              token:
-            #                type: 'string'
-            #                maxLength: 1000
-            #              before:
-            #                type: 'string'
-            #                maxLength: 24
-            #              after:
-            #                type: 'string'
-            #                maxLength: 24
-            #              updatedAt:
-            #                type: 'string'
-            #                maxLength: 100
-            #          description: 'use updatedAt when sort by first/lastUpdated'
-            #      responses:
-            #        '200':
-            #          description: 'Return all scheduled post informations or only scheduled post that not posted yet'
-            #          content:
-            #            application/json:
-            #              schema:
-            #                $ref: './v1/admin/schedule_post.yaml#/getRespBody'
-            #        '500':
-            #          $ref: './global/error.yaml#/UnexpectedError'
-            #
-            #  /internal/posts/schedule: 
-            #    post:
-            #      'x-internal': true
-            #      summary: 'create a post'
-            #      tags: 
-            #        - 'Internal'
-            #      security:
-            #        - BearerAuth: []
-            #      description: "
-            #        The purpose of this functionality is to create scheduled posts, and it should only be called from the Lambda function. It allows for the creation of a post using provided information and assigns a specific user (identified by the userId) as the owner of the post."
-            #      requestBody:
-            #        description: ""
-            #        required: true
-            #        content:
-            #          application/json:
-            #            schema:
-            #              type: 'object'
-            #              properties: 
-            #                id: 
-            #                  type: 'string'
-            #                  description: 'MongoDB document id'
-            #                userId: 
-            #                  type: 'string'
-            #                  description: 'User id'
-            #                networkId:
-            #                  type: 'string'
-            #                  description: 'Network id'
-            #      responses:
-            #        '200':
-            #          description: 'ok, not returning any data'
-            #        '500':
-            #          $ref: './global/error.yaml#/UnexpectedError'
+  /admin/v1/posts/schedule:
+    post: 
+      summary: 'schedule a post'
+      tags: 
+        - 'Admin'
+      security:
+        - BearerAuth: []
+      description: "Schedule a post at specfic date/time but the scheduled time need to be within next 1 days and next 30 days\n"
+      requestBody:
+        $ref: './v1/admin/schedule_post.yaml#/postReqBody'
+      responses:
+        '200':
+          description: 'ok'
+          content:
+            application/json:
+              schema:
+                $ref: './v1/admin/schedule_post.yaml#/postRespBody'
+        '400':
+          $ref: './global/error.yaml#/BadRequestError'
+        '422':
+          $ref: './global/error.yaml#/UnProcessableError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+    delete:
+      summary: 'delete scheduled post'
+      tags: 
+        - 'Admin'
+      security:
+        - BearerAuth: []
+      description: "Delete scheduled post"
+      parameters:
+      - in: query
+        name: id
+        required: true
+        schema:
+          type: string
+        description: 'to specify which scheduled post to delete'
+      responses:
+        '200':
+          description: 'ok, not returning any data'
+        '404':
+          $ref: './global/error.yaml#/NotFoundError'
+        '422':
+          $ref: './global/error.yaml#/UnProcessableError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+    get:
+      summary: 'get scheduled post'
+      tags: 
+        - 'Admin'
+      security:
+        - BearerAuth: []
+      description: "Get scheduled post"
+      parameters:
+        - name: 'notPostedOnly'
+          in: 'query'
+          schema:
+            type: 'boolean'
+            default: false
+          description: 'to get only scheduled post that not posted yet'
+        - name: 'sortBy'
+          in: 'query'
+          schema:
+            type: 'string'
+            enum:
+              - 'lastCreated'
+              - 'firstCreated'
+              - 'lastUpdated'
+              - 'firstUpdated'
+            default: 'lastCreated'
+            description: 'use updatedAt when sort by first/lastUpdated'
+        - name: 'options'
+          in: 'query'
+          style: 'deepObject'
+          schema:
+            type: 'object'
+            properties:
+              limit:
+                type: 'integer'
+                minimum: 1
+                maximum: 100
+                default: 10
+              token:
+                type: 'string'
+                maxLength: 1000
+              before:
+                type: 'string'
+                maxLength: 24
+              after:
+                type: 'string'
+                maxLength: 24
+              updatedAt:
+                type: 'string'
+                maxLength: 30
+        - name: 'targetType'
+          in: 'query'
+          schema: 
+            type: 'string'
+            enum:
+              - 'content'
+              - 'community'
+              - 'user'
+          description: 'target type of scheduled posts'
+        - name: 'targetId'
+          in: 'query'
+          schema: 
+            type: 'string'
+          description: 'target id of scheduled posts'
+      responses:
+        '200':
+          description: 'Return all scheduled post informations or only scheduled post that not posted yet'
+          content:
+            application/json:
+              schema:
+                $ref: './v1/admin/schedule_post.yaml#/getRespBody'
+        '422':
+          $ref: './global/error.yaml#/UnProcessableError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+
+  /internal/v1/posts/schedule: 
+    post:
+      'x-internal': true
+      summary: 'create a post'
+      tags: 
+        - 'Internal'
+      security:
+        - BasicAuth: []
+      description: "
+        The purpose of this functionality is to create scheduled posts, and it should only be called from the Lambda function. It allows for the creation of a post using provided information and assigns a specific user (identified by the userId) as the owner of the post."
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties: 
+                id: 
+                  type: 'string'
+                  pattern: '^[a-f\d]{24}$'
+                  description: 'MongoDB document id'
+                userId: 
+                  type: 'string'
+                  pattern: '^[a-f\d]{24}$'
+                  description: 'User id'
+                networkId:
+                  type: 'string'
+                  pattern: '^[a-f\d]{24}$'
+                  description: 'Network id'
+      responses:
+        '200':
+          description: 'ok, not returning any data'
+        '422':
+          $ref: './global/error.yaml#/ValidationError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
 
   /api/v4/posts/{postId}:
     put:
@@ -18726,6 +18756,163 @@ paths:
           description: 'Parameters validation error'
       security:
         - BearerAuth: []
+  /api/v1/presence/settings:
+    get:
+      summary: Get presence feature setting on both network and user level
+      description: Get presence feature setting on both network and user level
+      tags:
+        - 'Presence'
+      responses:
+        '200':
+          $ref: './v1/presence/response.yaml#/GetPresenceSettingResponse'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+      security:
+        - BearerAuth: []
+  /api/v1/presence/settings/user:
+    put:
+      summary: Update presence feature setting on user level
+      description: Update presence feature setting on user level.
+      tags:
+        - 'Presence'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+              required:
+                - enabled
+      responses:
+        "200":
+          $ref: './v1/presence/response.yaml#/UpdatePresenceUserSettingResponse'
+        "403":
+          description: Forbidden error due to feature is not enabled.
+          content:
+            application/json:
+              schema:
+                $ref: './global/error.yaml#/ForbiddenError'
+              example:
+                status: error
+                code: 400300
+                message: The feature is not enabled!
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+      security:
+        - BearerAuth: []
+  /api/v1/presence/users/list:
+    get:
+      summary: Get presence state of provided user list
+      description: >
+        Get presence state of provided user list
+          - Max userIds list of 220 items
+          - Each id max length up to 300
+      tags:
+        - Presence
+
+      parameters:
+        - name: userIds
+          in: query
+          required: true
+          schema:
+            $ref: './v1/presence/parameter.yaml#/UserIds_Params'
+      responses:
+        "200":
+          $ref: './v1/presence/response.yaml#/GetUserPresenceListResponse'
+        "403":
+          description: Forbidden error due to feature is not enabled.
+          content:
+            application/json:
+              schema:
+                $ref: './global/error.yaml#/ForbiddenError'
+              example:
+                status: error
+                code: 400300
+                message: The feature is not enabled!
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+  /api/v1/presence/network/users:
+    get:
+      summary: Get online users in a network
+      description: >
+        Get online users in a network
+         - Automatically sortedBy heartbeat time)
+         - Return max 1000 users
+      tags:
+        - Presence
+      parameters:
+        - name: orderBy
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          $ref: './v1/presence/response.yaml#/GetOnlineUsersResponse'
+        "403":
+          description: Forbidden error due to feature is not enabled.
+          content:
+            application/json:
+              schema:
+                $ref: './global/error.yaml#/ForbiddenError'
+              example:
+                status: error
+                code: 400300
+                message: The feature is not enabled!
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+      security:
+        - BearerAuth: []
+  /api/v1/presence/network/users/count:
+    get:
+      summary: Get number of online users in a network
+      description: Get number of online users in a network
+      tags:
+        - Presence
+      responses:
+        "200":
+          $ref: './v1/presence/response.yaml#/GetOnlineUsersCountReponse'
+        "403":
+          description: Forbidden error due to feature is not enabled.
+          content:
+            application/json:
+              schema:
+                $ref: './global/error.yaml#/ForbiddenError'
+              example:
+                status: error
+                code: 400300
+                message: The feature is not enabled!
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+      security:
+        - BearerAuth: []
+  /api/v1/presence/heartbeat:
+    post:
+      summary: Send a presence heartbeat
+      description: Send a presence heartbeat
+      tags:
+        - Presence
+      responses:
+        "202":
+          $ref: './v1/presence/response.yaml#/SendHeartbeatResponse'
+        "403":
+          description: Forbidden error due to feature is not enabled.
+          content:
+            application/json:
+              schema:
+                $ref: './global/error.yaml#/ForbiddenError'
+              example:
+                status: error
+                code: 400300
+                message: The feature is not enabled!
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+      security:
+        - BearerAuth: []
   /webhook/message.didCreate:
     get:
       tags:
@@ -21109,6 +21296,9 @@ components:
     BearerAuth:
       type: 'http'
       scheme: 'bearer'
+    BasicAuth:
+      type: 'http'
+      scheme: 'basic'
   responses:
     SuccessResponse:
       description: 'Success response.'

@@ -4,16 +4,18 @@ Error:
     status:
       type: string
     code:
-      type: string
+      type: number
     message:
       type: string
     data:
       type: object
       properties:
         detail:
-          type: array
-          items: 
-            type: string  
+          oneOf:
+            - type: array
+              items: 
+                type: string  
+            - type: object
 BadRequestError:
   description: Bad Request error.
   content:
@@ -389,3 +391,13 @@ UsernameNotFoundError:
         status: error
         code: 400400
         message: username Not Found.
+UnProcessableError:
+  description: Unprocessable Content.
+  content:
+    application/json:
+      schema:
+        $ref: "#/Error"
+      example:
+        status: error
+        code: 500000
+        message: Parameters validation error!.

@@ -8,36 +8,10 @@ postData:
           type: 'string'
           description: 'data for text in post parent'
           example: 'example text'
-          x-faker: 'lorem.sentences'
-        streamId:
-          type: 'string'
-          description: 'video streaming id for create live streaming post'
-          example: '81559bcc3a5bb3b6bbd69a83b89d337e'
-        pollId:
-          type: 'string'
-          description: 'poll id for create poll post'
-          example: '53a9fd8b5aaa1af6c5a1bbd245ce4a9b1627373735551'
-    attachments:
-      type: 'array'
-      items:
-        type: 'object'
-        description: 'attachment info'
-        properties:
-          fileId:
-            type: 'string'
-            example: '57b916d38eaf8010caddfb7759a2d06c'
-            description: 'file id for attachment'
-          type:
-            type: 'string'
-            description: 'attachment type'
-            enum:
-              - 'image'
-              - 'file'
-              - 'video'
     dataType:
       type: 'string'
       example: 'upstra.customtype'
-      description: 'Must be in dot separated string format or system defined format (ex. "upstra.customtype", "com.eko.birthday", "liveStream")'
+      description: 'Must be in dot separated string format or system defined format (ex. "upstra.customtype", "com.eko.birthday")'
     targetType:
       type: 'string'
       enum:
@@ -86,11 +60,14 @@ postData:
             description: 'Array of UserId. if the mention type is a channel, doesn''t send userIds'
             items:
               type: 'string'
-    createdAt:
-      type: 'string'
-      description: 'The date/time when a post is created.'
-      format: 'date-time'
-      example: '2022-07-07T04:24:20.444Z'
+
+postRespBody:
+  type: object
+  properties:
+    id:
+      type: string
+      description: id of the scheduled post
+      example: 60e4b1b4b3b2b5c4c4b3b2b5
 
 getRespBody:
   type: 'object'
@@ -111,24 +88,45 @@ getRespBody:
             type: 'object'
             description: 'status of scheduled post'
             properties:
-              type:
+              code:
                 type: 'string'
                 description: 'status type'
                 enum:
                   - 'WAIT'
                   - 'DONE'
                   - 'FAIL'
-              desc:
+              description:
                 type: 'string'
                 description: 'description of status'
                 example: 'waiting to be posted'
           postData: 
             $ref: '#/postData'
+          userId: 
+            type: 'string'
+            description: 'user id who create this scheduled post'
+            example: '60e4b1b4b3b2b5c4c4b3b2b5'
           createdAt:
             type: 'string'
             description: 'The date/time when this scheduled post is created.'
             format: 'date-time'
             example: '2022-07-07T04:24:20.444Z'
+          updatedAt:
+            type: 'string'
+            description: 'The date/time when this scheduled post is updated.'
+            format: 'date-time'
+            example: '2022-07-07T04:24:20.444Z'
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          userDisplayName:
+            type: string
+            description: 'User display name'
+            example: 'Alex'
+    networkId: 
+      type: string
+      description: 'network id of all of the posts'
+      example: '60e4b1b4b3b2b5c4c4b3b2b5'
     paging:
       type: 'object'
       properties:
@@ -146,7 +144,7 @@ postReqSchema:
       $ref: '#/postData'
     scheduledAt: 
       type: 'string'
-      description: 'The date/time when a post is scheduled. Need to be within next 1 days and next 30 days.'
+      description: 'The date/time when a post is scheduled. Need to be within next hour and next 30 days.'
       format: 'date-time'
       example: '2022-07-07T04:24:20.444Z'
   required:
@@ -176,58 +174,3 @@ postReqBody:
     application/json:
       schema: 
         $ref: '#/postReqSchema' 
-
-deleteReqBody:
-  required: true
-  content:
-    application/json:
-      schema:
-        type: 'object'
-        properties:
-          id:
-            type: 'string'
-            description: 'to specify which scheduled post to delete'
-        required:
-          - 'id'
-        description: 'Ok, not returning any data'
-
-getReqBody:
-  required: true
-  content:
-    application/json:
-      schema:
-        type: 'object'
-        properties:
-          notPostedOnly:
-            type: 'boolean'
-            description: 'to get only scheduled post that not posted yet'
-            default: false
-          options: 
-            type: 'object'
-            properties:
-              limit:
-                type: 'integer'
-                minimum: 1
-                maximum: 100
-                default: 10
-              token:
-                type: 'string'
-                maxLength: 1000
-              before:
-                type: 'string'
-                maxLength: 24
-              after:
-                type: 'string'
-                maxLength: 24
-              updatedAt:
-                type: 'string'
-                maxLength: 100
-            description: 'use updatedAt when sort by first/lastUpdated'
-          sortBy:
-            type: 'string'
-            enum:
-              - 'lastCreated'
-              - 'firstCreated'
-              - 'lastUpdated'
-              - 'firstUpdated'
-            default: 'lastCreated'
