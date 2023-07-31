@@ -6191,6 +6191,41 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
+  /api/v1/view/posts:
+    post: 
+      summary: View post
+      description: Send post viewing activity
+      tags: 
+        - Event Capture
+      security: 
+        - BearerAuth: []
+      requestBody: 
+        description: 'Given a list of `postId`, increase `reach` and `impression` of that post. 
+          `reach` will not be increase more than 1 time with the same owner (user) of `BearerAuth`'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: 
+                posts: 
+                  type: array
+                  items:
+                    type: object
+                    properties: 
+                      postId:
+                        type: string
+                        pattern: '^[a-f\d]{24}$'
+                        example: 60e4b1b4b3b2b5c4c4b3b2b5
+      responses:
+        202:
+          description:  ok, not returning any data
+        404:
+          $ref: './global/error.yaml#/NotFoundError'
+        422:
+          $ref: './global/error.yaml#/UnProcessableError'
+        500:
+          $ref: './global/error.yaml#/UnexpectedError'
   /api/v1/messages/images:
     post:
       summary: 'create a message with image in a given channel'
