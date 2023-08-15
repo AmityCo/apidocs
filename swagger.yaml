@@ -402,37 +402,6 @@ paths:
           $ref: './global/error.yaml#/UserIsGlobalBanned'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /v1/accessToken:
-    get:
-      summary: 'Generate AccessToken.'
-      tags:
-        - 'Device'
-      security:
-        - ApiKeyAuth: []
-      description: "Generate new Access Token.\n"
-      parameters:
-        - in: 'query'
-          name: 'userId'
-          schema:
-            type: 'string'
-          required: true
-        - in: 'query'
-          name: 'refreshToken'
-          schema:
-            type: 'string'
-          required: true
-      responses:
-        '200':
-          description: 'Return new accessToken'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  accessToken:
-                    type: 'string'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
   /v1/blacklist/records:
     put:
       summary: 'Refresh black list'
