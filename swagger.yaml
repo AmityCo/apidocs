@@ -18770,17 +18770,21 @@ paths:
     get:
       tags:
         - 'Message V5'
-      summary: 'Find messages by creatorId and multiple conditions'
-      description: 'Multiple conditions can be provided by query string'
+      summary: 'Find messages by creatorId'
+      description: 'This API can be called by admin user only'
       parameters:
         - name: creatorId
           in: path
           required: true
-          description: creator ID of message that needs to be find
+          description: Creator ID to filter
           schema:
             $ref: './schema/message.yaml#/MessageV5_creatorId'
-        - $ref: './v5/message/parameter.yaml#/IsDeleted'
-        - $ref: './v5/message/parameter.yaml#/HasFlags'
+        - name: channelId
+          in: query
+          required: false
+          description: Channel ID to filter
+          schema:
+            $ref: './schema/message.yaml#/MessageV5_messageFeedId'
         - $ref: './v5/message/parameter.yaml#/PagingOptions'
       responses:
         '200':
