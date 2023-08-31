@@ -15,10 +15,34 @@
   <script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
   <script type="text/javascript">
+
+    const urlAfterHash = window.location.href.split('#')[1];
+    // Parse the query parameters from the URL after hash
+    const queryParams = {};
+    if (urlAfterHash) {
+      const queryString = urlAfterHash.split('?')[1];
+      if (queryString) {
+        const paramPairs = queryString.split('&');
+        paramPairs.forEach(pair => {
+          const [key, value] = pair.split('=');
+          queryParams[key] = decodeURIComponent(value);
+        });
+      }
+    }
+
+    const branchName = queryParams.branch || 'develop';
+
     window.onload = function () {
+      document.getElementById('overlay').innerHTML = `
+        Branch: ${branchName}
+      `
+      document.getElementById('root').innerHTML = `
+        <div id="search"></div>
+          <elements-api apiDescriptionUrl="https://raw.githubusercontent.com/AmityCo/apidocs/${branchName}/swagger.yaml" router="hash" layout="sidebar">
+        </elements-api>`;
 
       const xhr = new XMLHttpRequest();
-      xhr.open('GET', 'https://raw.githubusercontent.com/AmityCo/apidocs/develop/swagger.yaml', true);
+      xhr.open('GET', `https://raw.githubusercontent.com/AmityCo/apidocs/${branchName}/swagger.yaml`, true);
       xhr.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
           const { autocomplete } = window['@algolia/autocomplete-js'];
@@ -101,10 +125,8 @@
 </head>
 
 <body>
-  <div id="search"></div>
-  <elements-api apiDescriptionUrl="https://raw.githubusercontent.com/AmityCo/apidocs/develop/swagger.yaml" router="hash"
-    layout="sidebar">
-  </elements-api>
+  <div id="overlay"></div>
+  <div id="root"></div>
 </body>
 
 </html>
