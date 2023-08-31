@@ -402,37 +402,6 @@ paths:
           $ref: './global/error.yaml#/UserIsGlobalBanned'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /v1/accessToken:
-    get:
-      summary: 'Generate AccessToken.'
-      tags:
-        - 'Device'
-      security:
-        - ApiKeyAuth: []
-      description: "Generate new Access Token.\n"
-      parameters:
-        - in: 'query'
-          name: 'userId'
-          schema:
-            type: 'string'
-          required: true
-        - in: 'query'
-          name: 'refreshToken'
-          schema:
-            type: 'string'
-          required: true
-      responses:
-        '200':
-          description: 'Return new accessToken'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  accessToken:
-                    type: 'string'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
   /v1/blacklist/records:
     put:
       summary: 'Refresh black list'
@@ -7872,25 +7841,29 @@ paths:
                           - 'channel.created'
                           - 'channel.joined'
                           - 'conversation-channel.joined'
-                          - 'message.created'
                           - 'text-mention-message.created'
+                          - 'message.created'
                           - 'conversation-message.created'
+                          - 'conversation-text-message.created'
+                          - 'conversation-image-message.created'
+                          - 'conversation-file-message.created'
                           - 'post.created'
-                          - 'post.reacted'
                           - 'post.approved'
                           - 'post.need-reviewing'
+                          - 'text-mention-post.created'
+                          - 'text-mention-user-feed-post.created'
+                          - 'video-streaming-post.created'
+                          - 'post.reacted'
                           - 'comment.created'
+                          - 'text-mention-comment.created'
+                          - 'text-mention-user-feed-comment.created'
                           - 'comment.replied'
+                          - 'text-mention-comment.replied'
+                          - 'text-mention-user-feed-comment.replied'
                           - 'comment.reacted'
                           - 'follow.created'
                           - 'follow.requested'
                           - 'follow.accepted'
-                          - 'text-mention-post.created'
-                          - 'text-mention-user-feed-post.created'
-                          - 'text-mention-comment.created'
-                          - 'text-mention-user-feed-comment.created'
-                          - 'text-mention-comment.replied'
-                          - 'text-mention-user-feed-comment.replied'
                           - 'community.roleAdded'
                           - 'community.updated'
                       moduleName:
@@ -8061,13 +8034,34 @@ paths:
                       name:
                         type: 'string'
                         enum:
+                          - 'channel.created'
+                          - 'channel.joined'
+                          - 'conversation-channel.joined'
+                          - 'text-mention-message.created'
+                          - 'message.created'
+                          - 'conversation-message.created'
+                          - 'conversation-text-message.created'
+                          - 'conversation-image-message.created'
+                          - 'conversation-file-message.created'
                           - 'post.created'
-                          - 'post.reacted'
                           - 'post.approved'
                           - 'post.need-reviewing'
+                          - 'text-mention-post.created'
+                          - 'text-mention-user-feed-post.created'
+                          - 'video-streaming-post.created'
+                          - 'post.reacted'
                           - 'comment.created'
+                          - 'text-mention-comment.created'
+                          - 'text-mention-user-feed-comment.created'
                           - 'comment.replied'
+                          - 'text-mention-comment.replied'
+                          - 'text-mention-user-feed-comment.replied'
                           - 'comment.reacted'
+                          - 'follow.created'
+                          - 'follow.requested'
+                          - 'follow.accepted'
+                          - 'community.roleAdded'
+                          - 'community.updated'
                       moduleName:
                         type: 'string'
                         enum:
@@ -8200,16 +8194,31 @@ paths:
                           - 'channel.created'
                           - 'channel.joined'
                           - 'conversation-channel.joined'
+                          - 'text-mention-message.created'
                           - 'message.created'
                           - 'conversation-message.created'
+                          - 'conversation-text-message.created'
+                          - 'conversation-image-message.created'
+                          - 'conversation-file-message.created'
                           - 'post.created'
+                          - 'post.approved'
+                          - 'post.need-reviewing'
+                          - 'text-mention-post.created'
+                          - 'text-mention-user-feed-post.created'
+                          - 'video-streaming-post.created'
                           - 'post.reacted'
                           - 'comment.created'
+                          - 'text-mention-comment.created'
+                          - 'text-mention-user-feed-comment.created'
                           - 'comment.replied'
+                          - 'text-mention-comment.replied'
+                          - 'text-mention-user-feed-comment.replied'
                           - 'comment.reacted'
                           - 'follow.created'
                           - 'follow.requested'
                           - 'follow.accepted'
+                          - 'community.roleAdded'
+                          - 'community.updated'
                       moduleName:
                         type: 'string'
                         enum:
@@ -18103,6 +18112,15 @@ paths:
     get:
       summary: 'user flag cleared'
       description: "Event has occurred when the user flag was cleared\n"
+      tags:
+        - 'Realtime'
+      responses:
+        '200':
+          $ref: './v4/realtime/user/response.yaml#/Response'
+  /realtime/user.didGlobalBan:
+    get:
+      summary: 'user global banned'
+      description: "Event has occurred when user was global banned\n"
       tags:
         - 'Realtime'
       responses:
