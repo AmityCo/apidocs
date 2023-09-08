@@ -31,18 +31,17 @@
     }
 
     const branchName = queryParams.branch || 'develop';
+    const swaggerPath = `https://raw.githubusercontent.com/AmityCo/apidocs/${branchName}/swagger.yaml`;
 
     window.onload = function () {
-      document.getElementById('overlay').innerHTML = `
-        Branch: ${branchName}
-      `
+      document.getElementById('overlay').innerHTML = `Branch: ${branchName}`
       document.getElementById('root').innerHTML = `
         <div id="search"></div>
-          <elements-api apiDescriptionUrl="https://raw.githubusercontent.com/AmityCo/apidocs/${branchName}/swagger.yaml" router="hash" layout="sidebar">
+          <elements-api apiDescriptionUrl="${swaggerPath}" router="hash" layout="sidebar">
         </elements-api>`;
 
       const xhr = new XMLHttpRequest();
-      xhr.open('GET', `https://raw.githubusercontent.com/AmityCo/apidocs/${branchName}/swagger.yaml`, true);
+      xhr.open('GET', swaggerPath, true);
       xhr.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
           const { autocomplete } = window['@algolia/autocomplete-js'];
