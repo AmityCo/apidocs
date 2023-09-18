@@ -610,7 +610,7 @@ MessageV5_messageIds:
 MessageV5_channelId:
   description: Channel id of message
   type: string
-  maxLength: 30
+  maxLength: 24
   example: abc665aed9dbb8d036037eed
 MessageV5_channelType:
   description: Channel type of message
@@ -628,8 +628,8 @@ MessageV5_createdAt:
 MessageV5_creatorId:
   description: A creator ID
   type: string
-  maxLength: 30
-  example: 8aa313c8dbb00af911b07672
+  maxLength: 24
+  example: 5349b4ddd2781d08c09890f4
 MessageV5_data:
   description: A custom object for storing message. The size of this object must be less than 10 kb.
   type: object
@@ -689,7 +689,7 @@ MessageV5_messageFeedId:
   description: Message feed id of message
   type: string
   maxLength: 30
-  example: abc665aed9dbb8d036037eec
+  example: 507f191e810c19729de860ea
 MessageV5_metadata:
   description: A custom object for storing the other data. The size of this object must be less than 20 kb.
   type: object
@@ -727,6 +727,25 @@ MessageV5_pageOptions:
     around:
       type: string
       maxLength: 30
+MessageV5_pageOptionsAdmin:
+  description: Page options by using cursor
+  type: object
+  properties:
+    after:
+      type: string
+      maxLength: 30
+    before:
+      type: string
+      maxLength: 30
+    limit:
+      type: number
+      format: int32
+      default: 10
+      minimum: 1
+      maximum: 100
+    token:
+      type: string
+      maxLength: 100
 MessageV5_parentId:
   description: Parent id of message
   type: string
