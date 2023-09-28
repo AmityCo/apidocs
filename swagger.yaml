@@ -17572,7 +17572,21 @@ paths:
               properties:
                 isAllowMentionedChannelEnabled:
                   type: 'boolean'
-                  default: true
+                  default: false
+                messagePreviewSetting:
+                  type: object
+                  description: "Message preview setting"
+                  properties:
+                    enabled:
+                      type: boolean
+                      default: false
+                      description: "message preview feature enable or disable"
+                    isIncludeDeleted:
+                      type: boolean  
+                      default: false
+                      description: "message preview can be a deleted message, if false return message preview without a deleted message"
+                  required:
+                    - enabled
       responses:
         '200':
           $ref: './v3/network-setting/response.yaml#/ChatNetworkSettingApiResponse'
