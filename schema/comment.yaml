@@ -13,6 +13,12 @@ Comment:
     userId:
       type: string
       description: ID of a creator.
+    userPublicId:
+      type: string
+      description: Public ID of a creator.
+    userInternalId:
+      type: string
+      description: Internal ID of a creator.
     parentId:
       type: string
       description: ID of a parent comment.
@@ -103,7 +109,7 @@ Comment:
       example: 1
     mentionees:
       type: array
-      description: The object of the mentions type and user who get a notification from the post.
+      description: The object of the mentions type and user who get a notification from the comment.
       items:
         type: object
         properties:
@@ -117,6 +123,16 @@ Comment:
           userIds:
             type: array
             description: Array of UserId.
+            items:
+              type: string
+          userPublicIds:
+            type: array
+            description: Array of UserPublicId.
+            items:
+              type: string
+          userInternalIds:
+            type: array
+            description: Array of UserInternalId.
             items:
               type: string
     attachments:
@@ -152,6 +168,12 @@ CommentForRealtime:
     userId:
       type: string
       description: ID of a creator.
+    userPublicId:
+      type: string
+      description: Public ID of a creator.
+    userInternalId:
+      type: string
+      description: Internal ID of a creator.
     parentId:
       type: string
       description: ID of a parent comment.
@@ -250,6 +272,16 @@ CommentForRealtime:
           userIds:
             type: array
             description: Array of UserId.
+            items:
+              type: string
+          userPublicIds:
+            type: array
+            description: Array of UserPublicId.
+            items:
+              type: string
+          userInternalIds:
+            type: array
+            description: Array of UserInternalId.
             items:
               type: string
     attachments:
