@@ -5865,35 +5865,113 @@ paths:
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsSocketResponse'
-  /api/v1/view/posts:
+  /api/v1/analytics/activities:
     post: 
-      summary: View post
-      description: Send post viewing activity
+      summary: send analytic activities
+      description: 
+        "Send a batch of analytic activities to the server, currently only support viewing post activity.
+        \n - For viewing post activity, the `impression` and `reach` of the post will be updated list 
+        of users from `/api/v1/analytics/views/posts/{postId}/users` will be updated too. (but not immediately)"
       tags: 
-        - Event Capture
+        - Analytic
       security: 
         - BearerAuth: []
       requestBody: 
-        description: 'Given a list of `postId`, increase `reach` and `impression` of that post. 
-          `reach` will not be increase more than 1 time with the same owner (user) of `BearerAuth`'
+        description: ''
         required: true
         content:
           application/json:
             schema:
               type: object
               properties: 
-                posts: 
+                activities: 
                   type: array
+                  minItems: 1
+                  maxItems: 1000
                   items:
                     type: object
                     properties: 
-                      postId:
+                      contentId:
                         type: string
                         pattern: '^[a-f\d]{24}$'
                         example: 60e4b1b4b3b2b5c4c4b3b2b5
+                      contentType: 
+                        type: string
+                        enum: [post]
+                      activityType: 
+                        type: string
+                        enum: [view]
+                      timestamp:
+                        type: string
+                        format: date-time
+                        example: 2017-07-21T17:32:28Z
       responses:
         202:
           description:  ok, not returning any data
+        400:
+          $ref: './global/error.yaml#/BadRequestError'
+        422:
+          $ref: './global/error.yaml#/UnProcessableError'
+        500:
+          $ref: './global/error.yaml#/UnexpectedError'
+  /api/v1/analytics/views/posts/{postId}/users:
+    get:
+      summary: query post reach
+      description: 'Query a list of users who have viewed certain post, the user who have been global banned, 
+        community banned, or soft deleted will be excluded from the list of users. And if the post is soft deleted, 
+        post owner will be able to view this list, but others can not.'
+      tags: 
+        - Analytic
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-f\d]{24}$'
+            example: 60e4b1b4b3b2b5c4c4b3b2b5
+        - name: token
+          in: query
+          schema: 
+            type: string
+            max: 1000
+            example: 'eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=='
+            description: token of the page that you need from either `next` or `prev` of `paging`
+        - name: limit
+          in: query
+          schema:
+            type: number
+            default: 10
+            description: number of user in a page
+      responses:
+        200:
+          description: List of users who have viewed this posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: "./schema/user.yaml#/UserV3"
+                  files:
+                    type: array
+                    items:
+                      $ref: "./schema/file.yaml#/File"
+                  paging:
+                    type: object
+                    properties:
+                      next:
+                        type: string
+                        example: 'eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=='
+                      previous:
+                        type: string
+                        example: 'eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=='
+        403:
+          $ref: './global/error.yaml#/ForbiddenError'
         404:
           $ref: './global/error.yaml#/NotFoundError'
         422:
