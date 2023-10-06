@@ -1,4 +1,77 @@
-postData: 
+postResponseData: 
+  type: 'object'
+  properties: 
+    data:
+      type: 'object'
+      properties:
+        text:
+          type: 'string'
+          description: 'data for text in post parent'
+          example: 'example text'
+    dataType:
+      type: 'string'
+      example: 'upstra.customtype'
+      description: 'Must be in dot separated string format or system defined format (ex. "upstra.customtype", "com.eko.birthday")'
+    targetType:
+      type: 'string'
+      enum:
+        - 'user'
+        - 'community'
+        - 'content'
+      default: 'user'
+      description: 'where to create post to'
+    targetId:
+      type: 'string'
+      example: 'public_user_id'
+      description: 'Resource public id depends on target type (ex. target type is community, target id will be community public id)'
+    metadata:
+      type: 'object'
+      example:
+        anything: 'you want'
+    postId:
+      type: 'string'
+      example: 'postidiwant'
+      description: 'for specify public post id on post creation'
+    tags:
+      type: 'array'
+      minItems: 0
+      maxItems: 5
+      items:
+        type: 'string'
+        description: 'tags'
+        maximum: 24
+    mentionees:
+      type: 'array'
+      description: 'The object of the mentions type and user who get a notification from the post.'
+      items:
+        type: 'object'
+        properties:
+          type:
+            type: 'string'
+            example: 'user'
+            description: "type: * `user` - need to specific userIds and notification mentions individual user\n"
+            enum:
+              - 'user'
+          userIds:
+            type: 'array'
+            example:
+              - 'userId1'
+              - 'userId2'
+            description: 'Array of UserId. if the mention type is a channel, doesn''t send userIds'
+            items:
+              type: 'string'
+          userPublicIds:
+            type: array
+            description: Array of UserPublicId.
+            items:
+              type: string
+          userInternalIds:
+            type: array
+            description: Array of UserInternalId.
+            items:
+              type: string
+
+postRequestData: 
   type: 'object'
   properties: 
     data:
@@ -100,7 +173,7 @@ getRespBody:
                 description: 'description of status'
                 example: 'waiting to be posted'
           postData: 
-            $ref: '#/postData'
+            $ref: '#/postResponseData'
           userId: 
             type: 'string'
             description: 'user id who create this scheduled post'
@@ -141,7 +214,7 @@ postReqSchema:
   type: 'object'
   properties:
     postData: 
-      $ref: '#/postData'
+      $ref: '#/postRequestData'
     scheduledAt: 
       type: 'string'
       description: 'The date/time when a post is scheduled. Need to be within next hour and next 30 days.'

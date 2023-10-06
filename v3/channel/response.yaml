@@ -13,6 +13,16 @@ ChannelsApiResponse:
             type: array
             items:
               $ref: "../../schema/channel.yaml#/ChannelUserV3"
+          messagePreviews:
+            type: array
+            description: Depends on messagePreviewId. if null will be empty array.
+            items:
+              $ref: "../../schema/message.yaml#/messagePreviews"  
+          messageFeedsInfo:
+            type: array
+            description: Depends on messagePreviews. if empty array will be empty array.
+            items:
+              $ref: "../../schema/message-feed.yaml#/messageFeedsInfo"    
           users:
             type: array
             items:
@@ -36,6 +46,16 @@ ChannelPaginationApiResponse:
             type: array
             items:
               $ref: "../../schema/channel.yaml#/ChannelUserV3"
+          messagePreviews:
+            type: array
+            description: Depends on messagePreviewId. if null will be empty array.
+            items:
+              $ref: "../../schema/message.yaml#/MessagePreviews"  
+          messageFeedsInfo:
+            type: array
+            description: Depends on messagePreviews. if empty array will be empty array.
+            items:
+              $ref: "../../schema/message-feed.yaml#/messageFeedsInfo" 
           users:
             type: array
             items:
@@ -72,6 +92,16 @@ ChannelsSocketResponse:
                 type: array
                 items:
                   $ref: "../../schema/channel.yaml#/ChannelUserV3"
+              messagePreviews:
+                type: array
+                description: Depends on messagePreviewId. if null will be empty array.
+                items:
+                  $ref: "../../schema/message.yaml#/MessagePreviews"  
+              messageFeedsInfo:
+                type: array
+                description: Depends on messagePreviews. if empty array will be empty array.
+                items:
+                  $ref: "../../schema/message-feed.yaml#/messageFeedsInfo"    
               users:
                 type: array
                 items:
@@ -100,6 +130,16 @@ ChannelPaginationSocketResponse:
                 type: array
                 items:
                   $ref: "../../schema/channel.yaml#/ChannelUserV3"
+              messagePreviews:
+                type: array
+                description: Depends on messagePreviewId. if null will be empty array.
+                items:
+                  $ref: "../../schema/message.yaml#/MessagePreviews"  
+              messageFeedsInfo:
+                type: array
+                description: Depends on messagePreviews. if empty array will be empty array.
+                items:
+                  $ref: "../../schema/message-feed.yaml#/messageFeedsInfo"
               users:
                 type: array
                 items:
@@ -132,3 +172,16 @@ ChannelCustomNotificationResponse:
       type: array
       items:
         $ref: "../../schema/file.yaml#/File"
+
+ChannelCountApiResponse:
+  description: Count information of channels
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          total: 
+            type: number
+            example: 10000
+          lastUpdatedAt:
+            type: date
