@@ -17587,6 +17587,79 @@ paths:
                 status: error
                 code: 500000
                 message: Unexpected error
+  /api/v3/network-settings/users:
+    get:
+      tags: 
+        - Network Setting
+      summary: Get users configuration.
+      description: Get users configuration.
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          $ref: './v3/network-setting/response.yaml#/UsersSettingApiResponse'
+        "403":
+          description: Permission denied.
+          content:
+            application/json:
+              schema:
+                $ref: './global/error.yaml#/PermissionDenidedError'
+              example:
+                status: error
+                code: 400301
+                message: Only administrator can do this
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: './global/error.yaml#/UnexpectedError'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+    put:
+      tags: 
+        - Network Setting
+      summary: Update users configuration
+      description: Update users configuration
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: './v3/network-setting/request.yaml#/UpdateUsersSetting'
+      responses:
+        "200":
+          $ref: './v3/network-setting/response.yaml#/UsersSettingApiResponse'
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: './global/error.yaml#/BadRequestError'
+              example:
+                status: error
+                code: 400000
+                message: This feature is not available on your network
+        "403":
+          description: Permission denied.
+          content:
+            application/json:
+              schema:
+                $ref: './global/error.yaml#/PermissionDenidedError'
+              example:
+                status: error
+                code: 400301
+                message: Only administrator can do this
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: './global/error.yaml#/UnexpectedError'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
   /api/v3/allowlists:
     get:
       summary: 'Get list of allowed words'
