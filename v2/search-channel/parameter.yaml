@@ -1,0 +1,76 @@
+Query:
+  name: query
+  in: query
+  required: true
+  description: The search query.
+  schema:
+    type: string
+
+ExactMatch:
+  name: exactMatch
+  in: query
+  required: false
+  description: Flag to indicate exact match.
+  schema:
+    type: boolean
+
+IsMemberOnly:
+  name: isMemberOnly
+  in: query
+  required: false
+  description: Flag to filter only member-only channels.
+  schema:
+    type: boolean
+
+Types:
+  name: types
+  in: query
+  required: false
+  description: Array of channel types.
+  schema:
+    type: array
+    items:
+      type: string
+      enum:
+        - community
+        - conversation
+        - live
+        - broadcast
+
+Tags:
+  name: tags
+  in: query
+  required: false
+  description: Array of channel tags.
+  schema:
+    type: array
+    items:
+      type: string
+
+Options:
+  name: options
+  in: query
+  required: false
+  description: Additional search options.
+  schema:
+    type: object
+    properties:
+      limit:
+        type: number
+        minimum: 1
+        maximum: 100
+        default: 20
+      orderBy:
+        type: string
+        enum:
+          - desc
+          - asc
+      sortBy:
+        type: string
+        enum:
+          - lastActivity
+          - relevance
+        default: relevance
+      token:
+        type: string
+        maxLength: 100
