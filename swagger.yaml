@@ -2781,6 +2781,27 @@ paths:
           $ref: './global/error.yaml#/ForbiddenError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
+  /api/v2/search/channels:
+    get:
+      tags:
+        - 'Search Channel V2'
+      summary: 'Search channels'
+      description: 'Retrieve channels based on search criteria'
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: './v2/search-channel/parameter.yaml#/Query'
+        - $ref: './v2/search-channel/parameter.yaml#/ExactMatch'
+        - $ref: './v2/search-channel/parameter.yaml#/IsMemberOnly'
+        - $ref: './v2/search-channel/parameter.yaml#/Types'
+        - $ref: './v2/search-channel/parameter.yaml#/Tags'
+        - $ref: './v2/search-channel/parameter.yaml#/Options'
+        
+      responses:
+        '200':
+          $ref: './v2/search-channel/response.yaml#/SearchChannelResponse'
+        '422':
+          description: 'Parameters validation error'
   /api/v2/channels/{channelId}/close:
     post:
       summary: 'close channel'

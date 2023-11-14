@@ -1,0 +1,61 @@
+SearchChannelResponse:
+  description: Search channel response
+  content:
+    application/json:
+      schema:
+        properties:
+          status:
+            type: string
+          data:
+            type: object
+            properties:
+              channels:
+                type: array
+                items:
+                  $ref: "../../schema/channel.yaml#/ChannelV3"
+              channelUsers:
+                type: array
+                items:
+                  $ref: "../../schema/channel.yaml#/ChannelUserV3"
+              messageFeedsInfo:
+                type: array
+                description: Depends on messagePreviews. if empty array will be empty array.
+                items:
+                  $ref: "../../schema/message-feed.yaml#/messageFeedsInfo"
+              messagePreviews:
+                type: array
+                description: Depends on messagePreviewId. if null will be empty array.
+                items:
+                  $ref: "../../schema/message.yaml#/MessagePreviews"
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/UserV3"
+              files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+              totalCount:
+                type: number
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  prev:
+                    type: string  
+              search:
+                type: object
+                properties:
+                  query:
+                    type: string
+                    description: The search query.
+                  limit:
+                    type: integer
+                    description: Limit on the number of results.
+                  sortBy:
+                    type: string
+                    description: Sorting criteria (e.g., "relevance").
+                  orderBy:
+                    type: string
+                    description: Sorting order (e.g., "desc").
