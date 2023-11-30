@@ -10215,6 +10215,40 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
+  /admin/v1/users/count:
+    get:
+      summary: 'Get user count'
+      description: Using for get user count by filter
+      tags:
+        - 'Admin'
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: 'keyword'
+          description: Display name search keyword
+          in: 'query'
+          schema:
+            type: 'string'
+            maxLength: 100
+        - name: 'filter'
+          in: 'query'
+          schema:
+            type: 'string'
+            enum:
+              - 'all'
+              - 'flagged'
+            default: 'all'
+      responses:
+        '200':
+          $ref: './v1/admin/response.yaml#/UserCountApiResponse'
+        '403':
+          $ref: './global/error.yaml#/PermissionDenidedError'
+        '429':
+          $ref: './global/error.yaml#/RateLimitError'
+        '404':
+          $ref: './global/error.yaml#/NotFoundError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
 
   /internal/v1/posts/schedule: 
     post:
