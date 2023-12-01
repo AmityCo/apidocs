@@ -1,0 +1,48 @@
+TargetId:
+  type: string
+  maxLength: 900
+
+TargetType:
+  type: string
+  enum:
+    - community
+    - user
+
+Targets:
+  type: array
+  items:
+    type: object
+    properties:
+      targetId:
+        $ref: "#/TargetId"
+      targetType:
+        $ref: "#/TargetType"
+  maxItems: 10
+  minItems: 1
+
+QueryOptions:
+  type: object
+  properties:
+    sortBy:
+      type: string
+      default: createdAt
+      enum:
+        - createdAt
+    orderBy:
+      type: string
+      default: desc
+      enum:
+        - asc
+        - desc
+
+StoryId:
+  type: string
+  pattern: '^[a-f\d]{24}$'
+
+SeenState:
+  type: string
+  enum:
+    - all
+    - seen
+    - unseen
+  default: unseen

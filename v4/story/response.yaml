@@ -1,0 +1,121 @@
+CreateStoryResponsePayload:
+  description: Create story response payload
+  type: object
+  properties:
+    stories:
+      type: array
+      items:
+        $ref: "../../schema/story.yaml#/StoryWithReferenceId"
+    comments:
+      type: array
+      items:
+        $ref: "../../schema/comment.yaml#/Comment"
+    files:
+      type: array
+      items:
+        $ref: "../../schema/file.yaml#/File"
+    users:
+      type: array
+      items:
+        $ref: "../../schema/user.yaml#/UserV3"
+    communities:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/Community"
+    communityUsers:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/CommunityUser"
+    communityCategories:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/CommunityCategory"
+
+StoryResponsePayload:
+  description: Story response payload
+  type: object
+  properties:
+    stories:
+      type: array
+      items:
+        $ref: "../../schema/story.yaml#/Story"
+    comments:
+      type: array
+      items:
+        $ref: "../../schema/comment.yaml#/Comment"
+    files:
+      type: array
+      items:
+        $ref: "../../schema/file.yaml#/File"
+    users:
+      type: array
+      items:
+        $ref: "../../schema/user.yaml#/UserV3"
+    communities:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/Community"
+    communityUsers:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/CommunityUser"
+    communityCategories:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/CommunityCategory"
+
+StoryWithTargetResponsePayload:
+  allOf:
+    - $ref: "#/StoryResponsePayload"
+    - type: object
+      properties:
+        storyTargets:
+          type: array
+          items:
+            $ref: "../../schema/story.yaml#/StoryTarget"
+
+StoryTargetsResponsePayload:
+  description: Story targets response payload
+  type: object
+  properties:
+    storyTargets:
+      type: array
+      items:
+        $ref: "../../schema/story.yaml#/StoryTarget"
+
+GlobalStoryTargetsResponsePayload:
+  type: object
+  properties:
+    storyTargets:
+      type: array
+      items:
+        $ref: "../../schema/story.yaml#/StoryTarget"
+    files:
+      type: array
+      items:
+        $ref: "../../schema/file.yaml#/File"
+    users:
+      type: array
+      items:
+        $ref: "../../schema/user.yaml#/UserV3"
+    communities:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/Community"
+    communityUsers:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/CommunityUser"
+    communityCategories:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/CommunityCategory"
+    paging:
+      type: object
+      properties:
+        next:
+          type: string
+          description: The next token to get the next page of stories.
+        previous:
+          type: string
+          description: The previous token to get the previous page of stories.
