@@ -6001,6 +6001,70 @@ paths:
           $ref: './global/error.yaml#/UnProcessableError'
         500:
           $ref: './global/error.yaml#/UnexpectedError'
+  /api/v1/analytics/views/stories/{storyId}/users:
+    get:
+      summary: query story reach
+      description: 'Query a list of users who have viewed certain story, the user who have been global banned, 
+        community banned, or soft deleted will be excluded from the list of users. And if the post is soft deleted, 
+        post owner will be able to view this list, but others can not.'
+      tags: 
+        - Analytic
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: storyId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-f\d]{24}$'
+            example: 60e4b1b4b3b2b5c4c4b3b2b5
+        - name: token
+          in: query
+          schema: 
+            type: string
+            maxLength: 1000
+            example: 'eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=='
+            description: token of the page that you need from either `next` or `prev` of `paging`
+        - name: limit
+          in: query
+          schema:
+            type: number
+            default: 10
+            description: number of user in a page
+      responses:
+        200:
+          description: List of users who have viewed this story
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: "./schema/user.yaml#/UserV3"
+                  files:
+                    type: array
+                    items:
+                      $ref: "./schema/file.yaml#/File"
+                  paging:
+                    type: object
+                    properties:
+                      next:
+                        type: string
+                        example: 'eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=='
+                      previous:
+                        type: string
+                        example: 'eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=='
+        403:
+          $ref: './global/error.yaml#/ForbiddenError'
+        404:
+          $ref: './global/error.yaml#/NotFoundError'
+        422:
+          $ref: './global/error.yaml#/UnProcessableError'
+        500:
+          $ref: './global/error.yaml#/UnexpectedError'
   /api/v1/messages/images:
     post:
       summary: 'create a message with image in a given channel'
