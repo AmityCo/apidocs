@@ -88,6 +88,17 @@ Community:
       description: Determines that this community require an authorize user to review post before post is published
     moderatorMemberCount:
       type: integer
+    notificationMode:
+      type: string
+      enum:
+        - default
+        - silent
+        - subscribe
+      description: >
+        Notification Mode:
+          * `default` - Auto register push notification.
+          * `silent` - Do not send notification.
+          * `subscribe` - Send notification to subscribed users only.
   required:
     - communityId
     - channelId
