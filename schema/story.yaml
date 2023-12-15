@@ -1,11 +1,30 @@
+StoryHyperlinkItemData:
+  type: object
+  description: Data of a hyperlink item. Required when item type is hyperlink.
+  properties:
+    url:
+      type: string
+      description: URL of the hyperlink.
+      maxLength: 1000
+    customText:
+      type: string
+      description: Custom text of the hyperlink.
+      maxLength: 30
+  required:
+    - url
+
 StoryItem:
   type: object
+  description: Story item. Currently support only hyperlink item. Only one hyperlink item is allowed per story.
   properties:
     type:
       type: string
+      description: Type of the story item. Currently support only hyperlink
       enum: ['hyperlink']
+      default: 'hyperlink'
     data:
-      type: object
+      oneOf:
+        - $ref: "#/StoryHyperlinkItemData"
     placement:
       type: object
       description: Placement of the item in the story. Currently not supported.
@@ -33,7 +52,6 @@ StoryItem:
               type: number
               description: Rotation angle in degrees
       required:
-        - type
         - data
   example:
     type: hyperlink
