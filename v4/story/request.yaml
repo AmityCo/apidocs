@@ -1,0 +1,57 @@
+CreateStoryRequestPayload:
+  type: object
+  properties:
+    data:
+      type: object
+      description: Main data contained in the story, required only 1 field depends on dataType. The size of this object must be less than 10 KB.
+      properties:
+        text:
+          type: string
+          description: text data (required if dataType is text)
+          example: example text
+        fileId:
+          type: string
+          description: image or video file id (required if dataType is image or video)
+        imageDisplayMode:
+          type: string
+          description: >
+            image display mode (required if dataType is image)
+            represents the display mode of an image for maintaining the correct visual dimensions when displaying or processing image.
+          enum:
+            - fit
+            - full
+          default: fit
+    dataType:
+      type: string
+      enum:
+        - text
+        - image
+        - video
+    items:
+      type: array
+      description: List of items contained in story. Currently only support hyperlink item. Only one hyperlink item is allowed per story.
+      items:
+        $ref: "../../schema/story.yaml#/StoryItem"
+      maxItems: 10
+    targetType:
+      type: string
+      enum:
+        - community
+      description: where to create story to. currently limited to community only
+    targetId:
+      type: string
+      example: public_community_id
+      description: Resource public id depends on target type (ex. target type is community, target id will be community public id)
+    metadata:
+      type: object
+      description: Metadata of the story. The size of this object must be less than 20 KB
+      example: { "anything": "you want" }
+    referenceId: 
+      type: string
+      description: the id used for reference when optimistically create the story
+  required:
+    - data
+    - dataType
+    - targetId
+    - targetType
+    - referenceId
