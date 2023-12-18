@@ -12,6 +12,15 @@ CreateStoryRequestPayload:
         fileId:
           type: string
           description: image or video file id (required if dataType is image or video)
+        imageDisplayMode:
+          type: string
+          description: >
+            image display mode (required if dataType is image)
+            represents the display mode of an image for maintaining the correct visual dimensions when displaying or processing image.
+          enum:
+            - fit
+            - full
+          default: fit
     dataType:
       type: string
       enum:

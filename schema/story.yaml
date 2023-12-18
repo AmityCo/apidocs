@@ -102,7 +102,7 @@ Story:
       default: []
     data:
       type: object
-      description: Body of a story. (It can be anything when dataType is not text, image, file)
+      description: Main data contained in the story, required only 1 field depends on dataType. The size of this object must be less than 10 KB.
       properties:
         text:
           type: string
@@ -110,6 +110,15 @@ Story:
         fileId:
           type: string
           description: file key on cloud storage (for image type).
+        imageDisplayMode:
+          type: string
+          description: >
+            image display mode (available if dataType is image)
+            represents the display mode of an image for maintaining the correct visual dimensions when displaying or processing image.
+          enum:
+            - fit
+            - full
+          default: fit
         thumbnailFileId:
           type: string
           description: video thumbnail file id (for video type).
