@@ -1,0 +1,272 @@
+StoryHyperlinkItemData:
+  type: object
+  description: Data of a hyperlink item. Required when item type is hyperlink.
+  properties:
+    url:
+      type: string
+      description: URL of the hyperlink.
+      maxLength: 1000
+    customText:
+      type: string
+      description: Custom text of the hyperlink.
+      maxLength: 30
+  required:
+    - url
+
+StoryItem:
+  type: object
+  description: Story item. Currently support only hyperlink item. Only one hyperlink item is allowed per story.
+  properties:
+    type:
+      type: string
+      description: Type of the story item. Currently support only hyperlink
+      enum: ['hyperlink']
+      default: 'hyperlink'
+    data:
+      oneOf:
+        - $ref: "#/StoryHyperlinkItemData"
+    placement:
+      type: object
+      description: Placement of the item in the story. Currently not supported.
+      properties:
+        width:
+          type: number
+        height:
+          type: number
+        transform:
+          type: object
+          properties:
+            translate_x:
+              type: number
+              description: Translation in the x-axis (in pixels)
+            translate_y:
+              type: number
+              description: Translation in the y-axis (in pixels)
+            scale_x:
+              type: number
+              description: Scale factor for the x-axis
+            scale_y:
+              type: number
+              description: Scale factor for the y-axis
+            rotate:
+              type: number
+              description: Rotation angle in degrees
+      required:
+        - data
+  example:
+    type: hyperlink
+    data:
+      url: https://www.google.com
+      customText: Google
+        
+
+Story:
+  type: object
+  properties:
+    storyId:
+      type: string
+      description: ID of a post.
+    path:
+      type: string
+      description: Path of a story.
+    creatorId:
+      type: string
+      description: Internal ID of a creator.
+    creatorPublicId:
+      type: string
+      description: Public ID of a creator.
+    targetId:
+      type: string
+      description: Internal ID of a target.
+    targetPublicId:
+      type: string
+      description: Public ID of a target.
+    targetType:
+      type: string
+      enum:
+        - user
+        - community
+      description: Type of a target (user, community, content).
+    dataType:
+      type: string
+      enum:
+        - text
+        - image
+        - video
+    items:
+      type: array
+      description: List of story item. Currently support only hyperlink item. Only one hyperlink item is allowed per story.
+      items:
+        $ref: "#/StoryItem"
+      maxItems: 10
+      default: []
+    data:
+      type: object
+      description: Main data contained in the story, required only 1 field depends on dataType. The size of this object must be less than 10 KB.
+      properties:
+        text:
+          type: string
+          description: post text.
+        fileId:
+          type: string
+          description: file key on cloud storage (for image type).
+        imageDisplayMode:
+          type: string
+          description: >
+            image display mode (available if dataType is image)
+            represents the display mode of an image for maintaining the correct visual dimensions when displaying or processing image.
+          enum:
+            - fit
+            - full
+          default: fit
+        thumbnailFileId:
+          type: string
+          description: video thumbnail file id (for video type).
+        videoFileId:
+          type: object
+          description: video file id for each quality (for video type).
+          properties:
+            original:
+              type: string
+              description: original file id
+            low:
+              type: string
+              description: low video quality file id
+            medium:
+              type: string
+              description: medium video quality file id
+            high:
+              type: string
+              description: high video quality file id
+    metadata:
+      type: object
+      description: Additional properties to support custom fields.
+    flagCount:
+      type: integer
+      description: The number of users that has read this post.
+    hashFlag:
+      type: object
+      description: The flag for checking internally that this post is reported or not.
+      properties:
+        bits:
+          type: integer
+        hashes:
+          type: integer
+        hash:
+          type: array
+          items:
+            type: integer
+    createdAt:
+      type: string
+      description: The date/time when a story is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a story is deleted.
+      format: date-time
+    expiresAt:
+      type: string
+      description: The date/time when a story is going to be expired.
+      format: date-time
+    reactions:
+      type: object
+      description: The mapping of reaction with reactionCounter.
+      example:
+        like: 1
+    reactionsCount:
+      type: integer
+      description: The number of all reactions for this post.
+      example: 1
+    myReactions:
+      type: array
+      items:
+        type: string
+        example: like
+      description: The list of my reactions to this post.
+    commentsCount:
+      type: integer
+      description: The number of all comments for this post.
+      example: 1
+    isDeleted:
+      type: boolean
+      default: false
+      description: A flag to deleted a story.
+    hasFlaggedComment:
+      type: boolean
+      default: false
+      description: The flag for checking internally that comments inside post is reported or not.
+    mentionedUsers:
+      type: array
+      description: The object of the mentions type and user who get a notification from the post.
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            description: >
+                type:
+                * `user` - need to specific userIds and notification mentions individual user
+            enum:
+              - user
+              - channel
+          userIds:
+            type: array
+            description: Array of UserId.
+            items:
+              type: string
+          userPublicIds:
+            type: array
+            description: Array of UserId.
+            items:
+              type: string
+    impression:
+      type: integer
+      description: Number of non-unique user view of the story
+    reach:
+      type: integer
+      description: Number of unique user view of the story
+  required:
+    - storyId
+    - data
+
+StoryWithReferenceId:
+  allOf:
+    - $ref: "#/Story"
+    - type: object
+      properties:
+        referenceId:
+          type: string
+          description: the id used for reference when optimistically create the story. only avaliable in create story API
+
+StoryTarget:
+  type: object
+  properties:
+    targetId:
+      type: string
+      description: ID of a target.
+    targetPublicId:
+      type: string
+      description: Public ID of a target.
+    targetType:
+      type: string
+      enum:
+        - community
+        - user
+      description: Type of a target (user, community, content).
+    lastStoryExpiresAt:
+      type: string
+      description: The expired date/time of the latest story created in target. Provided if there is any active story in target.
+      format: date-time
+    lastStorySeenExpiresAt:
+      type: string
+      description: The expired date/time of the latest story the user has seen. Provided if user has seen any story in target.
+      format: date-time
+    targetUpdatedAt:
+      type: string
+      description: The date/time when a target is updated. Used for validating the seen state on SDK side
+      format: date-time
+  required:
+    - targetId
+    - targetPublicId
+    - targetType
+    - targetUpdatedAt
