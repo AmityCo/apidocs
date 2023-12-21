@@ -2,7 +2,7 @@ openapi: '3.0.0'
 info:
   title: 'Amity Social Cloud SDK'
   description: "<h2>Using Amity APIs</h2>\n\nOur API documentation explains all API endpoints used in Amity Social Cloud. All APIs, with the exception of some\nauthentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin\nor User context. When used in user context, you will only be able to fetch data related to that user only.\nFor Administrators who are using our API documentation in making server-to-server API calls, you need an Admin\nAccess token to connect to the Amity server. Refer to <a href=\"https://docs.amity.co/console/settings#admin-api-access-token\" target=\"_blank\">this documentation</a>\nfor the instructions on how to generate an admin access token.\n\nAll backend endpoints that support Amity SDK are included here. To easily differentiate the type of each endpoint,\nwe added a prefix in each endpoint's path.\n\n1. Socket Endpoint: /sockets/...\n2. Socket Event: /callbacks/...\n3. REST API Endpoint: /v1/, /v2/, /v3/, or /v4/...\n4. Webhook Event: /webhook/...\n\n<h2>Select Region Endpoint</h2>\n\nBefore making server-to-server API calls, be sure to select the correct API endpoint for your region in\nthe <strong>Servers</strong> dropdown below.\n"
-  version: '4.67.0'
+  version: '4.69.0'
 servers:
   - url: 'https://api.us.amity.co'
     description: 'API Endpoint for US Region'
@@ -3057,6 +3057,17 @@ paths:
                   maximum: 100
                 isPublic:
                   type: 'boolean'  
+                notificationMode:
+                  type: string
+                  enum:
+                    - default
+                    - silent
+                    - subscribe
+                  description: >
+                    Notification Mode:
+                      * `default` - Auto register push notification.
+                      * `silent` - Do not send notification.
+                      * `subscribe` - Send notification to subscribed users only.
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
@@ -3137,6 +3148,17 @@ paths:
                   type: 'number'
                   minimum: 1
                   maximum: 100
+                notificationMode:
+                  type: string
+                  enum:
+                    - default
+                    - silent
+                    - subscribe
+                  description: >
+                    Notification Mode:
+                      * `default` - Auto register push notification.
+                      * `silent` - Do not send notification.
+                      * `subscribe` - Send notification to subscribed users only.
       responses:
         '200':
           $ref: './v3/channel/response.yaml#/ChannelsApiResponse'
@@ -5892,7 +5914,7 @@ paths:
     post: 
       summary: send analytic activities
       description: 
-        "Send a batch of analytic activities to the server, currently only support viewing post activity.
+        "Send a batch of analytic activities to the server, currently only support viewing post and story activity.
         \n - For viewing post activity, the `impression` and `reach` of the post will be updated list 
         of users from `/api/v1/analytics/views/posts/{postId}/users` will be updated too. (but not immediately)"
       tags: 
@@ -5920,7 +5942,7 @@ paths:
                         example: 60e4b1b4b3b2b5c4c4b3b2b5
                       contentType: 
                         type: string
-                        enum: [post]
+                        enum: [post, story]
                       activityType: 
                         type: string
                         enum: [view]
@@ -5971,6 +5993,70 @@ paths:
       responses:
         200:
           description: List of users who have viewed this posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: "./schema/user.yaml#/UserV3"
+                  files:
+                    type: array
+                    items:
+                      $ref: "./schema/file.yaml#/File"
+                  paging:
+                    type: object
+                    properties:
+                      next:
+                        type: string
+                        example: 'eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=='
+                      previous:
+                        type: string
+                        example: 'eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=='
+        403:
+          $ref: './global/error.yaml#/ForbiddenError'
+        404:
+          $ref: './global/error.yaml#/NotFoundError'
+        422:
+          $ref: './global/error.yaml#/UnProcessableError'
+        500:
+          $ref: './global/error.yaml#/UnexpectedError'
+  /api/v1/analytics/views/stories/{storyId}/users:
+    get:
+      summary: query story reach
+      description: 'Query a list of users who have viewed certain story, the user who have been global banned, 
+        community banned, or soft deleted will be excluded from the list of users. And if the post is soft deleted, 
+        post owner will be able to view this list, but others can not.'
+      tags: 
+        - Analytic
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: storyId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-f\d]{24}$'
+            example: 60e4b1b4b3b2b5c4c4b3b2b5
+        - name: token
+          in: query
+          schema: 
+            type: string
+            maxLength: 1000
+            example: 'eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=='
+            description: token of the page that you need from either `next` or `prev` of `paging`
+        - name: limit
+          in: query
+          schema:
+            type: number
+            default: 10
+            description: number of user in a page
+      responses:
+        200:
+          description: List of users who have viewed this story
           content:
             application/json:
               schema:
@@ -13127,7 +13213,7 @@ paths:
           schema:
             type: 'string'
 
-      description: "Upload video to cloud storage\n\nVideo size limit: 1,073,741,824 byte\n"
+      description: "Upload video to cloud storage\n\nVideo size limit: 2,147,483,648 byte (2GB)\n"
       requestBody:
         content:
           multipart/form-data:
@@ -13300,6 +13386,20 @@ paths:
                 needApprovalOnPostCreation:
                   type: 'boolean'
                   default: false
+                allowCommentInStory:
+                  type: 'boolean'
+                  default: true
+                notificationMode:
+                  type: string
+                  enum:
+                    - default
+                    - silent
+                    - subscribe
+                  description: >
+                    Notification Mode:
+                      * `default` - Auto register push notification.
+                      * `silent` - Do not send notification.
+                      * `subscribe` - Send notification to subscribed users only.
               required:
                 - 'displayName'
       responses:
@@ -13422,6 +13522,20 @@ paths:
                 needApprovalOnPostCreation:
                   type: 'boolean'
                   default: false
+                allowCommentInStory:
+                  type: 'boolean'
+                  default: true
+                notificationMode:
+                  type: string
+                  enum:
+                    - default
+                    - silent
+                    - subscribe
+                  description: >
+                    Notification Mode:
+                      * `default` - Auto register push notification.
+                      * `silent` - Do not send notification.
+                      * `subscribe` - Send notification to subscribed users only.
               required:
                 - 'communityId'
       responses:
@@ -18936,6 +19050,457 @@ paths:
           $ref: './global/error.yaml#/UnexpectedError'
       security:
         - BearerAuth: []
+  /api/v4/stories:
+    post:
+      summary: Create a story
+      description: Create a story
+      tags:
+        - Story
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './v4/story/request.yaml#/CreateStoryRequestPayload'
+      responses:
+        "200":
+          description: Create Result
+          content:
+            application/json:
+              schema:
+                $ref: './v4/story/response.yaml#/CreateStoryResponsePayload'
+
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "User reaches daily quota":
+                  value:
+                    status: error
+                    code: 400000
+                    message: You have reached your daily story creation quota. You can delete an existing story or wait for a story to expire before creating a new one
+                "Target reaches quota":
+                  value:
+                    status: error
+                    code: 400000
+                    message: This community has reached its daily story creation quota. Please try again later.
+                "Text is required in story type text":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Text is required in data object. 
+                "File ID is required in story type media":
+                  value:
+                    status: error
+                    code: 400000
+                    message: File is required in data object.
+                "URL is required in hyperlink item.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: url is required in hyperlink item.
+                "Invalid url format in hyperlink item (no TLD or else)":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Invalid url format in hyperlink item.
+                "Target not found.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Community not found.
+                "Target is deleted.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: The community has been deleted.
+        "403":
+          description: No permission to create story.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Have no permission in community to create a story":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not allowed to do this
+                "URL provided in an item is not in the whitelist":
+                  value:
+                    status: error
+                    code: 400309
+                    message: Link is not allowed
+        "422":
+          description: Parameters Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Parameters Validation Error!
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+    get:
+      summary: Query stories by target
+      description: Query stories by target
+      tags:
+        - Story
+      parameters:
+        - name: targetId
+          in: query
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/TargetId'
+        - name: targetType
+          in: query
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/TargetType'
+        - name: options
+          in: query
+          schema:
+            $ref: './v4/story/parameters.yaml#/QueryOptions'
+      responses:
+        "200":
+          description: Story Information
+          content:
+            application/json:
+              schema:
+                $ref: './v4/story/response.yaml#/StoryWithTargetResponsePayload'
+        "403":
+          description: Forbidden Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 400301
+                message: User xxx is not community xxx member
+        "404":
+          description: Target not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 400400
+                message: CommunityId xxx not found
+        "422":
+          description: Parameters Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Parameters Validation Error!
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+  /api/v4/stories/seen:
+    get:
+      summary: Get seen story information by muliple targets
+      description: Get seen story information by multiple targets
+      tags:
+        - Story
+      parameters:
+        - name: targets
+          description: >
+            Target object. The target object is an array of objects that contain targetId and targetType.
+            Max up to 10 items
+              * targetId: ID of a target.
+              * targetType: Type of a target (user, community).
+          in: query
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/Targets'
+      responses:
+        "200":
+          description: Seen Story Information
+          content:
+            application/json:
+              schema:
+                $ref: './v4/story/response.yaml#/StoryTargetsResponsePayload'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Target not found.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Community not found.
+                "Target is deleted.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: The community has been deleted.
+        "422":
+          description: Parameters Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Parameters Validation Error!
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+  /api/v4/stories-by-targets:
+    get:
+      summary: Query stories by multiple targets
+      description: Query stories by multiple targets
+      tags:
+        - Story
+      parameters:
+        - name: targets
+          description: >
+            Target object. The target object is an array of objects that contain targetId and targetType.
+            Max up to 10 items
+              * targetId: ID of a target.
+              * targetType: Type of a target (user, community).
+          in: query
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/Targets'
+        - name: options
+          in: query
+          schema:
+            $ref: './v4/story/parameters.yaml#/QueryOptions'
+      responses:
+        "200":
+          description: Story Information, sorted by the target order in the request then the sort option
+          content:
+            application/json:
+              schema:
+                $ref: './v4/story/response.yaml#/StoryWithTargetResponsePayload'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Target not found.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Community not found.
+                "Target is deleted.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: The community has been deleted.
+        "422":
+          description: Parameters Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Parameters Validation Error!
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+  /api/v4/stories/{storyId}:
+    get:
+      description: Get a story
+      summary: Get a story
+      tags:
+        - Story
+      parameters:
+        - name: storyId
+          in: path
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/StoryId'
+      responses:
+        "200":
+          description: Story Information
+          content:
+            application/json:
+              schema:
+                $ref: './v4/story/response.yaml#/StoryResponsePayload'
+        "403":
+          description: Forbidden Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 400300
+                message: User xxx is not community xxx member
+        "404":
+          description: Story not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 400400
+                message: Story not found
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+
+    delete:
+      description: Delete a story
+      summary: Delete a story
+      tags:
+        - Story
+      parameters:
+        - name: storyId
+          in: path
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/StoryId'
+        - name: permanent
+          in: query
+          required: false
+          description: >
+            If true, the story will be deleted permanently (hard deleted).
+            If false, the story will be soft deleted.
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "200":
+          description: Delete Result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        "403":
+          description: Forbidden Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 400300
+                message: You are not allowed to do this
+        "404":
+          description: Story not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 400400
+                message: Story not found
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+
+  /api/v5/me/global-story-targets:
+    get:
+      summary: Get global story targets
+      description: Get global story targets. Return a list of story targets
+      tags:
+        - Story
+      parameters:
+        - name: seenState
+          in: query
+          description: the seen state option used for filter the seen/unseen story targets
+          schema:
+            $ref: './v4/story/parameters.yaml#/SeenState'
+        - name: limit
+          in: query
+          description: the amount of story targets per query
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+        - name: token
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 900
+      responses:
+        "200":
+          description: Global Story Information
+          content:
+            application/json:
+              schema:
+                $ref: './v4/story/response.yaml#/GlobalStoryTargetsResponsePayload'           
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
   /webhook/message.didCreate:
     get:
       tags:
