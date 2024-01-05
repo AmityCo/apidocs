@@ -5914,8 +5914,8 @@ paths:
     post: 
       summary: send analytic activities
       description: 
-        "Send a batch of analytic activities to the server, currently only support viewing post and story activity.
-        \n - For viewing post activity, the `impression` and `reach` of the post will be updated list 
+        "Send a batch of analytic activities to the server, currently only support viewing post/story and story link clicked activities.
+        \n - For viewing post/story activity, the `impression` and `reach` of the post/story will be updated list 
         of users from `/api/v1/analytics/views/posts/{postId}/users` will be updated too. (but not immediately)"
       tags: 
         - Analytic
@@ -5945,7 +5945,7 @@ paths:
                         enum: [post, story]
                       activityType: 
                         type: string
-                        enum: [view]
+                        enum: [view, linkClicked]
                       timestamp:
                         type: string
                         format: date-time
