@@ -17891,6 +17891,98 @@ paths:
           $ref: './global/error.yaml#/BadRequestError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
+  /api/v3/allowlists/verify:
+    post:
+      tags:
+        - Moderation
+      security:
+        - BearerAuth: []
+      summary: Verify allowlist
+      description: Verify URLs with the allowlist rules.
+      operationId: verifyAllowlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: string
+                    maxLength: 500
+                  maxItems: 10
+                  minItems: 1
+      responses:
+        '200':
+          $ref: './v3/moderation/response.yaml#/VerifyingResponse'
+        '400':
+          description: Some URLs are not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400000
+                message: Some URLs are not valid
+        '403':
+          description: Some URLs are not in the allow list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400309
+                message: Some URLs are not in the allow list
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v3/blocklists/verify:
+    post:
+      tags:
+        - Moderation
+      security:
+        - BearerAuth: []
+      summary: Verify blocklist
+      description: Verify texts with the blocklist rules.
+      operationId: verifyBlocklist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: string
+                    maxLength: 500
+                  maxItems: 10
+                  minItems: 1
+      responses:
+        '200':
+          $ref: './v3/moderation/response.yaml#/VerifyingResponse'
+        '403':
+          description: Some texts contain blocked words
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400308
+                message: Some texts contain blocked words
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /sockets/v3/network-settings.getSocial:
     post:
       summary: 'Get social configuration.'
