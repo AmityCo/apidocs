@@ -17610,53 +17610,6 @@ paths:
           $ref: './global/error.yaml#/BadRequestError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/network-settings/tier:
-    put:
-      summary: 'Update network tier and feature'
-      tags:
-        - 'Network Setting'
-      security:
-        - BearerAuth: []
-      description: "Update network tier and feature\n# Authorization token is a Cognito client_credentials access token (client is amity-portal and scope is asc/network.write)\n"
-      parameters:
-        - name: 'Content-Type'
-          in: 'header'
-          required: true
-          schema:
-            type: 'string'
-      requestBody:
-        description: "information for a network setting\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                networkIds:
-                  type: 'array'
-                  description: 'Array of networkId'
-                  minimum: 1
-                  maximum: 10
-                  items:
-                    type: 'string'
-                tierHandler:
-                  type: 'string'
-                  maximum: 200
-                  enum:
-                    - 'asc-basic'
-                    - 'asc-advance'
-                    - 'asc-max'
-                    - 'asc-fixed-term-basic'
-                    - 'asc-fixed-term-advance'
-                    - 'asc-fixed-term-max'
-                  description: 'Network tier'
-      responses:
-        '200':
-          $ref: './v3/network-setting/response.yaml#/NetworkSettingApiResponse'
-        '400':
-          $ref: './global/error.yaml#/BadRequestError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
   /api/v3/network-settings/prehook:
     get:
       tags: 
