@@ -2,7 +2,7 @@ openapi: '3.0.0'
 info:
   title: 'Amity Social Cloud SDK'
   description: "<h2>Using Amity APIs</h2>\n\nOur API documentation explains all API endpoints used in Amity Social Cloud. All APIs, with the exception of some\nauthentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin\nor User context. When used in user context, you will only be able to fetch data related to that user only.\nFor Administrators who are using our API documentation in making server-to-server API calls, you need an Admin\nAccess token to connect to the Amity server. Refer to <a href=\"https://docs.amity.co/console/settings#admin-api-access-token\" target=\"_blank\">this documentation</a>\nfor the instructions on how to generate an admin access token.\n\nAll backend endpoints that support Amity SDK are included here. To easily differentiate the type of each endpoint,\nwe added a prefix in each endpoint's path.\n\n1. Socket Endpoint: /sockets/...\n2. Socket Event: /callbacks/...\n3. REST API Endpoint: /v1/, /v2/, /v3/, or /v4/...\n4. Webhook Event: /webhook/...\n\n<h2>Select Region Endpoint</h2>\n\nBefore making server-to-server API calls, be sure to select the correct API endpoint for your region in\nthe <strong>Servers</strong> dropdown below.\n"
-  version: '4.69.0'
+  version: '4.70.0'
 servers:
   - url: 'https://api.us.amity.co'
     description: 'API Endpoint for US Region'
@@ -5914,8 +5914,8 @@ paths:
     post: 
       summary: send analytic activities
       description: 
-        "Send a batch of analytic activities to the server, currently only support viewing post and story activity.
-        \n - For viewing post activity, the `impression` and `reach` of the post will be updated list 
+        "Send a batch of analytic activities to the server, currently only support viewing post/story and story link clicked activities.
+        \n - For viewing post/story activity, the `impression` and `reach` of the post/story will be updated list 
         of users from `/api/v1/analytics/views/posts/{postId}/users` will be updated too. (but not immediately)"
       tags: 
         - Analytic
@@ -5945,7 +5945,7 @@ paths:
                         enum: [post, story]
                       activityType: 
                         type: string
-                        enum: [view]
+                        enum: [view, linkClicked]
                       timestamp:
                         type: string
                         format: date-time
@@ -8178,6 +8178,7 @@ paths:
               - 'message'
               - 'post'
               - 'comment'
+              - 'story'
         - name: 'reactionName'
           in: 'query'
           schema:
@@ -8229,6 +8230,7 @@ paths:
                     - 'message'
                     - 'post'
                     - 'comment'
+                    - 'story'
                 reactionName:
                   type: 'string'
                   maxLength: 100
@@ -8278,6 +8280,7 @@ paths:
               - 'message'
               - 'post'
               - 'comment'
+              - 'story'
             minLength: 1
             maxLength: 900
           description: Reference type
@@ -8332,6 +8335,7 @@ paths:
               - 'message'
               - 'post'
               - 'comment'
+              - 'story'
         - name: 'referenceVersion'
           in: 'query'
           schema:
@@ -11806,6 +11810,7 @@ paths:
             enum:
               - 'post'
               - 'content'
+              - 'story'
         - name: 'filterByParentId'
           in: 'query'
           schema:
@@ -11922,6 +11927,7 @@ paths:
                   enum:
                     - 'post'
                     - 'content'
+                    - 'story'
                   default: 'post'
                 data:
                   type: 'object'
@@ -17610,53 +17616,6 @@ paths:
           $ref: './global/error.yaml#/BadRequestError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/network-settings/tier:
-    put:
-      summary: 'Update network tier and feature'
-      tags:
-        - 'Network Setting'
-      security:
-        - BearerAuth: []
-      description: "Update network tier and feature\n# Authorization token is a Cognito client_credentials access token (client is amity-portal and scope is asc/network.write)\n"
-      parameters:
-        - name: 'Content-Type'
-          in: 'header'
-          required: true
-          schema:
-            type: 'string'
-      requestBody:
-        description: "information for a network setting\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                networkIds:
-                  type: 'array'
-                  description: 'Array of networkId'
-                  minimum: 1
-                  maximum: 10
-                  items:
-                    type: 'string'
-                tierHandler:
-                  type: 'string'
-                  maximum: 200
-                  enum:
-                    - 'asc-basic'
-                    - 'asc-advance'
-                    - 'asc-max'
-                    - 'asc-fixed-term-basic'
-                    - 'asc-fixed-term-advance'
-                    - 'asc-fixed-term-max'
-                  description: 'Network tier'
-      responses:
-        '200':
-          $ref: './v3/network-setting/response.yaml#/NetworkSettingApiResponse'
-        '400':
-          $ref: './global/error.yaml#/BadRequestError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
   /api/v3/network-settings/prehook:
     get:
       tags: 
@@ -17891,6 +17850,100 @@ paths:
           $ref: './global/error.yaml#/BadRequestError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
+  /api/v3/allowlists/verify:
+    post:
+      tags:
+        - Moderation
+      security:
+        - BearerAuth: []
+      summary: Verify allowlist
+      description: Verify URLs with the allowlist rules.
+      operationId: verifyAllowlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  description: A list of URLs to be verified
+                  type: array
+                  items:
+                    type: string
+                    maxLength: 500
+                  maxItems: 10
+                  minItems: 1
+      responses:
+        '200':
+          $ref: './v3/moderation/response.yaml#/VerifyingResponse'
+        '400':
+          description: Some URLs are not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400000
+                message: Some URLs are not valid
+        '403':
+          description: Some URLs are not in the allow list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400309
+                message: Some URLs are not in the allow list
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v3/blocklists/verify:
+    post:
+      tags:
+        - Moderation
+      security:
+        - BearerAuth: []
+      summary: Verify blocklist
+      description: Verify texts with the blocklist rules.
+      operationId: verifyBlocklist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  description: A list of texts to be verified
+                  type: array
+                  items:
+                    type: string
+                    maxLength: 500
+                  maxItems: 10
+                  minItems: 1
+      responses:
+        '200':
+          $ref: './v3/moderation/response.yaml#/VerifyingResponse'
+        '403':
+          description: Some texts contain blocked words
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400308
+                message: Some texts contain blocked words
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /sockets/v3/network-settings.getSocial:
     post:
       summary: 'Get social configuration.'
