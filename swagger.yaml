@@ -17806,6 +17806,33 @@ paths:
           $ref: './global/error.yaml#/BadRequestError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
+    post:
+      summary: 'Add rules of allowlist V3'
+      tags:
+        - 'Moderation'
+      security:
+        - BearerAuth: []
+      description: "Add rules of allowlist.\n"
+      parameters:
+        - name: 'Authorization'
+          in: 'header'
+          required: true
+          schema:
+            type: 'string'
+        - name: 'Content-Type'
+          in: 'header'
+          required: true
+          schema:
+            type: 'string'
+      requestBody:
+        $ref: './v3/moderation/request.yaml#/AddRuleList'
+      responses:
+        '200':
+          $ref: './v3/moderation/response.yaml#/VerifyingResponse'
+        '400':
+          $ref: './global/error.yaml#/BadRequestError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
   /api/v3/blocklists:
     get:
       summary: 'Get list of banned words'
@@ -17846,6 +17873,33 @@ paths:
       responses:
         '200':
           $ref: './v3/moderation/response.yaml#/BlocklistResponse'
+        '400':
+          $ref: './global/error.yaml#/BadRequestError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+    post:
+      summary: 'Add rules of blocklist V3'
+      tags:
+        - 'Moderation'
+      security:
+        - BearerAuth: []
+      description: "Add rules of blocklist.\n"
+      parameters:
+        - name: 'Authorization'
+          in: 'header'
+          required: true
+          schema:
+            type: 'string'
+        - name: 'Content-Type'
+          in: 'header'
+          required: true
+          schema:
+            type: 'string'
+      requestBody:
+        $ref: './v3/moderation/request.yaml#/AddRuleList'
+      responses:
+        '200':
+          $ref: './v3/moderation/response.yaml#/VerifyingResponse'
         '400':
           $ref: './global/error.yaml#/BadRequestError'
         '500':

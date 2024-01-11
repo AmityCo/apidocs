@@ -1,0 +1,19 @@
+AddRuleList:
+  description: >
+    Rules information to be added.
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          regexs:
+            type: 'array'
+            minItems: 0
+            maxItems: 100
+            items:
+              type: 'string'
+              minLength: 1
+              maxLength: 500
+        required:
+          - regexs
