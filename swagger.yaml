@@ -13684,12 +13684,14 @@ paths:
           in: 'query'
           schema:
             type: 'string'
-            description: If the 'search' parameter is provided, this parameter will be ignored.
+            description: >
+              The default value depends on the 'search' parameter.
+                * If 'search' parameter is not set, the default value is 'lastCreated'.
+                * If 'search' parameter is set, the default value is 'displayName'.
             enum:
               - 'firstCreated'
               - 'lastCreated'
               - 'displayName'
-            default: 'lastCreated'
         - name: 'options'
           in: 'query'
           style: 'deepObject'
