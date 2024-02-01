@@ -17,7 +17,7 @@ ChannelsApiResponse:
             type: array
             description: Depends on messagePreviewId. if null will be empty array.
             items:
-              $ref: "../../schema/message.yaml#/messagePreviews"  
+              $ref: "../../schema/message.yaml#/MessagePreviews"  
           messageFeedsInfo:
             type: array
             description: Depends on messagePreviews. if empty array will be empty array.
@@ -71,90 +71,6 @@ ChannelPaginationApiResponse:
                 type: string
               prev:
                 type: string
-
-ChannelsSocketResponse:
-  description: Channels Information
-  content:
-    application/json:
-      schema:
-        properties:
-          status:
-            type: string
-          data:
-            type: object
-            properties:
-              channels:
-                type: array
-                items:
-                  $ref: "../../schema/channel.yaml#/ChannelV3"
-              channelUsers:
-                description: List of users in channel with membership and role. Normally, it will return only caller as user. However, it will return all users in conversation channel. For ban/unban events, it will return banned users.
-                type: array
-                items:
-                  $ref: "../../schema/channel.yaml#/ChannelUserV3"
-              messagePreviews:
-                type: array
-                description: Depends on messagePreviewId. if null will be empty array.
-                items:
-                  $ref: "../../schema/message.yaml#/MessagePreviews"  
-              messageFeedsInfo:
-                type: array
-                description: Depends on messagePreviews. if empty array will be empty array.
-                items:
-                  $ref: "../../schema/message-feed.yaml#/messageFeedsInfo"    
-              users:
-                type: array
-                items:
-                  $ref: "../../schema/user.yaml#/UserV3"
-              files:
-                type: array
-                items:
-                  $ref: "../../schema/file.yaml#/File"
-
-ChannelPaginationSocketResponse:
-  description: Channels Information
-  content:
-    application/json:
-      schema:
-        properties:
-          status:
-            type: string
-          data:
-            type: object
-            properties:
-              channels:
-                type: array
-                items:
-                  $ref: "../../schema/channel.yaml#/ChannelV3"
-              channelUsers:
-                type: array
-                items:
-                  $ref: "../../schema/channel.yaml#/ChannelUserV3"
-              messagePreviews:
-                type: array
-                description: Depends on messagePreviewId. if null will be empty array.
-                items:
-                  $ref: "../../schema/message.yaml#/MessagePreviews"  
-              messageFeedsInfo:
-                type: array
-                description: Depends on messagePreviews. if empty array will be empty array.
-                items:
-                  $ref: "../../schema/message-feed.yaml#/messageFeedsInfo"
-              users:
-                type: array
-                items:
-                  $ref: "../../schema/user.yaml#/UserV3"
-              files:
-                type: array
-                items:
-                  $ref: "../../schema/file.yaml#/File"
-              paging:
-                type: object
-                properties:
-                  next:
-                    type: string
-                  prev:
-                    type: string
 
 ChannelCustomNotificationResponse:
   description: Channels Information
