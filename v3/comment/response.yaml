@@ -26,40 +26,6 @@ CommentApiResponse:
             items:
               $ref: "../../schema/file.yaml#/File"
 
-
-CommentSocketResponse:
-  description: Comment Information
-  content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          status:
-            type: string
-          data:
-            type: object
-            properties:
-              comments:
-                type: array
-                items:
-                  $ref: "../../schema/comment.yaml#/Comment"
-              commentChildren:
-                type: array
-                items:
-                  $ref: "../../schema/comment.yaml#/Comment"
-              communityUsers:
-                type: array
-                items:
-                  $ref: "../../schema/community.yaml#/CommunityUser"
-              users:
-                type: array
-                items:
-                  $ref: "../../schema/user.yaml#/UserV3"
-              files:
-                type: array
-                items:
-                  $ref: "../../schema/file.yaml#/File"
-
 CommentPaginationApiResponse:
   description: Comment Information
   content:
@@ -94,46 +60,6 @@ CommentPaginationApiResponse:
                 type: string
               previous:
                 type: string
-
-CommentPaginationSocketResponse:
-  description: Comment Information
-  content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          status:
-            type: string
-          data:
-            type: object
-            properties:
-              comments:
-                type: array
-                items:
-                  $ref: "../../schema/comment.yaml#/Comment"
-              commentChildren:
-                type: array
-                items:
-                  $ref: "../../schema/comment.yaml#/Comment"
-              communityUsers:
-                type: array
-                items:
-                  $ref: "../../schema/community.yaml#/CommunityUser"
-              users:
-                type: array
-                items:
-                  $ref: "../../schema/user.yaml#/UserV3"
-              files:
-                type: array
-                items:
-                  $ref: "../../schema/file.yaml#/File"
-              paging:
-                type: object
-                properties:
-                  next:
-                    type: string
-                  previous:
-                    type: string
 
 CommentWebhookResponse:
   description: Comment Information
