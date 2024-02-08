@@ -40,3 +40,24 @@ PollPaginationResponse:
                 type: string
               previous:
                 type: string
+
+PollWebhookResponse:
+  description: Poll Information
+  content:
+    application/json:
+      schema:
+        type: 'object'
+        properties:
+          event:
+            type: 'string'
+          data:
+            type: object
+            properties:
+              polls:
+                type: array
+                items:
+                  $ref: '../../schema/poll.yaml#/Poll'
+              users:
+                type: array
+                items:
+                  $ref: '../../schema/user.yaml#/UserV3'             
