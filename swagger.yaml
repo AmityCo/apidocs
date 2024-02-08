@@ -12185,6 +12185,7 @@ paths:
       description: "This is called when the user flags are cleared\n"
       responses:
         '200':
+          description: 'User flag cleared event information. users is a list of userInfo. files is a list of file information'
           $ref: './v1/user/response.yaml#/UserWebhookResponse'
   /webhook/user.didFlag:
     get:
@@ -12195,6 +12196,7 @@ paths:
       description: "This is called when a user is flagged\n"
       responses:
         '200':
+          description: "User flag event information. users is a list of userInfo. files is a list of file information"
           $ref: './v1/user/response.yaml#/UserWebhookResponse'
   /webhook/user.didUnflag:
     get:
@@ -12205,6 +12207,18 @@ paths:
       description: "This is called when a user is unflagged\n"
       responses:
         '200':
+          description: 'User unflag event information. users is a list of userInfo. files is a list of file information'
+          $ref: './v1/user/response.yaml#/UserWebhookResponse'
+  /webhook/user.didCreate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when a user is created\n"
+      responses:
+        '200':
+          description: 'User created event information. users is a list of userInfo. files is a list of file information'
           $ref: './v1/user/response.yaml#/UserWebhookResponse'
   /webhook/user.didUpdate:
     get:
@@ -12215,6 +12229,7 @@ paths:
       description: "This is called when a user information is updated\n"
       responses:
         '200':
+          description: 'User updated event information. users is a list of userInfo. files is a list of file information'
           $ref: './v1/user/response.yaml#/UserWebhookResponse'
   /webhook/v3.community.didCreate:
     get:
@@ -12485,7 +12500,7 @@ paths:
       description: "This is called when poll is created\n"
       responses:
         '200':
-          $ref: './v3/poll/response.yaml#/PollResponse'
+          $ref: './v3/poll/response.yaml#/PollWebhookResponse'
   /webhook/poll.didUpdate:
     get:
       tags:
@@ -12495,7 +12510,7 @@ paths:
       description: "This is called when poll is updated\n"
       responses:
         '200':
-          $ref: './v3/poll/response.yaml#/PollResponse'
+          $ref: './v3/poll/response.yaml#/PollWebhookResponse'
   /webhook/poll.didVote:
     get:
       tags:
@@ -12505,7 +12520,7 @@ paths:
       description: "This is called when vote is created in poll\n"
       responses:
         '200':
-          $ref: './v3/poll/response.yaml#/PollResponse'
+          $ref: './v3/poll/response.yaml#/PollWebhookResponse'
   /webhook/v3.video-streaming.didRecord:
     get:
       tags:
@@ -12515,7 +12530,7 @@ paths:
       description: "This is called when video streaming recordings is ready.\n"
       responses:
         '200':
-          $ref: './v3/video-streaming/response.yaml#/VideoStreamingsApiResponse'
+          $ref: './v3/video-streaming/response.yaml#/VideoStreamingsWebhookResponse'
   /webhook/v3.video-streaming.didStart:
     get:
       tags:
@@ -12525,7 +12540,7 @@ paths:
       description: "This is called when video streaming start.\n"
       responses:
         '200':
-          $ref: './v3/video-streaming/response.yaml#/VideoStreamingsApiResponse'
+          $ref: './v3/video-streaming/response.yaml#/VideoStreamingsWebhookResponse'
   /webhook/v3.video-streaming.didStop:
     get:
       tags:
@@ -12535,7 +12550,7 @@ paths:
       description: "This is called when video streaming stop.\n"
       responses:
         '200':
-          $ref: './v3/video-streaming/response.yaml#/VideoStreamingsApiResponse'
+          $ref: './v3/video-streaming/response.yaml#/VideoStreamingsWebhookResponse'
   /webhook/follow.didCreate:
     get:
       tags:
@@ -12546,25 +12561,7 @@ paths:
       responses:
         '200':
           description: 'Follow Object'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  from:
-                    type: 'string'
-                  to:
-                    type: 'string'
-                  status:
-                    type: 'string'
-                    enum:
-                      - 'accepted'
-                  createdAt:
-                    type: 'string'
-                    format: 'date-time'
-                  updatedAt:
-                    type: 'string'
-                    format: 'date-time'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
   /webhook/follow.didRequest:
     get:
       tags:
@@ -12575,25 +12572,7 @@ paths:
       responses:
         '200':
           description: 'Follow Object'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  from:
-                    type: 'string'
-                  to:
-                    type: 'string'
-                  status:
-                    type: 'string'
-                    enum:
-                      - 'pending'
-                  createdAt:
-                    type: 'string'
-                    format: 'date-time'
-                  updatedAt:
-                    type: 'string'
-                    format: 'date-time'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
   /webhook/follow.didAcceptRequest:
     get:
       tags:
@@ -12604,25 +12583,7 @@ paths:
       responses:
         '200':
           description: 'Follow Object'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  from:
-                    type: 'string'
-                  to:
-                    type: 'string'
-                  status:
-                    type: 'string'
-                    enum:
-                      - 'accepted'
-                  createdAt:
-                    type: 'string'
-                    format: 'date-time'
-                  updatedAt:
-                    type: 'string'
-                    format: 'date-time'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
   /webhook/follow.didUnfollow:
     get:
       tags:
@@ -12633,25 +12594,7 @@ paths:
       responses:
         '200':
           description: 'Follow Object'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  from:
-                    type: 'string'
-                  to:
-                    type: 'string'
-                  status:
-                    type: 'string'
-                    enum:
-                      - 'none'
-                  createdAt:
-                    type: 'string'
-                    format: 'date-time'
-                  updatedAt:
-                    type: 'string'
-                    format: 'date-time'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
   /webhook/follow.didCancelRequest:
     get:
       tags:
@@ -12662,25 +12605,7 @@ paths:
       responses:
         '200':
           description: 'Follow Object'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  from:
-                    type: 'string'
-                  to:
-                    type: 'string'
-                  status:
-                    type: 'string'
-                    enum:
-                      - 'none'
-                  createdAt:
-                    type: 'string'
-                    format: 'date-time'
-                  updatedAt:
-                    type: 'string'
-                    format: 'date-time'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
   /webhook/follow.didDeclineRequest:
     get:
       tags:
@@ -12691,25 +12616,7 @@ paths:
       responses:
         '200':
           description: 'Follow Object'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  from:
-                    type: 'string'
-                  to:
-                    type: 'string'
-                  status:
-                    type: 'string'
-                    enum:
-                      - 'none'
-                  createdAt:
-                    type: 'string'
-                    format: 'date-time'
-                  updatedAt:
-                    type: 'string'
-                    format: 'date-time'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
   /webhook/follow.didDeleteFollower:
     get:
       tags:
@@ -12720,25 +12627,7 @@ paths:
       responses:
         '200':
           description: 'Follow Object'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  from:
-                    type: 'string'
-                  to:
-                    type: 'string'
-                  status:
-                    type: 'string'
-                    enum:
-                      - 'none'
-                  createdAt:
-                    type: 'string'
-                    format: 'date-time'
-                  updatedAt:
-                    type: 'string'
-                    format: 'date-time'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
   /webhook/push-notification/post.created:
     get:
       tags:

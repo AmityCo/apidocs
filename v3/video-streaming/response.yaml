@@ -61,3 +61,27 @@ VideoStreamingCustomNotificationResponse:
       type: array
       items:
         $ref: "../../schema/file.yaml#/File"
+VideoStreamingsWebhookResponse:
+  description: video streaming information
+  content:
+    application/json:
+      schema:
+        type: 'object'
+        properties:
+          event:
+            type: 'string'
+          data:
+            type: object
+            properties:
+              videoStreamings:
+                type: array
+                items:
+                  $ref: '../../schema/video-streaming.yml#/VideoStreaming'
+              users:
+                type: array
+                items:
+                  $ref: '../../schema/user.yaml#/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '../../schema/file.yaml#/File'    

@@ -82,3 +82,29 @@ FollowCustomNotificationResponse:
       type: array
       items:
         $ref: '../../schema/file.yaml#/File'
+
+FollowWebhookResponse:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          event:
+            type: string
+          data:
+            type: object
+            properties:
+              from:
+                type: 'string'
+              to:
+                type: 'string'
+              status:
+                type: 'string'
+                enum:
+                  - 'none'
+              createdAt:
+                type: 'string'
+                format: 'date-time'
+              updatedAt:
+                type: 'string'
+                format: 'date-time'
