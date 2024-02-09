@@ -5160,7 +5160,15 @@ paths:
                 maxLength: 1000
         - name: 'dataTypes'
           in: 'query'
-          description: "oneOf:\n  * video\n  * image\n  * file\n  * liveStream\n  * string\nexample: upstra.customtype - custom post type - must be in namespace like format (ex. \"upstra.customtype\", \"com.eko.birthday\")\n"
+          description: >
+            Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`.
+            The value in array could be oneOf:
+              * `video`
+              * `image`
+              * `file`
+              * `liveStream`
+              * custom post type
+                * must be a string in namespace like format (ex. `upstra.customtype`, `com.eko.birthday`)
           schema:
             type: 'array'
             maxItems: 10
@@ -5172,7 +5180,7 @@ paths:
                     - 'image'
                     - 'file'
                     - 'liveStream'
-                  description: 'post data type to filter'
+                  description: 'Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`'
                 - type: 'string'
                   example: 'upstra.customtype'
                   description: 'custom post type - must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")'
@@ -5190,7 +5198,7 @@ paths:
           schema:
             type: 'boolean'
             default: true
-          description: 'When `true` will filter only parent post'
+          description: 'An option whether to filter only parent post or not. If `true` will return only parent posts, else will return both parent and child posts'
       responses:
         '200':
           $ref: './v3/post/response.yaml#/PostPaginationApiResponse'
@@ -5780,7 +5788,7 @@ paths:
                 - 'file'
                 - 'liveStream'
                 - 'poll'
-          description: 'post data type to filter'
+          description: 'Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`'
         - name: 'tags'
           in: 'query'
           schema:
@@ -5796,7 +5804,7 @@ paths:
           schema:
             type: 'boolean'
             default: true
-          description: 'When `true` will filter only parent post'
+          description: 'An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts'
       responses:
         '200':
           $ref: './v4/post/response.yaml#/PostPaginationApiResponse'
