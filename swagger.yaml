@@ -10159,6 +10159,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /api/v1/post-moderation/settings:
+    get:
+      summary: 'Get post-moderation settings'
+      tags:
+        - 'Post-Moderation'
+      security:
+        - BearerAuth: []
+      operationId: getPostModerationSettings
+      description: Get post-moderation settings. Only admin token can access this API.
+      responses:
+        '200':
+          $ref: './v1/post-moderation/response.yaml#/GetConfidenceSettingResponse'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+    put:
+      summary: 'Update post moderation settings'
+      tags:
+        - 'Post-Moderation'
+      security:
+        - BearerAuth: []
+      operationId: updatePostModerationSettings
+      description: Update post-moderation settings. Only admin token can access this API.
+      requestBody:
+        description: Information for a updated settings
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './v1/post-moderation/request.yaml#/UpdateConfidenceSettingRequestPayload'
+      responses:
+        '200':
+          description: Update post-moderation settings response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Success
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
   /realtime/community.created:
     get:
       summary: 'community created'

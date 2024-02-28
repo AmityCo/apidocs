@@ -22,3 +22,74 @@ BlacklistRule:
       type: string
       description: The date/time when a rule is updated or deleted.
       format: date-time
+
+ConfidenceCategory:
+  type: string
+  enum:
+    - Adult Toys
+    - Air crash
+    - Alcohol
+    - Alcoholic Beverages
+    - Bare-chested Male
+    - Corpses
+    - Drinking
+    - Drug Paraphernalia
+    - Drug Products
+    - Drug Use
+    - Drugs
+    - Emaciated Bodies
+    - Explicit Nudity
+    - Explosions and blasts
+    - Extremist
+    - Female Swimwear Or Underwear
+    - Gambling
+    - Graphic Female Nudity
+    - Graphic Male Nudity
+    - Graphic Violence Or Gore
+    - Hanging
+    - Hate Symbols
+    - Illustrated Explicit Nudity
+    - Male Swimwear Or Underwear
+    - Middle Finger
+    - Nazi Party
+    - Nudity
+    - Offensive in certain situations.
+    - Partial Nudity
+    - Physical Violence
+    - Pills
+    - Revealing Clothes
+    - Rude Gestures
+    - Self Injury
+    - Sexual Activity
+    - Sexually explicit or adult in certain situations
+    - Sexually suggestive or mature in certain situations
+    - Sexual Situations
+    - Smoking
+    - Suggestive
+    - Tobacco
+    - Tobacco Products
+    - Violence
+    - Visually Disturbing
+    - Weapon Violence
+    - Weapons
+    - White Supremacy
+
+Confidence:
+  type: object
+  properties:
+    category:
+      $ref: "#/ConfidenceCategory"
+    flagConfidence:
+      type: integer
+      minimum: 0
+      maximum: 100
+      description: The level of confidence where the content will be flagged.
+    blockConfidence:
+      type: integer
+      minimum: 0
+      maximum: 100
+      description: The level of confidence where the content will be deleted.
+  required:
+    - category
+    - flagConfidence
+    - blockConfidence
