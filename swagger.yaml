@@ -11872,6 +11872,22 @@ paths:
                         type: 'array'
                         items:
                           $ref: './schema/user.yaml#/User'
+  /webhook/message.didAddReaction:
+    get:
+      tags:
+        - 'WebhookEvent'
+      description: 'Send updated message whenever add reaction to this message.'
+      responses:
+        '200':
+          $ref: './v3/message/response.yaml#/MessageAddReactionWithReactorWebhookResponse'    
+  /webhook/message.didRemoveReaction:
+    get:
+      tags:
+        - 'WebhookEvent'
+      description: 'Send updated message whenever remove reaction to this message.'
+      responses:
+        '200':
+          $ref: './v3/message/response.yaml#/MessageRemoveReactionWithReactorWebhookResponse'                             
   /webhook/channel.didCreate:
     get:
       tags:
