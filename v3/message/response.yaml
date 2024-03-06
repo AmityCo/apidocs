@@ -59,3 +59,61 @@ MessageCustomNotificationResponse:
       type: array
       items:
         $ref: "../../schema/file.yaml#/File"
+
+MessageAddReactionWithReactorWebhookResponse:
+  description: Messages Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          event:
+            type: string
+            enum:
+              - 'message.didAddReaction'
+          data:
+            type: object
+            properties:
+              messages:
+                type: array
+                items:
+                  $ref: "../../schema/message.yaml#/MessageV3"
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/UserV3"
+              files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+              reactor:
+                  $ref: "../../schema/reaction.yaml#/Reactor"  
+
+MessageRemoveReactionWithReactorWebhookResponse:
+  description: Messages Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          event:
+            type: string
+            enum:
+              - 'message.didRemoveReaction'
+          data:
+            type: object
+            properties:
+              messages:
+                type: array
+                items:
+                  $ref: "../../schema/message.yaml#/MessageV3"
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/UserV3"
+              files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+              reactor:
+                  $ref: "../../schema/reaction.yaml#/Reactor"  
