@@ -11376,6 +11376,10 @@ paths:
           in: query
           schema:
             $ref: './v4/story/parameters.yaml#/DataType'
+        - name: isExpired
+          in: query
+          schema:
+            $ref: './v4/story/parameters.yaml#/IsExpired'
         - name: options
           in: query
           schema:
@@ -11430,7 +11434,7 @@ paths:
   /api/v4/stories/count:
     get:
       summary: Count stories by target
-      description: Count stories by target which includes both acive and expired stories
+      description: Count stories by target which includes both acive and expired stories. Only admin can use this API.
       tags:
         - Story
       parameters:
