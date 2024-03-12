@@ -11372,6 +11372,10 @@ paths:
           required: true
           schema:
             $ref: './v4/story/parameters.yaml#/TargetType'
+        - name: dataType
+          in: query
+          schema:
+            $ref: './v4/story/parameters.yaml#/DataType'
         - name: options
           in: query
           schema:
@@ -11393,6 +11397,64 @@ paths:
                 status: error
                 code: 400301
                 message: User xxx is not community xxx member
+        "404":
+          description: Target not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 400400
+                message: CommunityId xxx not found
+        "422":
+          description: Parameters Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Parameters Validation Error!
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+  /api/v4/stories/count:
+    get:
+      summary: Count stories by target
+      description: Count stories by target which includes both acive and expired stories
+      tags:
+        - Story
+      parameters:
+        - name: targetId
+          in: query
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/TargetId'
+        - name: targetType
+          in: query
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/TargetType'
+      responses:
+        "200":
+          description: Story Count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 10
         "404":
           description: Target not found
           content:

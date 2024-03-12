@@ -20,6 +20,12 @@ Targets:
   maxItems: 10
   minItems: 1
 
+DataType:
+  type: string
+  enum:
+    - image
+    - video
+
 QueryOptions:
   type: object
   properties:
@@ -34,6 +40,13 @@ QueryOptions:
       enum:
         - asc
         - desc
+    limit:
+      type: integer
+      default: 10
+      minimum: 1
+      maximum: 100
+    token:
+      type: string
 
 StoryId:
   type: string
