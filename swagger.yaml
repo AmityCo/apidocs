@@ -11704,6 +11704,61 @@ paths:
                 status: error
                 code: 500000
                 message: Unexpected error
+  /api/v1/me/following-feeds:
+    get:
+      summary: Get following feeds
+      description: Get posts from your wall, people you follow and communities you join
+      tags:
+        - 'FollowingFeed'
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: './v1/following-feed/parameters.yaml#/SortBy'
+        - name: limit
+          in: query
+          required: false
+          description: > 
+            Limit the number of posts returned
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+        - name: token
+          in: query
+          required: false
+          description: > 
+            Token for pagination
+          schema:
+            type: string
+            maxLength: 100
+      responses:
+        '200':
+          description: Following feed Information
+          content:
+            application/json:
+              schema:
+                $ref: './v1/following-feed/response.yaml#/QueryFollowingFeedResponsePayload'
+        '422':
+          description: 'Parameters validation error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: 'Parameters validation error'
+        '500':
+          description: 'Unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: 'Unexpected error'
   /webhook/message.didCreate:
     get:
       tags:
