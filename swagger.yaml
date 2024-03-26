@@ -307,12 +307,12 @@ paths:
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
     delete:
-      summary: 'Revoke access token'
+      summary: Revoke access token
       tags:
         - 'Session'
       security:
         - BearerAuth: []
-      description: 'Revoke all userId''s access token by admin'
+      description: Revoke an access token. If the userId is provided, this will revoke all access tokens of that user. Only admin can revoke all access tokens of a user.
       parameters:
         - in: query
           name: userId
@@ -321,6 +321,52 @@ paths:
             minLength: 1
             maxLength: 50
           description: User id for revocation
+        - in: query
+          name: isPublic
+          schema:
+            type: boolean
+            default: true
+          description: A flag indicating whether the userId is a public id or not
+      responses:
+        '200':
+          description: 'Revoke access token success'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  success:
+                    type: 'boolean'
+                    default: true
+        "404":
+          $ref: "./global/error.yaml#/UserIdNotFoundError"
+        "403":
+          $ref: "./global/error.yaml#/UserIsGlobalBanned"
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+  /api/v4/sessions/users/{userId}:
+    delete:
+      summary: Revoke all user's access tokens by admin
+      tags:
+        - 'Session'
+      security:
+        - BearerAuth: []
+      description: Revoke all user's access tokens by admin
+      parameters:
+        - in: path
+          required: true
+          name: userId
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 50
+          description: User id for revocation
+        - in: query
+          name: isPublic
+          schema:
+            type: boolean
+            default: true
+          description: A flag indicating whether the userId is a public id or not
       responses:
         '200':
           description: 'Revoke access token success'
