@@ -2,7 +2,7 @@ openapi: '3.0.0'
 info:
   title: 'Amity Social Cloud SDK'
   description: "<h2>Using Amity APIs</h2>\n\nOur API documentation explains all API endpoints used in Amity Social Cloud. All APIs, with the exception of some\nauthentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin\nor User context. When used in user context, you will only be able to fetch data related to that user only.\nFor Administrators who are using our API documentation in making server-to-server API calls, you need an Admin\nAccess token to connect to the Amity server. Refer to <a href=\"https://docs.amity.co/console/settings#admin-api-access-token\" target=\"_blank\">this documentation</a>\nfor the instructions on how to generate an admin access token.\n\nAll backend endpoints that support Amity SDK are included here. To easily differentiate the type of each endpoint,\nwe added a prefix in each endpoint's path.\n\n1. REST API Endpoint: /v1/, /v2/, /v3/, or /v4/...\n4. Webhook Event: /webhook/...\n\n<h2>Select Region Endpoint</h2>\n\nBefore making server-to-server API calls, be sure to select the correct API endpoint for your region in\nthe <strong>Servers</strong> dropdown below.\n"
-  version: '4.76.0'
+  version: '4.77.0'
 servers:
   - url: 'https://apix.us.amity.co'
     description: 'API Endpoint for US Region'
@@ -11305,6 +11305,8 @@ paths:
       description: Create a story
       tags:
         - Story
+      security:
+        - BearerAuth: []
       requestBody:
         content:
           application/json:
@@ -11407,6 +11409,8 @@ paths:
       description: Query stories by target
       tags:
         - Story
+      security:
+        - BearerAuth: []
       parameters:
         - name: targetId
           in: query
@@ -11418,6 +11422,14 @@ paths:
           required: true
           schema:
             $ref: './v4/story/parameters.yaml#/TargetType'
+        - name: dataType
+          in: query
+          schema:
+            $ref: './v4/story/parameters.yaml#/DataType'
+        - name: isExpired
+          in: query
+          schema:
+            $ref: './v4/story/parameters.yaml#/IsExpired'
         - name: options
           in: query
           schema:
@@ -11428,7 +11440,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './v4/story/response.yaml#/StoryWithTargetResponsePayload'
+                $ref: './v4/story/response.yaml#/StoryWithTargetPaginatedResponsePayload'
         "403":
           description: Forbidden Error.
           content:
@@ -11469,12 +11481,74 @@ paths:
                 status: error
                 code: 500000
                 message: Unexpected error
+  /api/v4/stories/count:
+    get:
+      summary: Count stories by target
+      description: Count stories by target which includes both acive and expired stories. Only admin can use this API.
+      tags:
+        - Story
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: targetId
+          in: query
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/TargetId'
+        - name: targetType
+          in: query
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/TargetType'
+      responses:
+        "200":
+          description: Story Count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 10
+        "404":
+          description: Target not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 400400
+                message: CommunityId xxx not found
+        "422":
+          description: Parameters Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Parameters Validation Error!
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
   /api/v4/stories/seen:
     get:
       summary: Query story targets by multiple targets
       description: Query story targets by multiple targets
       tags:
         - Story
+      security:
+        - BearerAuth: []
       parameters:
         - name: targets
           description: >
@@ -11536,6 +11610,8 @@ paths:
       description: Query stories by multiple targets
       tags:
         - Story
+      security:
+        - BearerAuth: []
       parameters:
         - name: targets
           description: >
@@ -11601,6 +11677,8 @@ paths:
       summary: Get a story
       tags:
         - Story
+      security:
+        - BearerAuth: []
       parameters:
         - name: storyId
           in: path
@@ -11650,6 +11728,8 @@ paths:
       summary: Delete a story
       tags:
         - Story
+      security:
+        - BearerAuth: []
       parameters:
         - name: storyId
           in: path
@@ -11706,6 +11786,174 @@ paths:
                 code: 500000
                 message: Unexpected error
 
+  /api/v4/stories/{storyId}/flags:
+    post:
+      description: Flag a story
+      summary: Flag a story
+      tags:
+        - Story
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: storyId
+          in: path
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/StoryId'
+      responses:
+        "200":
+          description: Story Information
+          content:
+            application/json:
+              schema:
+                $ref: './v4/story/response.yaml#/StoryResponsePayload'
+        "403":
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Story creators cannot flag their own story.":
+                  value:
+                    status: error
+                    code: 400301
+                    message: Story creators cannot flag their own story.
+                "Number of flags already exceed.":
+                  value:
+                    status: error
+                    code: 400301
+                    message: Number of flags already exceed.
+        "404":
+          description: Story not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 400400
+                message: Story not found
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+    delete:
+      description: Unflag a story
+      summary: Unflag a story
+      tags:
+        - Story
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: storyId
+          in: path
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/StoryId'
+      responses:
+        "200":
+          description: Story Information
+          content:
+            application/json:
+              schema:
+                $ref: './v4/story/response.yaml#/StoryResponsePayload'
+        "403":
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Story creators cannot unflag their own story.":
+                  value:
+                    status: error
+                    code: 400301
+                    message: Story creators cannot unflag their own story.
+                "You never send a flag to this story.":
+                  value:
+                    status: error
+                    code: 400301
+                    message: You never send a flag to this story.
+        "404":
+          description: Story not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 400400
+                message: Story not found
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+  /api/v4/stories/{storyId}/flags/all:
+    delete:
+      description: Clear all flags in a story. Only admin can use this API.
+      summary: Clear all flags in a story.
+      tags:
+        - Story
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: storyId
+          in: path
+          required: true
+          schema:
+            $ref: './v4/story/parameters.yaml#/StoryId'
+      responses:
+        "200":
+          description: Story Information
+          content:
+            application/json:
+              schema:
+                $ref: './v4/story/response.yaml#/StoryResponsePayload'
+        "403":
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Only admin can clear flags":
+                  value:
+                    status: error
+                    code: 400301
+                    message: You are not allowed to do this.
+        "404":
+          description: Story not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 400400
+                message: Story not found
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
   /api/v5/me/global-story-targets:
     get:
       summary: Get global story targets
