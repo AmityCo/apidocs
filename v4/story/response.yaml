@@ -74,21 +74,6 @@ StoryWithTargetResponsePayload:
           items:
             $ref: "../../schema/story.yaml#/StoryTarget"
 
-StoryWithTargetPaginatedResponsePayload:
-  allOf:
-    - $ref: "#/StoryWithTargetResponsePayload"
-    - type: object
-      properties:
-        paging:
-          type: object
-          properties:
-            next:
-              type: string
-              description: The next token to get the next page of stories.
-            previous:
-              type: string
-              description: The previous token to get the previous page of stories.
-
 StoryTargetsResponsePayload:
   description: Story targets response payload
   type: object

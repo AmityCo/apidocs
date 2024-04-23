@@ -20,19 +20,6 @@ Targets:
   maxItems: 10
   minItems: 1
 
-DataType:
-  description: Type of data contained in the story. Only admin can query with this parameter.
-  type: string
-  enum:
-    - image
-    - video
-
-IsExpired:
-  description: >
-    Whether to include expired stories. Only admin can query with this parameter = true.
-  type: boolean
-  default: false
-
 QueryOptions:
   type: object
   properties:
@@ -47,13 +34,6 @@ QueryOptions:
       enum:
         - asc
         - desc
-    limit:
-      type: integer
-      default: 10
-      minimum: 1
-      maximum: 100
-    token:
-      type: string
 
 StoryId:
   type: string
