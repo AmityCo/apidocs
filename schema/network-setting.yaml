@@ -7,16 +7,18 @@ NetworkSetting:
         enabled:
           type: boolean
     chat:
-      $ref: '#/ChatNetworkSetting'
+      $ref: "#/ChatNetworkSetting"
     social:
-      $ref: '#/SocialNetworkSetting'
+      $ref: "#/SocialNetworkSetting"
     webhook:
-      $ref: '#/WebhookNetworkSetting'
+      $ref: "#/WebhookNetworkSetting"
     moderation:
       type: object
       properties:
         isWhitelistEnabled:
           type: boolean
+    ad:
+      $ref: "#/AdNetworkSetting"
     tierHandler:
       type: string
 
@@ -65,23 +67,23 @@ ChatNetworkSetting:
       type: object
       properties:
         isAllowMentionedChannelEnabled:
-          type: boolean  
+          type: boolean
           default: true
     messagePreview:
       type: object
       properties:
         enabled:
           type: boolean
-          default: false  
+          default: false
         isIncludeDeleted:
-          type: boolean 
+          type: boolean
           default: false
     isAllowAdminViewConversationMessage:
-      type: 'boolean'
+      type: "boolean"
       default: true
     isAllowAdminManageConversationMessage:
-      type: 'boolean'
-      default: true       
+      type: "boolean"
+      default: true
 ModerationNetworkSetting:
   type: object
   properties:
@@ -96,20 +98,20 @@ FeedSettingNetworkSetting:
       type: object
       properties:
         video:
-          $ref: '#/ContentCheckVideo'
+          $ref: "#/ContentCheckVideo"
     message:
       description: Feed type message
       type: object
       properties:
         video:
-          $ref: '#/ContentCheckVideo' 
+          $ref: "#/ContentCheckVideo"
     story:
       description: Feed type story
       type: object
       properties:
         video:
-          $ref: '#/ContentCheckVideo'  
-    
+          $ref: "#/ContentCheckVideo"
+
 ContentCheckVideo:
   description: Content Check video schema
   type: object
@@ -121,11 +123,11 @@ ContentCheckVideo:
       properties:
         maxResolution:
           type: string
-          enum: ['1080p', '720p', '480p', '360p']
+          enum: ["1080p", "720p", "480p", "360p"]
 
         minResolution:
           type: string
-          enum: ['1080p', '720p', '480p', '360p']
+          enum: ["1080p", "720p", "480p", "360p"]
 
     maxDurationSeconds:
       type: number
@@ -177,3 +179,41 @@ UsersNetworkSetting:
   properties:
     isAllowUpdateDisplayName:
       type: boolean
+
+AdNetworkSetting:
+  type: object
+  properties:
+    enabled:
+      type: boolean
+    frequency:
+      type: object
+      properties:
+        feed:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - fixed
+                - interval
+            value:
+              type: number
+              format: number
+              minimum: 1
+              maximum: 65536
+        story:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - fixed
+                - interval
+            value:
+              type: number
+              minimum: 1
+              maximum: 65536
+    impressionCap:
+      type: number
+      minimum: 1
+      maximum: 65536

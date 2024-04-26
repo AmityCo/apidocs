@@ -3,35 +3,35 @@ NetworkSettingApiResponse:
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/NetworkSetting'
+        $ref: "../../schema/network-setting.yaml#/NetworkSetting"
 
 SocialNetworkSettingApiResponse:
   description: Social configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/SocialNetworkSetting'
+        $ref: "../../schema/network-setting.yaml#/SocialNetworkSetting"
 
 WebhookNetworkSettingApiResponse:
   description: Webhook configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/WebhookNetworkSetting'
+        $ref: "../../schema/network-setting.yaml#/WebhookNetworkSetting"
 
 ChatNetworkSettingApiResponse:
-   description: Chat configuration
-   content:
-     application/json:
-       schema:
-         $ref: '../../schema/network-setting.yaml#/ChatNetworkSetting'
+  description: Chat configuration
+  content:
+    application/json:
+      schema:
+        $ref: "../../schema/network-setting.yaml#/ChatNetworkSetting"
 
 ModerationNetworkSettingApiResponse:
   description: Moderation configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/ModerationNetworkSetting'
+        $ref: "../../schema/network-setting.yaml#/ModerationNetworkSetting"
 
 FeedSettingNetworkSettingApiResponse:
   description: Feed setting check configuration
@@ -43,22 +43,22 @@ FeedSettingNetworkSettingApiResponse:
         properties:
           feedSettings:
             type: array
-            items: 
+            items:
               type: object
               properties:
                 feedType:
                   type: string
                 contentSettings:
                   type: array
-                  items: 
-                    type: object  
+                  items:
+                    type: object
                     properties:
-                      contentType: 
+                      contentType:
                         type: string
                       allowed:
                         type: boolean
                       maxDurationSeconds:
-                        type: number 
+                        type: number
                       transcodeConfig:
                         type: object
                         properties:
@@ -72,18 +72,25 @@ GetPrehookSettingApiResponse:
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/PrehookSetting'
+        $ref: "../../schema/network-setting.yaml#/PrehookSetting"
 
 UpdatePrehookSettingApiResponse:
   description: Prehook configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/PrehookSettingWithSecretKey'
+        $ref: "../../schema/network-setting.yaml#/PrehookSettingWithSecretKey"
 
 UsersSettingApiResponse:
   description: Users configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/UsersNetworkSetting'
+        $ref: "../../schema/network-setting.yaml#/UsersNetworkSetting"
+
+AdSettingApiResponse:
+  description: Ad configuration
+  content:
+    application/json:
+      schema:
+        $ref: "../../schema/network-setting.yaml#/AdNetworkSetting"
