@@ -12145,6 +12145,14 @@ paths:
         - "Ads"
       security:
         - BearerAuth: []
+      parameters:
+        - name: advertiserId
+          in: query
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+            description: Advertiser ID to filter
       responses:
         "200":
           description: Ads Information
@@ -12226,7 +12234,7 @@ paths:
               $ref: "./v1/ads/request.yaml#/QueryAdvertiseReachRequestPayload"
       responses:
         200:
-          description: The number of users reached by the ad
+          description: The number of approximate users reached by the ad
           content:
             application/json:
               schema:
