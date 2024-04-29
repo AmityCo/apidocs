@@ -12543,6 +12543,64 @@ paths:
                 status: error
                 code: 500000
                 message: "Unexpected error"
+    delete:
+      summary: Delete advertiser
+      description: |
+        Delete advertiser (only admin can call)
+        - If the advertiser has no ads, it will be deleted permanently.
+        - If the advertiser has ads, It won't be removed
+      tags:
+        - "Advertiser"
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: advertiserId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-f\d]{24}$'
+      responses:
+        "200":
+          description: Empty response
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Target not found.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Advertiser not found.
+                "This advertiser has ads.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: This advertiser has ads.
+
+        "422":
+          description: "Parameters validation error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: "Parameters validation error"
+        "500":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                status: error
+                code: 500000
+                message: "Unexpected error"
 
   /webhook/message.didCreate:
     get:
