@@ -12153,6 +12153,20 @@ paths:
             minLength: 1
             maxLength: 100
             description: Advertiser ID to filter
+        - name: "options"
+          in: "query"
+          style: "deepObject"
+          schema:
+            type: "object"
+            properties:
+              limit:
+                type: "integer"
+                minimum: 1
+                maximum: 100
+                default: 10
+              token:
+                type: "string"
+                maxLength: 1000
       responses:
         "200":
           description: Ads Information
@@ -12199,6 +12213,20 @@ paths:
             application/json:
               schema:
                 $ref: "./v1/ads/response.yaml#/QueryAdsResponsePayload"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Active ad limit reached":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Active ad limit reached
+        "403":
+          $ref: "./global/error.yaml#/ForbiddenError"
         "422":
           description: "Parameters validation error"
           content:
@@ -12219,14 +12247,32 @@ paths:
                 status: error
                 code: 500000
                 message: "Unexpected error"
-  /api/v1/ads/reaches:
+  /api/v1/ads/reach-estimation:
     get:
-      summary: Query advertisement target reach estimation
-      description: "Query the number of users reached by targets"
+      summary: Query target reach estimation
+      description: "Query the estimated number of users reached by targets"
       tags:
         - Ads
       security:
         - BearerAuth: []
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+            description: Target type
+        - name: ids
+          in: "query"
+          schema:
+            type: array
+            items:
+              type: string
+              minLength: 1
+              maxLength: 100
+              description: Target IDs
+            maxItems: 20
       requestBody:
         content:
           application/json:
@@ -12243,6 +12289,29 @@ paths:
                   reach:
                     type: number
                     example: 70
+        403:
+          $ref: "./global/error.yaml#/ForbiddenError"
+        404:
+          $ref: "./global/error.yaml#/NotFoundError"
+        422:
+          $ref: "./global/error.yaml#/UnProcessableError"
+        500:
+          $ref: "./global/error.yaml#/UnexpectedError"
+  /api/v1/ads/me:
+    get:
+      summary: Get all network ads with settings
+      description: "Get all network ads and settings"
+      tags:
+        - Ads
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Ads Information
+          content:
+            application/json:
+              schema:
+                $ref: "./v1/ads/response.yaml#/QueryAllAdsResponsePayload"
         403:
           $ref: "./global/error.yaml#/ForbiddenError"
         404:
@@ -12336,7 +12405,7 @@ paths:
                 code: 500000
                 message: "Unexpected error"
 
-  /api/v1/ads/{adId}/measurements:
+  /api/v1/ads/measurements:
     get:
       summary: Query advertisement stats
       description: "Query clicks, impressions and reaches for an ad."
@@ -12345,13 +12414,16 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: adId
-          in: path
+        - name: adIds
+          in: query
           required: true
           schema:
-            type: string
-            pattern: '^[a-f\d]{24}$'
-            example: 60e4b1b4b3b2b5c4c4b3b2b5
+            type: array
+            items:
+              type: string
+              pattern: '^[a-f\d]{24}$'
+              example: 60e4b1b4b3b2b5c4c4b3b2b5
+            maxItems: 20
       responses:
         200:
           description: Stats of the ad
@@ -12360,78 +12432,86 @@ paths:
               schema:
                 type: object
                 properties:
-                  total:
-                    type: object
-                    properties:
-                      clicks:
-                        type: number
-                        example: 40
-                      impressions:
-                        type: number
-                        example: 400
-                      reach:
-                        type: number
-                        example: 70
-                  post:
-                    type: object
-                    properties:
-                      clicks:
-                        type: number
-                        example: 10
-                      impressions:
-                        type: number
-                        example: 100
-                      reach:
-                        type: number
-                        example: 50
-                  story:
-                    type: object
-                    properties:
-                      clicks:
-                        type: number
-                        example: 10
-                      impressions:
-                        type: number
-                        example: 100
-                      reach:
-                        type: number
-                        example: 50
-                  comment:
-                    type: object
-                    properties:
-                      clicks:
-                        type: number
-                        example: 10
-                      impressions:
-                        type: number
-                        example: 100
-                      reach:
-                        type: number
-                        example: 50
-                  chat:
-                    type: object
-                    properties:
-                      clicks:
-                        type: number
-                        example: 10
-                      impressions:
-                        type: number
-                        example: 100
-                      reach:
-                        type: number
-                        example: 50
-                  chatList:
-                    type: object
-                    properties:
-                      clicks:
-                        type: number
-                        example: 10
-                      impressions:
-                        type: number
-                        example: 100
-                      reach:
-                        type: number
-                        example: 50
+                  measurements:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        adId:
+                          type: string
+                          example: 60e4b1b4b3b2b5c4c4b3b2b5
+                        total:
+                          type: object
+                          properties:
+                            clicks:
+                              type: number
+                              example: 40
+                            impressions:
+                              type: number
+                              example: 400
+                            reach:
+                              type: number
+                              example: 70
+                        post:
+                          type: object
+                          properties:
+                            clicks:
+                              type: number
+                              example: 10
+                            impressions:
+                              type: number
+                              example: 100
+                            reach:
+                              type: number
+                              example: 50
+                        story:
+                          type: object
+                          properties:
+                            clicks:
+                              type: number
+                              example: 10
+                            impressions:
+                              type: number
+                              example: 100
+                            reach:
+                              type: number
+                              example: 50
+                        comment:
+                          type: object
+                          properties:
+                            clicks:
+                              type: number
+                              example: 10
+                            impressions:
+                              type: number
+                              example: 100
+                            reach:
+                              type: number
+                              example: 50
+                        chat:
+                          type: object
+                          properties:
+                            clicks:
+                              type: number
+                              example: 10
+                            impressions:
+                              type: number
+                              example: 100
+                            reach:
+                              type: number
+                              example: 50
+                        chatList:
+                          type: object
+                          properties:
+                            clicks:
+                              type: number
+                              example: 10
+                            impressions:
+                              type: number
+                              example: 100
+                            reach:
+                              type: number
+                              example: 50
         403:
           $ref: "./global/error.yaml#/ForbiddenError"
         404:

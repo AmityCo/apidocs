@@ -16,16 +16,17 @@ Ads:
           - comment
           - chat-list
           - chat
-    title:
+    headline:
       type: string
       maxLength: 70
-    subTitle:
-      type: string
-      maxLength: 40
     description:
       type: string
+      maxLength: 40
+    body:
+      type: string
       maxLength: 180
-    media:
+      optional: true
+    images:
       type: array
       items:
         type: object
@@ -43,7 +44,7 @@ Ads:
     callToActionUrl:
       type: string
       maxLength: 1000
-    targetings:
+    targets:
       type: array
       items:
         type: object
@@ -56,6 +57,7 @@ Ads:
             type: array
             items:
               type: string
+      maxLength: 100
     startAt:
       type: string
       format: date-time
@@ -63,5 +65,8 @@ Ads:
       type: string
       format: date-time
     createdAt:
+      type: string
+      format: date-time
+    updatedAt:
       type: string
       format: date-time
