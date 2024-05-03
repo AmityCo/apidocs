@@ -2,7 +2,7 @@ openapi: '3.0.0'
 info:
   title: 'Amity Social Cloud SDK'
   description: "<h2>Using Amity APIs</h2>\n\nOur API documentation explains all API endpoints used in Amity Social Cloud. All APIs, with the exception of some\nauthentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin\nor User context. When used in user context, you will only be able to fetch data related to that user only.\nFor Administrators who are using our API documentation in making server-to-server API calls, you need an Admin\nAccess token to connect to the Amity server. Refer to <a href=\"https://docs.amity.co/console/settings#admin-api-access-token\" target=\"_blank\">this documentation</a>\nfor the instructions on how to generate an admin access token.\n\nAll backend endpoints that support Amity SDK are included here. To easily differentiate the type of each endpoint,\nwe added a prefix in each endpoint's path.\n\n1. REST API Endpoint: /v1/, /v2/, /v3/, or /v4/...\n4. Webhook Event: /webhook/...\n\n<h2>Select Region Endpoint</h2>\n\nBefore making server-to-server API calls, be sure to select the correct API endpoint for your region in\nthe <strong>Servers</strong> dropdown below.\n"
-  version: '4.74.0'
+  version: '4.77.0'
 servers:
   - url: 'https://apix.us.amity.co'
     description: 'API Endpoint for US Region'
@@ -307,12 +307,12 @@ paths:
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
     delete:
-      summary: 'Revoke access token'
+      summary: Revoke access token
       tags:
         - 'Session'
       security:
         - BearerAuth: []
-      description: 'Revoke all userId''s access token by admin'
+      description: Revoke an access token. If the userId is provided, this will revoke all access tokens of that user. Only admin can revoke all access tokens of a user.
       parameters:
         - in: query
           name: userId
@@ -321,6 +321,52 @@ paths:
             minLength: 1
             maxLength: 50
           description: User id for revocation
+        - in: query
+          name: isPublic
+          schema:
+            type: boolean
+            default: true
+          description: A flag indicating whether the userId is a public id or not
+      responses:
+        '200':
+          description: 'Revoke access token success'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  success:
+                    type: 'boolean'
+                    default: true
+        "404":
+          $ref: "./global/error.yaml#/UserIdNotFoundError"
+        "403":
+          $ref: "./global/error.yaml#/UserIsGlobalBanned"
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+  /api/v4/sessions/users/{userId}:
+    delete:
+      summary: Revoke all user's access tokens by admin
+      tags:
+        - 'Session'
+      security:
+        - BearerAuth: []
+      description: Revoke all user's access tokens by admin
+      parameters:
+        - in: path
+          required: true
+          name: userId
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 50
+          description: User id for revocation
+        - in: query
+          name: isPublic
+          schema:
+            type: boolean
+            default: true
+          description: A flag indicating whether the userId is a public id or not
       responses:
         '200':
           description: 'Revoke access token success'
@@ -469,109 +515,6 @@ paths:
       responses:
         '200':
           description: OK
-  /admin/v1/token:
-    post:
-      summary: 'Generate admin token.'
-      tags:
-        - 'Admin'
-      security:
-        - ApiKeyAuth: []
-      description: "Generate admin token\n"
-      responses:
-        '200':
-          $ref: './v1/admin/response.yaml#/AdminTokenResponse'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-    get:
-      summary: 'Get admin token.'
-      tags:
-        - 'Admin'
-      security:
-        - ApiKeyAuth: []
-      description: "Get admin token\n"
-      responses:
-        '200':
-          $ref: './v1/admin/response.yaml#/AdminTokenResponse'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-    delete:
-      summary: 'Revoke admin token.'
-      tags:
-        - 'Admin'
-      security:
-        - ApiKeyAuth: []
-      description: "Revoke admin token:\n  * super-admin can revoke any admin token\n  * admin can revoke own token only\n"
-      parameters:
-        - in: query
-          name: userId
-          schema:
-            type: string
-            minLength: 1
-            maxLength: 50
-          description: User id for revocation
-      responses:
-        '200':
-          $ref: './v1/admin/response.yaml#/RevokeAdminTokenResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '404':
-          $ref: './global/error.yaml#/UsernameNotFoundError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-  /admin/v1/blacklist/records:
-    get:
-      summary: 'get rules of blacklist.'
-      tags:
-        - 'Admin'
-      security:
-        - ApiKeyAuth: []
-      description: "Get rules of blacklist.\n"
-      parameters:
-        - name: 'Authorization'
-          in: 'header'
-          required: true
-          schema:
-            type: 'string'
-        - name: 'Content-Type'
-          in: 'header'
-          required: true
-          schema:
-            type: 'string'
-        - name: 'regexs'
-          in: 'query'
-          schema:
-            type: 'array'
-            items:
-              type: 'string'
-        - name: 'sortBy'
-          in: 'query'
-          schema:
-            type: 'string'
-            enum:
-              - 'lastCreated'
-              - 'firstCreated'
-            default: 'firstCreated'
-        - name: 'options'
-          in: 'query'
-          style: 'deepObject'
-          schema:
-            type: 'object'
-            properties:
-              limit:
-                type: 'integer'
-                minimum: 1
-                maximum: 100
-                default: 10
-              token:
-                type: 'string'
-                maxLength: 1000
-      responses:
-        '200':
-          $ref: './v1/moderation/response.yaml#/BlacklistRulesResponse'
-        '404':
-          $ref: './global/error.yaml#/NotFoundError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
   /api/v2/blacklist/records:
     get:
       summary: 'get rules of blacklist.'
@@ -2038,21 +1981,6 @@ paths:
           $ref: './global/error.yaml#/NotFoundError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /admin/v1/reports/user-last-activity:
-    get:
-      summary: 'Download last activity user report.'
-      tags:
-        - 'Admin'
-      parameters:
-        - name: 'Cookie'
-          in: 'cookie'
-          schema:
-            type: 'string'
-          description: 'Alternative way to pass authorization token'
-      description: "Download last activity user report.\n"
-      responses:
-        '200':
-          $ref: './v1/admin/response.yaml#/LastActivityReportResponse'
   /api/v2/users:
     get:
       summary: 'query users'
@@ -2118,6 +2046,8 @@ paths:
                     maxLength: 100
                 metadata:
                   type: 'object'
+                  description: >
+                    User metadata (max: 5,000 bytes)
       responses:
         '200':
           $ref: './v2/user/response.yaml#/UserApiResponse'
@@ -2291,6 +2221,8 @@ paths:
                     maxLength: 100
                 metadata:
                   type: 'object'
+                  description: >
+                    User metadata (max: 5,000 bytes)
                 avatarFileId:
                   type: 'string'
                   maxLength: 50
@@ -4381,176 +4313,6 @@ paths:
           $ref: '#/components/responses/SuccessResponse'
         '404':
           $ref: '#/components/responses/BadRequestError'
-  /admin/v1/notification/setting:
-    post:
-      summary: 'Save push notification setting.'
-      tags:
-        - 'Notification'
-      security:
-        - ApiKeyAuth: []
-      description: "Save push notification setting.\n"
-      parameters:
-        - name: 'Authorization'
-          in: 'header'
-          required: true
-          schema:
-            type: 'string'
-        - name: 'Content-Type'
-          in: 'header'
-          required: true
-          schema:
-            type: 'string'
-      requestBody:
-        description: "Notification setting information to be updated\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                level:
-                  type: 'string'
-                  enum:
-                    - 'network'
-                    - 'user'
-                    - 'channel'
-                    - 'community'
-                  description: "level:\n  * `network` - need to specific network events via notifiableEvents(this level need to have permission).\n  * `user` - need to specific modules via notifiableEvents.\n  * `channel` - need to specific channelId.\n  * `community` - need to specific communityId and community event via notifiableEvents.\n"
-                isPushNotifiable:
-                  type: 'boolean'
-                channelId:
-                  type: 'string'
-                  minLength: 1
-                  maxLength: 900
-                communityId:
-                  type: 'string'
-                  minLength: 1
-                  maxLength: 900
-                notifiableEvents:
-                  type: 'array'
-                  minItems: 1
-                  maxItems: 24
-                  items:
-                    type: 'object'
-                    properties:
-                      name:
-                        type: 'string'
-                        enum:
-                          - 'channel.created'
-                          - 'channel.joined'
-                          - 'conversation-channel.joined'
-                          - 'text-mention-message.created'
-                          - 'message.created'
-                          - 'conversation-message.created'
-                          - 'conversation-text-message.created'
-                          - 'conversation-image-message.created'
-                          - 'conversation-file-message.created'
-                          - 'post.created'
-                          - 'post.approved'
-                          - 'post.need-reviewing'
-                          - 'text-mention-post.created'
-                          - 'text-mention-user-feed-post.created'
-                          - 'video-streaming-post.created'
-                          - 'post.reacted'
-                          - 'comment.created'
-                          - 'text-mention-comment.created'
-                          - 'text-mention-user-feed-comment.created'
-                          - 'comment.replied'
-                          - 'text-mention-comment.replied'
-                          - 'text-mention-user-feed-comment.replied'
-                          - 'comment.reacted'
-                          - 'follow.created'
-                          - 'follow.requested'
-                          - 'follow.accepted'
-                          - 'community.roleAdded'
-                          - 'community.updated'
-                      moduleName:
-                        type: 'string'
-                        enum:
-                          - 'chat'
-                          - 'video-streaming'
-                          - 'social'
-                      isPushNotifiable:
-                        type: 'boolean'
-                      titleTemplate:
-                        type: 'string'
-                        maxLength: 1000
-                      bodyTemplate:
-                        type: 'string'
-                        maxLength: 5000
-                      listenFromRoleIds:
-                        type: 'array'
-                        maxItems: 10
-                        items:
-                          type: 'string'
-                          minLength: 1
-                          maxLength: 900
-                        description: 'specific roles for get notify by event creator who has roles only'
-                      ignoreFromRoleIds:
-                        type: 'array'
-                        maxItems: 10
-                        items:
-                          type: 'string'
-                          minLength: 1
-                          maxLength: 900
-                        description: 'specific roles for ignore notify by event creator who has roles only'
-              required:
-                - 'level'
-      responses:
-        '200':
-          $ref: './global/response.yaml#/SaveApiResponse'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '429':
-          $ref: './global/error.yaml#/RateLimitError'
-        '404':
-          $ref: './global/error.yaml#/NotFoundError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-    get:
-      summary: 'Get push notification setting.'
-      tags:
-        - 'Notification'
-      security:
-        - ApiKeyAuth: []
-      description: "Get push notification setting.\n"
-      parameters:
-        - name: 'Content-Type'
-          in: 'header'
-          required: true
-          schema:
-            type: 'string'
-        - name: 'level'
-          required: true
-          in: 'query'
-          schema:
-            type: 'string'
-            enum:
-              - 'network'
-              - 'user'
-              - 'channel'
-              - 'community'
-        - name: 'channelId'
-          in: 'query'
-          schema:
-            type: 'string'
-            minLength: 1
-            maxLength: 900
-        - name: 'communityId'
-          in: 'query'
-          schema:
-            type: 'string'
-            minLength: 1
-            maxLength: 900
-      responses:
-        '200':
-          $ref: './v1/notification/response.yaml#/NotificationSettingApiResponse'
-        '429':
-          $ref: './global/error.yaml#/RateLimitError'
-        '404':
-          $ref: './global/error.yaml#/NotFoundError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
   /api/v3/notification/setting:
     get:
       summary: 'Get push notification setting.'
@@ -4909,187 +4671,6 @@ paths:
       responses:
         '200':
           $ref: './v3/reaction/response.yaml#/ReactionResponse'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-  /admin/v1/network/{networkId}:
-    get:
-      summary: 'Get a network'
-      tags:
-        - 'Network'
-      security:
-        - ApiKeyAuth: []
-      description: "Get a network.\n"
-      parameters:
-        - name: 'Content-Type'
-          in: 'header'
-          required: true
-          schema:
-            type: 'string'
-        - name: 'networkId'
-          in: 'path'
-          required: true
-          schema:
-            type: 'string'
-      responses:
-        '200':
-          $ref: '#/components/responses/NetworkResponse'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-    put:
-      summary: 'Save network'
-      tags:
-        - 'Network'
-      security:
-        - ApiKeyAuth: []
-      description: "save network information\n"
-      parameters:
-        - name: 'Content-Type'
-          in: 'header'
-          required: true
-          schema:
-            type: 'string'
-        - name: 'networkId'
-          in: 'path'
-          required: true
-          schema:
-            type: 'string'
-      requestBody:
-        description: "data for save network\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                defaultMessageAutoDeleteEnabled:
-                  type: 'boolean'
-                  description: 'Is message in this channel will be deleted when the user flagged until flag limit?'
-                defaultAutoDeleteMessageByFlagLimit:
-                  type: 'number'
-                  minimum: 1
-                  example: 1
-                  description: 'Number of flags that will force a message to be deleted automatically.'
-                useSecureAuthentication:
-                  type: 'boolean'
-                  description: 'Is this network require secure authentication implementation.'
-              required:
-                - 'networkId'
-                - 'defaultMessageAutoDeleteEnabled'
-                - 'defaultAutoDeleteMessageByFlagLimit'
-      responses:
-        '200':
-          $ref: '#/components/responses/NetworkResponse'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-  /api/v3/networks/server-key:
-    get:
-      summary: 'Get server key last issued data'
-      tags:
-        - 'Network'
-      security:
-        - BearerAuth: []
-      description: "Get server key last issued data\n"
-      responses:
-        '200':
-          $ref: './v3/network/response.yaml#/KeyLastUpdateResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-    post:
-      summary: 'Issue new server key'
-      tags:
-        - 'Network'
-      security:
-        - BearerAuth: []
-      description: "Issue new server key (old key will be invoked)  \nAllow only admin to call.\n"
-      responses:
-        '200':
-          description: 'Server key'
-          content:
-            application/json:
-              schema:
-                type: 'string'
-                example: '7d47e0acf1a33cebef81ba9c2051698f14c1e8c64ec12270af21abb213bc01f101deff4a726254d6426734df02a89b99c59d3ed5cf2d1bb7249c940aec'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/networks:
-    post:
-      summary: 'Create network with tier'
-      tags:
-        - 'Network'
-      security:
-        - BearerAuth: []
-      description: "Create network (with feature toggle)\n"
-      requestBody:
-        description: "information for a network creation    \n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                name:
-                  type: 'string'
-                  description: 'network name'
-                  example: 'asgfssssfaufiasgf'
-                tierHandler:
-                  type: 'string'
-                  description: 'tier handler (in case of we have to do bulk update in the future)'
-                  example: 'asc-free'
-      responses:
-        '200':
-          $ref: './v3/network/response.yaml#/NetworkCreationResponse'
-        '400':
-          $ref: './global/error.yaml#/BadRequestError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-  /api/v3/networks/me:
-    get:
-      summary: 'Get self network info'
-      tags:
-        - 'Network'
-      security:
-        - BearerAuth: []
-      responses:
-        '200':
-          $ref: './v3/network/response.yaml#/NetworkResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-    put:
-      summary: 'Update self network info'
-      tags:
-        - 'Network'
-      security:
-        - BearerAuth: []
-      description: "Update self network info. Only admin can update.\n"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                defaultMessageAutoDeleteEnabled:
-                  type: 'boolean'
-                  description: 'Is message in this channel will be deleted when the user flagged until flag limit?'
-                defaultAutoDeleteMessageByFlagLimit:
-                  type: 'number'
-                  minimum: 1
-                  example: 1
-                  description: 'Number of flags that will force a message to be deleted automatically.'
-                useSecureAuthentication:
-                  type: 'boolean'
-                  description: 'Is this network require secure authentication implementation.'
-      responses:
-        '200':
-          $ref: './v3/network/response.yaml#/NetworkResponse'
-        '403':
-          $ref: './global/error.yaml#/GenericPermissionDenidedError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
   /api/v3/posts:
@@ -5814,224 +5395,6 @@ paths:
           $ref: './global/error.yaml#/RateLimitError'
         '404':
           $ref: './global/error.yaml#/NotFoundError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-  /admin/v1/posts/schedule:
-    post: 
-      summary: 'schedule a post'
-      tags: 
-        - 'Admin'
-      security:
-        - BearerAuth: []
-      description: "Schedule a post at specfic date/time but the scheduled time need to be within next 1 days and next 30 days\n"
-      requestBody:
-        $ref: './v1/admin/schedule_post.yaml#/postReqBody'
-      responses:
-        '200':
-          description: 'ok'
-          content:
-            application/json:
-              schema:
-                $ref: './v1/admin/schedule_post.yaml#/postRespBody'
-        '400':
-          $ref: './global/error.yaml#/BadRequestError'
-        '422':
-          $ref: './global/error.yaml#/UnProcessableError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-    delete:
-      summary: 'delete scheduled post'
-      tags: 
-        - 'Admin'
-      security:
-        - BearerAuth: []
-      description: "Delete scheduled post"
-      parameters:
-      - in: query
-        name: id
-        required: true
-        schema:
-          type: string
-        description: 'to specify which scheduled post to delete'
-      responses:
-        '200':
-          description: 'ok, not returning any data'
-        '404':
-          $ref: './global/error.yaml#/NotFoundError'
-        '422':
-          $ref: './global/error.yaml#/UnProcessableError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-    get:
-      summary: 'get scheduled post'
-      tags: 
-        - 'Admin'
-      security:
-        - BearerAuth: []
-      description: "Get scheduled post"
-      parameters:
-        - name: 'notPostedOnly'
-          in: 'query'
-          schema:
-            type: 'boolean'
-            default: false
-          description: 'to get only scheduled post that not posted yet'
-        - name: 'sortBy'
-          in: 'query'
-          schema:
-            type: 'string'
-            enum:
-              - 'lastCreated'
-              - 'firstCreated'
-              - 'lastUpdated'
-              - 'firstUpdated'
-            default: 'lastCreated'
-            description: 'use updatedAt when sort by first/lastUpdated'
-        - name: 'options'
-          in: 'query'
-          style: 'deepObject'
-          schema:
-            type: 'object'
-            properties:
-              limit:
-                type: 'integer'
-                minimum: 1
-                maximum: 100
-                default: 10
-              token:
-                type: 'string'
-                maxLength: 1000
-              before:
-                type: 'string'
-                maxLength: 24
-              after:
-                type: 'string'
-                maxLength: 24
-              updatedAt:
-                type: 'string'
-                maxLength: 30
-        - name: 'targetType'
-          in: 'query'
-          schema: 
-            type: 'string'
-            enum:
-              - 'content'
-              - 'community'
-              - 'user'
-          description: 'target type of scheduled posts'
-        - name: 'targetId'
-          in: 'query'
-          schema: 
-            type: 'string'
-          description: 'target id of scheduled posts'
-      responses:
-        '200':
-          description: 'Return all scheduled post informations or only scheduled post that not posted yet'
-          content:
-            application/json:
-              schema:
-                $ref: './v1/admin/schedule_post.yaml#/getRespBody'
-        '422':
-          $ref: './global/error.yaml#/UnProcessableError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-  /admin/v1/channels/count:
-    get:
-      summary: 'Get channel count'
-      description: Using for get channel count by filter
-      tags:
-        - 'Admin'
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: 'keyword'
-          description: Display name search keyword
-          in: 'query'
-          schema:
-            type: 'string'
-            maxLength: 100
-        - name: 'isDeleted'
-          in: 'query'
-          schema:
-            type: 'boolean'
-            default: null
-          description: "isDeleted:\n  * `null(default)` - Show both channel is actived and channel is inactived.\n  * `true` - Show channel is inactived only.\n  * `false` - Show channel is actived only.\n"
-        - name: 'tags'
-          description: Tags to filter
-          in: 'query'
-          schema:
-            type: 'array'
-            maxItems: 10
-            items:
-              type: 'string'
-              maxLength: 100
-        - name: 'filter'
-          in: 'query'
-          schema:
-            type: 'string'
-            enum:
-              - 'all'
-              - 'flagged'
-            default: 'all'
-        - name: 'types'
-          in: 'query'
-          schema:
-            type: 'array'
-            maxItems: 10
-            items:
-              type: 'string'
-              enum:
-                - 'standard'
-                - 'broadcast'
-                - 'live'
-                - 'community'
-      responses:
-        '200':
-          $ref: './v3/channel/response.yaml#/ChannelCountApiResponse'
-        '403':
-          $ref: './global/error.yaml#/PermissionDenidedError'
-        '429':
-          $ref: './global/error.yaml#/RateLimitError'
-        '404':
-          $ref: './global/error.yaml#/NotFoundError'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
-
-  /internal/v1/posts/schedule: 
-    post:
-      'x-internal': true
-      summary: 'create a post'
-      tags: 
-        - 'Internal'
-      security:
-        - BasicAuth: []
-      description: "
-        The purpose of this functionality is to create scheduled posts, and it should only be called from the Lambda function. It allows for the creation of a post using provided information and assigns a specific user (identified by the userId) as the owner of the post."
-      requestBody:
-        description: ""
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties: 
-                id: 
-                  type: 'string'
-                  pattern: '^[a-f\d]{24}$'
-                  description: 'MongoDB document id'
-                userId: 
-                  type: 'string'
-                  pattern: '^[a-f\d]{24}$'
-                  description: 'User id'
-                networkId:
-                  type: 'string'
-                  pattern: '^[a-f\d]{24}$'
-                  description: 'Network id'
-      responses:
-        '200':
-          description: 'ok, not returning any data'
-        '422':
-          $ref: './global/error.yaml#/ValidationError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
 
@@ -11704,6 +11067,61 @@ paths:
                 status: error
                 code: 500000
                 message: Unexpected error
+  /api/v1/me/following-feeds:
+    get:
+      summary: Get following feeds
+      description: Get posts from your wall, people you follow and communities you join
+      tags:
+        - 'FollowingFeed'
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: './v1/following-feed/parameters.yaml#/SortBy'
+        - name: limit
+          in: query
+          required: false
+          description: > 
+            Limit the number of posts returned
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+        - name: token
+          in: query
+          required: false
+          description: > 
+            Token for pagination
+          schema:
+            type: string
+            maxLength: 100
+      responses:
+        '200':
+          description: Following feed Information
+          content:
+            application/json:
+              schema:
+                $ref: './v1/following-feed/response.yaml#/QueryFollowingFeedResponsePayload'
+        '422':
+          description: 'Parameters validation error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: 'Parameters validation error'
+        '500':
+          description: 'Unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: 'Unexpected error'
   /webhook/message.didCreate:
     get:
       tags:
