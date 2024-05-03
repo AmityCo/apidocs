@@ -5994,7 +5994,10 @@ paths:
         - BearerAuth: []
       description: "Schedule a story at specific date/time but the scheduled time need to be within next 1 hour and next 30 days\n"
       requestBody:
-        $ref: './v4/story/request.yaml#/CreateStoryRequestPayload'
+        content:
+          application/json:
+            schema:
+              $ref: './v4/story/request.yaml#/CreateStoryRequestPayload'
       responses:
         '200':
           description: 'ok'
