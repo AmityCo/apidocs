@@ -5985,6 +5985,122 @@ paths:
           $ref: './global/error.yaml#/UnProcessableError'
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
+  /admin/v1/stories/schedule:
+    post: 
+      summary: 'schedule a story'
+      tags: 
+        - 'Admin'
+      security:
+        - BearerAuth: []
+      description: "Schedule a story at specific date/time but the scheduled time need to be within next 1 hour and next 30 days\n"
+      requestBody:
+        $ref: './v4/story/request.yaml#/CreateStoryRequestPayload'
+      responses:
+        '200':
+          description: 'ok'
+          content:
+            application/json:
+              schema:
+                $ref: './v4/story/response.yaml#/CreateStoryResponsePayload'
+        '400':
+          $ref: './global/error.yaml#/BadRequestError'
+        '422':
+          $ref: './global/error.yaml#/UnProcessableError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+    delete:
+      summary: 'delete scheduled story'
+      tags: 
+        - 'Admin'
+      security:
+        - BearerAuth: []
+      description: "Delete scheduled story"
+      parameters:
+      - in: query
+        name: id
+        required: true
+        schema:
+          type: string
+        description: 'to specify which scheduled story to delete'
+      responses:
+        '200':
+          description: 'ok, not returning any data'
+        '404':
+          $ref: './global/error.yaml#/NotFoundError'
+        '422':
+          $ref: './global/error.yaml#/UnProcessableError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
+    get:
+      summary: 'get scheduled stories'
+      tags: 
+        - 'Admin'
+      security:
+        - BearerAuth: []
+      description: "Get scheduled stories"
+      parameters:
+        - name: 'isPending'
+          in: 'query'
+          schema:
+            type: 'boolean'
+            default: false
+          description: 'to get only scheduled stories that not posted yet'
+        - name: 'sortBy'
+          in: 'query'
+          schema:
+            type: 'string'
+            enum:
+              - 'lastCreated'
+              - 'firstCreated'
+            default: 'lastCreated'
+        - name: 'options'
+          in: 'query'
+          style: 'deepObject'
+          schema:
+            type: 'object'
+            properties:
+              limit:
+                type: 'integer'
+                minimum: 1
+                maximum: 100
+                default: 10
+              token:
+                type: 'string'
+                maxLength: 1000
+              before:
+                type: 'string'
+                maxLength: 24
+              after:
+                type: 'string'
+                maxLength: 24
+              updatedAt:
+                type: 'string'
+                maxLength: 30
+        - name: 'targetType'
+          in: 'query'
+          schema: 
+            type: 'string'
+            enum:
+              - 'content'
+              - 'community'
+              - 'user'
+          description: 'target type of scheduled story'
+        - name: 'targetId'
+          in: 'query'
+          schema: 
+            type: 'string'
+          description: 'target id of scheduled story'
+      responses:
+        '200':
+          description: 'Return all scheduled post informations or only scheduled post that not posted yet'
+          content:
+            application/json:
+              schema:
+                $ref: './v4/story/response.yaml#/CreateStoryResponsePayload'
+        '422':
+          $ref: './global/error.yaml#/UnProcessableError'
+        '500':
+          $ref: './global/error.yaml#/UnexpectedError'
   /admin/v1/channels/count:
     get:
       summary: 'Get channel count'
