@@ -6558,6 +6558,9 @@ paths:
                 fullImage:
                   type: 'boolean'
                   nullable: true
+                preferredFilename:
+                  type: 'string'
+                  maxLength: 1024
       responses:
         '200':
           $ref: './v3/file/response.yaml#/FileUploadResponse'
@@ -6687,6 +6690,9 @@ paths:
                     type: 'string'
                     format: 'binary'
                     description: 'Image file data'
+                preferredFilename:
+                  type: 'string'
+                  maxLength: 1024
               required:
                 - 'files'
       responses:
@@ -6723,6 +6729,9 @@ paths:
                     type: 'string'
                     format: 'binary'
                     description: 'file data'
+                preferredFilename:
+                  type: 'string'
+                  maxLength: 1024
               required:
                 - 'files'
       responses:
@@ -6761,6 +6770,9 @@ paths:
                     description: 'Video file data'
                 feedType:
                   type: 'string'
+                preferredFilename:
+                  type: 'string'
+                  maxLength: 1024
               required:
                 - 'files'
       responses:
