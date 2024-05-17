@@ -384,70 +384,6 @@ paths:
           $ref: "./global/error.yaml#/UserIsGlobalBanned"
         '500':
           $ref: './global/error.yaml#/UnexpectedError'
-  /v1/device:
-    post:
-      summary: 'Register a device.'
-      tags:
-        - 'Device'
-      parameters:
-        - name: 'x-api-key'
-          in: 'header'
-          required: true
-          schema:
-            type: 'string'
-      description: "Register a session in order to receive access token to perform sdk operations.\n"
-      requestBody:
-        description: "Information about user and devices that he/she use to connect to. If displayName is provide, that user display is updated as well.\n\nIf userId doesn't exists, new user will be created.\n\nauthToken need to pass when network option is set to secure\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: 'object'
-              properties:
-                userId:
-                  type: 'string'
-                  minLength: 1
-                  maxLength: 50
-                deviceId:
-                  type: 'string'
-                  minLength: 1
-                  maxLength: 150
-                deviceInfo:
-                  type: 'object'
-                  properties:
-                    kind:
-                      type: 'string'
-                      enum:
-                        - 'ios'
-                        - 'android'
-                        - 'web'
-                        - 'node'
-                    model:
-                      type: 'string'
-                      maxLength: 100
-                    sdkVersion:
-                      type: 'string'
-                      maxLength: 30
-                displayName:
-                  type: 'string'
-                  maxLength: 100
-                authToken:
-                  type: 'string'
-                  description: 'Authentication token from /api/v3/authentication/token'
-                  minLength: 1
-                  maxLength: 100
-              required:
-                - 'userId'
-                - 'deviceId'
-      responses:
-        '200':
-          $ref: './v1/device/response.yaml#/DeviceResponse'
-        '401':
-          $ref: './global/error.yaml#/UserIsSystemBanned'
-        '403':
-          $ref: './global/error.yaml#/UserIsGlobalBanned'
-        '500':
-          $ref: './global/error.yaml#/UnexpectedError'
   /v1/blacklist/records:
     put:
       summary: 'Refresh black list'
@@ -2142,7 +2078,7 @@ paths:
     get:
       summary: 'Get users information.'
       tags:
-        - 'UserV3'
+        - 'User'
       security:
         - BearerAuth: []
       description: "Get users information (pagination supported)\n"
@@ -2271,7 +2207,7 @@ paths:
     get:
       summary: 'Get one user information.'
       tags:
-        - 'UserV3'
+        - 'User'
       security:
         - BearerAuth: []
       description: "Get one user information.\n"
@@ -2305,7 +2241,7 @@ paths:
       summary: 'Check whether user flag a given user.'
       description: "Check whether user flag a given user.\n"
       tags:
-        - 'UserV3'
+        - 'User'
       security:
         - BearerAuth: []
       parameters:
@@ -2331,7 +2267,7 @@ paths:
   /api/v2/search/channels:
     get:
       tags:
-        - 'Search Channel V2'
+        - 'Channel'
       summary: 'Search channels'
       description: 'Retrieve channels based on search criteria'
       security:
@@ -2353,7 +2289,7 @@ paths:
     post:
       summary: 'close channel'
       tags:
-        - 'Channel V2'
+        - 'Channel'
       security:
         - BearerAuth: []
       description: "Close channel\n"
@@ -2376,7 +2312,7 @@ paths:
     put:
       summary: 'Mute channel'
       tags:
-        - 'Channel V2'
+        - 'Channel'
       security:
         - BearerAuth: []
       description: "Mute all users in channel for a specific period of time.\n"
@@ -2412,7 +2348,7 @@ paths:
     put:
       summary: 'Mute user in channel'
       tags:
-        - 'Channel V2'
+        - 'Channel'
       security:
         - BearerAuth: []
       description: "Mute a user in channel for a specific period of time.\n"
@@ -2455,7 +2391,7 @@ paths:
     get:
       summary: 'Query channel'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -2553,7 +2489,7 @@ paths:
     post:
       summary: 'Create channel'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       requestBody:
@@ -2637,7 +2573,7 @@ paths:
     get:
       summary: 'get a channel by ID.'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -2658,7 +2594,7 @@ paths:
     put:
       summary: 'update a channel'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -2727,7 +2663,7 @@ paths:
     delete:
       summary: 'delete a channel'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -2763,7 +2699,7 @@ paths:
     post:
       summary: 'join a channel'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -2796,7 +2732,7 @@ paths:
     delete:
       summary: 'leave a channel'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -2829,7 +2765,7 @@ paths:
     get:
       summary: 'query channel users'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -2895,7 +2831,7 @@ paths:
     post:
       summary: 'add channel users'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -2945,7 +2881,7 @@ paths:
     delete:
       summary: 'remove channel users'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -2989,7 +2925,7 @@ paths:
     put:
       summary: 'ban channel users'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -3040,7 +2976,7 @@ paths:
     put:
       summary: 'unban channel users'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -3091,7 +3027,7 @@ paths:
     post:
       summary: 'Add role to channel users'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -3143,7 +3079,7 @@ paths:
     delete:
       summary: 'Remove role from channel users'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       parameters:
@@ -3192,7 +3128,7 @@ paths:
     post:
       summary: 'create a conversation channel'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       requestBody:
@@ -3250,7 +3186,7 @@ paths:
     get:
       summary: 'get list of channel'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       description: "Get list of channel\n"
@@ -3277,7 +3213,7 @@ paths:
     post:
       summary: 'Mark user message read position inside channel'
       tags:
-        - 'Channel V3'
+        - 'Channel'
       security:
         - BearerAuth: []
       description: "Mark user message read position inside channel\n"
@@ -11382,14 +11318,14 @@ paths:
                 status: error
                 code: 500000
                 message: 'Unexpected error'
-  /webhook/message.didCreate:
+  /webhook/channel.didAddUsers:
     get:
       tags:
         - 'WebhookEvent'
-      description: 'Send new created message whenever a message got created in a channel'
+      description: 'Send user added event information whenever new member got added to a channel.'
       responses:
         '200':
-          description: 'messages is messages information. users is list of all user information relate to this messages'
+          description: 'channel is channel information. userIds is a list of added userId. adderId is user who add other user to channel users is a list of user information.'
           content:
             application/json:
               schema:
@@ -11398,26 +11334,32 @@ paths:
                   event:
                     type: 'string'
                     enum:
-                      - 'message.didCreate'
+                      - 'channel.didAddUsers'
                   data:
                     type: 'object'
                     properties:
-                      messages:
+                      channel:
                         type: 'array'
                         items:
-                          $ref: './schema/message.yaml#/Message'
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: 'array'
                         items:
                           $ref: './schema/user.yaml#/User'
-  /webhook/message.didDelete:
+                      userIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+                      adderId:
+                        type: 'string'
+  /webhook/channel.didBan:
     get:
       tags:
         - 'WebhookEvent'
-      description: 'Send deleted message whenever a message got deleted in a channel'
+      description: 'Send channel banned event whenever a channel got banned.'
       responses:
         '200':
-          description: 'messages is messages information. users is list of all user information relate to this messages'
+          description: 'channel is channel information. userIds is a list of userIds who being banned. actorId is userId who ban other user. users is a list of userInfo'
           content:
             application/json:
               schema:
@@ -11426,26 +11368,32 @@ paths:
                   event:
                     type: 'string'
                     enum:
-                      - 'message.didDelete'
+                      - 'channel.didBan'
                   data:
                     type: 'object'
                     properties:
-                      messages:
+                      channel:
                         type: 'array'
                         items:
-                          $ref: './schema/message.yaml#/Message'
+                          $ref: '#/components/schemas/Channel'
                       users:
                         type: 'array'
                         items:
-                          $ref: './schema/user.yaml#/User'
-  /webhook/message.didUpdate:
+                          $ref: '#/components/schemas/User'
+                      actorId:
+                        type: 'string'
+                      userIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+  /webhook/channel.didClose:
     get:
       tags:
         - 'WebhookEvent'
-      description: 'Send updated message whenever a message got updated in a channel'
+      description: 'Send channel close event information whenever a channel close.'
       responses:
         '200':
-          description: 'messages is messages information. users is list of all user information relate to this messages'
+          description: 'channel is channel information.'
           content:
             application/json:
               schema:
@@ -11454,118 +11402,14 @@ paths:
                   event:
                     type: 'string'
                     enum:
-                      - 'message.didUpdate'
+                      - 'channel.didClose'
                   data:
                     type: 'object'
                     properties:
-                      messages:
+                      channel:
                         type: 'array'
                         items:
-                          $ref: './schema/message.yaml#/Message'
-                      users:
-                        type: 'array'
-                        items:
-                          $ref: './schema/user.yaml#/User'
-  /webhook/message.didFlag:
-    get:
-      tags:
-        - 'WebhookEvent'
-      description: 'Send updated message whenever a message got flag'
-      responses:
-        '200':
-          description: 'messages is messages information. users is list of all user information relate to this messages'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  event:
-                    type: 'string'
-                    enum:
-                      - 'message.didFlag'
-                  data:
-                    type: 'object'
-                    properties:
-                      messages:
-                        type: 'array'
-                        items:
-                          $ref: './schema/message.yaml#/Message'
-                      users:
-                        type: 'array'
-                        items:
-                          $ref: './schema/user.yaml#/User'
-  /webhook/message.didUnflag:
-    get:
-      tags:
-        - 'WebhookEvent'
-      description: 'Send updated message whenever a message flag is removed.'
-      responses:
-        '200':
-          description: 'messages is messages information. users is list of all user information relate to this messages'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  event:
-                    type: 'string'
-                    enum:
-                      - 'message.didUnflag'
-                  data:
-                    type: 'object'
-                    properties:
-                      messages:
-                        type: 'array'
-                        items:
-                          $ref: './schema/message.yaml#/Message'
-                      users:
-                        type: 'array'
-                        items:
-                          $ref: './schema/user.yaml#/User'
-  /webhook/message.didClearflag:
-    get:
-      tags:
-        - 'WebhookEvent'
-      description: 'Send updated message whenever all message flags are cleared.'
-      responses:
-        '200':
-          description: 'messages is messages information. users is list of all user information relate to this messages'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  event:
-                    type: 'string'
-                    enum:
-                      - 'message.didClearflag'
-                  data:
-                    type: 'object'
-                    properties:
-                      messages:
-                        type: 'array'
-                        items:
-                          $ref: './schema/message.yaml#/Message'
-                      users:
-                        type: 'array'
-                        items:
-                          $ref: './schema/user.yaml#/User'
-  /webhook/message.didAddReaction:
-    get:
-      tags:
-        - 'WebhookEvent'
-      description: 'Send updated message whenever add reaction to this message.'
-      responses:
-        '200':
-          $ref: './v3/message/response.yaml#/MessageAddReactionWithReactorWebhookResponse'    
-  /webhook/message.didRemoveReaction:
-    get:
-      tags:
-        - 'WebhookEvent'
-      description: 'Send updated message whenever remove reaction to this message.'
-      responses:
-        '200':
-          $ref: './v3/message/response.yaml#/MessageRemoveReactionWithReactorWebhookResponse'                             
+                          $ref: '#/components/schemas/Channel'
   /webhook/channel.didCreate:
     get:
       tags:
@@ -11630,64 +11474,6 @@ paths:
                         type: 'array'
                         items:
                           type: 'string'
-  /webhook/channel.didAddUsers:
-    get:
-      tags:
-        - 'WebhookEvent'
-      description: 'Send user added event information whenever new member got added to a channel.'
-      responses:
-        '200':
-          description: 'channel is channel information. userIds is a list of added userId. adderId is user who add other user to channel users is a list of user information.'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  event:
-                    type: 'string'
-                    enum:
-                      - 'channel.didAddUsers'
-                  data:
-                    type: 'object'
-                    properties:
-                      channel:
-                        type: 'array'
-                        items:
-                          $ref: '#/components/schemas/Channel'
-                      users:
-                        type: 'array'
-                        items:
-                          $ref: './schema/user.yaml#/User'
-                      userIds:
-                        type: 'array'
-                        items:
-                          type: 'string'
-                      adderId:
-                        type: 'string'
-  /webhook/channel.didClose:
-    get:
-      tags:
-        - 'WebhookEvent'
-      description: 'Send channel close event information whenever a channel close.'
-      responses:
-        '200':
-          description: 'channel is channel information.'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  event:
-                    type: 'string'
-                    enum:
-                      - 'channel.didClose'
-                  data:
-                    type: 'object'
-                    properties:
-                      channel:
-                        type: 'array'
-                        items:
-                          $ref: '#/components/schemas/Channel'
   /webhook/channel.didLeave:
     get:
       tags:
@@ -11720,36 +11506,6 @@ paths:
                         type: 'array'
                         items:
                           type: 'string'
-  /webhook/channel.didUpdate:
-    get:
-      tags:
-        - 'WebhookEvent'
-      description: 'Send channel updated event information whenever a channel got updated.'
-      responses:
-        '200':
-          description: 'channel is channel information. userId is a userId who update channel. users is a list of userInfo'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  event:
-                    type: 'string'
-                    enum:
-                      - 'channel.didUpdate'
-                  data:
-                    type: 'object'
-                    properties:
-                      channel:
-                        type: 'array'
-                        items:
-                          $ref: '#/components/schemas/Channel'
-                      users:
-                        type: 'array'
-                        items:
-                          $ref: './schema/user.yaml#/User'
-                      userId:
-                        type: 'string'
   /webhook/channel.didRemoveUsers:
     get:
       tags:
@@ -11784,6 +11540,36 @@ paths:
                           type: 'string'
                       removerId:
                         type: 'string'
+  /webhook/channel.didUpdate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      description: 'Send channel updated event information whenever a channel got updated.'
+      responses:
+        '200':
+          description: 'channel is channel information. userId is a userId who update channel. users is a list of userInfo'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  event:
+                    type: 'string'
+                    enum:
+                      - 'channel.didUpdate'
+                  data:
+                    type: 'object'
+                    properties:
+                      channel:
+                        type: 'array'
+                        items:
+                          $ref: '#/components/schemas/Channel'
+                      users:
+                        type: 'array'
+                        items:
+                          $ref: './schema/user.yaml#/User'
+                      userId:
+                        type: 'string'
   /webhook/channel.didUpdateMeta:
     get:
       tags:
@@ -11814,14 +11600,179 @@ paths:
                           $ref: './schema/user.yaml#/User'
                       userId:
                         type: 'string'
-  /webhook/channel.didBan:
+  /webhook/comment.didAddReaction:
     get:
       tags:
         - 'WebhookEvent'
-      description: 'Send channel banned event whenever a channel got banned.'
+      security:
+        - BearerAuth: []
+      description: "This is called when reaction of comment is added.\n"
       responses:
         '200':
-          description: 'channel is channel information. userIds is a list of userIds who being banned. actorId is userId who ban other user. users is a list of userInfo'
+          $ref: './v3/comment/response.yaml#/CommentWithReactorWebhookResponse'
+  /webhook/comment.didCreate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is created\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWebhookResponse'
+  /webhook/comment.didDelete:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is deleted\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWebhookResponse'
+  /webhook/comment.didFlag:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is flagged.\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWithFlagWebhookResponse'
+  /webhook/comment.didRemoveReaction:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when reaction of comment is removed.\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWithReactorWebhookResponse'
+  /webhook/comment.didReply:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is replied.\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWebhookResponse'
+  /webhook/comment.didUnflag:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is unflagged.\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWithFlagWebhookResponse'
+  /webhook/comment.didUpdate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is updated\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWebhookResponse'
+  /webhook/follow.didAcceptRequest:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when a user accepts a follow request from another user.\n"
+      responses:
+        '200':
+          description: 'Follow Object'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
+  /webhook/follow.didCancelRequest:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when a user cancels a request to follow another user.\n"
+      responses:
+        '200':
+          description: 'Follow Object'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
+  /webhook/follow.didCreate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when a user follows another user.\n"
+      responses:
+        '200':
+          description: 'Follow Object'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
+  /webhook/follow.didDeclineRequest:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when a user declines a follow request from another user.\n"
+      responses:
+        '200':
+          description: 'Follow Object'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
+  /webhook/follow.didDeleteFollower:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when a user deletes a user from their follower's list.\n"
+      responses:
+        '200':
+          description: 'Follow Object'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
+  /webhook/follow.didRequest:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when a user sends a request to follow another user.\n"
+      responses:
+        '200':
+          description: 'Follow Object'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
+  /webhook/follow.didUnfollow:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when a user unfollows another user.\n"
+      responses:
+        '200':
+          description: 'Follow Object'
+          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
+  /webhook/message.didAddReaction:
+    get:
+      tags:
+        - 'WebhookEvent'
+      description: 'Send updated message whenever add reaction to this message.'
+      responses:
+        '200':
+          $ref: './v3/message/response.yaml#/MessageAddReactionWithReactorWebhookResponse'
+  /webhook/message.didClearflag:
+    get:
+      tags:
+        - 'WebhookEvent'
+      description: 'Send updated message whenever all message flags are cleared.'
+      responses:
+        '200':
+          description: 'messages is messages information. users is list of all user information relate to this messages'
           content:
             application/json:
               schema:
@@ -11830,24 +11781,166 @@ paths:
                   event:
                     type: 'string'
                     enum:
-                      - 'channel.didBan'
+                      - 'message.didClearflag'
                   data:
                     type: 'object'
                     properties:
-                      channel:
+                      messages:
                         type: 'array'
                         items:
-                          $ref: '#/components/schemas/Channel'
+                          $ref: './schema/message.yaml#/Message'
                       users:
                         type: 'array'
                         items:
-                          $ref: '#/components/schemas/User'
-                      actorId:
-                        type: 'string'
-                      userIds:
+                          $ref: './schema/user.yaml#/User'
+  /webhook/message.didCreate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      description: 'Send new created message whenever a message got created in a channel'
+      responses:
+        '200':
+          description: 'messages is messages information. users is list of all user information relate to this messages'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  event:
+                    type: 'string'
+                    enum:
+                      - 'message.didCreate'
+                  data:
+                    type: 'object'
+                    properties:
+                      messages:
                         type: 'array'
                         items:
-                          type: 'string'
+                          $ref: './schema/message.yaml#/Message'
+                      users:
+                        type: 'array'
+                        items:
+                          $ref: './schema/user.yaml#/User'
+  /webhook/message.didDelete:
+    get:
+      tags:
+        - 'WebhookEvent'
+      description: 'Send deleted message whenever a message got deleted in a channel'
+      responses:
+        '200':
+          description: 'messages is messages information. users is list of all user information relate to this messages'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  event:
+                    type: 'string'
+                    enum:
+                      - 'message.didDelete'
+                  data:
+                    type: 'object'
+                    properties:
+                      messages:
+                        type: 'array'
+                        items:
+                          $ref: './schema/message.yaml#/Message'
+                      users:
+                        type: 'array'
+                        items:
+                          $ref: './schema/user.yaml#/User'
+  /webhook/message.didFlag:
+    get:
+      tags:
+        - 'WebhookEvent'
+      description: 'Send updated message whenever a message got flag'
+      responses:
+        '200':
+          description: 'messages is messages information. users is list of all user information relate to this messages'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  event:
+                    type: 'string'
+                    enum:
+                      - 'message.didFlag'
+                  data:
+                    type: 'object'
+                    properties:
+                      messages:
+                        type: 'array'
+                        items:
+                          $ref: './schema/message.yaml#/Message'
+                      users:
+                        type: 'array'
+                        items:
+                          $ref: './schema/user.yaml#/User'
+  /webhook/message.didRemoveReaction:
+    get:
+      tags:
+        - 'WebhookEvent'
+      description: 'Send updated message whenever remove reaction to this message.'
+      responses:
+        '200':
+          $ref: './v3/message/response.yaml#/MessageRemoveReactionWithReactorWebhookResponse'
+  /webhook/message.didUnflag:
+    get:
+      tags:
+        - 'WebhookEvent'
+      description: 'Send updated message whenever a message flag is removed.'
+      responses:
+        '200':
+          description: 'messages is messages information. users is list of all user information relate to this messages'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  event:
+                    type: 'string'
+                    enum:
+                      - 'message.didUnflag'
+                  data:
+                    type: 'object'
+                    properties:
+                      messages:
+                        type: 'array'
+                        items:
+                          $ref: './schema/message.yaml#/Message'
+                      users:
+                        type: 'array'
+                        items:
+                          $ref: './schema/user.yaml#/User'
+  /webhook/message.didUpdate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      description: 'Send updated message whenever a message got updated in a channel'
+      responses:
+        '200':
+          description: 'messages is messages information. users is list of all user information relate to this messages'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  event:
+                    type: 'string'
+                    enum:
+                      - 'message.didUpdate'
+                  data:
+                    type: 'object'
+                    properties:
+                      messages:
+                        type: 'array'
+                        items:
+                          $ref: './schema/message.yaml#/Message'
+                      users:
+                        type: 'array'
+                        items:
+                          $ref: './schema/user.yaml#/User'
   /webhook/moderation.didBan:
     get:
       tags:
@@ -11878,321 +11971,6 @@ paths:
                           $ref: '#/components/schemas/User'
                       userId:
                         type: 'string'
-  /webhook/user.didClearFlag:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when the user flags are cleared\n"
-      responses:
-        '200':
-          description: 'User flag cleared event information. users is a list of userInfo. files is a list of file information'
-          $ref: './v1/user/response.yaml#/UserWebhookResponse'
-  /webhook/user.didFlag:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when a user is flagged\n"
-      responses:
-        '200':
-          description: "User flag event information. users is a list of userInfo. files is a list of file information"
-          $ref: './v1/user/response.yaml#/UserWebhookResponse'
-  /webhook/user.didUnflag:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when a user is unflagged\n"
-      responses:
-        '200':
-          description: 'User unflag event information. users is a list of userInfo. files is a list of file information'
-          $ref: './v1/user/response.yaml#/UserWebhookResponse'
-  /webhook/user.didCreate:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when a user is created\n"
-      responses:
-        '200':
-          description: 'User created event information. users is a list of userInfo. files is a list of file information'
-          $ref: './v1/user/response.yaml#/UserWebhookResponse'
-  /webhook/user.didUpdate:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when a user information is updated\n"
-      responses:
-        '200':
-          description: 'User updated event information. users is a list of userInfo. files is a list of file information'
-          $ref: './v1/user/response.yaml#/UserWebhookResponse'
-  /webhook/v3.community.didCreate:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when community is created\n"
-      responses:
-        '200':
-          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
-  /webhook/v3.community.didUpdate:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when community is updated\n"
-      responses:
-        '200':
-          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
-  /webhook/v3.community.didDelete:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when community is deleted\n"
-      responses:
-        '200':
-          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
-  /webhook/v3.community.didJoin:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when user joined a community.\n"
-      responses:
-        '200':
-          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
-  /webhook/v3.community.didLeave:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when user left a community\n"
-      responses:
-        '200':
-          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
-  /webhook/v3.community.didAddUsers:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when add users into community\n"
-      responses:
-        '200':
-          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
-  /webhook/v3.community.didRemoveUsers:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when remove users from community\n"
-      responses:
-        '200':
-          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
-  /webhook/v3.community.didBan:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when community user is banned\n"
-      responses:
-        '200':
-          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
-  /webhook/v3.community.didUnban:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when community user is unbanned\n"
-      responses:
-        '200':
-          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
-  /webhook/v3.post.didCreate:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when post is created\n"
-      responses:
-        '200':
-          $ref: './v3/post/response.yaml#/PostWebhookResponse'
-  /webhook/v3.post.didUpdate:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when post is updated\n"
-      responses:
-        '200':
-          $ref: './v3/post/response.yaml#/PostWebhookResponse'
-  /webhook/v3.post.didDelete:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when post is deleted\n"
-      responses:
-        '200':
-          $ref: './v3/post/response.yaml#/PostWebhookResponse'
-  /webhook/v3.post.didApprove:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when post is approved\n"
-      responses:
-        '200':
-          $ref: './v3/post/response.yaml#/PostWebhookResponse'
-  /webhook/v3.post.didDecline:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when post is declined\n"
-      responses:
-        '200':
-          $ref: './v3/post/response.yaml#/PostWebhookResponse'
-  /webhook/v3.post.didFlag:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when post is flagged.\n"
-      responses:
-        '200':
-          $ref: './v3/post/response.yaml#/PostWithFlagWebhookResponse'
-  /webhook/v3.post.didUnflag:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when post is unflagged.\n"
-      responses:
-        '200':
-          $ref: './v3/post/response.yaml#/PostWithFlagWebhookResponse'
-  /webhook/v3.post.didAddReaction:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when reaction of post is added.\n"
-      responses:
-        '200':
-          $ref: './v3/post/response.yaml#/PostWithReactorWebhookResponse'
-  /webhook/v3.post.didRemoveReaction:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when reaction of post is removed.\n"
-      responses:
-        '200':
-          $ref: './v3/post/response.yaml#/PostWithReactorWebhookResponse'
-  /webhook/v3.comment.didCreate:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is created\n"
-      responses:
-        '200':
-          $ref: './v3/comment/response.yaml#/CommentWebhookResponse'
-  /webhook/v3.comment.didUpdate:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is updated\n"
-      responses:
-        '200':
-          $ref: './v3/comment/response.yaml#/CommentWebhookResponse'
-  /webhook/v3.comment.didDelete:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is deleted\n"
-      responses:
-        '200':
-          $ref: './v3/comment/response.yaml#/CommentWebhookResponse'
-  /webhook/v3.comment.didFlag:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is flagged.\n"
-      responses:
-        '200':
-          $ref: './v3/comment/response.yaml#/CommentWithFlagWebhookResponse'
-  /webhook/v3.comment.didUnflag:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is unflagged.\n"
-      responses:
-        '200':
-          $ref: './v3/comment/response.yaml#/CommentWithFlagWebhookResponse'
-  /webhook/v3.comment.didAddReaction:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when reaction of comment is added.\n"
-      responses:
-        '200':
-          $ref: './v3/comment/response.yaml#/CommentWithReactorWebhookResponse'
-  /webhook/v3.comment.didRemoveReaction:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when reaction of comment is removed.\n"
-      responses:
-        '200':
-          $ref: './v3/comment/response.yaml#/CommentWithReactorWebhookResponse'
-  /webhook/v3.comment.didReply:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is replied.\n"
-      responses:
-        '200':
-          $ref: './v3/comment/response.yaml#/CommentWebhookResponse'
   /webhook/poll.didCreate:
     get:
       tags:
@@ -12223,537 +12001,6 @@ paths:
       responses:
         '200':
           $ref: './v3/poll/response.yaml#/PollWebhookResponse'
-  /webhook/video-streaming.didRecord:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when video streaming recordings is ready.\n"
-      responses:
-        '200':
-          $ref: './v3/video-streaming/response.yaml#/VideoStreamingsWebhookResponse'
-  /webhook/video-streaming.didStart:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when video streaming start.\n"
-      responses:
-        '200':
-          $ref: './v3/video-streaming/response.yaml#/VideoStreamingsWebhookResponse'
-  /webhook/video-streaming.didStop:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when video streaming stop.\n"
-      responses:
-        '200':
-          $ref: './v3/video-streaming/response.yaml#/VideoStreamingsWebhookResponse'
-  /webhook/follow.didCreate:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when a user follows another user.\n"
-      responses:
-        '200':
-          description: 'Follow Object'
-          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
-  /webhook/follow.didRequest:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when a user sends a request to follow another user.\n"
-      responses:
-        '200':
-          description: 'Follow Object'
-          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
-  /webhook/follow.didAcceptRequest:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when a user accepts a follow request from another user.\n"
-      responses:
-        '200':
-          description: 'Follow Object'
-          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
-  /webhook/follow.didUnfollow:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when a user unfollows another user.\n"
-      responses:
-        '200':
-          description: 'Follow Object'
-          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
-  /webhook/follow.didCancelRequest:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when a user cancels a request to follow another user.\n"
-      responses:
-        '200':
-          description: 'Follow Object'
-          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
-  /webhook/follow.didDeclineRequest:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when a user declines a follow request from another user.\n"
-      responses:
-        '200':
-          description: 'Follow Object'
-          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
-  /webhook/follow.didDeleteFollower:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when a user deletes a user from their follower's list.\n"
-      responses:
-        '200':
-          description: 'Follow Object'
-          $ref: './v4/follow/response.yaml#/FollowWebhookResponse'
-  /webhook/push-notification/post.created:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when post is created\n"
-      responses:
-        '200':
-          description: 'post created'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  eventType:
-                    type: 'string'
-                    enum:
-                      - 'push-notification.created'
-                  id:
-                    type: 'string'
-                  networkId:
-                    type: 'string'
-                  path:
-                    type: 'string'
-                  senderId:
-                    type: 'string'
-                  sentTime:
-                    type: 'string'
-                    format: 'date-time'
-                  version:
-                    type: 'string'
-                  data:
-                    type: 'object'
-                    properties:
-                      eventName:
-                        type: 'string'
-                      isBroadcast:
-                        type: 'boolean'
-                        default: false
-                      targetIds:
-                        type: 'array'
-                        items:
-                          type: 'string'
-                      notify:
-                        type: 'boolean'
-                        description: 'should notify to user targetIds'
-                      title:
-                        type: 'string'
-                      body:
-                        type: 'string'
-                    allOf:
-                      - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
-  /webhook/push-notification/post.need-reviewing:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when post is created\n"
-      responses:
-        '200':
-          description: 'post created'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  eventType:
-                    type: 'string'
-                    enum:
-                      - 'push-notification.created'
-                  id:
-                    type: 'string'
-                  networkId:
-                    type: 'string'
-                  path:
-                    type: 'string'
-                  senderId:
-                    type: 'string'
-                  sentTime:
-                    type: 'string'
-                    format: 'date-time'
-                  version:
-                    type: 'string'
-                  data:
-                    type: 'object'
-                    properties:
-                      eventName:
-                        type: 'string'
-                      isBroadcast:
-                        type: 'boolean'
-                        default: false
-                      targetIds:
-                        type: 'array'
-                        items:
-                          type: 'string'
-                      notify:
-                        type: 'boolean'
-                        description: 'should notify to user targetIds'
-                      title:
-                        type: 'string'
-                      body:
-                        type: 'string'
-                    allOf:
-                      - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
-  /webhook/push-notification/post.approved:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when post is created\n"
-      responses:
-        '200':
-          description: 'post created'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  eventType:
-                    type: 'string'
-                    enum:
-                      - 'push-notification.created'
-                  id:
-                    type: 'string'
-                  networkId:
-                    type: 'string'
-                  path:
-                    type: 'string'
-                  senderId:
-                    type: 'string'
-                  sentTime:
-                    type: 'string'
-                    format: 'date-time'
-                  version:
-                    type: 'string'
-                  data:
-                    type: 'object'
-                    properties:
-                      eventName:
-                        type: 'string'
-                      isBroadcast:
-                        type: 'boolean'
-                        default: false
-                      targetIds:
-                        type: 'array'
-                        items:
-                          type: 'string'
-                      notify:
-                        type: 'boolean'
-                        description: 'should notify to user targetIds'
-                      title:
-                        type: 'string'
-                      body:
-                        type: 'string'
-                    allOf:
-                      - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
-  /webhook/push-notification/comment.created:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is created\n"
-      responses:
-        '200':
-          description: 'comment created'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  eventType:
-                    type: 'string'
-                    enum:
-                      - 'push-notification.created'
-                  id:
-                    type: 'string'
-                  networkId:
-                    type: 'string'
-                  path:
-                    type: 'string'
-                  senderId:
-                    type: 'string'
-                  sentTime:
-                    type: 'string'
-                    format: 'date-time'
-                  version:
-                    type: 'string'
-                  data:
-                    type: 'object'
-                    properties:
-                      eventName:
-                        type: 'string'
-                      isBroadcast:
-                        type: 'boolean'
-                        default: false
-                      targetIds:
-                        type: 'array'
-                        items:
-                          type: 'string'
-                      notify:
-                        type: 'boolean'
-                        description: 'should notify to user targetIds'
-                      title:
-                        type: 'string'
-                      body:
-                        type: 'string'
-                    allOf:
-                      - $ref: './v3/comment/response.yaml#/CommentCustomNotificationResponse'
-  /webhook/push-notification/comment.replied:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is created\n"
-      responses:
-        '200':
-          description: 'comment created'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  eventType:
-                    type: 'string'
-                    enum:
-                      - 'push-notification.created'
-                  id:
-                    type: 'string'
-                  networkId:
-                    type: 'string'
-                  path:
-                    type: 'string'
-                  senderId:
-                    type: 'string'
-                  sentTime:
-                    type: 'string'
-                    format: 'date-time'
-                  version:
-                    type: 'string'
-                  data:
-                    type: 'object'
-                    properties:
-                      eventName:
-                        type: 'string'
-                      isBroadcast:
-                        type: 'boolean'
-                        default: false
-                      targetIds:
-                        type: 'array'
-                        items:
-                          type: 'string'
-                      notify:
-                        type: 'boolean'
-                        description: 'should notify to user targetIds'
-                      title:
-                        type: 'string'
-                      body:
-                        type: 'string'
-                    allOf:
-                      - $ref: './v3/comment/response.yaml#/CommentCustomNotificationResponse'
-  /webhook/push-notification/post.reacted:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when post is created\n"
-      responses:
-        '200':
-          description: 'post created'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  eventType:
-                    type: 'string'
-                    enum:
-                      - 'push-notification.created'
-                  id:
-                    type: 'string'
-                  networkId:
-                    type: 'string'
-                  path:
-                    type: 'string'
-                  senderId:
-                    type: 'string'
-                  sentTime:
-                    type: 'string'
-                    format: 'date-time'
-                  version:
-                    type: 'string'
-                  data:
-                    type: 'object'
-                    properties:
-                      eventName:
-                        type: 'string'
-                      isBroadcast:
-                        type: 'boolean'
-                        default: false
-                      targetIds:
-                        type: 'array'
-                        items:
-                          type: 'string'
-                      notify:
-                        type: 'boolean'
-                        description: 'should notify to user targetIds'
-                      title:
-                        type: 'string'
-                      body:
-                        type: 'string'
-                    allOf:
-                      - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
-  /webhook/push-notification/comment.reacted:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is created\n"
-      responses:
-        '200':
-          description: 'comment created'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  eventType:
-                    type: 'string'
-                    enum:
-                      - 'push-notification.created'
-                  id:
-                    type: 'string'
-                  networkId:
-                    type: 'string'
-                  path:
-                    type: 'string'
-                  senderId:
-                    type: 'string'
-                  sentTime:
-                    type: 'string'
-                    format: 'date-time'
-                  version:
-                    type: 'string'
-                  data:
-                    type: 'object'
-                    properties:
-                      eventName:
-                        type: 'string'
-                      isBroadcast:
-                        type: 'boolean'
-                        default: false
-                      targetIds:
-                        type: 'array'
-                        items:
-                          type: 'string'
-                      notify:
-                        type: 'boolean'
-                        description: 'should notify to user targetIds'
-                      title:
-                        type: 'string'
-                      body:
-                        type: 'string'
-                    allOf:
-                      - $ref: './v3/comment/response.yaml#/CommentCustomNotificationResponse'
-  /webhook/push-notification/message.created:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when message is created\n"
-      responses:
-        '200':
-          description: 'message created'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  eventType:
-                    type: 'string'
-                    enum:
-                      - 'push-notification.created'
-                  id:
-                    type: 'string'
-                  networkId:
-                    type: 'string'
-                  path:
-                    type: 'string'
-                  senderId:
-                    type: 'string'
-                  sentTime:
-                    type: 'string'
-                    format: 'date-time'
-                  version:
-                    type: 'string'
-                  data:
-                    type: 'object'
-                    properties:
-                      eventName:
-                        type: 'string'
-                      isBroadcast:
-                        type: 'boolean'
-                        default: false
-                      targetIds:
-                        type: 'array'
-                        items:
-                          type: 'string'
-                      notify:
-                        type: 'boolean'
-                        description: 'should notify to user targetIds'
-                      title:
-                        type: 'string'
-                      body:
-                        type: 'string'
-                    allOf:
-                      - $ref: './v3/message/response.yaml#/MessageCustomNotificationResponse'
   /webhook/push-notification/channel.created:
     get:
       tags:
@@ -12860,6 +12107,218 @@ paths:
                         type: 'string'
                     allOf:
                       - $ref: './v3/channel/response.yaml#/ChannelCustomNotificationResponse'
+  /webhook/push-notification/comment.created:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is created\n"
+      responses:
+        '200':
+          description: 'comment created'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  eventType:
+                    type: 'string'
+                    enum:
+                      - 'push-notification.created'
+                  id:
+                    type: 'string'
+                  networkId:
+                    type: 'string'
+                  path:
+                    type: 'string'
+                  senderId:
+                    type: 'string'
+                  sentTime:
+                    type: 'string'
+                    format: 'date-time'
+                  version:
+                    type: 'string'
+                  data:
+                    type: 'object'
+                    properties:
+                      eventName:
+                        type: 'string'
+                      isBroadcast:
+                        type: 'boolean'
+                        default: false
+                      targetIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+                      notify:
+                        type: 'boolean'
+                        description: 'should notify to user targetIds'
+                      title:
+                        type: 'string'
+                      body:
+                        type: 'string'
+                    allOf:
+                      - $ref: './v3/comment/response.yaml#/CommentCustomNotificationResponse'
+  /webhook/push-notification/comment.reacted:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is created\n"
+      responses:
+        '200':
+          description: 'comment created'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  eventType:
+                    type: 'string'
+                    enum:
+                      - 'push-notification.created'
+                  id:
+                    type: 'string'
+                  networkId:
+                    type: 'string'
+                  path:
+                    type: 'string'
+                  senderId:
+                    type: 'string'
+                  sentTime:
+                    type: 'string'
+                    format: 'date-time'
+                  version:
+                    type: 'string'
+                  data:
+                    type: 'object'
+                    properties:
+                      eventName:
+                        type: 'string'
+                      isBroadcast:
+                        type: 'boolean'
+                        default: false
+                      targetIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+                      notify:
+                        type: 'boolean'
+                        description: 'should notify to user targetIds'
+                      title:
+                        type: 'string'
+                      body:
+                        type: 'string'
+                    allOf:
+                      - $ref: './v3/comment/response.yaml#/CommentCustomNotificationResponse'
+  /webhook/push-notification/comment.replied:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is created\n"
+      responses:
+        '200':
+          description: 'comment created'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  eventType:
+                    type: 'string'
+                    enum:
+                      - 'push-notification.created'
+                  id:
+                    type: 'string'
+                  networkId:
+                    type: 'string'
+                  path:
+                    type: 'string'
+                  senderId:
+                    type: 'string'
+                  sentTime:
+                    type: 'string'
+                    format: 'date-time'
+                  version:
+                    type: 'string'
+                  data:
+                    type: 'object'
+                    properties:
+                      eventName:
+                        type: 'string'
+                      isBroadcast:
+                        type: 'boolean'
+                        default: false
+                      targetIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+                      notify:
+                        type: 'boolean'
+                        description: 'should notify to user targetIds'
+                      title:
+                        type: 'string'
+                      body:
+                        type: 'string'
+                    allOf:
+                      - $ref: './v3/comment/response.yaml#/CommentCustomNotificationResponse'
+  /webhook/push-notification/follow.accepted:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when follow is created/requested/accepted\n"
+      responses:
+        '200':
+          description: 'follow created/requested/accepted'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  eventType:
+                    type: 'string'
+                    enum:
+                      - 'push-notification.created'
+                  id:
+                    type: 'string'
+                  networkId:
+                    type: 'string'
+                  path:
+                    type: 'string'
+                  senderId:
+                    type: 'string'
+                  sentTime:
+                    type: 'string'
+                    format: 'date-time'
+                  version:
+                    type: 'string'
+                  data:
+                    type: 'object'
+                    properties:
+                      eventName:
+                        type: 'string'
+                      isBroadcast:
+                        type: 'boolean'
+                        default: false
+                      targetIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+                      notify:
+                        type: 'boolean'
+                        description: 'should notify to user targetIds'
+                      title:
+                        type: 'string'
+                      body:
+                        type: 'string'
+                    allOf:
+                      - $ref: './v4/follow/response.yaml#/FollowCustomNotificationResponse'
   /webhook/push-notification/follow.created:
     get:
       tags:
@@ -12966,16 +12425,16 @@ paths:
                         type: 'string'
                     allOf:
                       - $ref: './v4/follow/response.yaml#/FollowCustomNotificationResponse'
-  /webhook/push-notification/follow.accepted:
+  /webhook/push-notification/message.created:
     get:
       tags:
         - 'WebhookEvent'
       security:
         - BearerAuth: []
-      description: "This is called when follow is created/requested/accepted\n"
+      description: "This is called when message is created\n"
       responses:
         '200':
-          description: 'follow created/requested/accepted'
+          description: 'message created'
           content:
             application/json:
               schema:
@@ -13018,61 +12477,8 @@ paths:
                       body:
                         type: 'string'
                     allOf:
-                      - $ref: './v4/follow/response.yaml#/FollowCustomNotificationResponse'
-  /webhook/push-notification/mention-post.created:
-    get:
-      tags:
-        - 'WebhookEvent'
-      security:
-        - BearerAuth: []
-      description: "This is called when post is created\n"
-      responses:
-        '200':
-          description: 'post created'
-          content:
-            application/json:
-              schema:
-                type: 'object'
-                properties:
-                  eventType:
-                    type: 'string'
-                    enum:
-                      - 'push-notification.created'
-                  id:
-                    type: 'string'
-                  networkId:
-                    type: 'string'
-                  path:
-                    type: 'string'
-                  senderId:
-                    type: 'string'
-                  sentTime:
-                    type: 'string'
-                    format: 'date-time'
-                  version:
-                    type: 'string'
-                  data:
-                    type: 'object'
-                    properties:
-                      eventName:
-                        type: 'string'
-                      isBroadcast:
-                        type: 'boolean'
-                        default: false
-                      targetIds:
-                        type: 'array'
-                        items:
-                          type: 'string'
-                      notify:
-                        type: 'boolean'
-                        description: 'should notify to user targetIds'
-                      title:
-                        type: 'string'
-                      body:
-                        type: 'string'
-                    allOf:
-                      - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
-  /webhook/push-notification/mention-user-feed-post.created:
+                      - $ref: './v3/message/response.yaml#/MessageCustomNotificationResponse'
+  /webhook/push-notification/post.approved:
     get:
       tags:
         - 'WebhookEvent'
@@ -13125,6 +12531,218 @@ paths:
                         type: 'string'
                     allOf:
                       - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
+  /webhook/push-notification/post.created:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is created\n"
+      responses:
+        '200':
+          description: 'post created'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  eventType:
+                    type: 'string'
+                    enum:
+                      - 'push-notification.created'
+                  id:
+                    type: 'string'
+                  networkId:
+                    type: 'string'
+                  path:
+                    type: 'string'
+                  senderId:
+                    type: 'string'
+                  sentTime:
+                    type: 'string'
+                    format: 'date-time'
+                  version:
+                    type: 'string'
+                  data:
+                    type: 'object'
+                    properties:
+                      eventName:
+                        type: 'string'
+                      isBroadcast:
+                        type: 'boolean'
+                        default: false
+                      targetIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+                      notify:
+                        type: 'boolean'
+                        description: 'should notify to user targetIds'
+                      title:
+                        type: 'string'
+                      body:
+                        type: 'string'
+                    allOf:
+                      - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
+  /webhook/push-notification/post.need-reviewing:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is created\n"
+      responses:
+        '200':
+          description: 'post created'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  eventType:
+                    type: 'string'
+                    enum:
+                      - 'push-notification.created'
+                  id:
+                    type: 'string'
+                  networkId:
+                    type: 'string'
+                  path:
+                    type: 'string'
+                  senderId:
+                    type: 'string'
+                  sentTime:
+                    type: 'string'
+                    format: 'date-time'
+                  version:
+                    type: 'string'
+                  data:
+                    type: 'object'
+                    properties:
+                      eventName:
+                        type: 'string'
+                      isBroadcast:
+                        type: 'boolean'
+                        default: false
+                      targetIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+                      notify:
+                        type: 'boolean'
+                        description: 'should notify to user targetIds'
+                      title:
+                        type: 'string'
+                      body:
+                        type: 'string'
+                    allOf:
+                      - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
+  /webhook/push-notification/post.reacted:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is created\n"
+      responses:
+        '200':
+          description: 'post created'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  eventType:
+                    type: 'string'
+                    enum:
+                      - 'push-notification.created'
+                  id:
+                    type: 'string'
+                  networkId:
+                    type: 'string'
+                  path:
+                    type: 'string'
+                  senderId:
+                    type: 'string'
+                  sentTime:
+                    type: 'string'
+                    format: 'date-time'
+                  version:
+                    type: 'string'
+                  data:
+                    type: 'object'
+                    properties:
+                      eventName:
+                        type: 'string'
+                      isBroadcast:
+                        type: 'boolean'
+                        default: false
+                      targetIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+                      notify:
+                        type: 'boolean'
+                        description: 'should notify to user targetIds'
+                      title:
+                        type: 'string'
+                      body:
+                        type: 'string'
+                    allOf:
+                      - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
+  /webhook/push-notification/video-streaming.started:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when video-streaming is started\n"
+      responses:
+        '200':
+          description: 'video-streaming is started'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  eventType:
+                    type: 'string'
+                    enum:
+                      - 'push-notification.created'
+                  id:
+                    type: 'string'
+                  networkId:
+                    type: 'string'
+                  path:
+                    type: 'string'
+                  senderId:
+                    type: 'string'
+                  sentTime:
+                    type: 'string'
+                    format: 'date-time'
+                  version:
+                    type: 'string'
+                  data:
+                    type: 'object'
+                    properties:
+                      eventName:
+                        type: 'string'
+                      isBroadcast:
+                        type: 'boolean'
+                        default: true
+                      targetIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+                      notify:
+                        type: 'boolean'
+                        description: 'should notify to user targetIds'
+                      title:
+                        type: 'string'
+                      body:
+                        type: 'string'
+                    allOf:
+                      - $ref: './v3/video-streaming/response.yaml#/VideoStreamingCustomNotificationResponse'
   /webhook/push-notification/mention-comment.created:
     get:
       tags:
@@ -13231,6 +12849,59 @@ paths:
                         type: 'string'
                     allOf:
                       - $ref: './v3/comment/response.yaml#/CommentCustomNotificationResponse'
+  /webhook/push-notification/mention-post.created:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is created\n"
+      responses:
+        '200':
+          description: 'post created'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  eventType:
+                    type: 'string'
+                    enum:
+                      - 'push-notification.created'
+                  id:
+                    type: 'string'
+                  networkId:
+                    type: 'string'
+                  path:
+                    type: 'string'
+                  senderId:
+                    type: 'string'
+                  sentTime:
+                    type: 'string'
+                    format: 'date-time'
+                  version:
+                    type: 'string'
+                  data:
+                    type: 'object'
+                    properties:
+                      eventName:
+                        type: 'string'
+                      isBroadcast:
+                        type: 'boolean'
+                        default: false
+                      targetIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+                      notify:
+                        type: 'boolean'
+                        description: 'should notify to user targetIds'
+                      title:
+                        type: 'string'
+                      body:
+                        type: 'string'
+                    allOf:
+                      - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
   /webhook/push-notification/mention-user-feed-comment.created:
     get:
       tags:
@@ -13337,16 +13008,16 @@ paths:
                         type: 'string'
                     allOf:
                       - $ref: './v3/comment/response.yaml#/CommentCustomNotificationResponse'
-  /webhook/push-notification/video-streaming.started:
+  /webhook/push-notification/mention-user-feed-post.created:
     get:
       tags:
         - 'WebhookEvent'
       security:
         - BearerAuth: []
-      description: "This is called when video-streaming is started\n"
+      description: "This is called when post is created\n"
       responses:
         '200':
-          description: 'video-streaming is started'
+          description: 'post created'
           content:
             application/json:
               schema:
@@ -13376,7 +13047,7 @@ paths:
                         type: 'string'
                       isBroadcast:
                         type: 'boolean'
-                        default: true
+                        default: false
                       targetIds:
                         type: 'array'
                         items:
@@ -13389,7 +13060,459 @@ paths:
                       body:
                         type: 'string'
                     allOf:
-                      - $ref: './v3/video-streaming/response.yaml#/VideoStreamingCustomNotificationResponse'
+                      - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
+  /webhook/push-notification/post.approved:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is created\n"
+      responses:
+        '200':
+          description: 'post created'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  eventType:
+                    type: 'string'
+                    enum:
+                      - 'push-notification.created'
+                  id:
+                    type: 'string'
+                  networkId:
+                    type: 'string'
+                  path:
+                    type: 'string'
+                  senderId:
+                    type: 'string'
+                  sentTime:
+                    type: 'string'
+                    format: 'date-time'
+                  version:
+                    type: 'string'
+                  data:
+                    type: 'object'
+                    properties:
+                      eventName:
+                        type: 'string'
+                      isBroadcast:
+                        type: 'boolean'
+                        default: false
+                      targetIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+                      notify:
+                        type: 'boolean'
+                        description: 'should notify to user targetIds'
+                      title:
+                        type: 'string'
+                      body:
+                        type: 'string'
+                    allOf:
+                      - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
+  /webhook/push-notification/post.created:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is created\n"
+      responses:
+        '200':
+          description: 'post created'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  eventType:
+                    type: 'string'
+                    enum:
+                      - 'push-notification.created'
+                  id:
+                    type: 'string'
+                  networkId:
+                    type: 'string'
+                  path:
+                    type: 'string'
+                  senderId:
+                    type: 'string'
+                  sentTime:
+                    type: 'string'
+                    format: 'date-time'
+                  version:
+                    type: 'string'
+                  data:
+                    type: 'object'
+                    properties:
+                      eventName:
+                        type: 'string'
+                      isBroadcast:
+                        type: 'boolean'
+                        default: false
+                      targetIds:
+                        type: 'array'
+                        items:
+                          type: 'string'
+                      notify:
+                        type: 'boolean'
+                        description: 'should notify to user targetIds'
+                      title:
+                        type: 'string'
+                      body:
+                        type: 'string'
+                    allOf:
+                      - $ref: './v3/post/response.yaml#/PostCustomNotificationResponse'
+  /webhook/user.didClearFlag:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when the user flags are cleared\n"
+      responses:
+        '200':
+          description: 'User flag cleared event information. users is a list of userInfo. files is a list of file information'
+          $ref: './v1/user/response.yaml#/UserWebhookResponse'
+  /webhook/user.didCreate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when a user is created\n"
+      responses:
+        '200':
+          description: 'User created event information. users is a list of userInfo. files is a list of file information'
+          $ref: './v1/user/response.yaml#/UserWebhookResponse'
+  /webhook/user.didFlag:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when a user is flagged\n"
+      responses:
+        '200':
+          description: "User flag event information. users is a list of userInfo. files is a list of file information"
+          $ref: './v1/user/response.yaml#/UserWebhookResponse'
+  /webhook/user.didUnflag:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when a user is unflagged\n"
+      responses:
+        '200':
+          description: 'User unflag event information. users is a list of userInfo. files is a list of file information'
+          $ref: './v1/user/response.yaml#/UserWebhookResponse'
+  /webhook/user.didUpdate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when a user information is updated\n"
+      responses:
+        '200':
+          description: 'User updated event information. users is a list of userInfo. files is a list of file information'
+          $ref: './v1/user/response.yaml#/UserWebhookResponse'
+  /webhook/v3.comment.didAddReaction:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when reaction of comment is added.\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWithReactorWebhookResponse'
+  /webhook/v3.comment.didCreate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is created\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWebhookResponse'
+  /webhook/v3.comment.didDelete:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is deleted\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWebhookResponse'
+  /webhook/v3.comment.didFlag:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is flagged.\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWithFlagWebhookResponse'
+  /webhook/v3.comment.didRemoveReaction:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when reaction of comment is removed.\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWithReactorWebhookResponse'
+  /webhook/v3.comment.didReply:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is replied.\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWebhookResponse'
+  /webhook/v3.comment.didUnflag:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is unflagged.\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWithFlagWebhookResponse'
+  /webhook/v3.comment.didUpdate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when comment is updated\n"
+      responses:
+        '200':
+          $ref: './v3/comment/response.yaml#/CommentWebhookResponse'
+  /webhook/v3.community.didAddUsers:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when add users into community\n"
+      responses:
+        '200':
+          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
+  /webhook/v3.community.didBan:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when community user is banned\n"
+      responses:
+        '200':
+          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
+  /webhook/v3.community.didCreate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when community is created\n"
+      responses:
+        '200':
+          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
+  /webhook/v3.community.didDelete:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when community is deleted\n"
+      responses:
+        '200':
+          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
+  /webhook/v3.community.didJoin:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when user joined a community.\n"
+      responses:
+        '200':
+          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
+  /webhook/v3.community.didLeave:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when user left a community\n"
+      responses:
+        '200':
+          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
+  /webhook/v3.community.didRemoveUsers:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when remove users from community\n"
+      responses:
+        '200':
+          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
+  /webhook/v3.community.didUnban:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when community user is unbanned\n"
+      responses:
+        '200':
+          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
+  /webhook/v3.community.didUpdate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when community is updated\n"
+      responses:
+        '200':
+          $ref: './v3/community/response.yaml#/CommunityWebhookResponse'
+  /webhook/v3.post.didAddReaction:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when reaction of post is added.\n"
+      responses:
+        '200':
+          $ref: './v3/post/response.yaml#/PostWithReactorWebhookResponse'
+  /webhook/v3.post.didApprove:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is approved\n"
+      responses:
+        '200':
+          $ref: './v3/post/response.yaml#/PostWebhookResponse'
+  /webhook/v3.post.didCreate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is created\n"
+      responses:
+        '200':
+          $ref: './v3/post/response.yaml#/PostWebhookResponse'
+  /webhook/v3.post.didDecline:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is declined\n"
+      responses:
+        '200':
+          $ref: './v3/post/response.yaml#/PostWebhookResponse'
+  /webhook/v3.post.didDelete:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is deleted\n"
+      responses:
+        '200':
+          $ref: './v3/post/response.yaml#/PostWebhookResponse'
+  /webhook/v3.post.didFlag:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is flagged.\n"
+      responses:
+        '200':
+          $ref: './v3/post/response.yaml#/PostWithFlagWebhookResponse'
+  /webhook/v3.post.didRemoveReaction:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when reaction of post is removed.\n"
+      responses:
+        '200':
+          $ref: './v3/post/response.yaml#/PostWithReactorWebhookResponse'
+  /webhook/v3.post.didUnflag:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is unflagged.\n"
+      responses:
+        '200':
+          $ref: './v3/post/response.yaml#/PostWithFlagWebhookResponse'
+  /webhook/v3.post.didUpdate:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when post is updated\n"
+      responses:
+        '200':
+          $ref: './v3/post/response.yaml#/PostWebhookResponse'
+  /webhook/video-streaming.didRecord:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when video streaming recordings is ready.\n"
+      responses:
+        '200':
+          $ref: './v3/video-streaming/response.yaml#/VideoStreamingsWebhookResponse'
+  /webhook/video-streaming.didStart:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when video streaming start.\n"
+      responses:
+        '200':
+          $ref: './v3/video-streaming/response.yaml#/VideoStreamingsWebhookResponse'
+  /webhook/video-streaming.didStop:
+    get:
+      tags:
+        - 'WebhookEvent'
+      security:
+        - BearerAuth: []
+      description: "This is called when video streaming stop.\n"
+      responses:
+        '200':
+          $ref: './v3/video-streaming/response.yaml#/VideoStreamingsWebhookResponse'
+
 components:
   schemas:
     User:
