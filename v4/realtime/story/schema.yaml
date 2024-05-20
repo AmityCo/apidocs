@@ -1,0 +1,65 @@
+StoryBase:
+  type: object
+  properties:
+    stories:
+      type: array
+      items:
+        $ref: "../../schema/story.yaml#/Story"
+    comments:
+      type: array
+      items:
+        $ref: "../../schema/comment.yaml#/Comment"
+    files:
+      type: array
+      items:
+        $ref: "../../schema/file.yaml#/File"
+    users:
+      type: array
+      items:
+        $ref: "../../schema/user.yaml#/UserV3"
+    communities:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/Community"
+    communityUsers:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/CommunityUser"
+    categories:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/CommunityCategory"
+
+Story:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          description: The story ID.
+        data:
+          $ref: '#/StoryBase'
+    - $ref: '../../../schema/realtime.yaml#/Wrapper'
+
+StoryWithFlag:
+  allOf:
+    - $ref: '#/Story'
+    - type: object
+      properties:
+        data:
+          type: object
+          properties:
+            flaggedUserId:
+              type: string
+              description: ID of the User has been flagged
+
+StoryWithReactor:
+  allOf:
+    - $ref: '#/Story'
+    - type: object
+      properties:
+        data:
+          type: object
+          properties:
+            reactor:
+              $ref: '../../../schema/reaction.yaml#/Reactor'
