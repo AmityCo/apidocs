@@ -10123,86 +10123,6 @@ paths:
                           $ref: "./schema/user.yaml#/User"
                       userId:
                         type: "string"
-  /webhook/comment.didAddReaction:
-    get:
-      tags:
-        - "Webhook event"
-      security:
-        - BearerAuth: []
-      description: "This is called when reaction of comment is added.\n"
-      responses:
-        "200":
-          $ref: "./v3/comment/response.yaml#/CommentWithReactorWebhookResponse"
-  /webhook/comment.didCreate:
-    get:
-      tags:
-        - "Webhook event"
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is created\n"
-      responses:
-        "200":
-          $ref: "./v3/comment/response.yaml#/CommentWebhookResponse"
-  /webhook/comment.didDelete:
-    get:
-      tags:
-        - "Webhook event"
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is deleted\n"
-      responses:
-        "200":
-          $ref: "./v3/comment/response.yaml#/CommentWebhookResponse"
-  /webhook/comment.didFlag:
-    get:
-      tags:
-        - "Webhook event"
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is flagged.\n"
-      responses:
-        "200":
-          $ref: "./v3/comment/response.yaml#/CommentWithFlagWebhookResponse"
-  /webhook/comment.didRemoveReaction:
-    get:
-      tags:
-        - "Webhook event"
-      security:
-        - BearerAuth: []
-      description: "This is called when reaction of comment is removed.\n"
-      responses:
-        "200":
-          $ref: "./v3/comment/response.yaml#/CommentWithReactorWebhookResponse"
-  /webhook/comment.didReply:
-    get:
-      tags:
-        - "Webhook event"
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is replied.\n"
-      responses:
-        "200":
-          $ref: "./v3/comment/response.yaml#/CommentWebhookResponse"
-  /webhook/comment.didUnflag:
-    get:
-      tags:
-        - "Webhook event"
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is unflagged.\n"
-      responses:
-        "200":
-          $ref: "./v3/comment/response.yaml#/CommentWithFlagWebhookResponse"
-  /webhook/comment.didUpdate:
-    get:
-      tags:
-        - "Webhook event"
-      security:
-        - BearerAuth: []
-      description: "This is called when comment is updated\n"
-      responses:
-        "200":
-          $ref: "./v3/comment/response.yaml#/CommentWebhookResponse"
   /webhook/follow.didAcceptRequest:
     get:
       tags:
@@ -11789,6 +11709,16 @@ paths:
       responses:
         "200":
           $ref: "./v3/community/response.yaml#/CommunityWebhookResponse"
+  /webhook/v3.community.didRoleChange:
+    get:
+      tags:
+        - "Webhook event"
+      security:
+        - BearerAuth: []
+      description: "This is called when role of user is changed in community\n"
+      responses:
+        "200":
+          $ref: "./v3/community/response.yaml#/CommunityWebhookResponse"
   /webhook/v3.community.didUnban:
     get:
       tags:
@@ -11929,7 +11859,126 @@ paths:
       responses:
         "200":
           $ref: "./v3/video-streaming/response.yaml#/VideoStreamingsWebhookResponse"
-
+  /webhook/v5.message.didCreate:
+    get:
+      tags:
+        - "Webhook event"
+      description: "Send created message whenever a message got created in a channel"
+      responses:
+        "200":
+          description: "messages is messages information. users is list of all user information relate to this messages"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  event:
+                    type: "string"
+                    enum:
+                      - "message.didCreate"
+                  data:
+                    type: "object"
+                    properties:
+                      files:
+                        type: "array"
+                        items:
+                          $ref: "./schema/file.yaml#/File"
+                      messageFeeds:
+                        type: "array"
+                        items:
+                          $ref: "./schema/message.yaml#/Message"
+                      messages:
+                        type: "array"
+                        items:
+                          $ref: "./schema/message-feed.yaml#/MessageFeed"
+                      reactions:
+                        type: "array"
+                        items:
+                          $ref: "./schema/reaction.yaml#/Reaction"
+                      users:
+                        type: "array"
+                        items:
+                          $ref: "./schema/user.yaml#/User"
+  /webhook/v5.message.didDelete:
+    get:
+      tags:
+        - "Webhook event"
+      description: "Send deleted message whenever a message got deleted in a channel"
+      responses:
+        "200":
+          description: "messages is messages information. users is list of all user information relate to this messages"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  event:
+                    type: "string"
+                    enum:
+                      - "message.didDelete"
+                  data:
+                    type: "object"
+                    properties:
+                      files:
+                        type: "array"
+                        items:
+                          $ref: "./schema/file.yaml#/File"
+                      messageFeeds:
+                        type: "array"
+                        items:
+                          $ref: "./schema/message.yaml#/Message"
+                      messages:
+                        type: "array"
+                        items:
+                          $ref: "./schema/message-feed.yaml#/MessageFeed"
+                      reactions:
+                        type: "array"
+                        items:
+                          $ref: "./schema/reaction.yaml#/Reaction"
+                      users:
+                        type: "array"
+                        items:
+                          $ref: "./schema/user.yaml#/User"
+  /webhook/v5.message.didUpdate:
+    get:
+      tags:
+        - "Webhook event"
+      description: "Send updated message whenever a message got updated in a channel"
+      responses:
+        "200":
+          description: "messages is messages information. users is list of all user information relate to this messages"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  event:
+                    type: "string"
+                    enum:
+                      - "message.didCreate"
+                  data:
+                    type: "object"
+                    properties:
+                      files:
+                        type: "array"
+                        items:
+                          $ref: "./schema/file.yaml#/File"
+                      messageFeeds:
+                        type: "array"
+                        items:
+                          $ref: "./schema/message.yaml#/Message"
+                      messages:
+                        type: "array"
+                        items:
+                          $ref: "./schema/message-feed.yaml#/MessageFeed"
+                      reactions:
+                        type: "array"
+                        items:
+                          $ref: "./schema/reaction.yaml#/Reaction"
+                      users:
+                        type: "array"
+                        items:
+                          $ref: "./schema/user.yaml#/User"
   /realtime/channel.banned:
     get:
       summary: "user is banned from the channel"
@@ -12033,6 +12082,15 @@ paths:
     get:
       summary: "comment flagged"
       description: "Event has occurred when comment was flagged\n"
+      tags:
+        - "Realtime event"
+      responses:
+        "200":
+          $ref: "./v4/realtime/comment/response.yaml#/ResponseWithFlag"
+  /realtime/comment.flagsCleared:
+    get:
+      summary: "comment flag cleared"
+      description: "Event has occurred when comment flag was cleared\n"
       tags:
         - "Realtime event"
       responses:
@@ -12266,6 +12324,14 @@ paths:
       responses:
         "200":
           $ref: "./v5/realtime/message/response.yaml#/Response"
+  /realtime/message.flagCleared:
+    get:
+      summary: "message flag cleared"
+      tags:
+        - "Realtime event"
+      responses:
+        "200":
+          $ref: "./v5/realtime/message/response.yaml#/Response"
   /realtime/message.flagged:
     get:
       summary: "message flagged"
@@ -12283,14 +12349,6 @@ paths:
         "200":
           $ref: "./v5/realtime/message/response.yaml#/ResponseWithReaction"
   /realtime/message.reactionRemoved:
-    get:
-      summary: "message reaction removed"
-      tags:
-        - "Realtime event"
-      responses:
-        "200":
-          $ref: "./v5/realtime/message/response.yaml#/ResponseWithReaction"
-  /realtime/message.removeReaction:
     get:
       summary: "message reaction removed"
       tags:
@@ -12368,6 +12426,15 @@ paths:
       responses:
         "200":
           $ref: "./v4/realtime/post/response.yaml#/ResponseWithFlag"
+  /realtime/post.flagsCleared:
+    get:
+      summary: "post flag cleared"
+      description: "Event has occurred when post flag was cleared\n"
+      tags:
+        - "Realtime event"
+      responses:
+        "200":
+          $ref: "./v4/realtime/post/response.yaml#/ResponseWithFlag"
   /realtime/post.removeReaction:
     get:
       summary: "post remove reaction"
@@ -12395,6 +12462,51 @@ paths:
       responses:
         "200":
           $ref: "./v4/realtime/post/response.yaml#/Response"
+  /realtime/story.created:
+    get:
+      summary: "story created"
+      description: "Event has occurred when story was created\n"
+      tags:
+        - "Realtime event"
+      responses:
+        "200":
+          $ref: "./v4/realtime/story/response.yaml#/Response"
+  /realtime/story.deleted:
+    get:
+      summary: "story deleted"
+      description: "Event has occurred when story was deleted\n"
+      tags:
+        - "Realtime event"
+      responses:
+        "200":
+          $ref: "./v4/realtime/story/response.yaml#/Response"
+  /realtime/story.reactionAdded:
+    get:
+      summary: "story reaction added"
+      description: "Event has occurred when a reaction is added to story\n"
+      tags:
+        - "Realtime event"
+      responses:
+        "200":
+          $ref: "./v4/realtime/story/response.yaml#/ResponseWithReactor"
+  /realtime/story.reactionRemoved:
+    get:
+      summary: "story reaction removed"
+      description: "Event has occurred when a reaction is removed to story\n"
+      tags:
+        - "Realtime event"
+      responses:
+        "200":
+          $ref: "./v4/realtime/story/response.yaml#/ResponseWithReactor"
+  /realtime/user.deleted:
+    get:
+      summary: "user deleted"
+      description: "Event has occurred when user was deleted\n"
+      tags:
+        - "Realtime event"
+      responses:
+        "200":
+          $ref: "./v4/realtime/user/response.yaml#/Response"
   /realtime/user.didGlobalBan:
     get:
       summary: "user global banned"
