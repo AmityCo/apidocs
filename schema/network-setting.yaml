@@ -96,7 +96,7 @@ FeedSettingNetworkSetting:
       type: object
       properties:
         video:
-          $ref: '#/ContentCheckVideo'
+          $ref: '#/ContentCheckVideoForPost'
     message:
       description: Feed type message
       type: object
@@ -110,7 +110,7 @@ FeedSettingNetworkSetting:
         video:
           $ref: '#/ContentCheckVideo'  
     
-ContentCheckVideo:
+ContentCheckVideoForPost:
   description: Content Check video schema
   type: object
   properties:
@@ -132,6 +132,29 @@ ContentCheckVideo:
       format: int32
       minimum: 1
       maximum: 7200
+
+ContentCheckVideo:
+  description: Content Check video schema
+  type: object
+  properties:
+    allowed:
+      type: boolean
+    transcodeConfig:
+      type: object
+      properties:
+        maxResolution:
+          type: string
+          enum: ['1080p', '720p', '480p', '360p']
+
+        minResolution:
+          type: string
+          enum: ['1080p', '720p', '480p', '360p']
+
+    maxDurationSeconds:
+      type: number
+      format: int32
+      minimum: 1
+      maximum: 90      
 
 ContentCheckText:
   description: Content Check text schema
