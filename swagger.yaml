@@ -6175,7 +6175,47 @@ paths:
           $ref: "./global/error.yaml#/BadRequestError"
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
-
+  /api/v3/network-settings/video-streaming:
+    get:
+      summary: "Get video streaming setting check configuration."
+      tags:
+        - "Network Setting"
+      security:
+        - BearerAuth: []
+      description: "Using for get network video streaming setting check configuration.\n"
+      responses:
+        "200":
+          $ref: "./v3/network-setting/response.yaml#/VideoStreamingNetworkSettingApiResponse"
+        "422":
+          $ref: "./global/error.yaml#/ValidationError"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    put:
+      summary: "Update video streaming setting check configuration."
+      tags:
+        - "Network Setting"
+      security:
+        - BearerAuth: []
+      description: "Update video streaming setting check configuration.\n"
+      requestBody:
+        description: "information for a network setting\n"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schema/network-setting.yaml#/VideoStreamingSettingNetworkSetting"
+      responses:
+        "200":
+          $ref: "./v3/network-setting/response.yaml#/VideoStreamingNetworkSettingApiResponse"
+        "422":
+          $ref: "./global/error.yaml#/ValidationError"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+  
   /v1/notification:
     post:
       summary: "register a device to get push notification"
