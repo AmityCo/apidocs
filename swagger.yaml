@@ -6135,46 +6135,6 @@ paths:
                 status: error
                 code: 500000
                 message: Unexpected error
-  /api/v3/network-settings/webhook:
-    put:
-      summary: "Update webhook configuration."
-      tags:
-        - "Network Setting"
-      security:
-        - BearerAuth: []
-      description: "Update webhook configuration.\n"
-      requestBody:
-        description: "information for a network setting\n"
-        required: true
-        content:
-          application/json:
-            schema:
-              type: "object"
-              properties:
-                webhookEnabled:
-                  type: "boolean"
-                  description: "`true` - User can register webhook for network and will receive a webhook.\n`false` - User won't be able to register webhook and won't receive a webhook.\n"
-      responses:
-        "200":
-          $ref: "./v3/network-setting/response.yaml#/WebhookNetworkSettingApiResponse"
-        "400":
-          $ref: "./global/error.yaml#/BadRequestError"
-        "500":
-          $ref: "./global/error.yaml#/UnexpectedError"
-    get:
-      summary: "Get webhook configuration."
-      tags:
-        - "Network Setting"
-      security:
-        - BearerAuth: []
-      description: "Get webhook configuration.\n"
-      responses:
-        "200":
-          $ref: "./v3/network-setting/response.yaml#/WebhookNetworkSettingApiResponse"
-        "400":
-          $ref: "./global/error.yaml#/BadRequestError"
-        "500":
-          $ref: "./global/error.yaml#/UnexpectedError"
   /api/v3/network-settings/video-streaming:
     get:
       summary: "Get video streaming setting check configuration."
@@ -6215,7 +6175,47 @@ paths:
           $ref: "./global/error.yaml#/BadRequestError"
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
-  
+  /api/v3/network-settings/webhook:
+    put:
+      summary: "Update webhook configuration."
+      tags:
+        - "Network Setting"
+      security:
+        - BearerAuth: []
+      description: "Update webhook configuration.\n"
+      requestBody:
+        description: "information for a network setting\n"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                webhookEnabled:
+                  type: "boolean"
+                  description: "`true` - User can register webhook for network and will receive a webhook.\n`false` - User won't be able to register webhook and won't receive a webhook.\n"
+      responses:
+        "200":
+          $ref: "./v3/network-setting/response.yaml#/WebhookNetworkSettingApiResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    get:
+      summary: "Get webhook configuration."
+      tags:
+        - "Network Setting"
+      security:
+        - BearerAuth: []
+      description: "Get webhook configuration.\n"
+      responses:
+        "200":
+          $ref: "./v3/network-setting/response.yaml#/WebhookNetworkSettingApiResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
   /v1/notification:
     post:
       summary: "register a device to get push notification"
