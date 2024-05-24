@@ -4907,6 +4907,302 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /api/v1/marker/channels:
+    get:
+      tags:
+        - "Marker"
+      summary: "Get marker for channels"
+      security:
+        - BearerAuth: []
+      description: "Get marker for channels"
+      parameters:
+        - name: channelIds
+          in: query
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/ChannelIds"
+          description: list of channel id (internal)
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/GetMarkerChannel"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/message-feeds:
+    get:
+      tags:
+        - "Marker"
+      summary: "Get marker for message feeds"
+      security:
+        - BearerAuth: []
+      description: "Get marker for message feeds"
+      parameters:
+        - name: messageFeedIds
+          in: query
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/MessageFeedIds"
+          description: list of message feed id (internal)
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/GetMarkerMessageFeed"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/message-feeds/{messageFeedId}/mark-delivering:
+    put:
+      tags:
+        - "Marker"
+      summary: "Mark message feeds as delivering"
+      security:
+        - BearerAuth: []
+      description: "Mark message feeds as delivering"
+      parameters:
+        - name: messageFeedId
+          in: path
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/MessageFeedId"
+          description: message feed id (internal)
+      requestBody:
+        $ref: "./v1/marker/request.yaml#/MarkDelivering"
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/MarkDelivering"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/message-feeds/{messageFeedId}/mark-read:
+    put:
+      tags:
+        - "Marker"
+      summary: "Mark message feeds as read"
+      security:
+        - BearerAuth: []
+      description: "Mark message feeds as read"
+      parameters:
+        - name: messageFeedId
+          in: path
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/MessageFeedId"
+          description: message feed id (internal)
+      requestBody:
+        $ref: "./v1/marker/request.yaml#/MarkRead"
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/MarkRead"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/message-feeds/{messageFeedId}/start-reading:
+    post:
+      tags:
+        - "Marker"
+      summary: "Start reading message feeds"
+      security:
+        - BearerAuth: []
+      description: "Start reading message feeds"
+      parameters:
+        - name: messageFeedId
+          in: path
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/MessageFeedId"
+          description: message feed id (internal)
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/StartReading"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/message-feeds/{messageFeedId}/stop-readings:
+    post:
+      tags:
+        - "Marker"
+      summary: "Stop reading message feeds"
+      security:
+        - BearerAuth: []
+      description: "Stop reading message feeds"
+      parameters:
+        - name: messageFeedId
+          in: path
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/MessageFeedId"
+          description: message feed id (internal)
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/StopReading"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/message-feeds/reading:
+    post:
+      tags:
+        - "Marker"
+      summary: "Mark message feeds as read"
+      security:
+        - BearerAuth: []
+      description: "Mark message feeds as read"
+      requestBody:
+        $ref: "./v1/marker/request.yaml#/MessageFeedReading"
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/MessageFeedReading"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/messages:
+    get:
+      tags:
+        - "Marker"
+      summary: "Get marker for messages"
+      security:
+        - BearerAuth: []
+      description: "Get marker for messages"
+      parameters:
+        - name: messageIds
+          in: query
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/MessageIds"
+          description: list of message id (internal)
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/GetMarkerMessage"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/messages/channels/{channelId}/mark-read:
+    put:
+      tags:
+        - "Marker"
+      summary: "Mark all messages in channel as read"
+      security:
+        - BearerAuth: []
+      description: "Mark all messages in channel as read"
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/ChannelId"
+          description: channel id (internal)
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/MarkAllChannel"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/messages/{messageId}/delivered-users:
+    get:
+      tags:
+        - "Marker"
+      summary: "Get list of users who delivered the message"
+      security:
+        - BearerAuth: []
+      description: "Get list of users who delivered the message"
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/ChannelId"
+          description: channel id (internal)
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/GetDeliveredUsers"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/messages/{messageId}/read-users:
+    get:
+      tags:
+        - "Marker"
+      summary: "Get list of users who read the message"
+      security:
+        - BearerAuth: []
+      description: "Get list of users who read the message"
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/ChannelId"
+          description: channel id (internal)
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/GetReadUsers"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/sync:
+    post:
+      tags:
+        - "Marker"
+      summary: "Marker sync"
+      security:
+        - BearerAuth: []
+      description: "Marker sync for update unread count"
+      requestBody:
+        $ref: "./v1/marker/request.yaml#/MarkerSync"
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/MarkerSync"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/user-message-feed:
+    get:
+      tags:
+        - "Marker"
+      summary: "Query Latest 100 user feed marker by a list of entity Id (channel id)"
+      security:
+        - BearerAuth: []
+      description: "Query Latest 100 user feed marker by a list of entity Id (channel id)"
+      parameters:
+        - name: channelIds
+          in: query
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/ChannelIds"
+          description: list of channel id (internal)
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/UserMessageFeedMarker"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/marker/userMarker:
+    get:
+      tags:
+        - "Marker"
+      summary: "Get marker for user"
+      security:
+        - BearerAuth: []
+      description: "Get marker for user"
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/UserMarker"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  
   /api/v5/message-feeds:
     post:
       tags:
@@ -6135,6 +6431,46 @@ paths:
                 status: error
                 code: 500000
                 message: Unexpected error
+  /api/v3/network-settings/video-streaming:
+    get:
+      summary: "Get video streaming setting check configuration."
+      tags:
+        - "Network Setting"
+      security:
+        - BearerAuth: []
+      description: "Using for get network video streaming setting check configuration.\n"
+      responses:
+        "200":
+          $ref: "./v3/network-setting/response.yaml#/VideoStreamingNetworkSettingApiResponse"
+        "422":
+          $ref: "./global/error.yaml#/ValidationError"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    put:
+      summary: "Update video streaming setting check configuration."
+      tags:
+        - "Network Setting"
+      security:
+        - BearerAuth: []
+      description: "Update video streaming setting check configuration.\n"
+      requestBody:
+        description: "information for a network setting\n"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schema/network-setting.yaml#/VideoStreamingSettingNetworkSetting"
+      responses:
+        "200":
+          $ref: "./v3/network-setting/response.yaml#/VideoStreamingNetworkSettingApiResponse"
+        "422":
+          $ref: "./global/error.yaml#/ValidationError"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
   /api/v3/network-settings/webhook:
     put:
       summary: "Update webhook configuration."

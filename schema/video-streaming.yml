@@ -45,6 +45,9 @@ VideoStreaming:
           type: string
         version:
           type: string
+    moderationId:
+      type: string
+      description: Moderation id
     startedAt:
       type: string
       format: date-time
@@ -181,7 +184,6 @@ VideoStreamingUrl:
     components:
       type: object
 
-
 VideoStreamingCustom:
   type: object
   properties:
@@ -260,3 +262,45 @@ VideoStreamingCustom:
               type: string
             query:
               type: string
+
+VideoStreamingModeration:
+  type: object
+  properties:
+    moderationId:
+      type: string
+      description: Moderation id
+    streamId:
+      type: string
+      description: Streaming id
+    flagLabels:
+      description: List of flag labels
+      type: array
+      items:
+        $ref: "#/VideoStreamingModerationLabel"
+    terminateLabels:
+      description: List of terminate labels
+      type: array
+      items:
+        $ref: "#/VideoStreamingModerationLabel"
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+
+VideoStreamingModerationLabel:
+  type: object
+  properties:
+    category: 
+      type: string
+      description: This field is for moderation category names.
+      enum: [pornography, violence, prohibited, inappropriate, profanity]
+    threshold:
+      description: This field is for flag threshold.
+      type: string
+    detectedAt:
+      type: string
+      format: date-time
+
+ 
