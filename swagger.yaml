@@ -4907,7 +4907,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /api/v1/marker/channels:
+  /api/v1/markers/channels:
     get:
       tags:
         - "Marker"
@@ -4929,7 +4929,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/message-feeds:
+  /api/v1/markers/message-feeds:
     get:
       tags:
         - "Marker"
@@ -4951,7 +4951,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/message-feeds/{messageFeedId}/mark-delivering:
+  /api/v1/markers/message-feeds/{messageFeedId}/mark-delivering:
     put:
       tags:
         - "Marker"
@@ -4975,7 +4975,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/message-feeds/{messageFeedId}/mark-read:
+  /api/v1/markers/message-feeds/{messageFeedId}/mark-read:
     put:
       tags:
         - "Marker"
@@ -4999,7 +4999,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/message-feeds/{messageFeedId}/start-reading:
+  /api/v1/markers/message-feeds/{messageFeedId}/start-reading:
     post:
       tags:
         - "Marker"
@@ -5021,7 +5021,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/message-feeds/{messageFeedId}/stop-readings:
+  /api/v1/markers/message-feeds/{messageFeedId}/stop-readings:
     post:
       tags:
         - "Marker"
@@ -5043,7 +5043,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/message-feeds/reading:
+  /api/v1/markers/message-feeds/reading:
     post:
       tags:
         - "Marker"
@@ -5060,7 +5060,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/messages:
+  /api/v1/markers/messages:
     get:
       tags:
         - "Marker"
@@ -5082,7 +5082,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/messages/channels/{channelId}/mark-read:
+  /api/v1/markers/messages/channels/{channelId}/mark-read:
     put:
       tags:
         - "Marker"
@@ -5104,7 +5104,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/messages/{messageId}/delivered-users:
+  /api/v1/markers/messages/{messageId}/delivered-users:
     get:
       tags:
         - "Marker"
@@ -5126,7 +5126,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/messages/{messageId}/read-users:
+  /api/v1/markers/messages/{messageId}/read-users:
     get:
       tags:
         - "Marker"
@@ -5148,7 +5148,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/sync:
+  /api/v1/markers/sync:
     post:
       tags:
         - "Marker"
@@ -5165,7 +5165,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/user-message-feed:
+  /api/v1/markers/user-message-feed:
     get:
       tags:
         - "Marker"
@@ -5187,7 +5187,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/marker/userMarker:
+  /api/v1/markers/userMarker:
     get:
       tags:
         - "Marker"
@@ -9714,6 +9714,7 @@ paths:
           $ref: "./global/error.yaml#/ForbiddenError"
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
+          
   /api/v3/users/{userId}/isFlagByMe:
     get:
       summary: "Check whether user flag a given user."
@@ -12602,6 +12603,38 @@ paths:
       responses:
         "200":
           $ref: "./v4/realtime/follow/response.yaml#/Response"
+  /realtime/marker.marked-message:
+    get:
+      summary: "marked message in marker"
+      tags:
+        - "Realtime event"
+      responses:
+        "200":
+          $ref: "./v5/realtime/marker/response.yaml#/MarkedMessageResponse"
+  /realtime/marker.marker.user-sync:
+    get:
+      summary: "user sync in marker"
+      tags:
+        - "Realtime event"
+      responses:
+        "200":
+          $ref: "./v5/realtime/marker/response.yaml#/UserSyncResponse"
+  /realtime/marker.userFeed-updated:
+    get:
+      summary: "user feed updated in marker"
+      tags:
+        - "Realtime event"
+      responses:
+        "200":
+          $ref: "./v5/realtime/marker/response.yaml#/UserFeedUpdatedResponse"
+  /realtime/marker.feed-updated:
+    get:
+      summary: "feed updated in marker"
+      tags:
+        - "Realtime event"
+      responses:
+        "200":
+          $ref: "./v5/realtime/marker/response.yaml#/FeedUpdatedResponse"
   /realtime/message-feed.created:
     get:
       summary: "message feed created"
