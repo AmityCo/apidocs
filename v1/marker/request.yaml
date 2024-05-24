@@ -1,0 +1,52 @@
+MarkDelivering:
+  description: Mark delivering
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - messageId
+        properties:
+          messageId:
+            type: string
+            description: message id (internal)
+
+MarkRead:
+  description: Mark read
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - readToSegment
+        properties:
+          readToSegment:
+            type: number
+            description: segment of message as read by user
+
+MessageFeedReading:
+  description: Message feed reading
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - messageFeedIds
+        properties:
+          messageFeedIds:
+            type: array
+            items:
+              type: string
+              description: message feed id (internal)
+
+MarkerSync:
+  description: Marker sync
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          deviceLastSyncAt:
+            type: string
+            description: The date/time when user device last sync.
+            format: date-time

@@ -102,13 +102,36 @@ FeedSettingNetworkSetting:
       type: object
       properties:
         video:
-          $ref: '#/ContentCheckVideo' 
+          $ref: '#/ContentCheckVideoForMessage' 
     story:
       description: Feed type story
       type: object
       properties:
         video:
-          $ref: '#/ContentCheckVideo'  
+          $ref: '#/ContentCheckVideoForStory'
+
+ContentCheckVideoForMessage:
+  description: Content Check video schema
+  type: object
+  properties:
+    allowed:
+      type: boolean
+    transcodeConfig:
+      type: object
+      properties:
+        maxResolution:
+          type: string
+          enum: ['1080p', '720p', '480p', '360p']
+
+        minResolution:
+          type: string
+          enum: ['1080p', '720p', '480p', '360p']
+
+    maxDurationSeconds:
+      type: number
+      format: int32
+      minimum: 1
+      maximum: 600
     
 ContentCheckVideoForPost:
   description: Content Check video schema
@@ -133,7 +156,7 @@ ContentCheckVideoForPost:
       minimum: 1
       maximum: 7200
 
-ContentCheckVideo:
+ContentCheckVideoForStory:
   description: Content Check video schema
   type: object
   properties:
@@ -200,3 +223,37 @@ UsersNetworkSetting:
   properties:
     isAllowUpdateDisplayName:
       type: boolean
+
+VideoStreamingSettingNetworkSetting:
+  type: object
+  properties:
+    enabled:
+      type: boolean
+      description: This field is for enabling or disabling the video streaming feature.
+    moderation: 
+      type: object
+      description: This field is for moderation configuration.
+      properties:
+        enabled:
+          type: boolean
+          description: This field is for enabling or disabling the moderation feature.
+        categories:
+          type: array
+          description: This field is for list of moderation categories.
+          items: 
+            type: object  
+            properties:
+              category: 
+                type: string
+                description: This field is for moderation category names.
+                enum: [pornography, violence, prohibited, inappropriate, profanity]
+              flagThreshold:
+                type: number
+                description: This field is for flag threshold.
+                minimum: 0
+                maximum: 1
+              terminateThreshold:
+                type: number 
+                description: This field is for terminate threshold.
+                minimum: 0
+                maximum: 1
