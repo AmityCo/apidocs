@@ -7,7 +7,6 @@ CreateAdvertiseRequestPayload:
     - placements
     - headline
     - description
-    - images
     - startAt
 
   properties:
@@ -37,19 +36,12 @@ CreateAdvertiseRequestPayload:
       type: string
       maxLength: 180
       optional: true
-    images:
-      type: array
-      items:
-        type: object
-        properties:
-          fileId:
-            type: string
-          type:
-            type: string
-            enum:
-              - image1_1
-              - image9_16
-      maxItems: 2
+    image1_1:
+      type: string
+      description: File ID of an image with 1:1 aspect ratio.
+    image9_16:
+      type: string
+      description: File ID of an image with 9:16 aspect ratio.
     callToAction:
       type: string
       maxLength: 20
@@ -79,7 +71,6 @@ EditAdsRequestPayload:
     - placements
     - headline
     - description
-    - images
     - startAt
   properties:
     advertiserId:
@@ -108,19 +99,12 @@ EditAdsRequestPayload:
       type: string
       maxLength: 180
       optional: true
-    images:
-      type: array
-      items:
-        type: object
-        properties:
-          fileId:
-            type: string
-          type:
-            type: string
-            enum:
-              - image1_1
-              - image9_16
-      maxItems: 2
+    image1_1:
+      type: string
+      description: File ID of an image with 1:1 aspect ratio.
+    image9_16:
+      type: string
+      description: File ID of an image with 9:16 aspect ratio.
     callToAction:
       type: string
       maxLength: 20
