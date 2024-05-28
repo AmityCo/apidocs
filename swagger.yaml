@@ -12256,22 +12256,15 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: targets
-          in: "query"
+        - name: communityIds
+          in: query
+          description: A list of community IDs. Max 20 items
+          required: true
           schema:
             type: array
             items:
-              type: object
-              properties:
-                type:
-                  type: string
-                  enum:
-                    - community
-                targetIds:
-                  type: array
-                  items:
-                    type: string
-                  maxItems: 20
+              type: string
+              maxItems: 20
       responses:
         200:
           description: The number of approximate users reached by the ad
@@ -12328,7 +12321,6 @@ paths:
           required: true
           schema:
             type: string
-            pattern: '^[a-f\d]{24}$'
       requestBody:
         content:
           application/json:
@@ -12374,7 +12366,6 @@ paths:
           required: true
           schema:
             type: string
-            pattern: '^[a-f\d]{24}$'
       responses:
         "200":
           description: Ads Information
@@ -12410,13 +12401,12 @@ paths:
       parameters:
         - name: adIds
           in: query
+          description: A list of advertisement IDs. Max 20 items
           required: true
           schema:
             type: array
             items:
               type: string
-              pattern: '^[a-f\d]{24}$'
-              example: 60e4b1b4b3b2b5c4c4b3b2b5
             maxItems: 20
       responses:
         200:
@@ -12424,88 +12414,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  measurements:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        adId:
-                          type: string
-                          example: 60e4b1b4b3b2b5c4c4b3b2b5
-                        total:
-                          type: object
-                          properties:
-                            clicks:
-                              type: number
-                              example: 40
-                            impressions:
-                              type: number
-                              example: 400
-                            reach:
-                              type: number
-                              example: 70
-                        feed:
-                          type: object
-                          properties:
-                            clicks:
-                              type: number
-                              example: 10
-                            impressions:
-                              type: number
-                              example: 100
-                            reach:
-                              type: number
-                              example: 50
-                        story:
-                          type: object
-                          properties:
-                            clicks:
-                              type: number
-                              example: 10
-                            impressions:
-                              type: number
-                              example: 100
-                            reach:
-                              type: number
-                              example: 50
-                        comment:
-                          type: object
-                          properties:
-                            clicks:
-                              type: number
-                              example: 10
-                            impressions:
-                              type: number
-                              example: 100
-                            reach:
-                              type: number
-                              example: 50
-                        chat:
-                          type: object
-                          properties:
-                            clicks:
-                              type: number
-                              example: 10
-                            impressions:
-                              type: number
-                              example: 100
-                            reach:
-                              type: number
-                              example: 50
-                        chatList:
-                          type: object
-                          properties:
-                            clicks:
-                              type: number
-                              example: 10
-                            impressions:
-                              type: number
-                              example: 100
-                            reach:
-                              type: number
-                              example: 50
+                $ref: "./v1/ads/response.yaml#/QueryAdvertisementsStatsResponsePayload"  
         403:
           $ref: "./global/error.yaml#/ForbiddenError"
         404:
@@ -12604,7 +12513,6 @@ paths:
           required: true
           schema:
             type: string
-            pattern: '^[a-f\d]{24}$'
       requestBody:
         content:
           application/json:
@@ -12653,7 +12561,6 @@ paths:
           required: true
           schema:
             type: string
-            pattern: '^[a-f\d]{24}$'
       responses:
         "200":
           description: Empty response

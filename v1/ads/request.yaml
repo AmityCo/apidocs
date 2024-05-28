@@ -57,19 +57,12 @@ CreateAdvertiseRequestPayload:
       type: string
       maxLength: 1000
     targets:
-      type: array
-      items:
-        type: object
-        properties:
-          type:
+      type: object
+      properties:
+        communityIds:
+          type: array
+          items:
             type: string
-            enum:
-              - community
-          targetIds:
-            type: array
-            items:
-              type: string
-      maxItems: 20
     startAt:
       type: string
       format: date-time
@@ -80,6 +73,14 @@ CreateAdvertiseRequestPayload:
 EditAdsRequestPayload:
   description: Edit ads request payload
   type: object
+  required:
+    - advertiserId
+    - name
+    - placements
+    - headline
+    - description
+    - images
+    - startAt
   properties:
     advertiserId:
       type: string
@@ -127,19 +128,12 @@ EditAdsRequestPayload:
       type: string
       maxLength: 1000
     targets:
-      type: array
-      items:
-        type: object
-        properties:
-          type:
+      type: object
+      properties:
+        communityIds:
+          type: array
+          items:
             type: string
-            enum:
-              - community
-          targetIds:
-            type: array
-            items:
-              type: string
-      maxItems: 20
     startAt:
       type: string
       format: date-time
