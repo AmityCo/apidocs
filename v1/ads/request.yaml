@@ -38,18 +38,21 @@ CreateAdvertiseRequestPayload:
       optional: true
     image1_1:
       type: string
-      description: File ID of an image with 1:1 aspect ratio.
+      description: File ID of an image with 1:1 aspect ratio. Either this or image9_16 is required.
     image9_16:
       type: string
-      description: File ID of an image with 9:16 aspect ratio.
+      description: File ID of an image with 9:16 aspect ratio. Either this or image1_1 is required.
     callToAction:
       type: string
       maxLength: 20
+      description: The call to action text of the advertisement. Required if callToActionUrl is provided.
     callToActionUrl:
       type: string
       maxLength: 1000
+      description: The URL of the call to action. Required if callToAction is provided.
     targets:
       type: object
+      description: The targets of the advertisement.
       properties:
         communityIds:
           type: array
@@ -101,18 +104,21 @@ EditAdsRequestPayload:
       optional: true
     image1_1:
       type: string
-      description: File ID of an image with 1:1 aspect ratio.
+      description: File ID of an image with 1:1 aspect ratio. Either this or image9_16 is required.
     image9_16:
       type: string
-      description: File ID of an image with 9:16 aspect ratio.
+      description: File ID of an image with 9:16 aspect ratio. Either this or image1_1 is required.
     callToAction:
       type: string
       maxLength: 20
+      description: The call to action text of the advertisement. Required if callToActionUrl is provided.
     callToActionUrl:
       type: string
       maxLength: 1000
+      description: The URL of the call to action. Required if callToAction is provided.
     targets:
       type: object
+      description: The targets of the advertisement.
       properties:
         communityIds:
           type: array

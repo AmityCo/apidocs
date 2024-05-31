@@ -3530,6 +3530,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - activities
               properties:
                 activities:
                   type: array
@@ -3537,11 +3539,15 @@ paths:
                   maxItems: 1000
                   items:
                     type: object
+                    required:
+                      - contentId
+                      - contentType
+                      - activityType
+                      - timestamp
                     properties:
                       contentId:
                         type: string
-                        pattern: '^[a-f\d]{24}$'
-                        example: 60e4b1b4b3b2b5c4c4b3b2b5
+                        description: ID of the content. If contentType = post, must be the `_id`` field
                       contentType:
                         type: string
                         enum: [post, story, ad]
@@ -3554,7 +3560,7 @@ paths:
                           placement:
                             type: string
                             enum: [feed, story, comment, chatList, chat]
-                            description: placement of the ad that activity happened
+                            description: Placement of the ad that activity happened. Required if contentType = ad.
                       timestamp:
                         type: string
                         format: date-time
