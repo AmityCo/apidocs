@@ -2,7 +2,7 @@ Query:
   name: query
   in: query
   required: true
-  description: The search query.
+  description: Keyword for searching
   schema:
     type: string
 
@@ -13,6 +13,7 @@ ExactMatch:
   description: Flag to indicate exact match.
   schema:
     type: boolean
+    default: false
 
 IsMemberOnly:
   name: isMemberOnly
@@ -21,6 +22,7 @@ IsMemberOnly:
   description: Flag to filter only member-only channels.
   schema:
     type: boolean
+    default: false
 
 Types:
   name: types
@@ -62,6 +64,7 @@ Options:
         default: 20
       orderBy:
         type: string
+        default: desc
         enum:
           - desc
           - asc
