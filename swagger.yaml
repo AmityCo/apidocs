@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 info:
   title: "Amity Social Cloud SDK"
-  description: | 
+  description: |
     <h2>Using Amity APIs</h2>
     <p>
       Our API documentation explains all API endpoints used in Amity Social Cloud. All APIs, with the exception of some authentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin or User context. When used in user context, you will only be able to fetch data related to that user only.
@@ -3663,7 +3663,6 @@ paths:
         - "File"
       security:
         - BearerAuth: []
-
       description: "Upload file to cloud storage\n"
       requestBody:
         description: "Information of file to be created. It will be applied to every attachment\n"
@@ -3683,6 +3682,13 @@ paths:
                 preferredFilename:
                   type: "string"
                   maxLength: 1024
+                accessType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
       responses:
         "200":
           $ref: "./v3/file/response.yaml#/FileUploadResponse"
@@ -3737,26 +3743,20 @@ paths:
           $ref: "./global/error.yaml#/ValidationError"
   /api/v3/files/{fileId}/download:
     get:
-      summary: "Get file"
+      summary: "Download file"
       tags:
         - "File"
-      description: "Get file info of fileId (type, attributes)\n"
+      description: "Download file data"
       parameters:
         - name: "Authorization"
           in: "header"
           schema:
             type: "string"
-        - name: "upstra-access-token"
+        - name: "_ascSession"
           in: "cookie"
           schema:
             type: "string"
-          description: "Alternative way to pass authorization token"
-        - in: "query"
-          name: "t"
-          required: false
-          schema:
-            type: "string"
-          description: "Access token (for showing image inside img tag on web)"
+          description: "Access token"
         - name: "Content-Type"
           in: "header"
           required: true
@@ -3781,8 +3781,13 @@ paths:
               - "small"
           description: "Size of image to download (no effect on file type 'file')"
       responses:
-        "200":
-          $ref: "./v3/file/response.yaml#/FileDeleteResponse"
+        "302":
+          description: "Redirect to retrieve file data"
+          headers:
+            Location:
+              description: "Signed URL to redirect to"
+              schema:
+                type: string
         "404":
           $ref: "./global/error.yaml#/NotFoundError"
   /api/v4/images:
@@ -3815,6 +3820,13 @@ paths:
                 preferredFilename:
                   type: "string"
                   maxLength: 1024
+                accessType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
               required:
                 - "files"
       responses:
@@ -3854,6 +3866,13 @@ paths:
                 preferredFilename:
                   type: "string"
                   maxLength: 1024
+                accessType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
               required:
                 - "files"
       responses:
@@ -3895,6 +3914,13 @@ paths:
                 preferredFilename:
                   type: "string"
                   maxLength: 1024
+                accessType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
               required:
                 - "files"
       responses:
@@ -4219,7 +4245,6 @@ paths:
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
 
-
   /api/v1/markers/channels:
     get:
       tags:
@@ -4515,7 +4540,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  
+
   /v1/blacklist/records:
     put:
       summary: "Refresh black list"
@@ -9800,7 +9825,7 @@ paths:
           $ref: "./global/error.yaml#/ForbiddenError"
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
-          
+
   /api/v3/users/{userId}/isFlagByMe:
     get:
       summary: "Check whether user flag a given user."
@@ -12391,7 +12416,7 @@ paths:
                         type: "array"
                         items:
                           $ref: "./schema/user.yaml#/User"
-  
+
   /realtime/channel.banned:
     get:
       summary: "user is banned from the channel"

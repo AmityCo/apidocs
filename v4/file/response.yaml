@@ -21,6 +21,13 @@ FileVideoUploadResponse:
                 - file
                 - video
               example: video
+            accessType:
+              type: string
+              description: File access type. `network` type requires authentication to download.
+              enum:
+                - public
+                - network
+              default: public
             createdAt:
               type: string
               description: The date/time when a file is uploaded.
@@ -51,7 +58,7 @@ FileVideoUploadResponse:
                 metadata:
                   type: object
                   description: Video metadata (width, height etc.).
-            
+
 FileImageUploadResponse:
   description: Image Upload Result
   content:
@@ -75,6 +82,13 @@ FileImageUploadResponse:
                 - file
                 - video
               example: image
+            accessType:
+              type: string
+              description: File access type. `network` type requires authentication to download.
+              enum:
+                - public
+                - network
+              default: public
             createdAt:
               type: string
               description: The date/time when a file is uploaded.
@@ -108,7 +122,7 @@ FileImageUploadResponse:
                   properties:
                     height:
                       type: number
-                    width: 
+                    width:
                       type: number
                     isFull:
                       type: boolean
@@ -136,6 +150,13 @@ FileUploadResponse:
                 - file
                 - video
               example: file
+            acceType:
+              type: string
+              description: File access type. `network` type requires authentication to download.
+              enum:
+                - public
+                - network
+              default: public
             createdAt:
               type: string
               description: The date/time when a file is uploaded.
