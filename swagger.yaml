@@ -94,6 +94,19 @@ servers:
   - url: "https://apix.sg.amity.co"
     description: "API Endpoint for SG Region"
 paths:
+  /api/v1/ads/me:
+    get:
+      summary: Query all network ads and settings
+      tags:
+       - Ads
+      responses:
+        "200":
+          description: All ads information and ads settings
+          content:
+            application/json:
+              schema:
+                $ref: "./v1/ads/response.yaml#/QueryAllAdsResponsePayload"
+
   /api/v1/analytics/activities:
     post:
       summary: send analytic activities
@@ -4242,6 +4255,28 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
+  /api/v1/markers/channels/{channelId}/mark-read:
+    put:
+      tags:
+        - "Marker"
+      summary: "Mark all messages in channel as read"
+      security:
+        - BearerAuth: []
+      description: "Mark all messages in channel as read"
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/ChannelId"
+          description: channel id (internal)
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/MarkAllChannel"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
   /api/v1/markers/message-feeds:
     get:
       tags:
@@ -4391,28 +4426,6 @@ paths:
       responses:
         "200":
           $ref: "./v1/marker/response.yaml#/GetMarkerMessage"
-        "404":
-          description: "Not found error"
-        "422":
-          description: "Parameters validation error"
-  /api/v1/markers/messages/channels/{channelId}/mark-read:
-    put:
-      tags:
-        - "Marker"
-      summary: "Mark all messages in channel as read"
-      security:
-        - BearerAuth: []
-      description: "Mark all messages in channel as read"
-      parameters:
-        - name: channelId
-          in: path
-          required: true
-          schema:
-            $ref: "./v1/marker/parameters.yaml#/ChannelId"
-          description: channel id (internal)
-      responses:
-        "200":
-          $ref: "./v1/marker/response.yaml#/MarkAllChannel"
         "404":
           description: "Not found error"
         "422":
