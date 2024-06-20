@@ -264,3 +264,56 @@ VideoStreamingSettingNetworkSetting:
                 description: This field is for terminate threshold.
                 minimum: 0
                 maximum: 1
+
+AdNetworkSetting:
+  type: object
+  properties:
+    enabled:
+      type: boolean
+    maxActiveAds:
+      type: number
+      default: 500
+    frequency:
+      type: object
+      properties:
+        feed:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - fixed
+                - time-window
+            value:
+              type: number
+              format: number
+              minimum: 1
+              maximum: 65535
+              default: 5
+        story:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - fixed
+                - time-window
+            value:
+              type: number
+              minimum: 1
+              maximum: 65535
+              default: 4
+
+        comment:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - fixed
+                - time-window
+            value:
+              type: number
+              minimum: 1
+              maximum: 65535
+              default: 10

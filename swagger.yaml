@@ -94,6 +94,19 @@ servers:
   - url: "https://apix.sg.amity.co"
     description: "API Endpoint for SG Region"
 paths:
+  /api/v1/ads/me:
+    get:
+      summary: Query all network ads and settings
+      tags:
+       - Ads
+      responses:
+        "200":
+          description: All ads information and ads settings
+          content:
+            application/json:
+              schema:
+                $ref: "./v1/ads/response.yaml#/QueryAllAdsResponsePayload"
+
   /api/v1/analytics/activities:
     post:
       summary: send analytic activities
