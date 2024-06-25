@@ -6838,6 +6838,206 @@ paths:
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
 
+  /api/v1/pinned-posts/communities/{communityId}:
+    get:
+      summary: "List all pinned posts in a community"
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "List all pinned posts in a community\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "sortBy"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "firstCreated"
+              - "lastCreated"
+              - "firstPinned"
+              - "LastPinned"
+              - "firstUpdated"
+              - "LastUpdated"
+      responses:
+        "200":
+          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+        "402":
+          $ref: "./global/error.yaml#/ValidationError"
+        "403":
+          $ref: "./global/error.yaml#/PermissionDenidedError"
+        "404":
+          $ref: "./global/error.yaml#/NotFoundError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+  /api/v1/pinned-posts/communities/{communityId}/{placement}:
+    get:
+      summary: "List all pinned posts in a community by placement"
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "List all pinned posts in a community by placement\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "placement"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            enum:
+              - "default"
+              - "announcement" 
+        - name: "sortBy"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "firstCreated"
+              - "lastCreated"
+              - "firstPinned"
+              - "LastPinned"
+              - "firstUpdated"
+              - "LastUpdated"
+      responses:
+        "200":
+          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+        "402":
+          $ref: "./global/error.yaml#/ValidationError"
+        "403":
+          $ref: "./global/error.yaml#/PermissionDenidedError"
+        "404":
+          $ref: "./global/error.yaml#/NotFoundError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Clear all pin posts in a community by placement"
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "Clear all pin posts in a community by placement\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "placement"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            enum:
+              - "default"
+              - "announcement" 
+      responses:
+        "200":
+          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+        "402":
+          $ref: "./global/error.yaml#/ValidationError"
+        "403":
+          $ref: "./global/error.yaml#/PermissionDenidedError"
+        "404":
+          $ref: "./global/error.yaml#/NotFoundError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+  /api/v1/pinned-posts/communities/{communityId}/{placement}/{postId}:
+    post:
+      summary: "Pin a post in a community "
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "Pin a post in a community\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "placement"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            enum:
+              - "default"
+              - "announcement" 
+        - name: "postId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "402":
+          $ref: "./global/error.yaml#/ValidationError"
+        "403":
+          $ref: "./global/error.yaml#/PermissionDenidedError"
+        "404":
+          $ref: "./global/error.yaml#/NotFoundError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Unpin a post in a community "
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "Unpin a post in a community\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "placement"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            enum:
+              - "default"
+              - "announcement" 
+        - name: "postId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "402":
+          $ref: "./global/error.yaml#/ValidationError"
+        "403":
+          $ref: "./global/error.yaml#/PermissionDenidedError"
+        "404":
+          $ref: "./global/error.yaml#/NotFoundError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
+
   /api/v3/polls:
     post:
       summary: "create a poll"
