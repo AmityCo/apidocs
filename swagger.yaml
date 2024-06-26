@@ -6875,6 +6875,32 @@ paths:
           $ref: "./global/error.yaml#/NotFoundError"
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Clear all pin posts in a community"
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "Clear all pin posts in a community\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v3/pin-post/response.yaml#/PinPostDeletedResponse"
+        "402":
+          $ref: "./global/error.yaml#/ValidationError"
+        "403":
+          $ref: "./global/error.yaml#/PermissionDenidedError"
+        "404":
+          $ref: "./global/error.yaml#/NotFoundError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    
   /api/v1/pinned-posts/communities/{communityId}/{placement}:
     get:
       summary: "List all pinned posts in a community by placement"
@@ -6944,7 +6970,7 @@ paths:
               - "announcement" 
       responses:
         "200":
-          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+          $ref: "./v3/pin-post/response.yaml#/PinPostDeletedResponse"
         "402":
           $ref: "./global/error.yaml#/ValidationError"
         "403":
