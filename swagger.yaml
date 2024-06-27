@@ -437,6 +437,23 @@ paths:
                     type: "object"
                     description: "error detail"
 
+  /api/v1/brand-users:
+    get:
+      summary: List all brand users
+      tags:
+        - Brand User
+      security:
+        - BearerAuth: []
+      description: List all brand users
+      responses:
+        "200":
+          $ref: "./v3/user/response.yaml#/UserResponse"
+        "403":
+          $ref: "./global/error.yaml#/PermissionDenidedError"
+        "429":
+          $ref: "./global/error.yaml#/RateLimitError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
   /api/v2/channels/{channelId}/close:
     post:
       summary: "close channel"
@@ -7712,6 +7729,10 @@ paths:
                         description: "Array of UserId. if the mention type is a channel, doesn't send userIds"
                         items:
                           type: "string"
+                brandId:
+                  type: "string"
+                  example: "brandId"
+                  description: The brand user ID for the post. Use when creating post as brand. Only admins with a permission are allowed to create post as a brand.
                 createdAt:
                   type: "string"
                   description: "The date/time when a post is created."
