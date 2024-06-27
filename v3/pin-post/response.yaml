@@ -1,0 +1,69 @@
+PinPostResponse:
+  description: Pin Post Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          pinTargets:
+            type: array
+            items:
+              $ref: "../../schema/pin-content.yaml#/PinTarget"
+          pins:
+            type: array
+            items:
+              $ref: "../../schema/pin-content.yaml#/Pin"
+          posts:
+            type: array
+            items:
+              $ref: "../../schema/post.yaml#/Post"
+          postChildren:
+            type: array
+            items:
+              $ref: "../../schema/post.yaml#/Post"
+          comments:
+            type: array
+            items:
+              $ref: "../../schema/comment.yaml#/Comment"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          communities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          communityUsers:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/CommunityUser"
+          categories:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/CommunityCategory"
+          feeds:
+            type: array
+            items:
+              $ref: "../../schema/feed.yaml#/Feed"
+          videoStreamings:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+          polls:
+            type: array
+            items:
+              $ref: "../../schema/poll.yaml#/Poll"
+
+PinPostDeletedResponse:
+  description: OK
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean
