@@ -1,3 +1,17 @@
+PinTarget:
+  type: object
+  properties:
+    targetId:
+      type: string
+      description: Id of target. (post if or message if)
+    targetType:
+      type: string
+      description: type of target. (community or messageFeed)
+    lastPinsUpdatedAt:
+      type: string
+      description: Latest date/time when pinned content is updated.
+      format: date-time
+
 Pin:
   type: object
   properties:
@@ -7,7 +21,7 @@ Pin:
     referenceType:
       type: string
       description: type of content. (post or message)
-    type:
+    placement:
       type: string
       description: type of pin. (default or announcement)
     pinnedBy:
