@@ -7127,7 +7127,32 @@ paths:
                   value:
                     status: error
                     code: 400000
-                    message: This post is already pinned.
+                    message: Post ${postId} is already pinned
+                "This post is not in community":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not in community
+                "This post is not approved":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} has to be approved
+                "This post is deleted":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is deleted
+                "Unable to pin child post ":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Unable to pin child post
+                "Pin post exceed the limit":
+                  value:
+                    status: error
+                    code: 400000
+                    message: "Pin post by placement: ${placement} exceed the limit"
         "403":
           description: No permission to pin post in a community
           content:
@@ -7151,12 +7176,12 @@ paths:
                   value:
                     status: error
                     code: 400400
-                    message: CommunityId ${id} not found
+                    message: "Failed to find community: ${communityId}"
                 "The postId is not found within the communityId":
                   value:
                     status: error
                     code: 400400
-                    message: PostId ${id} not found
+                    message: PostId ${postId} not found
         "422":
           description: validation error 
           content:
@@ -7209,11 +7234,16 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               examples:
-                "This post is currently not pinned.":
+                "This post is not pinned.":
                   value:
                     status: error
                     code: 400000
-                    message: This post is currently not pinned.
+                    message: Post ${postId} is not pinned
+                "This post is not in community":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not in community
         "403":
           description: No permission to unpin post in a community
           content:
@@ -7237,12 +7267,12 @@ paths:
                   value:
                     status: error
                     code: 400400
-                    message: CommunityId ${id} not found
+                    message: "Failed to find community: ${communityId}"
                 "The postId is not found within the communityId":
                   value:
                     status: error
                     code: 400400
-                    message: PostId ${id} not found
+                    message: PostId ${postId} not found
         "422":
           description: validation error 
           content:
