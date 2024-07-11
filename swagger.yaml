@@ -85,7 +85,7 @@ info:
     <p>
       Before making server-to-server API calls, be sure to select the correct API endpoint for your region in the <strong>Servers</strong> dropdown below.
     </p>
-  version: "4.82.0"
+  version: "4.82.1"
 servers:
   - url: "https://apix.us.amity.co"
     description: "API Endpoint for US Region"
@@ -6835,6 +6835,456 @@ paths:
           $ref: "./global/error.yaml#/RateLimitError"
         "404":
           $ref: "./global/error.yaml#/NotFoundError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
+  /api/v1/pinned-posts/communities/{communityId}:
+    get:
+      summary: "List all pinned posts in a community"
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "List all pinned posts in a community\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: options
+          in: query
+          schema:
+            $ref: "./v3/pin-post/parameters.yaml#/QueryOptions"
+      responses:
+        "200":
+          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+        "403":
+          description: No permission to query pin post in a community
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Private community and the user is not a member":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not a member of this community
+        "404":
+          description: The communityId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The communityId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: CommunityId ${id} not found
+        "422":
+          description: Validation error 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Clear all pin posts in a community"
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "Clear all pin posts in a community\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v3/pin-post/response.yaml#/PinPostDeletedResponse"
+        "403":
+          description: No permission to clear all pin post in a community
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Users do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not allowed to do this
+        "404":
+          description: The communityId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The communityId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: CommunityId ${id} not found
+        "422":
+          description: validation error 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+  /api/v1/pinned-posts/communities/{communityId}/{placement}:
+    get:
+      summary: "List all pinned posts in a community by placement"
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "List all pinned posts in a community by placement\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "placement"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            enum:
+              - "default"
+              - "announcement" 
+        - name: options
+          in: query
+          schema:
+            $ref: "./v3/pin-post/parameters.yaml#/QueryOptions"
+      responses:
+        "200":
+          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+        "403":
+          description: No permission to query pin post in a community
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Users do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not a member of this community
+        "404":
+          description: The communityId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The communityId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: CommunityId ${id} not found
+        "422":
+          description: validation error 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Clear all pin posts in a community by placement"
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "Clear all pin posts in a community by placement\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "placement"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            enum:
+              - "default"
+              - "announcement" 
+      responses:
+        "200":
+          $ref: "./v3/pin-post/response.yaml#/PinPostDeletedResponse"
+        "403":
+          description: No permission to clear all pin post in a community
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Users do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not allowed to do this
+        "404":
+          description: The communityId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The communityId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: CommunityId ${id} not found
+        "422":
+          description: validation error 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+  /api/v1/pinned-posts/communities/{communityId}/{placement}/{postId}:
+    post:
+      summary: "Pin a post in a community "
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "Pin a post in a community\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "placement"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            enum:
+              - "default"
+              - "announcement" 
+        - name: "postId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+        "400":
+          description: badRequest Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "This post is already pinned.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is already pinned
+                "This post is not in community":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not in community
+                "This post is not approved":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} has to be approved
+                "This post is deleted":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is deleted
+                "Unable to pin child post ":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Unable to pin child post
+                "Pin post exceed the limit":
+                  value:
+                    status: error
+                    code: 400000
+                    message: "Pin post by placement: ${placement} exceed the limit"
+        "403":
+          description: No permission to pin post in a community
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Users do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not allowed to do this
+        "404":
+          description: The communityId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The communityId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: "Failed to find community: ${communityId}"
+                "The postId is not found within the communityId":
+                  value:
+                    status: error
+                    code: 400400
+                    message: PostId ${postId} not found
+        "422":
+          description: validation error 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Unpin a post in a community "
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "Unpin a post in a community\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "placement"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            enum:
+              - "default"
+              - "announcement" 
+        - name: "postId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+        "400":
+          description: badRequest Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "This post is not pinned.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not pinned
+                "This post is not in community":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not in community
+        "403":
+          description: No permission to unpin post in a community
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Users do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not allowed to do this
+        "404":
+          description: The communityId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The communityId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: "Failed to find community: ${communityId}"
+                "The postId is not found within the communityId":
+                  value:
+                    status: error
+                    code: 400400
+                    message: PostId ${postId} not found
+        "422":
+          description: validation error 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
 
