@@ -6535,6 +6535,60 @@ paths:
                 status: error
                 code: 500000
                 message: Unexpected error
+  /api/v3/network-settings/ui-kit:
+    get:
+      tags:
+        - Network Setting
+      summary: Get UI-Kit configuration.
+      description: Get UI-Kit configuration.
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          $ref: "./v3/network-setting/response.yaml#/UIKitNetworkSettingApiResponse"
+        "403":
+          description: Permission denied.
+          content:
+            application/json:
+              schema:
+                $ref: "./global/error.yaml#/PermissionDenidedError"
+              example:
+                status: error
+                code: 400301
+                message: Only administrator can do this
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "./global/error.yaml#/UnexpectedError"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+    put:
+      tags:
+        - Network Setting
+      summary: Update UI-Kit configuration
+      description: Update UI-Kit configuration
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: "./v3/network-setting/request.yaml#/UpdateUIKitSetting"
+      responses:
+        "200":
+          $ref: "./v3/network-setting/response.yaml#/UIKitNetworkSettingApiResponse"
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "./global/error.yaml#/UnexpectedError"
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+
   /api/v3/network-settings/video-streaming:
     get:
       summary: "Get video streaming setting check configuration."
@@ -6615,7 +6669,6 @@ paths:
           $ref: "./global/error.yaml#/BadRequestError"
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
-
   /v1/notification:
     post:
       summary: "register a device to get push notification"
