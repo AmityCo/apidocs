@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 info:
   title: "Amity Social Cloud SDK"
-  description: | 
+  description: |
     <h2>Using Amity APIs</h2>
     <p>
       Our API documentation explains all API endpoints used in Amity Social Cloud. All APIs, with the exception of some authentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin or User context. When used in user context, you will only be able to fetch data related to that user only.
@@ -85,7 +85,7 @@ info:
     <p>
       Before making server-to-server API calls, be sure to select the correct API endpoint for your region in the <strong>Servers</strong> dropdown below.
     </p>
-  version: "4.82.1"
+  version: "4.84.0"
 servers:
   - url: "https://apix.us.amity.co"
     description: "API Endpoint for US Region"
@@ -98,7 +98,7 @@ paths:
     get:
       summary: Query all network ads and settings
       tags:
-       - Ads
+        - Ads
       responses:
         "200":
           description: All ads information and ads settings
@@ -1752,6 +1752,16 @@ paths:
           required: true
           schema:
             type: "string"
+        - name: "preserve-edited-at"
+          in: "header"
+          required: false
+          description: |
+            Preserve the `editedAt` value when updating a comment.
+            If the value is `true`, the `editedAt` value will not be updated.
+            If the value is `false`, the `editedAt` value will be updated.
+          schema:
+            type: "boolean"
+            default: false
       requestBody:
         description: "comment information.\n"
         required: true
@@ -4232,7 +4242,6 @@ paths:
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
 
-
   /api/v1/markers/channels:
     get:
       tags:
@@ -4528,7 +4537,7 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  
+
   /v1/blacklist/records:
     put:
       summary: "Refresh black list"
@@ -6885,7 +6894,7 @@ paths:
                     code: 400400
                     message: CommunityId ${id} not found
         "422":
-          description: Validation error 
+          description: Validation error
           content:
             application/json:
               schema:
@@ -6940,7 +6949,7 @@ paths:
                     code: 400400
                     message: CommunityId ${id} not found
         "422":
-          description: validation error 
+          description: validation error
           content:
             application/json:
               schema:
@@ -6975,7 +6984,7 @@ paths:
             type: "string"
             enum:
               - "default"
-              - "announcement" 
+              - "announcement"
         - name: options
           in: query
           schema:
@@ -7008,7 +7017,7 @@ paths:
                     code: 400400
                     message: CommunityId ${id} not found
         "422":
-          description: validation error 
+          description: validation error
           content:
             application/json:
               schema:
@@ -7042,7 +7051,7 @@ paths:
             type: "string"
             enum:
               - "default"
-              - "announcement" 
+              - "announcement"
       responses:
         "200":
           $ref: "./v3/pin-post/response.yaml#/PinPostDeletedResponse"
@@ -7071,7 +7080,7 @@ paths:
                     code: 400400
                     message: CommunityId ${id} not found
         "422":
-          description: validation error 
+          description: validation error
           content:
             application/json:
               schema:
@@ -7106,7 +7115,7 @@ paths:
             type: "string"
             enum:
               - "default"
-              - "announcement" 
+              - "announcement"
         - name: "postId"
           required: true
           in: "path"
@@ -7183,7 +7192,7 @@ paths:
                     code: 400400
                     message: PostId ${postId} not found
         "422":
-          description: validation error 
+          description: validation error
           content:
             application/json:
               schema:
@@ -7217,7 +7226,7 @@ paths:
             type: "string"
             enum:
               - "default"
-              - "announcement" 
+              - "announcement"
         - name: "postId"
           required: true
           in: "path"
@@ -7274,7 +7283,7 @@ paths:
                     code: 400400
                     message: PostId ${postId} not found
         "422":
-          description: validation error 
+          description: validation error
           content:
             application/json:
               schema:
@@ -7812,6 +7821,16 @@ paths:
           schema:
             type: "string"
             maxLength: 900
+        - name: "preserve-edited-at"
+          in: "header"
+          required: false
+          description: |
+            Preserve the `editedAt` value when updating a post.
+            If the value is `true`, the `editedAt` value will not be updated.
+            If the value is `false`, the `editedAt` value will be updated.
+          schema:
+            type: "boolean"
+            default: false
       requestBody:
         description: "information of a post to be updated.\n"
         required: true
@@ -8316,6 +8335,16 @@ paths:
           required: true
           schema:
             type: "string"
+        - name: "preserve-edited-at"
+          in: "header"
+          required: false
+          description: |
+            Preserve the `editedAt` value when updating a post.
+            If the value is `true`, the `editedAt` value will not be updated.
+            If the value is `false`, the `editedAt` value will be updated.
+          schema:
+            type: "boolean"
+            default: false
       requestBody:
         description: "information of a post to be updated.\n### Image, File, Video post update - Put `type` with file id in `attachments` - Image and File data can be picked from `fileId` in `data` object in child post - Video fileId for each resolution will be in `videoFileId` in `data` object in child post\n"
         required: true
@@ -9180,7 +9209,7 @@ paths:
       description: "Verify access token. The caller must add accessToken in header."
       responses:
         "200":
-          description: "Access token is valid"
+          $ref: "./v3/session/response.yaml#/GetSessionResponse"
         "401":
           description: "Access token is invalid or expired"
         "403":
@@ -10265,7 +10294,7 @@ paths:
           $ref: "./global/error.yaml#/ForbiddenError"
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
-          
+
   /api/v3/users/{userId}/isFlagByMe:
     get:
       summary: "Check whether user flag a given user."
@@ -12856,7 +12885,7 @@ paths:
                         type: "array"
                         items:
                           $ref: "./schema/user.yaml#/User"
-  
+
   /realtime/channel.banned:
     get:
       summary: "user is banned from the channel"
