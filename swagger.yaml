@@ -990,6 +990,12 @@ paths:
               token:
                 type: "string"
                 maxLength: 100
+        - name: "isDeleted"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: null
+          description: "filter deleted members if isDeleted is null, will return both deleted and non-deleted members"
       responses:
         "200":
           $ref: "./v3/channel/response.yaml#/ChannelPaginationApiResponse"
@@ -1496,6 +1502,12 @@ paths:
             type: "string"
             minLength: 0
             maxLength: 10000
+        - name: "isDeleted"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: null
+          description: "filter deleted members if isDeleted is null, will return both deleted and non-deleted members"
       responses:
         "200":
           $ref: "./v4/channel/response.yaml#/ChannelPaginationApiResponse"
@@ -2492,6 +2504,12 @@ paths:
               - "internal"
             default: "public"
           description: "type of communityId"
+        - name: "isDeleted"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: null
+          description: "filter deleted members if isDeleted is null, will return both deleted and non-deleted members"
       responses:
         "200":
           $ref: "./v3/community/response.yaml#/CommunityPaginationApiResponse"
@@ -10176,6 +10194,12 @@ paths:
               token:
                 type: "string"
                 maxLength: 1000
+        - name: "isDeleted"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: false
+          description: "filter only deleted deleted users when true"
       responses:
         "200":
           $ref: "./v3/user/response.yaml#/UserPaginationResponse"
