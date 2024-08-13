@@ -1,61 +1,61 @@
-postResponseData: 
-  type: 'object'
-  properties: 
+postResponseData:
+  type: "object"
+  properties:
     data:
-      type: 'object'
+      type: "object"
       properties:
         text:
-          type: 'string'
-          description: 'data for text in post parent'
-          example: 'example text'
+          type: "string"
+          description: "data for text in post parent"
+          example: "example text"
     targetType:
-      type: 'string'
+      type: "string"
       enum:
-        - 'user'
-        - 'community'
-        - 'content'
-      default: 'user'
-      description: 'where to create post to'
+        - "user"
+        - "community"
+        - "content"
+      default: "user"
+      description: "where to create post to"
     targetId:
-      type: 'string'
-      example: 'public_user_id'
-      description: 'Resource public id depends on target type (ex. target type is community, target id will be community public id)'
+      type: "string"
+      example: "public_user_id"
+      description: "Resource public id depends on target type (ex. target type is community, target id will be community public id)"
     metadata:
-      type: 'object'
+      type: "object"
       example:
-        anything: 'you want'
+        anything: "you want"
     postId:
-      type: 'string'
-      example: 'postidiwant'
-      description: 'for specify public post id on post creation'
+      type: "string"
+      example: "postidiwant"
+      description: "for specify public post id on post creation"
     tags:
-      type: 'array'
+      type: "array"
       minItems: 0
       maxItems: 5
       items:
-        type: 'string'
-        description: 'tags'
+        type: "string"
+        description: "tags"
         maximum: 24
     mentionees:
-      type: 'array'
-      description: 'The object of the mentions type and user who get a notification from the post.'
+      type: "array"
+      description: "The object of the mentions type and user who get a notification from the post."
       items:
-        type: 'object'
+        type: "object"
         properties:
           type:
-            type: 'string'
-            example: 'user'
+            type: "string"
+            example: "user"
             description: "type: * `user` - need to specific userIds and notification mentions individual user\n"
             enum:
-              - 'user'
+              - "user"
           userIds:
-            type: 'array'
+            type: "array"
             example:
-              - 'userId1'
-              - 'userId2'
-            description: 'Array of UserId. if the mention type is a channel, doesn''t send userIds'
+              - "userId1"
+              - "userId2"
+            description: "Array of UserId. if the mention type is a channel, doesn't send userIds"
             items:
-              type: 'string'
+              type: "string"
           userPublicIds:
             type: array
             description: Array of UserPublicId.
@@ -67,68 +67,68 @@ postResponseData:
             items:
               type: string
 
-postRequestData: 
-  type: 'object'
-  properties: 
+postRequestData:
+  type: "object"
+  properties:
     data:
-      type: 'object'
+      type: "object"
       properties:
         text:
-          type: 'string'
-          description: 'data for text in post parent'
-          example: 'example text'
+          type: "string"
+          description: "data for text in post parent"
+          example: "example text"
     dataType:
-      type: 'string'
-      example: 'upstra.customtype'
+      type: "string"
+      example: "upstra.customtype"
       description: 'Must be in dot separated string format or system defined format (ex. "upstra.customtype", "com.eko.birthday")'
     targetType:
-      type: 'string'
+      type: "string"
       enum:
-        - 'user'
-        - 'community'
-        - 'content'
-      default: 'user'
-      description: 'where to create post to'
+        - "user"
+        - "community"
+        - "content"
+      default: "user"
+      description: "where to create post to"
     targetId:
-      type: 'string'
-      example: 'public_user_id'
-      description: 'Resource public id depends on target type (ex. target type is community, target id will be community public id)'
+      type: "string"
+      example: "public_user_id"
+      description: "Resource public id depends on target type (ex. target type is community, target id will be community public id)"
     metadata:
-      type: 'object'
+      type: "object"
       example:
-        anything: 'you want'
+        anything: "you want"
     postId:
-      type: 'string'
-      example: 'postidiwant'
-      description: 'for specify public post id on post creation'
+      type: "string"
+      example: "postidiwant"
+      description: "for specify public post id on post creation"
     tags:
-      type: 'array'
+      type: "array"
       minItems: 0
       maxItems: 5
       items:
-        type: 'string'
-        description: 'tags'
+        type: "string"
+        description: "tags"
         maximum: 24
     mentionees:
-      type: 'array'
-      description: 'The object of the mentions type and user who get a notification from the post.'
+      type: "array"
+      description: "The object of the mentions type and user who get a notification from the post."
       items:
-        type: 'object'
+        type: "object"
         properties:
           type:
-            type: 'string'
-            example: 'user'
+            type: "string"
+            example: "user"
             description: "type: * `user` - need to specific userIds and notification mentions individual user\n"
             enum:
-              - 'user'
+              - "user"
           userIds:
-            type: 'array'
+            type: "array"
             example:
-              - 'userId1'
-              - 'userId2'
-            description: 'Array of UserId. if the mention type is a channel, doesn''t send userIds'
+              - "userId1"
+              - "userId2"
+            description: "Array of UserId. if the mention type is a channel, doesn't send userIds"
             items:
-              type: 'string'
+              type: "string"
 
 postRespBody:
   type: object
@@ -139,91 +139,103 @@ postRespBody:
       example: 60e4b1b4b3b2b5c4c4b3b2b5
 
 getRespBody:
-  type: 'object'
-  properties: 
+  type: "object"
+  properties:
     data:
-      type: 'array'
+      type: "array"
       items:
-        type: 'object'
-        description: 'list of scheduled post'
+        type: "object"
+        description: "list of scheduled post"
         properties:
-          _id: 
-            type: 'string'
-            description: 'scheduled post id'
-            example: '60e4b1b4b3b2b5c4c4b3b2b5'
-          scheduledAt: 
-            $ref: '#/postReqSchema/properties/scheduledAt'
+          _id:
+            type: "string"
+            description: "scheduled post id"
+            example: "60e4b1b4b3b2b5c4c4b3b2b5"
+          scheduledAt:
+            $ref: "#/postReqSchema/properties/scheduledAt"
           status:
-            type: 'object'
-            description: 'status of scheduled post'
+            type: "object"
+            description: "status of scheduled post"
             properties:
               code:
-                type: 'string'
-                description: 'status type'
+                type: "string"
+                description: "status type"
                 enum:
-                  - 'WAIT'
-                  - 'DONE'
-                  - 'FAIL'
+                  - "WAIT"
+                  - "DONE"
+                  - "FAIL"
               description:
-                type: 'string'
-                description: 'description of status'
-                example: 'waiting to be posted'
-          postData: 
-            $ref: '#/postResponseData'
-          userId: 
-            type: 'string'
-            description: 'user id who create this scheduled post'
-            example: '60e4b1b4b3b2b5c4c4b3b2b5'
+                type: "string"
+                description: "description of status"
+                example: "waiting to be posted"
+          postData:
+            $ref: "#/postResponseData"
+          userId:
+            type: "string"
+            description: "user id who create this scheduled post"
+            example: "60e4b1b4b3b2b5c4c4b3b2b5"
           createdAt:
-            type: 'string'
-            description: 'The date/time when this scheduled post is created.'
-            format: 'date-time'
-            example: '2022-07-07T04:24:20.444Z'
+            type: "string"
+            description: "The date/time when this scheduled post is created."
+            format: "date-time"
+            example: "2022-07-07T04:24:20.444Z"
           updatedAt:
-            type: 'string'
-            description: 'The date/time when this scheduled post is updated.'
-            format: 'date-time'
-            example: '2022-07-07T04:24:20.444Z'
+            type: "string"
+            description: "The date/time when this scheduled post is updated."
+            format: "date-time"
+            example: "2022-07-07T04:24:20.444Z"
           files:
             type: array
             items:
               $ref: "../../schema/file.yaml#/File"
           userDisplayName:
             type: string
-            description: 'User display name'
-            example: 'Alex'
+            description: "User display name"
+            example: "Alex"
           communities:
             type: array
             items:
               $ref: "../../schema/community.yaml#/Community"
-    networkId: 
+    networkId:
       type: string
-      description: 'network id of all of the posts'
-      example: '60e4b1b4b3b2b5c4c4b3b2b5'
+      description: "network id of all of the posts"
+      example: "60e4b1b4b3b2b5c4c4b3b2b5"
+    files:
+      type: array
+      description: "list of files that related to user"
+      items:
+        $ref: "../../schema/file.yaml#/File"
+    users:
+      type: array
+      description: "list of users that related to schedule post"
+      items:
+        $ref: "../../schema/user.yaml#/UserV3"
     paging:
-      type: 'object'
+      type: "object"
       properties:
-        next: 
-          type: 'string'
-          example: 'eyJiZWZvcmUiOiI2NDgxNzYxNmU0ZDgzODgxMTFhNDMwZjUiLCJsaW1pdCI6Mn0'
-        previous: 
-          type: 'string'
-          example: 'eyJhZnRlciI6IjY0ODE3NjE2ZTRkODM4ODExMWE0MzBmMCIsImxpbWl0IjoyfQ=='
+        next:
+          type: "string"
+          example: "eyJiZWZvcmUiOiI2NDgxNzYxNmU0ZDgzODgxMTFhNDMwZjUiLCJsaW1pdCI6Mn0"
+        previous:
+          type: "string"
+          example: "eyJhZnRlciI6IjY0ODE3NjE2ZTRkODM4ODExMWE0MzBmMCIsImxpbWl0IjoyfQ=="
 
-postReqSchema: 
-  type: 'object'
+postReqSchema:
+  type: "object"
   properties:
-    postData: 
-      $ref: '#/postRequestData'
-    scheduledAt: 
-      type: 'string'
-      description: 'The date/time when a post is scheduled. Need to be within next hour and next 30 days.'
-      format: 'date-time'
-      example: '2022-07-07T04:24:20.444Z'
+    postData:
+      $ref: "#/postRequestData"
+    scheduledAt:
+      type: "string"
+      description: "The date/time when a post is scheduled. Need to be within next hour and next 30 days."
+      format: "date-time"
+      example: "2022-07-07T04:24:20.444Z"
+    postAs:
+      type: "string"
+      description: "Brand user private id to post as"
   required:
-    - 'postData'
-    - 'scheduledAt'
-
+    - "postData"
+    - "scheduledAt"
 
 postReqBody:
   description: "
@@ -245,5 +257,5 @@ postReqBody:
   required: true
   content:
     application/json:
-      schema: 
-        $ref: '#/postReqSchema' 
+      schema:
+        $ref: "#/postReqSchema"
