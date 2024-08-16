@@ -1,0 +1,76 @@
+CreateAdminRequest:
+  description: Create admin
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          username:
+            type: string
+            example: "username"
+          displayName:
+            type: string
+            example: "displayName"
+          avatarFileId:
+            type: string
+            description: File id from image uploading
+          password:
+            type: string
+            description: password need to match the policy
+            example: "1qazZAQ!2wsx"
+          firstname:
+            type: string
+            example: "foo"
+          lastname:
+            type: string
+            example: "bar"
+          permissions:
+            type: array
+            items:
+              type: string
+            example:
+              - "CREATE_ADMIN"
+              - "CONFIGURE_ADMIN_TOKEN"
+              - "MANAGE_ADMIN"
+              - "MANAGE_SECURITY"
+              - "CAN_USE_BRAND_USERS"
+        required:
+          - username
+          - displayName
+          - password
+
+UpdateAdminRequest:
+  description: Update admin
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          userId:
+            type: string
+            example: "66bf36ed7b6970be23939680"
+            description: Admin user internal id
+          displayName:
+            type: string
+            example: "displayName"
+          avatarFileId:
+            type: string
+            description: File id from image uploading
+          firstname:
+            type: string
+            example: "foo"
+          lastname:
+            type: string
+            example: "bar"
+          permissions:
+            type: array
+            items:
+              type: string
+            example:
+              - "CREATE_ADMIN"
+              - "CONFIGURE_ADMIN_TOKEN"
+              - "MANAGE_ADMIN"
+              - "MANAGE_SECURITY"
+              - "CAN_USE_BRAND_USERS"
+        required:
+          - displayName

@@ -286,7 +286,58 @@ paths:
           $ref: "./global/error.yaml#/UnProcessableError"
         500:
           $ref: "./global/error.yaml#/UnexpectedError"
-
+  /admin/v1/admin:
+    post:
+      summary: Create admin
+      tags:
+        - Admin User
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: "./v1/admin/request.yaml#/CreateAdminRequest"
+      responses:
+        "200":
+          description: Admin created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+        "403":
+          $ref: "./global/error.yaml#/ForbiddenError"
+        "429":
+          $ref: "./global/error.yaml#/RateLimitError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+  /admin/v1/admin/update:
+    post:
+      summary: Update admin
+      tags:
+        - Admin User
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: "./v1/admin/request.yaml#/UpdateAdminRequest"
+      responses:
+        "200":
+          description: Admin created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+        "403":
+          $ref: "./global/error.yaml#/ForbiddenError"
+        "429":
+          $ref: "./global/error.yaml#/RateLimitError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
   /api/v3/authentication/token:
     get:
       summary: Get authentication token
