@@ -6670,7 +6670,7 @@ paths:
                     - "ios"
                 token:
                   type: "string"
-                  description: "device token for push notification. For ios platform, the token length must be less than or equals 400 characters and they must be hexadecimal." 
+                  description: "device token for push notification. For ios platform, the token length must be less than or equals 400 characters and they must be hexadecimal."
                   maxLength: 1000
                 userId:
                   type: "string"
@@ -10165,6 +10165,12 @@ paths:
           schema:
             type: "string"
             maxLength: 100
+        - name: "exactMatchKeyword"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: false
+          description: Return exact match search result when true
         - name: "filter"
           in: "query"
           schema:
