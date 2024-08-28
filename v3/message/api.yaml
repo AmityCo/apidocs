@@ -207,7 +207,8 @@ query:
         maxItems: 10
         items:
           type: string
-          maxLength: 100 
+          maxLength: 100
+      description: "Used for querying messages by matching all specified tags. When a query includes multiple tags (e.g., `tags=['tag1', 'tag2', 'tag3']`), the system will return all messages that have all the specified tags."
     - name: excludeTags
       in: query
       collectionFormat: multi
@@ -217,6 +218,7 @@ query:
         items:
           type: string
           maxLength: 100 
+      description: "Used for querying messages by excluding all specified tags. When a query includes multiple tags (e.g., `excludeTags=['tag1', 'tag2', 'tag3']`), the system will return all messages that do not have any of the specified tags."
     - name: options
       in: query
       style: deepObject
