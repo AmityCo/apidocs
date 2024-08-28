@@ -94,13 +94,13 @@ ParentId:
 ExcludeTags:
   name: excludeTags
   in: query
-  description: tags for filtering out (max=10)
+  description: "Used for querying messages by excluding all specified tags. When a query includes multiple tags (e.g., `excludeTags=['tag1', 'tag2', 'tag3']`), the system will return all messages that do not have any of the specified tags. (max=10)"
   schema:
     $ref: '../../schema/generic.yaml#/Generic_tags'
 IncludeTags:
   name: includeTags
   in: query
-  description: tags for filtering (max=10)
+  description: "Used for querying messages by matching all specified tags. When a query includes multiple tags (e.g., `tags=['tag1', 'tag2', 'tag3']`), the system will return all messages that have all the specified tags. (max=10)"
   schema:
     $ref: '../../schema/generic.yaml#/Generic_tags'
 Permanent:
