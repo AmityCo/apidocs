@@ -679,6 +679,7 @@ paths:
                 channelId:
                   type: "string"
                   maxLength: 100
+                  description: "A unique identifier for the channel. Maximum length is 100 characters."
                 type:
                   type: "string"
                   enum:
@@ -686,47 +687,57 @@ paths:
                     - "live"
                     - "broadcast"
                   default: "community"
+                  description: "Type of the channel. Options are 'community', 'live', or 'broadcast'. Default is 'community'."
                 displayName:
                   type: "string"
                   maxLength: 100
+                  description: "The display name for the channel. Maximum length is 100 characters."
                 avatarFileId:
                   type: "string"
                   maxLength: 50
+                  description: "The ID of the file to be used as the channel's avatar. Maximum length is 50 characters."
                 metadata:
                   type: "object"
+                  description: "Additional metadata associated with the channel. Can include custom properties."
                 tags:
                   type: "array"
                   maxItems: 10
                   items:
                     type: "string"
                     maxLength: 100
+                  description: "List of tags associated with the channel. Maximum of 10 tags, each up to 100 characters long."
                 userIds:
                   type: "array"
                   maxItems: 1000
                   items:
                     type: "string"
                     maxLength: 50
+                  description: "List of user IDs to be added to the channel. Maximum of 1000 user IDs, each up to 50 characters long."
                 isMuted:
                   type: "boolean"
+                  description: "Indicates whether the channel is muted by default for all users."
                 messageAutoDeleteEnabled:
                   type: "boolean"
+                  description: "Indicates whether automatic deletion of messages is enabled for the channel."
                 autoDeleteMessageByFlagLimit:
                   type: "number"
                   minimum: 1
-                  maximum: 100
+                  maximum: 1000
+                  description: "The number of flags required to automatically delete a message. Must be between 1 and 1000."
                 isPublic:
                   type: "boolean"
+                  description: "Indicates whether the channel is public and visible to all users."
                 notificationMode:
-                  type: string
+                  type: "string"
                   enum:
                     - default
                     - silent
                     - subscribe
                   description: >
-                    Notification Mode:
-                      * `default` - Auto register push notification.
-                      * `silent` - Do not send notification.
-                      * `subscribe` - Send notification to subscribed users only.
+                    The notification mode for the channel:
+                      * `default` - Automatically register push notifications.
+                      * `silent` - Do not send notifications.
+                      * `subscribe` - Send notifications only to subscribed users.
       responses:
         "200":
           $ref: "./v3/channel/response.yaml#/ChannelsApiResponse"
@@ -806,7 +817,7 @@ paths:
                 autoDeleteMessageByFlagLimit:
                   type: "number"
                   minimum: 1
-                  maximum: 100
+                  maximum: 1000
                 notificationMode:
                   type: string
                   enum:
