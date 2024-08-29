@@ -9215,6 +9215,92 @@ paths:
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
 
+  /api/v1/semantic-search/posts:
+    get:
+      summary: "Semantic search posts"
+      tags:
+        - "Semantic Search"
+      security:
+        - BearerAuth: []
+      description: "Semantic search posts\n"
+      parameters:
+        - name: "query"
+          required: true
+          in: "query"
+          schema:
+            type: "string"
+            maxLength: 1024
+        - name: "targetId"
+          in: "query"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "targetType"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "community"
+              - "user"
+              - "content"
+        - name: "options"
+          in: "query"
+          style: "deepObject"
+          schema:
+            type: "object"
+            properties:
+              limit:
+                type: "integer"
+                minimum: 1
+                maximum: 100
+                default: 10
+              token:
+                type: "string"
+                maxLength: 1000
+        - name: "dataTypes"
+          in: "query"
+          description: >
+            Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`.
+            The value in array could be oneOf:
+              * `text`
+              * `image`
+          schema:
+            type: "array"
+            maxItems: 10
+            items:
+              oneOf:
+                - type: "string"
+                  enum:
+                    - "text"
+                    - "image"
+                  description: "Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`"
+        - name: "tags"
+          in: "query"
+          schema:
+            type: "array"
+            minItems: 0
+            maxItems: 5
+            items:
+              type: "string"
+              maxLength: 24
+        - name: "matchingOnlyParentPost"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: true
+          description: "An option whether to filter only parent post or not. If `true` will return only parent posts, else will return both parent and child posts"
+      responses:
+        "200":
+          $ref: "./v1/semantic-search/response.yaml#/SemanticSearchPostPaginationApiResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "429":
+          $ref: "./global/error.yaml#/RateLimitError"
+        "404":
+          $ref: "./global/error.yaml#/NotFoundError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
   /api/v3/sessions:
     post:
       summary: "Register a session"
