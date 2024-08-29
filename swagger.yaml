@@ -6506,6 +6506,48 @@ paths:
           $ref: "./global/error.yaml#/BadRequestError"
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
+  /api/v3/network-settings/semantic-search:
+    put:
+      summary: "Update Semantics search configuration."
+      tags:
+        - "Network Setting"
+      security:
+        - BearerAuth: []
+      description: "Update Network setting for Semantics search.\n"
+      requestBody:
+        description: "information for a network setting\n"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                postMinScore:
+                  type: "integer"
+                  minimum: 0
+                  maximum: 1
+      responses:
+        "200":
+          $ref: "./v3/network-setting/response.yaml#/SemanticSearchNetworkSettingApiResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    get:
+      summary: "Get Network setting for Semantics search."
+      tags:
+        - "Network Setting"
+      security:
+        - BearerAuth: []
+      description: "Get Semantics search configuration.\n"
+      responses:
+        "200":
+          $ref: "./v3/network-setting/response.yaml#/SemanticSearchNetworkSettingApiResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
   /api/v3/network-settings/users:
     get:
       tags:
