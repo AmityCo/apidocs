@@ -338,6 +338,27 @@ paths:
           $ref: "./global/error.yaml#/RateLimitError"
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
+  /admin/v2/admin:
+    get:
+      summary: Query admin
+      description: Support avatar
+      tags:
+        - Admin User
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Following feed Information
+          content:
+            application/json:
+              schema:
+                $ref: "./v1/admin/response.yaml#/QueryAdminResponsePayload"
+        "403":
+          $ref: "./global/error.yaml#/ForbiddenError"
+        "429":
+          $ref: "./global/error.yaml#/RateLimitError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
   /api/v3/authentication/token:
     get:
       summary: Get authentication token
