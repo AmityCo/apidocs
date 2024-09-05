@@ -3968,7 +3968,7 @@ paths:
         - "Follow"
       security:
         - BearerAuth: []
-      description: "Follow user information\n"
+      description: "Follow user\n"
       parameters:
         - name: "userId"
           in: "path"
@@ -10093,7 +10093,7 @@ paths:
         - ApiKeyAuth: []
       description: "Ban a user\n"
       requestBody:
-        description: "User information to be baned\n"
+        description: "User to be baned\n"
         required: true
         content:
           application/json:
@@ -10122,7 +10122,7 @@ paths:
         - BearerAuth: []
       description: "Unban a user\n"
       requestBody:
-        description: "User information to be unbaned\n"
+        description: "User to be unbaned\n"
         required: true
         content:
           application/json:
@@ -10167,12 +10167,12 @@ paths:
           $ref: "./global/error.yaml#/UnexpectedError"
   /api/v3/users:
     get:
-      summary: "Get users information."
+      summary: "Get users."
       tags:
         - "User"
       security:
         - BearerAuth: []
-      description: "Get users information (pagination supported)\n"
+      description: "Get users (pagination supported)\n"
       parameters:
         - name: "keyword"
           in: "query"
@@ -10232,14 +10232,14 @@ paths:
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
     put:
-      summary: "Update user information."
+      summary: "Update user."
       tags:
         - "User"
       security:
         - BearerAuth: []
-      description: "Update user information such as displayName, roles, avatar and metadata\n"
+      description: "Update user such as displayName, roles, avatar and metadata\n"
       requestBody:
-        description: "User information to be updated\n"
+        description: "User to be updated\n"
         required: true
         content:
           application/json:
@@ -10283,15 +10283,16 @@ paths:
           $ref: "./global/error.yaml#/UnexpectedError"
   /api/v3/users/list:
     get:
-      summary: "Get users information by public id."
+      summary: "Get list of users by user ids."
       tags:
         - "User"
       security:
         - BearerAuth: []
-      description: "Get users information by public id.\n"
+      description: "Get list of users by user ids.\n"
       parameters:
         - name: "userIds"
           in: "query"
+          required: true
           schema:
             type: "array"
             maxItems: 100
@@ -10309,12 +10310,12 @@ paths:
           $ref: "./global/error.yaml#/UnexpectedError"
   /api/v3/users/{userId}:
     get:
-      summary: "Get one user information."
+      summary: "Get one user."
       tags:
         - "User"
       security:
         - BearerAuth: []
-      description: "Get one user information.\n"
+      description: "Get one user.\n"
       parameters:
         - name: "userId"
           in: "path"
@@ -10800,7 +10801,7 @@ paths:
       description: "Send user added event information whenever new member got added to a channel."
       responses:
         "200":
-          description: "channel is channel information. userIds is a list of added userId. adderId is user who add other user to channel users is a list of user information."
+          description: "channel is channel information. userIds is a list of added userId. adderId is user who add other user to channel users is a list of user."
           content:
             application/json:
               schema:
@@ -10892,7 +10893,7 @@ paths:
       description: "Send new created channel whenever a channel got create"
       responses:
         "200":
-          description: "channel is channel information. userIds is a list of userId who is added to channel. users is a list of user information."
+          description: "channel is channel information. userIds is a list of userId who is added to channel. users is a list of user."
           content:
             application/json:
               schema:
@@ -10924,7 +10925,7 @@ paths:
       description: "Send join event information whenever a channel got joined"
       responses:
         "200":
-          description: "channel is channel information. userIds is a list of joined userId. users is a list of user information."
+          description: "channel is channel information. userIds is a list of joined userId. users is a list of user."
           content:
             application/json:
               schema:
@@ -10988,7 +10989,7 @@ paths:
       description: "Send user removed event information whenever member got remove from channel."
       responses:
         "200":
-          description: "channel is channel information. userIds is a list of removed userId. removerId is userId who remove other users from channel. users is a list of user information."
+          description: "channel is channel information. userIds is a list of removed userId. removerId is userId who remove other users from channel. users is a list of user."
           content:
             application/json:
               schema:
@@ -11167,7 +11168,7 @@ paths:
       description: "Send updated message whenever all message flags are cleared."
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -11195,7 +11196,7 @@ paths:
       description: "Send new created message whenever a message got created in a channel"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -11223,7 +11224,7 @@ paths:
       description: "Send deleted message whenever a message got deleted in a channel"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -11251,7 +11252,7 @@ paths:
       description: "Send updated message whenever a message got flag"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -11287,7 +11288,7 @@ paths:
       description: "Send updated message whenever a message flag is removed."
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -11315,7 +11316,7 @@ paths:
       description: "Send updated message whenever a message got updated in a channel"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -12506,7 +12507,7 @@ paths:
         - "Webhook event"
       security:
         - BearerAuth: []
-      description: "This is called when a user information is updated\n"
+      description: "This is called when a user is updated\n"
       responses:
         "200":
           description: "User updated event information. users is a list of userInfo. files is a list of file information"
@@ -12818,7 +12819,7 @@ paths:
       description: "Send created message whenever a message got created in a channel"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -12858,7 +12859,7 @@ paths:
       description: "Send deleted message whenever a message got deleted in a channel"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -12898,7 +12899,7 @@ paths:
       description: "Send updated message whenever a message got updated in a channel"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -13994,7 +13995,7 @@ components:
                     items:
                       $ref: "./schema/user.yaml#/User"
     UserResponse:
-      description: "User Information"
+      description: "User"
       content:
         application/json:
           schema:
