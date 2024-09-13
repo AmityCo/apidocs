@@ -4275,6 +4275,198 @@ paths:
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
 
+  # Global Featured Post
+  /api/v1/pinned-posts/global:
+    get:
+      summary: "Query global pinned post"
+      tags:
+        - "Global Featured Post"
+      security:
+        - BearerAuth: []
+      description: "Query global pinned post\n"
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Clear all global pinned post in a global feed"
+      tags:
+        - "Global Featured Post"
+      security:
+        - BearerAuth: []
+      description: "Clear all global pinned post in a global feed\n"
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+  /api/v1/pinned-posts/global/{postId}:
+    post:
+      summary: "Global pin a post in a global feed"
+      tags:
+        - "Global Featured Post"
+      security:
+        - BearerAuth: []
+      description: "Global pin a post in a global feed\n"
+      parameters:
+        - name: "postId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
+        "400":
+          description: badRequest Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "This post is already pinned.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is already pinned
+                "This post is not in community":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not in community
+                "This post is not in public community":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not in public community
+                "This post is not approved":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} has to be approved
+                "This post is deleted":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is deleted
+                "Unable to pin child post ":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Unable to pin child post
+                "Pin post exceed the limit":
+                  value:
+                    status: error
+                    code: 400000
+                    message: "Pin post by placement: ${placement} exceed the limit"
+        "403":
+          description: No permission to global pin a post in a global feed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Admin do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: Insufficient permission
+        "404":
+          description: The postId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The postId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: PostId ${postId} not found
+        "422":
+          description: validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Global Unpin a post in a global feed"
+      tags:
+        - "Global Featured Post"
+      security:
+        - BearerAuth: []
+      description: "Global Unpin a post in a global feed\n"
+      parameters:
+        - name: "postId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
+        "400":
+          description: badRequest Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "This post is not pinned.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not pinned
+        "403":
+          description: No permission to global pin a post in a global feed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Admin do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: Insufficient permission
+        "404":
+          description: The postId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The postId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: PostId ${postId} not found
+        "422":
+          description: validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
   /api/v1/markers/channels:
     get:
       tags:
@@ -6947,10 +7139,10 @@ paths:
         - name: options
           in: query
           schema:
-            $ref: "./v3/pin-post/parameters.yaml#/QueryOptions"
+            $ref: "./v1/pin-post/parameters.yaml#/QueryOptions"
       responses:
         "200":
-          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
         "403":
           description: No permission to query pin post in a community
           content:
@@ -7005,7 +7197,7 @@ paths:
             maxLength: 900
       responses:
         "200":
-          $ref: "./v3/pin-post/response.yaml#/PinPostDeletedResponse"
+          $ref: "./v1/pin-post/response.yaml#/PinPostDeletedResponse"
         "403":
           description: No permission to clear all pin post in a community
           content:
@@ -7070,10 +7262,10 @@ paths:
         - name: options
           in: query
           schema:
-            $ref: "./v3/pin-post/parameters.yaml#/QueryOptions"
+            $ref: "./v1/pin-post/parameters.yaml#/QueryOptions"
       responses:
         "200":
-          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
         "403":
           description: No permission to query pin post in a community
           content:
@@ -7136,7 +7328,7 @@ paths:
               - "announcement"
       responses:
         "200":
-          $ref: "./v3/pin-post/response.yaml#/PinPostDeletedResponse"
+          $ref: "./v1/pin-post/response.yaml#/PinPostDeletedResponse"
         "403":
           description: No permission to clear all pin post in a community
           content:
@@ -7206,7 +7398,7 @@ paths:
             maxLength: 900
       responses:
         "200":
-          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
         "400":
           description: badRequest Error
           content:
@@ -7317,7 +7509,7 @@ paths:
             maxLength: 900
       responses:
         "200":
-          $ref: "./v3/pin-post/response.yaml#/PinPostResponse"
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
         "400":
           description: badRequest Error
           content:
