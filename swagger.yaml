@@ -6719,7 +6719,11 @@ paths:
               type: "object"
               properties:
                 postMinScore:
-                  type: "integer"
+                  type: "number"
+                  minimum: 0
+                  maximum: 1
+                communityMinScore:
+                  type: "number"
                   minimum: 0
                   maximum: 1
       responses:
@@ -9488,6 +9492,72 @@ paths:
       responses:
         "200":
           $ref: "./v1/semantic-search/response.yaml#/SemanticSearchPostPaginationApiResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "429":
+          $ref: "./global/error.yaml#/RateLimitError"
+        "404":
+          $ref: "./global/error.yaml#/NotFoundError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
+  /api/v1/semantic-search/communities:
+    get:
+      summary: "Semantic search community"
+      tags:
+        - "Semantic Search"
+      security:
+        - BearerAuth: []
+      description: "Semantic search community\n"
+      parameters:
+        - name: "query"
+          required: true
+          in: "query"
+          schema:
+            type: "string"
+            maxLength: 1024
+        - name: "filter"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "all"
+              - "member"
+              - "notMember"
+            default: "all"
+          description: "Filter community by membership status"
+        - name: "tags"
+          in: "query"
+          schema:
+            type: "array"
+            minItems: 0
+            maxItems: 5
+            items:
+              type: "string"
+              maxLength: 24
+          description: "Filter community by tags"
+        - name: "categoryIds"
+          in: "query"
+          schema:
+            type: "string"
+            maxLength: 128
+        - name: "options"
+          in: "query"
+          style: "deepObject"
+          schema:
+            type: "object"
+            properties:
+              limit:
+                type: "integer"
+                minimum: 1
+                maximum: 100
+                default: 10
+              token:
+                type: "string"
+                maxLength: 1000
+      responses:
+        "200":
+          $ref: "./v1/semantic-search/response.yaml#/SemanticSearchCommunityPaginationApiResponse"
         "400":
           $ref: "./global/error.yaml#/BadRequestError"
         "429":
