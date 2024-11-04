@@ -7,11 +7,11 @@ NetworkSetting:
         enabled:
           type: boolean
     chat:
-      $ref: '#/ChatNetworkSetting'
+      $ref: "#/ChatNetworkSetting"
     social:
-      $ref: '#/SocialNetworkSetting'
+      $ref: "#/SocialNetworkSetting"
     webhook:
-      $ref: '#/WebhookNetworkSetting'
+      $ref: "#/WebhookNetworkSetting"
     moderation:
       type: object
       properties:
@@ -60,6 +60,9 @@ SocialNetworkSetting:
           type: integer
           minimum: 1
           maximum: 1440
+        allowAllUserToCreateStory:
+          type: boolean
+          default: false
 
 WebhookNetworkSetting:
   type: object
@@ -76,23 +79,23 @@ ChatNetworkSetting:
       type: object
       properties:
         isAllowMentionedChannelEnabled:
-          type: boolean  
+          type: boolean
           default: true
     messagePreview:
       type: object
       properties:
         enabled:
           type: boolean
-          default: false  
+          default: false
         isIncludeDeleted:
-          type: boolean 
+          type: boolean
           default: false
     isAllowAdminViewConversationMessage:
-      type: 'boolean'
+      type: "boolean"
       default: true
     isAllowAdminManageConversationMessage:
-      type: 'boolean'
-      default: true       
+      type: "boolean"
+      default: true
 ModerationNetworkSetting:
   type: object
   properties:
@@ -107,19 +110,19 @@ FeedSettingNetworkSetting:
       type: object
       properties:
         video:
-          $ref: '#/ContentCheckVideoForPost'
+          $ref: "#/ContentCheckVideoForPost"
     message:
       description: Feed type message
       type: object
       properties:
         video:
-          $ref: '#/ContentCheckVideoForMessage' 
+          $ref: "#/ContentCheckVideoForMessage"
     story:
       description: Feed type story
       type: object
       properties:
         video:
-          $ref: '#/ContentCheckVideoForStory'
+          $ref: "#/ContentCheckVideoForStory"
 
 ContentCheckVideoForMessage:
   description: Content Check video schema
@@ -132,18 +135,18 @@ ContentCheckVideoForMessage:
       properties:
         maxResolution:
           type: string
-          enum: ['1080p', '720p', '480p', '360p']
+          enum: ["1080p", "720p", "480p", "360p"]
 
         minResolution:
           type: string
-          enum: ['1080p', '720p', '480p', '360p']
+          enum: ["1080p", "720p", "480p", "360p"]
 
     maxDurationSeconds:
       type: number
       format: int32
       minimum: 1
       maximum: 600
-    
+
 ContentCheckVideoForPost:
   description: Content Check video schema
   type: object
@@ -155,11 +158,11 @@ ContentCheckVideoForPost:
       properties:
         maxResolution:
           type: string
-          enum: ['1080p', '720p', '480p', '360p']
+          enum: ["1080p", "720p", "480p", "360p"]
 
         minResolution:
           type: string
-          enum: ['1080p', '720p', '480p', '360p']
+          enum: ["1080p", "720p", "480p", "360p"]
 
     maxDurationSeconds:
       type: number
@@ -178,17 +181,17 @@ ContentCheckVideoForStory:
       properties:
         maxResolution:
           type: string
-          enum: ['1080p', '720p', '480p', '360p']
+          enum: ["1080p", "720p", "480p", "360p"]
 
         minResolution:
           type: string
-          enum: ['1080p', '720p', '480p', '360p']
+          enum: ["1080p", "720p", "480p", "360p"]
 
     maxDurationSeconds:
       type: number
       format: int32
       minimum: 1
-      maximum: 90      
+      maximum: 90
 
 ContentCheckText:
   description: Content Check text schema
@@ -241,7 +244,7 @@ VideoStreamingSettingNetworkSetting:
     enabled:
       type: boolean
       description: This field is for enabling or disabling the video streaming feature.
-    moderation: 
+    moderation:
       type: object
       description: This field is for moderation configuration.
       properties:
@@ -251,20 +254,21 @@ VideoStreamingSettingNetworkSetting:
         categories:
           type: array
           description: This field is for list of moderation categories.
-          items: 
-            type: object  
+          items:
+            type: object
             properties:
-              category: 
+              category:
                 type: string
                 description: This field is for moderation category names.
-                enum: [pornography, violence, prohibited, inappropriate, profanity]
+                enum:
+                  [pornography, violence, prohibited, inappropriate, profanity]
               flagThreshold:
                 type: number
                 description: This field is for flag threshold.
                 minimum: 0
                 maximum: 1
               terminateThreshold:
-                type: number 
+                type: number
                 description: This field is for terminate threshold.
                 minimum: 0
                 maximum: 1
@@ -321,7 +325,6 @@ AdNetworkSetting:
               minimum: 1
               maximum: 65535
               default: 10
-
 
 SemanticSearchNetworkSetting:
   type: object
