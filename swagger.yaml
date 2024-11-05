@@ -6459,6 +6459,10 @@ paths:
                 isAllowAdminManageConversationMessage:
                   type: "boolean"
                   default: true
+                isAllowConversationChannelWideEditRights:
+                  type: "boolean"
+                  default: false
+                  description: "Allow conversation channel that has more than 2 member wide edit rights"
       responses:
         "200":
           $ref: "./v3/network-setting/response.yaml#/ChatNetworkSettingApiResponse"
@@ -6680,7 +6684,7 @@ paths:
                   description: "Allow all user to create story (default will allow only user that have permission to create story)"
                 allowJoinPrivateCommunity:
                   type: "boolean"
-                  description: | 
+                  description: |
                     true - Allow user to join private community by themselves
                     false - User need to be added to join private community
                 maxGlobalPinnedPost:
