@@ -48,7 +48,7 @@
       const branchName = currentUrl.searchParams.get("branch") || "develop";
       const swaggerPath = `https://raw.githubusercontent.com/AmityCo/apidocs/${branchName}/swagger.yaml`;
 
-      window.navigation.addEventListener("navigate", (event) => {
+      window.addEventListener("popstate", (event) => {
         const currentUrl = new URL(window.location.href);
         if (!currentUrl.searchParams.has("branch")) {
           currentUrl.searchParams.append("branch", branchName);
