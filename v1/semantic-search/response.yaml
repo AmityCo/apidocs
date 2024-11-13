@@ -1,3 +1,47 @@
+SemanticSearchCommunityPaginationApiResponse:
+  description: Community Information
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          searchResults:
+            description: Relevance of the search results
+            type: array
+            items:
+              $ref: "../../schema/semantic-search.yaml#/SearchCommunityResults"
+          communities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          communityUsers:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/CommunityUser"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          categories:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/CommunityCategory"
+          feeds:
+            type: array
+            items:
+              $ref: "../../schema/feed.yaml#/Feed"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              previous:
+                type: string
+
 SemanticSearchPostPaginationApiResponse:
   description: Post Information
   content:
@@ -9,7 +53,7 @@ SemanticSearchPostPaginationApiResponse:
             description: The list of message feed
             type: array
             items:
-              $ref: '../../schema/semantic-search.yaml#/SearchPostResults'
+              $ref: "../../schema/semantic-search.yaml#/SearchPostResults"
           posts:
             type: array
             items:
@@ -57,4 +101,3 @@ SemanticSearchPostPaginationApiResponse:
                 type: string
               previous:
                 type: string
-

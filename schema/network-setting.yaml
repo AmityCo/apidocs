@@ -103,6 +103,7 @@ ChatNetworkSetting:
       type: "boolean"
       default: false
       description: "`true` - When conversation channel have more than 2 members, all members can edit the channel.<br> `false` - When conversation channel have more than 2 members, Only people that has permission can edit the conversation channel."
+
 ModerationNetworkSetting:
   type: object
   properties:
@@ -340,6 +341,14 @@ SemanticSearchNetworkSetting:
       type: object
       properties:
         post:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+              default: false
+            minScore:
+              type: number
+        community:
           type: object
           properties:
             enabled:
