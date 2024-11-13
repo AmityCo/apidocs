@@ -85,7 +85,7 @@ info:
     <p>
       Before making server-to-server API calls, be sure to select the correct API endpoint for your region in the <strong>Servers</strong> dropdown below.
     </p>
-  version: "4.87.0"
+  version: "4.92.0"
 servers:
   - url: "https://apix.us.amity.co"
     description: "API Endpoint for US Region"
@@ -6675,6 +6675,14 @@ paths:
                   minimum: 60
                   maximum: 1440
                   default: 1440
+                allowAllUserToCreateStory:
+                  type: "boolean"
+                  description: "Allow all user to create story (default will allow only user that have permission to create story)"
+                allowJoinPrivateCommunity:
+                  type: "boolean"
+                  description: | 
+                    true - Allow user to join private community by themselves
+                    false - User need to be added to join private community
                 maxGlobalPinnedPost:
                   description: "Maximum number of global pinned post (only super admin)"
                   type: "integer"
@@ -7077,6 +7085,7 @@ paths:
                           - "follow.accepted"
                           - "community.roleAdded"
                           - "community.updated"
+                          - "video-streaming.didStart"
                       moduleName:
                         type: "string"
                         enum:
