@@ -85,7 +85,7 @@ info:
     <p>
       Before making server-to-server API calls, be sure to select the correct API endpoint for your region in the <strong>Servers</strong> dropdown below.
     </p>
-  version: "4.79.0"
+  version: "4.92.0"
 servers:
   - url: "https://apix.us.amity.co"
     description: "API Endpoint for US Region"
@@ -94,6 +94,19 @@ servers:
   - url: "https://apix.sg.amity.co"
     description: "API Endpoint for SG Region"
 paths:
+  /api/v1/ads/me:
+    get:
+      summary: Query all network ads and settings
+      tags:
+        - Ads
+      responses:
+        "200":
+          description: All ads information and ads settings
+          content:
+            application/json:
+              schema:
+                $ref: "./v1/ads/response.yaml#/QueryAllAdsResponsePayload"
+
   /api/v1/analytics/activities:
     post:
       summary: send analytic activities
@@ -277,6 +290,7 @@ paths:
   /api/v3/authentication/token:
     get:
       summary: Get authentication token
+      deprecated: true
       tags:
         - Authentication
       parameters:
@@ -574,6 +588,7 @@ paths:
             items:
               type: "string"
               maxLength: 100
+          description: "Used for querying channels by matching all specified tags. When a query includes multiple tags (e.g., `tags=['tag1', 'tag2', 'tag3']`), the system will return all channels that have all the specified tags."
         - name: "excludeTags"
           in: "query"
           schema:
@@ -582,6 +597,7 @@ paths:
             items:
               type: "string"
               maxLength: 100
+          description: "Used for querying channels by excluding all specified tags. When a query includes multiple tags (e.g., `excludeTags=['tag1', 'tag2', 'tag3']`), the system will return all channels that do not have any of the specified tags."
         - name: "filter"
           in: "query"
           schema:
@@ -663,6 +679,7 @@ paths:
                 channelId:
                   type: "string"
                   maxLength: 100
+                  description: "A unique identifier for the channel. Maximum length is 100 characters."
                 type:
                   type: "string"
                   enum:
@@ -670,47 +687,57 @@ paths:
                     - "live"
                     - "broadcast"
                   default: "community"
+                  description: "Type of the channel. Options are 'community', 'live', or 'broadcast'. Default is 'community'."
                 displayName:
                   type: "string"
                   maxLength: 100
+                  description: "The display name for the channel. Maximum length is 100 characters."
                 avatarFileId:
                   type: "string"
                   maxLength: 50
+                  description: "The ID of the file to be used as the channel's avatar. Maximum length is 50 characters."
                 metadata:
                   type: "object"
+                  description: "Additional metadata associated with the channel. Can include custom properties."
                 tags:
                   type: "array"
                   maxItems: 10
                   items:
                     type: "string"
                     maxLength: 100
+                  description: "List of tags associated with the channel. Maximum of 10 tags, each up to 100 characters long."
                 userIds:
                   type: "array"
                   maxItems: 1000
                   items:
                     type: "string"
                     maxLength: 50
+                  description: "List of user IDs to be added to the channel. Maximum of 1000 user IDs, each up to 50 characters long."
                 isMuted:
                   type: "boolean"
+                  description: "Indicates whether the channel is muted by default for all users."
                 messageAutoDeleteEnabled:
                   type: "boolean"
+                  description: "Indicates whether automatic deletion of messages is enabled for the channel."
                 autoDeleteMessageByFlagLimit:
                   type: "number"
                   minimum: 1
-                  maximum: 100
+                  maximum: 1000
+                  description: "The number of flags required to automatically delete a message. Must be between 1 and 1000."
                 isPublic:
                   type: "boolean"
+                  description: "Indicates whether the channel is public and visible to all users."
                 notificationMode:
-                  type: string
+                  type: "string"
                   enum:
                     - default
                     - silent
                     - subscribe
                   description: >
-                    Notification Mode:
-                      * `default` - Auto register push notification.
-                      * `silent` - Do not send notification.
-                      * `subscribe` - Send notification to subscribed users only.
+                    The notification mode for the channel:
+                      * `default` - Automatically register push notifications.
+                      * `silent` - Do not send notifications.
+                      * `subscribe` - Send notifications only to subscribed users.
       responses:
         "200":
           $ref: "./v3/channel/response.yaml#/ChannelsApiResponse"
@@ -790,7 +817,7 @@ paths:
                 autoDeleteMessageByFlagLimit:
                   type: "number"
                   minimum: 1
-                  maximum: 100
+                  maximum: 1000
                 notificationMode:
                   type: string
                   enum:
@@ -977,6 +1004,12 @@ paths:
               token:
                 type: "string"
                 maxLength: 100
+        - name: "isDeleted"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: null
+          description: "filter deleted members if isDeleted is null, will return both deleted and non-deleted members"
       responses:
         "200":
           $ref: "./v3/channel/response.yaml#/ChannelPaginationApiResponse"
@@ -1206,7 +1239,7 @@ paths:
                 role:
                   type: "string"
                   minLength: 1
-                  maxLength: 900
+                  maxLength: 100
                 userIds:
                   type: "array"
                   minItems: 1
@@ -1483,6 +1516,12 @@ paths:
             type: "string"
             minLength: 0
             maxLength: 10000
+        - name: "isDeleted"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: null
+          description: "filter deleted members if isDeleted is null, will return both deleted and non-deleted members"
       responses:
         "200":
           $ref: "./v4/channel/response.yaml#/ChannelPaginationApiResponse"
@@ -1739,6 +1778,16 @@ paths:
           required: true
           schema:
             type: "string"
+        - name: "preserve-edited-at"
+          in: "header"
+          required: false
+          description: |
+            Preserve the `editedAt` value when updating a comment.
+            If the value is `true`, the `editedAt` value will not be updated.
+            If the value is `false`, the `editedAt` value will be updated.
+          schema:
+            type: "boolean"
+            default: false
       requestBody:
         description: "comment information.\n"
         required: true
@@ -2014,6 +2063,7 @@ paths:
               type: "string"
               minLength: 1
               maxLength: 1000
+          description: "Used for querying communities by matching all specified tags. When a query includes multiple tags (e.g., `tags=['tag1', 'tag2', 'tag3']`), the system will return all communities that have all the specified tags."
         - name: "filter"
           in: "query"
           schema:
@@ -2110,7 +2160,7 @@ paths:
                   items:
                     type: "string"
                     minLength: 1
-                    maxLength: 1000
+                    maxLength: 100
                 metadata:
                   type: "object"
                 avatarFileId:
@@ -2254,7 +2304,7 @@ paths:
                   items:
                     type: "string"
                     minLength: 1
-                    maxLength: 1000
+                    maxLength: 100
                 metadata:
                   type: "object"
                 avatarFileId:
@@ -2469,6 +2519,12 @@ paths:
               - "internal"
             default: "public"
           description: "type of communityId"
+        - name: "isDeleted"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: null
+          description: "filter deleted members if isDeleted is null, will return both deleted and non-deleted members"
       responses:
         "200":
           $ref: "./v3/community/response.yaml#/CommunityPaginationApiResponse"
@@ -2697,7 +2753,7 @@ paths:
                 role:
                   type: "string"
                   minLength: 1
-                  maxLength: 900
+                  maxLength: 100
                 userIds:
                   type: "array"
                   minItems: 1
@@ -2944,7 +3000,7 @@ paths:
                 roles:
                   type: "array"
                   minItems: 1
-                  maxItems: 100
+                  maxItems: 20
                   items:
                     description: "Role id"
                     type: "string"
@@ -3938,7 +3994,7 @@ paths:
         - "Follow"
       security:
         - BearerAuth: []
-      description: "Follow user information\n"
+      description: "Follow user\n"
       parameters:
         - name: "userId"
           in: "path"
@@ -4245,6 +4301,198 @@ paths:
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
 
+  # Global Featured Post
+  /api/v1/pinned-posts/global:
+    get:
+      summary: "Query global pinned post"
+      tags:
+        - "Global Featured Post"
+      security:
+        - BearerAuth: []
+      description: "Query global pinned post\n"
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Clear all global pinned post in a global feed"
+      tags:
+        - "Global Featured Post"
+      security:
+        - BearerAuth: []
+      description: "Clear all global pinned post in a global feed\n"
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+  /api/v1/pinned-posts/global/{postId}:
+    post:
+      summary: "Global pin a post in a global feed"
+      tags:
+        - "Global Featured Post"
+      security:
+        - BearerAuth: []
+      description: "Global pin a post in a global feed\n"
+      parameters:
+        - name: "postId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
+        "400":
+          description: badRequest Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "This post is already pinned.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is already pinned
+                "This post is not in community":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not in community
+                "This post is not in public community":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not in public community
+                "This post is not approved":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} has to be approved
+                "This post is deleted":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is deleted
+                "Unable to pin child post ":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Unable to pin child post
+                "Pin post exceed the limit":
+                  value:
+                    status: error
+                    code: 400000
+                    message: "Pin post by placement: ${placement} exceed the limit"
+        "403":
+          description: No permission to global pin a post in a global feed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Admin do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: Insufficient permission
+        "404":
+          description: The postId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The postId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: PostId ${postId} not found
+        "422":
+          description: validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Global Unpin a post in a global feed"
+      tags:
+        - "Global Featured Post"
+      security:
+        - BearerAuth: []
+      description: "Global Unpin a post in a global feed\n"
+      parameters:
+        - name: "postId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
+        "400":
+          description: badRequest Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "This post is not pinned.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not pinned
+        "403":
+          description: No permission to global pin a post in a global feed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Admin do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: Insufficient permission
+        "404":
+          description: The postId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The postId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: PostId ${postId} not found
+        "422":
+          description: validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
   /api/v1/markers/channels:
     get:
       tags:
@@ -4263,6 +4511,28 @@ paths:
       responses:
         "200":
           $ref: "./v1/marker/response.yaml#/GetMarkerChannel"
+        "404":
+          description: "Not found error"
+        "422":
+          description: "Parameters validation error"
+  /api/v1/markers/channels/{channelId}/mark-read:
+    put:
+      tags:
+        - "Marker"
+      summary: "Mark all messages in channel as read"
+      security:
+        - BearerAuth: []
+      description: "Mark all messages in channel as read"
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            $ref: "./v1/marker/parameters.yaml#/ChannelId"
+          description: channel id (internal)
+      responses:
+        "200":
+          $ref: "./v1/marker/response.yaml#/MarkAllChannel"
         "404":
           description: "Not found error"
         "422":
@@ -4420,28 +4690,6 @@ paths:
           description: "Not found error"
         "422":
           description: "Parameters validation error"
-  /api/v1/markers/messages/channels/{channelId}/mark-read:
-    put:
-      tags:
-        - "Marker"
-      summary: "Mark all messages in channel as read"
-      security:
-        - BearerAuth: []
-      description: "Mark all messages in channel as read"
-      parameters:
-        - name: channelId
-          in: path
-          required: true
-          schema:
-            $ref: "./v1/marker/parameters.yaml#/ChannelId"
-          description: channel id (internal)
-      responses:
-        "200":
-          $ref: "./v1/marker/response.yaml#/MarkAllChannel"
-        "404":
-          description: "Not found error"
-        "422":
-          description: "Parameters validation error"
   /api/v1/markers/messages/{messageId}/delivered-users:
     get:
       tags:
@@ -4521,8 +4769,6 @@ paths:
       responses:
         "200":
           $ref: "./v1/marker/response.yaml#/UserMessageFeedMarker"
-        "404":
-          description: "Not found error"
         "422":
           description: "Parameters validation error"
   /api/v1/markers/userMarker:
@@ -5529,6 +5775,7 @@ paths:
             items:
               type: "string"
               maxLength: 100
+          description: "Used for querying messages by matching all specified tags. When a query includes multiple tags (e.g., `tags=['tag1', 'tag2', 'tag3']`), the system will return all messages that have all the specified tags."
         - name: "excludeTags"
           in: "query"
           schema:
@@ -5537,6 +5784,7 @@ paths:
             items:
               type: "string"
               maxLength: 100
+          description: "Used for querying messages by excluding all specified tags. When a query includes multiple tags (e.g., `excludeTags=['tag1', 'tag2', 'tag3']`), the system will return all messages that do not have any of the specified tags."
         - name: "options"
           in: "query"
           style: "deepObject"
@@ -5619,7 +5867,7 @@ paths:
                   maxItems: 10
                   items:
                     type: "string"
-                    maxLength: 100
+                    maxLength: 30
                 mentionees:
                   type: "array"
                   description: "The object of the mentions type and user who get a notification for the message."
@@ -5741,7 +5989,7 @@ paths:
                   maxItems: 10
                   items:
                     type: "string"
-                    maxLength: 100
+                    maxLength: 30
                 mentionees:
                   type: "array"
                   description: "The object of the mentions type and user who get a notification for the message."
@@ -6237,6 +6485,10 @@ paths:
                 isAllowAdminManageConversationMessage:
                   type: "boolean"
                   default: true
+                allowMemberToUpdateConversationChannel:
+                  type: "boolean"
+                  default: false
+                  description: "Allow conversation channel that has more than 2 member wide edit rights"
       responses:
         "200":
           $ref: "./v3/network-setting/response.yaml#/ChatNetworkSettingApiResponse"
@@ -6446,11 +6698,27 @@ paths:
                   type: "boolean"
                 isAllowMentionedChannelEnabled:
                   type: "boolean"
+                disallowNonMemberInteractInCommunity:
+                  type: "boolean"
                 storyExpiryTimeMinutes:
                   type: "integer"
                   minimum: 60
                   maximum: 1440
                   default: 1440
+                allowAllUserToCreateStory:
+                  type: "boolean"
+                  description: "Allow all user to create story (default will allow only user that have permission to create story)"
+                allowJoinPrivateCommunity:
+                  type: "boolean"
+                  description: |
+                    true - Allow user to join private community by themselves
+                    false - User need to be added to join private community
+                maxGlobalPinnedPost:
+                  description: "Maximum number of global pinned post (only super admin)"
+                  type: "integer"
+                  minimum: 1
+                  maximum: 20
+                  default: 1
       responses:
         "200":
           $ref: "./v3/network-setting/response.yaml#/SocialNetworkSettingApiResponse"
@@ -6472,6 +6740,52 @@ paths:
           $ref: "./global/error.yaml#/BadRequestError"
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
+  /api/v3/network-settings/semantic-search:
+    put:
+      summary: "Update Semantics search configuration."
+      tags:
+        - "Network Setting"
+      security:
+        - BearerAuth: []
+      description: "Update Network setting for Semantics search.\n"
+      requestBody:
+        description: "information for a network setting\n"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                postMinScore:
+                  type: "number"
+                  minimum: 0
+                  maximum: 1
+                communityMinScore:
+                  type: "number"
+                  minimum: 0
+                  maximum: 1
+      responses:
+        "200":
+          $ref: "./v3/network-setting/response.yaml#/SemanticSearchNetworkSettingApiResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    get:
+      summary: "Get Network setting for Semantics search."
+      tags:
+        - "Network Setting"
+      security:
+        - BearerAuth: []
+      description: "Get Semantics search configuration.\n"
+      responses:
+        "200":
+          $ref: "./v3/network-setting/response.yaml#/SemanticSearchNetworkSettingApiResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
   /api/v3/network-settings/users:
     get:
       tags:
@@ -6652,6 +6966,7 @@ paths:
                     - "ios"
                 token:
                   type: "string"
+                  description: "device token for push notification. For ios platform, the token length must be less than or equals 400 characters and they must be hexadecimal."
                   maxLength: 1000
                 userId:
                   type: "string"
@@ -6804,6 +7119,7 @@ paths:
                           - "follow.accepted"
                           - "community.roleAdded"
                           - "community.updated"
+                          - "video-streaming.didStart"
                       moduleName:
                         type: "string"
                         enum:
@@ -6845,6 +7161,456 @@ paths:
           $ref: "./global/error.yaml#/RateLimitError"
         "404":
           $ref: "./global/error.yaml#/NotFoundError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
+  /api/v1/pinned-posts/communities/{communityId}:
+    get:
+      summary: "List all pinned posts in a community"
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "List all pinned posts in a community\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: options
+          in: query
+          schema:
+            $ref: "./v1/pin-post/parameters.yaml#/QueryOptions"
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
+        "403":
+          description: No permission to query pin post in a community
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Private community and the user is not a member":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not a member of this community
+        "404":
+          description: The communityId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The communityId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: CommunityId ${id} not found
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Clear all pin posts in a community"
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "Clear all pin posts in a community\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostDeletedResponse"
+        "403":
+          description: No permission to clear all pin post in a community
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Users do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not allowed to do this
+        "404":
+          description: The communityId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The communityId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: CommunityId ${id} not found
+        "422":
+          description: validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+  /api/v1/pinned-posts/communities/{communityId}/{placement}:
+    get:
+      summary: "List all pinned posts in a community by placement"
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "List all pinned posts in a community by placement\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "placement"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            enum:
+              - "default"
+              - "announcement"
+        - name: options
+          in: query
+          schema:
+            $ref: "./v1/pin-post/parameters.yaml#/QueryOptions"
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
+        "403":
+          description: No permission to query pin post in a community
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Users do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not a member of this community
+        "404":
+          description: The communityId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The communityId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: CommunityId ${id} not found
+        "422":
+          description: validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Clear all pin posts in a community by placement"
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "Clear all pin posts in a community by placement\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "placement"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            enum:
+              - "default"
+              - "announcement"
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostDeletedResponse"
+        "403":
+          description: No permission to clear all pin post in a community
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Users do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not allowed to do this
+        "404":
+          description: The communityId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The communityId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: CommunityId ${id} not found
+        "422":
+          description: validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+  /api/v1/pinned-posts/communities/{communityId}/{placement}/{postId}:
+    post:
+      summary: "Pin a post in a community "
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "Pin a post in a community\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "placement"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            enum:
+              - "default"
+              - "announcement"
+        - name: "postId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
+        "400":
+          description: badRequest Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "This post is already pinned.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is already pinned
+                "This post is not in community":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not in community
+                "This post is not approved":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} has to be approved
+                "This post is deleted":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is deleted
+                "Unable to pin child post ":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Unable to pin child post
+                "Pin post exceed the limit":
+                  value:
+                    status: error
+                    code: 400000
+                    message: "Pin post by placement: ${placement} exceed the limit"
+        "403":
+          description: No permission to pin post in a community
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Users do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not allowed to do this
+        "404":
+          description: The communityId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The communityId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: "Failed to find community: ${communityId}"
+                "The postId is not found within the communityId":
+                  value:
+                    status: error
+                    code: 400400
+                    message: PostId ${postId} not found
+        "422":
+          description: validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+    delete:
+      summary: "Unpin a post in a community "
+      tags:
+        - "Pin post"
+      security:
+        - BearerAuth: []
+      description: "Unpin a post in a community\n"
+      parameters:
+        - name: "communityId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "placement"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            enum:
+              - "default"
+              - "announcement"
+        - name: "postId"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+            maxLength: 900
+      responses:
+        "200":
+          $ref: "./v1/pin-post/response.yaml#/PinPostResponse"
+        "400":
+          description: badRequest Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "This post is not pinned.":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not pinned
+                "This post is not in community":
+                  value:
+                    status: error
+                    code: 400000
+                    message: Post ${postId} is not in community
+        "403":
+          description: No permission to unpin post in a community
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Users do not have permission.":
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not allowed to do this
+        "404":
+          description: The communityId is not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "The communityId is not found":
+                  value:
+                    status: error
+                    code: 400400
+                    message: "Failed to find community: ${communityId}"
+                "The postId is not found within the communityId":
+                  value:
+                    status: error
+                    code: 400400
+                    message: PostId ${postId} not found
+        "422":
+          description: validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                "Parameters Validation Error":
+                  value:
+                    status: error
+                    code: 500000
+                    message: Parameters Validation Error!
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
 
@@ -7372,6 +8138,16 @@ paths:
           schema:
             type: "string"
             maxLength: 900
+        - name: "preserve-edited-at"
+          in: "header"
+          required: false
+          description: |
+            Preserve the `editedAt` value when updating a post.
+            If the value is `true`, the `editedAt` value will not be updated.
+            If the value is `false`, the `editedAt` value will be updated.
+          schema:
+            type: "boolean"
+            default: false
       requestBody:
         description: "information of a post to be updated.\n"
         required: true
@@ -7876,6 +8652,16 @@ paths:
           required: true
           schema:
             type: "string"
+        - name: "preserve-edited-at"
+          in: "header"
+          required: false
+          description: |
+            Preserve the `editedAt` value when updating a post.
+            If the value is `true`, the `editedAt` value will not be updated.
+            If the value is `false`, the `editedAt` value will be updated.
+          schema:
+            type: "boolean"
+            default: false
       requestBody:
         description: "information of a post to be updated.\n### Image, File, Video post update - Put `type` with file id in `attachments` - Image and File data can be picked from `fileId` in `data` object in child post - Video fileId for each resolution will be in `videoFileId` in `data` object in child post\n"
         required: true
@@ -8668,6 +9454,158 @@ paths:
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
 
+  /api/v1/semantic-search/posts:
+    get:
+      summary: "Semantic search posts"
+      tags:
+        - "Semantic Search"
+      security:
+        - BearerAuth: []
+      description: "Semantic search posts\n"
+      parameters:
+        - name: "query"
+          required: true
+          in: "query"
+          schema:
+            type: "string"
+            maxLength: 1024
+        - name: "targetId"
+          in: "query"
+          schema:
+            type: "string"
+            maxLength: 900
+        - name: "targetType"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "community"
+              - "user"
+              - "content"
+        - name: "options"
+          in: "query"
+          style: "deepObject"
+          schema:
+            type: "object"
+            properties:
+              limit:
+                type: "integer"
+                minimum: 1
+                maximum: 100
+                default: 10
+              token:
+                type: "string"
+                maxLength: 1000
+        - name: "dataTypes"
+          in: "query"
+          description: >
+            Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`.
+            The value in array could be oneOf:
+              * `text`
+              * `image`
+          schema:
+            type: "array"
+            maxItems: 10
+            items:
+              oneOf:
+                - type: "string"
+                  enum:
+                    - "text"
+                    - "image"
+                  description: "Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`"
+        - name: "tags"
+          in: "query"
+          schema:
+            type: "array"
+            minItems: 0
+            maxItems: 5
+            items:
+              type: "string"
+              maxLength: 24
+        - name: "matchingOnlyParentPost"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: true
+          description: "An option whether to filter only parent post or not. If `true` will return only parent posts, else will return both parent and child posts"
+      responses:
+        "200":
+          $ref: "./v1/semantic-search/response.yaml#/SemanticSearchPostPaginationApiResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "429":
+          $ref: "./global/error.yaml#/RateLimitError"
+        "404":
+          $ref: "./global/error.yaml#/NotFoundError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
+  /api/v1/semantic-search/communities:
+    get:
+      summary: "Semantic search community"
+      tags:
+        - "Semantic Search"
+      security:
+        - BearerAuth: []
+      description: "Semantic search community\n"
+      parameters:
+        - name: "query"
+          required: true
+          in: "query"
+          schema:
+            type: "string"
+            maxLength: 1024
+        - name: "filter"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "all"
+              - "member"
+              - "notMember"
+            default: "all"
+          description: "Filter community by membership status"
+        - name: "tags"
+          in: "query"
+          schema:
+            type: "array"
+            minItems: 0
+            maxItems: 5
+            items:
+              type: "string"
+              maxLength: 24
+          description: "Filter community by tags"
+        - name: "categoryIds"
+          in: "query"
+          schema:
+            type: "string"
+            maxLength: 128
+        - name: "options"
+          in: "query"
+          style: "deepObject"
+          schema:
+            type: "object"
+            properties:
+              limit:
+                type: "integer"
+                minimum: 1
+                maximum: 100
+                default: 10
+              token:
+                type: "string"
+                maxLength: 1000
+      responses:
+        "200":
+          $ref: "./v1/semantic-search/response.yaml#/SemanticSearchCommunityPaginationApiResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "429":
+          $ref: "./global/error.yaml#/RateLimitError"
+        "404":
+          $ref: "./global/error.yaml#/NotFoundError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
   /api/v3/sessions:
     post:
       summary: "Register a session"
@@ -8740,7 +9678,7 @@ paths:
       description: "Verify access token. The caller must add accessToken in header."
       responses:
         "200":
-          description: "Access token is valid"
+          $ref: "./v3/session/response.yaml#/GetSessionResponse"
         "401":
           description: "Access token is invalid or expired"
         "403":
@@ -9590,7 +10528,7 @@ paths:
         - ApiKeyAuth: []
       description: "Ban a user\n"
       requestBody:
-        description: "User information to be baned\n"
+        description: "User to be baned\n"
         required: true
         content:
           application/json:
@@ -9619,7 +10557,7 @@ paths:
         - BearerAuth: []
       description: "Unban a user\n"
       requestBody:
-        description: "User information to be unbaned\n"
+        description: "User to be unbaned\n"
         required: true
         content:
           application/json:
@@ -9664,18 +10602,24 @@ paths:
           $ref: "./global/error.yaml#/UnexpectedError"
   /api/v3/users:
     get:
-      summary: "Get users information."
+      summary: "Get users."
       tags:
         - "User"
       security:
         - BearerAuth: []
-      description: "Get users information (pagination supported)\n"
+      description: "Get users (pagination supported)\n"
       parameters:
         - name: "keyword"
           in: "query"
           schema:
             type: "string"
             maxLength: 100
+        - name: "exactMatchKeyword"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: false
+          description: Return exact match search result when true
         - name: "filter"
           in: "query"
           schema:
@@ -9707,6 +10651,12 @@ paths:
               token:
                 type: "string"
                 maxLength: 1000
+        - name: "isDeleted"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: false
+          description: "filter only deleted deleted users when true"
       responses:
         "200":
           $ref: "./v3/user/response.yaml#/UserPaginationResponse"
@@ -9717,14 +10667,14 @@ paths:
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
     put:
-      summary: "Update user information."
+      summary: "Update user."
       tags:
         - "User"
       security:
         - BearerAuth: []
-      description: "Update user information such as displayName, roles, avatar and metadata\n"
+      description: "Update user such as displayName, roles, avatar and metadata\n"
       requestBody:
-        description: "User information to be updated\n"
+        description: "User to be updated\n"
         required: true
         content:
           application/json:
@@ -9768,15 +10718,16 @@ paths:
           $ref: "./global/error.yaml#/UnexpectedError"
   /api/v3/users/list:
     get:
-      summary: "Get users information by public id."
+      summary: "Get list of users by user ids."
       tags:
         - "User"
       security:
         - BearerAuth: []
-      description: "Get users information by public id.\n"
+      description: "Get list of users by user ids.\n"
       parameters:
         - name: "userIds"
           in: "query"
+          required: true
           schema:
             type: "array"
             maxItems: 100
@@ -9794,12 +10745,12 @@ paths:
           $ref: "./global/error.yaml#/UnexpectedError"
   /api/v3/users/{userId}:
     get:
-      summary: "Get one user information."
+      summary: "Get one user."
       tags:
         - "User"
       security:
         - BearerAuth: []
-      description: "Get one user information.\n"
+      description: "Get one user.\n"
       parameters:
         - name: "userId"
           in: "path"
@@ -10285,7 +11236,7 @@ paths:
       description: "Send user added event information whenever new member got added to a channel."
       responses:
         "200":
-          description: "channel is channel information. userIds is a list of added userId. adderId is user who add other user to channel users is a list of user information."
+          description: "channel is channel information. userIds is a list of added userId. adderId is user who add other user to channel users is a list of user."
           content:
             application/json:
               schema:
@@ -10377,7 +11328,7 @@ paths:
       description: "Send new created channel whenever a channel got create"
       responses:
         "200":
-          description: "channel is channel information. userIds is a list of userId who is added to channel. users is a list of user information."
+          description: "channel is channel information. userIds is a list of userId who is added to channel. users is a list of user."
           content:
             application/json:
               schema:
@@ -10409,7 +11360,7 @@ paths:
       description: "Send join event information whenever a channel got joined"
       responses:
         "200":
-          description: "channel is channel information. userIds is a list of joined userId. users is a list of user information."
+          description: "channel is channel information. userIds is a list of joined userId. users is a list of user."
           content:
             application/json:
               schema:
@@ -10473,7 +11424,7 @@ paths:
       description: "Send user removed event information whenever member got remove from channel."
       responses:
         "200":
-          description: "channel is channel information. userIds is a list of removed userId. removerId is userId who remove other users from channel. users is a list of user information."
+          description: "channel is channel information. userIds is a list of removed userId. removerId is userId who remove other users from channel. users is a list of user."
           content:
             application/json:
               schema:
@@ -10652,7 +11603,7 @@ paths:
       description: "Send updated message whenever all message flags are cleared."
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -10680,7 +11631,7 @@ paths:
       description: "Send new created message whenever a message got created in a channel"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -10708,7 +11659,7 @@ paths:
       description: "Send deleted message whenever a message got deleted in a channel"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -10736,7 +11687,7 @@ paths:
       description: "Send updated message whenever a message got flag"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -10772,7 +11723,7 @@ paths:
       description: "Send updated message whenever a message flag is removed."
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -10800,7 +11751,7 @@ paths:
       description: "Send updated message whenever a message got updated in a channel"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -11991,7 +12942,7 @@ paths:
         - "Webhook event"
       security:
         - BearerAuth: []
-      description: "This is called when a user information is updated\n"
+      description: "This is called when a user is updated\n"
       responses:
         "200":
           description: "User updated event information. users is a list of userInfo. files is a list of file information"
@@ -12303,7 +13254,7 @@ paths:
       description: "Send created message whenever a message got created in a channel"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -12343,7 +13294,7 @@ paths:
       description: "Send deleted message whenever a message got deleted in a channel"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -12383,7 +13334,7 @@ paths:
       description: "Send updated message whenever a message got updated in a channel"
       responses:
         "200":
-          description: "messages is messages information. users is list of all user information relate to this messages"
+          description: "messages is messages information. users is list of all user relate to this messages"
           content:
             application/json:
               schema:
@@ -13479,7 +14430,7 @@ components:
                     items:
                       $ref: "./schema/user.yaml#/User"
     UserResponse:
-      description: "User Information"
+      description: "User"
       content:
         application/json:
           schema:

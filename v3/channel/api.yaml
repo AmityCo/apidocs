@@ -18,6 +18,7 @@ create:
             channelId:
               type: string
               maxLength: 100
+              description: "A unique identifier for the channel. Maximum length is 100 characters."
             type:
               type: string
               enum:
@@ -25,34 +26,43 @@ create:
                 - live
                 - broadcast
               default: community
+              description: "The type of channel to be created. Options are 'community', 'live', or 'broadcast'. Default is 'community'."
             displayName:
               type: string
               maxLength: 100
+              description: "The display name for the channel. Maximum length is 100 characters."
             avatarFileId:
               type: string
               maxLength: 50
+              description: "The ID of the file to be used as the channel's avatar. Maximum length is 50 characters."
             metadata:
               type: object
+              description: "Additional metadata associated with the channel. Can contain custom properties."
             tags:
               type: array
               maxItems: 10
               items:
                 type: string
                 maxLength: 100
+              description: "A list of tags associated with the channel. Maximum of 10 tags, each up to 100 characters long."
             userIds:
               type: array
               maxItems: 1000
               items:
                 type: string
                 maxLength: 50
+              description: "A list of user IDs to be added to the channel. Maximum of 1000 user IDs, each up to 50 characters long."
             isMuted:
               type: boolean
+              description: "Indicates whether the channel is muted by default for all users."
             messageAutoDeleteEnabled:
               type: boolean
+              description: "Indicates whether automatic deletion of messages is enabled for the channel."
             autoDeleteMessageByFlagLimit:
               type: number
               min: 1
-              max: 100
+              max: 1000
+              description: "The number of flags required to automatically delete a message. Must be between 1 and 1000."
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelsApiResponse"
@@ -246,6 +256,7 @@ query:
         items:
           type: string
           maxLength: 100
+      description: "Used for querying channels by matching all specified tags. When a query includes multiple tags (e.g., `tags=['tag1', 'tag2', 'tag3']`), the system will return all channels that have all the specified tags."
     - name: excludeTags
       in: query
       collectionFormat: multi
@@ -255,6 +266,7 @@ query:
         items:
           type: string
           maxLength: 100
+      description: "Used for querying channels by excluding all specified tags. When a query includes multiple tags (e.g., `excludeTags=['tag1', 'tag2', 'tag3']`), the system will return all channels that do not have any of the specified tags."
     - name: filter
       in: query
       schema:
@@ -349,23 +361,29 @@ update:
             displayName:
               type: string
               maxLength: 100
+              description: "The updated display name for the channel. Maximum length is 100 characters."
             avatarFileId:
               type: string
               maxLength: 50
+              description: "The ID of the file to be used as the updated channel avatar. Maximum length is 50 characters."
             metadata:
               type: object
+              description: "Additional metadata associated with the channel, which may include custom properties."
             tags:
               type: array
               maxItems: 10
               items:
                 type: string
                 maxLength: 100
+              description: "A list of updated tags associated with the channel. Maximum of 10 tags, each up to 100 characters long."
             messageAutoDeleteEnabled:
               type: boolean
+              description: "Indicates whether automatic deletion of messages is enabled or disabled for the channel."
             autoDeleteMessageByFlagLimit:
               type: number
               min: 1
-              max: 100
+              max: 1000
+              description: "The updated number of flags required to automatically delete a message. Must be between 1 and 1000."
   responses:
     "200000":
       $ref: "./response.yaml#/ChannelsApiResponse"
@@ -730,7 +748,7 @@ addRole:
             role:
               type: string
               minLength: 1
-              maxLength: 900
+              maxLength: 100
             userIds:
               type: array
               minItems: 1
@@ -780,7 +798,7 @@ removeRole:
             role:
               type: string
               minLength: 1
-              maxLength: 900
+              maxLength: 100
             userIds:
               type: array
               minItems: 1

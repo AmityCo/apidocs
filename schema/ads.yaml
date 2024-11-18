@@ -1,0 +1,67 @@
+Ads:
+  type: object
+  properties:
+    adId:
+      type: string
+    advertiserId:
+      type: string
+      description: ID of an advertiser.
+    name:
+      type: string
+      maxLength: 100
+      description: Name of an ad.
+    placements:
+      type: array
+      description: The placements of the advertisement.
+      items:
+        type: string
+        enum:
+          - feed
+          - story
+          - comment
+          - chatList
+          - chat
+    headline:
+      type: string
+      maxLength: 70
+    description:
+      type: string
+      maxLength: 40
+    body:
+      type: string
+      maxLength: 180
+      optional: true
+    image1_1:
+      type: string
+      description: File ID of an image with 1:1 aspect ratio.
+    image9_16:
+      type: string
+      description: File ID of an image with 9:16 aspect ratio.
+    callToAction:
+      type: string
+      maxLength: 20
+      description: The call to action text of the advertisement.
+    callToActionUrl:
+      type: string
+      maxLength: 1000
+      description: The URL of the call to action.
+    targets:
+      type: object
+      properties:
+        communityIds:
+          type: array
+          items:
+            type: string
+          maxItems: 20
+    startAt:
+      type: string
+      format: date-time
+    endAt:
+      type: string
+      format: date-time
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
