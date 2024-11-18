@@ -11203,6 +11203,60 @@ paths:
         "500":
           $ref: "./global/error.yaml#/UnexpectedError"
 
+  /admin/v1/platformapp/certificate:
+    post:
+      summary: "Upload iOS platform app certificate"
+      tags:
+        - "Admin"
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: "Platform app certificate to be uploaded\n"
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: "object"
+              properties:
+                file:
+                  type: "string"
+                  format: "binary"
+                  description: "Platform app certificate file"
+                type:
+                  type: "string"
+                  description: "Type of the certificate"
+                  default: "p8"
+                  enum:
+                    - "p12"
+                    - "p8"
+                name:
+                  type: "string"
+                  description: "Name of the certificate - required for p12 certificate"
+                  maxLength: 100
+                password:
+                  type: "string"
+                  description: "Password of the certificate - required for p12 certificate"
+                  maxLength: 100
+                keyId:
+                  type: "string"
+                  description: "Key ID of the certificate - required for p8 certificate"
+                  maxLength: 100
+                teamId:
+                  type: "string"
+                  description: "Apple developer account team ID of the certificate - required for p8 certificate"
+                  maxLength: 100
+                bundleId:
+                  type: "string"
+                  description: "Bundle ID of the application - required for p8 certificate"
+                  maxLength: 300
+      responses:
+        "200":
+          $ref: "./v1/platform-app/response.yaml#/PlatformAppCertificateResponse"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "500":
+          $ref: "./global/error.yaml#/UnexpectedError"
+
   /webhook/channel.didAddUsers:
     get:
       tags:
