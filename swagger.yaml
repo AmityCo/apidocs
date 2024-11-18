@@ -3719,7 +3719,6 @@ paths:
         - "File"
       security:
         - BearerAuth: []
-
       description: "Upload file to cloud storage\n"
       requestBody:
         description: "Information of file to be created. It will be applied to every attachment\n"
@@ -3739,6 +3738,13 @@ paths:
                 preferredFilename:
                   type: "string"
                   maxLength: 1024
+                accessType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
       responses:
         "200":
           $ref: "./v3/file/response.yaml#/FileUploadResponse"
@@ -3793,26 +3799,20 @@ paths:
           $ref: "./global/error.yaml#/ValidationError"
   /api/v3/files/{fileId}/download:
     get:
-      summary: "Get file"
+      summary: "Download file"
       tags:
         - "File"
-      description: "Get file info of fileId (type, attributes)\n"
+      description: "Download file data"
       parameters:
         - name: "Authorization"
           in: "header"
           schema:
             type: "string"
-        - name: "upstra-access-token"
+        - name: "_ascSession"
           in: "cookie"
           schema:
             type: "string"
-          description: "Alternative way to pass authorization token"
-        - in: "query"
-          name: "t"
-          required: false
-          schema:
-            type: "string"
-          description: "Access token (for showing image inside img tag on web)"
+          description: "Access token"
         - name: "Content-Type"
           in: "header"
           required: true
@@ -3837,8 +3837,13 @@ paths:
               - "small"
           description: "Size of image to download (no effect on file type 'file')"
       responses:
-        "200":
-          $ref: "./v3/file/response.yaml#/FileDeleteResponse"
+        "302":
+          description: "Redirect to retrieve file data"
+          headers:
+            Location:
+              description: "Signed URL to redirect to"
+              schema:
+                type: string
         "404":
           $ref: "./global/error.yaml#/NotFoundError"
   /api/v4/images:
@@ -3871,6 +3876,13 @@ paths:
                 preferredFilename:
                   type: "string"
                   maxLength: 1024
+                accessType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
               required:
                 - "files"
       responses:
@@ -3910,6 +3922,13 @@ paths:
                 preferredFilename:
                   type: "string"
                   maxLength: 1024
+                accessType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
               required:
                 - "files"
       responses:
@@ -3951,6 +3970,13 @@ paths:
                 preferredFilename:
                   type: "string"
                   maxLength: 1024
+                accessType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
               required:
                 - "files"
       responses:

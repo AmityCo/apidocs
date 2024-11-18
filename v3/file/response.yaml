@@ -79,6 +79,13 @@ FileUploadResponse:
                   enum:
                     - image
                     - file
+                accessType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
                 createdAt:
                   type: string
                   description: The date/time when a file is uploaded.
@@ -144,5 +151,3 @@ FilePayloadResponse:
       schema:
         type: string
         example: attachment; filename="<filename>"
-
-       
