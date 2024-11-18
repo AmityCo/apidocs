@@ -24,6 +24,12 @@ upload:
             fullImage:
               type: boolean
               optional: true
+            accessType:
+              type: string
+              enum:
+                - public
+                - network
+              default: public
   responses:
     "200":
       $ref: "./response.yaml#/FileUploadResponse"
@@ -34,7 +40,7 @@ upload:
 get:
   summary: Get file info
   security:
-    - BearerAuth: [] 
+    - BearerAuth: []
   tags:
     - File
   description: >

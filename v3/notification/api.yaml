@@ -33,16 +33,16 @@ register:
             - platform
             - token
   responses:
-    '200000':
-      $ref: '../../global/response.yaml#/SaveApiResponse'
-    '400301':
-      $ref: '../../global/error.yaml#/PermissionDenidedError'
-    '400311':
-      $ref: '../../global/error.yaml#/RateLimitError'
-    '400400':
-      $ref: '../../global/error.yaml#/NotFoundError'
-    '500000':
-      $ref: '../../global/error.yaml#/UnexpectedError'
+    "200000":
+      $ref: "../../global/response.yaml#/SaveApiResponse"
+    "400301":
+      $ref: "../../global/error.yaml#/PermissionDenidedError"
+    "400311":
+      $ref: "../../global/error.yaml#/RateLimitError"
+    "400400":
+      $ref: "../../global/error.yaml#/NotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
 
 unregister:
   summary: Unregister a device from a notification service provider
@@ -53,8 +53,8 @@ unregister:
   description: |
     Unregister a device from a notification service provider.
   responses:
-    '200000':
-      $ref: '../../global/response.yaml#/SaveApiResponse'
+    "200000":
+      $ref: "../../global/response.yaml#/SaveApiResponse"
 
 getSetting:
   summary: Get push notification setting.
@@ -145,37 +145,38 @@ saveSetting:
               items:
                 type: object
                 properties:
-                  name: 
+                  name:
                     type: string
                     enum:
-                      - 'channel.created'
-                      - 'channel.joined'
-                      - 'conversation-channel.joined'
-                      - 'text-mention-message.created'
-                      - 'message.created'
-                      - 'conversation-message.created'
-                      - 'conversation-text-message.created'
-                      - 'conversation-image-message.created'
-                      - 'conversation-file-message.created'
-                      - 'post.created'
-                      - 'post.approved'
-                      - 'post.need-reviewing'
-                      - 'text-mention-post.created'
-                      - 'text-mention-user-feed-post.created'
-                      - 'video-streaming-post.created'
-                      - 'post.reacted'
-                      - 'comment.created'
-                      - 'text-mention-comment.created'
-                      - 'text-mention-user-feed-comment.created'
-                      - 'comment.replied'
-                      - 'text-mention-comment.replied'
-                      - 'text-mention-user-feed-comment.replied'
-                      - 'comment.reacted'
-                      - 'follow.created'
-                      - 'follow.requested'
-                      - 'follow.accepted'
-                      - 'community.roleAdded'
-                      - 'community.updated'
+                      - "channel.created"
+                      - "channel.joined"
+                      - "conversation-channel.joined"
+                      - "text-mention-message.created"
+                      - "message.created"
+                      - "conversation-message.created"
+                      - "conversation-text-message.created"
+                      - "conversation-image-message.created"
+                      - "conversation-file-message.created"
+                      - "post.created"
+                      - "post.approved"
+                      - "post.need-reviewing"
+                      - "text-mention-post.created"
+                      - "text-mention-user-feed-post.created"
+                      - "video-streaming-post.created"
+                      - "post.reacted"
+                      - "comment.created"
+                      - "text-mention-comment.created"
+                      - "text-mention-user-feed-comment.created"
+                      - "comment.replied"
+                      - "text-mention-comment.replied"
+                      - "text-mention-user-feed-comment.replied"
+                      - "comment.reacted"
+                      - "follow.created"
+                      - "follow.requested"
+                      - "follow.accepted"
+                      - "community.roleAdded"
+                      - "community.updated"
+                      - "video-streaming.didStart"
                   moduleName:
                     type: string
                     enum:
@@ -198,7 +199,7 @@ saveSetting:
                       minLength: 1
                       maxLength: 900
                     description: specific roles for get notify by event creator who has roles only
-                  ignoreFromRoleIds: 
+                  ignoreFromRoleIds:
                     type: array
                     maxItems: 10
                     items:

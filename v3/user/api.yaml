@@ -84,13 +84,13 @@ getByPublicId:
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
 get:
-  summary: Get one user information.
+  summary: Get one user.
   tags:
     - UserV3
   security:
     - BearerAuth: []
   description: >
-    Get one user information.
+    Get one user.
   parameters:
     - name: userId
       in: path
@@ -120,18 +120,18 @@ get:
       $ref: "../../global/error.yaml#/UnexpectedError"
 
 update:
-  summary: Update user information.
+  summary: Update user.
   tags:
     - UserV3
   security:
     - BearerAuth: []
   description: >
-    Update user information such as displayName, roles, avatar and metadata
+    Update user such as displayName, roles, avatar and metadata
   consumes:
     - application/json
   requestBody:
     description: >
-      User information to be updated
+      User to be updated
     required: true
     content:
       application/json:
