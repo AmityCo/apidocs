@@ -9597,8 +9597,12 @@ paths:
         - name: "categoryIds"
           in: "query"
           schema:
-            type: "string"
-            maxLength: 128
+            type: "array"
+            minItems: 0
+            maxItems: 10
+            items:
+              type: "string"
+              maxLength: 128
         - name: "options"
           in: "query"
           style: "deepObject"
