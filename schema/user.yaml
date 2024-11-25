@@ -18,6 +18,10 @@ UserV3:
       description: Path of a user. (for real-time event)
     userId:
       type: string
+    userInternalId:
+      type: string
+    userPublicId:
+      type: string
     roles:
       type: array
       items:
@@ -25,7 +29,7 @@ UserV3:
     permissions:
       type: array
       items:
-        $ref: './role.yaml#/PermissionEnum'
+        $ref: "./role.yaml#/PermissionEnum"
     displayName:
       type: string
     description:
@@ -46,12 +50,15 @@ UserV3:
         hash:
           type: array
           items:
-            type: integer
+            type: string
     metadata:
       type: object
     isGlobalBan:
       type: boolean
       description: Global ban status. Every user can see this flag.
+    isBrand:
+      type: boolean
+      description: Brand user status.
     createdAt:
       type: string
       format: date-time
@@ -92,7 +99,7 @@ User:
         hash:
           type: array
           items:
-            type: integer
+            type: string
     metadata:
       type: object
     createdAt:

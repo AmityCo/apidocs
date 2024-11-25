@@ -1,0 +1,59 @@
+MarkedMessageResponse:
+  description: Marked message response
+  content:
+    application/json:
+      schema:
+        properties:
+          contentMarkers:
+            type: array
+            items:
+              $ref: '../../../schema/marker.yaml#/ContentMarkers'
+          feedMarkers:
+            type: array
+            items:
+              $ref: '../../../schema/marker.yaml#/FeedMarkers'
+
+UserSyncResponse:
+  description: User sync response
+  content:
+    application/json:
+      schema:
+        properties:
+          userMarkers:
+            type: array
+            items:
+              $ref: '../../../schema/marker.yaml#/UserMarkers'
+          userFeedMarkers:
+            type: array
+            items:
+              $ref: '../../../schema/marker.yaml#/UserFeedMarkers'
+          userEntityMarkers:
+            type: array
+            items:
+              $ref: '../../../schema/marker.yaml#/UserEntityMarkers'
+
+UserFeedUpdatedResponse:
+  description: User feed updated response
+  content:
+    application/json:
+      schema:
+        properties:
+          userFeedMarkers:
+            type: array
+            items:
+              $ref: '../../../schema/marker.yaml#/UserFeedMarkers'
+          feedMarkers:
+            type: array
+            items:
+              $ref: '../../../schema/marker.yaml#/FeedMarkers'
+
+FeedUpdatedResponse:
+  description: Feed updated response
+  content:
+    application/json:
+      schema:
+        properties:
+          feedMarkers:
+            type: array
+            items:
+              $ref: '../../../schema/marker.yaml#/FeedMarkers'

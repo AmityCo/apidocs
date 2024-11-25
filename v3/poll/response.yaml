@@ -41,53 +41,23 @@ PollPaginationResponse:
               previous:
                 type: string
 
-PollSocketResponse:
+PollWebhookResponse:
   description: Poll Information
   content:
     application/json:
       schema:
+        type: 'object'
         properties:
-          status:
-            type: string
+          event:
+            type: 'string'
           data:
             type: object
             properties:
               polls:
                 type: array
                 items:
-                  $ref: "../../schema/poll.yaml#/Poll"
+                  $ref: '../../schema/poll.yaml#/Poll'
               users:
                 type: array
                 items:
-                  $ref: "../../schema/user.yaml#/UserV3"
-
-PollPaginationSocketResponse:
-  description: Poll Information and users respondent.
-  content:
-    application/json:
-      schema:
-        properties:
-          status:
-            type: string
-          data:
-            type: object
-            properties:
-              polls:
-                type: array
-                items:
-                  $ref: "../../schema/poll.yaml#/Poll"
-              users:
-                type: array
-                items:
-                  $ref: "../../schema/user.yaml#/UserV3"
-              UsersAnswered:
-                type: array
-                items:
-                  $ref: "../../schema/poll.yaml#/UsersAnswered"
-              paging:
-                type: object
-                properties:
-                  next:
-                    type: string
-                  previous:
-                    type: string
+                  $ref: '../../schema/user.yaml#/UserV3'             

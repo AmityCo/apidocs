@@ -21,6 +21,13 @@ FileVideoUploadResponse:
                 - file
                 - video
               example: video
+            accessType:
+              type: string
+              description: File access type. `network` type requires authentication to download.
+              enum:
+                - public
+                - network
+              default: public
             createdAt:
               type: string
               description: The date/time when a file is uploaded.
@@ -41,7 +48,7 @@ FileVideoUploadResponse:
                   description: File format.
                   example: mp4
                 size:
-                  type: string
+                  type: number
                   description: File size.
                   example: 2107842
                 mimeType:
@@ -51,7 +58,7 @@ FileVideoUploadResponse:
                 metadata:
                   type: object
                   description: Video metadata (width, height etc.).
-            
+
 FileImageUploadResponse:
   description: Image Upload Result
   content:
@@ -75,6 +82,13 @@ FileImageUploadResponse:
                 - file
                 - video
               example: image
+            accessType:
+              type: string
+              description: File access type. `network` type requires authentication to download.
+              enum:
+                - public
+                - network
+              default: public
             createdAt:
               type: string
               description: The date/time when a file is uploaded.
@@ -95,7 +109,7 @@ FileImageUploadResponse:
                   description: File format.
                   example: jpeg
                 size:
-                  type: string
+                  type: number
                   description: File size.
                   example: 2107842
                 mimeType:
@@ -108,7 +122,7 @@ FileImageUploadResponse:
                   properties:
                     height:
                       type: number
-                    width: 
+                    width:
                       type: number
                     isFull:
                       type: boolean
@@ -136,6 +150,13 @@ FileUploadResponse:
                 - file
                 - video
               example: file
+            acceType:
+              type: string
+              description: File access type. `network` type requires authentication to download.
+              enum:
+                - public
+                - network
+              default: public
             createdAt:
               type: string
               description: The date/time when a file is uploaded.
@@ -156,7 +177,7 @@ FileUploadResponse:
                   description: File format.
                   example: pdf
                 size:
-                  type: string
+                  type: number
                   description: File size.
                   example: 2107842
                 mimeType:

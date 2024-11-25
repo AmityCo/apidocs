@@ -29,6 +29,8 @@ MessageFeed:
       $ref: '#/MessageFeed_createdAt'
     updatedAt:
       $ref: '#/MessageFeed_updatedAt'
+    messagePreviewId:
+      $ref: '#/MessageFeed_messagePreviewId'  
   required:
     - messageFeedId
     - channelId
@@ -136,3 +138,21 @@ MessageFeed_updatedAt:
   description: The updated timestamp of the message feed
   type: string
   format: date-time
+MessageFeed_messagePreviewId:
+  type: string
+  description: ID of a message preview. Depends on network settings. if disabled will be null.
+
+messageFeedsInfo:
+  type: object
+  description: Depends on messagePreviews. if empty array will be empty array.
+  properties:
+    messageFeedId:
+      $ref: '#/MessageFeed_messageFeedId'
+    name:
+      $ref: '#/MessageFeed_name'
+    createdAt:
+      $ref: '#/MessageFeed_createdAt'
+    updatedAt:
+      $ref: '#/MessageFeed_updatedAt'
+    messagePreviewId:
+      $ref: '#/MessageFeed_messagePreviewId'

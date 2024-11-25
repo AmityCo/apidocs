@@ -1,0 +1,149 @@
+UserMarkers:
+  type: object
+  properties:
+    userId:
+      type: string
+      description: User id (internal)
+    lastSyncAt:
+      type: string
+      description: The date/time when user last sync.
+      format: date-time
+    unreadCount:
+      type: number
+      description: Unread count of user
+    isMentioned:
+      type: boolean
+    createdAt:
+      type: string
+      description: The date/time when user markers are created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when user markers are updated.
+      format: date-time
+
+UserEntityMarkers:
+  type: object
+  properties:
+    userId:
+      type: string
+      description: User id (internal)
+    entityId:
+      type: string
+      description: channel id (internal)
+    unreadCount:
+      type: number
+      description: Unread count of user
+    isDeleted:
+      type: boolean
+      description: flag to check if channel marker deleted
+    isMentioned:
+      type: boolean
+      description: flag to check if user is mentioned in channel
+    membership:
+      type: string
+      description: membership status of user in channel
+      enum:
+        - member
+        - banned
+        - muted
+        - non-member
+        - deleted
+    createdAt:
+      type: string
+      description: The date/time when user channel markers are created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when user channel markers are updated.
+      format: date-time
+
+UserFeedMarkers:
+  type: object
+  properties:
+    userId:
+      type: string
+      description: User id (internal)
+    entityId:
+      type: string
+      description: channel id (internal)
+    feedId:
+      type: string
+      description: message feed id (internal)
+    readToSegment:
+      type: number
+      description: segment of message as read by user
+    deliveredToSegment:
+      type: number
+      description: segment of message as delivered by user
+    unreadCount:
+      type: number
+      description: Unread count of user
+    lastMentionSegment:
+      type: number
+      description: segment of message as last mentioned by user
+    isMentioned:
+      type: boolean
+      description: flag to check if user is mentioned in channel
+    createdAt:
+      type: string
+      description: The date/time when user message feed markers are created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when user message feed markers are updated.
+      format: date-time
+
+FeedMarkers:
+  type: object
+  properties:
+    entityId:
+      type: string
+      description: channel id (internal)
+    feedId:
+      type: string
+      description: message feed id (internal)
+    lastSegment:
+      type: number
+      description: segment of message as lasted in message feed
+    isDeleted:
+      type: boolean
+      description: flag to check if message feed marker deleted
+    createdAt:
+      type: string
+      description: The date/time when user message feed markers are created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when user message feed markers are updated.
+      format: date-time
+
+ContentMarkers:
+  type: object
+  properties:
+    contentId:
+      type: string
+      description: message id (internal)
+    feedId:
+      type: string
+      description: message feed id (internal)
+    segment:
+      type: number
+      description: segment of message
+    creatorId:
+      type: string
+      description: user id (internal) of creator
+    readCount:
+      type: number
+      description: count of read users
+    deliveredCount:
+      type: number
+      description: count of delivered users
+    createdAt:
+      type: string
+      description: The date/time when user message feed markers are created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when user message feed markers are updated.
+      format: date-time

@@ -16,6 +16,12 @@ Post:
     postedUserId:
       type: string
       description: ID of a creator.
+    postedUserPublicId:
+      type: string
+      description: Public ID of a creator.
+    postedUserInternalId:
+      type: string
+      description: Internal ID of a creator.
     sharedUserId:
       type: string
       description: ID of a shared owner.
@@ -25,6 +31,12 @@ Post:
     targetId:
       type: string
       description: ID of a target.
+    targetPublicId:
+      type: string
+      description: Public ID of a target.
+    targetInternalId:
+      type: string
+      description: Internal ID of a target.
     targetType:
       type: string
       enum:
@@ -91,7 +103,7 @@ Post:
         hash:
           type: array
           items:
-            type: integer
+            type: string
     editedAt:
       type: string
       description: The date/time when text or metadata of post is updated.
@@ -173,6 +185,20 @@ Post:
             description: Array of UserId.
             items:
               type: string
+          userPublicIds:
+            type: array
+            description: Array of UserPublicId.
+            items:
+              type: string
+          userInternalIds:
+            type: array
+            description: Array of UserInternalId.
+            items:
+              type: string
+    impression:
+      type: integer
+    reach:
+      type: integer
   required:
     - postId
     - data
@@ -195,6 +221,12 @@ PostForRealtime:
     postedUserId:
       type: string
       description: ID of a creator.
+    postedUserPublicId:
+      type: string
+      description: Public ID of a creator.
+    postedUserInternalId:
+      type: string
+      description: Internal ID of a creator.
     sharedUserId:
       type: string
       description: ID of a shared owner.
@@ -204,6 +236,12 @@ PostForRealtime:
     targetId:
       type: string
       description: ID of a target.
+    targetPublicId:
+      type: string
+      description: Public ID of a target.
+    targetInternalId:
+      type: string
+      description: Internal ID of a target.
     targetType:
       type: string
       enum:
@@ -270,7 +308,7 @@ PostForRealtime:
         hash:
           type: array
           items:
-            type: integer
+            type: string
     editedAt:
       type: string
       description: The date/time when text or metadata of post is updated.
@@ -346,6 +384,20 @@ PostForRealtime:
             description: Array of UserId.
             items:
               type: string
+          userPublicIds:
+            type: array
+            description: Array of UserPublicId.
+            items:
+              type: string
+          userInternalIds:
+            type: array
+            description: Array of UserInternalId.
+            items:
+              type: string
+    impression:
+      type: integer
+    reach:
+      type: integer
   required:
     - postId
     - data
@@ -371,6 +423,18 @@ PostV4:
     postedUserId:
       type: string
       description: ID of a creator.
+    postedUserPublicId:
+      type: string
+      description: Public ID of a creator.
+    postedUserInternalId:
+      type: string
+      description: Internal ID of a creator.
+    publisherId:
+      type: string
+      description: ID of an original publisher when creating a post as brand.
+    publisherPublicId:
+      type: string
+      description: Public ID of an original publisher when creating a post as brand.
     sharedUserId:
       type: string
       description: ID of a shared owner.
@@ -380,6 +444,12 @@ PostV4:
     targetId:
       type: string
       description: ID of a target.
+    targetPublicId:
+      type: string
+      description: Public ID of a target.
+    targetInternalId:
+      type: string
+      description: Internal ID of a target.
     targetType:
       type: string
       enum:
@@ -446,7 +516,7 @@ PostV4:
         hash:
           type: array
           items:
-            type: integer
+            type: string
     editedAt:
       type: string
       description: The date/time when text or metadata of post is updated.
@@ -528,6 +598,20 @@ PostV4:
             description: Array of UserId.
             items:
               type: string
+          userPublicIds:
+            type: array
+            description: Array of UserPublicId.
+            items:
+              type: string
+          userInternalIds:
+            type: array
+            description: Array of UserInternalId.
+            items:
+              type: string
+    impression:
+      type: integer
+    reach:
+      type: integer
   required:
     - postId
     - data

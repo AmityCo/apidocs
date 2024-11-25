@@ -23,6 +23,7 @@ get:
           type: string
           minLength: 1
           maxLength: 1000 
+      description: "Used for querying communities by matching all specified tags. When a query includes multiple tags (e.g., `tags=['tag1', 'tag2', 'tag3']`), the system will return all communities that have all the specified tags."
     - name: filter
       in: query
       schema:
@@ -133,7 +134,7 @@ create:
               items:
                 type: string
                 minLength: 1
-                maxLength: 1000
+                maxLength: 100
             metadata:
               type: object
             avatarFileId:
@@ -265,7 +266,7 @@ update:
               items:
                 type: string
                 minLength: 1
-                maxLength: 1000
+                maxLength: 100
             metadata:
               type: object
             avatarFileId:
@@ -405,7 +406,7 @@ getUsers:
       collectionFormat: multi
       schema:
         type: array
-        description: Membership type to filter (If not filter will return both banned user and member)
+        description: Membership type to filter (If not filter will return member users)
         minItems: 1
         maxItems: 2
         items:
@@ -822,7 +823,7 @@ addRole:
             role:
               type: string
               minLength: 1
-              maxLength: 900
+              maxLength: 100
             userIds:
               type: array
               minItems: 1
@@ -876,7 +877,7 @@ removeRole:
             role:
               type: string
               minLength: 1
-              maxLength: 900
+              maxLength: 100
             userIds:
               type: array
               minItems: 1

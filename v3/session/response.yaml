@@ -1,23 +1,12 @@
 SessionResponse:
+
+GetSessionResponse:
   description: Session Information
   content:
     application/json:
       schema:
         type: object
         properties:
-          accessToken:
+          lastCachePurge:
             type: string
-          refreshToken:
-            type: string
-          issuedAt:
-            type: string
-          expiresAt:
-            type: string
-          users:
-            type: array
-            items:
-              $ref: "../../schema/user.yaml#/UserV3"
-          files:
-            type: array
-            items:
-              $ref: "../../schema/file.yaml#/File"
+            description: Date of the last cache purge

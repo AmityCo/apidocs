@@ -134,11 +134,15 @@ ChannelV3:
   properties:
     _id:
       type: string
-    path: 
+    path:
       type: string
     channelId:
       type: string
       description: ID of a channel.
+    channelInternalId:
+      type: string
+    channelPublicId:
+      type: string
     isDistinct:
       type: boolean
     metadata:
@@ -204,17 +208,41 @@ ChannelV3:
       type: boolean
       default: false
       description: A flag to deleted a channel.
+    messagePreviewId:
+      $ref: '#/Channel_messagePreviewId' 
+    isPublic:
+      type: boolean
+      description: A flag to public or private a channel.  
+    notificationMode:
+      type: string
+      enum:
+        - default
+        - silent
+        - subscribe
+      description: >
+        Notification Mode:
+          * `default` - Auto register push notification.
+          * `silent` - Do not send notification.
+          * `subscribe` - Send notification to subscribed users only.
   required:
     - channelId
     - createdAt
     - updatedAt
-    
+
 ChannelUserV3:
   type: object
   properties:
     userId:
       type: string
+    userInternalId:
+      type: string
+    userPublicId:
+      type: string
     channelId:
+      type: string
+    channelInternalId:
+      type: string
+    channelPublicId:
       type: string
     membership:
       $ref: "#/ChannelMembership"
@@ -249,3 +277,6 @@ ChannelUserV3:
       description: The date/time when a channel user is updated.
       format: date-time
 
+Channel_messagePreviewId:
+  type: string
+  description: ID of a message preview. Depends on network settings. if disabled will be null.
