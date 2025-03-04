@@ -107,6 +107,73 @@ paths:
               schema:
                 $ref: "./v1/ads/response.yaml#/QueryAllAdsResponsePayload"
 
+  /api/v1/archives/channels:
+    get:
+      summary: Query all archived channels
+      tags:
+        - Archive
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: List of archived channels
+          content:
+            application/json:
+              schema:
+                $ref: "./v1/archive/response.yaml#/GetArchiveChannelResponsePayload"
+  /api/v1/archives/channels/{channelId}:
+    post:
+      summary: Archive channels
+      tags:
+        - Archive
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-f\d]{24}$'
+            example: 60e4b1b4b3b2b5c4c4b3b2b5
+      responses:
+        "200":
+          description: List of archived channels
+          content:
+            application/json:
+              schema:
+                $ref: "./v1/archive/response.yaml#/ArchiveChannelResponsePayload"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "404":
+          $ref: "./global/error.yaml#/NotFoundError"
+    delete:
+      summary: Unarchive channels
+      tags:
+        - Archive
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-f\d]{24}$'
+            example: 60e4b1b4b3b2b5c4c4b3b2b5
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: "boolean"
+        "400":
+          $ref: "./global/error.yaml#/BadRequestError"
+        "404":
+          $ref: "./global/error.yaml#/NotFoundError"
   /api/v1/analytics/activities:
     post:
       summary: send analytic activities
@@ -598,6 +665,12 @@ paths:
               type: "string"
               maxLength: 100
           description: "Used for querying channels by excluding all specified tags. When a query includes multiple tags (e.g., `excludeTags=['tag1', 'tag2', 'tag3']`), the system will return all channels that do not have any of the specified tags."
+        - name: "excludeArchives"
+          in: "query"
+          schema:
+            type: "boolean"
+            default: false
+          description: "excludeArchives:\n  * `false(default)` - Show all channels.\n  * `true` - Show channels that are not archived only.\n"
         - name: "filter"
           in: "query"
           schema:
