@@ -1,0 +1,467 @@
+root:
+  get:
+    summary: "query communities."
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "query communities.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/keyword"
+      - $ref: "./parameter.yaml#/tags"
+      - $ref: "./parameter.yaml#/filter"
+      - $ref: "./parameter.yaml#/categoryId"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/hasFlag"
+      - $ref: "./parameter.yaml#/options"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-get-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  post:
+    summary: "create a community."
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              ForbiddenError:
+                $ref: "../../global/error-example.yaml#/ForbiddenError"
+              DuplicateEntryError:
+                $ref: "../../global/error-example.yaml#/DuplicateEntryError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_communityId:
+  get:
+    summary: "get a community by ID."
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "Get a community by ID\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+      - $ref: "./parameter.yaml#/type"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "update a community."
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+    requestBody:
+      $ref: "./request.yaml#/_communityId-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              ForbiddenError:
+                $ref: "../../global/error-example.yaml#/ForbiddenError"
+              DuplicateEntryError:
+                $ref: "../../global/error-example.yaml#/DuplicateEntryError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "delete a community."
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+    responses:
+      200:
+        $ref: "../../global/response.yaml#/DeleteApiResponse"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_communityId-join:
+  post:
+    summary: "Join a community"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "Join community by ID\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        $ref: "../../global/error.yaml#/UserIsBannedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_communityId-leave:
+  delete:
+    summary: "Leave a community."
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "Leave community by ID\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      401:
+        $ref: "../../global/error.yaml#/UnAuthorizedError"
+      403:
+        $ref: "../../global/error.yaml#/UserIsBannedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_communityId-users:
+  get:
+    summary: "query community users"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "query community users.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+      - $ref: "./parameter.yaml#/memberships"
+      - $ref: "./parameter.yaml#/roles"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/search"
+      - $ref: "./parameter.yaml#/type"
+      - $ref: "./parameter.yaml#/isDeleted-users"
+      - $ref: "./parameter.yaml#/isBrand"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-get-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  post:
+    summary: "add community users"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "add community users\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+    requestBody:
+      $ref: "./request.yaml#/_communityId-users-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              PermissionDeniedError:
+                $ref: "../../global/error-example.yaml#/PermissionDeniedError"
+              UserIsBannedError:
+                $ref: "../../global/error-example.yaml#/UserIsBannedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "remove community users"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "remove community users\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+      - $ref: "./parameter.yaml#/userIds"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200" # Updated response reference
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_communityId-users-ban:
+  put:
+    summary: "ban community users"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "ban community users.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+    requestBody:
+      $ref: "./request.yaml#/_communityId-users-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              PermissionDeniedError:
+                $ref: "../../global/error-example.yaml#/PermissionDeniedError"
+              ExemptFromBanError:
+                $ref: "../../global/error-example.yaml#/ExemptFromBanError"
+              UserIsBannedError:
+                $ref: "../../global/error-example.yaml#/UserIsBannedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_communityId-users-unban:
+  put:
+    summary: "unban community users"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "unban community users.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+    requestBody:
+      $ref: "./request.yaml#/_communityId-users-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              PermissionDeniedError:
+                $ref: "../../global/error-example.yaml#/PermissionDeniedError"
+              UserIsUnbannedError:
+                $ref: "../../global/error-example.yaml#/UserIsUnbannedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_communityId-users-roles:
+  post:
+    summary: "Add role to community users"
+    tags:
+      - "Community"
+    security:
+      - ApiKeyAuth: []
+    description: "Add role to community users.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+    requestBody:
+      $ref: "./request.yaml#/_communityId-users-roles-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              GenericPermissionDeniedError:
+                $ref: "../../global/error-example.yaml#/GenericPermissionDeniedError"
+              UserIsBannedError:
+                $ref: "../../global/error-example.yaml#/UserIsBannedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Remove role from community users"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "Remove role from community users.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+      - $ref: "./parameter.yaml#/userIds"
+      - $ref: "./parameter.yaml#/role"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              GenericPermissionDeniedError:
+                $ref: "../../global/error-example.yaml#/GenericPermissionDeniedError"
+              UserIsBannedError:
+                $ref: "../../global/error-example.yaml#/UserIsBannedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_communityId-permissions-me:
+  get:
+    summary: "Get self permission in community"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "query comments.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+    responses:
+      200:
+        $ref: "./response.yaml#/_communityId-permissions-me-get-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+list:
+  get:
+    summary: "get list of community"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "Get list of community\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityIds"
+      - $ref: "./parameter.yaml#/type"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+recommended:
+  get:
+    summary: "get list of recommended community"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "Get list of recommended community\n"
+    parameters:
+      - $ref: "./parameter.yaml#/content-type"
+      - name: "options"
+        in: "query"
+        style: "deepObject"
+        schema:
+          type: "object"
+          properties:
+            limit:
+              type: "integer"
+              minimum: 1
+              maximum: 100
+              default: 5
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+top-trending:
+  get:
+    summary: "get list of top trend community"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "Get list of top trend community\n"
+    parameters:
+      - $ref: "./parameter.yaml#/content-type"
+      - name: "options"
+        in: "query"
+        style: "deepObject"
+        schema:
+          type: "object"
+          properties:
+            limit:
+              type: "integer"
+              minimum: 1
+              maximum: 100
+              default: 5
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

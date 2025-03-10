@@ -1,0 +1,34 @@
+root:
+  post:
+    summary: "register a device to get push notification"
+    tags:
+      - "Notification"
+    security:
+      - ApiKeyAuth: []
+    description: "Register a device to a notification service provider.\n"
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "../../global/response.yaml#/SuccessResponse"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError400"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"
+  delete:
+    summary: "unregister a device from a notification service provider"
+    tags:
+      - "Notification"
+    security:
+      - ApiKeyAuth: []
+    description: "Unregister a device from a notification service provider.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/userId"
+      - $ref: "./parameter.yaml#/deviceId"
+    responses:
+      200:
+        $ref: "../../global/response.yaml#/SuccessResponse"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError400"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"

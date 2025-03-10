@@ -1,4 +1,4 @@
-ReactionResponse:
+root-get-response-payload-200:
   description: Reaction information.
   content:
     application/json:
@@ -22,3 +22,37 @@ ReactionResponse:
                 type: array
                 items:
                   $ref: "../../schema/file.yaml#/File"
+
+root-post-response-payload-200:
+  description: "Returns a reaction id is added"
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          addedId:
+            type: "string"
+
+root-delete-response-payload-200:
+  description: "Returns a reaction id is removed"
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          removedId:
+            type: "string"
+
+messages-most-get-response-payload-200:
+  description: "Message information."
+  content:
+    application/json:
+      schema:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            messageId:
+              type: "string"
+            reactionsCount:
+              type: "integer"

@@ -1,4 +1,4 @@
-PinPostResponse:
+common-response-200:
   description: Pin Post Information
   content:
     application/json:
@@ -58,7 +58,7 @@ PinPostResponse:
             items:
               $ref: "../../schema/poll.yaml#/Poll"
 
-PinPostDeletedResponse:
+common-delete-response-200:
   description: OK
   content:
     application/json:
@@ -67,3 +67,46 @@ PinPostDeletedResponse:
         properties:
           success:
             type: boolean
+
+common-response-400:
+  description: badRequest Error
+  content:
+    application/json:
+      schema:
+        $ref: "../../global/error.yaml#/Error"
+      examples:
+        "This post is already pinned.":
+          value:
+            status: error
+            code: 400000
+            message: Post ${postId} is already pinned
+        "This post is not in community":
+          value:
+            status: error
+            code: 400000
+            message: Post ${postId} is not in community
+        "This post is not in public community":
+          value:
+            status: error
+            code: 400000
+            message: Post ${postId} is not in public community
+        "This post is not approved":
+          value:
+            status: error
+            code: 400000
+            message: Post ${postId} has to be approved
+        "This post is deleted":
+          value:
+            status: error
+            code: 400000
+            message: Post ${postId} is deleted
+        "Unable to pin child post ":
+          value:
+            status: error
+            code: 400000
+            message: Unable to pin child post
+        "Pin post exceed the limit":
+          value:
+            status: error
+            code: 400000
+            message: "Pin post by placement: ${placement} exceed the limit"

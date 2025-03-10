@@ -1,0 +1,51 @@
+sortBy:
+  name: "sortBy"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "firstCreated"
+      - "lastCreated"
+      - "name"
+    default: "name"
+
+isDeleted:
+  name: "isDeleted"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: null
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+        default: 10
+      token:
+        type: "string"
+        maxLength: 1000
+
+_categoryId:
+  name: "categoryId"
+  in: "path"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 50
+
+categoryId:
+  in: query
+  name: categoryId
+  required: true
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 50
+  description: Category id

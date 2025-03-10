@@ -1,0 +1,258 @@
+root:
+  get:
+    summary: "query posts"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Query posts\n"
+    parameters:
+      - $ref: "./parameter.yaml#/targetId"
+      - $ref: "./parameter.yaml#/targetType"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/dataType"
+      - $ref: "./parameter.yaml#/hasFlag"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/dataTypes"
+      - $ref: "./parameter.yaml#/tags"
+      - $ref: "./parameter.yaml#/matchingOnlyParentPost"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  post:
+    summary: "create a post"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Create a post\n"
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_postId:
+  get:
+    summary: "get a post by ID"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Get a post by ID\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_postId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "update a post"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Update a post\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_postId"
+      - $ref: "./parameter.yaml#/preserve-edited-at"
+    requestBody:
+      $ref: "./request.yaml#/_postId-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "delete a post"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Delete a post\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_postId"
+    responses:
+      200:
+        description: "post information"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                status:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    success:
+                      type: "boolean"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_postId-approve:
+  post:
+    summary: "Approve reviewing post"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Get a post by ID\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_postId"
+        description: "Post public id"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_postId-decline:
+  post:
+    summary: "Decline reviewing post"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Get a post by ID\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_postId"
+        description: "Post public id"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_postId-flag:
+  post:
+    summary: "flag a post."
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_postId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        $ref: "../../global/error.yaml#/NumberOfFlagExceedError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_postId-isflagbyme:
+  get:
+    summary: "Check whether user flag a given post."
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Check whether user flag a given post.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_postId"
+    responses:
+      200:
+        $ref: "../../global/response.yaml#/IsSocialFlagByMeResponse"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+
+_postId-unflag:
+  delete:
+    summary: "unflag a post."
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_postId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+list:
+  get:
+    summary: "get list of post"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Get list of post\n"
+    parameters:
+      - $ref: "./parameter.yaml#/postIds"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_postId-flags:
+  delete:
+    summary: "clear flags"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_postId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

@@ -1,0 +1,101 @@
+query:
+  name: "query"
+  required: true
+  in: "query"
+  schema:
+    type: "string"
+    maxLength: 1024
+
+filter:
+  name: "filter"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "all"
+      - "member"
+      - "notMember"
+    default: "all"
+  description: "Filter community by membership status"
+
+targetId:
+  name: "targetId"
+  in: "query"
+  schema:
+    type: "string"
+    maxLength: 900
+
+targetType:
+  name: "targetType"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "community"
+      - "user"
+      - "content"
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+        default: 10
+      token:
+        type: "string"
+        maxLength: 1000
+
+dataTypes:
+  name: "dataTypes"
+  in: "query"
+  description: >
+    Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`.
+    The value in array could be oneOf:
+      * `text`
+      * `image`
+  schema:
+    type: "array"
+    maxItems: 10
+    items:
+      oneOf:
+        - type: "string"
+          enum:
+            - "text"
+            - "image"
+          description: "Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`"
+
+tags:
+  name: "tags"
+  in: "query"
+  schema:
+    type: "array"
+    minItems: 0
+    maxItems: 5
+    items:
+      type: "string"
+      maxLength: 24
+
+matchingOnlyParentPost:
+  name: "matchingOnlyParentPost"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: true
+  description: "An option whether to filter only parent post or not. If `true` will return only parent posts, else will return both parent and child posts"
+
+categoryIds:
+  name: "categoryIds"
+  in: "query"
+  schema:
+    type: "array"
+    minItems: 0
+    maxItems: 10
+    items:
+      type: "string"
+      maxLength: 128

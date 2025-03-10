@@ -1,0 +1,254 @@
+root:
+  get:
+    summary: "query messages"
+    tags:
+      - "Message"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/channelId"
+      - $ref: "./parameter.yaml#/type"
+      - $ref: "./parameter.yaml#/parentId"
+      - $ref: "./parameter.yaml#/filterByParentId"
+      - $ref: "./parameter.yaml#/hasFlag"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/tags"
+      - $ref: "./parameter.yaml#/excludeTags"
+      - $ref: "./parameter.yaml#/options"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  post:
+    summary: "create a message"
+    tags:
+      - "Message"
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              ForbiddenAvatarError:
+                $ref: "../../global/error-example.yaml#/ForbiddenAvatarError"
+              PermissionDeniedError:
+                $ref: "../../global/error-example.yaml#/PermissionDeniedError"
+              UserIsMutedError:
+                $ref: "../../global/error-example.yaml#/UserIsMutedError"
+              ChannelIsMutedError:
+                $ref: "../../global/error-example.yaml#/ChannelIsMutedError"
+              UserIsBannedError:
+                $ref: "../../global/error-example.yaml#/UserIsBannedError"
+              MaxRepetitionExceed:
+                $ref: "../../global/error-example.yaml#/MaxRepetitionExceed"
+              BanWordFoundError:
+                $ref: "../../global/error-example.yaml#/BanWordFoundError"
+              LinkNotAllowedError:
+                $ref: "../../global/error-example.yaml#/LinkNotAllowedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/ValidationError"
+
+list:
+  get:
+    summary: "get list of messages"
+    tags:
+      - "Message"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/messageIds"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_messageId:
+  get:
+    summary: "get a message"
+    tags:
+      - "Message"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/messageId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "update a message"
+    tags:
+      - "Message"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/messageId"
+    requestBody:
+      $ref: "./request.yaml#/_messageId-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              ForbiddenAvatarError:
+                $ref: "../../global/error-example.yaml#/ForbiddenAvatarError"
+              PermissionDeniedError:
+                $ref: "../../global/error-example.yaml#/PermissionDeniedError"
+              MaxRepetitionExceed:
+                $ref: "../../global/error-example.yaml#/MaxRepetitionExceed"
+              BanWordFoundError:
+                $ref: "../../global/error-example.yaml#/BanWordFoundError"
+              LinkNotAllowedError:
+                $ref: "../../global/error-example.yaml#/LinkNotAllowedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/ValidationError"
+  delete:
+    summary: "delete a message"
+    tags:
+      - "Message"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/messageId"
+    responses:
+      200:
+        description: OK
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                status:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    success:
+                      type: "boolean"
+                    message:
+                      type: "string"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_messageId-flag:
+  post:
+    summary: "flag a message"
+    tags:
+      - "Message"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/messageId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              ForbiddenError:
+                $ref: "../../global/error-example.yaml#/ForbiddenError"
+              PermissionDeniedError:
+                $ref: "../../global/error-example.yaml#/PermissionDeniedError"
+              UserIsBannedError:
+                $ref: "../../global/error-example.yaml#/UserIsBannedError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_messageId-unflag:
+  delete:
+    summary: "unflag a message"
+    tags:
+      - "Message"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/messageId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_messageId-clearFlags:
+  delete:
+    summary: "clear flags"
+    tags:
+      - "Message"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/messageId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_messageId-isFlaggedByMe:
+  get:
+    summary: "is message flag by me"
+    tags:
+      - "Message"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/messageId"
+    responses:
+      200:
+        $ref: "../../global/response.yaml#/IsSocialFlagByMeResponse"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

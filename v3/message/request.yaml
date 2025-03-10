@@ -1,0 +1,82 @@
+root-post-request-payload:
+  description: "Information of message to be created\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          channelId:
+            type: "string"
+            maxLength: 150
+          messageId:
+            type: "string"
+            maxLength: 150
+          type:
+            type: "string"
+            enum:
+              - "text"
+              - "image"
+              - "file"
+              - "custom"
+              - "video"
+              - "audio"
+              - "imagemap"
+            default: "text"
+          data:
+            type: "object"
+            properties:
+              text:
+                type: "string"
+                maxLength: 20000
+          fileId:
+            type: "string"
+            maxLength: 50
+          parentId:
+            type: "string"
+            maxLength: 150
+          metadata:
+            type: "object"
+          tags:
+            type: "array"
+            maxItems: 10
+            items:
+              type: "string"
+              maxLength: 30
+          mentionees:
+            type: "array"
+            description: "The object of the mentions type and user who get a notification for the message."
+            maxItems: 2
+            items:
+              $ref: "../../schema/message.yaml#/MentioneesRequest"
+        required:
+          - "channelId"
+
+_messageId-post-request-payload:
+  description: "Information of message to be updated\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          data:
+            type: "object"
+            properties:
+              text:
+                type: "string"
+                maxLength: 20000
+          metadata:
+            type: "object"
+          tags:
+            type: "array"
+            maxItems: 10
+            items:
+              type: "string"
+              maxLength: 30
+          mentionees:
+            type: "array"
+            description: "The object of the mentions type and user who get a notification for the message."
+            maxItems: 2
+            items:
+              $ref: "../../schema/message.yaml#/MentioneesRequest"

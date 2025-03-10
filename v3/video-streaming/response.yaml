@@ -1,4 +1,4 @@
-VideoStreamingsApiResponse:
+common-response-200:
   description: video streaming information
   content:
     application/json:
@@ -20,7 +20,8 @@ VideoStreamingsApiResponse:
             type: array
             items:
               $ref: "../../schema/file.yaml#/File"
-VideoStreamingPaginationApiResponse:
+
+root-get-response-200:
   description: list of video streaming
   content:
     application/json:
@@ -74,22 +75,32 @@ VideoStreamingsWebhookResponse:
   content:
     application/json:
       schema:
-        type: 'object'
+        type: "object"
         properties:
           event:
-            type: 'string'
+            type: "string"
           data:
             type: object
             properties:
               videoStreamings:
                 type: array
                 items:
-                  $ref: '../../schema/video-streaming.yml#/VideoStreaming'
+                  $ref: "../../schema/video-streaming.yml#/VideoStreaming"
               users:
                 type: array
                 items:
-                  $ref: '../../schema/user.yaml#/UserV3'
+                  $ref: "../../schema/user.yaml#/UserV3"
               files:
                 type: array
                 items:
-                  $ref: '../../schema/file.yaml#/File'    
+                  $ref: "../../schema/file.yaml#/File"
+
+user-event-video-streaming-response-200:
+  description: event is processed successfully
+  content:
+    application/json:
+      schema:
+        properties:
+          ok:
+            type: boolean
+            example: true

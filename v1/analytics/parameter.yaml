@@ -1,0 +1,34 @@
+postId:
+  name: postId
+  in: path
+  required: true
+  schema:
+    type: string
+    pattern: '^[a-f\d]{24}$'
+    example: 60e4b1b4b3b2b5c4c4b3b2b5
+
+storyId:
+  name: storyId
+  in: path
+  required: true
+  schema:
+    type: string
+    pattern: '^[a-f\d]{24}$'
+    example: 60e4b1b4b3b2b5c4c4b3b2b5
+
+token:
+  name: token
+  in: query
+  schema:
+    type: string
+    maxLength: 1000
+    example: "eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=="
+    description: token of the page that you need from either `next` or `prev` of `paging`
+
+limit:
+  name: limit
+  in: query
+  schema:
+    type: number
+    default: 10
+    description: number of user in a page

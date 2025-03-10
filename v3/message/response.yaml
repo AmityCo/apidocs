@@ -1,4 +1,4 @@
-MessagesApiResponse:
+common-response-200:
   description: Messages Information
   content:
     application/json:
@@ -17,7 +17,7 @@ MessagesApiResponse:
             items:
               $ref: "../../schema/file.yaml#/File"
 
-MessagePaginationApiResponse:
+root-get-response-200:
   description: Messages Information
   content:
     application/json:
@@ -70,7 +70,7 @@ MessageAddReactionWithReactorWebhookResponse:
           event:
             type: string
             enum:
-              - 'message.didAddReaction'
+              - "message.didAddReaction"
           data:
             type: object
             properties:
@@ -87,7 +87,7 @@ MessageAddReactionWithReactorWebhookResponse:
                 items:
                   $ref: "../../schema/file.yaml#/File"
               reactor:
-                  $ref: "../../schema/reaction.yaml#/Reactor"  
+                $ref: "../../schema/reaction.yaml#/Reactor"
 
 MessageRemoveReactionWithReactorWebhookResponse:
   description: Messages Information
@@ -99,7 +99,7 @@ MessageRemoveReactionWithReactorWebhookResponse:
           event:
             type: string
             enum:
-              - 'message.didRemoveReaction'
+              - "message.didRemoveReaction"
           data:
             type: object
             properties:
@@ -116,4 +116,4 @@ MessageRemoveReactionWithReactorWebhookResponse:
                 items:
                   $ref: "../../schema/file.yaml#/File"
               reactor:
-                  $ref: "../../schema/reaction.yaml#/Reactor"  
+                $ref: "../../schema/reaction.yaml#/Reactor"

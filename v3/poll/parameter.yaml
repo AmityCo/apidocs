@@ -1,0 +1,58 @@
+pollId:
+  name: "pollId"
+  in: "path"
+  required: true
+  schema:
+    type: "string"
+
+authorization:
+  name: "Authorization"
+  in: "header"
+  required: true
+  schema:
+    type: "string"
+
+content-type:
+  name: "Content-Type"
+  in: "header"
+  required: true
+  schema:
+    type: "string"
+
+answerId:
+  name: "answerId"
+  in: "path"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 900
+
+sortBy:
+  name: "sortBy"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "lastCreated"
+      - "firstCreated"
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+        default: 10
+      token:
+        type: "string"
+        maxLength: 1000
+      before:
+        type: "string"
+        maxLength: 24
+      after:
+        type: "string"

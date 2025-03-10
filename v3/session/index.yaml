@@ -1,0 +1,38 @@
+root:
+  post:
+    summary: "Register a session"
+    deprecated: true
+    tags:
+      - "Session"
+    parameters:
+      - $ref: "./parameter.yaml#/x-api-key"
+    description: "Register a session in order to receive access token to perform sdk operations.\n"
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-post-response-200"
+      401:
+        $ref: "../../global/error.yaml#/UserIsSystemBanned"
+      403:
+        $ref: "../../global/error.yaml#/UserIsGlobalBanned"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "Verify access token"
+    tags:
+      - "Session"
+    description: "Verify access token. The caller must add accessToken in header."
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      401:
+        description: "Access token is invalid or expired"
+      403:
+        description: "User is global banned"
+      404:
+        description: "Not found"
+      422:
+        description: "Parameters validation error"
+    security:
+      - BearerAuth: []

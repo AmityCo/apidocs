@@ -1,0 +1,412 @@
+root:
+  put:
+    summary: "Update network setting configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Update network setting configuration.\n"
+    requestBody:
+      $ref: "./request.yaml#/root-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+chat:
+  put:
+    summary: "Update chat network setting configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Update chat network setting configuration.\n"
+    requestBody:
+      $ref: "./request.yaml#/chat-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/chat-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "Get chat network setting configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Get chat network setting configuration.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/chat-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+feed-setting:
+  get:
+    summary: "Get feed setting check configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Using for get network feed setting check configuration.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/feed-setting-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "Update feed setting check configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Update feed setting check configuration.\n"
+    requestBody:
+      description: "information for a network setting\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../schema/network-setting.yaml#/FeedSettingNetworkSetting"
+    responses:
+      200:
+        $ref: "./response.yaml#/feed-setting-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+moderation:
+  get:
+    summary: "Get moderation configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Using for get network moderation configuration.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/moderation-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "Update moderation configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Update moderation configuration.\n"
+    requestBody:
+      description: "information for a network setting\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              isWhitelistEnabled:
+                type: "boolean"
+                description: "`true` - Enabled whitelist validation.\n`false` - Disabled whitelist validation.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/moderation-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+prehook:
+  get:
+    tags:
+      - Network Setting
+    summary: Get prehook configuration.
+    description: Get prehook configuration.
+    security:
+      - BearerAuth: []
+    responses:
+      200:
+        $ref: "./response.yaml#/prehook-get-response-200"
+      403:
+        description: Permission denied.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/PermissionDeniedError"
+            example:
+              status: error
+              code: 400301
+              message: Only administrator can do this
+      500:
+        description: Unexpected error.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/UnexpectedError"
+            example:
+              status: error
+              code: 500000
+              message: Unexpected error
+  put:
+    tags:
+      - Network Setting
+    summary: Update prehook configuration
+    description: Update prehook configuration
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/prehook-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/prehook-put-response-200"
+      400:
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/BadRequestError"
+            example:
+              status: error
+              code: 400000
+              message: This feature is not available on your network
+      403:
+        description: Permission denied.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/PermissionDeniedError"
+            example:
+              status: error
+              code: 400301
+              message: Only administrator can do this
+      500:
+        description: Unexpected error.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/UnexpectedError"
+            example:
+              status: error
+              code: 500000
+              message: Unexpected error
+
+social:
+  put:
+    summary: "Update social configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Update social configuration.\n"
+    requestBody:
+      $ref: "./request.yaml#/social-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/social-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "Get social configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Get social configuration.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/social-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+semantic-search:
+  put:
+    summary: "Update Semantics search configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Update Network setting for Semantics search.\n"
+    requestBody:
+      $ref: "./request.yaml#/semantic-search-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/semantic-search-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "Get Network setting for Semantics search."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Get Semantics search configuration.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/semantic-search-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+users:
+  get:
+    tags:
+      - Network Setting
+    summary: Get users configuration.
+    description: Get users configuration.
+    security:
+      - BearerAuth: []
+    responses:
+      200:
+        $ref: "./response.yaml#/users-response-200"
+      403:
+        description: Permission denied.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/PermissionDeniedError"
+            example:
+              status: error
+              code: 400301
+              message: Only administrator can do this
+      500:
+        description: Unexpected error.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/UnexpectedError"
+            example:
+              status: error
+              code: 500000
+              message: Unexpected error
+  put:
+    tags:
+      - Network Setting
+    summary: Update users configuration
+    description: Update users configuration
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/users-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/users-response-200"
+      400:
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/BadRequestError"
+            example:
+              status: error
+              code: 400000
+              message: This feature is not available on your network
+      403:
+        description: Permission denied.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/PermissionDeniedError"
+            example:
+              status: error
+              code: 400301
+              message: Only administrator can do this
+      500:
+        description: Unexpected error.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/UnexpectedError"
+            example:
+              status: error
+              code: 500000
+              message: Unexpected error
+
+video-streaming:
+  get:
+    summary: "Get video streaming setting check configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Using for get network video streaming setting check configuration.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/video-streaming-response-200"
+      422:
+        $ref: "../../global/error.yaml#/ValidationError"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "Update video streaming setting check configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Update video streaming setting check configuration.\n"
+    requestBody:
+      description: "information for a network setting\n"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../schema/network-setting.yaml#/VideoStreamingSettingNetworkSetting"
+    responses:
+      200:
+        $ref: "./response.yaml#/video-streaming-response-200"
+      422:
+        $ref: "../../global/error.yaml#/ValidationError"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+webhook:
+  put:
+    summary: "Update webhook configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Update webhook configuration.\n"
+    requestBody:
+      $ref: "./request.yaml#/webhook-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/webhook-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "Get webhook configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Get webhook configuration.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/webhook-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

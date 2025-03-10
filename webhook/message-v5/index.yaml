@@ -1,0 +1,120 @@
+message.didCreate:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send created message whenever a message got created in a channel"
+    responses:
+      "200":
+        description: "messages is messages information. users is list of all user relate to this messages"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "message.didCreate"
+                data:
+                  type: "object"
+                  properties:
+                    files:
+                      type: "array"
+                      items:
+                        $ref: "./schema/file.yaml#/File"
+                    messageFeeds:
+                      type: "array"
+                      items:
+                        $ref: "./schema/message.yaml#/Message"
+                    messages:
+                      type: "array"
+                      items:
+                        $ref: "./schema/message-feed.yaml#/MessageFeed"
+                    reactions:
+                      type: "array"
+                      items:
+                        $ref: "./schema/reaction.yaml#/Reaction"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "./schema/user.yaml#/User"
+message.didDelete:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send deleted message whenever a message got deleted in a channel"
+    responses:
+      "200":
+        description: "messages is messages information. users is list of all user relate to this messages"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "message.didDelete"
+                data:
+                  type: "object"
+                  properties:
+                    files:
+                      type: "array"
+                      items:
+                        $ref: "./schema/file.yaml#/File"
+                    messageFeeds:
+                      type: "array"
+                      items:
+                        $ref: "./schema/message.yaml#/Message"
+                    messages:
+                      type: "array"
+                      items:
+                        $ref: "./schema/message-feed.yaml#/MessageFeed"
+                    reactions:
+                      type: "array"
+                      items:
+                        $ref: "./schema/reaction.yaml#/Reaction"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "./schema/user.yaml#/User"
+message.didUpdate:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send updated message whenever a message got updated in a channel"
+    responses:
+      "200":
+        description: "messages is messages information. users is list of all user relate to this messages"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "message.didCreate"
+                data:
+                  type: "object"
+                  properties:
+                    files:
+                      type: "array"
+                      items:
+                        $ref: "./schema/file.yaml#/File"
+                    messageFeeds:
+                      type: "array"
+                      items:
+                        $ref: "./schema/message.yaml#/Message"
+                    messages:
+                      type: "array"
+                      items:
+                        $ref: "./schema/message-feed.yaml#/MessageFeed"
+                    reactions:
+                      type: "array"
+                      items:
+                        $ref: "./schema/reaction.yaml#/Reaction"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "./schema/user.yaml#/User"

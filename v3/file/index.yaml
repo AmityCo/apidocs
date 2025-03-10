@@ -1,0 +1,74 @@
+root:
+  post:
+    summary: "Upload file."
+    tags:
+      - "File"
+    security:
+      - BearerAuth: []
+    description: "Upload file to cloud storage\n"
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-post-response-200"
+      413:
+        $ref: "../../global/error.yaml#/PayloadTooLargeError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_fileId:
+  get:
+    summary: "Get file info"
+    security:
+      - BearerAuth: []
+    tags:
+      - "File"
+    description: "Get file info of fileId (ex. type, attributes)\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_fileId"
+    responses:
+      200:
+        $ref: "./response.yaml#/_fileId-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/NotFoundError"
+  delete:
+    summary: "Delete file"
+    tags:
+      - "File"
+    security:
+      - BearerAuth: []
+    description: "Delete file (also remove from cloud). Only uploader and admin can remove.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_fileId"
+    responses:
+      200:
+        $ref: "./response.yaml#/_fileId-delete-response-200"
+      403:
+        $ref: "../../global/error.yaml#/GenericPermissionDeniedError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/ValidationError"
+
+_fileId-download:
+  get:
+    summary: "Download file"
+    tags:
+      - "File"
+    description: "Download file data"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/_ascSession"
+      - $ref: "./parameter.yaml#/content-type"
+      - $ref: "./parameter.yaml#/_fileId"
+      - $ref: "./parameter.yaml#/size"
+    responses:
+      302:
+        description: "Redirect to retrieve file data"
+        headers:
+          Location:
+            description: "Signed URL to redirect to"
+            schema:
+              type: string
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"

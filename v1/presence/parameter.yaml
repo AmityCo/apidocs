@@ -1,8 +1,21 @@
-UserIds_Params:
-  type: array
-  description: A list of user ID
-  maxItems: 220
-  items:
+userIds:
+  name: userIds
+  in: query
+  required: true
+  schema:
+    type: array
+    description: A list of user ID
+    maxItems: 220
+    items:
+      type: string
+      maxLength: 300
+    example: ["yama69", "yama420"]
+
+orderBy:
+  name: orderBy
+  in: query
+  schema:
     type: string
-    maxLength: 300
-  example: ['yama69', 'yama420']
+    enum:
+      - asc
+      - desc

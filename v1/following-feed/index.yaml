@@ -1,0 +1,19 @@
+root:
+  get:
+    summary: Get following feeds
+    description: Get posts from your wall, people you follow and communities you join
+    tags:
+      - "Feed"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameters.yaml#/sortBy"
+      - $ref: "./parameters.yaml#/limit"
+      - $ref: "./parameters.yaml#/token"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

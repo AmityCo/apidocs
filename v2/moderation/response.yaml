@@ -1,0 +1,69 @@
+blacklist-records-get-response-payload-200:
+  description: "rules of blacklist Information"
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          status:
+            type: "string"
+          data:
+            type: "object"
+            properties:
+              results:
+                type: "array"
+                items:
+                  $ref: "../../schema/moderation.yaml#/BlacklistRule"
+
+blacklist-records_ruleId-put-response-payload-200:
+  description: "rule of blacklist Information"
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          status:
+            type: "string"
+          data:
+            $ref: "../../schema/moderation.yaml#/BlacklistRule"
+
+whitelist-records-get-response-payload-200:
+  description: "rules of whitelist Information"
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          status:
+            type: "string"
+          data:
+            type: "object"
+            properties:
+              results:
+                type: "array"
+                items:
+                  $ref: "../../schema/moderation.yaml#/WhitelistRule"
+
+whitelist-records_ruleId-put-response-payload-200:
+  description: "rule of whitelist Information"
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          status:
+            type: "string"
+          data:
+            $ref: "../../schema/moderation.yaml#/WhitelistRule"
+
+settings-get-response-payload-200:
+  description: "Moderation Setting Information"
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          status:
+            type: "string"
+          data:
+            $ref: "../../schema/moderation.yaml#/ModerationSetting"

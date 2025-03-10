@@ -1,0 +1,88 @@
+records-put-request-payload:
+  description: "Rules information to be refreshed.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          regexs:
+            type: "array"
+            items:
+              type: "string"
+        required:
+          - "regexs"
+
+records-post-request-payload:
+  description: "Rules information to be added.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          regexs:
+            type: "array"
+            items:
+              type: "string"
+          isMatchExactWord:
+            type: "boolean"
+        required:
+          - "regexs"
+
+records_ruleId-put-request-payload:
+  description: "Rules information to be updated.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          ruleId:
+            type: "string"
+          isEnabled:
+            type: "boolean"
+        required:
+          - "ruleId"
+          - "isEnabled"
+
+settings-put-request-payload:
+  description: "moderation setting information\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          maxRepetition:
+            type: "integer"
+            minimum: 0
+          maxRepetitionTimeout:
+            type: "integer"
+            minimum: 0
+          blacklistMuteTimeout:
+            type: "integer"
+            minimum: 0
+          whitelistMuteTimeout:
+            type: "integer"
+            minimum: 0
+          maxRepetitionMuteTimeout:
+            type: "integer"
+            minimum: 0
+          enableImageModeration:
+            type: "boolean"
+          imageModeration:
+            type: "object"
+            properties:
+              nudity:
+                type: "number"
+                minimum: 0
+              suggestive:
+                type: "number"
+                minimum: 0
+              violence:
+                type: "number"
+                minimum: 0
+              disturbing:
+                type: "number"
+                minimum: 0

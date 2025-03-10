@@ -1,0 +1,41 @@
+setting:
+  get:
+    summary: "Get push notification setting."
+    tags:
+      - "Notification"
+    security:
+      - BearerAuth: []
+    description: "Get push notification setting.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/level"
+      - $ref: "./parameter.yaml#/channelId"
+      - $ref: "./parameter.yaml#/communityId"
+    responses:
+      200:
+        $ref: "./response.yaml#/setting-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  post:
+    summary: "Save push notification setting."
+    tags:
+      - "Notification"
+    security:
+      - BearerAuth: []
+    description: "Save push notification setting.\n"
+    requestBody:
+      $ref: "./request.yaml#/setting-post-request-payload"
+    responses:
+      200:
+        $ref: "../../global/response.yaml#/SaveApiResponse"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

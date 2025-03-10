@@ -1,0 +1,127 @@
+root:
+  get:
+    summary: "query community categories."
+    tags:
+      - "Community category"
+    security:
+      - BearerAuth: []
+    description: "query community categories.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/options"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  post:
+    summary: "create a community categories."
+    tags:
+      - "Community category"
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_categoryId:
+  get:
+    summary: "get a community category."
+    tags:
+      - "Community category"
+    security:
+      - BearerAuth: []
+    description: "get a community category.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_categoryId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "update a community categories."
+    tags:
+      - "Community category"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_categoryId"
+    requestBody:
+      $ref: "./request.yaml#/_categoryId-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "delete a community category."
+    tags:
+      - "Community category"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_categoryId"
+      - $ref: "./parameter.yaml#/categoryId"
+    responses:
+      200:
+        description: "community category information"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                status:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    success:
+                      type: "boolean"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+list:
+  get:
+    summary: "get list of community category."
+    tags:
+      - "Community category"
+    security:
+      - BearerAuth: []
+    description: "Get list of community category.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/categoryId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

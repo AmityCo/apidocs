@@ -1,0 +1,170 @@
+_userId:
+  delete:
+    summary: "Delete user"
+    security:
+      - BearerAuth: []
+    tags:
+      - "User"
+    parameters:
+      - in: "path"
+        name: "userId"
+        required: true
+        schema:
+          type: "string"
+          minimum: 1
+          maximum: 50
+        description: "User public id"
+      - in: query
+        name: deleteAll
+        schema:
+          type: "boolean"
+          default: false
+        description: "true - it will hard delete this user created channels, messages, comments, posts, polls, reactions after user is deleted."
+      - in: query
+        name: markMessageDeleted
+        schema:
+          type: "boolean"
+          default: false
+        description: "true - it will hard delete this user messages after user is deleted."
+      - in: query
+        name: hardDeletePost
+        schema:
+          type: "boolean"
+          default: false
+        description: "true - it will hard delete this user posts after user is deleted."
+      - in: query
+        name: hardDeleteComment
+        schema:
+          type: "boolean"
+          default: false
+        description: "true - it will hard delete this user comments after user is deleted."
+    description: "Delete user from system. User display name will be replaced with \"Deleted user\".\n\nContent that is created from the user will be able to be wiped depend on the options.\n\n**This API allow only admin user to call**\n"
+    responses:
+      "200":
+        $ref: "./v4/user/response.yaml#/UserDeleteResponse"
+      "400":
+        $ref: "./global/error.yaml#/UserIsAlreadyDeletedError"
+      "404":
+        $ref: "./global/error.yaml#/UserNotFoundError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+
+me-flags_userId:
+  post:
+    summary: "Report user (flag user)"
+    security:
+      - BearerAuth: []
+    tags:
+      - "User"
+    parameters:
+      - in: "path"
+        name: "userId"
+        required: true
+        schema:
+          type: "string"
+          minimum: 1
+          maximum: 50
+        description: "User public id"
+    description: "Report user by user id.\n"
+    responses:
+      "200":
+        $ref: "./v4/user/response.yaml#/FlagUserResponse"
+      "404":
+        $ref: "./global/error.yaml#/UserNotFoundError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Unreported user (unflag user)"
+    security:
+      - BearerAuth: []
+    tags:
+      - "User"
+    parameters:
+      - in: "path"
+        name: "userId"
+        required: true
+        schema:
+          type: "string"
+          minimum: 1
+          maximum: 50
+        description: "User public id"
+    description: "Unreported user by user id.\n"
+    responses:
+      "200":
+        $ref: "./v4/user/response.yaml#/UnflagUserResponse"
+      "404":
+        $ref: "./global/error.yaml#/UserNotFoundError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+
+me-user-blocks:
+  get:
+    summary: Get list of blocked users
+    description: "Get list of blocked users\n"
+    tags:
+      - User
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: token
+        in: query
+        schema:
+          type: string
+    responses:
+      "200":
+        $ref: "./v4/user/response.yaml#/GetBlockedUserListResponse"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+
+me-user-blocks_userId:
+  post:
+    summary: Block a user.
+    tags:
+      - User
+    description: "Blocking a user\n"
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        $ref: "./v4/user/response.yaml#/BlockUserResponse"
+      "400":
+        $ref: "./global/error.yaml#/BadRequestError"
+      "404":
+        $ref: "./global/error.yaml#/UserNotFoundError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+  delete:
+    summary: Unblock a user
+    tags:
+      - User
+    description: "Unblocking a user\n"
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        $ref: "./v4/user/response.yaml#/UnblockUserResponse"
+      "400":
+        $ref: "./global/error.yaml#/BadRequestError"
+      "404":
+        $ref: "./global/error.yaml#/UserNotFoundError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"

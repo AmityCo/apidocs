@@ -1,0 +1,41 @@
+_userId:
+  get:
+    summary: "Get list of posts."
+    tags:
+      - "Feed"
+    security:
+      - BearerAuth: []
+    description: "Get paginable list of posts.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/hasFlag"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/dataTypes"
+    responses:
+      "200":
+        $ref: "./response.yaml#/_userId-get-response-200"
+      "400":
+        $ref: "../../global/error.yaml#/BadRequestError"
+      "500":
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_userId-count:
+  get:
+    summary: "Get number of post."
+    tags:
+      - "Feed"
+    security:
+      - BearerAuth: []
+    description: "Get number of post.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+      - $ref: "./parameter.yaml#/isDeleted"
+    responses:
+      "200":
+        $ref: "./response.yaml#/_userId-count-get-response-200"
+      "400":
+        $ref: "../../global/error.yaml#/BadRequestError"
+      "500":
+        $ref: "../../global/error.yaml#/UnexpectedError"

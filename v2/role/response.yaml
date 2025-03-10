@@ -1,0 +1,20 @@
+root-get-response-payload-200:
+  description: "Roles information."
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          status:
+            type: "string"
+          data:
+            type: "object"
+            properties:
+              moderatonSettings:
+                type: "array"
+                items:
+                  $ref: "../../schema/moderation.yaml#/ModerationSetting"
+              roles:
+                type: "array"
+                items:
+                  $ref: "../../schema/role.yaml#/RoleV2"

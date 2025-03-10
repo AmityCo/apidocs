@@ -1,0 +1,129 @@
+_communityId-users-roles:
+  post:
+    summary: "Add roles to community users"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "Add roles to community users.\n"
+    parameters:
+      - name: "communityId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+          minLength: 1
+          maxLength: 900
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              roles:
+                type: "array"
+                minItems: 1
+                maxItems: 20
+                items:
+                  description: "Role id"
+                  type: "string"
+                  minLength: 1
+                  maxLength: 100
+              userIds:
+                type: "array"
+                minItems: 1
+                maxItems: 100
+                items:
+                  type: "string"
+                  minLength: 1
+                  maxLength: 50
+            required:
+              - "userIds"
+              - "roles"
+    responses:
+      "200":
+        $ref: "./v4/community/response.yaml#/CommunitiesApiResponse"
+      "403":
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              GenericPermissionDenidedError:
+                $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+              UserIsBannedError:
+                $ref: "./global/error-example.yaml#/UserIsBannedError"
+      "429":
+        $ref: "./global/error.yaml#/RateLimitError"
+      "404":
+        $ref: "./global/error.yaml#/NotFoundError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Remove roles from community users"
+    tags:
+      - "Community"
+    security:
+      - ApiKeyAuth: []
+    description: "Remove roles from community users.\n"
+    parameters:
+      - name: "Authorization"
+        in: "header"
+        required: true
+        schema:
+          type: "string"
+      - name: "Content-Type"
+        in: "header"
+        required: true
+        schema:
+          type: "string"
+      - name: "communityId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+          minLength: 1
+          maxLength: 900
+      - in: query
+        name: roles
+        required: true
+        schema:
+          type: "array"
+          minItems: 1
+          maxItems: 100
+          items:
+            type: "string"
+            description: "Role id"
+            minLength: 1
+            maxLength: 100
+        description: list of role id
+      - in: query
+        name: userIds
+        required: true
+        schema:
+          type: "array"
+          minItems: 1
+          maxItems: 100
+          items:
+            type: "string"
+            minLength: 1
+            maxLength: 50
+        description: list of user id
+    responses:
+      "200":
+        $ref: "./v4/community/response.yaml#/CommunitiesApiResponse"
+      "403":
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              GenericPermissionDenidedError:
+                $ref: "./global/error-example.yaml#/GenericPermissionDenidedError"
+              UserIsBannedError:
+                $ref: "./global/error-example.yaml#/UserIsBannedError"
+      "429":
+        $ref: "./global/error.yaml#/RateLimitError"
+      "404":
+        $ref: "./global/error.yaml#/NotFoundError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"

@@ -1,0 +1,52 @@
+keyword:
+  name: "keyword"
+  in: "query"
+  required: true
+  schema:
+    type: "string"
+    minLength: 0
+    maxLength: 100
+  description: "search keyword"
+
+sortBy:
+  name: "sortBy"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "lastCreated"
+      - "firstCreated"
+      - "displayName"
+    default: "lastCreated"
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+        default: 10
+      token:
+        type: "string"
+        maxLength: 1000
+
+_roleId:
+  name: "roleId"
+  in: "path"
+  required: true
+  schema:
+    type: "string"
+
+roleId:
+  in: query
+  name: roleId
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 100
+  description: role id to delete

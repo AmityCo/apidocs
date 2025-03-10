@@ -1,0 +1,298 @@
+following:
+  get:
+    summary: "Get my following list"
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get following information (pagination supported)\n"
+    parameters:
+      - name: "status"
+        in: "query"
+        schema:
+          type: "string"
+          enum:
+            - "all"
+            - "pending"
+            - "accepted"
+          default: "all"
+      - name: "limit"
+        in: "query"
+        schema:
+          type: "integer"
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: "token"
+        in: "query"
+        schema:
+          type: "string"
+          minLength: 1
+          maxLength: 100
+    responses:
+      "200":
+        $ref: "./v4/follow/response.yaml#/FollowPaginationResponse"
+      "400":
+        $ref: "./global/error.yaml#/BadRequestError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+
+following_userId:
+  post:
+    summary: "Follow user."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Follow user\n"
+    parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+    responses:
+      "200":
+        $ref: "./v4/follow/response.yaml#/FollowResponse"
+      "400":
+        $ref: "./global/error.yaml#/BadRequestError"
+      "404":
+        $ref: "./global/error.yaml#/NotFoundError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Unfollow or Cancel follow request"
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Unfollow or Cancel follow request\n"
+    parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+    responses:
+      "200":
+        $ref: "./v4/follow/response.yaml#/FollowResponse"
+      "400":
+        $ref: "./global/error.yaml#/BadRequestError"
+      "404":
+        $ref: "./global/error.yaml#/NotFoundError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+
+_userId-following:
+  get:
+    summary: "Get other following list."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get following information (pagination supported)\n"
+    parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+          maxLength: 900
+      - name: "status"
+        in: "query"
+        schema:
+          type: "string"
+          enum:
+            - "all"
+            - "pending"
+            - "accepted"
+          default: "all"
+      - name: "limit"
+        in: "query"
+        schema:
+          type: "integer"
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: "token"
+        in: "query"
+        schema:
+          type: "string"
+          minLength: 1
+          maxLength: 100
+    responses:
+      "200":
+        $ref: "./v4/follow/response.yaml#/FollowPaginationResponse"
+      "400":
+        $ref: "./global/error.yaml#/BadRequestError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+
+followers:
+  get:
+    summary: "Get my follower list."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get follower information (pagination supported)\n"
+    parameters:
+      - name: "status"
+        in: "query"
+        schema:
+          type: "string"
+          enum:
+            - "all"
+            - "pending"
+            - "accepted"
+          default: "all"
+      - name: "limit"
+        in: "query"
+        schema:
+          type: "integer"
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: "token"
+        in: "query"
+        schema:
+          type: "string"
+          minLength: 1
+          maxLength: 100
+    responses:
+      "200":
+        $ref: "./v4/follow/response.yaml#/FollowPaginationResponse"
+      "400":
+        $ref: "./global/error.yaml#/BadRequestError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+
+followers_userId:
+  post:
+    summary: "Accept follow request."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Accept follow request.\n"
+    parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+    responses:
+      "200":
+        $ref: "./v4/follow/response.yaml#/FollowResponse"
+      "400":
+        $ref: "./global/error.yaml#/BadRequestError"
+      "404":
+        $ref: "./global/error.yaml#/NotFoundError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Decline follow request or delete followers."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Delete follower.\n"
+    parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+    responses:
+      "200":
+        $ref: "./v4/follow/response.yaml#/FollowResponse"
+      "400":
+        $ref: "./global/error.yaml#/BadRequestError"
+      "404":
+        $ref: "./global/error.yaml#/NotFoundError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+
+_userId-followers:
+  get:
+    summary: "Get other follower list."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get follower information (pagination supported)\n"
+    parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+          maxLength: 900
+      - name: "status"
+        in: "query"
+        schema:
+          type: "string"
+          enum:
+            - "all"
+            - "pending"
+            - "accepted"
+          default: "all"
+      - name: "limit"
+        in: "query"
+        schema:
+          type: "integer"
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: "token"
+        in: "query"
+        schema:
+          type: "string"
+          minLength: 1
+          maxLength: 100
+    responses:
+      "200":
+        $ref: "./v4/follow/response.yaml#/FollowPaginationResponse"
+      "400":
+        $ref: "./global/error.yaml#/BadRequestError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+
+followInfo:
+  get:
+    summary: "Get my follow information."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get my follow information.\n"
+    responses:
+      "200":
+        $ref: "./v4/follow/response.yaml#/FollowCountResponse"
+      "400":
+        $ref: "./global/error.yaml#/BadRequestError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+
+_userId-followInfo:
+  get:
+    summary: "Get other follow information."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get other follow information.\n"
+    parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+          maxLength: 900
+    responses:
+      "200":
+        $ref: "./v4/follow/response.yaml#/FollowInformationResponse"
+      "400":
+        $ref: "./global/error.yaml#/BadRequestError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"

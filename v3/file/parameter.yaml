@@ -1,0 +1,41 @@
+_fileId:
+  in: "path"
+  name: "fileId"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 50
+  description: "File id"
+
+authorization:
+  name: "Authorization"
+  in: "header"
+  schema:
+    type: "string"
+
+_ascSession:
+  name: "_ascSession"
+  in: "cookie"
+  schema:
+    type: "string"
+  description: "Access token"
+
+content-type:
+  name: "Content-Type"
+  in: "header"
+  required: true
+  schema:
+    type: "string"
+
+size:
+  in: "query"
+  name: "size"
+  required: false
+  schema:
+    type: "string"
+    enum:
+      - "full"
+      - "large"
+      - "medium"
+      - "small"
+  description: "Size of image to download (no effect on file type 'file')"

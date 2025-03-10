@@ -1,0 +1,46 @@
+referenceId:
+  name: "referenceId"
+  in: "query"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 900
+
+referenceType:
+  name: "referenceType"
+  in: "query"
+  required: true
+  schema:
+    type: "string"
+    enum:
+      - "message"
+      - "post"
+      - "comment"
+      - "story"
+
+referenceVersion:
+  name: "referenceVersion"
+  in: "query"
+  schema:
+    type: "integer"
+
+reactionName:
+  name: "reactionName"
+  in: "query"
+  schema:
+    type: "string"
+    maxLength: 100
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+        minimum: 0
+      token:
+        type: "string"
+        maxLength: 200

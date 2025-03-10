@@ -1,0 +1,166 @@
+root:
+  post:
+    tags:
+      - "Message Feed"
+    summary: "Add a new message feed"
+    security:
+      - BearerAuth: []
+    description: "Add a new message feed"
+    requestBody:
+      $ref: "./v5/message-feed/request.yaml#/CreateMessageFeed"
+    responses:
+      "200":
+        $ref: "./v5/message-feed/response.yaml#/MessageFeedPayload"
+      "404":
+        description: "Not found error"
+      "422":
+        description: "Parameters validation error"
+
+_messageFeedId:
+  get:
+    tags:
+      - "Message Feed"
+    summary: "Find a message feed by ID"
+    security:
+      - BearerAuth: []
+    description: "Return a single message feed"
+    parameters:
+      - name: messageFeedId
+        in: path
+        required: true
+        description: Message feed ID
+        schema:
+          $ref: "./schema/message-feed.yaml#/MessageFeed_messageFeedId"
+    responses:
+      "200":
+        $ref: "./v5/message-feed/response.yaml#/MessageFeedPayload"
+      "404":
+        description: "Not found error"
+      "422":
+        description: "Parameters validation error"
+  put:
+    tags:
+      - "Message Feed"
+    summary: "Update a message feed"
+    description: "Update an existing message feed except the default message feed"
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: messageFeedId
+        in: path
+        required: true
+        description: Message feed ID
+        schema:
+          $ref: "./schema/message-feed.yaml#/MessageFeed_messageFeedId"
+    requestBody:
+      $ref: "./v5/message-feed/request.yaml#/UpdateMessageFeed"
+    responses:
+      "200":
+        $ref: "./v5/message-feed/response.yaml#/MessageFeedPayload"
+      "403":
+        description: "Forbidden error"
+      "404":
+        description: "Not found error"
+      "422":
+        description: "Parameters validation error"
+  delete:
+    tags:
+      - "Message Feed"
+    summary: "Delete a message feed"
+    security:
+      - BearerAuth: []
+    description: "Delete an existing message feed except the default message feed"
+    parameters:
+      - name: messageFeedId
+        in: path
+        required: true
+        description: Message feed ID
+        schema:
+          $ref: "./schema/message-feed.yaml#/MessageFeed_messageFeedId"
+      - name: permanent
+        in: query
+        schema:
+          $ref: "./schema/generic.yaml#/Generic_permanent"
+    responses:
+      "200":
+        description: "Successful operation"
+      "403":
+        description: "Fobidden error"
+      "404":
+        description: "Not found error"
+      "422":
+        description: "Parameters validation error"
+
+channel_channelId:
+  get:
+    tags:
+      - "Message Feed"
+    summary: "Finds message feeds by channelId and multiple conditions"
+    description: "Multiple conditions can be provided by query string"
+    security:
+      - BearerAuth: []
+    operationId: "findMessageFeedsByConditions"
+    parameters:
+      - name: "channelId"
+        in: "path"
+        required: true
+        description: "channel ID of message feed that needs to be find"
+        schema:
+          $ref: "./schema/message-feed.yaml#/MessageFeed_channelId"
+      - $ref: "./v5/message-feed/parameter.yaml#/IsDeleted"
+      - $ref: "./v5/message-feed/parameter.yaml#/PagingOptions"
+    responses:
+      "200":
+        $ref: "./v5/message-feed/response.yaml#/PaginatedMessageFeedPayload"
+      "404":
+        description: "Not found error"
+      "422":
+        description: "Parameters validation error"
+
+list:
+  get:
+    tags:
+      - "Message Feed"
+    summary: "Find message feeds by list of ID's"
+    description: "Multiple message feed id values can be provided with array format"
+    parameters:
+      - name: "messageFeedIds"
+        in: "query"
+        required: true
+        description: "List of message feed ID that needs to find (max=10) [messageFeedIds[]=messageFeedId1&messageFeedIds[]=messageFeedId2]"
+        schema:
+          $ref: "./schema/message-feed.yaml#/MessageFeed_messageFeedIds"
+    responses:
+      "200":
+        $ref: "./v5/message-feed/response.yaml#/MessageFeedPayload"
+      "404":
+        description: "Not found error"
+      "422":
+        description: "Parameters validation error"
+
+user_creatorId:
+  get:
+    tags:
+      - "Message Feed"
+    summary: "Finds message feeds by creatorId and multiple conditions"
+    description: "Conditions can be provided in query string"
+    operationId: "findMessageFeedsByCreatorId"
+    parameters:
+      - name: "creatorId"
+        in: "path"
+        required: true
+        description: "ID of message feed creator"
+        schema:
+          description: Creator's ID
+          type: string
+          maxLength: 30
+          example: 8aa313c8dbb00af911b07672
+      - $ref: "./v5/message-feed/parameter.yaml#/IsDeleted"
+      - $ref: "./v5/message-feed/parameter.yaml#/PagingOptions"
+    responses:
+      "200":
+        $ref: "./v5/message-feed/response.yaml#/MessageFeedPayload"
+      "404":
+        description: "Not found error"
+      "422":
+        description: "Parameters validation error"

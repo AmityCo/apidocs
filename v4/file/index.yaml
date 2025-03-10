@@ -1,0 +1,142 @@
+images:
+  post:
+    summary: "Upload image file."
+    security:
+      - BearerAuth: []
+    tags:
+      - "File"
+    parameters:
+      - name: "Content-Type"
+        in: "header"
+        required: true
+        schema:
+          type: "string"
+
+    description: "Upload image to cloud storage\n\nImage size limit: 1,073,741,824 byte\n"
+    requestBody:
+      content:
+        multipart/form-data:
+          schema:
+            type: "object"
+            properties:
+              files:
+                type: "array"
+                items:
+                  type: "string"
+                  format: "binary"
+                  description: "Image file data"
+              preferredFilename:
+                type: "string"
+                maxLength: 1024
+              accessType:
+                type: string
+                description: File access type. `network` type requires authentication to download.
+                enum:
+                  - public
+                  - network
+                default: public
+            required:
+              - "files"
+    responses:
+      "200":
+        $ref: "./v4/file/response.yaml#/FileImageUploadResponse"
+      "413":
+        $ref: "./global/error.yaml#/PayloadTooLargeError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+
+files:
+  post:
+    summary: "Upload file."
+    security:
+      - BearerAuth: []
+    tags:
+      - "File"
+    parameters:
+      - name: "Content-Type"
+        in: "header"
+        required: true
+        schema:
+          type: "string"
+
+    description: "Upload file to cloud storage\n\nFile size limit: 1,073,741,824 byte\n"
+    requestBody:
+      content:
+        multipart/form-data:
+          schema:
+            type: "object"
+            properties:
+              files:
+                type: "array"
+                items:
+                  type: "string"
+                  format: "binary"
+                  description: "file data"
+              preferredFilename:
+                type: "string"
+                maxLength: 1024
+              accessType:
+                type: string
+                description: File access type. `network` type requires authentication to download.
+                enum:
+                  - public
+                  - network
+                default: public
+            required:
+              - "files"
+    responses:
+      "200":
+        $ref: "./v4/file/response.yaml#/FileUploadResponse"
+      "413":
+        $ref: "./global/error.yaml#/PayloadTooLargeError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"
+
+videos:
+  post:
+    summary: "Upload video file."
+    security:
+      - BearerAuth: []
+    tags:
+      - "File"
+    parameters:
+      - name: "Content-Type"
+        in: "header"
+        required: true
+        schema:
+          type: "string"
+
+    description: "Upload video to cloud storage\n\nVideo size limit: 2,147,483,648 byte (2GB)\n"
+    requestBody:
+      content:
+        multipart/form-data:
+          schema:
+            type: "object"
+            properties:
+              files:
+                type: "array"
+                items:
+                  type: "string"
+                  format: "binary"
+                  description: "Video file data"
+              feedType:
+                type: "string"
+              preferredFilename:
+                type: "string"
+                maxLength: 1024
+              accessType:
+                type: string
+                description: File access type. `network` type requires authentication to download.
+                enum:
+                  - public
+                  - network
+                default: public
+            required:
+              - "files"
+    responses:
+      "200":
+        $ref: "./v4/file/response.yaml#/FileVideoUploadResponse"
+      "413":
+        $ref: "./global/error.yaml#/PayloadTooLargeError"
+      "500":
+        $ref: "./global/error.yaml#/UnexpectedError"

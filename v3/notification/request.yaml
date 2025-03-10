@@ -1,0 +1,96 @@
+setting-post-request-payload:
+  description: "Notification setting information to be updated\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          level:
+            type: "string"
+            enum:
+              - "user"
+              - "channel"
+              - "community"
+            description: "level:\n  * `user` - need to specific modules via notifiableEvents.\n  * `channel` - need to specific channelId.\n  * `community` - need to specific communityId and community event via notifiableEvents.\n"
+          isPushNotifiable:
+            type: "boolean"
+          channelId:
+            type: "string"
+            minLength: 1
+            maxLength: 900
+          communityId:
+            type: "string"
+            minLength: 1
+            maxLength: 900
+          notifiableEvents:
+            type: "array"
+            minItems: 1
+            maxItems: 7
+            items:
+              type: "object"
+              properties:
+                name:
+                  type: "string"
+                  enum:
+                    - "channel.created"
+                    - "channel.joined"
+                    - "conversation-channel.joined"
+                    - "text-mention-message.created"
+                    - "message.created"
+                    - "conversation-message.created"
+                    - "conversation-text-message.created"
+                    - "conversation-image-message.created"
+                    - "conversation-file-message.created"
+                    - "post.created"
+                    - "post.approved"
+                    - "post.need-reviewing"
+                    - "text-mention-post.created"
+                    - "text-mention-user-feed-post.created"
+                    - "video-streaming-post.created"
+                    - "post.reacted"
+                    - "comment.created"
+                    - "text-mention-comment.created"
+                    - "text-mention-user-feed-comment.created"
+                    - "comment.replied"
+                    - "text-mention-comment.replied"
+                    - "text-mention-user-feed-comment.replied"
+                    - "comment.reacted"
+                    - "follow.created"
+                    - "follow.requested"
+                    - "follow.accepted"
+                    - "community.roleAdded"
+                    - "community.updated"
+                    - "video-streaming.didStart"
+                moduleName:
+                  type: "string"
+                  enum:
+                    - "chat"
+                    - "video-streaming"
+                    - "social"
+                isPushNotifiable:
+                  type: "boolean"
+                titleTemplate:
+                  type: "string"
+                  maxLength: 1000
+                bodyTemplate:
+                  type: "string"
+                  maxLength: 5000
+                listenFromRoleIds:
+                  type: "array"
+                  maxItems: 10
+                  items:
+                    type: "string"
+                    minLength: 1
+                    maxLength: 900
+                  description: "specific roles for get notify by event creator who has roles only"
+                ignoreFromRoleIds:
+                  type: "array"
+                  maxItems: 10
+                  items:
+                    type: "string"
+                    minLength: 1
+                    maxLength: 900
+                  description: "specific roles for ignore notify by event creator who has roles only"
+        required:
+          - "level"

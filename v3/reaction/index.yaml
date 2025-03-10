@@ -1,0 +1,19 @@
+root:
+  get:
+    summary: "get list of reactions."
+    tags:
+      - "Reaction"
+    security:
+      - BearerAuth: []
+    description: "Get paginable list of reactions.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/referenceId"
+      - $ref: "./parameter.yaml#/referenceType"
+      - $ref: "./parameter.yaml#/referenceVersion"
+      - $ref: "./parameter.yaml#/reactionName"
+      - $ref: "./parameter.yaml#/options"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

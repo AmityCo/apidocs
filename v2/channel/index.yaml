@@ -1,0 +1,85 @@
+close:
+  post:
+    summary: "close channel"
+    tags:
+      - "Channel"
+    security:
+      - BearerAuth: []
+    description: "Close channel\n"
+    parameters:
+      - $ref: "./parameter.yaml#/channelId"
+    responses:
+      200:
+        description: "OK"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+mute:
+  put:
+    summary: "Mute channel"
+    tags:
+      - "Channel"
+    security:
+      - BearerAuth: []
+    description: "Mute all users in channel for a specific period of time.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/channelId"
+    requestBody:
+      $ref: "./request.yaml#/mute-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/mute-response-payload-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+users-mute:
+  put:
+    summary: "Mute user in channel"
+    tags:
+      - "Channel"
+    security:
+      - BearerAuth: []
+    description: "Mute a user in channel for a specific period of time.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/channelId"
+    requestBody:
+      $ref: "./request.yaml#/users-mute-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/mute-response-payload-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+search-channels:
+  get:
+    tags:
+      - "Channel"
+    summary: "Search channels"
+    description: "Retrieve channels based on search criteria"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/query"
+      - $ref: "./parameter.yaml#/exactMatch"
+      - $ref: "./parameter.yaml#/isMemberOnly"
+      - $ref: "./parameter.yaml#/types"
+      - $ref: "./parameter.yaml#/tags"
+      - $ref: "./parameter.yaml#/options"
+
+    responses:
+      200:
+        $ref: "./response.yaml#/search-channels-response-payload-200"
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"

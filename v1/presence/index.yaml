@@ -1,0 +1,143 @@
+settings:
+  get:
+    summary: Get presence feature setting on both network and user level
+    description: Get presence feature setting on both network and user level
+    tags:
+      - "Presence"
+    responses:
+      200:
+        $ref: "./response.yaml#/settings-response-payload-200"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+    security:
+      - BearerAuth: []
+
+settings-user:
+  put:
+    summary: Update presence feature setting on user level
+    description: Update presence feature setting on user level.
+    tags:
+      - "Presence"
+    requestBody:
+      $ref: "./request.yaml#/settings-user-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/settings-user-response-payload-200"
+      403:
+        description: Forbidden error due to feature is not enabled.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/ForbiddenError"
+            example:
+              status: error
+              code: 400300
+              message: The feature is not enabled!
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+    security:
+      - BearerAuth: []
+
+users-list:
+  get:
+    summary: Get presence state of provided user list
+    description: >
+      Get presence state of provided user list
+        - Max userIds list of 220 items
+        - Each id max length up to 300
+    tags:
+      - Presence
+    parameters:
+      - $ref: "./parameter.yaml#/userIds"
+    responses:
+      200:
+        $ref: "./response.yaml#/users-list-response-payload-200"
+      403:
+        description: Forbidden error due to feature is not enabled.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/ForbiddenError"
+            example:
+              status: error
+              code: 400300
+              message: The feature is not enabled!
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+network-users:
+  get:
+    summary: Get online users in a network
+    description: >
+      Get online users in a network
+       - Automatically sortedBy heartbeat time)
+       - Return max 1000 users
+    tags:
+      - Presence
+    parameters:
+      - $ref: "./parameter.yaml#/orderBy"
+    responses:
+      200:
+        $ref: "./response.yaml#/network-users-response-payload-200"
+      403:
+        description: Forbidden error due to feature is not enabled.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/ForbiddenError"
+            example:
+              status: error
+              code: 400300
+              message: The feature is not enabled!
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+    security:
+      - BearerAuth: []
+
+network-users-count:
+  get:
+    summary: Get number of online users in a network
+    description: Get number of online users in a network
+    tags:
+      - Presence
+    responses:
+      200:
+        $ref: "./response.yaml#/network-users-count-response-payload-200"
+      403:
+        description: Forbidden error due to feature is not enabled.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/ForbiddenError"
+            example:
+              status: error
+              code: 400300
+              message: The feature is not enabled!
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+    security:
+      - BearerAuth: []
+
+heartbeat:
+  post:
+    summary: Send a presence heartbeat
+    description: Send a presence heartbeat
+    tags:
+      - Presence
+    responses:
+      202:
+        $ref: "./response.yaml#/heartbeat-response-payload-200"
+      403:
+        description: Forbidden error due to feature is not enabled.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/ForbiddenError"
+            example:
+              status: error
+              code: 400300
+              message: The feature is not enabled!
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+    security:
+      - BearerAuth: []

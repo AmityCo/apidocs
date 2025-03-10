@@ -1,0 +1,115 @@
+channelId:
+  name: "channelId"
+  required: true
+  in: "query"
+  schema:
+    type: "string"
+    maxLength: 100
+
+type:
+  name: "type"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "text"
+      - "image"
+      - "file"
+      - "custom"
+      - "video"
+      - "audio"
+      - "imagemap"
+
+parentId:
+  name: "parentId"
+  in: "query"
+  schema:
+    type: "string"
+    maxLength: 150
+
+filterByParentId:
+  name: "filterByParentId"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: false
+
+hasFlag:
+  name: "hasFlag"
+  in: "query"
+  schema:
+    type: "boolean"
+
+isDeleted:
+  name: "isDeleted"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: null
+  description: "isDeleted:\n  * `null(default)` - Show both message is actived and message is inactived.\n  * `true` - Show message is inactived only.\n  * `false` - Show message is actived only.\n"
+
+tags:
+  name: "tags"
+  in: "query"
+  schema:
+    type: "array"
+    maxItems: 10
+    items:
+      type: "string"
+      maxLength: 100
+  description: "Used for querying messages by matching all specified tags. When a query includes multiple tags (e.g., `tags=['tag1', 'tag2', 'tag3']`), the system will return all messages that have all the specified tags."
+
+excludeTags:
+  name: "excludeTags"
+  in: "query"
+  schema:
+    type: "array"
+    maxItems: 10
+    items:
+      type: "string"
+      maxLength: 100
+  description: "Used for querying messages by excluding all specified tags. When a query includes multiple tags (e.g., `excludeTags=['tag1', 'tag2', 'tag3']`), the system will return all messages that do not have any of the specified tags."
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      after:
+        type: "integer"
+        minimum: 1
+      first:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+      before:
+        type: "integer"
+        minimum: 1
+      last:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+      token:
+        type: "string"
+        maxLength: 1000
+
+messageId:
+  name: "messageId"
+  in: "path"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 150
+
+messageIds:
+  name: "messageIds"
+  in: "query"
+  required: true
+  schema:
+    type: "array"
+    maxItems: 10
+    items:
+      type: "string"
+      maxLength: 150

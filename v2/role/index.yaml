@@ -1,0 +1,39 @@
+root:
+  get:
+    summary: "get all roles"
+    tags:
+      - "Role"
+    security:
+      - ApiKeyAuth: []
+    description: "Get all roles\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-payload-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError400"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+  put:
+    summary: "add permissions."
+    tags:
+      - "Role"
+    security:
+      - ApiKeyAuth: []
+    description: "Add permissions\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    requestBody:
+      $ref: "./request.yaml#/root-put-request-payload"
+    responses:
+      200:
+        description: "OK"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError429"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"

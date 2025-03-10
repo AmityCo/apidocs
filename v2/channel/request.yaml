@@ -1,0 +1,34 @@
+mute-put-request-payload:
+  description: "Information of channel to be muted and period\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          mutePeriod:
+            type: "number"
+            description: "mute period (milliseconds)"
+        required:
+          - "mutePeriod"
+
+users-mute-put-request-payload:
+  description: "Information of channel to be muted and period\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          userIds:
+            type: "array"
+            items:
+              type: "string"
+              maxLength: 50
+            maxItems: 100
+          mutePeriod:
+            type: "number"
+            description: "mute period (milliseconds)"
+        required:
+          - "userIds"
+          - "mutePeriod"

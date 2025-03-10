@@ -4,31 +4,31 @@ StoryBase:
     stories:
       type: array
       items:
-        $ref: "../../schema/story.yaml#/Story"
+        $ref: "../../../schema/story.yaml#/Story"
     comments:
       type: array
       items:
-        $ref: "../../schema/comment.yaml#/Comment"
+        $ref: "../../../schema/comment.yaml#/Comment"
     files:
       type: array
       items:
-        $ref: "../../schema/file.yaml#/File"
+        $ref: "../../../schema/file.yaml#/File"
     users:
       type: array
       items:
-        $ref: "../../schema/user.yaml#/UserV3"
+        $ref: "../../../schema/user.yaml#/UserV3"
     communities:
       type: array
       items:
-        $ref: "../../schema/community.yaml#/Community"
+        $ref: "../../../schema/community.yaml#/Community"
     communityUsers:
       type: array
       items:
-        $ref: "../../schema/community.yaml#/CommunityUser"
+        $ref: "../../../schema/community.yaml#/CommunityUser"
     categories:
       type: array
       items:
-        $ref: "../../schema/community.yaml#/CommunityCategory"
+        $ref: "../../../schema/community.yaml#/CommunityCategory"
 
 Story:
   allOf:
@@ -38,12 +38,12 @@ Story:
           type: string
           description: The story ID.
         data:
-          $ref: '#/StoryBase'
-    - $ref: '../../../schema/realtime.yaml#/Wrapper'
+          $ref: "#/StoryBase"
+    - $ref: "../../../schema/realtime.yaml#/Wrapper"
 
 StoryWithFlag:
   allOf:
-    - $ref: '#/Story'
+    - $ref: "#/Story"
     - type: object
       properties:
         data:
@@ -55,11 +55,11 @@ StoryWithFlag:
 
 StoryWithReactor:
   allOf:
-    - $ref: '#/Story'
+    - $ref: "#/Story"
     - type: object
       properties:
         data:
           type: object
           properties:
             reactor:
-              $ref: '../../../schema/reaction.yaml#/Reactor'
+              $ref: "../../../schema/reaction.yaml#/Reactor"

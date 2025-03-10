@@ -1,0 +1,39 @@
+blacklist-records:
+  put:
+    summary: "Refresh black list"
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Refresh the black list\n"
+    requestBody:
+      description: "Regular expression to refresh.\n"
+      $ref: "./request.yaml#/blacklist-records-request-payload"
+    responses:
+      200:
+        description: OK
+  post:
+    summary: "Add rules to black list"
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Add rules to the black list\n"
+    requestBody:
+      description: "Regular expression to add.\n"
+      $ref: "./request.yaml#/blacklist-records-request-payload"
+    responses:
+      "200":
+        description: OK
+  delete:
+    summary: "Delete rules from black list"
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Delete rules from the black list\n"
+    parameters:
+      - $ref: "./parameter.yaml#/ruleIds"
+    responses:
+      200:
+        description: OK

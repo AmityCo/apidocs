@@ -1,4 +1,4 @@
-CommunitiesApiResponse:
+common-response-200:
   description: Communities Information
   content:
     application/json:
@@ -30,7 +30,7 @@ CommunitiesApiResponse:
             items:
               $ref: "../../schema/feed.yaml#/Feed"
 
-CommunityPaginationApiResponse:
+common-get-response-200:
   description: Community Users Information
   content:
     application/json:
@@ -68,6 +68,22 @@ CommunityPaginationApiResponse:
                 type: string
               previous:
                 type: string
+
+_communityId-permissions-me-get-response-200:
+  description: "Communities permission information for this user"
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          isCreator:
+            type: "boolean"
+            example: false
+            description: "Is this person create this community?"
+          permissions:
+            type: "array"
+            items:
+              $ref: "../../schema/role.yaml#/PermissionEnum"
 
 CommunityWebhookResponse:
   description: Community Information

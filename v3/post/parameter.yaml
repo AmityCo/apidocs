@@ -1,0 +1,147 @@
+targetId:
+  name: "targetId"
+  in: "query"
+  schema:
+    type: "string"
+    maxLength: 900
+
+targetType:
+  name: "targetType"
+  required: true
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "community"
+      - "user"
+      - "content"
+
+sortBy:
+  name: "sortBy"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "firstCreated"
+      - "lastCreated"
+      - "lastUpdated"
+      - "firstUpdated"
+    default: "lastCreated"
+
+dataType:
+  name: "dataType"
+  in: "query"
+  schema:
+    type: "string"
+    maxLength: 900
+  example: "upstra.customtype"
+  description: 'must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")'
+  deprecated: true
+
+hasFlag:
+  name: "hasFlag"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: null
+  description: "hasFlag:\n  * `null(default)` - Show all posts.\n  * `true` - Show only flagged post(or children) or has flagged comment.\n  * `false` - Show only no flagged post(and children) and has no flagged comment.  \n"
+
+isDeleted:
+  name: "isDeleted"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: null
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+        default: 10
+      token:
+        type: "string"
+        maxLength: 1000
+
+dataTypes:
+  name: "dataTypes"
+  in: "query"
+  description: >
+    Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`.
+    The value in array could be oneOf:
+      * `video`
+      * `image`
+      * `file`
+      * `liveStream`
+      * custom post type
+        * must be a string in namespace like format (ex. `upstra.customtype`, `com.eko.birthday`)
+  schema:
+    type: "array"
+    maxItems: 10
+    items:
+      oneOf:
+        - type: "string"
+          enum:
+            - "video"
+            - "image"
+            - "file"
+            - "liveStream"
+          description: "Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`"
+        - type: "string"
+          example: "upstra.customtype"
+          description: 'custom post type - must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")'
+
+tags:
+  name: "tags"
+  in: "query"
+  schema:
+    type: "array"
+    minItems: 0
+    maxItems: 5
+    items:
+      type: "string"
+      maxLength: 24
+
+matchingOnlyParentPost:
+  name: "matchingOnlyParentPost"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: true
+  description: "An option whether to filter only parent post or not. If `true` will return only parent posts, else will return both parent and child posts"
+
+_postId:
+  name: "postId"
+  in: "path"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 900
+
+postIds:
+  name: "postIds"
+  in: "query"
+  schema:
+    type: "array"
+    maxItems: 100
+    items:
+      type: "string"
+      maxLength: 50
+
+preserve-edited-at:
+  name: "preserve-edited-at"
+  in: "header"
+  required: false
+  description: |
+    Preserve the `editedAt` value when updating a post.
+    If the value is `true`, the `editedAt` value will not be updated.
+    If the value is `false`, the `editedAt` value will be updated.
+  schema:
+    type: "boolean"
+    default: false

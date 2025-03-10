@@ -1,0 +1,16 @@
+token:
+  get:
+    summary: "Get authentication token"
+    deprecated: true
+    tags:
+      - "Authentication"
+    parameters:
+      - $ref: "./parameter.yaml#/x-server-key"
+      - $ref: "./parameter.yaml#/userId"
+    responses:
+      200:
+        $ref: "./response.yaml#/token-get-response-payload-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/ValidationError"

@@ -1,14 +1,36 @@
-SortBy:
+sortBy:
   name: sortBy
   in: query
   required: false
-  description: > 
+  description: >
     Sort by option
       * customRanking: Sort by custom ranking
       * lastCreated: Sort by last created
-  schema:      
+  schema:
     type: string
     enum:
       - lastCreated
       - customRanking
     default: customRanking
+
+limit:
+  name: limit
+  in: query
+  required: false
+  description: >
+    Limit the number of posts returned
+  schema:
+    type: integer
+    default: 10
+    minimum: 1
+    maximum: 100
+
+token:
+  name: token
+  in: query
+  required: false
+  description: >
+    Token for pagination
+  schema:
+    type: string
+    maxLength: 100
