@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ci
-      url: https://${{ vars.AWS_S3_BUCKET_DOCS }}/${{ github.ref_name }}
+      url: https://${{ vars.AWS_S3_BUCKET_DOCS }}/${{ github.head_ref }}
     permissions:
       id-token: write
       contents: read
@@ -31,11 +31,12 @@ jobs:
       - name: replace branch name
         if: always()
         env:
-          BRANCH_NAME: ${{ github.ref_name }}
+          BRANCH_NAME: ${{ github.head_ref }}
         run: |
           echo "replacing branch name $BRANCH_NAME"
-          sed -i '' "s|\$branch|$BRANCH_NAME|g" build/index.html
-          cat build/index.html
+          sed -i.bak "s/\$branch/$BRANCH_NAME/g" ./build/index.html
+          rm ./build/index.html.bak
+          cat ./build/index.html
 
       - name: configure aws credentials
         if: always()
@@ -52,4 +53,4 @@ jobs:
         env:
           AWS_S3_BUCKET: ${{ vars.AWS_S3_BUCKET_DOCS }}
           SOURCE_DIR: build
-          DEST_DIR: ${{ github.ref_name }}
+          DEST_DIR: ${{ github.head_ref }}
