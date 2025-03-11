@@ -1,0 +1,32 @@
+limit:
+  name: "limit"
+  in: "query"
+  schema:
+    type: "integer"
+    minimum: 1
+    maximum: 100
+    default: 10
+
+token:
+  name: "token"
+  in: "query"
+  schema:
+    type: "string"
+    minLength: 1
+    maxLength: 100
+
+dataTypes:
+  name: "dataTypes"
+  in: "query"
+  schema:
+    type: "array"
+    minItems: 1
+    maxItems: 4
+    items:
+      type: "string"
+      enum:
+        - "video"
+        - "image"
+        - "file"
+        - "liveStream"
+    description: "post data type to filter"

@@ -1,0 +1,149 @@
+_postId:
+  name: "postId"
+  in: "path"
+  required: true
+  schema:
+    type: "string"
+
+preserve-edited-at:
+  name: "preserve-edited-at"
+  in: "header"
+  required: false
+  description: |
+    Preserve the `editedAt` value when updating a post.
+    If the value is `true`, the `editedAt` value will not be updated.
+    If the value is `false`, the `editedAt` value will be updated.
+  schema:
+    type: "boolean"
+    default: false
+
+permanent:
+  name: "permanent"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: false
+    description: "If permanent data will be hard deleted"
+
+targetId:
+  name: "targetId"
+  in: "query"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 900
+
+targetType:
+  name: "targetType"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "community"
+      - "user"
+      - "content"
+
+sortBy:
+  name: "sortBy"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "lastCreated"
+      - "firstCreated"
+      - "lastUpdated"
+      - "firstUpdated"
+    default: "lastCreated"
+
+hasFlag:
+  name: "hasFlag"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: null
+  description: "hasFlag:\n  * `null(default)` - Show all posts.\n  * `true` - Show only flagged post(or children) or has flagged comment.\n  * `false` - Show only no flagged post(and children) and has no flagged comment.\n"
+
+isDeleted:
+  name: "isDeleted"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: null
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+        default: 10
+      token:
+        type: "string"
+        maxLength: 1000
+      before:
+        type: "string"
+        maxLength: 24
+      after:
+        type: "string"
+        maxLength: 24
+      updatedAt:
+        type: "string"
+        maxLength: 100
+  description: "use updatedAt when sort by first/lastUpdated"
+
+feedType:
+  name: "feedType"
+  in: "query"
+  schema:
+    type: "array"
+    minItems: 1
+    maxItems: 4
+    items:
+      type: "string"
+      enum:
+        - "reviewing"
+        - "published"
+    example: ["published"]
+
+dataTypes:
+  name: "dataTypes"
+  in: "query"
+  schema:
+    type: "array"
+    minItems: 1
+    maxItems: 4
+    items:
+      type: "string"
+      maxLength: 100
+      enum:
+        - "video"
+        - "image"
+        - "file"
+        - "liveStream"
+        - "poll"
+  description: "Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`"
+
+tags:
+  name: "tags"
+  in: "query"
+  schema:
+    type: "array"
+    minItems: 0
+    maxItems: 5
+    items:
+      type: "string"
+      maximum: 24
+  description: "tags"
+
+matchingOnlyParentPost:
+  name: "matchingOnlyParentPost"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: true
+  description: "An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts"

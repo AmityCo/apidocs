@@ -1,0 +1,27 @@
+_communityId-users-roles-request-payload:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          roles:
+            type: "array"
+            minItems: 1
+            maxItems: 20
+            items:
+              description: "Role id"
+              type: "string"
+              minLength: 1
+              maxLength: 100
+          userIds:
+            type: "array"
+            minItems: 1
+            maxItems: 100
+            items:
+              type: "string"
+              minLength: 1
+              maxLength: 50
+        required:
+          - "userIds"
+          - "roles"

@@ -6,34 +6,14 @@ _commentId:
     security:
       - BearerAuth: []
     parameters:
-      - name: "commentId"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
-      - name: "permanent"
-        in: "query"
-        schema:
-          type: "boolean"
-          description: "If permanent data will be hard deleted"
+      - $ref: "./parameter.yaml#/_commentId"
+      - $ref: "./parameter.yaml#/permanent"
     responses:
-      "200":
-        description: "comment information"
-        content:
-          application/json:
-            schema:
-              type: "object"
-              properties:
-                status:
-                  type: "string"
-                data:
-                  type: "object"
-                  properties:
-                    success:
-                      type: "boolean"
-      "429":
-        $ref: "./global/error.yaml#/RateLimitError"
-      "404":
-        $ref: "./global/error.yaml#/NotFoundError"
-      "500":
-        $ref: "./global/error.yaml#/UnexpectedError"
+      200:
+        $ref: "./response.yaml#/_commentId-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

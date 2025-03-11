@@ -1,4 +1,4 @@
-FollowResponse:
+follow-response-200:
   description: Follow Response Object
   content:
     application/json:
@@ -8,7 +8,7 @@ FollowResponse:
           follows:
             type: array
             items:
-              $ref: '../../schema/follow.yaml#/Follow'
+              $ref: "../../schema/follow.yaml#/Follow"
 
 FollowCountResponse:
   description: Follow Count
@@ -20,7 +20,7 @@ FollowCountResponse:
           followCounts:
             type: array
             items:
-              $ref: '../../schema/follow.yaml#/FollowCount'
+              $ref: "../../schema/follow.yaml#/FollowCount"
 
 FollowInformationResponse:
   description: Follow Information
@@ -28,18 +28,18 @@ FollowInformationResponse:
     application/json:
       schema:
         type: object
-        required: ['followCounts']
+        required: ["followCounts"]
         properties:
           follows:
             type: array
             items:
-              $ref: '../../schema/follow.yaml#/Follow'
+              $ref: "../../schema/follow.yaml#/Follow"
           followCounts:
             type: array
             items:
-              $ref: '../../schema/follow.yaml#/FollowCount'
+              $ref: "../../schema/follow.yaml#/FollowCount"
 
-FollowPaginationResponse:
+follow-pagination-response-200:
   description: Follows List
   content:
     application/json:
@@ -49,15 +49,15 @@ FollowPaginationResponse:
           follows:
             type: array
             items:
-              $ref: '../../schema/follow.yaml#/Follow'
+              $ref: "../../schema/follow.yaml#/Follow"
           users:
             type: array
             items:
-              $ref: '../../schema/user.yaml#/UserV3'
+              $ref: "../../schema/user.yaml#/UserV3"
           files:
             type: array
             items:
-              $ref: '../../schema/file.yaml#/File'
+              $ref: "../../schema/file.yaml#/File"
           paging:
             type: object
             properties:
@@ -73,15 +73,15 @@ FollowCustomNotificationResponse:
     follows:
       type: array
       items:
-        $ref: '../../schema/follow.yaml#/Follow'
+        $ref: "../../schema/follow.yaml#/Follow"
     users:
       type: array
       items:
-        $ref: '../../schema/user.yaml#/UserV3'
+        $ref: "../../schema/user.yaml#/UserV3"
     files:
       type: array
       items:
-        $ref: '../../schema/file.yaml#/File'
+        $ref: "../../schema/file.yaml#/File"
 
 FollowWebhookResponse:
   content:
@@ -95,16 +95,16 @@ FollowWebhookResponse:
             type: object
             properties:
               from:
-                type: 'string'
+                type: "string"
               to:
-                type: 'string'
+                type: "string"
               status:
-                type: 'string'
+                type: "string"
                 enum:
-                  - 'none'
+                  - "none"
               createdAt:
-                type: 'string'
-                format: 'date-time'
+                type: "string"
+                format: "date-time"
               updatedAt:
-                type: 'string'
-                format: 'date-time'
+                type: "string"
+                format: "date-time"

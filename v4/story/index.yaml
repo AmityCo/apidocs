@@ -5,24 +5,20 @@ root:
     tags:
       - Story
     requestBody:
-      content:
-        application/json:
-          schema:
-            $ref: "./v4/story/request.yaml#/CreateStoryRequestPayload"
+      $ref: "./request.yaml#/root-post-request-payload"
     responses:
-      "200":
+      200:
         description: Create Result
         content:
           application/json:
             schema:
-              $ref: "./v4/story/response.yaml#/CreateStoryResponsePayload"
-
-      "400":
+              $ref: "./response.yaml#/CreateStoryResponsePayload"
+      400:
         description: Bad request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             examples:
               "User reaches daily quota":
                 value:
@@ -64,12 +60,12 @@ root:
                   status: error
                   code: 400000
                   message: The community has been deleted.
-      "403":
+      403:
         description: No permission to create story.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             examples:
               "Have no permission in community to create a story":
                 value:
@@ -81,22 +77,22 @@ root:
                   status: error
                   code: 400309
                   message: Link is not allowed
-      "422":
+      422:
         description: Parameters Validation Error
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
               message: Parameters Validation Error!
-      "500":
+      500:
         description: Unexpected error.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
@@ -107,71 +103,54 @@ root:
     tags:
       - Story
     parameters:
-      - name: targetId
-        in: query
-        required: true
-        schema:
-          $ref: "./v4/story/parameters.yaml#/TargetId"
-      - name: targetType
-        in: query
-        required: true
-        schema:
-          $ref: "./v4/story/parameters.yaml#/TargetType"
-      - name: dataType
-        in: query
-        schema:
-          $ref: "./v4/story/parameters.yaml#/DataType"
-      - name: isExpired
-        in: query
-        schema:
-          $ref: "./v4/story/parameters.yaml#/IsExpired"
-      - name: options
-        in: query
-        schema:
-          $ref: "./v4/story/parameters.yaml#/QueryOptions"
+      - $ref: "./parameter.yaml#/targetId"
+      - $ref: "./parameter.yaml#/targetType"
+      - $ref: "./parameter.yaml#/dataType"
+      - $ref: "./parameter.yaml#/isExpired"
+      - $ref: "./parameter.yaml#/options"
     responses:
-      "200":
+      200:
         description: Story Information
         content:
           application/json:
             schema:
-              $ref: "./v4/story/response.yaml#/StoryWithTargetPaginatedResponsePayload"
-      "403":
+              $ref: "./response.yaml#/StoryWithTargetPaginatedResponsePayload"
+      403:
         description: Forbidden Error.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 400301
               message: User xxx is not community xxx member
-      "404":
+      404:
         description: Target not found
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 400400
               message: CommunityId xxx not found
-      "422":
+      422:
         description: Parameters Validation Error
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
               message: Parameters Validation Error!
-      "500":
+      500:
         description: Unexpected error.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
@@ -186,18 +165,10 @@ count:
     security:
       - BearerAuth: []
     parameters:
-      - name: targetId
-        in: query
-        required: true
-        schema:
-          $ref: "./v4/story/parameters.yaml#/TargetId"
-      - name: targetType
-        in: query
-        required: true
-        schema:
-          $ref: "./v4/story/parameters.yaml#/TargetType"
+      - $ref: "./parameter.yaml#/targetId"
+      - $ref: "./parameter.yaml#/targetType"
     responses:
-      "200":
+      200:
         description: Story Count
         content:
           application/json:
@@ -207,32 +178,32 @@ count:
                 count:
                   type: integer
                   example: 10
-      "404":
+      404:
         description: Target not found
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 400400
               message: CommunityId xxx not found
-      "422":
+      422:
         description: Parameters Validation Error
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
               message: Parameters Validation Error!
-      "500":
+      500:
         description: Unexpected error.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
@@ -245,29 +216,20 @@ seen:
     tags:
       - Story
     parameters:
-      - name: targets
-        description: >
-          Target object. The target object is an array of objects that contain targetId and targetType.
-          Max up to 10 items
-            * targetId: ID of a target.
-            * targetType: Type of a target (user, community).
-        in: query
-        required: true
-        schema:
-          $ref: "./v4/story/parameters.yaml#/Targets"
+      - $ref: "./parameter.yaml#/targets"
     responses:
-      "200":
+      200:
         description: Story targets Information
         content:
           application/json:
             schema:
-              $ref: "./v4/story/response.yaml#/StoryTargetsResponsePayload"
-      "400":
+              $ref: "./response.yaml#/StoryTargetsResponsePayload"
+      400:
         description: Bad request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             examples:
               "Target not found.":
                 value:
@@ -279,22 +241,22 @@ seen:
                   status: error
                   code: 400000
                   message: The community has been deleted.
-      "422":
+      422:
         description: Parameters Validation Error
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
               message: Parameters Validation Error!
-      "500":
+      500:
         description: Unexpected error.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
@@ -307,33 +269,21 @@ stories-by-targets:
     tags:
       - Story
     parameters:
-      - name: targets
-        description: >
-          Target object. The target object is an array of objects that contain targetId and targetType.
-          Max up to 10 items
-            * targetId: ID of a target.
-            * targetType: Type of a target (user, community).
-        in: query
-        required: true
-        schema:
-          $ref: "./v4/story/parameters.yaml#/Targets"
-      - name: options
-        in: query
-        schema:
-          $ref: "./v4/story/parameters.yaml#/QueryOptions"
+      - $ref: "./parameter.yaml#/targets"
+      - $ref: "./parameter.yaml#/options"
     responses:
-      "200":
+      200:
         description: Story Information, sorted by the target order in the request then the sort option
         content:
           application/json:
             schema:
-              $ref: "./v4/story/response.yaml#/StoryWithTargetResponsePayload"
-      "400":
+              $ref: "./response.yaml#/StoryWithTargetResponsePayload"
+      400:
         description: Bad request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             examples:
               "Target not found.":
                 value:
@@ -345,22 +295,22 @@ stories-by-targets:
                   status: error
                   code: 400000
                   message: The community has been deleted.
-      "422":
+      422:
         description: Parameters Validation Error
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
               message: Parameters Validation Error!
-      "500":
+      500:
         description: Unexpected error.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
@@ -373,44 +323,40 @@ _storyId:
     tags:
       - Story
     parameters:
-      - name: storyId
-        in: path
-        required: true
-        schema:
-          $ref: "./v4/story/parameters.yaml#/StoryId"
+      - $ref: "./parameter.yaml#/_storyId"
     responses:
-      "200":
+      200:
         description: Story Information
         content:
           application/json:
             schema:
-              $ref: "./v4/story/response.yaml#/StoryResponsePayload"
-      "403":
+              $ref: "./response.yaml#/StoryResponsePayload"
+      403:
         description: Forbidden Error
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 400300
               message: User xxx is not community xxx member
-      "404":
+      404:
         description: Story not found.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 400400
               message: Story not found
-      "500":
+      500:
         description: Unexpected error.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
@@ -421,22 +367,10 @@ _storyId:
     tags:
       - Story
     parameters:
-      - name: storyId
-        in: path
-        required: true
-        schema:
-          $ref: "./v4/story/parameters.yaml#/StoryId"
-      - name: permanent
-        in: query
-        required: false
-        description: >
-          If true, the story will be deleted permanently (hard deleted).
-          If false, the story will be soft deleted.
-        schema:
-          type: boolean
-          default: false
+      - $ref: "./parameter.yaml#/_storyId"
+      - $ref: "./parameter.yaml#/permanent"
     responses:
-      "200":
+      200:
         description: Delete Result
         content:
           application/json:
@@ -445,32 +379,32 @@ _storyId:
               properties:
                 success:
                   type: boolean
-      "403":
+      403:
         description: Forbidden Error
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 400300
               message: You are not allowed to do this
-      "404":
+      404:
         description: Story not found.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 400400
               message: Story not found
-      "500":
+      500:
         description: Unexpected error.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
@@ -485,24 +419,20 @@ _storyId-flags:
     security:
       - BearerAuth: []
     parameters:
-      - name: storyId
-        in: path
-        required: true
-        schema:
-          $ref: "./v4/story/parameters.yaml#/StoryId"
+      - $ref: "./parameter.yaml#/_storyId"
     responses:
-      "200":
+      200:
         description: Story Information
         content:
           application/json:
             schema:
-              $ref: "./v4/story/response.yaml#/StoryResponsePayload"
-      "403":
+              $ref: "./response.yaml#/StoryResponsePayload"
+      403:
         description: Forbidden error
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             examples:
               "Story creators cannot flag their own story.":
                 value:
@@ -514,22 +444,22 @@ _storyId-flags:
                   status: error
                   code: 400301
                   message: Number of flags already exceed.
-      "404":
+      404:
         description: Story not found.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 400400
               message: Story not found
-      "500":
+      500:
         description: Unexpected error.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
@@ -542,24 +472,20 @@ _storyId-flags:
     security:
       - BearerAuth: []
     parameters:
-      - name: storyId
-        in: path
-        required: true
-        schema:
-          $ref: "./v4/story/parameters.yaml#/StoryId"
+      - $ref: "./parameter.yaml#/_storyId"
     responses:
-      "200":
+      200:
         description: Story Information
         content:
           application/json:
             schema:
-              $ref: "./v4/story/response.yaml#/StoryResponsePayload"
-      "403":
+              $ref: "./response.yaml#/StoryResponsePayload"
+      403:
         description: Forbidden error
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             examples:
               "Story creators cannot unflag their own story.":
                 value:
@@ -571,22 +497,22 @@ _storyId-flags:
                   status: error
                   code: 400301
                   message: You never send a flag to this story.
-      "404":
+      404:
         description: Story not found.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 400400
               message: Story not found
-      "500":
+      500:
         description: Unexpected error.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
@@ -601,46 +527,42 @@ _storyId-flags-all:
     security:
       - BearerAuth: []
     parameters:
-      - name: storyId
-        in: path
-        required: true
-        schema:
-          $ref: "./v4/story/parameters.yaml#/StoryId"
+      - $ref: "./parameter.yaml#/_storyId"
     responses:
-      "200":
+      200:
         description: Story Information
         content:
           application/json:
             schema:
-              $ref: "./v4/story/response.yaml#/StoryResponsePayload"
-      "403":
+              $ref: "./response.yaml#/StoryResponsePayload"
+      403:
         description: Forbidden error
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             examples:
               "Only admin can clear flags":
                 value:
                   status: error
                   code: 400301
                   message: You are not allowed to do this.
-      "404":
+      404:
         description: Story not found.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 400400
               message: Story not found
-      "500":
+      500:
         description: Unexpected error.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000
@@ -653,39 +575,22 @@ me-global-story-targets:
     tags:
       - Story
     parameters:
-      - name: seenState
-        in: query
-        description: the seen state option used for filter the seen/unseen story targets
-        schema:
-          $ref: "./v4/story/parameters.yaml#/SeenState"
-      - name: limit
-        in: query
-        description: the amount of story targets per query
-        required: false
-        schema:
-          type: integer
-          default: 10
-          minimum: 1
-          maximum: 100
-      - name: token
-        in: query
-        required: false
-        schema:
-          type: string
-          maxLength: 900
+      - $ref: "./parameter.yaml#/seenState"
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
     responses:
-      "200":
+      200:
         description: Global Story Information
         content:
           application/json:
             schema:
-              $ref: "./v4/story/response.yaml#/GlobalStoryTargetsResponsePayload"
-      "500":
+              $ref: "./response.yaml#/GlobalStoryTargetsResponsePayload"
+      500:
         description: Unexpected error.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: "../../global/error.yaml#/Error"
             example:
               status: error
               code: 500000

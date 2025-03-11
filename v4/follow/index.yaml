@@ -7,35 +7,16 @@ following:
       - BearerAuth: []
     description: "Get following information (pagination supported)\n"
     parameters:
-      - name: "status"
-        in: "query"
-        schema:
-          type: "string"
-          enum:
-            - "all"
-            - "pending"
-            - "accepted"
-          default: "all"
-      - name: "limit"
-        in: "query"
-        schema:
-          type: "integer"
-          minimum: 1
-          maximum: 100
-          default: 10
-      - name: "token"
-        in: "query"
-        schema:
-          type: "string"
-          minLength: 1
-          maxLength: 100
+      - $ref: "./parameter.yaml#/status"
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
     responses:
-      "200":
-        $ref: "./v4/follow/response.yaml#/FollowPaginationResponse"
-      "400":
-        $ref: "./global/error.yaml#/BadRequestError"
-      "500":
-        $ref: "./global/error.yaml#/UnexpectedError"
+      200:
+        $ref: "./response.yaml#/follow-pagination-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
 
 following_userId:
   post:
@@ -46,20 +27,16 @@ following_userId:
       - BearerAuth: []
     description: "Follow user\n"
     parameters:
-      - name: "userId"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
+      - $ref: "./parameter.yaml#/_userId"
     responses:
-      "200":
-        $ref: "./v4/follow/response.yaml#/FollowResponse"
-      "400":
-        $ref: "./global/error.yaml#/BadRequestError"
-      "404":
-        $ref: "./global/error.yaml#/NotFoundError"
-      "500":
-        $ref: "./global/error.yaml#/UnexpectedError"
+      200:
+        $ref: "./response.yaml#/follow-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
   delete:
     summary: "Unfollow or Cancel follow request"
     tags:
@@ -68,20 +45,16 @@ following_userId:
       - BearerAuth: []
     description: "Unfollow or Cancel follow request\n"
     parameters:
-      - name: "userId"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
+      - $ref: "./parameter.yaml#/_userId"
     responses:
-      "200":
-        $ref: "./v4/follow/response.yaml#/FollowResponse"
-      "400":
-        $ref: "./global/error.yaml#/BadRequestError"
-      "404":
-        $ref: "./global/error.yaml#/NotFoundError"
-      "500":
-        $ref: "./global/error.yaml#/UnexpectedError"
+      200:
+        $ref: "./response.yaml#/follow-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
 
 _userId-following:
   get:
@@ -92,41 +65,17 @@ _userId-following:
       - BearerAuth: []
     description: "Get following information (pagination supported)\n"
     parameters:
-      - name: "userId"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
-          maxLength: 900
-      - name: "status"
-        in: "query"
-        schema:
-          type: "string"
-          enum:
-            - "all"
-            - "pending"
-            - "accepted"
-          default: "all"
-      - name: "limit"
-        in: "query"
-        schema:
-          type: "integer"
-          minimum: 1
-          maximum: 100
-          default: 10
-      - name: "token"
-        in: "query"
-        schema:
-          type: "string"
-          minLength: 1
-          maxLength: 100
+      - $ref: "./parameter.yaml#/_userId"
+      - $ref: "./parameter.yaml#/status"
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
     responses:
-      "200":
-        $ref: "./v4/follow/response.yaml#/FollowPaginationResponse"
-      "400":
-        $ref: "./global/error.yaml#/BadRequestError"
-      "500":
-        $ref: "./global/error.yaml#/UnexpectedError"
+      200:
+        $ref: "./response.yaml#/follow-pagination-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
 
 followers:
   get:
@@ -137,35 +86,16 @@ followers:
       - BearerAuth: []
     description: "Get follower information (pagination supported)\n"
     parameters:
-      - name: "status"
-        in: "query"
-        schema:
-          type: "string"
-          enum:
-            - "all"
-            - "pending"
-            - "accepted"
-          default: "all"
-      - name: "limit"
-        in: "query"
-        schema:
-          type: "integer"
-          minimum: 1
-          maximum: 100
-          default: 10
-      - name: "token"
-        in: "query"
-        schema:
-          type: "string"
-          minLength: 1
-          maxLength: 100
+      - $ref: "./parameter.yaml#/status"
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
     responses:
-      "200":
-        $ref: "./v4/follow/response.yaml#/FollowPaginationResponse"
-      "400":
-        $ref: "./global/error.yaml#/BadRequestError"
-      "500":
-        $ref: "./global/error.yaml#/UnexpectedError"
+      200:
+        $ref: "./response.yaml#/follow-pagination-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
 
 followers_userId:
   post:
@@ -176,20 +106,16 @@ followers_userId:
       - BearerAuth: []
     description: "Accept follow request.\n"
     parameters:
-      - name: "userId"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
+      - $ref: "./parameter.yaml#/_userId"
     responses:
-      "200":
-        $ref: "./v4/follow/response.yaml#/FollowResponse"
-      "400":
-        $ref: "./global/error.yaml#/BadRequestError"
-      "404":
-        $ref: "./global/error.yaml#/NotFoundError"
-      "500":
-        $ref: "./global/error.yaml#/UnexpectedError"
+      200:
+        $ref: "./response.yaml#/follow-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
   delete:
     summary: "Decline follow request or delete followers."
     tags:
@@ -198,20 +124,16 @@ followers_userId:
       - BearerAuth: []
     description: "Delete follower.\n"
     parameters:
-      - name: "userId"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
+      - $ref: "./parameter.yaml#/_userId"
     responses:
-      "200":
-        $ref: "./v4/follow/response.yaml#/FollowResponse"
-      "400":
-        $ref: "./global/error.yaml#/BadRequestError"
-      "404":
-        $ref: "./global/error.yaml#/NotFoundError"
-      "500":
-        $ref: "./global/error.yaml#/UnexpectedError"
+      200:
+        $ref: "./response.yaml#/follow-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
 
 _userId-followers:
   get:
@@ -222,41 +144,17 @@ _userId-followers:
       - BearerAuth: []
     description: "Get follower information (pagination supported)\n"
     parameters:
-      - name: "userId"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
-          maxLength: 900
-      - name: "status"
-        in: "query"
-        schema:
-          type: "string"
-          enum:
-            - "all"
-            - "pending"
-            - "accepted"
-          default: "all"
-      - name: "limit"
-        in: "query"
-        schema:
-          type: "integer"
-          minimum: 1
-          maximum: 100
-          default: 10
-      - name: "token"
-        in: "query"
-        schema:
-          type: "string"
-          minLength: 1
-          maxLength: 100
+      - $ref: "./parameter.yaml#/_userId"
+      - $ref: "./parameter.yaml#/status"
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
     responses:
-      "200":
-        $ref: "./v4/follow/response.yaml#/FollowPaginationResponse"
-      "400":
-        $ref: "./global/error.yaml#/BadRequestError"
-      "500":
-        $ref: "./global/error.yaml#/UnexpectedError"
+      200:
+        $ref: "./response.yaml#/follow-pagination-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
 
 followInfo:
   get:
@@ -267,12 +165,12 @@ followInfo:
       - BearerAuth: []
     description: "Get my follow information.\n"
     responses:
-      "200":
-        $ref: "./v4/follow/response.yaml#/FollowCountResponse"
-      "400":
-        $ref: "./global/error.yaml#/BadRequestError"
-      "500":
-        $ref: "./global/error.yaml#/UnexpectedError"
+      200:
+        $ref: "./response.yaml#/FollowCountResponse"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
 
 _userId-followInfo:
   get:
@@ -283,16 +181,11 @@ _userId-followInfo:
       - BearerAuth: []
     description: "Get other follow information.\n"
     parameters:
-      - name: "userId"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
-          maxLength: 900
+      - $ref: "./parameter.yaml#/_userId"
     responses:
-      "200":
-        $ref: "./v4/follow/response.yaml#/FollowInformationResponse"
-      "400":
-        $ref: "./global/error.yaml#/BadRequestError"
-      "500":
-        $ref: "./global/error.yaml#/UnexpectedError"
+      200:
+        $ref: "./response.yaml#/FollowInformationResponse"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

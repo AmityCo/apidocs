@@ -4,19 +4,19 @@ token:
     tags:
       - "Authentication"
     parameters:
-      - $ref: "../../params/_index.yaml#/x-server-key"
+      - $ref: "./parameter.yaml#/x-server-key"
     description: "Create authentication token for session creation API. Token userId need to match userId when using it\n"
     requestBody:
       content:
         application/json:
           schema:
-            $ref: "./request.yaml#/createAuthenticationTokenRequestPayload"
+            $ref: "./request.yaml#/token-post-request-payload"
     responses:
       200:
-        $ref: "./response.yaml#/createAuthenticationTokenResponsePayload200"
+        $ref: "./response.yaml#/token-post-response-200"
       401:
-        $ref: "./response.yaml#/createAuthenticationTokenResponsePayload401"
+        $ref: "./response.yaml#/token-post-response-401"
       403:
-        $ref: "./response.yaml#/createAuthenticationTokenResponsePayload403"
+        $ref: "./response.yaml#/token-post-response-403"
       422:
-        $ref: "./response.yaml#/createAuthenticationTokenResponsePayload422"
+        $ref: "./response.yaml#/token-post-response-422"

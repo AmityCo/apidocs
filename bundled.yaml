@@ -240,6 +240,29 @@ paths:
           $ref: '#/components/responses/ForbiddenError'
         '500':
           $ref: '#/components/responses/ValidationError'
+  /api/v4/authentication/token:
+    post:
+      summary: Create authentication token for session creation API
+      tags:
+        - Authentication
+      parameters:
+        - $ref: '#/components/parameters/x-server-key'
+      description: |
+        Create authentication token for session creation API. Token userId need to match userId when using it
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/token-post-request-payload'
+      responses:
+        '200':
+          $ref: '#/components/responses/token-post-response-200'
+        '401':
+          $ref: '#/components/responses/token-post-response-401'
+        '403':
+          $ref: '#/components/responses/token-post-response-403'
+        '422':
+          $ref: '#/components/responses/token-post-response-422'
   /api/v2/channels/{channelId}/close:
     post:
       summary: close channel
@@ -783,6 +806,33 @@ paths:
           $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /api/v4/channels/{channelId}/users:
+    get:
+      summary: query channel users
+      tags:
+        - Channel
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/_channelId'
+        - $ref: '#/components/parameters/parameter_role'
+        - $ref: '#/components/parameters/parameter_sortBy'
+        - $ref: '#/components/parameters/memberships'
+        - $ref: '#/components/parameters/parameter_options-2'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/parameter_isDeleted'
+        - $ref: '#/components/parameters/isBrand'
+      responses:
+        '200':
+          $ref: '#/components/responses/_channelId-users-response-200'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v3/comments:
     get:
       summary: query comments (pagination support).
@@ -800,9 +850,9 @@ paths:
         - $ref: '#/components/parameters/filterByParentId'
         - $ref: '#/components/parameters/parentId'
         - $ref: '#/components/parameters/hasFlag'
-        - $ref: '#/components/parameters/parameter_isDeleted'
-        - $ref: '#/components/parameters/parameter_sortBy'
-        - $ref: '#/components/parameters/parameter_options-2'
+        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_sortBy-2'
+        - $ref: '#/components/parameters/parameter_options-3'
         - $ref: '#/components/parameters/dataTypes'
       responses:
         '200':
@@ -994,6 +1044,25 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /api/v4/comments/{commentId}:
+    delete:
+      summary: delete a comment.
+      tags:
+        - Comment
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/_commentId'
+        - $ref: '#/components/parameters/permanent'
+      responses:
+        '200':
+          $ref: '#/components/responses/_commentId-response-200'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v3/communities:
     get:
       summary: query communities.
@@ -1008,10 +1077,10 @@ paths:
         - $ref: '#/components/parameters/parameter_tags-2'
         - $ref: '#/components/parameters/parameter_filter'
         - $ref: '#/components/parameters/categoryId'
-        - $ref: '#/components/parameters/parameter_sortBy-2'
-        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_sortBy-3'
+        - $ref: '#/components/parameters/parameter_isDeleted-3'
         - $ref: '#/components/parameters/parameter_hasFlag'
-        - $ref: '#/components/parameters/parameter_options-3'
+        - $ref: '#/components/parameters/parameter_options-4'
       responses:
         '200':
           $ref: '#/components/responses/common-get-response-200'
@@ -1172,11 +1241,11 @@ paths:
         query community users.
       parameters:
         - $ref: '#/components/parameters/communityId'
-        - $ref: '#/components/parameters/memberships'
+        - $ref: '#/components/parameters/parameter_memberships'
         - $ref: '#/components/parameters/parameter_roles'
-        - $ref: '#/components/parameters/parameter_sortBy-2'
-        - $ref: '#/components/parameters/parameter_options-3'
-        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/parameter_sortBy-3'
+        - $ref: '#/components/parameters/parameter_options-4'
+        - $ref: '#/components/parameters/parameter_search'
         - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/isDeleted-users'
         - $ref: '#/components/parameters/isBrand'
@@ -1347,7 +1416,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/communityId'
         - $ref: '#/components/parameters/parameter_userIds'
-        - $ref: '#/components/parameters/parameter_role'
+        - $ref: '#/components/parameters/parameter_role-2'
       responses:
         '200':
           $ref: '#/components/responses/common-response-200'
@@ -1465,6 +1534,69 @@ paths:
           $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /api/v4/communities/{communityId}/users/roles:
+    post:
+      summary: Add roles to community users
+      tags:
+        - Community
+      security:
+        - BearerAuth: []
+      description: |
+        Add roles to community users.
+      parameters:
+        - $ref: '#/components/parameters/_communityId'
+      requestBody:
+        $ref: '#/components/requestBodies/_communityId-users-roles-request-payload'
+      responses:
+        '200':
+          $ref: '#/components/responses/common-response-200'
+        '403':
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDeniedError:
+                  $ref: '#/components/examples/GenericPermissionDeniedError'
+                UserIsBannedError:
+                  $ref: '#/components/examples/UserIsBannedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      summary: Remove roles from community users
+      tags:
+        - Community
+      security:
+        - ApiKeyAuth: []
+      description: |
+        Remove roles from community users.
+      parameters:
+        - $ref: '#/components/parameters/authorization'
+        - $ref: '#/components/parameters/content-type'
+        - $ref: '#/components/parameters/_communityId'
+        - $ref: '#/components/parameters/parameter_roles-2'
+        - $ref: '#/components/parameters/parameter_userIds'
+      responses:
+        '200':
+          $ref: '#/components/responses/common-response-200'
+        '403':
+          description: Error Response
+          content:
+            application/json:
+              examples:
+                GenericPermissionDeniedError:
+                  $ref: '#/components/examples/GenericPermissionDeniedError'
+                UserIsBannedError:
+                  $ref: '#/components/examples/UserIsBannedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v3/community-categories:
     get:
       summary: query community categories.
@@ -1475,9 +1607,9 @@ paths:
       description: |
         query community categories.
       parameters:
-        - $ref: '#/components/parameters/parameter_sortBy-3'
-        - $ref: '#/components/parameters/parameter_isDeleted'
-        - $ref: '#/components/parameters/parameter_options-4'
+        - $ref: '#/components/parameters/parameter_sortBy-4'
+        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_options-5'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200'
@@ -1622,10 +1754,10 @@ paths:
       description: |
         Get paginable list of contents.
       parameters:
-        - $ref: '#/components/parameters/parameter_sortBy-4'
+        - $ref: '#/components/parameters/parameter_sortBy-5'
         - $ref: '#/components/parameters/parameter_hasFlag-2'
-        - $ref: '#/components/parameters/parameter_isDeleted'
-        - $ref: '#/components/parameters/parameter_options-4'
+        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_options-5'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-2'
@@ -1643,11 +1775,11 @@ paths:
       description: |
         Get paginable list of posts.
       parameters:
-        - $ref: '#/components/parameters/_communityId'
-        - $ref: '#/components/parameters/parameter_sortBy-4'
+        - $ref: '#/components/parameters/parameter__communityId'
+        - $ref: '#/components/parameters/parameter_sortBy-5'
         - $ref: '#/components/parameters/parameter_hasFlag-3'
-        - $ref: '#/components/parameters/parameter_isDeleted'
-        - $ref: '#/components/parameters/parameter_options-4'
+        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_options-5'
         - $ref: '#/components/parameters/parameter_dataTypes'
       responses:
         '200':
@@ -1670,7 +1802,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/showOnlyMyFeed'
         - $ref: '#/components/parameters/parameter_dataTypes'
-        - $ref: '#/components/parameters/parameter_options-4'
+        - $ref: '#/components/parameters/parameter_options-5'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-3'
@@ -1689,10 +1821,10 @@ paths:
         Get paginable list of posts.
       parameters:
         - $ref: '#/components/parameters/_userId'
-        - $ref: '#/components/parameters/parameter_sortBy-4'
+        - $ref: '#/components/parameters/parameter_sortBy-5'
         - $ref: '#/components/parameters/parameter_hasFlag-4'
-        - $ref: '#/components/parameters/parameter_isDeleted'
-        - $ref: '#/components/parameters/parameter_options-4'
+        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_options-5'
         - $ref: '#/components/parameters/parameter_dataTypes'
       responses:
         '200':
@@ -1712,10 +1844,30 @@ paths:
         Get number of post.
       parameters:
         - $ref: '#/components/parameters/_userId'
-        - $ref: '#/components/parameters/parameter_isDeleted'
+        - $ref: '#/components/parameters/parameter_isDeleted-2'
       responses:
         '200':
           $ref: '#/components/responses/_userId-count-get-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/me/global-feeds:
+    get:
+      summary: Get global feed.
+      tags:
+        - Feed
+      security:
+        - BearerAuth: []
+      description: |
+        Get paginable list of active posts (not deleted) from users and community.
+      parameters:
+        - $ref: '#/components/parameters/parameter_limit'
+        - $ref: '#/components/parameters/parameter_token'
+        - $ref: '#/components/parameters/parameter_dataTypes'
+      responses:
+        '200':
+          $ref: '#/components/responses/root-response-200'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '500':
@@ -1795,6 +1947,266 @@ paths:
                 type: string
         '404':
           $ref: '#/components/responses/NotFoundError'
+  /api/v4/images:
+    post:
+      summary: Upload image file.
+      security:
+        - BearerAuth: []
+      tags:
+        - File
+      parameters:
+        - $ref: '#/components/parameters/content-type'
+      description: |
+        Upload image to cloud storage
+
+        Image size limit: 1,073,741,824 byte
+      requestBody:
+        $ref: '#/components/requestBodies/common-post-request-payload'
+      responses:
+        '200':
+          $ref: '#/components/responses/images-response-200'
+        '413':
+          $ref: '#/components/responses/PayloadTooLargeError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/files:
+    post:
+      summary: Upload file.
+      security:
+        - BearerAuth: []
+      tags:
+        - File
+      parameters:
+        - $ref: '#/components/parameters/content-type'
+      description: |
+        Upload file to cloud storage
+
+        File size limit: 1,073,741,824 byte
+      requestBody:
+        $ref: '#/components/requestBodies/common-post-request-payload'
+      responses:
+        '200':
+          $ref: '#/components/responses/files-response-200'
+        '413':
+          $ref: '#/components/responses/PayloadTooLargeError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/videos:
+    post:
+      summary: Upload video file.
+      security:
+        - BearerAuth: []
+      tags:
+        - File
+      parameters:
+        - $ref: '#/components/parameters/content-type'
+      description: |
+        Upload video to cloud storage
+
+        Video size limit: 2,147,483,648 byte (2GB)
+      requestBody:
+        $ref: '#/components/requestBodies/common-post-request-payload'
+      responses:
+        '200':
+          $ref: '#/components/responses/videos-response-200'
+        '413':
+          $ref: '#/components/responses/PayloadTooLargeError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/me/following/{userId}:
+    post:
+      summary: Follow user.
+      tags:
+        - Follow
+      security:
+        - BearerAuth: []
+      description: |
+        Follow user
+      parameters:
+        - $ref: '#/components/parameters/_userId'
+      responses:
+        '200':
+          $ref: '#/components/responses/follow-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      summary: Unfollow or Cancel follow request
+      tags:
+        - Follow
+      security:
+        - BearerAuth: []
+      description: |
+        Unfollow or Cancel follow request
+      parameters:
+        - $ref: '#/components/parameters/_userId'
+      responses:
+        '200':
+          $ref: '#/components/responses/follow-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/me/followers/{userId}:
+    post:
+      summary: Accept follow request.
+      tags:
+        - Follow
+      security:
+        - BearerAuth: []
+      description: |
+        Accept follow request.
+      parameters:
+        - $ref: '#/components/parameters/_userId'
+      responses:
+        '200':
+          $ref: '#/components/responses/follow-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      summary: Decline follow request or delete followers.
+      tags:
+        - Follow
+      security:
+        - BearerAuth: []
+      description: |
+        Delete follower.
+      parameters:
+        - $ref: '#/components/parameters/_userId'
+      responses:
+        '200':
+          $ref: '#/components/responses/follow-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/me/followers:
+    get:
+      summary: Get my follower list.
+      tags:
+        - Follow
+      security:
+        - BearerAuth: []
+      description: |
+        Get follower information (pagination supported)
+      parameters:
+        - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/parameter_limit'
+        - $ref: '#/components/parameters/parameter_token'
+      responses:
+        '200':
+          $ref: '#/components/responses/follow-pagination-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/users/{userId}/followers:
+    get:
+      summary: Get other follower list.
+      tags:
+        - Follow
+      security:
+        - BearerAuth: []
+      description: |
+        Get follower information (pagination supported)
+      parameters:
+        - $ref: '#/components/parameters/_userId'
+        - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/parameter_limit'
+        - $ref: '#/components/parameters/parameter_token'
+      responses:
+        '200':
+          $ref: '#/components/responses/follow-pagination-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/me/following:
+    get:
+      summary: Get my following list
+      tags:
+        - Follow
+      security:
+        - BearerAuth: []
+      description: |
+        Get following information (pagination supported)
+      parameters:
+        - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/parameter_limit'
+        - $ref: '#/components/parameters/parameter_token'
+      responses:
+        '200':
+          $ref: '#/components/responses/follow-pagination-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/users/{userId}/following:
+    get:
+      summary: Get other following list.
+      tags:
+        - Follow
+      security:
+        - BearerAuth: []
+      description: |
+        Get following information (pagination supported)
+      parameters:
+        - $ref: '#/components/parameters/_userId'
+        - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/parameter_limit'
+        - $ref: '#/components/parameters/parameter_token'
+      responses:
+        '200':
+          $ref: '#/components/responses/follow-pagination-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/me/followInfo:
+    get:
+      summary: Get my follow information.
+      tags:
+        - Follow
+      security:
+        - BearerAuth: []
+      description: |
+        Get my follow information.
+      responses:
+        '200':
+          $ref: '#/components/responses/FollowCountResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/users/{userId}/followInfo:
+    get:
+      summary: Get other follow information.
+      tags:
+        - Follow
+      security:
+        - BearerAuth: []
+      description: |
+        Get other follow information.
+      parameters:
+        - $ref: '#/components/parameters/_userId'
+      responses:
+        '200':
+          $ref: '#/components/responses/FollowInformationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v1/pinned-posts/global:
     get:
       summary: Query global pinned post
@@ -2460,8 +2872,8 @@ paths:
         - Moderation
       parameters:
         - $ref: '#/components/parameters/regex'
-        - $ref: '#/components/parameters/parameter_sortBy-5'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_sortBy-6'
+        - $ref: '#/components/parameters/parameter_options-6'
       responses:
         '200':
           $ref: '#/components/responses/allowlists-get-response-200'
@@ -2498,8 +2910,8 @@ paths:
         - Moderation
       parameters:
         - $ref: '#/components/parameters/regex'
-        - $ref: '#/components/parameters/parameter_sortBy-5'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_sortBy-6'
+        - $ref: '#/components/parameters/parameter_options-6'
       responses:
         '200':
           $ref: '#/components/responses/blocklists-get-response-200'
@@ -2610,10 +3022,10 @@ paths:
         - $ref: '#/components/parameters/parameter_parentId'
         - $ref: '#/components/parameters/parameter_filterByParentId'
         - $ref: '#/components/parameters/parameter_hasFlag-5'
-        - $ref: '#/components/parameters/parameter_isDeleted-3'
+        - $ref: '#/components/parameters/parameter_isDeleted-4'
         - $ref: '#/components/parameters/parameter_tags-3'
         - $ref: '#/components/parameters/parameter_excludeTags'
-        - $ref: '#/components/parameters/parameter_options-6'
+        - $ref: '#/components/parameters/parameter_options-7'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-4'
@@ -2858,7 +3270,7 @@ paths:
         $ref: '#/components/requestBodies/root-put-request-payload'
       responses:
         '200':
-          $ref: '#/components/responses/root-response-200'
+          $ref: '#/components/responses/response_root-response-200'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '500':
@@ -3358,7 +3770,7 @@ paths:
         List all pinned posts in a community
       parameters:
         - $ref: '#/components/parameters/parameter_communityId-2'
-        - $ref: '#/components/parameters/parameter_options-7'
+        - $ref: '#/components/parameters/parameter_options-8'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-2'
@@ -3443,7 +3855,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_communityId-2'
         - $ref: '#/components/parameters/placement'
-        - $ref: '#/components/parameters/parameter_options-7'
+        - $ref: '#/components/parameters/parameter_options-8'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-2'
@@ -3763,8 +4175,8 @@ paths:
         - $ref: '#/components/parameters/answerId'
         - $ref: '#/components/parameters/authorization'
         - $ref: '#/components/parameters/content-type'
-        - $ref: '#/components/parameters/parameter_sortBy-6'
-        - $ref: '#/components/parameters/parameter_options-8'
+        - $ref: '#/components/parameters/parameter_sortBy-7'
+        - $ref: '#/components/parameters/parameter_options-9'
       responses:
         '200':
           $ref: '#/components/responses/PollPaginationResponse'
@@ -3784,11 +4196,11 @@ paths:
       parameters:
         - $ref: '#/components/parameters/targetId'
         - $ref: '#/components/parameters/targetType'
-        - $ref: '#/components/parameters/parameter_sortBy-4'
+        - $ref: '#/components/parameters/parameter_sortBy-5'
         - $ref: '#/components/parameters/dataType'
         - $ref: '#/components/parameters/parameter_hasFlag-6'
-        - $ref: '#/components/parameters/parameter_isDeleted'
-        - $ref: '#/components/parameters/parameter_options-4'
+        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_options-5'
         - $ref: '#/components/parameters/parameter_dataTypes-2'
         - $ref: '#/components/parameters/parameter_tags-4'
         - $ref: '#/components/parameters/matchingOnlyParentPost'
@@ -4031,6 +4443,230 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /api/v4/posts:
+    post:
+      summary: create a post
+      tags:
+        - Post
+      security:
+        - BearerAuth: []
+      description: |
+        Create a post
+      requestBody:
+        description: |
+          information of a post to be created.
+
+          require text or at least 1 attachments
+
+          ### Custom post
+          - When `dataType` is set as the custom name (dot separated string format, see the `dataType` field section), `data` payload can be anything but it will not support normal data capability (ex. `text` data will not be created)
+          and `data` payload size will be limit to `100kb`
+          - `attachments` will be ignored, users need to keep them in `data` field and handle the file info by themselves
+
+          ### Image, File, Video post
+          - Put `type` with file id in `attachments`
+          - Image and File data can be picked from `fileId` in `data` object in child post
+          - Video fileId for each resolution will be in `videoFileId` in `data` object in child post
+
+          ### Live streaming post
+          - When put `dataType` as `liveStream` and `streamId` in `data`, post will be created as live streaming post
+          - `attachments` will be ignored
+          - Video streaming info will be in `videoStreamings` object in response
+
+          ### Poll post
+          - When put `dataType` as `poll` and `pollId` in `data`, post will be created as poll post
+          - `attachments` will be ignored
+          - Poll info will be in `polls` object in response
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                      description: data for text in post parent
+                      example: example text
+                    streamId:
+                      type: string
+                      description: video streaming id for create live streaming post
+                      example: 81559bcc3a5bb3b6bbd69a83b89d337e
+                    pollId:
+                      type: string
+                      description: poll id for create poll post
+                      example: 53a9fd8b5aaa1af6c5a1bbd245ce4a9b1627373735551
+                attachments:
+                  type: array
+                  items:
+                    type: object
+                    description: attachment info
+                    properties:
+                      fileId:
+                        type: string
+                        example: 57b916d38eaf8010caddfb7759a2d06c
+                        description: file id for attachment
+                      type:
+                        type: string
+                        description: attachment type
+                        enum:
+                          - image
+                          - file
+                          - video
+                dataType:
+                  type: string
+                  example: upstra.customtype
+                  description: Must be in dot separated string format or system defined format (ex. "upstra.customtype", "com.eko.birthday", "liveStream")
+                targetType:
+                  type: string
+                  enum:
+                    - user
+                    - community
+                    - content
+                  default: user
+                  description: where to create post to
+                targetId:
+                  type: string
+                  example: public_user_id
+                  description: Resource public id depends on target type (ex. target type is community, target id will be community public id)
+                metadata:
+                  type: object
+                  example:
+                    anything: you want
+                postId:
+                  type: string
+                  example: postidiwant
+                  description: for specify public post id on post creation
+                tags:
+                  type: array
+                  minItems: 0
+                  maxItems: 5
+                  items:
+                    type: string
+                    description: tags
+                    maximum: 24
+                mentionees:
+                  type: array
+                  description: The object of the mentions type and user who get a notification from the post.
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: user
+                        description: |
+                          type: * `user` - need to specific userIds and notification mentions individual user
+                        enum:
+                          - user
+                      userIds:
+                        type: array
+                        example:
+                          - userId1
+                          - userId2
+                        description: Array of UserId. if the mention type is a channel, doesn't send userIds
+                        items:
+                          type: string
+                createdAt:
+                  type: string
+                  description: The date/time when a post is created.
+                  format: date-time
+                  example: '2022-07-07T04:24:20.444Z'
+              required:
+                - data
+      responses:
+        '200':
+          $ref: '#/components/responses/post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    get:
+      summary: query a post
+      tags:
+        - Post
+      security:
+        - BearerAuth: []
+      description: |
+        Query posts
+      parameters:
+        - $ref: '#/components/parameters/parameter_targetId'
+        - $ref: '#/components/parameters/parameter_targetType'
+        - $ref: '#/components/parameters/parameter_sortBy-8'
+        - $ref: '#/components/parameters/parameter_hasFlag-4'
+        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_options-10'
+        - $ref: '#/components/parameters/feedType'
+        - $ref: '#/components/parameters/parameter_dataTypes-3'
+        - $ref: '#/components/parameters/parameter_tags-5'
+        - $ref: '#/components/parameters/parameter_matchingOnlyParentPost'
+      responses:
+        '200':
+          $ref: '#/components/responses/post-pagination-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/posts/{postId}:
+    put:
+      summary: update a post
+      tags:
+        - Post
+      security:
+        - BearerAuth: []
+      description: |
+        Update a post
+      parameters:
+        - $ref: '#/components/parameters/parameter__postId'
+        - $ref: '#/components/parameters/parameter_preserve-edited-at'
+      requestBody:
+        $ref: '#/components/requestBodies/request__postId-put-request-payload'
+      responses:
+        '200':
+          $ref: '#/components/responses/post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      summary: delete a post
+      tags:
+        - Post
+      security:
+        - BearerAuth: []
+      description: |
+        Delete a post
+      parameters:
+        - $ref: '#/components/parameters/parameter__postId'
+        - $ref: '#/components/parameters/parameter_permanent'
+      responses:
+        '200':
+          description: post information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v1/presence/settings:
     get:
       summary: Get presence feature setting on both network and user level
@@ -4179,7 +4815,7 @@ paths:
       description: |
         Get message ids by the most of reactions.
       parameters:
-        - $ref: '#/components/parameters/parameter_limit'
+        - $ref: '#/components/parameters/parameter_limit-2'
         - $ref: '#/components/parameters/reactionName'
       responses:
         '200':
@@ -4203,7 +4839,7 @@ paths:
         - $ref: '#/components/parameters/parameter_referenceId'
         - $ref: '#/components/parameters/parameter_referenceType'
         - $ref: '#/components/parameters/reactionName'
-        - $ref: '#/components/parameters/parameter_options-9'
+        - $ref: '#/components/parameters/parameter_options-11'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-payload-200'
@@ -4246,6 +4882,26 @@ paths:
           $ref: '#/components/responses/root-delete-response-payload-200'
         '404':
           $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v3/reactions:
+    get:
+      summary: get list of reactions.
+      tags:
+        - Reaction
+      security:
+        - BearerAuth: []
+      description: |
+        Get paginable list of reactions.
+      parameters:
+        - $ref: '#/components/parameters/referenceId'
+        - $ref: '#/components/parameters/parameter_referenceType-2'
+        - $ref: '#/components/parameters/parameter_referenceVersion'
+        - $ref: '#/components/parameters/parameter_reactionName'
+        - $ref: '#/components/parameters/parameter_options-12'
+      responses:
+        '200':
+          $ref: '#/components/responses/response_root-get-response-200-6'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v2/roles:
@@ -4300,8 +4956,8 @@ paths:
         Get roles (pagination support)
       parameters:
         - $ref: '#/components/parameters/parameter_keyword-2'
-        - $ref: '#/components/parameters/parameter_sortBy-7'
-        - $ref: '#/components/parameters/parameter_options-4'
+        - $ref: '#/components/parameters/parameter_sortBy-9'
+        - $ref: '#/components/parameters/parameter_options-5'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-7'
@@ -4400,8 +5056,8 @@ paths:
         - $ref: '#/components/parameters/parameter_query'
         - $ref: '#/components/parameters/targetId'
         - $ref: '#/components/parameters/parameter_targetType'
-        - $ref: '#/components/parameters/parameter_options-4'
-        - $ref: '#/components/parameters/parameter_dataTypes-3'
+        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_dataTypes-4'
         - $ref: '#/components/parameters/parameter_tags-4'
         - $ref: '#/components/parameters/matchingOnlyParentPost'
       responses:
@@ -4429,7 +5085,7 @@ paths:
         - $ref: '#/components/parameters/parameter_filter-2'
         - $ref: '#/components/parameters/parameter_tags-4'
         - $ref: '#/components/parameters/categoryIds'
-        - $ref: '#/components/parameters/parameter_options-4'
+        - $ref: '#/components/parameters/parameter_options-5'
       responses:
         '200':
           $ref: '#/components/responses/communities-response-payload-200'
@@ -4469,7 +5125,7 @@ paths:
       description: Verify access token. The caller must add accessToken in header.
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-6'
+          $ref: '#/components/responses/response_root-get-response-200-7'
         '401':
           description: Access token is invalid or expired
         '403':
@@ -4480,6 +5136,644 @@ paths:
           description: Parameters validation error
       security:
         - BearerAuth: []
+  /api/v4/sessions:
+    post:
+      summary: Register a session
+      tags:
+        - Session
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'
+      description: |
+        Register a session in order receive access token to perform sdk operations.
+      requestBody:
+        $ref: '#/components/requestBodies/request_root-post-request-payload-11'
+      responses:
+        '200':
+          $ref: '#/components/responses/session-response-200'
+        '401':
+          $ref: '#/components/responses/UserIsSystemBanned'
+        '403':
+          $ref: '#/components/responses/UserIsGlobalBanned'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      summary: Revoke access token
+      tags:
+        - Session
+      security:
+        - BearerAuth: []
+      description: Revoke an access token. If the userId is provided, this will revoke all access tokens of that user. Only admin can revoke all access tokens of a user.
+      parameters:
+        - $ref: '#/components/parameters/parameter_userId-3'
+        - $ref: '#/components/parameters/isPublic'
+      responses:
+        '200':
+          description: Revoke access token success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+        '403':
+          $ref: '#/components/responses/UserIsGlobalBanned'
+        '404':
+          $ref: '#/components/responses/UserIdNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/sessions/users/{userId}:
+    delete:
+      summary: Revoke all user's access tokens by admin
+      tags:
+        - Session
+      security:
+        - BearerAuth: []
+      description: Revoke all user's access tokens by admin
+      parameters:
+        - $ref: '#/components/parameters/parameter__userId'
+        - $ref: '#/components/parameters/isPublic'
+      responses:
+        '200':
+          description: Revoke access token success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+        '403':
+          $ref: '#/components/responses/UserIsGlobalBanned'
+        '404':
+          $ref: '#/components/responses/UserIdNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/stories:
+    post:
+      summary: Create a story
+      description: Create a story
+      tags:
+        - Story
+      requestBody:
+        $ref: '#/components/requestBodies/request_root-post-request-payload-12'
+      responses:
+        '200':
+          description: Create Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateStoryResponsePayload'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                User reaches daily quota:
+                  value:
+                    status: error
+                    code: 400000
+                    message: You have reached your daily story creation quota. You can delete an existing story or wait for a story to expire before creating a new one
+                Target reaches quota:
+                  value:
+                    status: error
+                    code: 400000
+                    message: This community has reached its daily story creation quota. Please try again later.
+                Text is required in story type text:
+                  value:
+                    status: error
+                    code: 400000
+                    message: Text is required in data object.
+                File ID is required in story type media:
+                  value:
+                    status: error
+                    code: 400000
+                    message: File is required in data object.
+                URL is required in hyperlink item.:
+                  value:
+                    status: error
+                    code: 400000
+                    message: url is required in hyperlink item.
+                Invalid url format in hyperlink item (no TLD or else):
+                  value:
+                    status: error
+                    code: 400000
+                    message: Invalid url format in hyperlink item.
+                Target not found.:
+                  value:
+                    status: error
+                    code: 400000
+                    message: Community not found.
+                Target is deleted.:
+                  value:
+                    status: error
+                    code: 400000
+                    message: The community has been deleted.
+        '403':
+          description: No permission to create story.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Have no permission in community to create a story:
+                  value:
+                    status: error
+                    code: 400300
+                    message: You are not allowed to do this
+                URL provided in an item is not in the whitelist:
+                  value:
+                    status: error
+                    code: 400309
+                    message: Link is not allowed
+        '422':
+          description: Parameters Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Parameters Validation Error!
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+    get:
+      summary: Query stories by target
+      description: Query stories by target
+      tags:
+        - Story
+      parameters:
+        - $ref: '#/components/parameters/parameter_targetId'
+        - $ref: '#/components/parameters/parameter_targetType-2'
+        - $ref: '#/components/parameters/parameter_dataType'
+        - $ref: '#/components/parameters/isExpired'
+        - $ref: '#/components/parameters/parameter_options-13'
+      responses:
+        '200':
+          description: Story Information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryWithTargetPaginatedResponsePayload'
+        '403':
+          description: Forbidden Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400301
+                message: User xxx is not community xxx member
+        '404':
+          description: Target not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400400
+                message: CommunityId xxx not found
+        '422':
+          description: Parameters Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Parameters Validation Error!
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+  /api/v4/stories/count:
+    get:
+      summary: Count stories by target
+      description: Count stories by target which includes both active and expired stories. Only admin can use this API.
+      tags:
+        - Story
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/parameter_targetId'
+        - $ref: '#/components/parameters/parameter_targetType-2'
+      responses:
+        '200':
+          description: Story Count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 10
+        '404':
+          description: Target not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400400
+                message: CommunityId xxx not found
+        '422':
+          description: Parameters Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Parameters Validation Error!
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+  /api/v4/stories/seen:
+    get:
+      summary: Query story targets by multiple targets
+      description: Query story targets by multiple targets
+      tags:
+        - Story
+      parameters:
+        - $ref: '#/components/parameters/targets'
+      responses:
+        '200':
+          description: Story targets Information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryTargetsResponsePayload'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Target not found.:
+                  value:
+                    status: error
+                    code: 400000
+                    message: Community not found.
+                Target is deleted.:
+                  value:
+                    status: error
+                    code: 400000
+                    message: The community has been deleted.
+        '422':
+          description: Parameters Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Parameters Validation Error!
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+  /api/v4/stories-by-targets:
+    get:
+      summary: Query stories by multiple targets
+      description: Query stories by multiple targets
+      tags:
+        - Story
+      parameters:
+        - $ref: '#/components/parameters/targets'
+        - $ref: '#/components/parameters/parameter_options-13'
+      responses:
+        '200':
+          description: Story Information, sorted by the target order in the request then the sort option
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryWithTargetResponsePayload'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Target not found.:
+                  value:
+                    status: error
+                    code: 400000
+                    message: Community not found.
+                Target is deleted.:
+                  value:
+                    status: error
+                    code: 400000
+                    message: The community has been deleted.
+        '422':
+          description: Parameters Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Parameters Validation Error!
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+  /api/v4/stories/{storyId}:
+    get:
+      description: Get a story
+      summary: Get a story
+      tags:
+        - Story
+      parameters:
+        - $ref: '#/components/parameters/_storyId'
+      responses:
+        '200':
+          description: Story Information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponsePayload'
+        '403':
+          description: Forbidden Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400300
+                message: User xxx is not community xxx member
+        '404':
+          description: Story not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400400
+                message: Story not found
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+    delete:
+      description: Delete a story
+      summary: Delete a story
+      tags:
+        - Story
+      parameters:
+        - $ref: '#/components/parameters/_storyId'
+        - $ref: '#/components/parameters/parameter_permanent-2'
+      responses:
+        '200':
+          description: Delete Result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        '403':
+          description: Forbidden Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400300
+                message: You are not allowed to do this
+        '404':
+          description: Story not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400400
+                message: Story not found
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+  /api/v4/stories/{storyId}/flags:
+    post:
+      description: Flag a story
+      summary: Flag a story
+      tags:
+        - Story
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/_storyId'
+      responses:
+        '200':
+          description: Story Information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponsePayload'
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Story creators cannot flag their own story.:
+                  value:
+                    status: error
+                    code: 400301
+                    message: Story creators cannot flag their own story.
+                Number of flags already exceed.:
+                  value:
+                    status: error
+                    code: 400301
+                    message: Number of flags already exceed.
+        '404':
+          description: Story not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400400
+                message: Story not found
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+    delete:
+      description: Unflag a story
+      summary: Unflag a story
+      tags:
+        - Story
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/_storyId'
+      responses:
+        '200':
+          description: Story Information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponsePayload'
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Story creators cannot unflag their own story.:
+                  value:
+                    status: error
+                    code: 400301
+                    message: Story creators cannot unflag their own story.
+                You never send a flag to this story.:
+                  value:
+                    status: error
+                    code: 400301
+                    message: You never send a flag to this story.
+        '404':
+          description: Story not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400400
+                message: Story not found
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
+  /api/v4/stories/{storyId}/flags/all:
+    delete:
+      description: Clear all flags in a story. Only admin can use this API.
+      summary: Clear all flags in a story.
+      tags:
+        - Story
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/_storyId'
+      responses:
+        '200':
+          description: Story Information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryResponsePayload'
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Only admin can clear flags:
+                  value:
+                    status: error
+                    code: 400301
+                    message: You are not allowed to do this.
+        '404':
+          description: Story not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 400400
+                message: Story not found
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
   /api/v2/users/ban:
     post:
       summary: ban a user.
@@ -4490,7 +5784,7 @@ paths:
       description: |
         Ban a user
       requestBody:
-        $ref: '#/components/requestBodies/common-post-request-payload'
+        $ref: '#/components/requestBodies/request_common-post-request-payload'
         description: |
           User to be baned
       responses:
@@ -4512,7 +5806,7 @@ paths:
       description: |
         Unban a user
       requestBody:
-        $ref: '#/components/requestBodies/common-post-request-payload'
+        $ref: '#/components/requestBodies/request_common-post-request-payload'
         description: |
           User to be unbaned
       responses:
@@ -4534,7 +5828,7 @@ paths:
       description: |
         Clear flag a user
       parameters:
-        - $ref: '#/components/parameters/parameter_userId-3'
+        - $ref: '#/components/parameters/parameter_userId-4'
       responses:
         '200':
           $ref: '#/components/responses/_userId-flags-delete-response-payload-200'
@@ -4557,13 +5851,13 @@ paths:
         - $ref: '#/components/parameters/keyword'
         - $ref: '#/components/parameters/exactMatchKeyword'
         - $ref: '#/components/parameters/parameter_filter-3'
-        - $ref: '#/components/parameters/parameter_sortBy-8'
-        - $ref: '#/components/parameters/parameter_options-4'
-        - $ref: '#/components/parameters/parameter_isDeleted-4'
+        - $ref: '#/components/parameters/parameter_sortBy-10'
+        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_isDeleted-5'
         - $ref: '#/components/parameters/isBrand'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-7'
+          $ref: '#/components/responses/response_root-get-response-200-8'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '403':
@@ -4619,7 +5913,7 @@ paths:
       description: |
         Get one user.
       parameters:
-        - $ref: '#/components/parameters/parameter__userId'
+        - $ref: '#/components/parameters/parameter__userId-2'
         - $ref: '#/components/parameters/parameter_type-2'
       responses:
         '200':
@@ -4640,7 +5934,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/parameter__userId'
+        - $ref: '#/components/parameters/parameter__userId-2'
       responses:
         '200':
           description: Is flag by me response.
@@ -4653,6 +5947,119 @@ paths:
                     type: boolean
         '404':
           $ref: '#/components/responses/UserNotFoundError'
+  /api/v4/users/{userId}:
+    delete:
+      summary: Delete user
+      security:
+        - BearerAuth: []
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/parameter__userId-3'
+        - $ref: '#/components/parameters/deleteAll'
+        - $ref: '#/components/parameters/markMessageDeleted'
+        - $ref: '#/components/parameters/hardDeletePost'
+        - $ref: '#/components/parameters/hardDeleteComment'
+      responses:
+        '200':
+          $ref: '#/components/responses/_userId-delete-response-200'
+        '400':
+          $ref: '#/components/responses/UserIsAlreadyDeletedError'
+        '404':
+          $ref: '#/components/responses/UserNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/me/flags/{userId}:
+    post:
+      summary: Report user (flag user)
+      security:
+        - BearerAuth: []
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/parameter__userId-3'
+      description: |
+        Report user by user id.
+      responses:
+        '200':
+          $ref: '#/components/responses/me-flags_userId-post-response-200'
+        '404':
+          $ref: '#/components/responses/UserNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      summary: Unreported user (unflag user)
+      security:
+        - BearerAuth: []
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/parameter__userId-3'
+      description: |
+        Unreported user by user id.
+      responses:
+        '200':
+          $ref: '#/components/responses/me-flags_userId-delete-response-200'
+        '404':
+          $ref: '#/components/responses/UserNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/me/user-blocks:
+    get:
+      summary: Get list of blocked users
+      description: |
+        Get list of blocked users
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/parameter_limit'
+        - $ref: '#/components/parameters/parameter_token-2'
+      responses:
+        '200':
+          $ref: '#/components/responses/me-user-blocks-get-response-200'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/me/user-blocks/{userId}:
+    post:
+      summary: Block a user.
+      tags:
+        - User
+      description: |
+        Blocking a user
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/parameter__userId-3'
+      responses:
+        '200':
+          $ref: '#/components/responses/me-user-blocks_userId-post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/UserNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      summary: Unblock a user
+      tags:
+        - User
+      description: |
+        Unblocking a user
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/parameter__userId-3'
+      responses:
+        '200':
+          $ref: '#/components/responses/me-user-blocks_userId-delete-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/UserNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v3/user-event/video-streaming:
     post:
       summary: create user event for video streaming
@@ -4675,7 +6082,7 @@ paths:
       security:
         - BearerAuth: []
       requestBody:
-        $ref: '#/components/requestBodies/request_root-post-request-payload-11'
+        $ref: '#/components/requestBodies/request_root-post-request-payload-13'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-9'
@@ -4693,12 +6100,12 @@ paths:
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/statuses'
         - $ref: '#/components/parameters/userPublicIds'
-        - $ref: '#/components/parameters/parameter_sortBy-5'
-        - $ref: '#/components/parameters/parameter_isDeleted-5'
-        - $ref: '#/components/parameters/parameter_options-10'
+        - $ref: '#/components/parameters/parameter_sortBy-6'
+        - $ref: '#/components/parameters/parameter_isDeleted-6'
+        - $ref: '#/components/parameters/parameter_options-14'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-8'
+          $ref: '#/components/responses/response_root-get-response-200-9'
         '404':
           $ref: '#/components/responses/NotFoundError'
         '500':
@@ -5105,6 +6512,12 @@ components:
         - userId
         - createdAt
         - updatedAt
+    token-post-request-payload:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: User id to assign this token
     ChannelType:
       type: string
       enum:
@@ -5974,6 +7387,44 @@ components:
       required:
         - postId
         - data
+    Follow:
+      type: object
+      properties:
+        from:
+          type: string
+        fromUserPublicId:
+          type: string
+        fromUserInternalId:
+          type: string
+        to:
+          type: string
+        toUserPublicId:
+          type: string
+        toUserInternalId:
+          type: string
+        status:
+          type: string
+          enum:
+            - pending
+            - accepted
+            - none
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    FollowCount:
+      type: object
+      properties:
+        userId:
+          type: string
+        followerCount:
+          type: integer
+        followingCount:
+          type: integer
+        pendingCount:
+          type: integer
     PinTarget:
       type: object
       properties:
@@ -7045,6 +8496,209 @@ components:
             type: string
         createdAt:
           type: string
+    PostV4:
+      type: object
+      properties:
+        postId:
+          type: string
+          description: ID of a post.
+        parentPostId:
+          type: string
+          description: ID of a parent post.
+        postedUserId:
+          type: string
+          description: ID of a creator.
+        postedUserPublicId:
+          type: string
+          description: Public ID of a creator.
+        postedUserInternalId:
+          type: string
+          description: Internal ID of a creator.
+        publisherId:
+          type: string
+          description: ID of an original publisher when creating a post as brand.
+        publisherPublicId:
+          type: string
+          description: Public ID of an original publisher when creating a post as brand.
+        sharedUserId:
+          type: string
+          description: ID of a shared owner.
+        sharedCount:
+          type: integer
+          description: number of shared post.
+        targetId:
+          type: string
+          description: ID of a target.
+        targetPublicId:
+          type: string
+          description: Public ID of a target.
+        targetInternalId:
+          type: string
+          description: Internal ID of a target.
+        targetType:
+          type: string
+          enum:
+            - user
+            - community
+            - content
+          description: Type of a target (user, community, content).
+        dataType:
+          type: string
+          enum:
+            - text
+            - image
+            - file
+            - video
+            - liveStream
+          description: Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).
+          default: text
+        data:
+          type: object
+          description: Body of a post. (It can be anything when dataType is not text, image, file)
+          properties:
+            text:
+              type: string
+              description: post text.
+            fileId:
+              type: string
+              description: file key on cloud storage (for image, file post).
+            thumbnailFileId:
+              type: string
+              description: video thumbnail file id (for video post).
+            videoFileId:
+              type: object
+              description: video file id for each quality (for video post).
+              properties:
+                original:
+                  type: string
+                  description: original file id
+                low:
+                  type: string
+                  description: low video quality file id
+                medium:
+                  type: string
+                  description: medium video quality file id
+                high:
+                  type: string
+                  description: high video quality file id
+            streamId:
+              type: string
+              description: video streaming id (for video streaming post)
+        metadata:
+          type: object
+          description: Additional properties to support custom fields.
+        flagCount:
+          type: integer
+          description: The number of users that has read this post.
+        hashFlag:
+          type: object
+          description: The flag for checking internally that this post is reported or not.
+          properties:
+            bits:
+              type: integer
+            hashes:
+              type: integer
+            hash:
+              type: array
+              items:
+                type: string
+        editedAt:
+          type: string
+          description: The date/time when text or metadata of post is updated.
+          format: date-time
+        createdAt:
+          type: string
+          description: The date/time when a post is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a post is updated or deleted.
+          format: date-time
+        reactions:
+          type: object
+          description: The mapping of reaction with reactionCounter.
+          example:
+            like: 1
+        reactionsCount:
+          type: integer
+          description: The number of all reactions for this post.
+          example: 1
+        myReactions:
+          type: array
+          items:
+            type: string
+            example: like
+          description: The list of my reactions to this post.
+        commentsCount:
+          type: integer
+          description: The number of all comments for this post.
+          example: 1
+        comments:
+          type: array
+          items:
+            type: string
+            description: ID of a comment.
+        children:
+          type: array
+          items:
+            type: string
+            description: ID of a children post.
+        isDeleted:
+          type: boolean
+          default: false
+          description: A flag to deleted a post.
+        hasFlaggedComment:
+          type: boolean
+          default: false
+          description: The flag for checking internally that comments inside post is reported or not.
+        hasFlaggedChildren:
+          type: boolean
+          default: false
+          description: The flag for checking internally that children post is reported or not.
+        feedId:
+          type: string
+          description: Feed public id
+        tags:
+          type: array
+          minItems: 0
+          maxItems: 5
+          items:
+            type: string
+            maxLength: 24
+        mentionees:
+          type: array
+          description: The object of the mentions type and user who get a notification from the post.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: |
+                  type: * `user` - need to specific userIds and notification mentions individual user
+                enum:
+                  - user
+              userIds:
+                type: array
+                description: Array of UserId.
+                items:
+                  type: string
+              userPublicIds:
+                type: array
+                description: Array of UserPublicId.
+                items:
+                  type: string
+              userInternalIds:
+                type: array
+                description: Array of UserInternalId.
+                items:
+                  type: string
+        impression:
+          type: integer
+        reach:
+          type: integer
+      required:
+        - postId
+        - data
     PresenceUserSetting:
       description: Presence user setting
       type: object
@@ -7193,6 +8847,367 @@ components:
         score:
           type: number
           description: Score of matching the search query.
+    StoryHyperlinkItemData:
+      type: object
+      description: Data of a hyperlink item. Required when item type is hyperlink.
+      properties:
+        url:
+          type: string
+          description: URL of the hyperlink.
+          maxLength: 1000
+        customText:
+          type: string
+          description: Custom text of the hyperlink.
+          maxLength: 30
+      required:
+        - url
+    StoryItem:
+      type: object
+      description: Story item. Currently support only hyperlink item. Only one hyperlink item is allowed per story.
+      properties:
+        type:
+          type: string
+          description: Type of the story item. Currently support only hyperlink
+          enum:
+            - hyperlink
+          default: hyperlink
+        data:
+          oneOf:
+            - $ref: '#/components/schemas/StoryHyperlinkItemData'
+        placement:
+          type: object
+          description: Placement of the item in the story. Currently not supported.
+          properties:
+            width:
+              type: number
+            height:
+              type: number
+            transform:
+              type: object
+              properties:
+                translate_x:
+                  type: number
+                  description: Translation in the x-axis (in pixels)
+                translate_y:
+                  type: number
+                  description: Translation in the y-axis (in pixels)
+                scale_x:
+                  type: number
+                  description: Scale factor for the x-axis
+                scale_y:
+                  type: number
+                  description: Scale factor for the y-axis
+                rotate:
+                  type: number
+                  description: Rotation angle in degrees
+          required:
+            - data
+      example:
+        type: hyperlink
+        data:
+          url: https://www.google.com
+          customText: Google
+    Story:
+      type: object
+      properties:
+        storyId:
+          type: string
+          description: ID of a post.
+        path:
+          type: string
+          description: Path of a story.
+        creatorId:
+          type: string
+          description: Internal ID of a creator.
+        creatorPublicId:
+          type: string
+          description: Public ID of a creator.
+        targetId:
+          type: string
+          description: Internal ID of a target.
+        targetPublicId:
+          type: string
+          description: Public ID of a target.
+        targetType:
+          type: string
+          enum:
+            - user
+            - community
+          description: Type of a target (user, community, content).
+        dataType:
+          type: string
+          enum:
+            - text
+            - image
+            - video
+        items:
+          type: array
+          description: List of story item. Currently support only hyperlink item. Only one hyperlink item is allowed per story.
+          items:
+            $ref: '#/components/schemas/StoryItem'
+          maxItems: 10
+          default: []
+        data:
+          type: object
+          description: Main data contained in the story, required only 1 field depends on dataType. The size of this object must be less than 10 KB.
+          properties:
+            text:
+              type: string
+              description: post text.
+            fileId:
+              type: string
+              description: file key on cloud storage (for image type).
+            imageDisplayMode:
+              type: string
+              description: |
+                image display mode (available if dataType is image) represents the display mode of an image for maintaining the correct visual dimensions when displaying or processing image.
+              enum:
+                - fit
+                - fill
+              default: fit
+            thumbnailFileId:
+              type: string
+              description: video thumbnail file id (for video type).
+            videoFileId:
+              type: object
+              description: video file id for each quality (for video type).
+              properties:
+                original:
+                  type: string
+                  description: original file id
+                low:
+                  type: string
+                  description: low video quality file id
+                medium:
+                  type: string
+                  description: medium video quality file id
+                high:
+                  type: string
+                  description: high video quality file id
+        metadata:
+          type: object
+          description: Additional properties to support custom fields.
+        flagCount:
+          type: integer
+          description: The number of users that has read this post.
+        hashFlag:
+          type: object
+          description: The flag for checking internally that this post is reported or not.
+          properties:
+            bits:
+              type: integer
+            hashes:
+              type: integer
+            hash:
+              type: array
+              items:
+                type: string
+        createdAt:
+          type: string
+          description: The date/time when a story is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a story is deleted.
+          format: date-time
+        expiresAt:
+          type: string
+          description: The date/time when a story is going to be expired.
+          format: date-time
+        reactions:
+          type: object
+          description: The mapping of reaction with reactionCounter.
+          example:
+            like: 1
+        reactionsCount:
+          type: integer
+          description: The number of all reactions for this post.
+          example: 1
+        myReactions:
+          type: array
+          items:
+            type: string
+            example: like
+          description: The list of my reactions to this post.
+        commentsCount:
+          type: integer
+          description: The number of all comments for this post.
+          example: 1
+        isDeleted:
+          type: boolean
+          default: false
+          description: A flag to deleted a story.
+        hasFlaggedComment:
+          type: boolean
+          default: false
+          description: The flag for checking internally that comments inside post is reported or not.
+        mentionedUsers:
+          type: array
+          description: The object of the mentions type and user who get a notification from the post.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: |
+                  type: * `user` - need to specific userIds and notification mentions individual user
+                enum:
+                  - user
+                  - channel
+              userIds:
+                type: array
+                description: Array of UserId.
+                items:
+                  type: string
+              userPublicIds:
+                type: array
+                description: Array of UserId.
+                items:
+                  type: string
+        impression:
+          type: integer
+          description: Number of non-unique user view of the story
+        reach:
+          type: integer
+          description: Number of unique user view of the story
+      required:
+        - storyId
+        - data
+    StoryResponsePayload:
+      description: Story response payload
+      type: object
+      properties:
+        stories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Story'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        communities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Community'
+        communityUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityUser'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityCategory'
+    StoryTarget:
+      type: object
+      properties:
+        targetId:
+          type: string
+          description: ID of a target.
+        targetPublicId:
+          type: string
+          description: Public ID of a target.
+        targetType:
+          type: string
+          enum:
+            - community
+            - user
+          description: Type of a target (user, community, content).
+        lastStoryExpiresAt:
+          type: string
+          description: The expired date/time of the latest story created in target. Provided if there is any active story in target.
+          format: date-time
+        lastStorySeenExpiresAt:
+          type: string
+          description: The expired date/time of the latest story the user has seen. Provided if user has seen any story in target.
+          format: date-time
+        targetUpdatedAt:
+          type: string
+          description: The date/time when a target is updated. Used for validating the seen state on SDK side
+          format: date-time
+      required:
+        - targetId
+        - targetPublicId
+        - targetType
+        - targetUpdatedAt
+    StoryWithTargetResponsePayload:
+      allOf:
+        - $ref: '#/components/schemas/StoryResponsePayload'
+        - type: object
+          properties:
+            storyTargets:
+              type: array
+              items:
+                $ref: '#/components/schemas/StoryTarget'
+    StoryWithTargetPaginatedResponsePayload:
+      allOf:
+        - $ref: '#/components/schemas/StoryWithTargetResponsePayload'
+        - type: object
+          properties:
+            paging:
+              type: object
+              properties:
+                next:
+                  type: string
+                  description: The next token to get the next page of stories.
+                previous:
+                  type: string
+                  description: The previous token to get the previous page of stories.
+    StoryWithReferenceId:
+      allOf:
+        - $ref: '#/components/schemas/Story'
+        - type: object
+          properties:
+            referenceId:
+              type: string
+              description: the id used for reference when optimistically create the story. only avaliable in create story API
+    CreateStoryResponsePayload:
+      description: Create story response payload
+      type: object
+      properties:
+        stories:
+          type: array
+          items:
+            $ref: '#/components/schemas/StoryWithReferenceId'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        communities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Community'
+        communityUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityUser'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityCategory'
+    StoryTargetsResponsePayload:
+      description: Story targets response payload
+      type: object
+      properties:
+        storyTargets:
+          type: array
+          items:
+            $ref: '#/components/schemas/StoryTarget'
     User:
       type: object
       properties:
@@ -7237,6 +9252,34 @@ components:
         - userId
         - createdAt
         - updatedAt
+    FollowV5:
+      type: object
+      properties:
+        from:
+          type: string
+        fromUserPublicId:
+          type: string
+        fromUserInternalId:
+          type: string
+        to:
+          type: string
+        toUserPublicId:
+          type: string
+        toUserInternalId:
+          type: string
+        status:
+          type: string
+          enum:
+            - blocked
+            - pending
+            - accepted
+            - none
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     VideoStreamingModerationLabel:
       type: object
       properties:
@@ -7452,6 +9495,54 @@ components:
             data:
               detail:
                 - The 'data.text' field length must be less than or equal to 20000 characters long.
+    token-post-response-200:
+      description: Response payload
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: s9qne0wEqVb2e05271177748659f574a4e8ab85e08
+            description: Use this token when create sessions
+    token-post-response-401:
+      description: Unauthorized. Server key is invalid.
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: Unauthorized
+            description: Server key is invalid
+    token-post-response-403:
+      description: Forbidden. Possibly that secure mode is disabled
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+              code:
+                type: number
+              data:
+                type: object
+                description: error detail
+    token-post-response-422:
+      description: Parameters validation error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+              code:
+                type: number
+              data:
+                type: object
+                description: error detail
     PermissionDeniedError:
       description: Permission denied.
       content:
@@ -7640,6 +9731,35 @@ components:
                 properties:
                   success:
                     type: boolean
+    _channelId-users-response-200:
+      description: Channels Information
+      content:
+        application/json:
+          schema:
+            properties:
+              channels:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChannelV3'
+              channelUsers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChannelUserV3'
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  prev:
+                    type: string
     root-get-response-200:
       description: Comment Information
       content:
@@ -7725,6 +9845,29 @@ components:
                 properties:
                   result:
                     type: boolean
+    _commentId-response-200:
+      description: Comment Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              comments:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+              commentChildren:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
     common-get-response-200:
       description: Community Users Information
       content:
@@ -8078,6 +10221,57 @@ components:
             properties:
               postsCount:
                 type: number
+    root-response-200:
+      description: Global Feed Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+                  postChildren:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+                  comments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+                  communities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Community'
+                  communityUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityUser'
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityCategory'
+                  paging:
+                    type: object
+                    properties:
+                      next:
+                        type: string
+                      previous:
+                        type: string
     root-post-response-200:
       description: File Upload Result
       content:
@@ -8238,6 +10432,258 @@ components:
             status: error
             code: 400301
             message: Permission denied
+    images-response-200:
+      description: Image Upload Result
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                  description: Root file key on cloud storage.
+                fileUrl:
+                  type: string
+                  description: url to download the file
+                type:
+                  type: enum
+                  description: File type.
+                  enum:
+                    - image
+                    - file
+                    - video
+                  example: image
+                accessType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
+                createdAt:
+                  type: string
+                  description: The date/time when a file is uploaded.
+                  format: date-time
+                updatedAt:
+                  type: string
+                  description: The date/time when a file is updated.
+                  format: date-time
+                attributes:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: File name.
+                      example: test.jpeg
+                    extension:
+                      type: string
+                      description: File format.
+                      example: jpeg
+                    size:
+                      type: number
+                      description: File size.
+                      example: 2107842
+                    mimeType:
+                      type: string
+                      description: File mime-type.
+                      example: image/jpeg
+                    metadata:
+                      type: object
+                      description: Image metadata (width, height etc.).
+                      properties:
+                        height:
+                          type: number
+                        width:
+                          type: number
+                        isFull:
+                          type: boolean
+    files-response-200:
+      description: File Upload Result
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                  description: Root file key on cloud storage.
+                fileUrl:
+                  type: string
+                  description: url to download the file
+                type:
+                  type: enum
+                  description: File type.
+                  enum:
+                    - image
+                    - file
+                    - video
+                  example: file
+                acceType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
+                createdAt:
+                  type: string
+                  description: The date/time when a file is uploaded.
+                  format: date-time
+                updatedAt:
+                  type: string
+                  description: The date/time when a file is updated.
+                  format: date-time
+                attributes:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: File name.
+                      example: test.pdf
+                    extension:
+                      type: string
+                      description: File format.
+                      example: pdf
+                    size:
+                      type: number
+                      description: File size.
+                      example: 2107842
+                    mimeType:
+                      type: string
+                      description: File mime-type.
+                      example: application/pdf
+                    metadata:
+                      type: object
+                      description: File metadata.
+    videos-response-200:
+      description: File Video Upload Result
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                  description: Root file key on cloud storage.
+                fileUrl:
+                  type: string
+                  description: url to download the file
+                type:
+                  type: enum
+                  description: File type.
+                  enum:
+                    - image
+                    - file
+                    - video
+                  example: video
+                accessType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
+                createdAt:
+                  type: string
+                  description: The date/time when a file is uploaded.
+                  format: date-time
+                updatedAt:
+                  type: string
+                  description: The date/time when a file is updated.
+                  format: date-time
+                attributes:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: File name.
+                      example: big_buck_bunny_720p_2mb.mp4
+                    extension:
+                      type: string
+                      description: File format.
+                      example: mp4
+                    size:
+                      type: number
+                      description: File size.
+                      example: 2107842
+                    mimeType:
+                      type: string
+                      description: File mime-type.
+                      example: video/mp4
+                    metadata:
+                      type: object
+                      description: Video metadata (width, height etc.).
+    follow-response-200:
+      description: Follow Response Object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              follows:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Follow'
+    follow-pagination-response-200:
+      description: Follows List
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              follows:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Follow'
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  prev:
+                    type: string
+    FollowCountResponse:
+      description: Follow Count
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              followCounts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FollowCount'
+    FollowInformationResponse:
+      description: Follow Information
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - followCounts
+            properties:
+              follows:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Follow'
+              followCounts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FollowCount'
     response_common-response-200-2:
       description: Pin Post Information
       content:
@@ -8845,7 +11291,7 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/File'
-    root-response-200:
+    response_root-response-200:
       description: network setting configuration
       content:
         application/json:
@@ -9178,6 +11624,111 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/Poll'
+    post-pagination-response-200:
+      description: Post Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              posts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostV4'
+              postChildren:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostV4'
+              comments:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+              communities:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Community'
+              communityUsers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommunityUser'
+              categories:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommunityCategory'
+              feeds:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feed'
+              videoStreamings:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VideoStreaming'
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  previous:
+                    type: string
+    post-response-200:
+      description: Post Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              posts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostV4'
+              postChildren:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostV4'
+              comments:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+              communities:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Community'
+              communityUsers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommunityUser'
+              categories:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommunityCategory'
+              feeds:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feed'
+              videoStreamings:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VideoStreaming'
+              polls:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Poll'
     settings-response-payload-200:
       description: Get presence feature setting response
       content:
@@ -9301,6 +11852,32 @@ components:
             properties:
               removedId:
                 type: string
+    response_root-get-response-200-6:
+      description: Reaction information.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              reactions:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reaction'
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  previous:
+                    type: string
     response_root-get-response-payload-200-2:
       description: Roles information.
       content:
@@ -9446,7 +12023,7 @@ components:
                     type: string
                   previous:
                     type: string
-    response_root-get-response-200-6:
+    response_root-get-response-200-7:
       description: Session Information
       content:
         application/json:
@@ -9502,13 +12079,49 @@ components:
             status: error
             code: 400312
             message: User is global banned.
+    session-response-200:
+      description: Session Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              accessToken:
+                type: string
+              refreshToken:
+                type: string
+              issuedAt:
+                type: string
+              expiresAt:
+                type: string
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+              lastCachePurge:
+                type: string
+                description: Date of the last cache purge
+    UserIdNotFoundError:
+      description: UserId Not Found error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400400
+            message: userId Not Found.
     _userId-flags-delete-response-payload-200:
       description: User
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/User'
-    response_root-get-response-200-7:
+    response_root-get-response-200-8:
       description: User
       content:
         application/json:
@@ -9553,6 +12166,125 @@ components:
             status: error
             code: 400400
             message: User Not Found.
+    _userId-delete-response-200:
+      description: return success:'true' when deletion is successful
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+    UserIsAlreadyDeletedError:
+      description: Bad Request error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400000
+            message: User is already deleted
+    me-flags_userId-post-response-200:
+      description: Flag user response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+    me-flags_userId-delete-response-200:
+      description: Unflag user response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+    me-user-blocks-get-response-200:
+      description: Get blockedU uer list response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              follows:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FollowV5'
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                    description: token for getting the next page of data
+                    maxLength: 100
+                  previous:
+                    type: string
+                    description: token for getting the previous page of data
+                    maxLength: 100
+                  total:
+                    type: number
+                    description: total number of blockers
+    me-user-blocks_userId-post-response-200:
+      description: Block user response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - follows
+              - followCounts
+            properties:
+              follows:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FollowV5'
+              followCounts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FollowCount'
+    me-user-blocks_userId-delete-response-200:
+      description: Unblock user response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - follows
+              - followCounts
+            properties:
+              follows:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FollowV5'
+              followCounts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FollowCount'
     user-event-video-streaming-response-200:
       description: event is processed successfully
       content:
@@ -9572,7 +12304,7 @@ components:
             code: 500000,
             message: Information mismatch
             status: error
-    response_root-get-response-200-8:
+    response_root-get-response-200-9:
       description: list of video streaming
       content:
         application/json:
@@ -9938,6 +12670,92 @@ components:
         items:
           type: string
           maxLength: 50
+    _channelId:
+      name: channelId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
+    parameter_role:
+      name: role
+      in: query
+      schema:
+        type: array
+        description: Role to filter
+        minItems: 1
+        maxItems: 20
+        items:
+          type: string
+          minLength: 1
+          maxLength: 900
+    parameter_sortBy:
+      name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - lastCreated
+          - firstCreated
+        default: lastCreated
+    memberships:
+      name: memberships
+      in: query
+      schema:
+        type: array
+        description: |
+          Member type to filter - member type: User is member of channel - banned type: User is banned member of channel - muted type: User is member of channel but isMuted is true
+        minItems: 1
+        maxItems: 3
+        items:
+          type: string
+          enum:
+            - muted
+            - banned
+            - member
+        default:
+          - member
+    parameter_options-2:
+      name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          token:
+            type: string
+            maxLength: 1000
+      description: use updatedAt when sort by first/lastUpdated
+    search:
+      name: search
+      in: query
+      schema:
+        type: string
+        minLength: 0
+        maxLength: 10000
+    parameter_isDeleted:
+      name: isDeleted
+      in: query
+      schema:
+        type: boolean
+        default: null
+      description: filter deleted members if isDeleted is null, will return both deleted and non-deleted members
+    isBrand:
+      name: isBrand
+      in: query
+      schema:
+        type: boolean
+      description: |
+        Filter brand user <br>
+        ```undefined``` - return all user <br>
+        ```true``` - return only brand user <br>
+        ```false``` - return only non-brand user
     authorization:
       name: Authorization
       in: header
@@ -9952,8 +12770,8 @@ components:
         type: string
     referenceId:
       name: referenceId
-      required: true
       in: query
+      required: true
       schema:
         type: string
         maxLength: 900
@@ -9984,13 +12802,13 @@ components:
       schema:
         type: boolean
         default: false
-    parameter_isDeleted:
+    parameter_isDeleted-2:
       name: isDeleted
       in: query
       schema:
         type: boolean
         default: null
-    parameter_sortBy:
+    parameter_sortBy-2:
       name: sortBy
       in: query
       schema:
@@ -10005,7 +12823,7 @@ components:
         type:
           * `scrollable(default)` - sort by segment number only.
           * `pagination` - can sort by 'lastCreated(default)', 'firstCreated', 'lastUpdated', 'firstUpdated'.
-    parameter_options-2:
+    parameter_options-3:
       name: options
       in: query
       style: deepObject
@@ -10107,6 +12925,18 @@ components:
         items:
           type: string
           maxLength: 50
+    _commentId:
+      name: commentId
+      in: path
+      required: true
+      schema:
+        type: string
+    permanent:
+      name: permanent
+      in: query
+      schema:
+        type: boolean
+        description: If permanent data will be hard deleted
     parameter_keyword:
       name: keyword
       in: query
@@ -10142,7 +12972,7 @@ components:
         type: string
         minLength: 50
         maxLength: 50
-    parameter_sortBy-2:
+    parameter_sortBy-3:
       name: sortBy
       in: query
       description: |
@@ -10156,7 +12986,7 @@ components:
           - lastCreated
           - displayName
         default: lastCreated
-    parameter_isDeleted-2:
+    parameter_isDeleted-3:
       name: isDeleted
       in: query
       schema:
@@ -10178,7 +13008,7 @@ components:
             * `null(default)` - Show all communities.
             * `true` - Show only community has flagged post(or children post) or has flagged comment.
             * `false` - Show only community has no flagged post(and children post) and has no flagged comment.
-    parameter_options-3:
+    parameter_options-4:
       name: options
       in: query
       style: deepObject
@@ -10210,7 +13040,7 @@ components:
           - internal
         default: public
       description: type of communityId
-    memberships:
+    parameter_memberships:
       name: memberships
       in: query
       schema:
@@ -10235,7 +13065,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-    search:
+    parameter_search:
       name: search
       description: Input text for searching display name and user id
       in: query
@@ -10249,16 +13079,6 @@ components:
         type: boolean
         default: null
       description: filter deleted members if isDeleted is null, will return both deleted and non-deleted members
-    isBrand:
-      name: isBrand
-      in: query
-      schema:
-        type: boolean
-      description: |
-        Filter brand user <br>
-        ```undefined``` - return all user <br>
-        ```true``` - return only brand user <br>
-        ```false``` - return only non-brand user
     parameter_userIds:
       in: query
       name: userIds
@@ -10272,7 +13092,7 @@ components:
           minLength: 1
           maxLength: 50
       description: list of user id
-    parameter_role:
+    parameter_role-2:
       in: query
       name: role
       required: true
@@ -10291,7 +13111,29 @@ components:
         items:
           type: string
           maxLength: 50
-    parameter_sortBy-3:
+    _communityId:
+      name: communityId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 900
+    parameter_roles-2:
+      in: query
+      name: roles
+      required: true
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 100
+        items:
+          type: string
+          description: Role id
+          minLength: 1
+          maxLength: 100
+      description: list of role id
+    parameter_sortBy-4:
       name: sortBy
       in: query
       schema:
@@ -10301,7 +13143,7 @@ components:
           - lastCreated
           - name
         default: name
-    parameter_options-4:
+    parameter_options-5:
       name: options
       in: query
       style: deepObject
@@ -10366,7 +13208,7 @@ components:
       schema:
         type: string
         maxLength: 100
-    parameter_sortBy-4:
+    parameter_sortBy-5:
       name: sortBy
       in: query
       schema:
@@ -10388,7 +13230,7 @@ components:
           * `null(default)` - Show all contents.
           * `true` - Show only flagged content or has flagged comment.
           * `false` - Show only no flagged content and has no flagged comment.
-    _communityId:
+    parameter__communityId:
       name: communityId
       in: path
       required: true
@@ -10442,6 +13284,21 @@ components:
           * `null(default)` - Show all posts.
           * `true` - Show only flagged post(or children) or has flagged comment.
           * `false` - Show only no flagged post(and children) and has no flagged comment.
+    parameter_limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+    parameter_token:
+      name: token
+      in: query
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 100
     _fileId:
       in: path
       name: fileId
@@ -10473,6 +13330,16 @@ components:
           - medium
           - small
       description: Size of image to download (no effect on file type 'file')
+    status:
+      name: status
+      in: query
+      schema:
+        type: string
+        enum:
+          - all
+          - pending
+          - accepted
+        default: all
     parameter_postId:
       name: postId
       required: true
@@ -10557,7 +13424,7 @@ components:
       schema:
         type: string
       description: search keyword from start
-    parameter_sortBy-5:
+    parameter_sortBy-6:
       name: sortBy
       in: query
       schema:
@@ -10565,7 +13432,7 @@ components:
         enum:
           - firstCreated
           - lastCreated
-    parameter_options-5:
+    parameter_options-6:
       name: options
       in: query
       style: deepObject
@@ -10620,7 +13487,7 @@ components:
       in: query
       schema:
         type: boolean
-    parameter_isDeleted-3:
+    parameter_isDeleted-4:
       name: isDeleted
       in: query
       schema:
@@ -10651,7 +13518,7 @@ components:
           type: string
           maxLength: 100
       description: Used for querying messages by excluding all specified tags. When a query includes multiple tags (e.g., `excludeTags=['tag1', 'tag2', 'tag3']`), the system will return all messages that do not have any of the specified tags.
-    parameter_options-6:
+    parameter_options-7:
       name: options
       in: query
       style: deepObject
@@ -10738,7 +13605,7 @@ components:
       schema:
         type: string
         maxLength: 900
-    parameter_options-7:
+    parameter_options-8:
       name: options
       in: query
       schema:
@@ -10777,7 +13644,7 @@ components:
       schema:
         type: string
         maxLength: 900
-    parameter_sortBy-6:
+    parameter_sortBy-7:
       name: sortBy
       in: query
       schema:
@@ -10785,7 +13652,7 @@ components:
         enum:
           - lastCreated
           - firstCreated
-    parameter_options-8:
+    parameter_options-9:
       name: options
       in: query
       style: deepObject
@@ -10911,6 +13778,120 @@ components:
         items:
           type: string
           maxLength: 50
+    parameter_targetId:
+      name: targetId
+      in: query
+      required: true
+      schema:
+        type: string
+        maxLength: 900
+    parameter_targetType:
+      name: targetType
+      in: query
+      schema:
+        type: string
+        enum:
+          - community
+          - user
+          - content
+    parameter_sortBy-8:
+      name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - lastCreated
+          - firstCreated
+          - lastUpdated
+          - firstUpdated
+        default: lastCreated
+    parameter_options-10:
+      name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          token:
+            type: string
+            maxLength: 1000
+          before:
+            type: string
+            maxLength: 24
+          after:
+            type: string
+            maxLength: 24
+          updatedAt:
+            type: string
+            maxLength: 100
+      description: use updatedAt when sort by first/lastUpdated
+    feedType:
+      name: feedType
+      in: query
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 4
+        items:
+          type: string
+          enum:
+            - reviewing
+            - published
+        example:
+          - published
+    parameter_dataTypes-3:
+      name: dataTypes
+      in: query
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 4
+        items:
+          type: string
+          maxLength: 100
+          enum:
+            - video
+            - image
+            - file
+            - liveStream
+            - poll
+      description: Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`
+    parameter_tags-5:
+      name: tags
+      in: query
+      schema:
+        type: array
+        minItems: 0
+        maxItems: 5
+        items:
+          type: string
+          maximum: 24
+      description: tags
+    parameter_matchingOnlyParentPost:
+      name: matchingOnlyParentPost
+      in: query
+      schema:
+        type: boolean
+        default: true
+      description: An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts
+    parameter__postId:
+      name: postId
+      in: path
+      required: true
+      schema:
+        type: string
+    parameter_permanent:
+      name: permanent
+      in: query
+      schema:
+        type: boolean
+        default: false
+        description: If permanent data will be hard deleted
     parameter_userIds-2:
       name: userIds
       in: query
@@ -10933,7 +13914,7 @@ components:
         enum:
           - asc
           - desc
-    parameter_limit:
+    parameter_limit-2:
       name: limit
       in: query
       schema:
@@ -10966,7 +13947,7 @@ components:
           - post
           - comment
           - story
-    parameter_options-9:
+    parameter_options-11:
       name: options
       in: query
       style: deepObject
@@ -10988,6 +13969,41 @@ components:
       schema:
         type: integer
       description: The API version of the document (Ex. If using with message v5, the referenceVersion will be 5)
+    parameter_referenceType-2:
+      name: referenceType
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - message
+          - post
+          - comment
+          - story
+    parameter_referenceVersion:
+      name: referenceVersion
+      in: query
+      schema:
+        type: integer
+    parameter_reactionName:
+      name: reactionName
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+    parameter_options-12:
+      name: options
+      in: query
+      style: deepObject
+      schema:
+        type: object
+        properties:
+          limit:
+            type: integer
+            minimum: 0
+          token:
+            type: string
+            maxLength: 200
     parameter_keyword-2:
       name: keyword
       in: query
@@ -10997,7 +14013,7 @@ components:
         minLength: 0
         maxLength: 100
       description: search keyword
-    parameter_sortBy-7:
+    parameter_sortBy-9:
       name: sortBy
       in: query
       schema:
@@ -11028,16 +14044,7 @@ components:
       schema:
         type: string
         maxLength: 1024
-    parameter_targetType:
-      name: targetType
-      in: query
-      schema:
-        type: string
-        enum:
-          - community
-          - user
-          - content
-    parameter_dataTypes-3:
+    parameter_dataTypes-4:
       name: dataTypes
       in: query
       description: |
@@ -11082,6 +14089,121 @@ components:
       schema:
         type: string
     parameter_userId-3:
+      in: query
+      name: userId
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 50
+      description: User id for revocation
+    isPublic:
+      in: query
+      name: isPublic
+      schema:
+        type: boolean
+        default: true
+      description: A flag indicating whether the userId is a public id or not
+    parameter__userId:
+      in: path
+      required: true
+      name: userId
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 50
+      description: User id for revocation
+    parameter_targetType-2:
+      name: targetType
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - community
+          - user
+    parameter_dataType:
+      name: dataType
+      in: query
+      schema:
+        description: Type of data contained in the story. Only admin can query with this parameter.
+        type: string
+        enum:
+          - image
+          - video
+    isExpired:
+      name: isExpired
+      in: query
+      schema:
+        description: |
+          Whether to include expired stories. Only admin can query with this parameter = true.
+        type: boolean
+        default: false
+    parameter_options-13:
+      name: options
+      in: query
+      schema:
+        type: object
+        properties:
+          sortBy:
+            type: string
+            default: createdAt
+            enum:
+              - createdAt
+          orderBy:
+            type: string
+            default: desc
+            enum:
+              - asc
+              - desc
+          limit:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          token:
+            type: string
+    targets:
+      name: targets
+      description: |
+        Target object. The target object is an array of objects that contain targetId and targetType. Max up to 10 items
+          * targetId: ID of a target.
+          * targetType: Type of a target (user, community).
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: object
+          properties:
+            targetId:
+              schema:
+                type: string
+                maxLength: 900
+            targetType:
+              schema:
+                type: string
+                enum:
+                  - community
+                  - user
+        maxItems: 10
+        minItems: 1
+    _storyId:
+      name: storyId
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^[a-f\d]{24}$
+    parameter_permanent-2:
+      name: permanent
+      in: query
+      required: false
+      description: |
+        If true, the story will be deleted permanently (hard deleted). If false, the story will be soft deleted.
+      schema:
+        type: boolean
+        default: false
+    parameter_userId-4:
       name: userId
       in: path
       required: true
@@ -11103,7 +14225,7 @@ components:
           - all
           - flagged
         default: all
-    parameter_sortBy-8:
+    parameter_sortBy-10:
       name: sortBy
       in: query
       schema:
@@ -11113,7 +14235,7 @@ components:
           - lastCreated
           - displayName
         default: displayName
-    parameter_isDeleted-4:
+    parameter_isDeleted-5:
       name: isDeleted
       in: query
       schema:
@@ -11130,7 +14252,7 @@ components:
         items:
           type: string
           maxLength: 900
-    parameter__userId:
+    parameter__userId-2:
       name: userId
       in: path
       required: true
@@ -11147,6 +14269,48 @@ components:
           - public
           - internal
         default: public
+    parameter__userId-3:
+      in: path
+      name: userId
+      required: true
+      schema:
+        type: string
+        minimum: 1
+        maximum: 50
+      description: User public id
+    deleteAll:
+      in: query
+      name: deleteAll
+      schema:
+        type: boolean
+        default: false
+      description: true - it will hard delete this user created channels, messages, comments, posts, polls, reactions after user is deleted.
+    markMessageDeleted:
+      in: query
+      name: markMessageDeleted
+      schema:
+        type: boolean
+        default: false
+      description: true - it will hard delete this user messages after user is deleted.
+    hardDeletePost:
+      in: query
+      name: hardDeletePost
+      schema:
+        type: boolean
+        default: false
+      description: true - it will hard delete this user posts after user is deleted.
+    hardDeleteComment:
+      in: query
+      name: hardDeleteComment
+      schema:
+        type: boolean
+        default: false
+      description: true - it will hard delete this user comments after user is deleted.
+    parameter_token-2:
+      name: token
+      in: query
+      schema:
+        type: string
     isLive:
       name: isLive
       in: query
@@ -11181,7 +14345,7 @@ components:
         items:
           type: string
           maxLength: 50
-    parameter_isDeleted-5:
+    parameter_isDeleted-6:
       name: isDeleted
       in: query
       schema:
@@ -11192,7 +14356,7 @@ components:
           * `null(default)` - Show both video streaming is activated and video streaming is inactivated.
           * `true` - Show video streaming is inactivated only.
           * `false` - Show video streaming is activated only.
-    parameter_options-10:
+    parameter_options-14:
       name: options
       in: query
       style: deepObject
@@ -11814,6 +14978,33 @@ components:
             required:
               - userIds
               - role
+    _communityId-users-roles-request-payload:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              roles:
+                type: array
+                minItems: 1
+                maxItems: 20
+                items:
+                  description: Role id
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+              userIds:
+                type: array
+                minItems: 1
+                maxItems: 100
+                items:
+                  type: string
+                  minLength: 1
+                  maxLength: 50
+            required:
+              - userIds
+              - roles
     request_root-post-request-payload-3:
       description: |
         information of a community category to be created.
@@ -11881,6 +15072,30 @@ components:
                   - public
                   - network
                 default: public
+    common-post-request-payload:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              files:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                  description: file data
+              preferredFilename:
+                type: string
+                maxLength: 1024
+              accessType:
+                type: string
+                description: File access type. `network` type requires authentication to download.
+                enum:
+                  - public
+                  - network
+                default: public
+            required:
+              - files
     message-feeds_messageFeedId-mark-delivering-request-payload:
       description: Mark delivering
       content:
@@ -12664,6 +15879,86 @@ components:
                   description: tags
             required:
               - postId
+    request__postId-put-request-payload:
+      description: |
+        information of a post to be updated.
+        ### Image, File, Video post update - Put `type` with file id in `attachments` - Image and File data can be picked from `fileId` in `data` object in child post - Video fileId for each resolution will be in `videoFileId` in `data` object in child post
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              text:
+                type: string
+                deprecated: true
+              data:
+                type: object
+                properties:
+                  text:
+                    type: string
+                    maximum: 50000
+                    description: For updating text in the post
+                  fileId:
+                    type: string
+                    maximum: 100
+                    description: Put file id to update file,image inside file, image post (video is not supported yet)
+                  streamId:
+                    type: string
+                    maximum: 100
+                    description: Put stream id to update live streaming post with new streaming
+                  thumbnailFileId:
+                    type: string
+                    maximum: 100
+                    description: Put image file id to update video file thumbnail in video post
+              metadata:
+                type: object
+              tags:
+                type: array
+                minItems: 0
+                maxItems: 5
+                items:
+                  type: string
+                  maximum: 24
+                  description: tags
+              mentionees:
+                type: array
+                description: The object of the mentions type and user who get a notification from the post.
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      example: user
+                      description: |
+                        type: * `user` - need to specific userIds and notification mentions individual user
+                      enum:
+                        - user
+                    userIds:
+                      type: array
+                      example:
+                        - userId1
+                        - userId2
+                      description: Array of UserId. if the mention type is a channel, doesn't send userIds
+                      items:
+                        type: string
+              attachments:
+                type: array
+                items:
+                  type: object
+                  description: attachment info
+                  properties:
+                    fileId:
+                      type: string
+                      example: 57b916d38eaf8010caddfb7759a2d06c
+                      description: file id for attachment
+                    type:
+                      type: string
+                      description: attachment type
+                      enum:
+                        - image
+                        - file
+                        - video
     settings-user-request-payload:
       content:
         application/json:
@@ -12800,7 +16095,117 @@ components:
             required:
               - userId
               - deviceId
-    common-post-request-payload:
+    request_root-post-request-payload-11:
+      description: |
+        Information about user and devices that he/she use to connect to. If displayName is provide, that user display is updated as well.
+
+        If userId doesn't exists, new user will be created.
+
+        authToken need to pass when network option is set to secure
+
+        accessToken expiry 30 days
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+                minLength: 1
+                maxLength: 50
+              deviceId:
+                type: string
+                minLength: 1
+                maxLength: 150
+              deviceInfo:
+                type: object
+                properties:
+                  kind:
+                    type: string
+                    enum:
+                      - ios
+                      - android
+                      - web
+                      - node
+                  model:
+                    type: string
+                    maxLength: 100
+                  sdkVersion:
+                    type: string
+                    maxLength: 30
+              displayName:
+                type: string
+                maxLength: 100
+              authToken:
+                type: string
+                description: Authentication token from /api/v3/authentication/token
+                minLength: 1
+                maxLength: 100
+            required:
+              - userId
+              - deviceId
+    request_root-post-request-payload-12:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                description: Main data contained in the story, required only 1 field depends on dataType. The size of this object must be less than 10 KB.
+                properties:
+                  text:
+                    type: string
+                    description: text data (required if dataType is text)
+                    example: example text
+                  fileId:
+                    type: string
+                    description: image or video file id (required if dataType is image or video)
+                  imageDisplayMode:
+                    type: string
+                    description: |
+                      image display mode (required if dataType is image) represents the display mode of an image for maintaining the correct visual dimensions when displaying or processing image.
+                    enum:
+                      - fit
+                      - fill
+                    default: fit
+              dataType:
+                type: string
+                enum:
+                  - text
+                  - image
+                  - video
+              items:
+                type: array
+                description: List of items contained in story. Currently only support hyperlink item. Only one hyperlink item is allowed per story.
+                items:
+                  $ref: '#/components/schemas/StoryItem'
+                maxItems: 10
+              targetType:
+                type: string
+                enum:
+                  - community
+                description: where to create story to. currently limited to community only
+              targetId:
+                type: string
+                example: public_community_id
+                description: Resource public id depends on target type (ex. target type is community, target id will be community public id)
+              metadata:
+                type: object
+                description: Metadata of the story. The size of this object must be less than 5 KB
+                example:
+                  anything: you want
+              referenceId:
+                type: string
+                description: the id used for reference when optimistically create the story
+            required:
+              - data
+              - dataType
+              - targetId
+              - targetType
+              - referenceId
+    request_common-post-request-payload:
       required: true
       content:
         application/json:
@@ -12897,7 +16302,7 @@ components:
                       description: user's watching time in seconds
                       type: number
                       example: 120
-    request_root-post-request-payload-11:
+    request_root-post-request-payload-13:
       description: |
         Information of video streaming to be created
       required: true

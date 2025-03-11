@@ -1,0 +1,24 @@
+common-post-request-payload:
+  content:
+    multipart/form-data:
+      schema:
+        type: "object"
+        properties:
+          files:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+              description: "file data"
+          preferredFilename:
+            type: "string"
+            maxLength: 1024
+          accessType:
+            type: string
+            description: File access type. `network` type requires authentication to download.
+            enum:
+              - public
+              - network
+            default: public
+        required:
+          - "files"

@@ -1,4 +1,4 @@
-UserDeleteResponse:
+_userId-delete-response-200:
   description: return success:'true' when deletion is successful
   content:
     application/json:
@@ -9,7 +9,7 @@ UserDeleteResponse:
             type: boolean
             example: true
 
-FlagUserResponse:
+me-flags_userId-post-response-200:
   description: Flag user response
   content:
     application/json:
@@ -21,11 +21,11 @@ FlagUserResponse:
             items:
               $ref: "../../schema/user.yaml#/UserV3"
           files:
-                type: array
-                items:
-                  $ref: "../../schema/file.yaml#/File"
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
 
-UnflagUserResponse:
+me-flags_userId-delete-response-200:
   description: Unflag user response
   content:
     application/json:
@@ -37,11 +37,11 @@ UnflagUserResponse:
             items:
               $ref: "../../schema/user.yaml#/UserV3"
           files:
-                type: array
-                items:
-                  $ref: "../../schema/file.yaml#/File"
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
 
-BlockUserResponse:
+me-user-blocks_userId-post-response-200:
   description: Block user response
   content:
     application/json:
@@ -54,13 +54,13 @@ BlockUserResponse:
           follows:
             type: array
             items:
-              $ref: '../../schema/follow.yaml#/FollowV5'
+              $ref: "../../schema/follow.yaml#/FollowV5"
           followCounts:
             type: array
             items:
-              $ref: '../../schema/follow.yaml#/FollowCount'
+              $ref: "../../schema/follow.yaml#/FollowCount"
 
-UnblockUserResponse:
+me-user-blocks_userId-delete-response-200:
   description: Unblock user response
   content:
     application/json:
@@ -73,13 +73,13 @@ UnblockUserResponse:
           follows:
             type: array
             items:
-              $ref: '../../schema/follow.yaml#/FollowV5'
+              $ref: "../../schema/follow.yaml#/FollowV5"
           followCounts:
             type: array
             items:
-              $ref: '../../schema/follow.yaml#/FollowCount' 
+              $ref: "../../schema/follow.yaml#/FollowCount"
 
-GetBlockedUserListResponse:
+me-user-blocks-get-response-200:
   description: Get blockedU uer list response
   content:
     application/json:
@@ -107,8 +107,8 @@ GetBlockedUserListResponse:
                 maxLength: 100
               previous:
                 type: string
-                description: token for getting the previous page of data        
+                description: token for getting the previous page of data
                 maxLength: 100
               total:
                 type: number
-                description: total number of blockers      
+                description: total number of blockers
