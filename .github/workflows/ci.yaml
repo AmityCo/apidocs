@@ -29,6 +29,7 @@ jobs:
         run: npm run lint
 
       - name: replace branch name
+        if: always()
         env:
           BRANCH_NAME: ${{ github.ref_name }}
         run: |
@@ -37,12 +38,14 @@ jobs:
           cat build/index.html
 
       - name: configure aws credentials
+        if: always()
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ vars.AWS_OIDC_ROLE_ARN }}
 
       - name: publish docs on s3
+        if: always()
         shell: bash
         run: |
           aws s3 sync $SOURCE_DIR s3://$AWS_S3_BUCKET/$DEST_DIR --follow-symlinks --delete --exclude '[0-9]*/*'
