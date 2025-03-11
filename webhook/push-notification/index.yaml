@@ -1,4 +1,4 @@
-push-notification/channel.created:
+channel.created:
   get:
     tags:
       - "Webhook event"
@@ -6,7 +6,7 @@ push-notification/channel.created:
       - BearerAuth: []
     description: "This is called when channel is created/joined\n"
     responses:
-      "200":
+      200:
         description: "channel created/joined"
         content:
           application/json:
@@ -50,8 +50,8 @@ push-notification/channel.created:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/channel/response.yaml#/ChannelCustomNotificationResponse"
-push-notification/channel.joined:
+                    - $ref: "../../v3/channel/response.yaml#/channel-custom-notification-response"
+channel.joined:
   get:
     tags:
       - "Webhook event"
@@ -59,7 +59,7 @@ push-notification/channel.joined:
       - BearerAuth: []
     description: "This is called when channel is created/joined\n"
     responses:
-      "200":
+      200:
         description: "channel created/joined"
         content:
           application/json:
@@ -103,8 +103,8 @@ push-notification/channel.joined:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/channel/response.yaml#/ChannelCustomNotificationResponse"
-push-notification/comment.created:
+                    - $ref: "../../v3/channel/response.yaml#/channel-custom-notification-response"
+comment.created:
   get:
     tags:
       - "Webhook event"
@@ -112,7 +112,7 @@ push-notification/comment.created:
       - BearerAuth: []
     description: "This is called when comment is created\n"
     responses:
-      "200":
+      200:
         description: "comment created"
         content:
           application/json:
@@ -156,8 +156,8 @@ push-notification/comment.created:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/comment/response.yaml#/CommentCustomNotificationResponse"
-push-notification/comment.reacted:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+comment.reacted:
   get:
     tags:
       - "Webhook event"
@@ -165,7 +165,7 @@ push-notification/comment.reacted:
       - BearerAuth: []
     description: "This is called when comment is created\n"
     responses:
-      "200":
+      200:
         description: "comment created"
         content:
           application/json:
@@ -209,8 +209,8 @@ push-notification/comment.reacted:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/comment/response.yaml#/CommentCustomNotificationResponse"
-push-notification/comment.replied:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+comment.replied:
   get:
     tags:
       - "Webhook event"
@@ -218,7 +218,7 @@ push-notification/comment.replied:
       - BearerAuth: []
     description: "This is called when comment is created\n"
     responses:
-      "200":
+      200:
         description: "comment created"
         content:
           application/json:
@@ -262,8 +262,8 @@ push-notification/comment.replied:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/comment/response.yaml#/CommentCustomNotificationResponse"
-push-notification/follow.accepted:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+follow.accepted:
   get:
     tags:
       - "Webhook event"
@@ -271,7 +271,7 @@ push-notification/follow.accepted:
       - BearerAuth: []
     description: "This is called when follow is created/requested/accepted\n"
     responses:
-      "200":
+      200:
         description: "follow created/requested/accepted"
         content:
           application/json:
@@ -315,8 +315,8 @@ push-notification/follow.accepted:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v4/follow/response.yaml#/FollowCustomNotificationResponse"
-push-notification/follow.created:
+                    - $ref: "../../v4/follow/response.yaml#/follow-custom-notification-response"
+follow.created:
   get:
     tags:
       - "Webhook event"
@@ -324,7 +324,7 @@ push-notification/follow.created:
       - BearerAuth: []
     description: "This is called when follow is created/requested/accepted\n"
     responses:
-      "200":
+      200:
         description: "follow created/requested/accepted"
         content:
           application/json:
@@ -368,8 +368,8 @@ push-notification/follow.created:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v4/follow/response.yaml#/FollowCustomNotificationResponse"
-push-notification/follow.requested:
+                    - $ref: "../../v4/follow/response.yaml#/follow-custom-notification-response"
+follow.requested:
   get:
     tags:
       - "Webhook event"
@@ -377,7 +377,7 @@ push-notification/follow.requested:
       - BearerAuth: []
     description: "This is called when follow is created/requested/accepted\n"
     responses:
-      "200":
+      200:
         description: "follow created/requested/accepted"
         content:
           application/json:
@@ -421,8 +421,8 @@ push-notification/follow.requested:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v4/follow/response.yaml#/FollowCustomNotificationResponse"
-push-notification/message.created:
+                    - $ref: "../../v4/follow/response.yaml#/follow-custom-notification-response"
+message.created:
   get:
     tags:
       - "Webhook event"
@@ -430,7 +430,7 @@ push-notification/message.created:
       - BearerAuth: []
     description: "This is called when message is created\n"
     responses:
-      "200":
+      200:
         description: "message created"
         content:
           application/json:
@@ -474,8 +474,8 @@ push-notification/message.created:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/message/response.yaml#/MessageCustomNotificationResponse"
-push-notification/post.approved:
+                    - $ref: "../../v3/message/response.yaml#/message-custom-notification-response"
+post.approved:
   get:
     tags:
       - "Webhook event"
@@ -483,7 +483,7 @@ push-notification/post.approved:
       - BearerAuth: []
     description: "This is called when post is created\n"
     responses:
-      "200":
+      200:
         description: "post created"
         content:
           application/json:
@@ -527,8 +527,8 @@ push-notification/post.approved:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/post/response.yaml#/PostCustomNotificationResponse"
-push-notification/post.created:
+                    - $ref: "../../v3/post/response.yaml#/post-custom-notification-response"
+post.created:
   get:
     tags:
       - "Webhook event"
@@ -536,7 +536,7 @@ push-notification/post.created:
       - BearerAuth: []
     description: "This is called when post is created\n"
     responses:
-      "200":
+      200:
         description: "post created"
         content:
           application/json:
@@ -580,8 +580,8 @@ push-notification/post.created:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/post/response.yaml#/PostCustomNotificationResponse"
-push-notification/post.need-reviewing:
+                    - $ref: "../../v3/post/response.yaml#/post-custom-notification-response"
+post.need-reviewing:
   get:
     tags:
       - "Webhook event"
@@ -589,7 +589,7 @@ push-notification/post.need-reviewing:
       - BearerAuth: []
     description: "This is called when post is created\n"
     responses:
-      "200":
+      200:
         description: "post created"
         content:
           application/json:
@@ -633,8 +633,8 @@ push-notification/post.need-reviewing:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/post/response.yaml#/PostCustomNotificationResponse"
-push-notification/post.reacted:
+                    - $ref: "../../v3/post/response.yaml#/post-custom-notification-response"
+post.reacted:
   get:
     tags:
       - "Webhook event"
@@ -642,7 +642,7 @@ push-notification/post.reacted:
       - BearerAuth: []
     description: "This is called when post is created\n"
     responses:
-      "200":
+      200:
         description: "post created"
         content:
           application/json:
@@ -686,8 +686,8 @@ push-notification/post.reacted:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/post/response.yaml#/PostCustomNotificationResponse"
-push-notification/video-streaming.started:
+                    - $ref: "../../v3/post/response.yaml#/post-custom-notification-response"
+video-streaming.started:
   get:
     tags:
       - "Webhook event"
@@ -695,7 +695,7 @@ push-notification/video-streaming.started:
       - BearerAuth: []
     description: "This is called when video-streaming is started\n"
     responses:
-      "200":
+      200:
         description: "video-streaming is started"
         content:
           application/json:
@@ -739,8 +739,8 @@ push-notification/video-streaming.started:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/video-streaming/response.yaml#/VideoStreamingCustomNotificationResponse"
-push-notification/mention-comment.created:
+                    - $ref: "../../v3/video-streaming/response.yaml#/video-streaming-custom-notification-response"
+mention-comment.created:
   get:
     tags:
       - "Webhook event"
@@ -748,7 +748,7 @@ push-notification/mention-comment.created:
       - BearerAuth: []
     description: "This is called when comment is created\n"
     responses:
-      "200":
+      200:
         description: "comment created"
         content:
           application/json:
@@ -792,8 +792,8 @@ push-notification/mention-comment.created:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/comment/response.yaml#/CommentCustomNotificationResponse"
-push-notification/mention-comment.replied:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+mention-comment.replied:
   get:
     tags:
       - "Webhook event"
@@ -801,7 +801,7 @@ push-notification/mention-comment.replied:
       - BearerAuth: []
     description: "This is called when comment is created\n"
     responses:
-      "200":
+      200:
         description: "comment created"
         content:
           application/json:
@@ -845,8 +845,8 @@ push-notification/mention-comment.replied:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/comment/response.yaml#/CommentCustomNotificationResponse"
-push-notification/mention-post.created:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+mention-post.created:
   get:
     tags:
       - "Webhook event"
@@ -854,7 +854,7 @@ push-notification/mention-post.created:
       - BearerAuth: []
     description: "This is called when post is created\n"
     responses:
-      "200":
+      200:
         description: "post created"
         content:
           application/json:
@@ -898,8 +898,8 @@ push-notification/mention-post.created:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/post/response.yaml#/PostCustomNotificationResponse"
-push-notification/mention-user-feed-comment.created:
+                    - $ref: "../../v3/post/response.yaml#/post-custom-notification-response"
+mention-user-feed-comment.created:
   get:
     tags:
       - "Webhook event"
@@ -907,7 +907,7 @@ push-notification/mention-user-feed-comment.created:
       - BearerAuth: []
     description: "This is called when comment is created\n"
     responses:
-      "200":
+      200:
         description: "comment created"
         content:
           application/json:
@@ -951,8 +951,8 @@ push-notification/mention-user-feed-comment.created:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/comment/response.yaml#/CommentCustomNotificationResponse"
-push-notification/mention-user-feed-comment.replied:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+mention-user-feed-comment.replied:
   get:
     tags:
       - "Webhook event"
@@ -960,7 +960,7 @@ push-notification/mention-user-feed-comment.replied:
       - BearerAuth: []
     description: "This is called when comment is created\n"
     responses:
-      "200":
+      200:
         description: "comment created"
         content:
           application/json:
@@ -1004,8 +1004,8 @@ push-notification/mention-user-feed-comment.replied:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/comment/response.yaml#/CommentCustomNotificationResponse"
-push-notification/mention-user-feed-post.created:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+mention-user-feed-post.created:
   get:
     tags:
       - "Webhook event"
@@ -1013,7 +1013,7 @@ push-notification/mention-user-feed-post.created:
       - BearerAuth: []
     description: "This is called when post is created\n"
     responses:
-      "200":
+      200:
         description: "post created"
         content:
           application/json:
@@ -1057,4 +1057,4 @@ push-notification/mention-user-feed-post.created:
                     body:
                       type: "string"
                   allOf:
-                    - $ref: "./v3/post/response.yaml#/PostCustomNotificationResponse"
+                    - $ref: "../../v3/post/response.yaml#/post-custom-notification-response"

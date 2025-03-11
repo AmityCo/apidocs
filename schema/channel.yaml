@@ -94,6 +94,11 @@ ChannelV1:
       format: date-time
     avatar:
       type: object
+      $ref: "./file.yaml#/File"
+  required:
+    - channelId
+    - createdAt
+    - updatedAt
 
 ChannelUserV1:
   type: object
@@ -209,10 +214,10 @@ ChannelV3:
       default: false
       description: A flag to deleted a channel.
     messagePreviewId:
-      $ref: '#/Channel_messagePreviewId' 
+      $ref: "#/Channel_messagePreviewId"
     isPublic:
       type: boolean
-      description: A flag to public or private a channel.  
+      description: A flag to public or private a channel.
     notificationMode:
       type: string
       enum:

@@ -4544,7 +4544,7 @@ paths:
         - $ref: '#/components/parameters/parameter_options-9'
       responses:
         '200':
-          $ref: '#/components/responses/PollPaginationResponse'
+          $ref: '#/components/responses/poll-pagination-response-200'
         '404':
           $ref: '#/components/responses/PollNotFoundError'
         '500':
@@ -6584,6 +6584,2859 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /webhook/channel.didAddUsers:
+    get:
+      tags:
+        - Webhook event
+      description: Send user added event information whenever new member got added to a channel.
+      responses:
+        '200':
+          description: channel is channel information. userIds is a list of added userId. adderId is user who add other user to channel users is a list of user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - channel.didAddUsers
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChannelV1'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userIds:
+                        type: array
+                        items:
+                          type: string
+                      adderId:
+                        type: string
+  /webhook/channel.didBan:
+    get:
+      tags:
+        - Webhook event
+      description: Send channel banned event whenever a channel got banned.
+      responses:
+        '200':
+          description: channel is channel information. userIds is a list of userIds who being banned. actorId is userId who ban other user. users is a list of userInfo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - channel.didBan
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChannelV1'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      actorId:
+                        type: string
+                      userIds:
+                        type: array
+                        items:
+                          type: string
+  /webhook/channel.didClose:
+    get:
+      tags:
+        - Webhook event
+      description: Send channel close event information whenever a channel close.
+      responses:
+        '200':
+          description: channel is channel information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - channel.didClose
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChannelV1'
+  /webhook/channel.didCreate:
+    get:
+      tags:
+        - Webhook event
+      description: Send new created channel whenever a channel got create
+      responses:
+        '200':
+          description: channel is channel information. userIds is a list of userId who is added to channel. users is a list of user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - channel.didCreate
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChannelV1'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userIds:
+                        type: array
+                        items:
+                          type: string
+  /webhook/channel.didJoin:
+    get:
+      tags:
+        - Webhook event
+      description: Send join event information whenever a channel got joined
+      responses:
+        '200':
+          description: channel is channel information. userIds is a list of joined userId. users is a list of user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - channel.didJoin
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChannelV1'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userIds:
+                        type: array
+                        items:
+                          type: string
+  /webhook/channel.didLeave:
+    get:
+      tags:
+        - Webhook event
+      description: Send channel leave event information whenever someone leave a channel.
+      responses:
+        '200':
+          description: channel is channel information. userIds is a list of userId who leave channel. users is a list of userInfo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - channel.didLeave
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChannelV1'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userIds:
+                        type: array
+                        items:
+                          type: string
+  /webhook/channel.didRemoveUsers:
+    get:
+      tags:
+        - Webhook event
+      description: Send user removed event information whenever member got remove from channel.
+      responses:
+        '200':
+          description: channel is channel information. userIds is a list of removed userId. removerId is userId who remove other users from channel. users is a list of user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - channel.didRemoveUsers
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChannelV1'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userIds:
+                        type: array
+                        items:
+                          type: string
+                      removerId:
+                        type: string
+  /webhook/channel.didUpdate:
+    get:
+      tags:
+        - Webhook event
+      description: Send channel updated event information whenever a channel got updated.
+      responses:
+        '200':
+          description: channel is channel information. userId is a userId who update channel. users is a list of userInfo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - channel.didUpdate
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChannelV1'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userId:
+                        type: string
+  /webhook/channel.didUpdateMeta:
+    get:
+      tags:
+        - Webhook event
+      description: Send channel's meta data updated event information whenever a channel's meta data got updated.
+      responses:
+        '200':
+          description: channel is channel information. userId is a userId who update channel's meta data. users is a list of userInfo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - channel.didUpdateMeta
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChannelV1'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userId:
+                        type: string
+  /webhook/follow.didAcceptRequest:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when a user accepts a follow request from another user.
+      responses:
+        '200':
+          description: Follow Object
+          $ref: '#/components/responses/follow-webhook-response'
+  /webhook/follow.didCancelRequest:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when a user cancels a request to follow another user.
+      responses:
+        '200':
+          description: Follow Object
+          $ref: '#/components/responses/follow-webhook-response'
+  /webhook/follow.didCreate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when a user follows another user.
+      responses:
+        '200':
+          description: Follow Object
+          $ref: '#/components/responses/follow-webhook-response'
+  /webhook/follow.didDeclineRequest:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when a user declines a follow request from another user.
+      responses:
+        '200':
+          description: Follow Object
+          $ref: '#/components/responses/follow-webhook-response'
+  /webhook/follow.didDeleteFollower:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when a user deletes a user from their follower's list.
+      responses:
+        '200':
+          description: Follow Object
+          $ref: '#/components/responses/follow-webhook-response'
+  /webhook/follow.didRequest:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when a user sends a request to follow another user.
+      responses:
+        '200':
+          description: Follow Object
+          $ref: '#/components/responses/follow-webhook-response'
+  /webhook/follow.didUnfollow:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when a user unfollows another user.
+      responses:
+        '200':
+          description: Follow Object
+          $ref: '#/components/responses/follow-webhook-response'
+  /webhook/message.didAddReaction:
+    get:
+      tags:
+        - Webhook event
+      description: Send updated message whenever add reaction to this message.
+      responses:
+        '200':
+          $ref: '#/components/responses/message-add-reaction-with-reactor-webhook-response'
+  /webhook/message.didClearflag:
+    get:
+      tags:
+        - Webhook event
+      description: Send updated message whenever all message flags are cleared.
+      responses:
+        '200':
+          description: messages is messages information. users is list of all user relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - message.didClearflag
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Message'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /webhook/message.didCreate:
+    get:
+      tags:
+        - Webhook event
+      description: Send new created message whenever a message got created in a channel
+      responses:
+        '200':
+          description: messages is messages information. users is list of all user relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - message.didCreate
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Message'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /webhook/message.didDelete:
+    get:
+      tags:
+        - Webhook event
+      description: Send deleted message whenever a message got deleted in a channel
+      responses:
+        '200':
+          description: messages is messages information. users is list of all user relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - message.didDelete
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Message'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /webhook/message.didFlag:
+    get:
+      tags:
+        - Webhook event
+      description: Send updated message whenever a message got flag
+      responses:
+        '200':
+          description: messages is messages information. users is list of all user relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - message.didFlag
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Message'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /webhook/message.didRemoveReaction:
+    get:
+      tags:
+        - Webhook event
+      description: Send updated message whenever remove reaction to this message.
+      responses:
+        '200':
+          $ref: '#/components/responses/message-remove-reaction-with-reactor-webhook-response'
+  /webhook/message.didUnflag:
+    get:
+      tags:
+        - Webhook event
+      description: Send updated message whenever a message flag is removed.
+      responses:
+        '200':
+          description: messages is messages information. users is list of all user relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - message.didUnflag
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Message'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /webhook/message.didUpdate:
+    get:
+      tags:
+        - Webhook event
+      description: Send updated message whenever a message got updated in a channel
+      responses:
+        '200':
+          description: messages is messages information. users is list of all user relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - message.didUpdate
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Message'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /webhook/moderation.didBan:
+    get:
+      tags:
+        - Webhook event
+      description: Send banned event whenever a system detect message that contain in the blacklist
+      responses:
+        '200':
+          description: channel is channel information. userId is a userId who send the message. users is a list of userInfo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - moderation.didBan
+                  data:
+                    type: object
+                    properties:
+                      channel:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChannelV1'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      userId:
+                        type: string
+  /webhook/poll.didCreate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when poll is created
+      responses:
+        '200':
+          $ref: '#/components/responses/poll-webhook-response'
+  /webhook/poll.didUpdate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when poll is updated
+      responses:
+        '200':
+          $ref: '#/components/responses/poll-webhook-response'
+  /webhook/poll.didVote:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when vote is created in poll
+      responses:
+        '200':
+          $ref: '#/components/responses/poll-webhook-response'
+  /webhook/push-notification/channel.created:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when channel is created/joined
+      responses:
+        '200':
+          description: channel created/joined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/channel-custom-notification-response'
+  /webhook/push-notification/channel.joined:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when channel is created/joined
+      responses:
+        '200':
+          description: channel created/joined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/channel-custom-notification-response'
+  /webhook/push-notification/comment.created:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is created
+      responses:
+        '200':
+          description: comment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/comment-custom-notification-response'
+  /webhook/push-notification/comment.reacted:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is created
+      responses:
+        '200':
+          description: comment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/comment-custom-notification-response'
+  /webhook/push-notification/comment.replied:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is created
+      responses:
+        '200':
+          description: comment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/comment-custom-notification-response'
+  /webhook/push-notification/follow.accepted:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when follow is created/requested/accepted
+      responses:
+        '200':
+          description: follow created/requested/accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/follow-custom-notification-response'
+  /webhook/push-notification/follow.created:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when follow is created/requested/accepted
+      responses:
+        '200':
+          description: follow created/requested/accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/follow-custom-notification-response'
+  /webhook/push-notification/follow.requested:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when follow is created/requested/accepted
+      responses:
+        '200':
+          description: follow created/requested/accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/follow-custom-notification-response'
+  /webhook/push-notification/message.created:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when message is created
+      responses:
+        '200':
+          description: message created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/message-custom-notification-response'
+  /webhook/push-notification/post.approved:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is created
+      responses:
+        '200':
+          description: post created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/post-custom-notification-response'
+  /webhook/push-notification/post.created:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is created
+      responses:
+        '200':
+          description: post created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/post-custom-notification-response'
+  /webhook/push-notification/post.need-reviewing:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is created
+      responses:
+        '200':
+          description: post created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/post-custom-notification-response'
+  /webhook/push-notification/post.reacted:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is created
+      responses:
+        '200':
+          description: post created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/post-custom-notification-response'
+  /webhook/push-notification/video-streaming.started:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when video-streaming is started
+      responses:
+        '200':
+          description: video-streaming is started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: true
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/video-streaming-custom-notification-response'
+  /webhook/push-notification/mention-comment.created:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is created
+      responses:
+        '200':
+          description: comment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/comment-custom-notification-response'
+  /webhook/push-notification/mention-comment.replied:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is created
+      responses:
+        '200':
+          description: comment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/comment-custom-notification-response'
+  /webhook/push-notification/mention-post.created:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is created
+      responses:
+        '200':
+          description: post created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/post-custom-notification-response'
+  /webhook/push-notification/mention-user-feed-comment.created:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is created
+      responses:
+        '200':
+          description: comment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/comment-custom-notification-response'
+  /webhook/push-notification/mention-user-feed-comment.replied:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is created
+      responses:
+        '200':
+          description: comment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/comment-custom-notification-response'
+  /webhook/push-notification/mention-user-feed-post.created:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is created
+      responses:
+        '200':
+          description: post created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eventType:
+                    type: string
+                    enum:
+                      - push-notification.created
+                  id:
+                    type: string
+                  networkId:
+                    type: string
+                  path:
+                    type: string
+                  senderId:
+                    type: string
+                  sentTime:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      eventName:
+                        type: string
+                      isBroadcast:
+                        type: boolean
+                        default: false
+                      targetIds:
+                        type: array
+                        items:
+                          type: string
+                      notify:
+                        type: boolean
+                        description: should notify to user targetIds
+                      title:
+                        type: string
+                      body:
+                        type: string
+                    allOf:
+                      - $ref: '#/components/schemas/post-custom-notification-response'
+  /webhook/user.didClearFlag:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when the user flags are cleared
+      responses:
+        '200':
+          description: User flag cleared event information. users is a list of userInfo. files is a list of file information
+          $ref: '#/components/responses/user-webhook-response'
+  /webhook/user.didCreate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when a user is created
+      responses:
+        '200':
+          description: User created event information. users is a list of userInfo. files is a list of file information
+          $ref: '#/components/responses/user-webhook-response'
+  /webhook/user.didFlag:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when a user is flagged
+      responses:
+        '200':
+          description: User flag event information. users is a list of userInfo. files is a list of file information
+          $ref: '#/components/responses/user-webhook-response'
+  /webhook/user.didUnflag:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when a user is unflagged
+      responses:
+        '200':
+          description: User unflag event information. users is a list of userInfo. files is a list of file information
+          $ref: '#/components/responses/user-webhook-response'
+  /webhook/user.didUpdate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when a user is updated
+      responses:
+        '200':
+          description: User updated event information. users is a list of userInfo. files is a list of file information
+          $ref: '#/components/responses/user-webhook-response'
+  /webhook/v3.comment.didAddReaction:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when reaction of comment is added.
+      responses:
+        '200':
+          $ref: '#/components/responses/comment-with-refactor-webhook-response'
+  /webhook/v3.comment.didCreate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is created
+      responses:
+        '200':
+          $ref: '#/components/responses/comment-webhook-response'
+  /webhook/v3.comment.didDelete:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is deleted
+      responses:
+        '200':
+          $ref: '#/components/responses/comment-webhook-response'
+  /webhook/v3.comment.didFlag:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is flagged.
+      responses:
+        '200':
+          $ref: '#/components/responses/comment-with-flag-webhook-response'
+  /webhook/v3.comment.didRemoveReaction:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when reaction of comment is removed.
+      responses:
+        '200':
+          $ref: '#/components/responses/comment-with-refactor-webhook-response'
+  /webhook/v3.comment.didReply:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is replied.
+      responses:
+        '200':
+          $ref: '#/components/responses/comment-webhook-response'
+  /webhook/v3.comment.didUnflag:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is unflagged.
+      responses:
+        '200':
+          $ref: '#/components/responses/comment-with-flag-webhook-response'
+  /webhook/v3.comment.didUpdate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is updated
+      responses:
+        '200':
+          $ref: '#/components/responses/comment-webhook-response'
+  /webhook/v3.community.didAddUsers:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when add users into community
+      responses:
+        '200':
+          $ref: '#/components/responses/community-webhook-response'
+  /webhook/v3.community.didBan:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when community user is banned
+      responses:
+        '200':
+          $ref: '#/components/responses/community-webhook-response'
+  /webhook/v3.community.didCreate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when community is created
+      responses:
+        '200':
+          $ref: '#/components/responses/community-webhook-response'
+  /webhook/v3.community.didDelete:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when community is deleted
+      responses:
+        '200':
+          $ref: '#/components/responses/community-webhook-response'
+  /webhook/v3.community.didJoin:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when user joined a community.
+      responses:
+        '200':
+          $ref: '#/components/responses/community-webhook-response'
+  /webhook/v3.community.didLeave:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when user left a community
+      responses:
+        '200':
+          $ref: '#/components/responses/community-webhook-response'
+  /webhook/v3.community.didRemoveUsers:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when remove users from community
+      responses:
+        '200':
+          $ref: '#/components/responses/community-webhook-response'
+  /webhook/v3.community.didRoleChange:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when role of user is changed in community
+      responses:
+        '200':
+          $ref: '#/components/responses/community-webhook-response'
+  /webhook/v3.community.didUnban:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when community user is unbanned
+      responses:
+        '200':
+          $ref: '#/components/responses/community-webhook-response'
+  /webhook/v3.community.didUpdate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when community is updated
+      responses:
+        '200':
+          $ref: '#/components/responses/community-webhook-response'
+  /webhook/v3.post.didAddReaction:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when reaction of post is added.
+      responses:
+        '200':
+          $ref: '#/components/responses/post-with-reactor-webhook-response'
+  /webhook/v3.post.didApprove:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is approved
+      responses:
+        '200':
+          $ref: '#/components/responses/post-webhook-response'
+  /webhook/v3.post.didCreate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is created
+      responses:
+        '200':
+          $ref: '#/components/responses/post-webhook-response'
+  /webhook/v3.post.didDecline:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is declined
+      responses:
+        '200':
+          $ref: '#/components/responses/post-webhook-response'
+  /webhook/v3.post.didDelete:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is deleted
+      responses:
+        '200':
+          $ref: '#/components/responses/post-webhook-response'
+  /webhook/v3.post.didFlag:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is flagged.
+      responses:
+        '200':
+          $ref: '#/components/responses/post-with-flag-webhook-response'
+  /webhook/v3.post.didRemoveReaction:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when reaction of post is removed.
+      responses:
+        '200':
+          $ref: '#/components/responses/post-with-reactor-webhook-response'
+  /webhook/v3.post.didUnflag:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is unflagged.
+      responses:
+        '200':
+          $ref: '#/components/responses/post-with-flag-webhook-response'
+  /webhook/v3.post.didUpdate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is updated
+      responses:
+        '200':
+          $ref: '#/components/responses/post-webhook-response'
+  /webhook/video-streaming.didRecord:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when video streaming recordings is ready.
+      responses:
+        '200':
+          $ref: '#/components/responses/video-streaming-webhook-response'
+  /webhook/video-streaming.didStart:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when video streaming start.
+      responses:
+        '200':
+          $ref: '#/components/responses/video-streaming-webhook-response'
+  /webhook/video-streaming.didStop:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when video streaming stop.
+      responses:
+        '200':
+          $ref: '#/components/responses/video-streaming-webhook-response'
+  /webhook/v5.message.didCreate:
+    get:
+      tags:
+        - Webhook event
+      description: Send created message whenever a message got created in a channel
+      responses:
+        '200':
+          description: messages is messages information. users is list of all user relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - message.didCreate
+                  data:
+                    type: object
+                    properties:
+                      files:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/File'
+                      messageFeeds:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Message'
+                      messages:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/MessageFeed'
+                      reactions:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Reaction'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /webhook/v5.message.didDelete:
+    get:
+      tags:
+        - Webhook event
+      description: Send deleted message whenever a message got deleted in a channel
+      responses:
+        '200':
+          description: messages is messages information. users is list of all user relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - message.didDelete
+                  data:
+                    type: object
+                    properties:
+                      files:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/File'
+                      messageFeeds:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Message'
+                      messages:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/MessageFeed'
+                      reactions:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Reaction'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /webhook/v5.message.didUpdate:
+    get:
+      tags:
+        - Webhook event
+      description: Send updated message whenever a message got updated in a channel
+      responses:
+        '200':
+          description: messages is messages information. users is list of all user relate to this messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    type: string
+                    enum:
+                      - message.didCreate
+                  data:
+                    type: object
+                    properties:
+                      files:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/File'
+                      messageFeeds:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Message'
+                      messages:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/MessageFeed'
+                      reactions:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Reaction'
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+  /realtime/channel.banned:
+    get:
+      summary: user is banned from the channel
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+  /realtime/channel.created:
+    get:
+      summary: channel created
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+  /realtime/channel.deleted:
+    get:
+      summary: channel deleted
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+  /realtime/channel.joined:
+    get:
+      summary: user joined the channel
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+  /realtime/channel.left:
+    get:
+      summary: user left the channel
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+  /realtime/channel.membersAdded:
+    get:
+      summary: users were added to the channel
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+  /realtime/channel.membersRemoved:
+    get:
+      summary: users were removed from the channel
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+  /realtime/channel.unbanned:
+    get:
+      summary: user is unbanned from the channel
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+  /realtime/channel.updated:
+    get:
+      summary: channel updated
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+  /realtime/comment.addReaction:
+    get:
+      summary: comment add reaction
+      description: |
+        Event has occurred when a reaction is added to comment
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseWithReactor'
+  /realtime/comment.created:
+    get:
+      summary: comment created
+      description: |
+        Event has occurred when comment was created
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response'
+  /realtime/comment.deleted:
+    get:
+      summary: comment deleted
+      description: |
+        Event has occurred when comment was deleted
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response'
+  /realtime/comment.flagged:
+    get:
+      summary: comment flagged
+      description: |
+        Event has occurred when comment was flagged
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseWithFlag'
+  /realtime/comment.flagsCleared:
+    get:
+      summary: comment flag cleared
+      description: |
+        Event has occurred when comment flag was cleared
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseWithFlag'
+  /realtime/comment.removeReaction:
+    get:
+      summary: comment remove reaction
+      description: |
+        Event has occurred when a reaction is removed from comment
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseWithReactor'
+  /realtime/comment.unflagged:
+    get:
+      summary: comment unflagged
+      description: |
+        Event has occurred when comment was unflagged
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseWithFlag'
+  /realtime/comment.updated:
+    get:
+      summary: comment updated
+      description: |
+        Event has occurred when comment was updated
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response'
+  /realtime/community.created:
+    get:
+      summary: community created
+      description: |
+        Event has occurred when community was created
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-2'
+  /realtime/community.deleted:
+    get:
+      summary: community deleted
+      description: |
+        Event has occurred when community was deleted
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-2'
+  /realtime/community.joined:
+    get:
+      summary: community joined
+      description: |
+        Event has occurred when joined community
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-2'
+  /realtime/community.left:
+    get:
+      summary: community left
+      description: |
+        Event has occurred when left community
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-2'
+  /realtime/community.updated:
+    get:
+      summary: community updated
+      description: |
+        Event has occurred when community was updated
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-2'
+  /realtime/community.userAdded:
+    get:
+      summary: community user added
+      description: |
+        Event has occurred when user was added to community
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-2'
+  /realtime/community.userBanned:
+    get:
+      summary: community user banned
+      description: |
+        Event has occurred when user was banned from community
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-2'
+  /realtime/community.userChanged:
+    get:
+      summary: community user changed
+      description: |
+        Event has occurred when the number of user was changed in community
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-2'
+  /realtime/community.userRemoved:
+    get:
+      summary: community user removed
+      description: |
+        Event has occurred when user was removed from community
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-2'
+  /realtime/community.userUnbanned:
+    get:
+      summary: community user unbanned
+      description: |
+        Event has occurred when user was unbanned from community
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-2'
+  /realtime/follow.accepted:
+    get:
+      summary: follow accepted
+      description: |
+        Event has occurred when follow was accepted
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-3'
+  /realtime/follow.created:
+    get:
+      summary: follow created
+      description: |
+        Event has occurred when follow was created
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-3'
+  /realtime/follow.followerDeleted:
+    get:
+      summary: delete follower
+      description: |
+        Event has occurred when follower was deleted
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-3'
+  /realtime/follow.requestCanceled:
+    get:
+      summary: follow request canceled
+      description: |
+        Event has occurred when follow request was canceled
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-3'
+  /realtime/follow.requestDeclined:
+    get:
+      summary: decline follow request
+      description: |
+        Event has occurred when follow request was declined
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-3'
+  /realtime/follow.requested:
+    get:
+      summary: follow requested
+      description: |
+        Event has occurred when follow was requested
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-3'
+  /realtime/follow.unfollowed:
+    get:
+      summary: unfollowed
+      description: |
+        Event has occurred when unfollow was created
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-3'
+  /realtime/marker.marked-message:
+    get:
+      summary: marked message in marker
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/MarkedMessageResponse'
+  /realtime/marker.marker.user-sync:
+    get:
+      summary: user sync in marker
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/UserSyncResponse'
+  /realtime/marker.userFeed-updated:
+    get:
+      summary: user feed updated in marker
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/UserFeedUpdatedResponse'
+  /realtime/marker.feed-updated:
+    get:
+      summary: feed updated in marker
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/FeedUpdatedResponse'
+  /realtime/message-feed.created:
+    get:
+      summary: message feed created
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-4'
+  /realtime/message-feed.deleted:
+    get:
+      summary: message feed deleted
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-4'
+  /realtime/message-feed.updated:
+    get:
+      summary: message feed updated
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-4'
+  /realtime/message.addReaction:
+    get:
+      summary: message reaction added
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseWithReaction'
+  /realtime/message.created:
+    get:
+      summary: message created
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/CreatedResponse'
+  /realtime/message.deleted:
+    get:
+      summary: message deleted
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-5'
+  /realtime/message.flagCleared:
+    get:
+      summary: message flag cleared
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-5'
+  /realtime/message.flagged:
+    get:
+      summary: message flagged
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-5'
+  /realtime/message.reactionAdded:
+    get:
+      summary: message reaction added
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseWithReaction'
+  /realtime/message.reactionRemoved:
+    get:
+      summary: message reaction removed
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseWithReaction'
+  /realtime/message.unflagged:
+    get:
+      summary: message unflagged
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-5'
+  /realtime/message.updated:
+    get:
+      summary: message updated
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-5'
+  /realtime/post.addReaction:
+    get:
+      summary: post add reaction
+      description: |
+        Event has occurred when a reaction is added to post
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_ResponseWithReactor'
+  /realtime/post.approved:
+    get:
+      summary: post approved
+      description: |
+        Event has occurred when post was approved
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_ResponseWithFlag'
+  /realtime/post.created:
+    get:
+      summary: post created
+      description: |
+        Event has occurred when post was created
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-6'
+  /realtime/post.declined:
+    get:
+      summary: post declined
+      description: |
+        Event has occurred when post was declined
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_ResponseWithFlag'
+  /realtime/post.deleted:
+    get:
+      summary: post deleted
+      description: |
+        Event has occurred post was deleted
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-6'
+  /realtime/post.flagged:
+    get:
+      summary: post flagged
+      description: |
+        Event has occurred when post was flagged
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_ResponseWithFlag'
+  /realtime/post.flagsCleared:
+    get:
+      summary: post flag cleared
+      description: |
+        Event has occurred when post flag was cleared
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_ResponseWithFlag'
+  /realtime/post.removeReaction:
+    get:
+      summary: post remove reaction
+      description: |
+        Event has occurred when a reaction is removed from post
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_ResponseWithReactor'
+  /realtime/post.unflagged:
+    get:
+      summary: post unflagged
+      description: |
+        Event has occurred when post was unflagged
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_ResponseWithFlag'
+  /realtime/post.updated:
+    get:
+      summary: post updated
+      description: |
+        Event has occurred when post was updated
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-6'
+  /realtime/story.created:
+    get:
+      summary: story created
+      description: |
+        Event has occurred when story was created
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-7'
+  /realtime/story.deleted:
+    get:
+      summary: story deleted
+      description: |
+        Event has occurred when story was deleted
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-7'
+  /realtime/story.reactionAdded:
+    get:
+      summary: story reaction added
+      description: |
+        Event has occurred when a reaction is added to story
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_ResponseWithReactor-2'
+  /realtime/story.reactionRemoved:
+    get:
+      summary: story reaction removed
+      description: |
+        Event has occurred when a reaction is removed to story
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_ResponseWithReactor-2'
+  /realtime/user.deleted:
+    get:
+      summary: user deleted
+      description: |
+        Event has occurred when user was deleted
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-8'
+  /realtime/user.didGlobalBan:
+    get:
+      summary: user global banned
+      description: |
+        Event has occurred when user was global banned
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-8'
+  /realtime/user.flagCleared:
+    get:
+      summary: user flag cleared
+      description: |
+        Event has occurred when the user flag was cleared
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-8'
+  /realtime/user.flagged:
+    get:
+      summary: user flagged
+      description: |
+        Event has occurred when user was flagged
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-8'
+  /realtime/user.unflagged:
+    get:
+      summary: user unflagged
+      description: |
+        Event has occurred when user was unflagged
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-8'
+  /realtime/user.updated:
+    get:
+      summary: user updated
+      description: |
+        Event has occurred when user was updated
+      tags:
+        - Realtime event
+      responses:
+        '200':
+          $ref: '#/components/responses/response_Response-8'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -10121,6 +12974,1362 @@ components:
         updatedAt:
           type: string
           format: date-time
+    ChannelV1:
+      type: object
+      properties:
+        _id:
+          type: string
+        path:
+          type: string
+        channelId:
+          type: string
+          description: ID of a channel.
+        isDistinct:
+          type: boolean
+        metadata:
+          type: object
+          description: Additional properties to support custom fields.
+        type:
+          $ref: '#/components/schemas/ChannelType'
+        tags:
+          type: array
+          description: List of tags. They will be used for searching.
+          items:
+            type: string
+        isMuted:
+          type: boolean
+          description: Is this channel muted? (Computed by using muteTimeout).
+        isRateLimited:
+          type: boolean
+          description: Is this channel limited sending rate? (Computed by using muteTimeout).
+        muteTimeout:
+          type: string
+          description: The date/time to suppress muteness.
+          format: date-time
+        rateLimit:
+          type: integer
+          description: Number of messages within rate limit.
+        rateLimitWindow:
+          type: integer
+          description: Waiting time interval before reset rateLimit to 0.
+        rateLimitTimeout:
+          type: string
+          description: The date/time to suppress limitation of sending rate.
+          format: date-time
+        displayName:
+          type: string
+          description: Channel name for displaying.
+        messageAutoDeleteEnabled:
+          type: boolean
+          description: Is message in this channel will be deleted when the user flagged until flag limit?
+        autoDeleteMessageByFlagLimit:
+          type: number
+          description: Number of flags that will force a message to be deleted automatically.
+        memberCount:
+          type: integer
+          description: Number of members in channel.
+        messageCount:
+          type: integer
+          description: Number of messages in channel.
+        lastActivity:
+          type: string
+          description: The date/time when a user last did something related to the channel such as add/remove members .
+          format: date-time
+        createdAt:
+          type: string
+          description: The date/time when a channel is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a channel is updated.
+          format: date-time
+        avatar:
+          type: object
+          $ref: '#/components/schemas/File'
+      required:
+        - channelId
+        - createdAt
+        - updatedAt
+    Message:
+      type: object
+      properties:
+        _id:
+          type: string
+        path:
+          type: string
+        messageId:
+          type: string
+          description: ID of a message.
+        parentId:
+          type: string
+          description: ID of a parent message.
+        childrenNumber:
+          type: integer
+          description: A number of comments in this message.
+        channelId:
+          type: string
+          description: ID of a channel.
+        userId:
+          type: string
+          description: ID of a user.
+        type:
+          type: string
+          description: Type of a message (text, image, video, json).
+        tags:
+          type: array
+          description: List of tags. They will be used for searching.
+          items:
+            type: string
+        data:
+          type: object
+          description: Body of a message.
+        isDeleted:
+          type: boolean
+          description: A flag to hide a message. Unable to show after hiding. It will be set to true when user deletes a message or a channel of this message is banned.
+        channelSegment:
+          type: integer
+          description: A sequence number of a message in channel.
+        createdAt:
+          type: string
+          description: The date/time when a channel is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a channel of this message is banned or this message is deleted.
+          format: date-time
+        editedAt:
+          type: string
+          description: The date/time when a message is deleted or updated.
+          format: date-time
+        flagCount:
+          type: integer
+          description: The number of users that has read this message.
+        hashFlag:
+          type: object
+          description: The flag for checking internally that this message is reported or not.
+          properties:
+            bits:
+              type: integer
+            hashes:
+              type: integer
+            hash:
+              type: array
+              items:
+                type: string
+        reactions:
+          type: object
+          description: The mapping of reaction with reactionCounter.
+        reactionsCount:
+          type: integer
+          description: The number of all reactions for this messages.
+        myReactions:
+          type: array
+          description: The list of my reactions to this message. This property will not exist when it is triggered from an event 'message.didUpdate'.
+          items:
+            type: string
+        latestReaction:
+          type: object
+          description: The latest reaction. This property will exist when it is triggered from an event 'message.didUpdate'.
+          properties:
+            referenceId:
+              type: string
+              description: ID of a document.
+            referenceType:
+              type: string
+              description: Type of document.
+            reactionName:
+              type: string
+            userId:
+              type: string
+            userDisplayName:
+              type: string
+            reactionId:
+              type: string
+            eventName:
+              type: string
+            createdAt:
+              type: string
+              description: The date/time when a reaction is created.
+              format: date-time
+        mentionees:
+          type: array
+          description: The object of the mentions type and user who get a notification for the message.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: |
+                  type: * `user` - need to specific userIds and notification mentions individual user * `channel` - notification mentions all user in channel
+                enum:
+                  - user
+                  - channel
+              userIds:
+                type: array
+                description: Array of UserId. if the mention type is a channel, doesn't send userIds
+                items:
+                  type: string
+              userPublicIds:
+                type: array
+                description: Array of UserPublicId.
+                items:
+                  type: string
+              userInternalIds:
+                type: array
+                description: Array of UserInternalId.
+                items:
+                  type: string
+      required:
+        - messageId
+        - channelId
+        - userId
+        - channelSegment
+        - createdAt
+        - updatedAt
+    channel-custom-notification-response:
+      description: Channels Information
+      type: object
+      properties:
+        channels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChannelV3'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+    comment-custom-notification-response:
+      description: Comment Information
+      type: object
+      properties:
+        posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        communities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Community'
+        communityUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityUser'
+    follow-custom-notification-response:
+      description: Follow Response Object
+      type: object
+      properties:
+        follows:
+          type: array
+          items:
+            $ref: '#/components/schemas/Follow'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+    message-custom-notification-response:
+      description: Messages Information
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageV3'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+    post-custom-notification-response:
+      description: Post Information
+      type: object
+      properties:
+        posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        communities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Community'
+    VideoStreamingCustom:
+      type: object
+      properties:
+        streamId:
+          type: string
+        userId:
+          type: string
+          description: Streaming creator user id
+        thumbnailFileId:
+          type: string
+          description: Thumbnaiil file id
+        title:
+          type: string
+        status:
+          type: string
+          enum:
+            - idle
+            - live
+            - ended
+            - recorded
+          description: |
+            Status of livestreaming   * idle - streaming is just created   * live - streamer is streaming now or streamer is reconnecting   * ended - streamer stop streaming or streamer disconnect and not connect back in time period   * recorded - live stream recordings available 
+        isLive:
+          type: boolean
+          description: Deprecated (was used before for checking live status)
+        isDeleted:
+          type: boolean
+          description: Is streaming deleted?
+        description:
+          type: string
+        platform:
+          type: object
+          properties:
+            name:
+              type: string
+            version:
+              type: string
+        startedAt:
+          type: string
+          format: date-time
+        endedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+        resolution:
+          type: string
+          enum:
+            - SD
+            - HD
+            - FHD
+          default: SD
+        streamerUrl:
+          type: object
+          properties:
+            url:
+              type: string
+            components:
+              type: object
+              properties:
+                origin:
+                  type: string
+                appName:
+                  type: string
+                streamName:
+                  type: string
+                query:
+                  type: string
+    video-streaming-custom-notification-response:
+      description: video streaming information
+      type: object
+      properties:
+        videoStreamings:
+          type: array
+          items:
+            $ref: '#/components/schemas/VideoStreamingCustom'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+    ChannelBase:
+      type: object
+      properties:
+        channels:
+          description: The list of channels
+          type: array
+          items:
+            $ref: '#/components/schemas/ChannelV3'
+        channelUsers:
+          description: The list of channel users
+          type: array
+          items:
+            $ref: '#/components/schemas/ChannelUserV3'
+        users:
+          description: The list of users
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        files:
+          description: The list of files
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+    Wrapper:
+      type: object
+      properties:
+        networkId:
+          type: string
+          description: ID of the network.
+        path:
+          type: string
+          description: A topic path for subscription.
+        eventType:
+          type: string
+          description: Name of the event.
+        senderId:
+          type: string
+          description: ID of sender node.
+        sendTime:
+          type: string
+          description: The date/time when event was sent.
+          format: date-time
+        version:
+          type: string
+          description: Version of API
+    Channel:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: The message ID.
+            data:
+              $ref: '#/components/schemas/ChannelBase'
+        - $ref: '#/components/schemas/Wrapper'
+    CommentForRealtime:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Private ID of a comment. (for real-time event)
+        path:
+          type: string
+          description: Path of a comment. (for real-time event)
+        commentId:
+          type: string
+          description: ID of a comment.
+        userId:
+          type: string
+          description: ID of a creator.
+        userPublicId:
+          type: string
+          description: Public ID of a creator.
+        userInternalId:
+          type: string
+          description: Internal ID of a creator.
+        parentId:
+          type: string
+          description: ID of a parent comment.
+        rootId:
+          type: string
+          description: ID of a root comment.
+        referenceId:
+          type: string
+          description: ID of a reference.
+        referenceType:
+          type: string
+          enum:
+            - post
+            - content
+            - story
+          description: Type of a reference (post/content).
+        dataType:
+          type: string
+          description: Type of a comment (deprecated in new SDK version, will be fixed as "text").
+        dataTypes:
+          type: array
+          description: Types of a comment (a comment can contain multiple types)
+          items:
+            type: string
+            enum:
+              - text
+              - image
+        data:
+          type: object
+          description: Body of a comment.
+        metadata:
+          type: object
+          description: Additional properties to support custom fields.
+        childrenNumber:
+          type: number
+        flagCount:
+          type: integer
+          description: The number of users that has read this comment.
+        hashFlag:
+          type: object
+          description: The flag for checking internally that this comment is reported or not.
+          properties:
+            bits:
+              type: integer
+            hashes:
+              type: integer
+            hash:
+              type: array
+              items:
+                type: string
+        reactions:
+          type: object
+          description: The mapping of reaction with reactionCounter.
+          example:
+            like: 1
+        reactionsCount:
+          type: integer
+          description: The number of all reactions for this comment.
+          example: 1
+        isDeleted:
+          type: boolean
+          default: false
+          description: A flag to deleted a comment.
+        editedAt:
+          type: string
+          description: The date/time when comment is updated.
+          format: date-time
+        createdAt:
+          type: string
+          description: The date/time when a comment is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a comment is updated or deleted.
+          format: date-time
+        children:
+          type: array
+          items:
+            type: string
+            description: ID of a children comment.
+        segmentNumber:
+          type: integer
+          example: 1
+        mentionees:
+          type: array
+          description: The object of the mentions type and user who get a notification from the post.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: |
+                  type: * `user` - need to specific userIds and notification mentions individual user
+                enum:
+                  - user
+              userIds:
+                type: array
+                description: Array of UserId.
+                items:
+                  type: string
+              userPublicIds:
+                type: array
+                description: Array of UserPublicId.
+                items:
+                  type: string
+              userInternalIds:
+                type: array
+                description: Array of UserInternalId.
+                items:
+                  type: string
+        attachments:
+          type: array
+          description: The attachments/medias to be included in the comment
+          items:
+            $ref: '#/components/schemas/CommentAttachment'
+      required:
+        - commentId
+    CommentBase:
+      type: object
+      properties:
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentForRealtime'
+        commentChildren:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentForRealtime'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+    schema_Comment:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: The comment ID.
+            data:
+              $ref: '#/components/schemas/CommentBase'
+        - $ref: '#/components/schemas/Wrapper'
+    CommentWithReactor:
+      allOf:
+        - $ref: '#/components/schemas/schema_Comment'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                reactor:
+                  $ref: '#/components/schemas/Reactor'
+    CommentWithFlag:
+      allOf:
+        - $ref: '#/components/schemas/schema_Comment'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                flaggedUserId:
+                  type: string
+                  description: ID of the User has been flagged
+    CommunityForRealtime:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Private ID of a community. (for real-time event)
+        path:
+          type: string
+          description: Path of a community. (for real-time event)
+        communityId:
+          type: string
+          description: ID of a community.
+        channelId:
+          type: string
+          description: ID of a channel.
+        userId:
+          type: string
+          description: ID of a creator.
+        userPublicId:
+          type: string
+          description: Public ID of a creator.
+        userInternalId:
+          type: string
+          description: Internal ID of a creator.
+        displayName:
+          type: string
+          description: Community name for displaying.
+        avatarFileId:
+          type: string
+          description: ID of a avatar file.
+        description:
+          type: string
+          description: Description of a community.
+        isOfficial:
+          type: boolean
+          description: Is this community official?
+        isPublic:
+          type: boolean
+          description: Is this community public?
+        onlyAdminCanPost:
+          type: boolean
+          description: Can post by admin only?
+        tags:
+          type: array
+          description: List of tags. They will be used for searching.
+          items:
+            type: string
+        metadata:
+          type: object
+          description: Additional properties to support custom fields.
+        postsCount:
+          type: integer
+          description: Number of posts in community.
+        membersCount:
+          type: integer
+          description: Number of members in community.
+        categoryIds:
+          type: array
+          items:
+            type: string
+            description: ID of a category.
+        isDeleted:
+          type: boolean
+          default: false
+          description: Is this community deleted?
+        createdAt:
+          type: string
+          description: The date/time when a community is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a community is updated or deleted.
+          format: date-time
+        hasFlaggedComment:
+          type: boolean
+          default: false
+          description: The flag for checking internally that comments inside post is reported or not.
+        hasFlaggedPost:
+          type: boolean
+          default: false
+          description: The flag for checking internally that post inside community is reported or not.
+        needApprovalOnPostCreation:
+          type: boolean
+          default: false
+          description: Determines that this community require an authorize user to review post before post is published
+        moderatorMemberCount:
+          type: integer
+        allowCommentInStory:
+          type: boolean
+          default: true
+      required:
+        - communityId
+        - channelId
+        - displayName
+    CommunityBase:
+      type: object
+      properties:
+        communities:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityForRealtime'
+        communityUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityUser'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityCategory'
+        feeds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feed'
+    schema_Community:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: The community ID.
+            data:
+              $ref: '#/components/schemas/CommunityBase'
+        - $ref: '#/components/schemas/Wrapper'
+    FollowBase:
+      type: object
+      properties:
+        follows:
+          type: array
+          items:
+            $ref: '#/components/schemas/Follow'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+    schema_Follow:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+            data:
+              $ref: '#/components/schemas/FollowBase'
+        - $ref: '#/components/schemas/Wrapper'
+    MessageV5ForRealtimeEvent:
+      type: object
+      properties:
+        messageId:
+          $ref: '#/components/schemas/MessageV5_messageId'
+        networkId:
+          $ref: '#/components/schemas/MessageV5_networkId'
+        channelId:
+          $ref: '#/components/schemas/MessageV5_channelId'
+        channelType:
+          $ref: '#/components/schemas/MessageV5_channelType'
+        messageFeedId:
+          $ref: '#/components/schemas/MessageV5_messageFeedId'
+        segment:
+          $ref: '#/components/schemas/MessageV5_segment'
+        dataType:
+          $ref: '#/components/schemas/MessageV5_dataType'
+        data:
+          $ref: '#/components/schemas/MessageV5_data'
+        fileId:
+          $ref: '#/components/schemas/MessageV5_fileId'
+        thumbnailFileId:
+          $ref: '#/components/schemas/MessageV5_thumbnailFileId'
+        metadata:
+          $ref: '#/components/schemas/MessageV5_metadata'
+        tags:
+          $ref: '#/components/schemas/Generic_tags'
+        creatorId:
+          $ref: '#/components/schemas/MessageV5_creatorId'
+        mentionedUsers:
+          $ref: '#/components/schemas/MessageV5_mentionedUsers'
+        reactions:
+          $ref: '#/components/schemas/MessageV5_reactions'
+        reactionCount:
+          $ref: '#/components/schemas/MessageV5_reactionCount'
+        parentId:
+          $ref: '#/components/schemas/MessageV5_parentId'
+        path:
+          $ref: '#/components/schemas/MessageV5_path'
+        flagCount:
+          $ref: '#/components/schemas/MessageV5_flagCount'
+        childCount:
+          $ref: '#/components/schemas/MessageV5_childCount'
+        isDeleted:
+          $ref: '#/components/schemas/Generic_isDeleted'
+        editedAt:
+          $ref: '#/components/schemas/MessageV5_editedAt'
+        createdAt:
+          $ref: '#/components/schemas/MessageV5_createdAt'
+        updatedAt:
+          $ref: '#/components/schemas/MessageV5_updatedAt'
+    MessageFeedBase:
+      type: object
+      properties:
+        messageFeeds:
+          description: the list of message feed
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageFeed'
+        messages:
+          description: The list of message
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageV5ForRealtimeEvent'
+        files:
+          description: The list of file
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        users:
+          description: The list of user
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    schema_MessageFeed:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: The message feed ID.
+            data:
+              $ref: '#/components/schemas/MessageFeedBase'
+        - $ref: '#/components/schemas/Wrapper'
+    MessageBase:
+      type: object
+      properties:
+        messages:
+          description: The list of message
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageV5ForRealtimeEvent'
+        files:
+          description: The list of file
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        users:
+          description: The list of user
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    MessageWithReactionBase:
+      allOf:
+        - $ref: '#/components/schemas/MessageBase'
+        - type: object
+          properties:
+            reactions:
+              description: The reaction added/removed to the message
+              type: array
+              items:
+                $ref: '#/components/schemas/Reactor'
+    MessageWithReaction:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: The message ID.
+            data:
+              $ref: '#/components/schemas/MessageWithReactionBase'
+        - $ref: '#/components/schemas/Wrapper'
+    MessageV5CreatedForRealtimeEvent:
+      type: object
+      properties:
+        messageId:
+          $ref: '#/components/schemas/MessageV5_messageId'
+        networkId:
+          $ref: '#/components/schemas/MessageV5_networkId'
+        channelId:
+          $ref: '#/components/schemas/MessageV5_channelId'
+        channelType:
+          $ref: '#/components/schemas/MessageV5_channelType'
+        messageFeedId:
+          $ref: '#/components/schemas/MessageV5_messageFeedId'
+        segment:
+          $ref: '#/components/schemas/MessageV5_segment'
+        dataType:
+          $ref: '#/components/schemas/MessageV5_dataType'
+        data:
+          $ref: '#/components/schemas/MessageV5_data'
+        fileId:
+          $ref: '#/components/schemas/MessageV5_fileId'
+        thumbnailFileId:
+          $ref: '#/components/schemas/MessageV5_thumbnailFileId'
+        metadata:
+          $ref: '#/components/schemas/MessageV5_metadata'
+        tags:
+          $ref: '#/components/schemas/Generic_tags'
+        creatorId:
+          $ref: '#/components/schemas/MessageV5_creatorId'
+        mentionedUsers:
+          $ref: '#/components/schemas/MessageV5_mentionedUsers'
+        reactions:
+          $ref: '#/components/schemas/MessageV5_reactions'
+        reactionCount:
+          $ref: '#/components/schemas/MessageV5_reactionCount'
+        parentId:
+          $ref: '#/components/schemas/MessageV5_parentId'
+        path:
+          $ref: '#/components/schemas/MessageV5_path'
+        flagCount:
+          $ref: '#/components/schemas/MessageV5_flagCount'
+        childCount:
+          $ref: '#/components/schemas/MessageV5_childCount'
+        isDeleted:
+          $ref: '#/components/schemas/Generic_isDeleted'
+        editedAt:
+          $ref: '#/components/schemas/MessageV5_editedAt'
+        createdAt:
+          $ref: '#/components/schemas/MessageV5_createdAt'
+        updatedAt:
+          $ref: '#/components/schemas/MessageV5_updatedAt'
+        referenceId:
+          $ref: '#/components/schemas/MessageV5_referenceId'
+    MessageCreatedBase:
+      type: object
+      properties:
+        messages:
+          description: The list of message
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageV5CreatedForRealtimeEvent'
+        files:
+          description: The list of file
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        users:
+          description: The list of user
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    MessageCreated:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: The message ID.
+            data:
+              $ref: '#/components/schemas/MessageCreatedBase'
+        - $ref: '#/components/schemas/Wrapper'
+    schema_Message:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: The message ID.
+            data:
+              $ref: '#/components/schemas/MessageBase'
+        - $ref: '#/components/schemas/Wrapper'
+    PostForRealtime:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Private ID of a post. (for real-time event)
+        path:
+          type: string
+          description: Path of a post. (for real-time event)
+        postId:
+          type: string
+          description: ID of a post.
+        parentPostId:
+          type: string
+          description: ID of a parent post.
+        postedUserId:
+          type: string
+          description: ID of a creator.
+        postedUserPublicId:
+          type: string
+          description: Public ID of a creator.
+        postedUserInternalId:
+          type: string
+          description: Internal ID of a creator.
+        sharedUserId:
+          type: string
+          description: ID of a shared owner.
+        sharedCount:
+          type: integer
+          description: number of shared post.
+        targetId:
+          type: string
+          description: ID of a target.
+        targetPublicId:
+          type: string
+          description: Public ID of a target.
+        targetInternalId:
+          type: string
+          description: Internal ID of a target.
+        targetType:
+          type: string
+          enum:
+            - user
+            - community
+            - content
+          description: Type of a target (user, community, content).
+        dataType:
+          type: string
+          enum:
+            - text
+            - image
+            - file
+            - video
+            - liveStream
+          description: Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).
+          default: text
+        data:
+          type: object
+          description: Body of a post. (It can be anything when dataType is not text, image, file)
+          properties:
+            text:
+              type: string
+              description: post text.
+            fileId:
+              type: string
+              description: file key on cloud storage (for image, file post).
+            thumbnailFileId:
+              type: string
+              description: video thumbnail file id (for video post).
+            videoFileId:
+              type: object
+              description: video file id for each quality (for video post).
+              properties:
+                original:
+                  type: string
+                  description: original file id
+                low:
+                  type: string
+                  description: low video quality file id
+                medium:
+                  type: string
+                  description: medium video quality file id
+                high:
+                  type: string
+                  description: high video quality file id
+            streamId:
+              type: string
+              description: video streaming id (for video streaming post)
+        metadata:
+          type: object
+          description: Additional properties to support custom fields.
+        flagCount:
+          type: integer
+          description: The number of users that has read this post.
+        hashFlag:
+          type: object
+          description: The flag for checking internally that this post is reported or not.
+          properties:
+            bits:
+              type: integer
+            hashes:
+              type: integer
+            hash:
+              type: array
+              items:
+                type: string
+        editedAt:
+          type: string
+          description: The date/time when text or metadata of post is updated.
+          format: date-time
+        createdAt:
+          type: string
+          description: The date/time when a post is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a post is updated or deleted.
+          format: date-time
+        reactions:
+          type: object
+          description: The mapping of reaction with reactionCounter.
+          example:
+            like: 1
+        reactionsCount:
+          type: integer
+          description: The number of all reactions for this post.
+          example: 1
+        commentsCount:
+          type: integer
+          description: The number of all comments for this post.
+          example: 1
+        comments:
+          type: array
+          items:
+            type: string
+            description: ID of a comment.
+        children:
+          type: array
+          items:
+            type: string
+            description: ID of a children post.
+        isDeleted:
+          type: boolean
+          default: false
+          description: A flag to deleted a post.
+        hasFlaggedComment:
+          type: boolean
+          default: false
+          description: The flag for checking internally that comments inside post is reported or not.
+        hasFlaggedChildren:
+          type: boolean
+          default: false
+          description: The flag for checking internally that children post is reported or not.
+        feedId:
+          type: string
+          description: Feed public id
+        tags:
+          type: array
+          minItems: 0
+          maxItems: 5
+          items:
+            type: string
+            maxLength: 24
+        mentionees:
+          type: array
+          description: The object of the mentions type and user who get a notification from the post.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: |
+                  type: * `user` - need to specific userIds and notification mentions individual user
+                enum:
+                  - user
+              userIds:
+                type: array
+                description: Array of UserId.
+                items:
+                  type: string
+              userPublicIds:
+                type: array
+                description: Array of UserPublicId.
+                items:
+                  type: string
+              userInternalIds:
+                type: array
+                description: Array of UserInternalId.
+                items:
+                  type: string
+        impression:
+          type: integer
+        reach:
+          type: integer
+      required:
+        - postId
+        - data
+    PostBase:
+      type: object
+      properties:
+        posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostForRealtime'
+        postChildren:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostForRealtime'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        communities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Community'
+        communityUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityUser'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityCategory'
+        feeds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feed'
+        videoStreamings:
+          type: array
+          items:
+            $ref: '#/components/schemas/VideoStreaming'
+        polls:
+          type: array
+          items:
+            $ref: '#/components/schemas/Poll'
+    schema_Post:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: The post ID.
+            data:
+              $ref: '#/components/schemas/PostBase'
+        - $ref: '#/components/schemas/Wrapper'
+    PostWithReactor:
+      allOf:
+        - $ref: '#/components/schemas/schema_Post'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                reactor:
+                  $ref: '#/components/schemas/Reactor'
+    PostWithFlag:
+      allOf:
+        - $ref: '#/components/schemas/schema_Post'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                flaggedUserId:
+                  type: string
+                  description: ID of the User has been flagged
+    StoryBase:
+      type: object
+      properties:
+        stories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Story'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        communities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Community'
+        communityUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityUser'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityCategory'
+    schema_Story:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: The story ID.
+            data:
+              $ref: '#/components/schemas/StoryBase'
+        - $ref: '#/components/schemas/Wrapper'
+    StoryWithReactor:
+      allOf:
+        - $ref: '#/components/schemas/schema_Story'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                reactor:
+                  $ref: '#/components/schemas/Reactor'
+    UserBase:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+    schema_User:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: The user ID.
+            data:
+              $ref: '#/components/schemas/UserBase'
+        - $ref: '#/components/schemas/Wrapper'
   responses:
     me-response-payload-200:
       description: All ads information and ads settings
@@ -12447,7 +16656,7 @@ components:
             status: error
             code: 400300
             message: Only creator can update poll.
-    PollPaginationResponse:
+    poll-pagination-response-200:
       description: Poll Information and users respondent.
       content:
         application/json:
@@ -13312,6 +17521,598 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/File'
+    follow-webhook-response:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+              data:
+                type: object
+                properties:
+                  from:
+                    type: string
+                  to:
+                    type: string
+                  status:
+                    type: string
+                    enum:
+                      - none
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+    message-add-reaction-with-reactor-webhook-response:
+      description: Messages Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+                enum:
+                  - message.didAddReaction
+              data:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MessageV3'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+                  reactor:
+                    $ref: '#/components/schemas/Reactor'
+    message-remove-reaction-with-reactor-webhook-response:
+      description: Messages Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+                enum:
+                  - message.didRemoveReaction
+              data:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MessageV3'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+                  reactor:
+                    $ref: '#/components/schemas/Reactor'
+    poll-webhook-response:
+      description: Poll Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+              data:
+                type: object
+                properties:
+                  polls:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Poll'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+    user-webhook-response:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+              data:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+    comment-with-refactor-webhook-response:
+      description: Comment Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+              data:
+                type: object
+                properties:
+                  comments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  commentChildren:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  communityUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityUser'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+                  reactor:
+                    $ref: '#/components/schemas/Reactor'
+    comment-webhook-response:
+      description: Comment Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+              data:
+                type: object
+                properties:
+                  comments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  commentChildren:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  communityUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityUser'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+    comment-with-flag-webhook-response:
+      description: Comment Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+              data:
+                type: object
+                properties:
+                  comments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  commentChildren:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  communityUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityUser'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+                  flaggedUserId:
+                    type: string
+    community-webhook-response:
+      description: Community Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+              data:
+                type: object
+                properties:
+                  communities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Community'
+                  communityUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityUser'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityCategory'
+                  feeds:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Feed'
+    post-with-reactor-webhook-response:
+      description: Post Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+              data:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+                  postChildren:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+                  comments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+                  communities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Community'
+                  communityUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityUser'
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityCategory'
+                  feeds:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Feed'
+                  reactor:
+                    $ref: '#/components/schemas/Reactor'
+                  videoStreamings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoStreaming'
+    post-webhook-response:
+      description: Post Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+              data:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+                  postChildren:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+                  comments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+                  communities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Community'
+                  communityUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityUser'
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityCategory'
+                  feeds:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Feed'
+                  videoStreamings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoStreaming'
+    post-with-flag-webhook-response:
+      description: Post Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+              data:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+                  postChildren:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+                  comments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+                  communities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Community'
+                  communityUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityUser'
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityCategory'
+                  feeds:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Feed'
+                  videoStreamings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoStreaming'
+                  flaggedUserId:
+                    type: string
+    video-streaming-webhook-response:
+      description: video streaming information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              event:
+                type: string
+              data:
+                type: object
+                properties:
+                  videoStreamings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoStreaming'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+    Response:
+      description: Channel Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Channel'
+    ResponseWithReactor:
+      description: Comment Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CommentWithReactor'
+    response_Response:
+      description: Comment Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schema_Comment'
+    ResponseWithFlag:
+      description: Comment Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CommentWithFlag'
+    response_Response-2:
+      description: Community Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schema_Community'
+    response_Response-3:
+      description: Message Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schema_Follow'
+    MarkedMessageResponse:
+      description: Marked message response
+      content:
+        application/json:
+          schema:
+            properties:
+              contentMarkers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContentMarkers'
+              feedMarkers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeedMarkers'
+    UserSyncResponse:
+      description: User sync response
+      content:
+        application/json:
+          schema:
+            properties:
+              userMarkers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserMarkers'
+              userFeedMarkers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserFeedMarkers'
+              userEntityMarkers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserEntityMarkers'
+    UserFeedUpdatedResponse:
+      description: User feed updated response
+      content:
+        application/json:
+          schema:
+            properties:
+              userFeedMarkers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserFeedMarkers'
+              feedMarkers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeedMarkers'
+    FeedUpdatedResponse:
+      description: Feed updated response
+      content:
+        application/json:
+          schema:
+            properties:
+              feedMarkers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeedMarkers'
+    response_Response-4:
+      description: Message Feed Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schema_MessageFeed'
+    ResponseWithReaction:
+      description: Message with reaction Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MessageWithReaction'
+    CreatedResponse:
+      description: Message Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MessageCreated'
+    response_Response-5:
+      description: Message Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schema_Message'
+    response_ResponseWithReactor:
+      description: Post Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PostWithReactor'
+    response_ResponseWithFlag:
+      description: Post Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PostWithFlag'
+    response_Response-6:
+      description: Post Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schema_Post'
+    response_Response-7:
+      description: Story Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schema_Story'
+    response_ResponseWithReactor-2:
+      description: Story Information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StoryWithReactor'
+    response_Response-8:
+      description: User
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schema_User'
   parameters:
     channelId:
       name: channelId

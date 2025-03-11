@@ -4,7 +4,7 @@ channel.didAddUsers:
       - "Webhook event"
     description: "Send user added event information whenever new member got added to a channel."
     responses:
-      "200":
+      200:
         description: "channel is channel information. userIds is a list of added userId. adderId is user who add other user to channel users is a list of user."
         content:
           application/json:
@@ -21,11 +21,11 @@ channel.didAddUsers:
                     channel:
                       type: "array"
                       items:
-                        $ref: "#/components/schemas/Channel"
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
                     users:
                       type: "array"
                       items:
-                        $ref: "./schema/user.yaml#/User"
+                        $ref: "../../schema/user.yaml#/User"
                     userIds:
                       type: "array"
                       items:
@@ -39,7 +39,7 @@ channel.didBan:
       - "Webhook event"
     description: "Send channel banned event whenever a channel got banned."
     responses:
-      "200":
+      200:
         description: "channel is channel information. userIds is a list of userIds who being banned. actorId is userId who ban other user. users is a list of userInfo"
         content:
           application/json:
@@ -56,11 +56,11 @@ channel.didBan:
                     channel:
                       type: "array"
                       items:
-                        $ref: "#/components/schemas/Channel"
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
                     users:
                       type: "array"
                       items:
-                        $ref: "#/components/schemas/User"
+                        $ref: "../../schema/user.yaml#/User"
                     actorId:
                       type: "string"
                     userIds:
@@ -74,7 +74,7 @@ channel.didClose:
       - "Webhook event"
     description: "Send channel close event information whenever a channel close."
     responses:
-      "200":
+      200:
         description: "channel is channel information."
         content:
           application/json:
@@ -91,7 +91,7 @@ channel.didClose:
                     channel:
                       type: "array"
                       items:
-                        $ref: "#/components/schemas/Channel"
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
 
 channel.didCreate:
   get:
@@ -99,7 +99,7 @@ channel.didCreate:
       - "Webhook event"
     description: "Send new created channel whenever a channel got create"
     responses:
-      "200":
+      200:
         description: "channel is channel information. userIds is a list of userId who is added to channel. users is a list of user."
         content:
           application/json:
@@ -116,11 +116,11 @@ channel.didCreate:
                     channel:
                       type: "array"
                       items:
-                        $ref: "#/components/schemas/Channel"
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
                     users:
                       type: "array"
                       items:
-                        $ref: "./schema/user.yaml#/User"
+                        $ref: "../../schema/user.yaml#/User"
                     userIds:
                       type: "array"
                       items:
@@ -132,7 +132,7 @@ channel.didJoin:
       - "Webhook event"
     description: "Send join event information whenever a channel got joined"
     responses:
-      "200":
+      200:
         description: "channel is channel information. userIds is a list of joined userId. users is a list of user."
         content:
           application/json:
@@ -149,11 +149,11 @@ channel.didJoin:
                     channel:
                       type: "array"
                       items:
-                        $ref: "#/components/schemas/Channel"
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
                     users:
                       type: "array"
                       items:
-                        $ref: "./schema/user.yaml#/User"
+                        $ref: "../../schema/user.yaml#/User"
                     userIds:
                       type: "array"
                       items:
@@ -165,7 +165,7 @@ channel.didLeave:
       - "Webhook event"
     description: "Send channel leave event information whenever someone leave a channel."
     responses:
-      "200":
+      200:
         description: "channel is channel information. userIds is a list of userId who leave channel. users is a list of userInfo"
         content:
           application/json:
@@ -182,11 +182,11 @@ channel.didLeave:
                     channel:
                       type: "array"
                       items:
-                        $ref: "#/components/schemas/Channel"
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
                     users:
                       type: "array"
                       items:
-                        $ref: "./schema/user.yaml#/User"
+                        $ref: "../../schema/user.yaml#/User"
                     userIds:
                       type: "array"
                       items:
@@ -198,7 +198,7 @@ channel.didRemoveUsers:
       - "Webhook event"
     description: "Send user removed event information whenever member got remove from channel."
     responses:
-      "200":
+      200:
         description: "channel is channel information. userIds is a list of removed userId. removerId is userId who remove other users from channel. users is a list of user."
         content:
           application/json:
@@ -215,11 +215,11 @@ channel.didRemoveUsers:
                     channel:
                       type: "array"
                       items:
-                        $ref: "#/components/schemas/Channel"
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
                     users:
                       type: "array"
                       items:
-                        $ref: "./schema/user.yaml#/User"
+                        $ref: "../../schema/user.yaml#/User"
                     userIds:
                       type: "array"
                       items:
@@ -233,7 +233,7 @@ channel.didUpdate:
       - "Webhook event"
     description: "Send channel updated event information whenever a channel got updated."
     responses:
-      "200":
+      200:
         description: "channel is channel information. userId is a userId who update channel. users is a list of userInfo"
         content:
           application/json:
@@ -250,11 +250,11 @@ channel.didUpdate:
                     channel:
                       type: "array"
                       items:
-                        $ref: "#/components/schemas/Channel"
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
                     users:
                       type: "array"
                       items:
-                        $ref: "./schema/user.yaml#/User"
+                        $ref: "../../schema/user.yaml#/User"
                     userId:
                       type: "string"
 
@@ -264,7 +264,7 @@ channel.didUpdateMeta:
       - "Webhook event"
     description: "Send channel's meta data updated event information whenever a channel's meta data got updated."
     responses:
-      "200":
+      200:
         description: "channel is channel information. userId is a userId who update channel's meta data. users is a list of userInfo"
         content:
           application/json:
@@ -281,10 +281,10 @@ channel.didUpdateMeta:
                     channel:
                       type: "array"
                       items:
-                        $ref: "#/components/schemas/Channel"
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
                     users:
                       type: "array"
                       items:
-                        $ref: "./schema/user.yaml#/User"
+                        $ref: "../../schema/user.yaml#/User"
                     userId:
                       type: "string"
