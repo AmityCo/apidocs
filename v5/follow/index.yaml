@@ -7,16 +7,11 @@ _userId-followInfo:
       - BearerAuth: []
     description: "Get other follow information.\n"
     parameters:
-      - name: "userId"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
-          maxLength: 900
+      - $ref: "./parameter.yaml#/_userId"
     responses:
-      "200":
-        $ref: "./v5/follow/response.yaml#/FollowInformationResponse"
-      "400":
-        $ref: "./global/error.yaml#/BadRequestError"
-      "500":
-        $ref: "./global/error.yaml#/UnexpectedError"
+      200:
+        $ref: "./response.yaml#/_userId-followInfo-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

@@ -1,0 +1,30 @@
+seenState:
+  name: seenState
+  in: query
+  description: the seen state option used for filter the seen/unseen story targets
+  schema:
+    type: string
+    enum:
+      - all
+      - seen
+      - unseen
+    default: unseen
+
+limit:
+  name: limit
+  in: query
+  description: the amount of story targets per query
+  required: false
+  schema:
+    type: integer
+    default: 10
+    minimum: 1
+    maximum: 100
+
+token:
+  name: token
+  in: query
+  required: false
+  schema:
+    type: string
+    maxLength: 900

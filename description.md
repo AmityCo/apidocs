@@ -1,28 +1,28 @@
-## Using Amity APIs
+## Using Social+ APIs
 
-Our API documentation explains all API endpoints used in Amity Social Cloud. All APIs, with the exception of some authentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin or User context. When used in user context, you will only be able to fetch data related to that user only.
-For Administrators who are using our API documentation in making server-to-server API calls, you need an Admin Access token to connect to the Amity server. Refer to
-[this documentation](https://docs.amity.co/console/settings#admin-api-access-token)
+Our API documentation explains all API endpoints used in Social+ Cloud. All APIs, with the exception of some authentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin or User context. When used in user context, you will only be able to fetch data related to that user only.
+For Administrators who are using our API documentation in making server-to-server API calls, you need an Admin Access token to connect to the Social+ server. Refer to
+[this documentation](https://docs.social.plus/console/settings#admin-api-access-token)
 for the instructions on how to generate an admin access token.
 
-All backend endpoints that support Amity SDK are included here. To easily differentiate the type of each endpoint, we added a prefix in each endpoint's path.
+All backend endpoints that support Social+ Cloud SDK are included here. To easily differentiate the type of each endpoint, we added a prefix in each endpoint's path.
 
-- REST API Endpoint: /v1/, /v2/, /v3/, or /v4/...
+- REST API Endpoint: /v1/, /v2/, /v3/, /v4/, or /v5/...
 - Webhook Event: /webhook/...
 
 ---
 
 ## **Schema Definitions**
 
-This section provides detailed descriptions of the key schemas used in Amity Social Cloud. Understanding these schemas is essential for effectively integrating our features into your applications. Each schema entry includes a concise description and highlights its core functionality and relationships within the platform. These definitions will help you grasp the structure and purpose of various components, ensuring a seamless and efficient development experience.
+This section provides detailed descriptions of the key schemas used in Social+ Cloud. Understanding these schemas is essential for effectively integrating our features into your applications. Each schema entry includes a concise description and highlights its core functionality and relationships within the platform. These definitions will help you grasp the structure and purpose of various components, ensuring a seamless and efficient development experience.
 
 ### **User**
 
-A User represents an individual who interacts with the Amity Social Cloud. Users can create profiles, join communities, post content, comment, react, and engage with other users.
+A User represents an individual who interacts with the Social+ Cloud. Users can create profiles, join communities, post content, comment, react, and engage with other users.
 
 ### **Role**
 
-A Role defines the permissions and access levels for Users within the Amity Social Cloud. Roles can be assigned to manage and moderate content, ensuring a controlled and safe environment for all users.
+A Role defines the permissions and access levels for Users within the Social+ Cloud. Roles can be assigned to manage and moderate content, ensuring a controlled and safe environment for all users.
 
 ### **Channel**
 
@@ -54,11 +54,11 @@ A CommunityCategory helps organize and manage communities by categorizing them i
 
 ### **Post**
 
-A Post is a piece of content created and shared by a user within a network or community. Posts can include text, images, videos, or other elements. Users can create, view, and interact with posts in a social feed, which can be displayed in chronological order and customized using various settings. Post types supported by Amity include text, image, video, file, live stream, poll, and custom posts. The parent post serves as a container for text data, while each multimedia element (e.g., image, video) is treated as a separate child post. Both parent and child posts support reactions and comments, allowing users to engage comprehensively with content.
+A Post is a piece of content created and shared by a user within a network or community. Posts can include text, images, videos, or other elements. Users can create, view, and interact with posts in a social feed, which can be displayed in chronological order and customized using various settings. Post types supported by Social+ include text, image, video, file, live stream, poll, and custom posts. The parent post serves as a container for text data, while each multimedia element (e.g., image, video) is treated as a separate child post. Both parent and child posts support reactions and comments, allowing users to engage comprehensively with content.
 
 ### **Comment**
 
-A Comment in Amity Social Cloud is a user-generated response to specific content, such as a post or story. Comments enable users to engage in conversations, express thoughts, opinions, and emotions, fostering a sense of community around the content.
+A Comment in Social+ Cloud is a user-generated response to specific content, such as a post or story. Comments enable users to engage in conversations, express thoughts, opinions, and emotions, fostering a sense of community around the content.
 
 **Comment Reference Types:**
 
@@ -78,11 +78,11 @@ A Reaction is a user interaction on messages, posts, or comments, such as like, 
 
 ### **File**
 
-A File in Amity Social Cloud supports file upload and download, enabling file-sharing within applications. It handles various file types, including images, videos, audio, and documents, with a maximum size of 1 GB. This functionality allows users to share files directly in chats or social feeds, enhancing engagement and interaction.
+A File in Social+ Cloud supports file upload and download, enabling file-sharing within applications. It handles various file types, including images, videos, audio, and documents, with a maximum size of 1 GB. This functionality allows users to share files directly in chats or social feeds, enhancing engagement and interaction.
 
 ### **Follow**
 
-A Follow schema in Amity Social Cloud defines one-directional relationships between users, essential for social networking features. When user A follows user B, user A can see user B's updates in their feed, but user B does not need to reciprocate. This schema helps manage visibility and accessibility of user-generated content in user feeds.
+A Follow schema in Social+ Cloud defines one-directional relationships between users, essential for social networking features. When user A follows user B, user A can see user B's updates in their feed, but user B does not need to reciprocate. This schema helps manage visibility and accessibility of user-generated content in user feeds.
 
 ---
 

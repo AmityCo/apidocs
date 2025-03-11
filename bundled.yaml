@@ -1,32 +1,32 @@
 openapi: 3.0.0
 info:
-  title: Amity Social Cloud SDK
+  title: Social+ Cloud SDK
   description: |
-    ## Using Amity APIs
+    ## Using Social+ APIs
 
-    Our API documentation explains all API endpoints used in Amity Social Cloud. All APIs, with the exception of some authentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin or User context. When used in user context, you will only be able to fetch data related to that user only.
-    For Administrators who are using our API documentation in making server-to-server API calls, you need an Admin Access token to connect to the Amity server. Refer to
-    [this documentation](https://docs.amity.co/console/settings#admin-api-access-token)
+    Our API documentation explains all API endpoints used in Social+ Cloud. All APIs, with the exception of some authentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin or User context. When used in user context, you will only be able to fetch data related to that user only.
+    For Administrators who are using our API documentation in making server-to-server API calls, you need an Admin Access token to connect to the Social+ server. Refer to
+    [this documentation](https://docs.social.plus/console/settings#admin-api-access-token)
     for the instructions on how to generate an admin access token.
 
-    All backend endpoints that support Amity SDK are included here. To easily differentiate the type of each endpoint, we added a prefix in each endpoint's path.
+    All backend endpoints that support Social+ Cloud SDK are included here. To easily differentiate the type of each endpoint, we added a prefix in each endpoint's path.
 
-    - REST API Endpoint: /v1/, /v2/, /v3/, or /v4/...
+    - REST API Endpoint: /v1/, /v2/, /v3/, /v4/, or /v5/...
     - Webhook Event: /webhook/...
 
     ---
 
     ## **Schema Definitions**
 
-    This section provides detailed descriptions of the key schemas used in Amity Social Cloud. Understanding these schemas is essential for effectively integrating our features into your applications. Each schema entry includes a concise description and highlights its core functionality and relationships within the platform. These definitions will help you grasp the structure and purpose of various components, ensuring a seamless and efficient development experience.
+    This section provides detailed descriptions of the key schemas used in Social+ Cloud. Understanding these schemas is essential for effectively integrating our features into your applications. Each schema entry includes a concise description and highlights its core functionality and relationships within the platform. These definitions will help you grasp the structure and purpose of various components, ensuring a seamless and efficient development experience.
 
     ### **User**
 
-    A User represents an individual who interacts with the Amity Social Cloud. Users can create profiles, join communities, post content, comment, react, and engage with other users.
+    A User represents an individual who interacts with the Social+ Cloud. Users can create profiles, join communities, post content, comment, react, and engage with other users.
 
     ### **Role**
 
-    A Role defines the permissions and access levels for Users within the Amity Social Cloud. Roles can be assigned to manage and moderate content, ensuring a controlled and safe environment for all users.
+    A Role defines the permissions and access levels for Users within the Social+ Cloud. Roles can be assigned to manage and moderate content, ensuring a controlled and safe environment for all users.
 
     ### **Channel**
 
@@ -58,11 +58,11 @@ info:
 
     ### **Post**
 
-    A Post is a piece of content created and shared by a user within a network or community. Posts can include text, images, videos, or other elements. Users can create, view, and interact with posts in a social feed, which can be displayed in chronological order and customized using various settings. Post types supported by Amity include text, image, video, file, live stream, poll, and custom posts. The parent post serves as a container for text data, while each multimedia element (e.g., image, video) is treated as a separate child post. Both parent and child posts support reactions and comments, allowing users to engage comprehensively with content.
+    A Post is a piece of content created and shared by a user within a network or community. Posts can include text, images, videos, or other elements. Users can create, view, and interact with posts in a social feed, which can be displayed in chronological order and customized using various settings. Post types supported by Social+ include text, image, video, file, live stream, poll, and custom posts. The parent post serves as a container for text data, while each multimedia element (e.g., image, video) is treated as a separate child post. Both parent and child posts support reactions and comments, allowing users to engage comprehensively with content.
 
     ### **Comment**
 
-    A Comment in Amity Social Cloud is a user-generated response to specific content, such as a post or story. Comments enable users to engage in conversations, express thoughts, opinions, and emotions, fostering a sense of community around the content.
+    A Comment in Social+ Cloud is a user-generated response to specific content, such as a post or story. Comments enable users to engage in conversations, express thoughts, opinions, and emotions, fostering a sense of community around the content.
 
     **Comment Reference Types:**
 
@@ -82,11 +82,11 @@ info:
 
     ### **File**
 
-    A File in Amity Social Cloud supports file upload and download, enabling file-sharing within applications. It handles various file types, including images, videos, audio, and documents, with a maximum size of 1 GB. This functionality allows users to share files directly in chats or social feeds, enhancing engagement and interaction.
+    A File in Social+ Cloud supports file upload and download, enabling file-sharing within applications. It handles various file types, including images, videos, audio, and documents, with a maximum size of 1 GB. This functionality allows users to share files directly in chats or social feeds, enhancing engagement and interaction.
 
     ### **Follow**
 
-    A Follow schema in Amity Social Cloud defines one-directional relationships between users, essential for social networking features. When user A follows user B, user A can see user B's updates in their feed, but user B does not need to reciprocate. This schema helps manage visibility and accessibility of user-generated content in user feeds.
+    A Follow schema in Social+ Cloud defines one-directional relationships between users, essential for social networking features. When user A follows user B, user A can see user B's updates in their feed, but user B does not need to reciprocate. This schema helps manage visibility and accessibility of user-generated content in user feeds.
 
     ---
 
@@ -1872,6 +1872,25 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /api/v5/me/global-feeds:
+    get:
+      summary: Get global feed.
+      tags:
+        - Feed
+      security:
+        - BearerAuth: []
+      description: |
+        Get posts from your wall, people you follow and communities you join sorted by custom rannking algorithm
+      parameters:
+        - $ref: '#/components/parameters/parameter_limit'
+        - $ref: '#/components/parameters/parameter_token-2'
+      responses:
+        '200':
+          $ref: '#/components/responses/response_root-get-response-200-3'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v3/files:
     post:
       summary: Upload file.
@@ -2203,6 +2222,24 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/FollowInformationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v5/users/{userId}/followInfo:
+    get:
+      summary: Get other follow information.
+      tags:
+        - Follow
+      security:
+        - BearerAuth: []
+      description: |
+        Get other follow information.
+      parameters:
+        - $ref: '#/components/parameters/parameter__userId'
+      responses:
+        '200':
+          $ref: '#/components/responses/_userId-followInfo-get-response-200'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '500':
@@ -3009,6 +3046,132 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /api/v5/message-feeds:
+    post:
+      tags:
+        - Message Feed
+      summary: Add a new message feed
+      security:
+        - BearerAuth: []
+      description: Add a new message feed
+      requestBody:
+        $ref: '#/components/requestBodies/request_root-post-request-payload-5'
+      responses:
+        '200':
+          $ref: '#/components/responses/message-feed-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+  /api/v5/message-feeds/{messageFeedId}:
+    get:
+      tags:
+        - Message Feed
+      summary: Find a message feed by ID
+      security:
+        - BearerAuth: []
+      description: Return a single message feed
+      parameters:
+        - $ref: '#/components/parameters/_messageFeedId'
+      responses:
+        '200':
+          $ref: '#/components/responses/message-feed-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+    put:
+      tags:
+        - Message Feed
+      summary: Update a message feed
+      description: Update an existing message feed except the default message feed
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/_messageFeedId'
+      requestBody:
+        $ref: '#/components/requestBodies/_messageFeedId-put-request-payload'
+      responses:
+        '200':
+          $ref: '#/components/responses/message-feed-response-200'
+        '403':
+          description: Forbidden error
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+    delete:
+      tags:
+        - Message Feed
+      summary: Delete a message feed
+      security:
+        - BearerAuth: []
+      description: Delete an existing message feed except the default message feed
+      parameters:
+        - $ref: '#/components/parameters/_messageFeedId'
+        - $ref: '#/components/parameters/parameter_permanent'
+      responses:
+        '200':
+          description: Successful operation
+        '403':
+          description: Forbidden error
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+  /api/v5/message-feeds/channel/{channelId}:
+    get:
+      tags:
+        - Message Feed
+      summary: Finds message feeds by channelId and multiple conditions
+      description: Multiple conditions can be provided by query string
+      security:
+        - BearerAuth: []
+      operationId: findMessageFeedsByConditions
+      parameters:
+        - $ref: '#/components/parameters/parameter__channelId'
+        - $ref: '#/components/parameters/parameter_isDeleted-4'
+        - $ref: '#/components/parameters/paging-options'
+      responses:
+        '200':
+          $ref: '#/components/responses/paginated-message-feed-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+  /api/v5/message-feeds/list:
+    get:
+      tags:
+        - Message Feed
+      summary: Find message feeds by list of ID's
+      description: Multiple message feed id values can be provided with array format
+      parameters:
+        - $ref: '#/components/parameters/parameter_messageFeedIds'
+      responses:
+        '200':
+          $ref: '#/components/responses/message-feed-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+  /api/v5/message-feeds/user/{creatorId}:
+    get:
+      tags:
+        - Message Feed
+      summary: Finds message feeds by creatorId and multiple conditions
+      description: Conditions can be provided in query string
+      operationId: findMessageFeedsByCreatorId
+      parameters:
+        - $ref: '#/components/parameters/_creatorId'
+        - $ref: '#/components/parameters/parameter_isDeleted-4'
+        - $ref: '#/components/parameters/paging-options'
+      responses:
+        '200':
+          $ref: '#/components/responses/message-feed-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
   /api/v3/messages:
     get:
       summary: query messages
@@ -3022,7 +3185,7 @@ paths:
         - $ref: '#/components/parameters/parameter_parentId'
         - $ref: '#/components/parameters/parameter_filterByParentId'
         - $ref: '#/components/parameters/parameter_hasFlag-5'
-        - $ref: '#/components/parameters/parameter_isDeleted-4'
+        - $ref: '#/components/parameters/parameter_isDeleted-5'
         - $ref: '#/components/parameters/parameter_tags-3'
         - $ref: '#/components/parameters/parameter_excludeTags'
         - $ref: '#/components/parameters/parameter_options-7'
@@ -3042,7 +3205,7 @@ paths:
       security:
         - BearerAuth: []
       requestBody:
-        $ref: '#/components/requestBodies/request_root-post-request-payload-5'
+        $ref: '#/components/requestBodies/request_root-post-request-payload-6'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-4'
@@ -3257,6 +3420,208 @@ paths:
           $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /api/v5/messages:
+    post:
+      tags:
+        - Message
+      summary: Create a new message in message feed
+      description: Create a new message
+      requestBody:
+        $ref: '#/components/requestBodies/create-message-request-payload'
+      responses:
+        '200':
+          $ref: '#/components/responses/create-message-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - BearerAuth: []
+    get:
+      tags:
+        - Message
+      summary: Find message by message feed id and multiple conditions
+      description: Multiple conditions can be provided in query string
+      parameters:
+        - $ref: '#/components/parameters/parameter_messageFeedId'
+        - $ref: '#/components/parameters/parameter_parentId-2'
+        - $ref: '#/components/parameters/parameter_isDeleted-6'
+        - $ref: '#/components/parameters/includeTags'
+        - $ref: '#/components/parameters/parameter_excludeTags-2'
+        - $ref: '#/components/parameters/hasFlags'
+        - $ref: '#/components/parameters/dataType'
+        - $ref: '#/components/parameters/parameter_paging-options'
+      responses:
+        '200':
+          $ref: '#/components/responses/paginated-message-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - BearerAuth: []
+  /api/v5/messages/{messageId}:
+    delete:
+      tags:
+        - Message
+      summary: Delete a message
+      description: Delete a message
+      parameters:
+        - $ref: '#/components/parameters/_messageId'
+        - $ref: '#/components/parameters/parameter_permanent-2'
+      responses:
+        '200':
+          description: Successful operation
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - BearerAuth: []
+    get:
+      tags:
+        - Message
+      summary: Find message by ID
+      description: Returns a single message
+      parameters:
+        - $ref: '#/components/parameters/_messageId'
+      responses:
+        '200':
+          $ref: '#/components/responses/message-common-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - BearerAuth: []
+    put:
+      tags:
+        - Message
+      summary: Update a message
+      description: Update a message
+      parameters:
+        - $ref: '#/components/parameters/_messageId'
+      requestBody:
+        $ref: '#/components/requestBodies/update-message-request-payload'
+      responses:
+        '200':
+          $ref: '#/components/responses/message-common-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - BearerAuth: []
+  /api/v5/messages/{messageId}/flags/all:
+    delete:
+      tags:
+        - Message
+      summary: Delete all flags in message
+      description: Delete all flags in message
+      parameters:
+        - $ref: '#/components/parameters/_messageId'
+      responses:
+        '200':
+          $ref: '#/components/responses/message-common-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - BearerAuth: []
+  /api/v5/messages/{messageId}/flags:
+    delete:
+      tags:
+        - Message
+      summary: Delete my flag in a message
+      description: Delete my flag in a message
+      parameters:
+        - $ref: '#/components/parameters/_messageId'
+      responses:
+        '200':
+          $ref: '#/components/responses/message-common-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - BearerAuth: []
+    get:
+      tags:
+        - Message
+      summary: Find my flag in message by ID
+      description: Return my flag in message
+      parameters:
+        - $ref: '#/components/parameters/_messageId'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    $ref: '#/components/schemas/MessageV5_hasFlags'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - BearerAuth: []
+    post:
+      tags:
+        - Message
+      summary: Create my flag in a message
+      description: Flag a message
+      parameters:
+        - $ref: '#/components/parameters/_messageId'
+      responses:
+        '200':
+          $ref: '#/components/responses/message-common-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - BearerAuth: []
+  /api/v5/messages/list:
+    get:
+      tags:
+        - Message
+      summary: Find messages by message id (max=10)
+      description: Multiple message id values can be provided with array format
+      parameters:
+        - $ref: '#/components/parameters/parameter_messageIds-2'
+      responses:
+        '200':
+          $ref: '#/components/responses/message-common-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - BearerAuth: []
+  /api/v5/messages/user/{creatorId}:
+    get:
+      tags:
+        - Message
+      summary: Find messages by creatorId
+      description: This API can be called by admin user only
+      parameters:
+        - $ref: '#/components/parameters/parameter__creatorId'
+        - $ref: '#/components/parameters/parameter_channelId-4'
+        - $ref: '#/components/parameters/hasFlags'
+        - $ref: '#/components/parameters/paging-options-admin'
+      responses:
+        '200':
+          $ref: '#/components/responses/paginated-message-response-200'
+        '404':
+          description: Not found error
+        '422':
+          description: Parameters validation error
+      security:
+        - BearerAuth: []
   /api/v3/network-settings:
     put:
       summary: Update network setting configuration.
@@ -3690,7 +4055,7 @@ paths:
       description: |
         Register a device to a notification service provider.
       requestBody:
-        $ref: '#/components/requestBodies/request_root-post-request-payload-6'
+        $ref: '#/components/requestBodies/request_root-post-request-payload-7'
       responses:
         '200':
           $ref: '#/components/responses/SuccessResponse'
@@ -3727,7 +4092,7 @@ paths:
         Get push notification setting.
       parameters:
         - $ref: '#/components/parameters/level'
-        - $ref: '#/components/parameters/parameter_channelId-4'
+        - $ref: '#/components/parameters/parameter_channelId-5'
         - $ref: '#/components/parameters/parameter_communityId'
       responses:
         '200':
@@ -4055,7 +4420,7 @@ paths:
       description: |
         Create a poll
       requestBody:
-        $ref: '#/components/requestBodies/request_root-post-request-payload-7'
+        $ref: '#/components/requestBodies/request_root-post-request-payload-8'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-5'
@@ -4197,7 +4562,7 @@ paths:
         - $ref: '#/components/parameters/targetId'
         - $ref: '#/components/parameters/targetType'
         - $ref: '#/components/parameters/parameter_sortBy-5'
-        - $ref: '#/components/parameters/dataType'
+        - $ref: '#/components/parameters/parameter_dataType'
         - $ref: '#/components/parameters/parameter_hasFlag-6'
         - $ref: '#/components/parameters/parameter_isDeleted-2'
         - $ref: '#/components/parameters/parameter_options-5'
@@ -4224,7 +4589,7 @@ paths:
       description: |
         Create a post
       requestBody:
-        $ref: '#/components/requestBodies/request_root-post-request-payload-8'
+        $ref: '#/components/requestBodies/request_root-post-request-payload-9'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-6'
@@ -4647,7 +5012,7 @@ paths:
         Delete a post
       parameters:
         - $ref: '#/components/parameters/parameter__postId'
-        - $ref: '#/components/parameters/parameter_permanent'
+        - $ref: '#/components/parameters/parameter_permanent-3'
       responses:
         '200':
           description: post information
@@ -4856,7 +5221,7 @@ paths:
       description: |
         Add reaction to a document referenced by ID and type.
       requestBody:
-        $ref: '#/components/requestBodies/request_root-post-request-payload-9'
+        $ref: '#/components/requestBodies/request_root-post-request-payload-10'
       responses:
         '200':
           $ref: '#/components/responses/root-post-response-payload-200'
@@ -5108,7 +5473,7 @@ paths:
       description: |
         Register a session in order to receive access token to perform sdk operations.
       requestBody:
-        $ref: '#/components/requestBodies/request_root-post-request-payload-10'
+        $ref: '#/components/requestBodies/request_root-post-request-payload-11'
       responses:
         '200':
           $ref: '#/components/responses/response_root-post-response-200'
@@ -5146,7 +5511,7 @@ paths:
       description: |
         Register a session in order receive access token to perform sdk operations.
       requestBody:
-        $ref: '#/components/requestBodies/request_root-post-request-payload-11'
+        $ref: '#/components/requestBodies/request_root-post-request-payload-12'
       responses:
         '200':
           $ref: '#/components/responses/session-response-200'
@@ -5192,7 +5557,7 @@ paths:
         - BearerAuth: []
       description: Revoke all user's access tokens by admin
       parameters:
-        - $ref: '#/components/parameters/parameter__userId'
+        - $ref: '#/components/parameters/parameter__userId-2'
         - $ref: '#/components/parameters/isPublic'
       responses:
         '200':
@@ -5218,7 +5583,7 @@ paths:
       tags:
         - Story
       requestBody:
-        $ref: '#/components/requestBodies/request_root-post-request-payload-12'
+        $ref: '#/components/requestBodies/request_root-post-request-payload-13'
       responses:
         '200':
           description: Create Result
@@ -5318,7 +5683,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_targetId'
         - $ref: '#/components/parameters/parameter_targetType-2'
-        - $ref: '#/components/parameters/parameter_dataType'
+        - $ref: '#/components/parameters/parameter_dataType-2'
         - $ref: '#/components/parameters/isExpired'
         - $ref: '#/components/parameters/parameter_options-13'
       responses:
@@ -5577,7 +5942,7 @@ paths:
         - Story
       parameters:
         - $ref: '#/components/parameters/_storyId'
-        - $ref: '#/components/parameters/parameter_permanent-2'
+        - $ref: '#/components/parameters/parameter_permanent-4'
       responses:
         '200':
           description: Delete Result
@@ -5774,6 +6139,33 @@ paths:
                 status: error
                 code: 500000
                 message: Unexpected error
+  /api/v5/me/global-story-targets:
+    get:
+      summary: Get global story targets
+      description: Get global story targets. Return a list of story targets
+      tags:
+        - Story
+      parameters:
+        - $ref: '#/components/parameters/seenState'
+        - $ref: '#/components/parameters/parameter_limit-3'
+        - $ref: '#/components/parameters/parameter_token-3'
+      responses:
+        '200':
+          description: Global Story Information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalStoryTargetsResponsePayload'
+        '500':
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: error
+                code: 500000
+                message: Unexpected error
   /api/v2/users/ban:
     post:
       summary: ban a user.
@@ -5853,7 +6245,7 @@ paths:
         - $ref: '#/components/parameters/parameter_filter-3'
         - $ref: '#/components/parameters/parameter_sortBy-10'
         - $ref: '#/components/parameters/parameter_options-5'
-        - $ref: '#/components/parameters/parameter_isDeleted-5'
+        - $ref: '#/components/parameters/parameter_isDeleted-7'
         - $ref: '#/components/parameters/isBrand'
       responses:
         '200':
@@ -5913,7 +6305,7 @@ paths:
       description: |
         Get one user.
       parameters:
-        - $ref: '#/components/parameters/parameter__userId-2'
+        - $ref: '#/components/parameters/parameter__userId-3'
         - $ref: '#/components/parameters/parameter_type-2'
       responses:
         '200':
@@ -5934,7 +6326,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/parameter__userId-2'
+        - $ref: '#/components/parameters/parameter__userId-3'
       responses:
         '200':
           description: Is flag by me response.
@@ -5955,7 +6347,7 @@ paths:
       tags:
         - User
       parameters:
-        - $ref: '#/components/parameters/parameter__userId-3'
+        - $ref: '#/components/parameters/parameter__userId-4'
         - $ref: '#/components/parameters/deleteAll'
         - $ref: '#/components/parameters/markMessageDeleted'
         - $ref: '#/components/parameters/hardDeletePost'
@@ -5977,7 +6369,7 @@ paths:
       tags:
         - User
       parameters:
-        - $ref: '#/components/parameters/parameter__userId-3'
+        - $ref: '#/components/parameters/parameter__userId-4'
       description: |
         Report user by user id.
       responses:
@@ -5994,7 +6386,7 @@ paths:
       tags:
         - User
       parameters:
-        - $ref: '#/components/parameters/parameter__userId-3'
+        - $ref: '#/components/parameters/parameter__userId-4'
       description: |
         Unreported user by user id.
       responses:
@@ -6015,7 +6407,7 @@ paths:
         - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/parameter_limit'
-        - $ref: '#/components/parameters/parameter_token-2'
+        - $ref: '#/components/parameters/parameter_token-4'
       responses:
         '200':
           $ref: '#/components/responses/me-user-blocks-get-response-200'
@@ -6031,7 +6423,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/parameter__userId-3'
+        - $ref: '#/components/parameters/parameter__userId-4'
       responses:
         '200':
           $ref: '#/components/responses/me-user-blocks_userId-post-response-200'
@@ -6050,7 +6442,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/parameter__userId-3'
+        - $ref: '#/components/parameters/parameter__userId-4'
       responses:
         '200':
           $ref: '#/components/responses/me-user-blocks_userId-delete-response-200'
@@ -6082,7 +6474,7 @@ paths:
       security:
         - BearerAuth: []
       requestBody:
-        $ref: '#/components/requestBodies/request_root-post-request-payload-13'
+        $ref: '#/components/requestBodies/request_root-post-request-payload-14'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-9'
@@ -6101,7 +6493,7 @@ paths:
         - $ref: '#/components/parameters/statuses'
         - $ref: '#/components/parameters/userPublicIds'
         - $ref: '#/components/parameters/parameter_sortBy-6'
-        - $ref: '#/components/parameters/parameter_isDeleted-6'
+        - $ref: '#/components/parameters/parameter_isDeleted-8'
         - $ref: '#/components/parameters/parameter_options-14'
       responses:
         '200':
@@ -6193,6 +6585,14 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
   schemas:
     Ads:
       type: object
@@ -7425,6 +7825,34 @@ components:
           type: integer
         pendingCount:
           type: integer
+    FollowV5:
+      type: object
+      properties:
+        from:
+          type: string
+        fromUserPublicId:
+          type: string
+        fromUserInternalId:
+          type: string
+        to:
+          type: string
+        toUserPublicId:
+          type: string
+        toUserInternalId:
+          type: string
+        status:
+          type: string
+          enum:
+            - blocked
+            - pending
+            - accepted
+            - none
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     PinTarget:
       type: object
       properties:
@@ -7909,6 +8337,304 @@ components:
           format: date-time
       required:
         - regex
+    MessageFeed_channelId:
+      description: Internal ID of the channel that the message feed belongs to
+      type: string
+      maxLength: 30
+      example: abc665aed9dbb8d036037eeb
+    MessageFeed_channelPublicId:
+      description: ID of the channel that the message feed belongs to
+      type: string
+      maxLength: 30
+      example: abc665aed9dbb8d036037eeb
+    MessageFeed_channelType:
+      description: Type of the channel that the message feed belongs to
+      type: string
+      enum:
+        - broadcast
+        - community
+        - conversation
+        - live
+      example: community
+    MessageFeed_lastMessageId:
+      description: The ID of the last message created in the message feed
+      type: string
+      maxLength: 30
+      example: 9530b11ec8de87db22b06b21
+    MessageFeed_lastMessageTimestamp:
+      description: The created timestamp of the the last message created in the message feed
+      type: string
+      format: date-time
+    MessageFeed_creatorId:
+      description: Creator's ID
+      type: string
+      maxLength: 30
+      example: 8aa313c8dbb00af911b07672
+    MessageFeed_path:
+      description: Object path
+      type: string
+      maxLength: 200
+      example: 12cba9779cc479e1fcefd1de/chat/f00ab16cbd27d4a9525aea6d/32b468ae0b1bd0cc7976719d/0a003482f0ac53a71e7c9239
+    MessageFeed_childCount:
+      description: The number of messages inside the message feed
+      type: number
+      format: int32
+    MessageFeed_editedAt:
+      description: The edited timestamp of the message feed data
+      type: string
+      format: date-time
+    MessageFeed:
+      type: object
+      properties:
+        messageFeedId:
+          $ref: '#/components/schemas/MessageFeed_messageFeedId'
+        channelId:
+          $ref: '#/components/schemas/MessageFeed_channelId'
+        channelPublicId:
+          $ref: '#/components/schemas/MessageFeed_channelPublicId'
+        channelType:
+          $ref: '#/components/schemas/MessageFeed_channelType'
+        name:
+          $ref: '#/components/schemas/MessageFeed_name'
+        lastMessageId:
+          $ref: '#/components/schemas/MessageFeed_lastMessageId'
+        lastMessageTimestamp:
+          $ref: '#/components/schemas/MessageFeed_lastMessageTimestamp'
+        creatorId:
+          $ref: '#/components/schemas/MessageFeed_creatorId'
+        path:
+          $ref: '#/components/schemas/MessageFeed_path'
+        childCount:
+          $ref: '#/components/schemas/MessageFeed_childCount'
+        isDeleted:
+          $ref: '#/components/schemas/Generic_isDeleted'
+        editedAt:
+          $ref: '#/components/schemas/MessageFeed_editedAt'
+        createdAt:
+          $ref: '#/components/schemas/MessageFeed_createdAt'
+        updatedAt:
+          $ref: '#/components/schemas/MessageFeed_updatedAt'
+        messagePreviewId:
+          $ref: '#/components/schemas/MessageFeed_messagePreviewId'
+      required:
+        - messageFeedId
+        - channelId
+        - channelPublicId
+        - channelType
+        - name
+        - creatorId
+        - path
+        - childCount
+        - isDeleted
+        - createdAt
+        - updatedAt
+    MessageV5_networkId:
+      description: A network ID
+      type: string
+      maxLength: 30
+      example: 9530b11ec8de87db22b06b27
+    MessageV5_channelType:
+      description: Channel type of message
+      type: string
+      enum:
+        - broadcast
+        - community
+        - conversation
+        - live
+      example: community
+    MessageV5_fileId:
+      description: File id
+      type: string
+      maxLength: 30
+      example: 76bfe68974157a114053364d
+    MessageV5_thumbnailFileId:
+      description: Thumbnail file id
+      type: string
+      maxLength: 30
+      example: 76bfe68974157a114053364e
+    MessageV5_metadata:
+      description: A custom object for storing the other data. The size of this object must be less than 20 kb.
+      type: object
+      example:
+        refId: d601c27c0675baa2103ec573
+    Generic_tags:
+      description: List of tags for searching
+      type: array
+      maxItems: 10
+      default: []
+      items:
+        type: string
+        maxLength: 30
+      example:
+        - tag1
+        - tag2
+    MessageV5_mentionedUsers:
+      description: List of mentioned users
+      type: array
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            maxLength: 20
+            default: user
+            enum:
+              - channel
+              - user
+          userIds:
+            type: array
+            maxItems: 50
+            items:
+              type: string
+              maxLength: 24
+            example:
+              - 3cac302ab992aa17b215ba21
+              - adb34ec2aeedca03a38e1d54
+    MessageV5_reactions:
+      description: List of reactions
+      type: object
+      items:
+        type: object
+        additionalProperties:
+          type: number
+      example:
+        like: 1
+        love: 2
+    MessageV5_reactionCount:
+      description: Total number of reactions
+      type: number
+      format: int32
+    MessageV5_path:
+      description: Object path
+      type: string
+      maxLength: 200
+      example: 12cba9779cc479e1fcefd1de/chat/f00ab16cbd27d4a9525aea6d/32b468ae0b1bd0cc7976719d/0a003482f0ac53a71e7c9239
+    MessageV5_flagCount:
+      description: The number of flags
+      type: number
+      format: int32
+    MessageV5_childCount:
+      description: The number of children message
+      type: number
+      format: int32
+    MessageV5_editedAt:
+      description: The latest date/time of changes in message data
+      type: string
+      format: date-time
+    MessageV5_myReactions:
+      description: List of reactions of the actor
+      type: array
+      maxItems: 10
+      default: []
+      items:
+        type: string
+        maxLength: 30
+      example:
+        - like
+        - love
+    MessageV5:
+      type: object
+      properties:
+        messageId:
+          $ref: '#/components/schemas/MessageV5_messageId'
+        networkId:
+          $ref: '#/components/schemas/MessageV5_networkId'
+        channelId:
+          $ref: '#/components/schemas/MessageV5_channelId'
+        channelType:
+          $ref: '#/components/schemas/MessageV5_channelType'
+        messageFeedId:
+          $ref: '#/components/schemas/MessageV5_messageFeedId'
+        segment:
+          $ref: '#/components/schemas/MessageV5_segment'
+        dataType:
+          $ref: '#/components/schemas/MessageV5_dataType'
+        data:
+          $ref: '#/components/schemas/MessageV5_data'
+        fileId:
+          $ref: '#/components/schemas/MessageV5_fileId'
+        thumbnailFileId:
+          $ref: '#/components/schemas/MessageV5_thumbnailFileId'
+        metadata:
+          $ref: '#/components/schemas/MessageV5_metadata'
+        tags:
+          $ref: '#/components/schemas/Generic_tags'
+        creatorId:
+          $ref: '#/components/schemas/MessageV5_creatorId'
+        mentionedUsers:
+          $ref: '#/components/schemas/MessageV5_mentionedUsers'
+        reactions:
+          $ref: '#/components/schemas/MessageV5_reactions'
+        reactionCount:
+          $ref: '#/components/schemas/MessageV5_reactionCount'
+        parentId:
+          $ref: '#/components/schemas/MessageV5_parentId'
+        path:
+          $ref: '#/components/schemas/MessageV5_path'
+        flagCount:
+          $ref: '#/components/schemas/MessageV5_flagCount'
+        childCount:
+          $ref: '#/components/schemas/MessageV5_childCount'
+        isDeleted:
+          $ref: '#/components/schemas/Generic_isDeleted'
+        editedAt:
+          $ref: '#/components/schemas/MessageV5_editedAt'
+        createdAt:
+          $ref: '#/components/schemas/MessageV5_createdAt'
+        updatedAt:
+          $ref: '#/components/schemas/MessageV5_updatedAt'
+        myReactions:
+          $ref: '#/components/schemas/MessageV5_myReactions'
+    Generic_permanent:
+      type: boolean
+      description: A flag to confirm permanent deletion
+      default: false
+    MessageFeed_pageOptions:
+      description: Page options by using cursor
+      type: object
+      properties:
+        after:
+          type: string
+          maxLength: 30
+        before:
+          type: string
+          maxLength: 30
+        limit:
+          type: number
+          format: int32
+        sortBy:
+          type: string
+          default: lastMessageTimestampDesc
+          enum:
+            - lastMessageTimestampAsc
+            - lastMessageTimestampDesc
+        token:
+          type: string
+          maxLength: 100
+    Generic_paging:
+      description: Paging response
+      type: object
+      properties:
+        next:
+          type: string
+          description: token for getting the next page of data
+          maxLength: 100
+        previous:
+          type: string
+          description: token for getting the previous page of data
+          maxLength: 100
+        total:
+          type: number
+          format: int32
+    MessageFeed_messageFeedIds:
+      description: List of message feed IDs
+      type: array
+      items:
+        type: string
+        maxLength: 30
+      maxItems: 10
+      example:
+        - a85dca058f5b585f86a29f14
     MessageV3:
       type: object
       properties:
@@ -8071,6 +8797,114 @@ components:
           maxItems: 30
       required:
         - type
+    MessageV5_hasFlags:
+      description: A flag to filter only flagged message
+      type: boolean
+    MessageV5_pageOptions:
+      description: Page options by using cursor
+      type: object
+      properties:
+        after:
+          type: string
+          maxLength: 30
+        before:
+          type: string
+          maxLength: 30
+        limit:
+          type: number
+          format: int32
+          default: 10
+          minimum: 1
+          maximum: 100
+        sortBy:
+          type: string
+          default: segmentDesc
+          enum:
+            - segmentAsc
+            - segmentDesc
+        token:
+          type: string
+          maxLength: 100
+        around:
+          type: string
+          maxLength: 30
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Private ID of a user. (for real-time event)
+        path:
+          type: string
+          description: Path of a user. (for real-time event)
+        userId:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+        displayName:
+          type: string
+        flagCount:
+          type: integer
+        hashFlag:
+          type: object
+          properties:
+            bits:
+              type: integer
+            hashes:
+              type: integer
+            hash:
+              type: array
+              items:
+                type: string
+        metadata:
+          type: object
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+      required:
+        - userId
+        - createdAt
+        - updatedAt
+    MessageV5_referenceId:
+      description: A reference ID
+      type: string
+      maxLength: 30
+      example: 1530b11ec8df87da22b06b27
+    MessageV5_messageIds:
+      description: A list of message ID
+      type: array
+      items:
+        type: string
+        maxLength: 30
+      maxItems: 10
+      example:
+        - a85dca058f5b585f86a29f14
+    MessageV5_pageOptionsAdmin:
+      description: Page options by using cursor
+      type: object
+      properties:
+        after:
+          type: string
+          maxLength: 30
+        before:
+          type: string
+          maxLength: 30
+        limit:
+          type: number
+          format: int32
+          default: 10
+          minimum: 1
+          maximum: 100
+        token:
+          type: string
+          maxLength: 100
     ChatNetworkSetting:
       type: object
       properties:
@@ -9208,78 +10042,42 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/StoryTarget'
-    User:
+    GlobalStoryTargetsResponsePayload:
       type: object
       properties:
-        _id:
-          type: string
-          description: Private ID of a user. (for real-time event)
-        path:
-          type: string
-          description: Path of a user. (for real-time event)
-        userId:
-          type: string
-        roles:
+        storyTargets:
           type: array
           items:
-            type: string
-        displayName:
-          type: string
-        flagCount:
-          type: integer
-        hashFlag:
+            $ref: '#/components/schemas/StoryTarget'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserV3'
+        communities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Community'
+        communityUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityUser'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityCategory'
+        paging:
           type: object
           properties:
-            bits:
-              type: integer
-            hashes:
-              type: integer
-            hash:
-              type: array
-              items:
-                type: string
-        metadata:
-          type: object
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        isDeleted:
-          type: boolean
-      required:
-        - userId
-        - createdAt
-        - updatedAt
-    FollowV5:
-      type: object
-      properties:
-        from:
-          type: string
-        fromUserPublicId:
-          type: string
-        fromUserInternalId:
-          type: string
-        to:
-          type: string
-        toUserPublicId:
-          type: string
-        toUserInternalId:
-          type: string
-        status:
-          type: string
-          enum:
-            - blocked
-            - pending
-            - accepted
-            - none
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+            next:
+              type: string
+              description: The next token to get the next page of stories.
+            previous:
+              type: string
+              description: The previous token to get the previous page of stories.
     VideoStreamingModerationLabel:
       type: object
       properties:
@@ -10684,6 +11482,23 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/FollowCount'
+    _userId-followInfo-get-response-200:
+      description: Follow Information
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - followCounts
+            properties:
+              follows:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FollowV5'
+              followCounts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FollowCount'
     response_common-response-200-2:
       description: Pin Post Information
       content:
@@ -11248,6 +12063,54 @@ components:
                     type: string
                   previous:
                     type: string
+    message-feed-response-200:
+      description: Message feed payload
+      content:
+        application/json:
+          schema:
+            description: The returned payload of message feed(s)
+            type: object
+            properties:
+              messageFeeds:
+                description: List of message feeds
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageFeed'
+              messages:
+                description: List of last messages in each message feed
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageV5'
+              users:
+                description: List of related users
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+    paginated-message-feed-response-200:
+      description: Paginated message feed payload
+      content:
+        application/json:
+          schema:
+            description: The returned payload of message feed(s)
+            type: object
+            properties:
+              messageFeeds:
+                description: List of message feeds
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageFeed'
+              messages:
+                description: List of last messages in each message feed
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageV5'
+              users:
+                description: List of related users
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              paging:
+                $ref: '#/components/schemas/Generic_paging'
     response_root-get-response-200-4:
       description: Messages Information
       content:
@@ -11291,6 +12154,97 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/File'
+    paginated-message-response-200:
+      description: Paginated message payload
+      content:
+        application/json:
+          schema:
+            description: The returned payload of message(s)
+            type: object
+            properties:
+              messages:
+                description: The list of message
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageV5'
+              messageFeeds:
+                description: List of message feeds
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageFeed'
+              files:
+                description: The list of file
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+              users:
+                description: The list of user
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              paging:
+                $ref: '#/components/schemas/Generic_paging'
+    create-message-response-200:
+      description: Create message payload
+      content:
+        application/json:
+          schema:
+            description: The returned payload of created message(s)
+            type: object
+            properties:
+              messages:
+                description: The list of created message
+                type: array
+                items:
+                  allOf:
+                    - type: object
+                      properties:
+                        referenceId:
+                          $ref: '#/components/schemas/MessageV5_referenceId'
+                    - $ref: '#/components/schemas/MessageV5'
+              messageFeeds:
+                description: List of message feeds
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageFeed'
+              files:
+                description: The list of file
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+              users:
+                description: The list of user
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    message-common-response-200:
+      description: Message payload
+      content:
+        application/json:
+          schema:
+            description: The returned payload of message(s)
+            type: object
+            properties:
+              messages:
+                description: The list of message
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageV5'
+              messageFeeds:
+                description: List of message feeds
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageFeed'
+              files:
+                description: The list of file
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+              users:
+                description: The list of user
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
     response_root-response-200:
       description: network setting configuration
       content:
@@ -13299,6 +14253,13 @@ components:
         type: string
         minLength: 1
         maxLength: 100
+    parameter_token-2:
+      name: token
+      in: query
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 1000
     _fileId:
       in: path
       name: fileId
@@ -13340,6 +14301,13 @@ components:
           - pending
           - accepted
         default: all
+    parameter__userId:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 900
     parameter_postId:
       name: postId
       required: true
@@ -13450,6 +14418,66 @@ components:
           token:
             type: string
             description: pagination token
+    _messageFeedId:
+      name: messageFeedId
+      in: path
+      required: true
+      description: Message feed ID
+      schema:
+        $ref: '#/components/schemas/MessageFeed_messageFeedId'
+    parameter_permanent:
+      name: permanent
+      in: query
+      schema:
+        $ref: '#/components/schemas/Generic_permanent'
+    parameter__channelId:
+      name: channelId
+      in: path
+      required: true
+      description: channel ID of message feed that needs to be find
+      schema:
+        $ref: '#/components/schemas/MessageFeed_channelId'
+    parameter_isDeleted-4:
+      name: isDeleted
+      in: query
+      description: deleted flag of message feed
+      schema:
+        type: boolean
+        default: false
+    paging-options:
+      name: options
+      in: query
+      description: |
+        Pagination options
+
+        **after**: string(30) : return documents after this message feed id
+
+        **before**: string(30) : return documents before this message feed id
+
+        **limit**: number(0, 100) default=10
+
+        **sortBy**: lastContentTimestampDesc
+
+        **token**: string(100) : This token will be generated by server using encryption of after, before, limit, sortBy. It would be returned in response payload (paging.next, paging.previous). The caller can send only token for getting data from previous or next page easily.
+      schema:
+        $ref: '#/components/schemas/MessageFeed_pageOptions'
+    parameter_messageFeedIds:
+      name: messageFeedIds
+      in: query
+      required: true
+      description: List of message feed ID that needs to find (max=10) [messageFeedIds[]=messageFeedId1&messageFeedIds[]=messageFeedId2]
+      schema:
+        $ref: '#/components/schemas/MessageFeed_messageFeedIds'
+    _creatorId:
+      name: creatorId
+      in: path
+      required: true
+      description: ID of message feed creator
+      schema:
+        description: Creator's ID
+        type: string
+        maxLength: 30
+        example: 8aa313c8dbb00af911b07672
     parameter_channelId-3:
       name: channelId
       required: true
@@ -13487,7 +14515,7 @@ components:
       in: query
       schema:
         type: boolean
-    parameter_isDeleted-4:
+    parameter_isDeleted-5:
       name: isDeleted
       in: query
       schema:
@@ -13559,6 +14587,117 @@ components:
       schema:
         type: string
         maxLength: 150
+    parameter_messageFeedId:
+      name: messageFeedId
+      in: query
+      required: true
+      description: Message feed ID
+      schema:
+        $ref: '#/components/schemas/MessageFeed_messageFeedId'
+    parameter_parentId-2:
+      name: parentId
+      in: query
+      description: parent ID of a message (max length=50)
+      schema:
+        $ref: '#/components/schemas/MessageV5_parentId'
+    parameter_isDeleted-6:
+      name: isDeleted
+      in: query
+      description: deleted flag of message that needs to be find
+      schema:
+        $ref: '#/components/schemas/Generic_isDeleted'
+    includeTags:
+      name: includeTags
+      in: query
+      description: Used for querying messages by matching all specified tags. When a query includes multiple tags (e.g., `tags=['tag1', 'tag2', 'tag3']`), the system will return all messages that have all the specified tags. (max=10)
+      schema:
+        $ref: '#/components/schemas/Generic_tags'
+    parameter_excludeTags-2:
+      name: excludeTags
+      in: query
+      description: Used for querying messages by excluding all specified tags. When a query includes multiple tags (e.g., `excludeTags=['tag1', 'tag2', 'tag3']`), the system will return all messages that do not have any of the specified tags. (max=10)
+      schema:
+        $ref: '#/components/schemas/Generic_tags'
+    hasFlags:
+      name: hasFlags
+      in: query
+      description: flag to filter only flagged message
+      schema:
+        $ref: '#/components/schemas/MessageV5_hasFlags'
+    dataType:
+      name: dataType
+      in: query
+      description: data type of message (max length=20)
+      schema:
+        $ref: '#/components/schemas/MessageV5_dataType'
+    parameter_paging-options:
+      name: options
+      in: query
+      description: |
+        Pagination options
+
+        **after**: string(30) : return documents after this message id
+
+        **before**: string(30) : return documents before this message id
+
+        **limit**: number(0, 100) default=10 if use limit along with options.around, limit must be even number
+
+        **sortBy**: segmentAsc | segmentDesc
+
+        **token**: string(100) : This token will be generated by server using encryption of after, before, limit, sortBy. It would be returned in response payload (paging.next, paging.previous). The caller can send only token for getting data from previous or next page easily.
+
+        **around**: target message id
+      schema:
+        $ref: '#/components/schemas/MessageV5_pageOptions'
+    _messageId:
+      name: messageId
+      in: path
+      required: true
+      description: ID of a message
+      schema:
+        $ref: '#/components/schemas/MessageV5_messageId'
+    parameter_permanent-2:
+      name: permanent
+      in: query
+      description: flag to confirm permanent deletion
+      schema:
+        $ref: '#/components/schemas/Generic_permanent'
+    parameter_messageIds-2:
+      name: messageIds
+      in: query
+      required: true
+      description: List of message ID that needs to find (max=10) [messageIds[]=message1&messageIds[]=message2]
+      schema:
+        $ref: '#/components/schemas/MessageV5_messageIds'
+    parameter__creatorId:
+      name: creatorId
+      in: path
+      required: true
+      description: Creator ID to filter
+      schema:
+        $ref: '#/components/schemas/MessageV5_creatorId'
+    parameter_channelId-4:
+      name: channelId
+      in: query
+      required: true
+      description: Channel ID to filter
+      schema:
+        $ref: '#/components/schemas/MessageV5_messageFeedId'
+    paging-options-admin:
+      name: options
+      in: query
+      description: |
+        Pagination options
+
+        **after**: string(30) : return documents after this message id
+
+        **before**: string(30) : return documents before this message id
+
+        **limit**: number(0, 100) default=10
+
+        **token**: string(100) : This token will be generated by server using encryption of after, before, limit, sortBy. It would be returned in response payload (paging.next, paging.previous). The caller can send only token for getting data from previous or next page easily.
+      schema:
+        $ref: '#/components/schemas/MessageV5_pageOptionsAdmin'
     parameter_userId-2:
       name: userId
       description: user id
@@ -13584,7 +14723,7 @@ components:
           - user
           - channel
           - community
-    parameter_channelId-4:
+    parameter_channelId-5:
       name: channelId
       in: query
       schema:
@@ -13688,7 +14827,7 @@ components:
           - community
           - user
           - content
-    dataType:
+    parameter_dataType:
       name: dataType
       in: query
       schema:
@@ -13885,7 +15024,7 @@ components:
       required: true
       schema:
         type: string
-    parameter_permanent:
+    parameter_permanent-3:
       name: permanent
       in: query
       schema:
@@ -14103,7 +15242,7 @@ components:
         type: boolean
         default: true
       description: A flag indicating whether the userId is a public id or not
-    parameter__userId:
+    parameter__userId-2:
       in: path
       required: true
       name: userId
@@ -14121,7 +15260,7 @@ components:
         enum:
           - community
           - user
-    parameter_dataType:
+    parameter_dataType-2:
       name: dataType
       in: query
       schema:
@@ -14194,7 +15333,7 @@ components:
       schema:
         type: string
         pattern: ^[a-f\d]{24}$
-    parameter_permanent-2:
+    parameter_permanent-4:
       name: permanent
       in: query
       required: false
@@ -14203,6 +15342,34 @@ components:
       schema:
         type: boolean
         default: false
+    seenState:
+      name: seenState
+      in: query
+      description: the seen state option used for filter the seen/unseen story targets
+      schema:
+        type: string
+        enum:
+          - all
+          - seen
+          - unseen
+        default: unseen
+    parameter_limit-3:
+      name: limit
+      in: query
+      description: the amount of story targets per query
+      required: false
+      schema:
+        type: integer
+        default: 10
+        minimum: 1
+        maximum: 100
+    parameter_token-3:
+      name: token
+      in: query
+      required: false
+      schema:
+        type: string
+        maxLength: 900
     parameter_userId-4:
       name: userId
       in: path
@@ -14235,7 +15402,7 @@ components:
           - lastCreated
           - displayName
         default: displayName
-    parameter_isDeleted-5:
+    parameter_isDeleted-7:
       name: isDeleted
       in: query
       schema:
@@ -14252,7 +15419,7 @@ components:
         items:
           type: string
           maxLength: 900
-    parameter__userId-2:
+    parameter__userId-3:
       name: userId
       in: path
       required: true
@@ -14269,7 +15436,7 @@ components:
           - public
           - internal
         default: public
-    parameter__userId-3:
+    parameter__userId-4:
       in: path
       name: userId
       required: true
@@ -14306,7 +15473,7 @@ components:
         type: boolean
         default: false
       description: true - it will hard delete this user comments after user is deleted.
-    parameter_token-2:
+    parameter_token-4:
       name: token
       in: query
       schema:
@@ -14345,7 +15512,7 @@ components:
         items:
           type: string
           maxLength: 50
-    parameter_isDeleted-6:
+    parameter_isDeleted-8:
       name: isDeleted
       in: query
       schema:
@@ -15303,6 +16470,33 @@ components:
                 maxItems: 10
                 minItems: 1
     request_root-post-request-payload-5:
+      description: Payload for creating a new message feed
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - channelId
+              - name
+            properties:
+              name:
+                $ref: '#/components/schemas/MessageFeed_name'
+              channelId:
+                $ref: '#/components/schemas/MessageFeed_channelId'
+              createdAt:
+                $ref: '#/components/schemas/MessageFeed_createdAt'
+    _messageFeedId-put-request-payload:
+      description: Payload for updating an existing message feed Message feed object that needs to be added
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - name
+            properties:
+              name:
+                $ref: '#/components/schemas/MessageFeed_name'
+    request_root-post-request-payload-6:
       description: |
         Information of message to be created
       required: true
@@ -15385,6 +16579,52 @@ components:
                 maxItems: 2
                 items:
                   $ref: '#/components/schemas/MentioneesRequest'
+    create-message-request-payload:
+      description: Message object that needs to be added
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - referenceId
+              - dataType
+              - messageFeedId
+            properties:
+              messageFeedId:
+                $ref: '#/components/schemas/MessageV5_messageFeedId'
+              parentId:
+                $ref: '#/components/schemas/MessageV5_parentId'
+              referenceId:
+                $ref: '#/components/schemas/MessageV5_referenceId'
+              dataType:
+                $ref: '#/components/schemas/MessageV5_dataType'
+              data:
+                $ref: '#/components/schemas/MessageV5_data'
+              fileId:
+                $ref: '#/components/schemas/MessageV5_fileId'
+              metadata:
+                $ref: '#/components/schemas/MessageV5_metadata'
+              tags:
+                $ref: '#/components/schemas/Generic_tags'
+              mentionedUsers:
+                $ref: '#/components/schemas/MessageV5_mentionedUsers'
+              createdAt:
+                $ref: '#/components/schemas/MessageV5_createdAt'
+    update-message-request-payload:
+      description: Message object that needs to be updated
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/MessageV5_data'
+              metadata:
+                $ref: '#/components/schemas/MessageV5_metadata'
+              tags:
+                $ref: '#/components/schemas/Generic_tags'
+              mentionedUsers:
+                $ref: '#/components/schemas/MessageV5_mentionedUsers'
     root-put-request-payload:
       description: |
         information for a network setting
@@ -15560,7 +16800,7 @@ components:
                 description: |
                   `true` - User can register webhook for network and will receive a webhook.
                   `false` - User won't be able to register webhook and won't receive a webhook.
-    request_root-post-request-payload-6:
+    request_root-post-request-payload-7:
       description: |
         information of a device to be registered.
       required: true
@@ -15691,7 +16931,7 @@ components:
                       description: specific roles for ignore notify by event creator who has roles only
             required:
               - level
-    request_root-post-request-payload-7:
+    request_root-post-request-payload-8:
       description: |
         Information of a poll to be created.
         ### Required
@@ -15773,7 +17013,7 @@ components:
                   type: string
             required:
               - data
-    request_root-post-request-payload-8:
+    request_root-post-request-payload-9:
       description: |
         information of a post to be created.
 
@@ -15969,7 +17209,7 @@ components:
                 type: boolean
             required:
               - enabled
-    request_root-post-request-payload-9:
+    request_root-post-request-payload-10:
       description: |
         reference ID and type with reaction name
       required: true
@@ -16047,7 +17287,7 @@ components:
             required:
               - roleId
               - permissions
-    request_root-post-request-payload-10:
+    request_root-post-request-payload-11:
       description: |
         Information about user and devices that he/she use to connect to. If displayName is provide, that user display is updated as well.
 
@@ -16095,7 +17335,7 @@ components:
             required:
               - userId
               - deviceId
-    request_root-post-request-payload-11:
+    request_root-post-request-payload-12:
       description: |
         Information about user and devices that he/she use to connect to. If displayName is provide, that user display is updated as well.
 
@@ -16145,7 +17385,7 @@ components:
             required:
               - userId
               - deviceId
-    request_root-post-request-payload-12:
+    request_root-post-request-payload-13:
       content:
         application/json:
           schema:
@@ -16302,7 +17542,7 @@ components:
                       description: user's watching time in seconds
                       type: number
                       example: 120
-    request_root-post-request-payload-13:
+    request_root-post-request-payload-14:
       description: |
         Information of video streaming to be created
       required: true

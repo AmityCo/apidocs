@@ -1,6 +1,6 @@
 openapi: "3.0.0"
 info:
-  title: "Amity Social Cloud SDK"
+  title: "Social+ Cloud SDK"
   description:
     $ref: "./description.md"
   version: "4.99.1"
@@ -133,8 +133,8 @@ paths:
     $ref: "./v3/user-feed/index.yaml#/_userId-count"
   /api/v4/me/global-feeds:
     $ref: "./v4/global-feed/index.yaml#/root"
-  # /api/v5/me/global-feeds:
-  #   $ref: "./v5/global-feed/index.yaml#/root"
+  /api/v5/me/global-feeds:
+    $ref: "./v5/global-feed/index.yaml#/root"
 
   /api/v3/files:
     $ref: "./v3/file/index.yaml#/root"
@@ -165,8 +165,8 @@ paths:
     $ref: "./v4/follow/index.yaml#/followInfo"
   /api/v4/users/{userId}/followInfo:
     $ref: "./v4/follow/index.yaml#/_userId-followInfo"
-  # /api/v5/users/{userId}/followInfo:
-  #   $ref: "./v5/follow/index.yaml#/_userId-followInfo"
+  /api/v5/users/{userId}/followInfo:
+    $ref: "./v5/follow/index.yaml#/_userId-followInfo"
 
   # Global Featured Post
   /api/v1/pinned-posts/global:
@@ -224,16 +224,16 @@ paths:
   /api/v3/blocklists/verify:
     $ref: "./v3/moderation/index.yaml#/blocklists-verify"
 
-  # /api/v5/message-feeds:
-  #   $ref: "./v5/message-feed/index.yaml#/root"
-  # /api/v5/message-feeds/{messageFeedId}:
-  #   $ref: "./v5/message-feed/index.yaml#/_messageFeedId"
-  # /api/v5/message-feeds/channel/{channelId}:
-  #   $ref: "./v5/message-feed/index.yaml#/channel_channelId"
-  # /api/v5/message-feeds/list:
-  #   $ref: "./v5/message-feed/index.yaml#/list"
-  # /api/v5/message-feeds/user/{creatorId}:
-  #   $ref: "./v5/message-feed/index.yaml#/user_creatorId"
+  /api/v5/message-feeds:
+    $ref: "./v5/message-feed/index.yaml#/root"
+  /api/v5/message-feeds/{messageFeedId}:
+    $ref: "./v5/message-feed/index.yaml#/_messageFeedId"
+  /api/v5/message-feeds/channel/{channelId}:
+    $ref: "./v5/message-feed/index.yaml#/channel_channelId"
+  /api/v5/message-feeds/list:
+    $ref: "./v5/message-feed/index.yaml#/list"
+  /api/v5/message-feeds/user/{creatorId}:
+    $ref: "./v5/message-feed/index.yaml#/user_creatorId"
 
   /api/v3/messages:
     $ref: "./v3/message/index.yaml#/root"
@@ -249,18 +249,18 @@ paths:
     $ref: "./v3/message/index.yaml#/_messageId-clearFlags"
   /api/v3/messages/{messageId}/isFlaggedByMe:
     $ref: "./v3/message/index.yaml#/_messageId-isFlaggedByMe"
-  # /api/v5/messages:
-  #   $ref: "./v5/message/index.yaml#/root"
-  # /api/v5/messages/{messageId}:
-  #   $ref: "./v5/message/index.yaml#/_messageId"
-  # /api/v5/messages/{messageId}/flags/all:
-  #   $ref: "./v5/message/index.yaml#/_messageId-flags-all"
-  # /api/v5/messages/{messageId}/flags:
-  #   $ref: "./v5/message/index.yaml#/_messageId-flags"
-  # /api/v5/messages/list:
-  #   $ref: "./v5/message/index.yaml#/list"
-  # /api/v5/messages/user/{creatorId}:
-  #   $ref: "./v5/message/index.yaml#/user_creatorId"
+  /api/v5/messages:
+    $ref: "./v5/message/index.yaml#/root"
+  /api/v5/messages/{messageId}:
+    $ref: "./v5/message/index.yaml#/_messageId"
+  /api/v5/messages/{messageId}/flags/all:
+    $ref: "./v5/message/index.yaml#/_messageId-flags-all"
+  /api/v5/messages/{messageId}/flags:
+    $ref: "./v5/message/index.yaml#/_messageId-flags"
+  /api/v5/messages/list:
+    $ref: "./v5/message/index.yaml#/list"
+  /api/v5/messages/user/{creatorId}:
+    $ref: "./v5/message/index.yaml#/user_creatorId"
 
   /api/v3/network-settings:
     $ref: "./v3/network-setting/index.yaml#/root"
@@ -380,8 +380,8 @@ paths:
     $ref: "./v4/story/index.yaml#/_storyId-flags"
   /api/v4/stories/{storyId}/flags/all:
     $ref: "./v4/story/index.yaml#/_storyId-flags-all"
-  # /api/v5/me/global-story-targets:
-  #   $ref: "./v5/story/index.yaml#/me-global-story-targets"
+  /api/v5/me/global-story-targets:
+    $ref: "./v5/story/index.yaml#/me-global-story-targets"
 
   /api/v2/users/ban:
     $ref: "./v2/user/index.yaml#/ban"
@@ -728,6 +728,15 @@ paths:
 #   /realtime/user.updated:
 #     $ref: "./realtime/user.yaml#/user.updated"
 
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: "apiKey"
+      in: "header"
+      name: "X-API-Key"
+    BearerAuth:
+      type: "http"
+      scheme: "bearer"
 # components:
 #   schemas:
 #     User:

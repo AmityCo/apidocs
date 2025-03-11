@@ -5,13 +5,13 @@ root:
     summary: "Create a new message in message feed"
     description: "Create a new message"
     requestBody:
-      $ref: "./v5/message/request.yaml#/CreateMessage"
+      $ref: "./request.yaml#/create-message-request-payload"
     responses:
-      "200":
-        $ref: "./v5/message/response.yaml#/CreateMessagePayload"
-      "404":
+      200:
+        $ref: "./response.yaml#/create-message-response-200"
+      404:
         description: "Not found error"
-      "422":
+      422:
         description: "Parameters validation error"
     security:
       - BearerAuth: []
@@ -21,20 +21,20 @@ root:
     summary: "Find message by message feed id and multiple conditions"
     description: "Multiple conditions can be provided in query string"
     parameters:
-      - $ref: "./v5/message/parameter.yaml#/MessageFeedId"
-      - $ref: "./v5/message/parameter.yaml#/ParentId"
-      - $ref: "./v5/message/parameter.yaml#/IsDeleted"
-      - $ref: "./v5/message/parameter.yaml#/IncludeTags"
-      - $ref: "./v5/message/parameter.yaml#/ExcludeTags"
-      - $ref: "./v5/message/parameter.yaml#/HasFlags"
-      - $ref: "./v5/message/parameter.yaml#/DataType"
-      - $ref: "./v5/message/parameter.yaml#/PagingOptions"
+      - $ref: "./parameter.yaml#/messageFeedId"
+      - $ref: "./parameter.yaml#/parentId"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/includeTags"
+      - $ref: "./parameter.yaml#/excludeTags"
+      - $ref: "./parameter.yaml#/hasFlags"
+      - $ref: "./parameter.yaml#/dataType"
+      - $ref: "./parameter.yaml#/paging-options"
     responses:
-      "200":
-        $ref: "./v5/message/response.yaml#/PaginatedMessagePayload"
-      "404":
+      200:
+        $ref: "./response.yaml#/paginated-message-response-200"
+      404:
         description: "Not found error"
-      "422":
+      422:
         description: "Parameters validation error"
     security:
       - BearerAuth: []
@@ -46,19 +46,14 @@ _messageId:
     summary: "Delete a message"
     description: "Delete a message"
     parameters:
-      - name: messageId
-        in: path
-        required: true
-        description: ID of a message
-        schema:
-          $ref: "./schema/message.yaml#/MessageV5_messageId"
-      - $ref: "./v5/message/parameter.yaml#/Permanent"
+      - $ref: "./parameter.yaml#/_messageId"
+      - $ref: "./parameter.yaml#/permanent"
     responses:
-      "200":
+      200:
         description: "Successful operation"
-      "404":
+      404:
         description: "Not found error"
-      "422":
+      422:
         description: "Parameters validation error"
     security:
       - BearerAuth: []
@@ -68,18 +63,13 @@ _messageId:
     summary: "Find message by ID"
     description: "Returns a single message"
     parameters:
-      - name: messageId
-        in: path
-        required: true
-        description: ID of a message
-        schema:
-          $ref: "./schema/message.yaml#/MessageV5_messageId"
+      - $ref: "./parameter.yaml#/_messageId"
     responses:
-      "200":
-        $ref: "./v5/message/response.yaml#/MessagePayload"
-      "404":
+      200:
+        $ref: "./response.yaml#/message-common-response-200"
+      404:
         description: "Not found error"
-      "422":
+      422:
         description: "Parameters validation error"
     security:
       - BearerAuth: []
@@ -89,20 +79,15 @@ _messageId:
     summary: "Update a message"
     description: "Update a message"
     parameters:
-      - name: messageId
-        in: path
-        required: true
-        description: ID of a message
-        schema:
-          $ref: "./schema/message.yaml#/MessageV5_messageId"
+      - $ref: "./parameter.yaml#/_messageId"
     requestBody:
-      $ref: "./v5/message/request.yaml#/UpdateMessage"
+      $ref: "./request.yaml#/update-message-request-payload"
     responses:
-      "200":
-        $ref: "./v5/message/response.yaml#/MessagePayload"
-      "404":
+      200:
+        $ref: "./response.yaml#/message-common-response-200"
+      404:
         description: "Not found error"
-      "422":
+      422:
         description: "Parameters validation error"
     security:
       - BearerAuth: []
@@ -114,18 +99,13 @@ _messageId-flags-all:
     summary: "Delete all flags in message"
     description: "Delete all flags in message"
     parameters:
-      - name: messageId
-        in: path
-        required: true
-        description: ID of a message
-        schema:
-          $ref: "./schema/message.yaml#/MessageV5_messageId"
+      - $ref: "./parameter.yaml#/_messageId"
     responses:
-      "200":
-        $ref: "./v5/message/response.yaml#/MessagePayload"
-      "404":
+      200:
+        $ref: "./response.yaml#/message-common-response-200"
+      404:
         description: "Not found error"
-      "422":
+      422:
         description: "Parameters validation error"
     security:
       - BearerAuth: []
@@ -137,18 +117,13 @@ _messageId-flags:
     summary: "Delete my flag in a message"
     description: "Delete my flag in a message"
     parameters:
-      - name: messageId
-        in: path
-        required: true
-        description: ID of a message
-        schema:
-          $ref: "./schema/message.yaml#/MessageV5_messageId"
+      - $ref: "./parameter.yaml#/_messageId"
     responses:
-      "200":
-        $ref: "./v5/message/response.yaml#/MessagePayload"
-      "404":
+      200:
+        $ref: "./response.yaml#/message-common-response-200"
+      404:
         description: "Not found error"
-      "422":
+      422:
         description: "Parameters validation error"
     security:
       - BearerAuth: []
@@ -158,14 +133,9 @@ _messageId-flags:
     summary: "Find my flag in message by ID"
     description: "Return my flag in message"
     parameters:
-      - name: messageId
-        in: path
-        required: true
-        description: ID of a message
-        schema:
-          $ref: "./schema/message.yaml#/MessageV5_messageId"
+      - $ref: "./parameter.yaml#/_messageId"
     responses:
-      "200":
+      200:
         description: "successful operation"
         content:
           application/json:
@@ -173,10 +143,10 @@ _messageId-flags:
               type: "object"
               properties:
                 result:
-                  $ref: "./schema/message.yaml#/MessageV5_hasFlags"
-      "404":
+                  $ref: "../../schema/message.yaml#/MessageV5_hasFlags"
+      404:
         description: "Not found error"
-      "422":
+      422:
         description: "Parameters validation error"
     security:
       - BearerAuth: []
@@ -186,18 +156,13 @@ _messageId-flags:
     summary: "Create my flag in a message"
     description: "Flag a message"
     parameters:
-      - name: messageId
-        in: path
-        required: true
-        description: ID of a message
-        schema:
-          $ref: "./schema/message.yaml#/MessageV5_messageId"
+      - $ref: "./parameter.yaml#/_messageId"
     responses:
-      "200":
-        $ref: "./v5/message/response.yaml#/MessagePayload"
-      "404":
+      200:
+        $ref: "./response.yaml#/message-common-response-200"
+      404:
         description: "Not found error"
-      "422":
+      422:
         description: "Parameters validation error"
     security:
       - BearerAuth: []
@@ -209,13 +174,13 @@ list:
     summary: "Find messages by message id (max=10)"
     description: "Multiple message id values can be provided with array format"
     parameters:
-      - $ref: "./v5/message/parameter.yaml#/MessageIds"
+      - $ref: "./parameter.yaml#/messageIds"
     responses:
-      "200":
-        $ref: "./v5/message/response.yaml#/MessagePayload"
-      "404":
+      200:
+        $ref: "./response.yaml#/message-common-response-200"
+      404:
         description: "Not found error"
-      "422":
+      422:
         description: "Parameters validation error"
     security:
       - BearerAuth: []
@@ -227,31 +192,16 @@ user_creatorId:
     summary: "Find messages by creatorId"
     description: "This API can be called by admin user only"
     parameters:
-      - name: creatorId
-        in: path
-        required: true
-        description: Creator ID to filter
-        schema:
-          $ref: "./schema/message.yaml#/MessageV5_creatorId"
-      - name: channelId
-        in: query
-        required: false
-        description: Channel ID to filter
-        schema:
-          $ref: "./schema/message.yaml#/MessageV5_channelId"
-      - name: hasFlags
-        in: query
-        required: false
-        description: Filter flagged message
-        schema:
-          $ref: "./schema/message.yaml#/MessageV5_hasFlags"
-      - $ref: "./v5/message/parameter.yaml#/PagingOptionsAdmin"
+      - $ref: "./parameter.yaml#/_creatorId"
+      - $ref: "./parameter.yaml#/channelId"
+      - $ref: "./parameter.yaml#/hasFlags"
+      - $ref: "./parameter.yaml#/paging-options-admin"
     responses:
-      "200":
-        $ref: "./v5/message/response.yaml#/PaginatedMessagePayload"
-      "404":
+      200:
+        $ref: "./response.yaml#/paginated-message-response-200"
+      404:
         description: "Not found error"
-      "422":
+      422:
         description: "Parameters validation error"
     security:
       - BearerAuth: []
