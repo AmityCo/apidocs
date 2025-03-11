@@ -1,6 +1,6 @@
-# Amity API Documentation
+# Social+ API Documentation
 
-For comprehensive information, please visit [Amity API Docs](https://api-docs.amity.co).
+For comprehensive information, please visit [Social+ API Docs](https://api.docs.social.plus).
 
 ## Validation
 

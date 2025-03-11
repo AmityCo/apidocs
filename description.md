@@ -7,8 +7,8 @@ for the instructions on how to generate an admin access token.
 
 All backend endpoints that support Social+ Cloud SDK are included here. To easily differentiate the type of each endpoint, we added a prefix in each endpoint's path.
 
-- REST API Endpoint: /v1/, /v2/, /v3/, /v4/, or /v5/...
-- Webhook Event: /webhook/...
+- REST API Endpoint: **`/v1, /v2, /v3, /v4, or /v5 ...`**
+- Webhook Event: **`/webhook ...`**
 
 ---
 
