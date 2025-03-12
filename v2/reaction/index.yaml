@@ -1,0 +1,76 @@
+root:
+  get:
+    summary: "get list of reactions."
+    tags:
+      - "Reaction"
+    security:
+      - BearerAuth: []
+    description: "Get paginable list of reactions.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/referenceId"
+      - $ref: "./parameter.yaml#/referenceType"
+      - $ref: "./parameter.yaml#/reactionName"
+      - $ref: "./parameter.yaml#/options"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-payload-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  post:
+    summary: "add reaction to any document."
+    tags:
+      - "Reaction"
+    security:
+      - BearerAuth: []
+    description: "Add reaction to a document referenced by ID and type.\n"
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-post-response-payload-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "remove reaction from any document."
+    tags:
+      - "Reaction"
+    security:
+      - BearerAuth: []
+    description: "Remove reaction from a document referenced by ID and type.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/referenceId"
+      - $ref: "./parameter.yaml#/referenceType"
+      - $ref: "./parameter.yaml#/reactionName"
+      - $ref: "./parameter.yaml#/referenceVersion"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-delete-response-payload-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+messages-most:
+  get:
+    summary: "Get message ids by the most of reactions."
+    tags:
+      - "Reaction"
+    security:
+      - BearerAuth: []
+    description: "Get message ids by the most of reactions.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/reactionName"
+    responses:
+      200:
+        $ref: "./response.yaml#/messages-most-get-response-payload-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

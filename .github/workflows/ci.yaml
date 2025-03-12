@@ -1,0 +1,56 @@
+name: ci
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: ci
+      url: https://${{ vars.AWS_S3_BUCKET_DOCS }}/${{ github.head_ref }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: install deps
+        run: npm install --frozen-lockfile
+
+      - name: lint
+        run: npm run lint
+
+      - name: replace branch name
+        if: always()
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          echo "replacing branch name $BRANCH_NAME"
+          sed -i.bak "s/\$branch/$BRANCH_NAME/g" ./build/index.html
+          rm ./build/index.html.bak
+          cat ./build/index.html
+
+      - name: configure aws credentials
+        if: always()
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ vars.AWS_OIDC_ROLE_ARN }}
+
+      - name: publish docs on s3
+        if: always()
+        shell: bash
+        run: |
+          aws s3 sync $SOURCE_DIR s3://$AWS_S3_BUCKET/$DEST_DIR --follow-symlinks --delete --exclude '[0-9]*/*'
+        env:
+          AWS_S3_BUCKET: ${{ vars.AWS_S3_BUCKET_DOCS }}
+          SOURCE_DIR: build
+          DEST_DIR: ${{ github.head_ref }}

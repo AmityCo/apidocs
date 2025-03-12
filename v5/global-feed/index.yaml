@@ -1,0 +1,18 @@
+root:
+  get:
+    summary: "Get global feed."
+    tags:
+      - "Feed"
+    security:
+      - BearerAuth: []
+    description: "Get posts from your wall, people you follow and communities you join sorted by custom rannking algorithm\n"
+    parameters:
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

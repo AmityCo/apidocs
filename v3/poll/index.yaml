@@ -1,0 +1,136 @@
+root:
+  post:
+    summary: "create a poll"
+    tags:
+      - "Poll"
+    security:
+      - BearerAuth: []
+    description: "Create a poll\n"
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_pollId:
+  put:
+    summary: "update status poll"
+    tags:
+      - "Poll"
+    security:
+      - BearerAuth: []
+    description: "update a poll\n"
+    parameters:
+      - $ref: "./parameter.yaml#/pollId"
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    requestBody:
+      $ref: "./request.yaml#/_pollId-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        $ref: "../../global/error.yaml#/PollForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/PollNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "get poll"
+    tags:
+      - "Poll"
+    security:
+      - BearerAuth: []
+    description: "List users who vote the poll with specific answer\n"
+    parameters:
+      - $ref: "./parameter.yaml#/pollId"
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      404:
+        $ref: "../../global/error.yaml#/PollNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "delete poll"
+    tags:
+      - "Poll"
+    security:
+      - BearerAuth: []
+    description: "delete a poll\n"
+    parameters:
+      - $ref: "./parameter.yaml#/pollId"
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    responses:
+      200:
+        description: "poll deleted"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                status:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    success:
+                      type: "boolean"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/PollNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_pollId-votes:
+  post:
+    summary: "vote poll"
+    tags:
+      - "Poll"
+    security:
+      - BearerAuth: []
+    description: "Client vote poll\n"
+    parameters:
+      - $ref: "./parameter.yaml#/pollId"
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    requestBody:
+      $ref: "./request.yaml#/_pollId-votes-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/PollNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_pollId-answers_answerId:
+  get:
+    summary: "List users who vote the poll with specific answer"
+    tags:
+      - "Poll"
+    security:
+      - BearerAuth: []
+    description: "List users who vote the poll with specific answer\n"
+    parameters:
+      - $ref: "./parameter.yaml#/pollId"
+      - $ref: "./parameter.yaml#/answerId"
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/options"
+    responses:
+      200:
+        $ref: "./response.yaml#/poll-pagination-response-200"
+      404:
+        $ref: "../../global/error.yaml#/PollNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

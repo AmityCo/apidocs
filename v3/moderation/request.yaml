@@ -1,4 +1,4 @@
-AddBlacklistRules:
+blocklists-post-request-payload:
   description: >
     Rules information to be added.
   required: true
@@ -8,21 +8,20 @@ AddBlacklistRules:
         type: object
         properties:
           regexs:
-            type: 'array'
+            type: "array"
             minItems: 0
             maxItems: 100
             items:
-              type: 'string'
+              type: "string"
               minLength: 1
               maxLength: 500
           isMatchExactWord:
-            type: 'boolean'
+            type: "boolean"
             default: false
         required:
           - regexs
 
-
-AddWhitelistRules:
+allowlists-post-request-payload:
   description: >
     Rules information to be added.
   required: true
@@ -32,12 +31,27 @@ AddWhitelistRules:
         type: object
         properties:
           regexs:
-            type: 'array'
+            type: "array"
             minItems: 0
             maxItems: 100
             items:
-              type: 'string'
+              type: "string"
               minLength: 1
               maxLength: 500
         required:
           - regexs
+
+verify-request-payload:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          data:
+            description: A list of URLs to be verified
+            type: array
+            items:
+              type: string
+              maxLength: 500
+            maxItems: 10
+            minItems: 1

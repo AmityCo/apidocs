@@ -1,0 +1,27 @@
+_channelId-users:
+  get:
+    summary: "query channel users"
+    tags:
+      - "Channel"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_channelId"
+      - $ref: "./parameter.yaml#/role"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/memberships"
+      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/search"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/isBrand"
+    responses:
+      200:
+        $ref: "./response.yaml#/_channelId-users-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

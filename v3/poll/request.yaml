@@ -1,0 +1,73 @@
+root-post-request-payload:
+  description: "Information of a poll to be created.\n### Required\n- at least 2 options\n- dataType currently support only `text`\n- closedIn unit must be `milliseconds`\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          text:
+            type: "string"
+          question:
+            type: "string"
+            description: "question."
+          answers:
+            type: "array"
+            minimum: 2
+            maxItems: 10
+            items:
+              type: "object"
+              properties:
+                dataType:
+                  description: "Datatype of answer (current only string)."
+                  type: "string"
+                  enum:
+                    - "text"
+                data:
+                  type: "string"
+          answerType:
+            description: "single or multiple."
+            type: "string"
+            enum:
+              - single
+              - multiple
+              - null
+            default: null
+          closedIn:
+            type: "number"
+            description: "Countdown time to close vote (milliseconds)"
+        required:
+          - "data"
+
+_pollId-put-request-payload:
+  description: "Information of a poll to be updated.\n### Required\n- currently support only `closed`\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          text:
+            type: "string"
+          status:
+            description: "poll status"
+            type: "string"
+            default: "closed"
+        required:
+          - "data"
+
+_pollId-votes-post-request-payload:
+  description: "Information of a poll to be voted.\n### Required\n- answerIds for vote the poll\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          answerIds:
+            description: "poll id"
+            type: "array"
+            items:
+              type: "string"
+        required:
+          - "data"

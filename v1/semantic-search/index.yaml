@@ -1,0 +1,53 @@
+posts:
+  get:
+    summary: "Semantic search posts"
+    tags:
+      - "Semantic Search"
+    security:
+      - BearerAuth: []
+    description: "Semantic search posts\n"
+    parameters:
+      - $ref: "./parameter.yaml#/query"
+      - $ref: "./parameter.yaml#/targetId"
+      - $ref: "./parameter.yaml#/targetType"
+      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/dataTypes"
+      - $ref: "./parameter.yaml#/tags"
+      - $ref: "./parameter.yaml#/matchingOnlyParentPost"
+    responses:
+      200:
+        $ref: "./response.yaml#/posts-response-payload-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+communities:
+  get:
+    summary: "Semantic search community"
+    tags:
+      - "Semantic Search"
+    security:
+      - BearerAuth: []
+    description: "Semantic search community\n"
+    parameters:
+      - $ref: "./parameter.yaml#/query"
+      - $ref: "./parameter.yaml#/filter"
+      - $ref: "./parameter.yaml#/tags"
+      - $ref: "./parameter.yaml#/categoryIds"
+      - $ref: "./parameter.yaml#/options"
+    responses:
+      200:
+        $ref: "./response.yaml#/communities-response-payload-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

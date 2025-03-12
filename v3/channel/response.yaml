@@ -1,4 +1,4 @@
-ChannelsApiResponse:
+common-channels-response-200:
   description: Channels Information
   content:
     application/json:
@@ -17,12 +17,12 @@ ChannelsApiResponse:
             type: array
             description: Depends on messagePreviewId. if null will be empty array.
             items:
-              $ref: "../../schema/message.yaml#/MessagePreviews"  
+              $ref: "../../schema/message.yaml#/MessagePreviews"
           messageFeedsInfo:
             type: array
             description: Depends on messagePreviews. if empty array will be empty array.
             items:
-              $ref: "../../schema/message-feed.yaml#/messageFeedsInfo"    
+              $ref: "../../schema/message-feed.yaml#/messageFeedsInfo"
           users:
             type: array
             items:
@@ -32,7 +32,7 @@ ChannelsApiResponse:
             items:
               $ref: "../../schema/file.yaml#/File"
 
-ChannelPaginationApiResponse:
+root-get-response-payload-200:
   description: Channels Information
   content:
     application/json:
@@ -50,12 +50,12 @@ ChannelPaginationApiResponse:
             type: array
             description: Depends on messagePreviewId. if null will be empty array.
             items:
-              $ref: "../../schema/message.yaml#/MessagePreviews"  
+              $ref: "../../schema/message.yaml#/MessagePreviews"
           messageFeedsInfo:
             type: array
             description: Depends on messagePreviews. if empty array will be empty array.
             items:
-              $ref: "../../schema/message-feed.yaml#/messageFeedsInfo" 
+              $ref: "../../schema/message-feed.yaml#/messageFeedsInfo"
           users:
             type: array
             items:
@@ -72,7 +72,22 @@ ChannelPaginationApiResponse:
               prev:
                 type: string
 
-ChannelCustomNotificationResponse:
+_channelId-delete-response-payload-200:
+  description: OK
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          status:
+            type: "string"
+          data:
+            type: "object"
+            properties:
+              success:
+                type: "boolean"
+
+channel-custom-notification-response:
   description: Channels Information
   type: object
   properties:
@@ -96,7 +111,7 @@ ChannelCountApiResponse:
       schema:
         type: object
         properties:
-          total: 
+          total:
             type: number
             example: 10000
           lastUpdatedAt:

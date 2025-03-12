@@ -1,0 +1,290 @@
+channel.didAddUsers:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send user added event information whenever new member got added to a channel."
+    responses:
+      200:
+        description: "channel is channel information. userIds is a list of added userId. adderId is user who add other user to channel users is a list of user."
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "channel.didAddUsers"
+                data:
+                  type: "object"
+                  properties:
+                    channel:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+                    userIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    adderId:
+                      type: "string"
+
+channel.didBan:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send channel banned event whenever a channel got banned."
+    responses:
+      200:
+        description: "channel is channel information. userIds is a list of userIds who being banned. actorId is userId who ban other user. users is a list of userInfo"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "channel.didBan"
+                data:
+                  type: "object"
+                  properties:
+                    channel:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+                    actorId:
+                      type: "string"
+                    userIds:
+                      type: "array"
+                      items:
+                        type: "string"
+
+channel.didClose:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send channel close event information whenever a channel close."
+    responses:
+      200:
+        description: "channel is channel information."
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "channel.didClose"
+                data:
+                  type: "object"
+                  properties:
+                    channel:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
+
+channel.didCreate:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send new created channel whenever a channel got create"
+    responses:
+      200:
+        description: "channel is channel information. userIds is a list of userId who is added to channel. users is a list of user."
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "channel.didCreate"
+                data:
+                  type: "object"
+                  properties:
+                    channel:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+                    userIds:
+                      type: "array"
+                      items:
+                        type: "string"
+
+channel.didJoin:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send join event information whenever a channel got joined"
+    responses:
+      200:
+        description: "channel is channel information. userIds is a list of joined userId. users is a list of user."
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "channel.didJoin"
+                data:
+                  type: "object"
+                  properties:
+                    channel:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+                    userIds:
+                      type: "array"
+                      items:
+                        type: "string"
+
+channel.didLeave:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send channel leave event information whenever someone leave a channel."
+    responses:
+      200:
+        description: "channel is channel information. userIds is a list of userId who leave channel. users is a list of userInfo"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "channel.didLeave"
+                data:
+                  type: "object"
+                  properties:
+                    channel:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+                    userIds:
+                      type: "array"
+                      items:
+                        type: "string"
+
+channel.didRemoveUsers:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send user removed event information whenever member got remove from channel."
+    responses:
+      200:
+        description: "channel is channel information. userIds is a list of removed userId. removerId is userId who remove other users from channel. users is a list of user."
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "channel.didRemoveUsers"
+                data:
+                  type: "object"
+                  properties:
+                    channel:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+                    userIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    removerId:
+                      type: "string"
+
+channel.didUpdate:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send channel updated event information whenever a channel got updated."
+    responses:
+      200:
+        description: "channel is channel information. userId is a userId who update channel. users is a list of userInfo"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "channel.didUpdate"
+                data:
+                  type: "object"
+                  properties:
+                    channel:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+                    userId:
+                      type: "string"
+
+channel.didUpdateMeta:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send channel's meta data updated event information whenever a channel's meta data got updated."
+    responses:
+      200:
+        description: "channel is channel information. userId is a userId who update channel's meta data. users is a list of userInfo"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "channel.didUpdateMeta"
+                data:
+                  type: "object"
+                  properties:
+                    channel:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+                    userId:
+                      type: "string"

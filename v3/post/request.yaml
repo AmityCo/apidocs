@@ -1,0 +1,103 @@
+root-post-request-payload:
+  description: "information of a post to be created.\n\nWhen `dataType` is set `data` payload can be anything but it will not support normal data capability (ex. images and files) and `data` payload size will be limit to `100kb`\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          text:
+            type: "string"
+            deprecated: true
+          data:
+            type: "object"
+            description: "require text or images or files (can't add images with files)"
+            properties:
+              text:
+                type: "string"
+              images:
+                type: "array"
+                items:
+                  type: "string"
+              files:
+                type: "array"
+                items:
+                  type: "string"
+            required:
+              - "text"
+          dataType:
+            type: "string"
+            example: "upstra.customtype"
+            description: 'must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")'
+          targetType:
+            type: "string"
+            enum:
+              - "user"
+              - "community"
+              - "content"
+            default: "user"
+          targetId:
+            type: "string"
+            example: "<userId>"
+          metadata:
+            type: "object"
+          postId:
+            type: "string"
+          tags:
+            type: "array"
+            minItems: 0
+            maxItems: 5
+            items:
+              type: "string"
+              maximum: 24
+              description: "tags"
+          createdAt:
+            type: "string"
+            description: "The date/time when a post is created."
+            format: "date-time"
+            example: "2022-07-07T04:24:20.444Z"
+        required:
+          - "data"
+
+_postId-put-request-payload:
+  description: "information of a post to be updated.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          text:
+            type: "string"
+            deprecated: true
+          data:
+            type: "object"
+            properties:
+              text:
+                type: "string"
+                maximum: 50000
+                description: "For updating text in the post"
+              fileId:
+                type: "string"
+                maximum: 100
+                description: "Put file id to update file,image inside file, image post (video is not supported yet)"
+              streamId:
+                type: "string"
+                maximum: 100
+                description: "Put stream id to update live streaming post with new streaming"
+              thumbnailFileId:
+                type: "string"
+                maximum: 100
+                description: "Put image file id to update video file thumbnail in video post"
+          metadata:
+            type: "object"
+          tags:
+            type: "array"
+            minItems: 0
+            maxItems: 5
+            items:
+              type: "string"
+              maximum: 24
+              description: "tags"
+        required:
+          - "postId"

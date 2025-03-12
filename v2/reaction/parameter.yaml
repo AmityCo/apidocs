@@ -1,0 +1,60 @@
+referenceId:
+  name: "referenceId"
+  description: Reference id
+  in: "query"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 900
+
+referenceType:
+  name: "referenceType"
+  description: Reference type
+  in: "query"
+  required: true
+  schema:
+    type: "string"
+    enum:
+      - "message"
+      - "post"
+      - "comment"
+      - "story"
+
+reactionName:
+  name: "reactionName"
+  description: Reaction name
+  in: "query"
+  schema:
+    type: "string"
+    maxLength: 100
+
+referenceVersion:
+  in: query
+  name: referenceVersion
+  schema:
+    type: integer
+  description: "The API version of the document (Ex. If using with message v5, the referenceVersion will be 5)"
+
+limit:
+  name: "limit"
+  in: "query"
+  schema:
+    type: "integer"
+    minimum: 1
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+        minimum: 0
+      token:
+        type: "string"
+        maxLength: 1000
+      skip:
+        type: "integer"
+        minimum: 0

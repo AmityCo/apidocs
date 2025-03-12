@@ -1,0 +1,61 @@
+_communityId-users-roles:
+  post:
+    summary: "Add roles to community users"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: "Add roles to community users.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_communityId"
+    requestBody:
+      $ref: "./request.yaml#/_communityId-users-roles-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              GenericPermissionDeniedError:
+                $ref: "../../global/error-example.yaml#/GenericPermissionDeniedError"
+              UserIsBannedError:
+                $ref: "../../global/error-example.yaml#/UserIsBannedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Remove roles from community users"
+    tags:
+      - "Community"
+    security:
+      - ApiKeyAuth: []
+    description: "Remove roles from community users.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+      - $ref: "./parameter.yaml#/_communityId"
+      - $ref: "./parameter.yaml#/roles"
+      - $ref: "./parameter.yaml#/userIds"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              GenericPermissionDeniedError:
+                $ref: "../../global/error-example.yaml#/GenericPermissionDeniedError"
+              UserIsBannedError:
+                $ref: "../../global/error-example.yaml#/UserIsBannedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

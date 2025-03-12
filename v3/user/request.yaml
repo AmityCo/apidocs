@@ -1,0 +1,34 @@
+root-put-request-payload:
+  description: "User to be updated\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          userId:
+            type: "string"
+            maxLength: 50
+          displayName:
+            type: "string"
+            maxLength: 100
+          roles:
+            type: "array"
+            description: Only administrator can update system roles (moderator and admin)
+            maxItems: 10
+            items:
+              type: "string"
+              maxLength: 100
+          metadata:
+            type: "object"
+            description: >
+              User metadata (max: 5,000 bytes)
+          avatarFileId:
+            type: "string"
+            maxLength: 50
+          avatarCustomUrl:
+            type: "string"
+            maxLength: 1000
+          description:
+            type: "string"
+            maxLength: 500

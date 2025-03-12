@@ -1,0 +1,404 @@
+global:
+  get:
+    summary: "Query global pinned post"
+    tags:
+      - "Global Featured Post"
+    security:
+      - BearerAuth: []
+    description: "Query global pinned post\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Clear all global pinned post in a global feed"
+    tags:
+      - "Global Featured Post"
+    security:
+      - BearerAuth: []
+    description: "Clear all global pinned post in a global feed\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+global_postId:
+  post:
+    summary: "Global pin a post in a global feed"
+    tags:
+      - "Global Featured Post"
+    security:
+      - BearerAuth: []
+    description: "Global pin a post in a global feed\n"
+    parameters:
+      - $ref: "./parameter.yaml#/postId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "./response.yaml#/common-response-400"
+      403:
+        description: No permission to global pin a post in a global feed
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "Admin do not have permission.":
+                value:
+                  status: error
+                  code: 400300
+                  message: Insufficient permission
+      404:
+        description: The postId is not found.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "The postId is not found":
+                value:
+                  status: error
+                  code: 400400
+                  message: PostId ${postId} not found
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Global Unpin a post in a global feed"
+    tags:
+      - "Global Featured Post"
+    security:
+      - BearerAuth: []
+    description: "Global Unpin a post in a global feed\n"
+    parameters:
+      - $ref: "./parameter.yaml#/postId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        description: badRequest Error
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "This post is not pinned.":
+                value:
+                  status: error
+                  code: 400000
+                  message: Post ${postId} is not pinned
+      403:
+        description: No permission to global pin a post in a global feed
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "Admin do not have permission.":
+                value:
+                  status: error
+                  code: 400300
+                  message: Insufficient permission
+      404:
+        description: The postId is not found.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "The postId is not found":
+                value:
+                  status: error
+                  code: 400400
+                  message: PostId ${postId} not found
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+communities_communityId:
+  get:
+    summary: "List all pinned posts in a community"
+    tags:
+      - "Pin post"
+    security:
+      - BearerAuth: []
+    description: "List all pinned posts in a community\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+      - $ref: "./parameter.yaml#/options"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: No permission to query pin post in a community
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "Private community and the user is not a member":
+                value:
+                  status: error
+                  code: 400300
+                  message: You are not a member of this community
+      404:
+        description: The communityId is not found.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "The communityId is not found":
+                value:
+                  status: error
+                  code: 400400
+                  message: CommunityId ${id} not found
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Clear all pin posts in a community"
+    tags:
+      - "Pin post"
+    security:
+      - BearerAuth: []
+    description: "Clear all pin posts in a community\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-delete-response-200"
+      403:
+        description: No permission to clear all pin post in a community
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "Users do not have permission.":
+                value:
+                  status: error
+                  code: 400300
+                  message: You are not allowed to do this
+      404:
+        description: The communityId is not found.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "The communityId is not found":
+                value:
+                  status: error
+                  code: 400400
+                  message: CommunityId ${id} not found
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+communities_communityId_placement:
+  get:
+    summary: "List all pinned posts in a community by placement"
+    tags:
+      - "Pin post"
+    security:
+      - BearerAuth: []
+    description: "List all pinned posts in a community by placement\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+      - $ref: "./parameter.yaml#/placement"
+      - $ref: "./parameter.yaml#/options"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        description: No permission to query pin post in a community
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "Users do not have permission.":
+                value:
+                  status: error
+                  code: 400300
+                  message: You are not a member of this community
+      404:
+        description: The communityId is not found.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "The communityId is not found":
+                value:
+                  status: error
+                  code: 400400
+                  message: CommunityId ${id} not found
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Clear all pin posts in a community by placement"
+    tags:
+      - "Pin post"
+    security:
+      - BearerAuth: []
+    description: "Clear all pin posts in a community by placement\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+      - $ref: "./parameter.yaml#/placement"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-delete-response-200"
+      403:
+        description: No permission to clear all pin post in a community
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "Users do not have permission.":
+                value:
+                  status: error
+                  code: 400300
+                  message: You are not allowed to do this
+      404:
+        description: The communityId is not found.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "The communityId is not found":
+                value:
+                  status: error
+                  code: 400400
+                  message: CommunityId ${id} not found
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+communities_communityId_placement_postId:
+  post:
+    summary: "Pin a post in a community "
+    tags:
+      - "Pin post"
+    security:
+      - BearerAuth: []
+    description: "Pin a post in a community\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+      - $ref: "./parameter.yaml#/placement"
+      - $ref: "./parameter.yaml#/postId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "./response.yaml#/common-response-400"
+      403:
+        description: No permission to pin post in a community
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "Users do not have permission.":
+                value:
+                  status: error
+                  code: 400300
+                  message: You are not allowed to do this
+      404:
+        description: The communityId is not found.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "The communityId is not found":
+                value:
+                  status: error
+                  code: 400400
+                  message: "Failed to find community: ${communityId}"
+              "The postId is not found within the communityId":
+                value:
+                  status: error
+                  code: 400400
+                  message: PostId ${postId} not found
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Unpin a post in a community "
+    tags:
+      - "Pin post"
+    security:
+      - BearerAuth: []
+    description: "Unpin a post in a community\n"
+    parameters:
+      - $ref: "./parameter.yaml#/communityId"
+      - $ref: "./parameter.yaml#/placement"
+      - $ref: "./parameter.yaml#/postId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        description: badRequest Error
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "This post is not pinned.":
+                value:
+                  status: error
+                  code: 400000
+                  message: Post ${postId} is not pinned
+              "This post is not in community":
+                value:
+                  status: error
+                  code: 400000
+                  message: Post ${postId} is not in community
+      403:
+        description: No permission to unpin post in a community
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "Users do not have permission.":
+                value:
+                  status: error
+                  code: 400300
+                  message: You are not allowed to do this
+      404:
+        description: The communityId is not found.
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "The communityId is not found":
+                value:
+                  status: error
+                  code: 400400
+                  message: "Failed to find community: ${communityId}"
+              "The postId is not found within the communityId":
+                value:
+                  status: error
+                  code: 400400
+                  message: PostId ${postId} not found
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

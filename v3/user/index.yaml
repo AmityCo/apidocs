@@ -1,0 +1,107 @@
+root:
+  get:
+    summary: "Get users."
+    tags:
+      - "User"
+    security:
+      - BearerAuth: []
+    description: "Get users (pagination supported)\n"
+    parameters:
+      - $ref: "./parameter.yaml#/keyword"
+      - $ref: "./parameter.yaml#/exactMatchKeyword"
+      - $ref: "./parameter.yaml#/filter"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/isBrand"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "Update user."
+    tags:
+      - "User"
+    security:
+      - BearerAuth: []
+    description: "Update user such as displayName, roles, avatar and metadata\n"
+    requestBody:
+      $ref: "./request.yaml#/root-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+list:
+  get:
+    summary: "Get list of users by user ids."
+    tags:
+      - "User"
+    security:
+      - BearerAuth: []
+    description: "Get list of users by user ids.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/userIds"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_userId:
+  get:
+    summary: "Get one user."
+    tags:
+      - "User"
+    security:
+      - BearerAuth: []
+    description: "Get one user.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+      - $ref: "./parameter.yaml#/type"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_userId-isFlagByMe:
+  get:
+    summary: "Check whether user flag a given user."
+    description: "Check whether user flag a given user.\n"
+    tags:
+      - "User"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+    responses:
+      200:
+        description: "Is flag by me response."
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                isFlagByMe:
+                  type: "boolean"
+      404:
+        $ref: "../../global/error.yaml#/UserNotFoundError"

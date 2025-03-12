@@ -1,0 +1,28 @@
+root-post-request-payload:
+  description: "reference ID and type with reaction name\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          referenceId:
+            type: "string"
+            maxLength: 900
+          referenceType:
+            type: "string"
+            enum:
+              - "message"
+              - "post"
+              - "comment"
+              - "story"
+          reactionName:
+            type: "string"
+            maxLength: 100
+          referenceVersion:
+            description: "The API version of the document (Ex. If using with message v5, the referenceVersion will be 5)"
+            type: "integer"
+        required:
+          - "referenceId"
+          - "referenceType"
+          - "reactionName"

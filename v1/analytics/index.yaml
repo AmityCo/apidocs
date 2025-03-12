@@ -1,0 +1,76 @@
+activities:
+  post:
+    summary: send analytic activities
+    description:
+      "Send a batch of analytic activities to the server, currently only support viewing post/story and story link clicked activities.
+      \n - For viewing post/story activity, the `impression` and `reach` of the post/story will be updated list
+      of users from `/api/v1/analytics/views/posts/{postId}/users` will be updated too. (but not immediately)"
+    tags:
+      - Analytic
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/activities-request-payload"
+    responses:
+      202:
+        description: ok, not returning any data
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+views-posts_postId-users:
+  get:
+    summary: query post reach
+    description:
+      "Query a list of users who have viewed certain post, the user who have been global banned,
+      community banned, or soft deleted will be excluded from the list of users. And if the post is soft deleted,
+      post owner will be able to view this list, but others can not."
+    tags:
+      - Analytic
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/postId"
+      - $ref: "./parameter.yaml#/token"
+      - $ref: "./parameter.yaml#/limit"
+    responses:
+      200:
+        $ref: "./response.yaml#/views-posts_postId-users-response-payload-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+views-stories_storyId-users:
+  get:
+    summary: query story reach
+    description:
+      "Query a list of users who have viewed certain story, the user who have been global banned,
+      community banned, or soft deleted will be excluded from the list of users. And if the post is soft deleted,
+      post owner will be able to view this list, but others can not."
+    tags:
+      - Analytic
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/storyId"
+      - $ref: "./parameter.yaml#/token"
+      - $ref: "./parameter.yaml#/limit"
+    responses:
+      200:
+        $ref: "./response.yaml#/views-stories_storyId-users-response-payload-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

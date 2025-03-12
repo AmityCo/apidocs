@@ -1,0 +1,72 @@
+isLive:
+  name: "isLive"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: false
+
+statuses:
+  name: "statuses"
+  in: "query"
+  schema:
+    type: "array"
+    maxItems: 10
+    items:
+      type: "string"
+      enum:
+        - "idle"
+        - "live"
+        - "ended"
+        - "recorded"
+  description: "Status of livestreaming  \n  * idle - streaming is just created  \n  * live - streamer is streaming now or streamer is reconnecting  \n  * ended - streamer stop streaming or streamer disconnect and not connect back in time period  \n  * recorded - live stream recordings available \n"
+
+userPublicIds:
+  name: "userPublicIds"
+  in: "query"
+  schema:
+    type: "array"
+    maxItems: 100
+    items:
+      type: "string"
+      maxLength: 50
+
+sortBy:
+  name: "sortBy"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "firstCreated"
+      - "lastCreated"
+
+isDeleted:
+  name: "isDeleted"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: null
+  description: "isDeleted:\n  * `null(default)` - Show both video streaming is activated and video streaming is inactivated.\n  * `true` - Show video streaming is inactivated only.\n  * `false` - Show video streaming is activated only.\n"
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+      skip:
+        type: "integer"
+      token:
+        type: "string"
+        maxLength: 1000
+
+_streamId:
+  in: "path"
+  name: "streamId"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 50
+  description: "Stream id to update"

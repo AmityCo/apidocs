@@ -1,0 +1,100 @@
+keyword:
+  name: "keyword"
+  in: "query"
+  schema:
+    type: "string"
+    maxLength: 100
+
+exactMatchKeyword:
+  name: "exactMatchKeyword"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: false
+  description: Return exact match search result when true
+
+filter:
+  name: "filter"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "all"
+      - "flagged"
+    default: "all"
+
+sortBy:
+  name: "sortBy"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "firstCreated"
+      - "lastCreated"
+      - "displayName"
+    default: "displayName"
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+        default: 10
+      token:
+        type: "string"
+        maxLength: 1000
+
+isDeleted:
+  name: "isDeleted"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: false
+  description: "filter only deleted deleted users when true"
+
+isBrand:
+  name: "isBrand"
+  in: "query"
+  schema:
+    type: "boolean"
+  description: |
+    Filter brand user <br>
+    ```undefined``` - return all user <br>
+    ```true``` - return only brand user <br>
+    ```false``` - return only non-brand user
+
+userIds:
+  name: "userIds"
+  in: "query"
+  required: true
+  schema:
+    type: "array"
+    maxItems: 100
+    items:
+      type: "string"
+      maxLength: 900
+
+_userId:
+  name: "userId"
+  in: "path"
+  required: true
+  schema:
+    type: "string"
+    minLength: 1
+    maxLength: 900
+
+type:
+  name: "type"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "public"
+      - "internal"
+    default: "public"

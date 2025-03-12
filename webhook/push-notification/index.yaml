@@ -1,0 +1,1060 @@
+channel.created:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when channel is created/joined\n"
+    responses:
+      200:
+        description: "channel created/joined"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/channel/response.yaml#/channel-custom-notification-response"
+channel.joined:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when channel is created/joined\n"
+    responses:
+      200:
+        description: "channel created/joined"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/channel/response.yaml#/channel-custom-notification-response"
+comment.created:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      200:
+        description: "comment created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+comment.reacted:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      200:
+        description: "comment created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+comment.replied:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      200:
+        description: "comment created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+follow.accepted:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when follow is created/requested/accepted\n"
+    responses:
+      200:
+        description: "follow created/requested/accepted"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v4/follow/response.yaml#/follow-custom-notification-response"
+follow.created:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when follow is created/requested/accepted\n"
+    responses:
+      200:
+        description: "follow created/requested/accepted"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v4/follow/response.yaml#/follow-custom-notification-response"
+follow.requested:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when follow is created/requested/accepted\n"
+    responses:
+      200:
+        description: "follow created/requested/accepted"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v4/follow/response.yaml#/follow-custom-notification-response"
+message.created:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when message is created\n"
+    responses:
+      200:
+        description: "message created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/message/response.yaml#/message-custom-notification-response"
+post.approved:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      200:
+        description: "post created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/post/response.yaml#/post-custom-notification-response"
+post.created:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      200:
+        description: "post created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/post/response.yaml#/post-custom-notification-response"
+post.need-reviewing:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      200:
+        description: "post created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/post/response.yaml#/post-custom-notification-response"
+post.reacted:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      200:
+        description: "post created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/post/response.yaml#/post-custom-notification-response"
+video-streaming.started:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when video-streaming is started\n"
+    responses:
+      200:
+        description: "video-streaming is started"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: true
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/video-streaming/response.yaml#/video-streaming-custom-notification-response"
+mention-comment.created:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      200:
+        description: "comment created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+mention-comment.replied:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      200:
+        description: "comment created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+mention-post.created:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      200:
+        description: "post created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/post/response.yaml#/post-custom-notification-response"
+mention-user-feed-comment.created:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      200:
+        description: "comment created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+mention-user-feed-comment.replied:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when comment is created\n"
+    responses:
+      200:
+        description: "comment created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/comment/response.yaml#/comment-custom-notification-response"
+mention-user-feed-post.created:
+  get:
+    tags:
+      - "Webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when post is created\n"
+    responses:
+      200:
+        description: "post created"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                eventType:
+                  type: "string"
+                  enum:
+                    - "push-notification.created"
+                id:
+                  type: "string"
+                networkId:
+                  type: "string"
+                path:
+                  type: "string"
+                senderId:
+                  type: "string"
+                sentTime:
+                  type: "string"
+                  format: "date-time"
+                version:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    eventName:
+                      type: "string"
+                    isBroadcast:
+                      type: "boolean"
+                      default: false
+                    targetIds:
+                      type: "array"
+                      items:
+                        type: "string"
+                    notify:
+                      type: "boolean"
+                      description: "should notify to user targetIds"
+                    title:
+                      type: "string"
+                    body:
+                      type: "string"
+                  allOf:
+                    - $ref: "../../v3/post/response.yaml#/post-custom-notification-response"

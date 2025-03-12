@@ -1,0 +1,94 @@
+root:
+  get:
+    summary: "Get roles (pagination support)"
+    tags:
+      - "Role"
+    security:
+      - BearerAuth: []
+    description: "Get roles (pagination support)\n"
+    parameters:
+      - $ref: "./parameter.yaml#/keyword"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/options"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  post:
+    summary: "Create role"
+    tags:
+      - "Role"
+    security:
+      - BearerAuth: []
+    description: "Create a role\n"
+    requestBody:
+      $ref: "./request.yaml#/role-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/GenericPermissionDeniedError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_roleId:
+  get:
+    summary: "Get role"
+    tags:
+      - "Role"
+    security:
+      - BearerAuth: []
+    description: "Get a role\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_roleId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "Update role"
+    tags:
+      - "Role"
+    security:
+      - BearerAuth: []
+    description: "Update a role\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_roleId"
+    requestBody:
+      $ref: "./request.yaml#/role-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      403:
+        $ref: "../../global/error.yaml#/GenericPermissionDeniedError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Delete role"
+    tags:
+      - "Role"
+    security:
+      - BearerAuth: []
+    description: "Delete a role\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_roleId"
+      - $ref: "./parameter.yaml#/roleId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/GenericPermissionDeniedError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

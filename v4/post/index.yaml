@@ -1,0 +1,103 @@
+root:
+  post:
+    summary: "create a post"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Create a post\n"
+    requestBody:
+      description: "information of a post to be created.\n\nrequire text or at least 1 attachments\n\n### Custom post\n- When `dataType` is set as the custom name (dot separated string format, see the `dataType` field section), `data` payload can be anything but it will not support normal data capability (ex. `text` data will not be created)\nand `data` payload size will be limit to `100kb`\n- `attachments` will be ignored, users need to keep them in `data` field and handle the file info by themselves\n\n### Image, File, Video post\n- Put `type` with file id in `attachments`\n- Image and File data can be picked from `fileId` in `data` object in child post\n- Video fileId for each resolution will be in `videoFileId` in `data` object in child post\n\n### Live streaming post\n- When put `dataType` as `liveStream` and `streamId` in `data`, post will be created as live streaming post\n- `attachments` will be ignored\n- Video streaming info will be in `videoStreamings` object in response\n\n### Poll post\n- When put `dataType` as `poll` and `pollId` in `data`, post will be created as poll post\n- `attachments` will be ignored\n- Poll info will be in `polls` object in response\n"
+      required: true
+      content:
+        $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/post-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "query a post"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Query posts\n"
+    parameters:
+      - $ref: "./parameter.yaml#/targetId"
+      - $ref: "./parameter.yaml#/targetType"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/hasFlag"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/feedType"
+      - $ref: "./parameter.yaml#/dataTypes"
+      - $ref: "./parameter.yaml#/tags"
+      - $ref: "./parameter.yaml#/matchingOnlyParentPost"
+    responses:
+      200:
+        $ref: "./response.yaml#/post-pagination-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_postId:
+  put:
+    summary: "update a post"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Update a post\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_postId"
+      - $ref: "./parameter.yaml#/preserve-edited-at"
+    requestBody:
+      $ref: "./request.yaml#/_postId-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/post-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "delete a post"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: "Delete a post\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_postId"
+      - $ref: "./parameter.yaml#/permanent"
+    responses:
+      200:
+        description: "post information"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                status:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    success:
+                      type: "boolean"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

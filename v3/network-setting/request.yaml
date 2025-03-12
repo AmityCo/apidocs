@@ -1,4 +1,62 @@
-UpdatePrehookSetting:
+root-put-request-payload:
+  description: "information for a network setting\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          networkId:
+            type: "string"
+          tierHandler:
+            type: "string"
+            maxLength: 200
+          socialEnabled:
+            type: "boolean"
+          videoStreamingEnabled:
+            type: "boolean"
+          chatEnabled:
+            type: "boolean"
+          isWhitelistEnabled:
+            type: "boolean"
+
+chat-put-request-payload:
+  description: "information for a network setting\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          isAllowMentionedChannelEnabled:
+            type: "boolean"
+            default: false
+          messagePreviewSetting:
+            type: object
+            description: "Message preview setting"
+            properties:
+              enabled:
+                type: boolean
+                default: false
+                description: "message preview feature enable or disable"
+              isIncludeDeleted:
+                type: boolean
+                default: false
+                description: "message preview can be a deleted message, if false return message preview without a deleted message"
+            required:
+              - enabled
+          isAllowAdminViewConversationMessage:
+            type: "boolean"
+            default: true
+          isAllowAdminManageConversationMessage:
+            type: "boolean"
+            default: true
+          allowMemberToUpdateConversationChannel:
+            type: "boolean"
+            default: false
+            description: "Allow conversation channel that has more than 2 member wide edit rights"
+
+prehook-put-request-payload:
   description: >
     Information of a prehook to be updated.
   required: true
@@ -21,7 +79,77 @@ UpdatePrehookSetting:
             type: boolean
             description: An option for regenerating the secret key.
 
-UpdateUsersSetting:
+social-put-request-payload:
+  description: "information for a network setting\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          userPrivacySetting:
+            type: "string"
+            enum:
+              - "public"
+              - "private"
+          isFollowWithRequestEnabled:
+            type: "boolean"
+            default: false
+          isAllowEditPostWhenReviewingEnabled:
+            type: "boolean"
+          showOnlyMyFeed:
+            type: "boolean"
+            default: false
+          showMyPost:
+            type: "boolean"
+          showEveryonePost:
+            type: "boolean"
+          showCommunityPost:
+            type: "boolean"
+          showFollowingPost:
+            type: "boolean"
+          isAllowMentionedChannelEnabled:
+            type: "boolean"
+          disallowNonMemberInteractInCommunity:
+            type: "boolean"
+          storyExpiryTimeMinutes:
+            type: "integer"
+            minimum: 60
+            maximum: 1440
+            default: 1440
+          allowAllUserToCreateStory:
+            type: "boolean"
+            description: "Allow all user to create story (default will allow only user that have permission to create story)"
+          allowJoinPrivateCommunity:
+            type: "boolean"
+            description: |
+              true - Allow user to join private community by themselves
+              false - User need to be added to join private community
+          maxGlobalPinnedPost:
+            description: "Maximum number of global pinned post (only super admin)"
+            type: "integer"
+            minimum: 1
+            maximum: 20
+            default: 1
+
+semantic-search-put-request-payload:
+  description: "information for a network setting\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          postMinScore:
+            type: "number"
+            minimum: 0
+            maximum: 1
+          communityMinScore:
+            type: "number"
+            minimum: 0
+            maximum: 1
+
+users-put-request-payload:
   description: >
     Information of a users to be updated.
   required: true
@@ -32,3 +160,15 @@ UpdateUsersSetting:
         properties:
           isAllowUpdateDisplayName:
             type: boolean
+
+webhook-put-request-payload:
+  description: "information for a network setting\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          webhookEnabled:
+            type: "boolean"
+            description: "`true` - User can register webhook for network and will receive a webhook.\n`false` - User won't be able to register webhook and won't receive a webhook.\n"

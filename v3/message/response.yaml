@@ -1,4 +1,4 @@
-MessagesApiResponse:
+common-response-200:
   description: Messages Information
   content:
     application/json:
@@ -17,7 +17,7 @@ MessagesApiResponse:
             items:
               $ref: "../../schema/file.yaml#/File"
 
-MessagePaginationApiResponse:
+root-get-response-200:
   description: Messages Information
   content:
     application/json:
@@ -43,7 +43,7 @@ MessagePaginationApiResponse:
               prev:
                 type: string
 
-MessageCustomNotificationResponse:
+message-custom-notification-response:
   description: Messages Information
   type: object
   properties:
@@ -60,7 +60,7 @@ MessageCustomNotificationResponse:
       items:
         $ref: "../../schema/file.yaml#/File"
 
-MessageAddReactionWithReactorWebhookResponse:
+message-add-reaction-with-reactor-webhook-response:
   description: Messages Information
   content:
     application/json:
@@ -70,7 +70,7 @@ MessageAddReactionWithReactorWebhookResponse:
           event:
             type: string
             enum:
-              - 'message.didAddReaction'
+              - "message.didAddReaction"
           data:
             type: object
             properties:
@@ -87,9 +87,9 @@ MessageAddReactionWithReactorWebhookResponse:
                 items:
                   $ref: "../../schema/file.yaml#/File"
               reactor:
-                  $ref: "../../schema/reaction.yaml#/Reactor"  
+                $ref: "../../schema/reaction.yaml#/Reactor"
 
-MessageRemoveReactionWithReactorWebhookResponse:
+message-remove-reaction-with-reactor-webhook-response:
   description: Messages Information
   content:
     application/json:
@@ -99,7 +99,7 @@ MessageRemoveReactionWithReactorWebhookResponse:
           event:
             type: string
             enum:
-              - 'message.didRemoveReaction'
+              - "message.didRemoveReaction"
           data:
             type: object
             properties:
@@ -116,4 +116,4 @@ MessageRemoveReactionWithReactorWebhookResponse:
                 items:
                   $ref: "../../schema/file.yaml#/File"
               reactor:
-                  $ref: "../../schema/reaction.yaml#/Reactor"  
+                $ref: "../../schema/reaction.yaml#/Reactor"

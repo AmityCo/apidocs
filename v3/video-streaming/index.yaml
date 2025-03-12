@@ -1,0 +1,133 @@
+root:
+  post:
+    summary: "create video streaming"
+    tags:
+      - "Video streaming"
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "get list of video streaming"
+    tags:
+      - "Video streaming"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/isLive"
+      - $ref: "./parameter.yaml#/statuses"
+      - $ref: "./parameter.yaml#/userPublicIds"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/options"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+user-event-video-streaming:
+  post:
+    summary: "create user event for video streaming"
+    tags:
+      - "Video streaming"
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/user-event-video-streaming-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/user-event-video-streaming-response-200"
+      500:
+        $ref: "../../global/error.yaml#/CustomValidationError"
+
+_streamId:
+  get:
+    summary: "get single video-streaming item"
+    tags:
+      - "Video streaming"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_streamId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "update video streaming"
+    tags:
+      - "Video streaming"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_streamId"
+    requestBody:
+      $ref: "./request.yaml#/_streamId-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "delete video streaming"
+    tags:
+      - "Video streaming"
+    security:
+      - BearerAuth: []
+    description: "Delete a video streaming\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_streamId"
+    responses:
+      200:
+        description: "video streaming information"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                status:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    success:
+                      type: "boolean"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_streamId-streaming-url:
+  delete:
+    summary: "dispose video streaming url"
+    tags:
+      - "Video streaming"
+    security:
+      - ApiKeyAuth: []
+    description: "This API will update streaming status to `ended` and dispose apsara streaming url\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_streamId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

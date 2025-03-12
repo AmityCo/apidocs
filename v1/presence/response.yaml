@@ -1,4 +1,4 @@
-GetPresenceSettingResponse:
+settings-response-payload-200:
   description: Get presence feature setting response
   content:
     application/json:
@@ -6,33 +6,19 @@ GetPresenceSettingResponse:
         description: Presence feature setting
         type: object
         properties:
-          user: 
-            $ref: '../../schema/presence.yaml#/PresenceUserSetting'
-          network: 
-            $ref: '../../schema/presence.yaml#/PresenceNetworkSettingWithoutEnabled'
-      
-UpdatePresenceUserSettingResponse:
+          user:
+            $ref: "../../schema/presence.yaml#/PresenceUserSetting"
+          network:
+            $ref: "../../schema/presence.yaml#/PresenceNetworkSettingWithoutEnabled"
+
+settings-user-response-payload-200:
   description: Update presence user setting response
   content:
     application/json:
       schema:
-        $ref: '../../schema/presence.yaml#/PresenceUserSetting'
+        $ref: "../../schema/presence.yaml#/PresenceUserSetting"
 
-GetPresenceNetworkSettingResponse:
-  description: Get presence network setting response
-  content:
-    application/json:
-      schema:
-        $ref: '../../schema/presence.yaml#/PresenceNetworkSetting'
-
-UpdatePresenceNetworkSettingResponse:
-  description: Update presence network setting response
-  content:
-    application/json:
-      schema:
-        $ref: '../../schema/presence.yaml#/PresenceNetworkSetting'
-
-GetUserPresenceListResponse:
+users-list-response-payload-200:
   description: Get user presence list response
   content:
     application/json:
@@ -43,9 +29,9 @@ GetUserPresenceListResponse:
           presences:
             type: array
             items:
-              $ref: '../../schema/presence.yaml#/Presence'
+              $ref: "../../schema/presence.yaml#/Presence"
 
-GetOnlineUsersResponse:
+network-users-response-payload-200:
   description: Get online users presence response
   content:
     application/json:
@@ -56,9 +42,9 @@ GetOnlineUsersResponse:
           presences:
             type: array
             items:
-              $ref: '../../schema/presence.yaml#/Presence'
+              $ref: "../../schema/presence.yaml#/Presence"
 
-GetOnlineUsersCountReponse:
+network-users-count-response-payload-200:
   description: Get online users count response
   content:
     application/json:
@@ -74,7 +60,7 @@ GetOnlineUsersCountReponse:
           - count
           - referenceTimeStamp
 
-SendHeartbeatResponse:
+heartbeat-response-payload-200:
   description: Send heartbeat response
   content:
     application/json:
@@ -85,4 +71,3 @@ SendHeartbeatResponse:
             type: boolean
         required:
           - success
-          

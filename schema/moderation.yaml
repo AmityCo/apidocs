@@ -1,24 +1,86 @@
 BlacklistRule:
-  type: object
+  type: "object"
   properties:
     ruleId:
-      type: string
+      type: "string"
     regex:
-      type: string
-      description: Rule of blacklist.
+      type: "string"
+      description: "Rule of blacklist."
     isMatchExactWord:
-      type: boolean
+      type: "boolean"
     isEnabled:
-      type: boolean
-      description: A flag to enabled a rule.
+      type: "boolean"
+      description: "A flag to enabled a rule."
     isDeleted:
-      type: boolean
-      description: A flag to deleted a rule.
+      type: "boolean"
+      description: "A flag to deleted a rule."
     createdAt:
-      type: string
-      description: The date/time when a rule is created.
-      format: date-time
+      type: "string"
+      description: "The date/time when a rule is created."
+      format: "date-time"
     updatedAt:
-      type: string
-      description: The date/time when a rule is updated or deleted.
-      format: date-time
+      type: "string"
+      description: "The date/time when a rule is updated or deleted."
+      format: "date-time"
+  required:
+    - "regex"
+
+WhitelistRule:
+  type: "object"
+  properties:
+    ruleId:
+      type: "string"
+    regex:
+      type: "string"
+      description: "Rule of whitelist."
+    isEnabled:
+      type: "boolean"
+      description: "A flag to enabled a rule."
+    isDeleted:
+      type: "boolean"
+      description: "A flag to deleted a rule."
+    createdAt:
+      type: "string"
+      description: "The date/time when a rule is created."
+      format: "date-time"
+    updatedAt:
+      type: "string"
+      description: "The date/time when a rule is updated or deleted."
+      format: "date-time"
+  required:
+    - "regex"
+
+ModerationSetting:
+  type: "object"
+  properties:
+    maxRepetition:
+      type: "integer"
+    maxRepetitionTimeout:
+      type: "integer"
+    blacklistMuteTimeout:
+      type: "integer"
+    whitelistMuteTimeout:
+      type: "integer"
+    maxRepetitionMuteTimeout:
+      type: "integer"
+    enableImageModeration:
+      type: "boolean"
+    imageModeration:
+      type: "object"
+      properties:
+        nudity:
+          type: "number"
+        suggestive:
+          type: "number"
+        violence:
+          type: "number"
+        disturbing:
+          type: "number"
+    createdAt:
+      type: "string"
+      description: "The date/time when a rule is created."
+      format: "date-time"
+    updatedAt:
+      type: "string"
+      description: "The date/time when a rule is updated or deleted."
+      format: "date-time"

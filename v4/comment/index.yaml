@@ -1,0 +1,19 @@
+_commentId:
+  delete:
+    summary: "delete a comment."
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_commentId"
+      - $ref: "./parameter.yaml#/permanent"
+    responses:
+      200:
+        $ref: "./response.yaml#/_commentId-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

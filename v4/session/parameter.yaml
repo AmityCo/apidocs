@@ -1,0 +1,33 @@
+x-api-key:
+  name: "x-api-key"
+  in: "header"
+  required: true
+  schema:
+    type: "string"
+
+userId:
+  in: query
+  name: userId
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 50
+  description: User id for revocation
+
+_userId:
+  in: path
+  required: true
+  name: userId
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 50
+  description: User id for revocation
+
+isPublic:
+  in: query
+  name: isPublic
+  schema:
+    type: boolean
+    default: true
+  description: A flag indicating whether the userId is a public id or not

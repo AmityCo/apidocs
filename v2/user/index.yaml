@@ -1,0 +1,61 @@
+ban:
+  post:
+    summary: "ban a user."
+    tags:
+      - "User"
+    security:
+      - ApiKeyAuth: []
+    description: "Ban a user\n"
+    requestBody:
+      $ref: "./request.yaml#/common-post-request-payload"
+      description: "User to be baned\n"
+    responses:
+      200:
+        description: "OK"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+unban:
+  post:
+    summary: "unban a user."
+    tags:
+      - "User"
+    security:
+      - BearerAuth: []
+    description: "Unban a user\n"
+    requestBody:
+      $ref: "./request.yaml#/common-post-request-payload"
+      description: "User to be unbaned\n"
+    responses:
+      200:
+        description: "OK"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_userId-flags:
+  delete:
+    summary: "clear flag a user."
+    tags:
+      - "User"
+    security:
+      - BearerAuth: []
+    description: "Clear flag a user\n"
+    parameters:
+      - $ref: "./parameter.yaml#/userId"
+    responses:
+      200:
+        $ref: "./response.yaml#/_userId-flags-delete-response-payload-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

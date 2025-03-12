@@ -1,4 +1,4 @@
-PollResponse:
+common-response-200:
   description: Poll Information
   content:
     application/json:
@@ -14,7 +14,7 @@ PollResponse:
             items:
               $ref: "../../schema/user.yaml#/UserV3"
 
-PollPaginationResponse:
+poll-pagination-response-200:
   description: Poll Information and users respondent.
   content:
     application/json:
@@ -41,23 +41,23 @@ PollPaginationResponse:
               previous:
                 type: string
 
-PollWebhookResponse:
+poll-webhook-response:
   description: Poll Information
   content:
     application/json:
       schema:
-        type: 'object'
+        type: "object"
         properties:
           event:
-            type: 'string'
+            type: "string"
           data:
             type: object
             properties:
               polls:
                 type: array
                 items:
-                  $ref: '../../schema/poll.yaml#/Poll'
+                  $ref: "../../schema/poll.yaml#/Poll"
               users:
                 type: array
                 items:
-                  $ref: '../../schema/user.yaml#/UserV3'             
+                  $ref: "../../schema/user.yaml#/UserV3"

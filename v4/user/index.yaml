@@ -1,0 +1,111 @@
+_userId:
+  delete:
+    summary: "Delete user"
+    security:
+      - BearerAuth: []
+    tags:
+      - "User"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+      - $ref: "./parameter.yaml#/deleteAll"
+      - $ref: "./parameter.yaml#/markMessageDeleted"
+      - $ref: "./parameter.yaml#/hardDeletePost"
+      - $ref: "./parameter.yaml#/hardDeleteComment"
+    responses:
+      200:
+        $ref: "./response.yaml#/_userId-delete-response-200"
+      400:
+        $ref: "../../global/error.yaml#/UserIsAlreadyDeletedError"
+      404:
+        $ref: "../../global/error.yaml#/UserNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+me-flags_userId:
+  post:
+    summary: "Report user (flag user)"
+    security:
+      - BearerAuth: []
+    tags:
+      - "User"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+    description: "Report user by user id.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/me-flags_userId-post-response-200"
+      404:
+        $ref: "../../global/error.yaml#/UserNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Unreported user (unflag user)"
+    security:
+      - BearerAuth: []
+    tags:
+      - "User"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+    description: "Unreported user by user id.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/me-flags_userId-delete-response-200"
+      404:
+        $ref: "../../global/error.yaml#/UserNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+me-user-blocks:
+  get:
+    summary: Get list of blocked users
+    description: "Get list of blocked users\n"
+    tags:
+      - User
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
+    responses:
+      200:
+        $ref: "./response.yaml#/me-user-blocks-get-response-200"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+me-user-blocks_userId:
+  post:
+    summary: Block a user.
+    tags:
+      - User
+    description: "Blocking a user\n"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+    responses:
+      200:
+        $ref: "./response.yaml#/me-user-blocks_userId-post-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/UserNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: Unblock a user
+    tags:
+      - User
+    description: "Unblocking a user\n"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+    responses:
+      200:
+        $ref: "./response.yaml#/me-user-blocks_userId-delete-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/UserNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

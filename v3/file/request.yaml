@@ -1,0 +1,25 @@
+root-post-request-payload:
+  description: "Information of file to be created. It will be applied to every attachment\n"
+  content:
+    multipart/form-data:
+      schema:
+        type: "object"
+        properties:
+          file:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+          fullImage:
+            type: "boolean"
+            nullable: true
+          preferredFilename:
+            type: "string"
+            maxLength: 1024
+          accessType:
+            type: string
+            description: File access type. `network` type requires authentication to download.
+            enum:
+              - public
+              - network
+            default: public

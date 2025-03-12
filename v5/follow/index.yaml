@@ -1,0 +1,17 @@
+_userId-followInfo:
+  get:
+    summary: "Get other follow information."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get other follow information.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+    responses:
+      200:
+        $ref: "./response.yaml#/_userId-followInfo-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

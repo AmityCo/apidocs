@@ -1,0 +1,30 @@
+moderation.didBan:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send banned event whenever a system detect message that contain in the blacklist"
+    responses:
+      200:
+        description: "channel is channel information. userId is a userId who send the message. users is a list of userInfo"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "moderation.didBan"
+                data:
+                  type: "object"
+                  properties:
+                    channel:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/channel.yaml#/ChannelV1"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+                    userId:
+                      type: "string"

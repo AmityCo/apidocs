@@ -1,0 +1,29 @@
+root-post-request-payload:
+  description: "information of a device to be registered.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          deviceId:
+            type: "string"
+            maxLength: 150
+          platform:
+            type: "string"
+            enum:
+              - "android"
+              - "ios"
+          token:
+            type: "string"
+            description: "device token for push notification. For ios platform, the token length must be less than or equals 400 characters and they must be hexadecimal."
+            maxLength: 1000
+          userId:
+            type: "string"
+          provider:
+            type: "string"
+        required:
+          - "deviceId"
+          - "platform"
+          - "token"
+          - "userId"

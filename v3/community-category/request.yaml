@@ -1,0 +1,40 @@
+root-post-request-payload:
+  description: "information of a community category to be created.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          name:
+            type: "string"
+            maxLength: 1000
+          metadata:
+            type: "object"
+          avatarFileId:
+            type: "string"
+            maxLength: 50
+        required:
+          - "name"
+
+_categoryId-put-request-payload:
+  description: "community category information.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          categoryId:
+            type: "string"
+            maxLength: 50
+          name:
+            type: "string"
+            maxLength: 1000
+          metadata:
+            type: "object"
+          avatarFileId:
+            type: "string"
+            maxLength: 50
+        required:
+          - "categoryId"

@@ -1,6 +1,6 @@
-# Amity API Documentation
+# Social+ API Documentation
 
-For comprehensive information, please visit [Amity API Docs](https://api-docs.amity.co).
+For comprehensive information, please visit [Social+ API Docs](https://api.docs.social.plus).
 
 ## Validation
 
@@ -8,36 +8,32 @@ To validate `swagger.yaml`, you can use the [swagger-cli](https://github.com/API
 
 ### Installation
 
-Install the swagger-cli globally using npm:
+Install the redocly using npm:
 ```
-npm install -g @apidevtools/swagger-cli
+npm install
 ```
 
 ### Usage
 
 Validate the OpenAPI specification with the following command:
 ```
-swagger-cli validate swagger.yaml --no-schema
+npm run lint
 ```
 
 ## Running a Local Server
 
 To run a local server, follow these steps:
 
-1. Update the `swaggerPath` in `index.html` to:
-```
-http://localhost:8081/swagger.yaml
+1. Install [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer), a VSCode extensions:
+
+2. Update `data-url` path to `bundled.yaml`:
+```css
+<script id="api-reference" data-url="./bundled.yaml" ></script>
 ```
 
-2. Start the server with the following command:
-```
-http-server --cors -c-1 -p 8081
-```
+3. Start Live server in `index.html` file:
 
-3. Access the server at:
-```
-http://127.0.0.1:8080
-```
+![Example](./resources/live-server-sample.png)
 
 
 

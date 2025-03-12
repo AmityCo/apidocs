@@ -1,0 +1,91 @@
+## Using Social+ APIs
+
+Our API documentation explains all API endpoints used in Social+ Cloud. All APIs, with the exception of some authentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin or User context. When used in user context, you will only be able to fetch data related to that user only.
+For Administrators who are using our API documentation in making server-to-server API calls, you need an Admin Access token to connect to the Social+ server. Refer to
+[this documentation](https://docs.social.plus/console/settings#admin-api-access-token)
+for the instructions on how to generate an admin access token.
+
+All backend endpoints that support Social+ Cloud SDK are included here. To easily differentiate the type of each endpoint, we added a prefix in each endpoint's path.
+
+- REST API Endpoint: **`/v1, /v2, /v3, /v4, or /v5 ...`**
+- Webhook Event: **`/webhook ...`**
+
+---
+
+## **Schema Definitions**
+
+This section provides detailed descriptions of the key schemas used in Social+ Cloud. Understanding these schemas is essential for effectively integrating our features into your applications. Each schema entry includes a concise description and highlights its core functionality and relationships within the platform. These definitions will help you grasp the structure and purpose of various components, ensuring a seamless and efficient development experience.
+
+### **User**
+
+A User represents an individual who interacts with the Social+ Cloud. Users can create profiles, join communities, post content, comment, react, and engage with other users.
+
+### **Role**
+
+A Role defines the permissions and access levels for Users within the Social+ Cloud. Roles can be assigned to manage and moderate content, ensuring a controlled and safe environment for all users.
+
+### **Channel**
+
+A Channel is a primary structure used to implement various chat messaging capabilities within an application. Channels serve as containers for Subchannels, enabling a hierarchical organization of conversations. This structure allows developers to manage and navigate different chat threads efficiently.
+
+### **Subchannel**
+
+A Subchannel is a subdivision within a Channel for specific conversation threads. Subchannels host all messages and interactions, providing organized discussions within a larger channel. Users can individually create, update, delete, and manage subchannels. Moderation actions, such as banning and muting, are applied at the channel level, affecting all subchannels.
+
+### **ChannelUser**
+
+A ChannelUser represents an individual user within a specific Channel. This schema tracks user participation, roles, and permissions within the channel. Each ChannelUser can interact in subchannels, participate in discussions, and engage with other members. Users can be assigned roles with varying permissions, such as admin, moderator, or member, allowing for tailored access and control. Moderation actions like banning or muting a ChannelUser affect their participation across all subchannels within the channel.
+
+### **Message**
+
+A Message facilitates real-time communication among channel users. Messages can contain up to 20,000 characters or weigh up to 100KB for custom content. For larger binary data, such as files, it's recommended to upload the data to a cloud storage service like AWS S3 and include the URL in the message. The SDK supports various message types, including text and image, built on a standard message layer.
+
+### **Community**
+
+A Community is a feature that allows users to share their posts and comments and engage with each other within the app. Communities provide a dedicated space for discussing specific topics or interests.
+
+### **CommunityUser**
+
+A CommunityUser represents an individual user within a specific Community. This schema tracks user participation, roles, and interactions within the community. CommunityUsers can join public or private communities, participate in discussions, and engage with other members. Each user can have different roles with varying permissions, such as admin, moderator, or member, which control their access and actions within the community. Moderation actions, like banning or muting, can be applied to CommunityUsers to maintain a safe and respectful environment.
+
+### **CommunityCategory**
+
+A CommunityCategory helps organize and manage communities by categorizing them into specific groups. This categorization allows users to easily sort and filter communities based on their interests or needs.
+
+### **Post**
+
+A Post is a piece of content created and shared by a user within a network or community. Posts can include text, images, videos, or other elements. Users can create, view, and interact with posts in a social feed, which can be displayed in chronological order and customized using various settings. Post types supported by Social+ include text, image, video, file, live stream, poll, and custom posts. The parent post serves as a container for text data, while each multimedia element (e.g., image, video) is treated as a separate child post. Both parent and child posts support reactions and comments, allowing users to engage comprehensively with content.
+
+### **Comment**
+
+A Comment in Social+ Cloud is a user-generated response to specific content, such as a post or story. Comments enable users to engage in conversations, express thoughts, opinions, and emotions, fostering a sense of community around the content.
+
+**Comment Reference Types:**
+
+- **Post Type Comment:** Designed for regular posts like text updates, photos, or videos. These comments are associated with the post and displayed beneath it, promoting conversation and interaction.
+- **Story Type Comment:** Similar to post type comments but associated with stories, driving user engagement and discussion around short-lived content.
+- **Content Type Comment:** Intended for content-specific such as articles or specialized content, providing a more organized and contextual commenting experience.
+
+### **Reaction**
+
+A Reaction is a user interaction on messages, posts, or comments, such as like, dislike, or love. The type of reactions is customizable. Currently, reactions are supported for Posts, Messages, and Comments.
+
+**Reaction Reference Types:**
+
+- **Comment Reference Type:** Allows users to query reactions on a specific comment, showing how others have responded to it.
+- **Post Reference Type:** Allows users to query reactions on a specific post, highlighting user engagement with the post.
+- **Story Reference Type:** Allows users to query reactions on a specific story, showing user reactions to the story.
+
+### **File**
+
+A File in Social+ Cloud supports file upload and download, enabling file-sharing within applications. It handles various file types, including images, videos, audio, and documents, with a maximum size of 1 GB. This functionality allows users to share files directly in chats or social feeds, enhancing engagement and interaction.
+
+### **Follow**
+
+A Follow schema in Social+ Cloud defines one-directional relationships between users, essential for social networking features. When user A follows user B, user A can see user B's updates in their feed, but user B does not need to reciprocate. This schema helps manage visibility and accessibility of user-generated content in user feeds.
+
+---
+
+## Select Region Endpoint
+
+Before making server-to-server API calls, be sure to select the correct API endpoint for your region in the **Servers** dropdown below.

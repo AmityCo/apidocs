@@ -1,0 +1,19 @@
+root:
+  get:
+    summary: "Get global feed."
+    tags:
+      - "Feed"
+    security:
+      - BearerAuth: []
+    description: "Get paginable list of active posts (not deleted) from users and community.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
+      - $ref: "./parameter.yaml#/dataTypes"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

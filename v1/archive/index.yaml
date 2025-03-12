@@ -1,0 +1,48 @@
+channels:
+  get:
+    summary: Query all archived channels
+    tags:
+      - Archive
+    security:
+      - BearerAuth: []
+    responses:
+      200:
+        $ref: "./response.yaml#/channels-response-payload-200"
+
+channels_channelId:
+  post:
+    summary: Archive channels
+    tags:
+      - Archive
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/channelId"
+    responses:
+      200:
+        $ref: "./response.yaml#/channels_channelId-post-response-payload-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+  delete:
+    summary: Unarchive channels
+    tags:
+      - Archive
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/channelId"
+    responses:
+      200:
+        description: OK
+        content:
+          application/json:
+            schema:
+              properties:
+                success:
+                  type: "boolean"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"

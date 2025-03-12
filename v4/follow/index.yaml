@@ -1,0 +1,191 @@
+following:
+  get:
+    summary: "Get my following list"
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get following information (pagination supported)\n"
+    parameters:
+      - $ref: "./parameter.yaml#/status"
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
+    responses:
+      200:
+        $ref: "./response.yaml#/follow-pagination-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+following_userId:
+  post:
+    summary: "Follow user."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Follow user\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+    responses:
+      200:
+        $ref: "./response.yaml#/follow-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Unfollow or Cancel follow request"
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Unfollow or Cancel follow request\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+    responses:
+      200:
+        $ref: "./response.yaml#/follow-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_userId-following:
+  get:
+    summary: "Get other following list."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get following information (pagination supported)\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+      - $ref: "./parameter.yaml#/status"
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
+    responses:
+      200:
+        $ref: "./response.yaml#/follow-pagination-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+followers:
+  get:
+    summary: "Get my follower list."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get follower information (pagination supported)\n"
+    parameters:
+      - $ref: "./parameter.yaml#/status"
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
+    responses:
+      200:
+        $ref: "./response.yaml#/follow-pagination-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+followers_userId:
+  post:
+    summary: "Accept follow request."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Accept follow request.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+    responses:
+      200:
+        $ref: "./response.yaml#/follow-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "Decline follow request or delete followers."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Delete follower.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+    responses:
+      200:
+        $ref: "./response.yaml#/follow-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_userId-followers:
+  get:
+    summary: "Get other follower list."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get follower information (pagination supported)\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+      - $ref: "./parameter.yaml#/status"
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
+    responses:
+      200:
+        $ref: "./response.yaml#/follow-pagination-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+followInfo:
+  get:
+    summary: "Get my follow information."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get my follow information.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/FollowCountResponse"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_userId-followInfo:
+  get:
+    summary: "Get other follow information."
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: "Get other follow information.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+    responses:
+      200:
+        $ref: "./response.yaml#/FollowInformationResponse"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

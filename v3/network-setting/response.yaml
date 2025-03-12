@@ -1,39 +1,39 @@
-NetworkSettingApiResponse:
+root-response-200:
   description: network setting configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/NetworkSetting'
+        $ref: "../../schema/network-setting.yaml#/NetworkSetting"
 
-SocialNetworkSettingApiResponse:
+social-response-200:
   description: Social configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/SocialNetworkSetting'
+        $ref: "../../schema/network-setting.yaml#/SocialNetworkSetting"
 
-WebhookNetworkSettingApiResponse:
+webhook-response-200:
   description: Webhook configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/WebhookNetworkSetting'
+        $ref: "../../schema/network-setting.yaml#/WebhookNetworkSetting"
 
-ChatNetworkSettingApiResponse:
-   description: Chat configuration
-   content:
-     application/json:
-       schema:
-         $ref: '../../schema/network-setting.yaml#/ChatNetworkSetting'
+chat-response-200:
+  description: Chat configuration
+  content:
+    application/json:
+      schema:
+        $ref: "../../schema/network-setting.yaml#/ChatNetworkSetting"
 
-ModerationNetworkSettingApiResponse:
+moderation-response-200:
   description: Moderation configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/ModerationNetworkSetting'
+        $ref: "../../schema/network-setting.yaml#/ModerationNetworkSetting"
 
-FeedSettingNetworkSettingApiResponse:
+feed-setting-response-200:
   description: Feed setting check configuration
   content:
     application/json:
@@ -43,22 +43,22 @@ FeedSettingNetworkSettingApiResponse:
         properties:
           feedSettings:
             type: array
-            items: 
+            items:
               type: object
               properties:
                 feedType:
                   type: string
                 contentSettings:
                   type: array
-                  items: 
-                    type: object  
+                  items:
+                    type: object
                     properties:
-                      contentType: 
+                      contentType:
                         type: string
                       allowed:
                         type: boolean
                       maxDurationSeconds:
-                        type: number 
+                        type: number
                       transcodeConfig:
                         type: object
                         properties:
@@ -67,28 +67,28 @@ FeedSettingNetworkSettingApiResponse:
                           minResolution:
                             type: string
 
-GetPrehookSettingApiResponse:
+prehook-get-response-200:
   description: Prehook configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/PrehookSetting'
+        $ref: "../../schema/network-setting.yaml#/PrehookSetting"
 
-UpdatePrehookSettingApiResponse:
+prehook-put-response-200:
   description: Prehook configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/PrehookSettingWithSecretKey'
+        $ref: "../../schema/network-setting.yaml#/PrehookSettingWithSecretKey"
 
-UsersSettingApiResponse:
+users-response-200:
   description: Users configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/UsersNetworkSetting'
+        $ref: "../../schema/network-setting.yaml#/UsersNetworkSetting"
 
-VideoStreamingNetworkSettingApiResponse:
+video-streaming-response-200:
   description: Video Streaming setting check configuration
   content:
     application/json:
@@ -99,7 +99,7 @@ VideoStreamingNetworkSettingApiResponse:
           enabled:
             type: boolean
             description: This field is for enabling or disabling the video streaming feature.
-          moderation: 
+          moderation:
             type: object
             description: This field is for moderation configuration.
             properties:
@@ -109,27 +109,34 @@ VideoStreamingNetworkSettingApiResponse:
               categories:
                 type: array
                 description: This field is for list of moderation categories.
-                items: 
-                  type: object  
+                items:
+                  type: object
                   properties:
-                    category: 
+                    category:
                       type: string
                       description: This field is for moderation category names.
-                      enum: [pornography, violence, prohibited, inappropriate, profanity]
+                      enum:
+                        [
+                          pornography,
+                          violence,
+                          prohibited,
+                          inappropriate,
+                          profanity,
+                        ]
                     flagThreshold:
                       type: number
                       description: This field is for flag threshold.
                       minimum: 0
                       maximum: 1
                     terminateThreshold:
-                      type: number 
+                      type: number
                       description: This field is for terminate threshold.
                       minimum: 0
                       maximum: 1
 
-SemanticSearchNetworkSettingApiResponse:
+semantic-search-response-200:
   description: Semantic Search configuration
   content:
     application/json:
       schema:
-        $ref: '../../schema/network-setting.yaml#/SemanticSearchNetworkSetting'
+        $ref: "../../schema/network-setting.yaml#/SemanticSearchNetworkSetting"

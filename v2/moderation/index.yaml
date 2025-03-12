@@ -1,0 +1,242 @@
+blacklist-records:
+  get:
+    summary: "get rules of blacklist."
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Get rules of blacklist.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+      - $ref: "./parameter.yaml#/regexs"
+    responses:
+      200:
+        $ref: "./response.yaml#/blacklist-records-get-response-payload-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+  put:
+    summary: "refresh rules of blacklist."
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Refresh rules of blacklist.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    requestBody:
+      $ref: "./request.yaml#/records-put-request-payload"
+    responses:
+      200:
+        description: "OK"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+  post:
+    summary: "add rules to blacklist."
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Add rules to blacklist\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    requestBody:
+      $ref: "./request.yaml#/records-post-request-payload"
+    responses:
+      200:
+        description: "OK"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+  delete:
+    summary: "delete rules from blacklist"
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Delete rule from blacklist\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+      - $ref: "./parameter.yaml#/ruleIds"
+    responses:
+      200:
+        description: "OK"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+
+blacklist-records_ruleId:
+  put:
+    summary: "update rule of blacklist."
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Update rule of blacklist.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    requestBody:
+      $ref: "./request.yaml#/records_ruleId-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/blacklist-records_ruleId-put-response-payload-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+
+whitelist-records:
+  get:
+    summary: "get rules of whitelist."
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Get rules of whitelist.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+      - $ref: "./parameter.yaml#/regexs"
+    responses:
+      200:
+        $ref: "./response.yaml#/whitelist-records-get-response-payload-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+  put:
+    summary: "refresh rules of whitelist."
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Refresh rules of whitelist.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    requestBody:
+      $ref: "./request.yaml#/records-put-request-payload"
+    responses:
+      200:
+        description: "OK"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+  post:
+    summary: "add rules to whitelist."
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Add rules to whitelist\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    requestBody:
+      $ref: "./request.yaml#/records-post-request-payload"
+    responses:
+      200:
+        description: "OK"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+  delete:
+    summary: "delete rules from whitelist"
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Delete rule from whitelist\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+      - $ref: "./parameter.yaml#/ruleIds"
+    responses:
+      200:
+        description: "OK"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+
+whitelist-records_ruleId:
+  put:
+    summary: "update rule of whitelist."
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Update rule of whitelist.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    requestBody:
+      $ref: "./request.yaml#/records_ruleId-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/whitelist-records_ruleId-put-response-payload-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError404"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+
+settings:
+  get:
+    summary: "get a moderation setting"
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+    description: "Get a moderation setting.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/settings-get-response-payload-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError400"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+  put:
+    summary: "update a moderation setting"
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Update a moderation setting\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    requestBody:
+      $ref: "./request.yaml#/settings-put-request-payload"
+    responses:
+      200:
+        description: OK
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                status:
+                  type: "string"
+                code:
+                  type: "string"
+              example:
+                status: "success"
+                code: 200
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError400"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"

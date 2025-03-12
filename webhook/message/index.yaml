@@ -1,0 +1,184 @@
+message.didAddReaction:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send updated message whenever add reaction to this message."
+    responses:
+      200:
+        $ref: "../../v3/message/response.yaml#/message-add-reaction-with-reactor-webhook-response"
+message.didClearflag:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send updated message whenever all message flags are cleared."
+    responses:
+      200:
+        description: "messages is messages information. users is list of all user relate to this messages"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "message.didClearflag"
+                data:
+                  type: "object"
+                  properties:
+                    messages:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/message.yaml#/Message"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+message.didCreate:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send new created message whenever a message got created in a channel"
+    responses:
+      200:
+        description: "messages is messages information. users is list of all user relate to this messages"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "message.didCreate"
+                data:
+                  type: "object"
+                  properties:
+                    messages:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/message.yaml#/Message"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+message.didDelete:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send deleted message whenever a message got deleted in a channel"
+    responses:
+      200:
+        description: "messages is messages information. users is list of all user relate to this messages"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "message.didDelete"
+                data:
+                  type: "object"
+                  properties:
+                    messages:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/message.yaml#/Message"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+message.didFlag:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send updated message whenever a message got flag"
+    responses:
+      200:
+        description: "messages is messages information. users is list of all user relate to this messages"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "message.didFlag"
+                data:
+                  type: "object"
+                  properties:
+                    messages:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/message.yaml#/Message"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+message.didRemoveReaction:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send updated message whenever remove reaction to this message."
+    responses:
+      200:
+        $ref: "../../v3/message/response.yaml#/message-remove-reaction-with-reactor-webhook-response"
+message.didUnflag:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send updated message whenever a message flag is removed."
+    responses:
+      200:
+        description: "messages is messages information. users is list of all user relate to this messages"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "message.didUnflag"
+                data:
+                  type: "object"
+                  properties:
+                    messages:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/message.yaml#/Message"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"
+message.didUpdate:
+  get:
+    tags:
+      - "Webhook event"
+    description: "Send updated message whenever a message got updated in a channel"
+    responses:
+      200:
+        description: "messages is messages information. users is list of all user relate to this messages"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                event:
+                  type: "string"
+                  enum:
+                    - "message.didUpdate"
+                data:
+                  type: "object"
+                  properties:
+                    messages:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/message.yaml#/Message"
+                    users:
+                      type: "array"
+                      items:
+                        $ref: "../../schema/user.yaml#/User"

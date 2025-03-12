@@ -1,0 +1,57 @@
+_userId:
+  in: "path"
+  name: "userId"
+  required: true
+  schema:
+    type: "string"
+    minimum: 1
+    maximum: 50
+  description: "User public id"
+
+deleteAll:
+  in: query
+  name: deleteAll
+  schema:
+    type: "boolean"
+    default: false
+  description: "true - it will hard delete this user created channels, messages, comments, posts, polls, reactions after user is deleted."
+
+markMessageDeleted:
+  in: query
+  name: markMessageDeleted
+  schema:
+    type: "boolean"
+    default: false
+  description: "true - it will hard delete this user messages after user is deleted."
+
+hardDeletePost:
+  in: query
+  name: hardDeletePost
+  schema:
+    type: "boolean"
+    default: false
+  description: "true - it will hard delete this user posts after user is deleted."
+
+hardDeleteComment:
+  in: query
+  name: hardDeleteComment
+  schema:
+    type: "boolean"
+    default: false
+  description: "true - it will hard delete this user comments after user is deleted."
+description: "Delete user from system. User display name will be replaced with \"Deleted user\".\n\nContent that is created from the user will be able to be wiped depend on the options.\n\n**This API allow only admin user to call**\n"
+
+limit:
+  name: limit
+  in: query
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 10
+
+token:
+  name: token
+  in: query
+  schema:
+    type: string

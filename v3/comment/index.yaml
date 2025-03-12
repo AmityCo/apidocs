@@ -1,0 +1,213 @@
+root:
+  get:
+    summary: "query comments (pagination support)."
+    tags:
+      - "Comment"
+    security:
+      - ApiKeyAuth: []
+    description: "query comments.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+      - $ref: "./parameter.yaml#/referenceId"
+      - $ref: "./parameter.yaml#/referenceType"
+      - $ref: "./parameter.yaml#/filterByParentId"
+      - $ref: "./parameter.yaml#/parentId"
+      - $ref: "./parameter.yaml#/hasFlag"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/dataTypes"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  post:
+    summary: "create a comment."
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-post-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_commentId:
+  get:
+    summary: "get a comment."
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    description: "get a comment.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-post-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "update a comment."
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/commentId"
+      - $ref: "./parameter.yaml#/preserve-edited-at"
+    requestBody:
+      $ref: "./request.yaml#/_commentId-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-post-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "delete a comment."
+    deprecated: true
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/commentId"
+    responses:
+      200:
+        description: "comment information"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                status:
+                  type: "string"
+                data:
+                  type: "object"
+                  properties:
+                    success:
+                      type: "boolean"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_commentId-flag:
+  post:
+    summary: "flag a comment."
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/commentId"
+    requestBody:
+      $ref: "./request.yaml#/_commentId-flag-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-post-response-200"
+      403:
+        $ref: "../../global/error.yaml#/NumberOfFlagExceedError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_commentId-isflagbyme:
+  get:
+    summary: "Check whether user flag a given comment."
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/commentId"
+    description: "Check whether user flag a given comment.\n"
+    responses:
+      200:
+        $ref: "../../global/response.yaml#/IsSocialFlagByMeResponse"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+
+_commentId-unflag:
+  delete:
+    summary: "unflag a comment."
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/commentId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-post-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_commentId-flags:
+  delete:
+    summary: "clear flags."
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/commentId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-post-response-200"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+list:
+  get:
+    summary: "get comments by IDs."
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    description: "get comments by IDs.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/commentIds"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-post-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

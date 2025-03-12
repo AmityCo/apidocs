@@ -1,0 +1,138 @@
+targetId:
+  name: targetId
+  in: query
+  required: true
+  schema:
+    type: string
+    maxLength: 900
+
+targetType:
+  name: targetType
+  in: query
+  required: true
+  schema:
+    type: string
+    enum:
+      - community
+      - user
+
+targets:
+  name: targets
+  description: >
+    Target object. The target object is an array of objects that contain targetId and targetType.
+    Max up to 10 items
+      * targetId: ID of a target.
+      * targetType: Type of a target (user, community).
+  in: query
+  required: true
+  schema:
+    type: array
+    items:
+      type: object
+      properties:
+        targetId:
+          schema:
+            type: string
+            maxLength: 900
+        targetType:
+          schema:
+            type: string
+            enum:
+              - community
+              - user
+    maxItems: 10
+    minItems: 1
+
+dataType:
+  name: dataType
+  in: query
+  schema:
+    description: Type of data contained in the story. Only admin can query with this parameter.
+    type: string
+    enum:
+      - image
+      - video
+
+isExpired:
+  name: isExpired
+  in: query
+  schema:
+    description: >
+      Whether to include expired stories. Only admin can query with this parameter = true.
+    type: boolean
+    default: false
+
+options:
+  name: options
+  in: query
+  schema:
+    type: object
+    properties:
+      sortBy:
+        type: string
+        default: createdAt
+        enum:
+          - createdAt
+      orderBy:
+        type: string
+        default: desc
+        enum:
+          - asc
+          - desc
+      limit:
+        type: integer
+        default: 10
+        minimum: 1
+        maximum: 100
+      token:
+        type: string
+
+_storyId:
+  name: storyId
+  in: path
+  required: true
+  schema:
+    type: string
+    pattern: '^[a-f\d]{24}$'
+
+seenState:
+  name: seenState
+  in: query
+  description: the seen state option used for filter the seen/unseen story targets
+  schema:
+    type: string
+    enum:
+      - all
+      - seen
+      - unseen
+    default: unseen
+
+permanent:
+  name: permanent
+  in: query
+  required: false
+  description: >
+    If true, the story will be deleted permanently (hard deleted).
+    If false, the story will be soft deleted.
+  schema:
+    type: boolean
+    default: false
+
+limit:
+  name: limit
+  in: query
+  description: the amount of story targets per query
+  required: false
+  schema:
+    type: integer
+    default: 10
+    minimum: 1
+    maximum: 100
+
+token:
+  name: token
+  in: query
+  required: false
+  schema:
+    type: string
+    maxLength: 900

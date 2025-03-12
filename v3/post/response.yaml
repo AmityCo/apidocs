@@ -1,4 +1,4 @@
-PostResponse:
+common-response-200:
   description: Post Information
   content:
     application/json:
@@ -50,7 +50,7 @@ PostResponse:
             items:
               $ref: "../../schema/poll.yaml#/Poll"
 
-PostWebhookResponse:
+post-webhook-response:
   description: Post Information
   content:
     application/json:
@@ -103,7 +103,7 @@ PostWebhookResponse:
                 items:
                   $ref: "../../schema/video-streaming.yml#/VideoStreaming"
 
-PostPaginationApiResponse:
+root-get-response-200:
   description: Post Information
   content:
     application/json:
@@ -158,7 +158,7 @@ PostPaginationApiResponse:
               previous:
                 type: string
 
-PostWithFlagWebhookResponse:
+post-with-flag-webhook-response:
   description: Post Information
   content:
     application/json:
@@ -213,7 +213,7 @@ PostWithFlagWebhookResponse:
               flaggedUserId:
                 type: string
 
-PostWithReactorWebhookResponse:
+post-with-reactor-webhook-response:
   description: Post Information
   content:
     application/json:
@@ -268,23 +268,23 @@ PostWithReactorWebhookResponse:
                 items:
                   $ref: "../../schema/video-streaming.yml#/VideoStreaming"
 
-PostCustomNotificationResponse:
+post-custom-notification-response:
   description: Post Information
   type: object
   properties:
-        posts:
-          type: array
-          items:
-            $ref: "../../schema/post.yaml#/Post"
-        users:
-          type: array
-          items:
-            $ref: "../../schema/user.yaml#/UserV3"
-        files:
-          type: array
-          items:
-            $ref: "../../schema/file.yaml#/File"
-        communities:
-          type: array
-          items:
-            $ref: "../../schema/community.yaml#/Community"
+    posts:
+      type: array
+      items:
+        $ref: "../../schema/post.yaml#/Post"
+    users:
+      type: array
+      items:
+        $ref: "../../schema/user.yaml#/UserV3"
+    files:
+      type: array
+      items:
+        $ref: "../../schema/file.yaml#/File"
+    communities:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/Community"

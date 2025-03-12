@@ -1,0 +1,174 @@
+root-post-request-payload:
+  application/json:
+    schema:
+      type: "object"
+      properties:
+        data:
+          type: "object"
+          properties:
+            text:
+              type: "string"
+              description: "data for text in post parent"
+              example: "example text"
+            streamId:
+              type: "string"
+              description: "video streaming id for create live streaming post"
+              example: "81559bcc3a5bb3b6bbd69a83b89d337e"
+            pollId:
+              type: "string"
+              description: "poll id for create poll post"
+              example: "53a9fd8b5aaa1af6c5a1bbd245ce4a9b1627373735551"
+        attachments:
+          type: "array"
+          items:
+            type: "object"
+            description: "attachment info"
+            properties:
+              fileId:
+                type: "string"
+                example: "57b916d38eaf8010caddfb7759a2d06c"
+                description: "file id for attachment"
+              type:
+                type: "string"
+                description: "attachment type"
+                enum:
+                  - "image"
+                  - "file"
+                  - "video"
+        dataType:
+          type: "string"
+          example: "upstra.customtype"
+          description: 'Must be in dot separated string format or system defined format (ex. "upstra.customtype", "com.eko.birthday", "liveStream")'
+        targetType:
+          type: "string"
+          enum:
+            - "user"
+            - "community"
+            - "content"
+          default: "user"
+          description: "where to create post to"
+        targetId:
+          type: "string"
+          example: "public_user_id"
+          description: "Resource public id depends on target type (ex. target type is community, target id will be community public id)"
+        metadata:
+          type: "object"
+          example:
+            anything: "you want"
+        postId:
+          type: "string"
+          example: "postidiwant"
+          description: "for specify public post id on post creation"
+        tags:
+          type: "array"
+          minItems: 0
+          maxItems: 5
+          items:
+            type: "string"
+            description: "tags"
+            maximum: 24
+        mentionees:
+          type: "array"
+          description: "The object of the mentions type and user who get a notification from the post."
+          items:
+            type: "object"
+            properties:
+              type:
+                type: "string"
+                example: "user"
+                description: "type: * `user` - need to specific userIds and notification mentions individual user\n"
+                enum:
+                  - "user"
+              userIds:
+                type: "array"
+                example:
+                  - "userId1"
+                  - "userId2"
+                description: "Array of UserId. if the mention type is a channel, doesn't send userIds"
+                items:
+                  type: "string"
+        createdAt:
+          type: "string"
+          description: "The date/time when a post is created."
+          format: "date-time"
+          example: "2022-07-07T04:24:20.444Z"
+      required:
+        - "data"
+
+_postId-put-request-payload:
+  description: "information of a post to be updated.\n### Image, File, Video post update - Put `type` with file id in `attachments` - Image and File data can be picked from `fileId` in `data` object in child post - Video fileId for each resolution will be in `videoFileId` in `data` object in child post\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          text:
+            type: "string"
+            deprecated: true
+          data:
+            type: "object"
+            properties:
+              text:
+                type: "string"
+                maximum: 50000
+                description: "For updating text in the post"
+              fileId:
+                type: "string"
+                maximum: 100
+                description: "Put file id to update file,image inside file, image post (video is not supported yet)"
+              streamId:
+                type: "string"
+                maximum: 100
+                description: "Put stream id to update live streaming post with new streaming"
+              thumbnailFileId:
+                type: "string"
+                maximum: 100
+                description: "Put image file id to update video file thumbnail in video post"
+          metadata:
+            type: "object"
+          tags:
+            type: "array"
+            minItems: 0
+            maxItems: 5
+            items:
+              type: "string"
+              maximum: 24
+              description: "tags"
+          mentionees:
+            type: "array"
+            description: "The object of the mentions type and user who get a notification from the post."
+            items:
+              type: "object"
+              properties:
+                type:
+                  type: "string"
+                  example: "user"
+                  description: "type: * `user` - need to specific userIds and notification mentions individual user\n"
+                  enum:
+                    - "user"
+                userIds:
+                  type: "array"
+                  example:
+                    - "userId1"
+                    - "userId2"
+                  description: "Array of UserId. if the mention type is a channel, doesn't send userIds"
+                  items:
+                    type: "string"
+          attachments:
+            type: "array"
+            items:
+              type: "object"
+              description: "attachment info"
+              properties:
+                fileId:
+                  type: "string"
+                  example: "57b916d38eaf8010caddfb7759a2d06c"
+                  description: "file id for attachment"
+                type:
+                  type: "string"
+                  description: "attachment type"
+                  enum:
+                    - "image"
+                    - "file"
+                    - "video"

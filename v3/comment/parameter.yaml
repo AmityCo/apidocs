@@ -1,0 +1,162 @@
+authorization:
+  name: "Authorization"
+  in: "header"
+  required: true
+  schema:
+    type: "string"
+
+content-type:
+  name: "Content-Type"
+  in: "header"
+  required: true
+  schema:
+    type: "string"
+
+referenceId:
+  name: "referenceId"
+  required: true
+  in: "query"
+  schema:
+    type: "string"
+    maxLength: 900
+
+referenceType:
+  name: "referenceType"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "post"
+      - "content"
+      - "story"
+
+filterByParentId:
+  name: "filterByParentId"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: true
+
+parentId:
+  name: "parentId"
+  in: "query"
+  schema:
+    type: "string"
+    maxLength: 900
+
+hasFlag:
+  name: "hasFlag"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: false
+
+isDeleted:
+  name: "isDeleted"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: null
+
+sortBy:
+  name: "sortBy"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "firstCreated"
+      - "lastCreated"
+      - "lastUpdated"
+      - "firstUpdated"
+    default: "lastCreated"
+  description: "type:\n  * `scrollable(default)` - sort by segment number only.\n  * `pagination` - can sort by 'lastCreated(default)', 'firstCreated', 'lastUpdated', 'firstUpdated'.\n"
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  description: "type:\n  * `scrollable(default)` - 'after', 'first', 'before' and 'last' will be set for page size with direction.\n  * `pagination` - 'skip' and 'limit' will be the number of records to skip and max records size.\n\nlimit/skip:\n  * support pagination type only\n\nbefore/after/first/last:\n  * support scrollable type only\n"
+  schema:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+        enum:
+          - "scrollable"
+          - "pagination"
+        default: "scrollable"
+      limit:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+      skip:
+        type: "integer"
+        minimum: 0
+        maximum: 100
+      after:
+        type: "integer"
+        minimum: 1
+      first:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+      before:
+        type: "integer"
+        minimum: 1
+      last:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+      token:
+        type: "string"
+        maxLength: 1000
+
+dataTypes:
+  name: "dataTypes"
+  in: "query"
+  style: "deepObject"
+  description: "Option to set how the returned comments dataTypes will be contained:\n  * `values`: the dataTypes values want to be contained in the comment (available values: `text`, `image`)\n  * `matchType`: how the dataTypes must be contained in the comment\n    * `any`: the dataTypes could match only partial of the provided field\n    * `exact`: the dataTypes must contain exactly the same as provided in values\n\nExample query params: `GET /api/v3/comments?dataTypes[values][]=text&dataTypes[values][]=image&dataTypes[matchType]=any`\n"
+  schema:
+    type: "object"
+    properties:
+      values:
+        type: "array"
+        items:
+          type: "string"
+      matchType:
+        type: "string"
+        enum:
+          - "any"
+          - "exact"
+
+commentId:
+  name: "commentId"
+  in: "path"
+  required: true
+  description: "Get comment by ID.\n"
+  schema:
+    type: "string"
+
+commentIds:
+  name: "commentIds"
+  in: "query"
+  required: true
+  schema:
+    type: "array"
+    minItems: 1
+    maxItems: 10
+    items:
+      type: "string"
+      maxLength: 50
+
+preserve-edited-at:
+  name: "preserve-edited-at"
+  in: "header"
+  required: false
+  description: |
+    Preserve the `editedAt` value when updating a comment.
+    If the value is `true`, the `editedAt` value will not be updated.
+    If the value is `false`, the `editedAt` value will be updated.
+  schema:
+    type: "boolean"
+    default: false

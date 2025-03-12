@@ -1,0 +1,251 @@
+channels:
+  get:
+    tags:
+      - "Marker"
+    summary: "Get marker for channels"
+    security:
+      - BearerAuth: []
+    description: "Get marker for channels"
+    parameters:
+      - $ref: "./parameter.yaml#/channelIds"
+    responses:
+      200:
+        $ref: "./response.yaml#/channels-get-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
+
+channels_channelId-mark-read:
+  put:
+    tags:
+      - "Marker"
+    summary: "Mark all messages in channel as read"
+    security:
+      - BearerAuth: []
+    description: "Mark all messages in channel as read"
+    parameters:
+      - $ref: "./parameter.yaml#/channelId"
+    responses:
+      200:
+        $ref: "./response.yaml#/channels_channelId-mark-read-put-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
+
+message-feeds:
+  get:
+    tags:
+      - "Marker"
+    summary: "Get marker for message feeds"
+    security:
+      - BearerAuth: []
+    description: "Get marker for message feeds"
+    parameters:
+      - $ref: "./parameter.yaml#/messageFeedIds"
+    responses:
+      200:
+        $ref: "./response.yaml#/message-feeds-get-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
+
+message-feeds_messageFeedId-mark-delivering:
+  put:
+    tags:
+      - "Marker"
+    summary: "Mark message feeds as delivering"
+    security:
+      - BearerAuth: []
+    description: "Mark message feeds as delivering"
+    parameters:
+      - $ref: "./parameter.yaml#/messageFeedId"
+    requestBody:
+      $ref: "./request.yaml#/message-feeds_messageFeedId-mark-delivering-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/message-feeds_messageFeedId-mark-delivering-put-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
+
+message-feeds_messageFeedId-mark-read:
+  put:
+    tags:
+      - "Marker"
+    summary: "Mark message feeds as read"
+    security:
+      - BearerAuth: []
+    description: "Mark message feeds as read"
+    parameters:
+      - $ref: "./parameter.yaml#/messageFeedId"
+    requestBody:
+      $ref: "./request.yaml#/message-feeds_messageFeedId-mark-read-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/message-feeds_messageFeedId-mark-read-put-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
+
+message-feeds_messageFeedId-start-reading:
+  post:
+    tags:
+      - "Marker"
+    summary: "Start reading message feeds"
+    security:
+      - BearerAuth: []
+    description: "Start reading message feeds"
+    parameters:
+      - $ref: "./parameter.yaml#/messageFeedId"
+    responses:
+      200:
+        $ref: "./response.yaml#/message-feeds_messageFeedId-start-reading-post-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
+
+message-feeds_messageFeedId-stop-readings:
+  post:
+    tags:
+      - "Marker"
+    summary: "Stop reading message feeds"
+    security:
+      - BearerAuth: []
+    description: "Stop reading message feeds"
+    parameters:
+      - $ref: "./parameter.yaml#/messageFeedId"
+    responses:
+      200:
+        $ref: "./response.yaml#/message-feeds_messageFeedId-stop-readings-post-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
+
+message-feeds-reading:
+  post:
+    tags:
+      - "Marker"
+    summary: "Mark message feeds as read"
+    security:
+      - BearerAuth: []
+    description: "Mark message feeds as read"
+    requestBody:
+      $ref: "./request.yaml#/message-feeds-reading-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/message-feeds-reading-post-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
+
+messages:
+  get:
+    tags:
+      - "Marker"
+    summary: "Get marker for messages"
+    security:
+      - BearerAuth: []
+    description: "Get marker for messages"
+    parameters:
+      - $ref: "./parameter.yaml#/messageIds"
+    responses:
+      200:
+        $ref: "./response.yaml#/messages-get-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
+
+messages_messageId-delivered-users:
+  get:
+    tags:
+      - "Marker"
+    summary: "Get list of users who delivered the message"
+    security:
+      - BearerAuth: []
+    description: "Get list of users who delivered the message"
+    parameters:
+      - $ref: "./parameter.yaml#/channelId"
+    responses:
+      200:
+        $ref: "./response.yaml#/messages_messageId-delivered-users-get-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
+
+messages_messageId-read-users:
+  get:
+    tags:
+      - "Marker"
+    summary: "Get list of users who read the message"
+    security:
+      - BearerAuth: []
+    description: "Get list of users who read the message"
+    parameters:
+      - $ref: "./parameter.yaml#/channelId"
+    responses:
+      200:
+        $ref: "./response.yaml#/messages_messageId-read-users-get-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
+
+sync:
+  post:
+    tags:
+      - "Marker"
+    summary: "Marker sync"
+    security:
+      - BearerAuth: []
+    description: "Marker sync for update unread count"
+    requestBody:
+      $ref: "./request.yaml#/sync-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/sync-post-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
+
+user-message-feed:
+  get:
+    tags:
+      - "Marker"
+    summary: "Query Latest 100 user feed marker by a list of entity Id (channel id)"
+    security:
+      - BearerAuth: []
+    description: "Query Latest 100 user feed marker by a list of entity Id (channel id)"
+    parameters:
+      - $ref: "./parameter.yaml#/channelIds"
+    responses:
+      200:
+        $ref: "./response.yaml#/user-message-feed-get-response-payload-200"
+      422:
+        description: "Parameters validation error"
+
+userMarker:
+  get:
+    tags:
+      - "Marker"
+    summary: "Get marker for user"
+    security:
+      - BearerAuth: []
+    description: "Get marker for user"
+    responses:
+      200:
+        $ref: "./response.yaml#/userMarker-get-response-payload-200"
+      404:
+        description: "Not found error"
+      422:
+        description: "Parameters validation error"
