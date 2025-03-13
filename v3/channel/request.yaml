@@ -69,6 +69,45 @@ root-post-request-payload:
                 * `silent` - Do not send notifications.
                 * `subscribe` - Send notifications only to subscribed users.
 
+seen-post-request-payload:
+  description: "Information of read sengment to be updated\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          channels:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                channelId:
+                  type: "string"
+                  maxLength: 128
+                  description: >
+                    The unique identifier for the channel. This public ID is used to identify the specific channel
+                    for which the readToSegment value is being updated.
+                readToSegment:
+                  type: "number"
+                  minimum: 1
+                  description: >
+                    The readToSegment value indicates the last segment that has been read by the user in that channel.
+                    This is used to track the user's progress in reading messages within the channel.
+              required:
+                - "channelId"
+                - "readToSegment"
+            description: >
+              List of channels with their respective readToSegment values.
+              Each channel object must include a channelId and the readToSegment value.
+            example:
+              - channelId: "67cfbbe1c5dbdcb2909935e5"
+                readToSegment: 4
+              - channelId: "67cfbbd7c5dbdcb2909935d0"
+                readToSegment: 10
+              - channelId: "67cfbbd7c5dbdcb2909935d1"
+                readToSegment: 10
+
 _channelId-post-request-payload:
   description: "Information of channel to be updated\n"
   required: true

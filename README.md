@@ -26,9 +26,9 @@ To run a local server, follow these steps:
 
 1. Install [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer), a VSCode extensions:
 
-2. Update `data-url` path to `bundled.yaml`:
-```css
-<script id="api-reference" data-url="./bundled.yaml" ></script>
+2. Update `data-url` path to `bundled.yaml` at `index.html` file in `build` folder (after run `npm run build`):
+```html
+<script id="api-reference" data-url="../bundled.yaml" ></script>
 ```
 
 3. Start Live server in `index.html` file:

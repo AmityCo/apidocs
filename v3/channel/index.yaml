@@ -54,6 +54,25 @@ root:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
+seen:
+  post:
+    summary: "Bulk mark seen"
+    tags:
+      - "Channel"
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/seen-post-request-payload"
+    responses:
+      200:
+        description: "This endpoint returns 200 OK if the request is successful."
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
 _channelId:
   get:
     summary: "get a channel by ID."
