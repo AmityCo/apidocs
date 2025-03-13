@@ -4,19 +4,19 @@ For comprehensive information, please visit [Social+ API Docs](https://api.docs.
 
 ## Validation
 
-To validate `swagger.yaml`, you can use the [swagger-cli](https://github.com/APIDevTools/swagger-cli) tool.
+To validate `swagger.yaml`, you can use the [redocly-cli](https://github.com/Redocly/redocly-cli) tool.
 
 ### Installation
 
 Install the redocly using npm:
-```
+```bash
 npm install
 ```
 
 ### Usage
 
 Validate the OpenAPI specification with the following command:
-```
+```bash
 npm run lint
 ```
 
