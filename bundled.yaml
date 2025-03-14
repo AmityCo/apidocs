@@ -155,12 +155,16 @@ paths:
               maxLength: 24
         - name: isDeleted
           in: query
-          description: For filter content that is deleted while reviewing
+          description: |
+            For filter content that is deleted while reviewing <br>
+            Will filter manualReview.reviewedType == 'deleted' || aiModeration.moderatedAction == 'deleted'
           schema:
             type: boolean
         - name: isFlagCleared
           in: query
-          description: For filter content that flag is cleared while reviewing
+          description: |
+            For filter content that flag is cleared while reviewing <br>
+            Will filter manualReview.reviewedType == "clearFlag"
           schema:
             type: boolean
         - name: options[token]
