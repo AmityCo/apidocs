@@ -1,5 +1,6 @@
 root-response-200:
-  description: "Moderation feeds information."
+  description: |
+    Moderation feeds information. To display actual content, use the contentId and contentType to get the content from the list API (ex. Post list, Comment list).
   content:
     application/json:
       schema:
@@ -9,54 +10,6 @@ root-response-200:
             type: "array"
             items:
               $ref: "../../schema/content.yaml#/Content"
-          posts:
-            type: array
-            items:
-              $ref: "../../schema/post.yaml#/Post"
-          postChildren:
-            type: array
-            items:
-              $ref: "../../schema/post.yaml#/Post"
-          comments:
-            type: array
-            items:
-              $ref: "../../schema/comment.yaml#/Comment"
-          users:
-            type: array
-            items:
-              $ref: "../../schema/user.yaml#/UserV3"
-          files:
-            type: array
-            items:
-              $ref: "../../schema/file.yaml#/File"
-          communities:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/Community"
-          communityUsers:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/CommunityUser"
-          categories:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/CommunityCategory"
-          feeds:
-            type: array
-            items:
-              $ref: "../../schema/feed.yaml#/Feed"
-          videoStreamings:
-            type: array
-            items:
-              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-          polls:
-            type: array
-            items:
-              $ref: "../../schema/poll.yaml#/Poll"
-          commentChildren:
-            type: array
-            items:
-              $ref: "../../schema/comment.yaml#/Comment"
           paging:
             type: object
             properties:
