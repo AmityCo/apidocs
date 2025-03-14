@@ -1,0 +1,35 @@
+root-delete-request-payload:
+  description: "Information of content to be deleted"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          contentIds:
+            type: array
+            items:
+              type: string
+              maxLength: 900
+            maxItems: 100
+        required:
+          - contentIds
+        description: |
+          Payload to delete multiple content by their IDs.
+
+flags-delete-request-payload:
+  description: "Information of content to be cleared"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          contentIds:
+            type: array
+            items:
+              type: string
+              maxLength: 900
+            maxItems: 100
+        required:
+          - contentIds
+        description: |
+          Payload to clear multiple content flags by their IDs.

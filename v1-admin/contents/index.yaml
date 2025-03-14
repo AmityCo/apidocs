@@ -1,0 +1,35 @@
+root:
+  delete:
+    summary: "Delete multiple content"
+    description: "Delete multiple content. Use when review item in moderation feeds."
+    tags:
+      - "Moderation Feed"
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/root-delete-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-delete-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+flags:
+  delete:
+    summary: "Clear multiple content flags"
+    description: "Clear multiple content flags. Use when review item in moderation feeds."
+    tags:
+      - "Moderation Feed"
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/flags-delete-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/flags-delete-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

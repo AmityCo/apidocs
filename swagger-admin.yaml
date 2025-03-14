@@ -1,0 +1,36 @@
+openapi: "3.0.0"
+info:
+  title: "Social+ Cloud SDK"
+  description:
+    $ref: "./description.md"
+  version: "4.99.1"
+servers:
+  - url: "https://apix.us.amity.co"
+    description: "API Endpoint for US Region"
+  - url: "https://apix.eu.amity.co"
+    description: "API Endpoint for EU Region"
+  - url: "https://apix.sg.amity.co"
+    description: "API Endpoint for SG Region"
+paths:
+  /admin/v1/moderation-feeds:
+    $ref: "./v1-admin/moderation-feeds/index.yaml#/root"
+
+  /admin/v1/contents:
+    $ref: "./v1-admin/contents/index.yaml#/root"
+
+  /admin/v1/contents/flags:
+    $ref: "./v1-admin/contents/index.yaml#/flags"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: "apiKey"
+      in: "header"
+      name: "X-API-Key"
+    BearerAuth:
+      type: "http"
+      scheme: "bearer"
+    cookieAuth: # arbitrary name for the security scheme; will be used in the "security" key later
+      type: apiKey
+      in: cookie
+      name: connect.sid # cookie name

@@ -1,0 +1,17 @@
+root:
+  get:
+    summary: "Get moderation feeds"
+    description: "Get moderation feeds."
+    tags:
+      - "Moderation Feed"
+    security:
+      - BearerAuth: []
+    parameters:
+      $ref: "./request.yaml#/root-get-request-parameters"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

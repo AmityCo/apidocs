@@ -1,0 +1,67 @@
+root-get-request-parameters:
+  - name: targetType
+    in: query
+    schema:
+      type: string
+      enum:
+        - user
+        - community
+  - name: targetIds
+    in: query
+    description: Target internal id
+    schema:
+      type: array
+      items:
+        type: string
+        maxLength: 900
+  - name: contentTypes
+    in: query
+    schema:
+      type: array
+      items:
+        type: string
+        enum:
+          - post
+          - comment
+          - photo
+          - video
+          - file
+  - name: creatorIds
+    in: query
+    description: Creator internal id
+    schema:
+      type: array
+      items:
+        type: string
+        maxLength: 900
+  - name: tags
+    in: query
+    schema:
+      type: array
+      items:
+        type: string
+        maxLength: 24
+  - name: isDeleted
+    in: query
+    description: "For filter content that is deleted while reviewing"
+    schema:
+      type: boolean
+  - name: isFlagCleared
+    in: query
+    description: "For filter content that flag is cleared while reviewing"
+    schema:
+      type: boolean
+  - name: token
+    in: query
+    description: "Token for pagination. Use the token from the previous response to get the next page."
+    schema:
+      type: string
+      maxLength: 1000
+  - name: limit
+    in: query
+    description: "Limit the number of items in the response. Default is 20."
+    schema:
+      type: integer
+      minimum: 1
+      maximum: 100
+      default: 20
