@@ -1,11 +1,10 @@
 root:
   get:
-    summary: "query comments (pagination support)."
+    summary: "Query comments"
     tags:
       - "Comment"
     security:
       - ApiKeyAuth: []
-    description: "query comments.\n"
     parameters:
       - $ref: "./parameter.yaml#/authorization"
       - $ref: "./parameter.yaml#/content-type"
@@ -28,7 +27,7 @@ root:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
   post:
-    summary: "create a comment."
+    summary: "Create comment"
     tags:
       - "Comment"
     security:
@@ -49,12 +48,12 @@ root:
 
 _commentId:
   get:
-    summary: "get a comment."
+    summary: "Get comment"
     tags:
       - "Comment"
     security:
       - BearerAuth: []
-    description: "get a comment.\n"
+    description: Get one comment detail by ID.
     parameters:
       - $ref: "./parameter.yaml#/authorization"
     responses:
@@ -67,7 +66,7 @@ _commentId:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
   put:
-    summary: "update a comment."
+    summary: "Update comment"
     tags:
       - "Comment"
     security:
@@ -89,7 +88,7 @@ _commentId:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
   delete:
-    summary: "delete a comment."
+    summary: "Delete comment"
     deprecated: true
     tags:
       - "Comment"
@@ -121,7 +120,7 @@ _commentId:
 
 _commentId-flag:
   post:
-    summary: "flag a comment."
+    summary: "Flag comment"
     tags:
       - "Comment"
     security:
@@ -158,7 +157,7 @@ _commentId-isflagbyme:
 
 _commentId-unflag:
   delete:
-    summary: "unflag a comment."
+    summary: "Unflag comment"
     tags:
       - "Comment"
     security:
@@ -175,7 +174,8 @@ _commentId-unflag:
 
 _commentId-flags:
   delete:
-    summary: "clear flags."
+    summary: "Clear flags"
+    description: "Clear flags for a comment.\n"
     tags:
       - "Comment"
     security:
@@ -194,12 +194,12 @@ _commentId-flags:
 
 list:
   get:
-    summary: "get comments by IDs."
+    summary: "Get comments by IDs."
+    description: "Get comments by comment IDs.\n"
     tags:
       - "Comment"
     security:
       - BearerAuth: []
-    description: "get comments by IDs.\n"
     parameters:
       - $ref: "./parameter.yaml#/commentIds"
     responses:

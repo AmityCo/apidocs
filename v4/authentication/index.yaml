@@ -1,11 +1,15 @@
 token:
   post:
-    summary: "Create authentication token for session creation API"
+    summary: "Create authentication token"
     tags:
       - "Authentication"
     parameters:
       - $ref: "./parameter.yaml#/x-server-key"
-    description: "Create authentication token for session creation API. Token userId need to match userId when using it\n"
+    description: |
+      Create authentication token for session creation API. Token userId needs to match userId when using it. <br><br>
+      For example: <br> 
+      You put userId: "123456" in the request body, <br> 
+      then you need to use the same userId: "123456" and token from the response in the session creation API.
     requestBody:
       content:
         application/json:
