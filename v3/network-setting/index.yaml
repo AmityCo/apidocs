@@ -410,3 +410,39 @@ webhook:
         $ref: "../../global/error.yaml#/BadRequestError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+uikit: 
+  get: 
+    summary: Get UIKit config
+    tags: 
+      - Network Setting
+    security:
+      - BearerAuth: []
+    description: >
+      Get UIKit config in json format, will return empty config (`{}`) if we have not set the config yet.
+    responses:
+      200:
+        $ref: "./response.yaml#/uikit-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: Put UIKit config
+    tags: 
+      - Network Setting
+    security:
+      - BearerAuth: []
+    description: >
+      Update or create a UIKit config for a network.
+      
+      Only admin is allowed to call this.
+    requestBody:
+      $ref: "./request.yaml#/uikit-put-request-payload"
+    responses: 
+      200:
+        $ref: "./response.yaml#/uikit-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
