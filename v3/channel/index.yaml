@@ -75,7 +75,8 @@ seen:
 
 _channelId:
   get:
-    summary: "get a channel by ID."
+    summary: "Get channel by ID"
+    description: "Retrieve a channel's details using its public ID."
     tags:
       - "Channel"
     security:
@@ -92,7 +93,7 @@ _channelId:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
   put:
-    summary: "update a channel"
+    summary: "Update channel"
     tags:
       - "Channel"
     security:
@@ -120,7 +121,7 @@ _channelId:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
   delete:
-    summary: "delete a channel"
+    summary: "Delete channel"
     tags:
       - "Channel"
     security:
@@ -141,7 +142,8 @@ _channelId:
 
 _channelId-join:
   post:
-    summary: "join a channel"
+    summary: "Join channel"
+    description: "Join a user to specified channel."
     tags:
       - "Channel"
     security:
@@ -171,7 +173,8 @@ _channelId-join:
 
 _channelId-leave:
   delete:
-    summary: "leave a channel"
+    summary: "Leave channel"
+    description: "User leave channel."
     tags:
       - "Channel"
     security:
@@ -201,7 +204,8 @@ _channelId-leave:
 
 _channelId-users:
   get:
-    summary: "query channel users"
+    summary: "Query channel users (v3)"
+    description: "Retrieve a list of users in the specified channel."
     tags:
       - "Channel"
     security:
@@ -225,7 +229,8 @@ _channelId-users:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
   post:
-    summary: "add channel users"
+    summary: "Add channel users"
+    description: "Add users to the specified channel."
     tags:
       - "Channel"
     security:
@@ -255,7 +260,8 @@ _channelId-users:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
   delete:
-    summary: "remove channel users"
+    summary: "Remove channel users"
+    description: "Remove users from the specified channel."
     tags:
       - "Channel"
     security:
@@ -286,7 +292,8 @@ _channelId-users:
 
 _channelId-users-ban:
   put:
-    summary: "ban channel users"
+    summary: "Ban channel users"
+    description: "Ban users from the specified channel."
     tags:
       - "Channel"
     security:
@@ -317,7 +324,10 @@ _channelId-users-ban:
         $ref: "../../global/error.yaml#/UnexpectedError"
 _channelId-users-unban:
   put:
-    summary: "unban channel users"
+    summary: "Unban channel users"
+    description: |
+      Unban users from the specified channel. After unban, user will be force to leave a channel. <br>
+      User will be able to rejoin the channel if they want it.
     tags:
       - "Channel"
     security:
@@ -349,6 +359,7 @@ _channelId-users-unban:
 _channelId-users-roles:
   post:
     summary: "Add role to channel users"
+    description: "Add role to users in the specified channel."
     tags:
       - "Channel"
     security:
@@ -377,6 +388,7 @@ _channelId-users-roles:
         $ref: "../../global/error.yaml#/UnexpectedError"
   delete:
     summary: "Remove role from channel users"
+    description: "Remove role from users in the specified channel."
     tags:
       - "Channel"
     security:
@@ -405,7 +417,7 @@ _channelId-users-roles:
         $ref: "../../global/error.yaml#/UnexpectedError"
 conversation:
   post:
-    summary: "create a conversation channel"
+    summary: "Create conversation channel"
     tags:
       - "Channel"
     security:
@@ -432,12 +444,12 @@ conversation:
         $ref: "../../global/error.yaml#/UnexpectedError"
 list:
   get:
-    summary: "get list of channel"
+    summary: "Get list of channel"
+    description: "Get list of channels by IDs"
     tags:
       - "Channel"
     security:
       - BearerAuth: []
-    description: "Get list of channel\n"
     parameters:
       - $ref: "./parameter.yaml#/channelIds"
     responses:

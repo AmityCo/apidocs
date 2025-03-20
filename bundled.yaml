@@ -112,7 +112,8 @@ paths:
           $ref: '#/components/responses/me-response-payload-200'
   /api/v1/archives/channels:
     get:
-      summary: Query all archived channels
+      summary: Query archived channels
+      description: This API is used to query all archived channels of the user.
       tags:
         - Archive
       security:
@@ -123,6 +124,7 @@ paths:
   /api/v1/archives/channels/{channelId}:
     post:
       summary: Archive channels
+      description: This API is used to archive conversation channels.
       tags:
         - Archive
       security:
@@ -138,6 +140,7 @@ paths:
           $ref: '#/components/responses/NotFoundError'
     delete:
       summary: Unarchive channels
+      description: This API is used to unarchive conversation channels.
       tags:
         - Archive
       security:
@@ -159,7 +162,7 @@ paths:
           $ref: '#/components/responses/NotFoundError'
   /api/v1/analytics/activities:
     post:
-      summary: send analytic activities
+      summary: Send analytic activities
       description: |-
         Send a batch of analytic activities to the server, currently only support viewing post/story and story link clicked activities. 
          - For viewing post/story activity, the `impression` and `reach` of the post/story will be updated list of users from `/api/v1/analytics/views/posts/{postId}/users` will be updated too. (but not immediately)
@@ -180,7 +183,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v1/analytics/views/posts/{postId}/users:
     get:
-      summary: query post reach
+      summary: Query post reach
       description: Query a list of users who have viewed certain post, the user who have been global banned, community banned, or soft deleted will be excluded from the list of users. And if the post is soft deleted, post owner will be able to view this list, but others can not.
       tags:
         - Analytic
@@ -203,7 +206,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v1/analytics/views/stories/{storyId}/users:
     get:
-      summary: query story reach
+      summary: Query story reach
       description: Query a list of users who have viewed certain story, the user who have been global banned, community banned, or soft deleted will be excluded from the list of users. And if the post is soft deleted, post owner will be able to view this list, but others can not.
       tags:
         - Analytic
@@ -242,13 +245,16 @@ paths:
           $ref: '#/components/responses/ValidationError'
   /api/v4/authentication/token:
     post:
-      summary: Create authentication token for session creation API
+      summary: Create authentication token
       tags:
         - Authentication
       parameters:
         - $ref: '#/components/parameters/x-server-key'
       description: |
-        Create authentication token for session creation API. Token userId need to match userId when using it
+        Create authentication token for session creation API. Token userId needs to match userId when using it. <br><br>
+        For example: <br> 
+        You put userId: "123456" in the request body, <br> 
+        then you need to use the same userId: "123456" and token from the response in the session creation API.
       requestBody:
         content:
           application/json:
@@ -265,13 +271,12 @@ paths:
           $ref: '#/components/responses/token-post-response-422'
   /api/v2/channels/{channelId}/close:
     post:
-      summary: close channel
+      summary: Close channel
       tags:
         - Channel
       security:
         - BearerAuth: []
-      description: |
-        Close channel
+      description: Close the channel.
       parameters:
         - $ref: '#/components/parameters/parameter_channelId'
       responses:
@@ -422,7 +427,8 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/channels/{channelId}:
     get:
-      summary: get a channel by ID.
+      summary: Get channel by ID
+      description: Retrieve a channel's details using its public ID.
       tags:
         - Channel
       security:
@@ -439,7 +445,7 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
     put:
-      summary: update a channel
+      summary: Update channel
       tags:
         - Channel
       security:
@@ -467,7 +473,7 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
     delete:
-      summary: delete a channel
+      summary: Delete channel
       tags:
         - Channel
       security:
@@ -487,7 +493,8 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/channels/{channelId}/join:
     post:
-      summary: join a channel
+      summary: Join channel
+      description: Join a user to specified channel.
       tags:
         - Channel
       security:
@@ -516,7 +523,8 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/channels/{channelId}/leave:
     delete:
-      summary: leave a channel
+      summary: Leave channel
+      description: User leave channel.
       tags:
         - Channel
       security:
@@ -576,7 +584,8 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/channels/{channelId}/users:
     get:
-      summary: query channel users
+      summary: Query channel users (v3)
+      description: Retrieve a list of users in the specified channel.
       tags:
         - Channel
       security:
@@ -600,7 +609,8 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
     post:
-      summary: add channel users
+      summary: Add channel users
+      description: Add users to the specified channel.
       tags:
         - Channel
       security:
@@ -630,7 +640,8 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
     delete:
-      summary: remove channel users
+      summary: Remove channel users
+      description: Remove users from the specified channel.
       tags:
         - Channel
       security:
@@ -660,7 +671,8 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/channels/{channelId}/users/ban:
     put:
-      summary: ban channel users
+      summary: Ban channel users
+      description: Ban users from the specified channel.
       tags:
         - Channel
       security:
@@ -691,7 +703,10 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/channels/{channelId}/users/unban:
     put:
-      summary: unban channel users
+      summary: Unban channel users
+      description: |
+        Unban users from the specified channel. After unban, user will be force to leave a channel. <br>
+        User will be able to rejoin the channel if they want it.
       tags:
         - Channel
       security:
@@ -723,6 +738,7 @@ paths:
   /api/v3/channels/{channelId}/users/roles:
     post:
       summary: Add role to channel users
+      description: Add role to users in the specified channel.
       tags:
         - Channel
       security:
@@ -751,6 +767,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
     delete:
       summary: Remove role from channel users
+      description: Remove role from users in the specified channel.
       tags:
         - Channel
       security:
@@ -779,7 +796,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/channels/conversation:
     post:
-      summary: create a conversation channel
+      summary: Create conversation channel
       tags:
         - Channel
       security:
@@ -806,13 +823,12 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/channels/list:
     get:
-      summary: get list of channel
+      summary: Get list of channel
+      description: Get list of channels by IDs
       tags:
         - Channel
       security:
         - BearerAuth: []
-      description: |
-        Get list of channel
       parameters:
         - $ref: '#/components/parameters/channelIds'
       responses:
@@ -853,13 +869,11 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/comments:
     get:
-      summary: query comments (pagination support).
+      summary: Query comments
       tags:
         - Comment
       security:
         - ApiKeyAuth: []
-      description: |
-        query comments.
       parameters:
         - $ref: '#/components/parameters/authorization'
         - $ref: '#/components/parameters/content-type'
@@ -882,7 +896,7 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
     post:
-      summary: create a comment.
+      summary: Create comment
       tags:
         - Comment
       security:
@@ -902,13 +916,12 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/comments/{commentId}:
     get:
-      summary: get a comment.
+      summary: Get comment
       tags:
         - Comment
       security:
         - BearerAuth: []
-      description: |
-        get a comment.
+      description: Get one comment detail by ID.
       parameters:
         - $ref: '#/components/parameters/authorization'
       responses:
@@ -921,7 +934,7 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
     put:
-      summary: update a comment.
+      summary: Update comment
       tags:
         - Comment
       security:
@@ -943,7 +956,7 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
     delete:
-      summary: delete a comment.
+      summary: Delete comment
       deprecated: true
       tags:
         - Comment
@@ -974,7 +987,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/comments/{commentId}/flag:
     post:
-      summary: flag a comment.
+      summary: Flag comment
       tags:
         - Comment
       security:
@@ -1010,7 +1023,7 @@ paths:
           $ref: '#/components/responses/NotFoundError'
   /api/v3/comments/{commentId}/unflag:
     delete:
-      summary: unflag a comment.
+      summary: Unflag comment
       tags:
         - Comment
       security:
@@ -1026,13 +1039,13 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/comments/list:
     get:
-      summary: get comments by IDs.
+      summary: Get comments by IDs.
+      description: |
+        Get comments by comment IDs.
       tags:
         - Comment
       security:
         - BearerAuth: []
-      description: |
-        get comments by IDs.
       parameters:
         - $ref: '#/components/parameters/commentIds'
       responses:
@@ -1046,7 +1059,9 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/comments/{commentId}/flags:
     delete:
-      summary: clear flags.
+      summary: Clear flags
+      description: |
+        Clear flags for a comment.
       tags:
         - Comment
       security:
@@ -2391,9 +2406,9 @@ paths:
       tags:
         - Marker
       summary: Get marker for channels
+      description: Get channels unread, mentioned marker info
       security:
         - BearerAuth: []
-      description: Get marker for channels
       parameters:
         - $ref: '#/components/parameters/parameter_channelIds'
       responses:
