@@ -4063,6 +4063,40 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /api/v3/network-settings/uikit:
+    get:
+      summary: Get UIKit config
+      tags:
+        - Network Setting
+      security:
+        - BearerAuth: []
+      description: |
+        Get UIKit config in json format, will return empty config (`{}`) if we have not set the config yet.
+      responses:
+        '200':
+          $ref: '#/components/responses/uikit-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      summary: Update UIKit config
+      tags:
+        - Network Setting
+      security:
+        - BearerAuth: []
+      description: |
+        Update or create a UIKit config for a network.
+        Only admin is allowed to call this.
+      requestBody:
+        $ref: '#/components/requestBodies/uikit-put-request-payload'
+      responses:
+        '200':
+          $ref: '#/components/responses/uikit-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /v1/notification:
     post:
       summary: register a device to get push notification
@@ -16602,6 +16636,43 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/WebhookNetworkSetting'
+    uikit-response-200:
+      description: UIKit configuration
+      content:
+        application/json:
+          schema:
+            description: UIKit config json
+            type: object
+          example:
+            config:
+              preferred_theme: default
+              theme:
+                light:
+                  primary_color: '#1054DF'
+                  secondary_color: '#292B32'
+                  base_color: '#292B32'
+                  base_shade1_color: '#636878'
+                  base_shade2_color: '#898E9E'
+                  base_shade3_color: '#A5A9b5'
+                  base_shade4_color: '#EBECEF'
+                  alert_color: '#FA4D30'
+                  background_color: '#FFFFFF'
+                  base_inverse_color: '#000000'
+                  background_shade1_color: '#F6F7F8'
+                  highlight_color: '#1054DE'
+                dark:
+                  primary_color: '#1054DE'
+                  secondary_color: '#292B32'
+                  base_color: '#EBECEF'
+                  base_shade1_color: '#A5A9B5'
+                  base_shade2_color: '#6E7487'
+                  base_shade3_color: '#40434E'
+                  base_shade4_color: '#292B32'
+                  alert_color: '#FA4D30'
+                  background_color: '#191919'
+                  base_inverse_color: '#FFFFFF'
+                  background_shade1_color: '#40434E'
+                  highlight_color: '#1054DE'
     SuccessResponse:
       description: Success response.
       content:
@@ -21655,6 +21726,43 @@ components:
                 description: |
                   `true` - User can register webhook for network and will receive a webhook.
                   `false` - User won't be able to register webhook and won't receive a webhook.
+    uikit-put-request-payload:
+      description: UIKit config in json
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+          example:
+            config:
+              preferred_theme: default
+              theme:
+                light:
+                  primary_color: '#1054DF'
+                  secondary_color: '#292B32'
+                  base_color: '#292B32'
+                  base_shade1_color: '#636878'
+                  base_shade2_color: '#898E9E'
+                  base_shade3_color: '#A5A9b5'
+                  base_shade4_color: '#EBECEF'
+                  alert_color: '#FA4D30'
+                  background_color: '#FFFFFF'
+                  base_inverse_color: '#000000'
+                  background_shade1_color: '#F6F7F8'
+                  highlight_color: '#1054DE'
+                dark:
+                  primary_color: '#1054DE'
+                  secondary_color: '#292B32'
+                  base_color: '#EBECEF'
+                  base_shade1_color: '#A5A9B5'
+                  base_shade2_color: '#6E7487'
+                  base_shade3_color: '#40434E'
+                  base_shade4_color: '#292B32'
+                  alert_color: '#FA4D30'
+                  background_color: '#191919'
+                  base_inverse_color: '#FFFFFF'
+                  background_shade1_color: '#40434E'
+                  highlight_color: '#1054DE'
     request_root-post-request-payload-7:
       description: |
         information of a device to be registered.

@@ -6,9 +6,13 @@
   "scripts": {
     "lint": "redocly lint swagger.yaml",
     "build": "redocly bundle swagger.yaml -o bundled.yaml",
-    "prepare-local": "npm run build && rm -rf ./local && cp -r build local && cp ./bundled.yaml ./local/bundled.yaml && sh ./scripts/prepare-local.sh"
+    "prepare-local": "npm run build && rm -rf ./local && cp -r build local && cp ./bundled.yaml ./local/bundled.yaml && sh ./scripts/prepare-local.sh",
+    "prepare": "husky"
   },
   "dependencies": {
     "@redocly/cli": "^1.33.0"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
   }
 }
