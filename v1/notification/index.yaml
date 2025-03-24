@@ -32,3 +32,57 @@ root:
         $ref: "../../global/error.yaml#/BadRequestError400"
       404:
         $ref: "../../global/error.yaml#/NotFoundError404"
+
+notification-tray:
+  get:
+    summary: Get list of notification tray items
+    tags: 
+      - Notification Tray
+    security: 
+      - BearerAuth: [] 
+    description: Retrieves the notification tray items for the current user
+    parameters:
+      - $ref: "./parameter.yaml#/pathUserId"
+      - $ref: "./parameter.yaml#/page"
+      - $ref: "./parameter.yaml#/pageSize"
+    responses: 
+      200:
+        $ref: "./response.yaml#/GetNotificationTrayApiResponse"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError400"
+
+notification-tray-seen:
+  post:
+    summary: Mark all notifications as seen
+    tags: 
+      - Notification Tray
+    security: 
+      - BearerAuth: [] 
+    description: Marks all notifications as seen for the specified user
+    parameters:
+      - $ref: "./parameter.yaml#/pathUserId"
+    requestBody:
+      $ref: "./request.yaml#/MarkAllSeenRequest"
+    responses: 
+      200:
+        description: Successfully marked all notifications as seen
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError400"
+
+notification-items-seen:
+  post:
+    summary: Mark specific notification items as seen
+    tags: 
+      - Notification Tray
+    security: 
+      - BearerAuth: [] 
+    description: Marks specific notification tray items as seen for the specified user
+    parameters:
+      - $ref: "./parameter.yaml#/pathUserId"
+    requestBody:
+      $ref: './request.yaml#/MarkItemsSeenRequest'
+    responses: 
+      200:
+        description: Successfully marked specified notifications as seen
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError400"

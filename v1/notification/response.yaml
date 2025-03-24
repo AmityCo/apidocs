@@ -4,3 +4,151 @@ NotificationSettingApiResponse:
     application/json:
       schema:
         $ref: "../../schema/notification.yaml#/NotificationSetting"
+
+TrayItemData:
+  oneOf:
+    - type: object
+      required:
+        - communityName
+      properties:
+        communityName:
+          type: string
+    - type: object
+      required:
+        - reactionName
+      properties:
+        reactionName:
+          type: string
+
+NotificationTrayItem:
+  type: object
+  required:
+    - id
+    - lastSeenAt
+    - lastOccuredAt
+    - actorIds
+    - actorsCount
+    - action
+    - targetId
+    - targetType
+    - data
+    - text
+    - templatedText
+  properties:
+    id:
+      type: string
+      description: ObjectId of the notification tray item
+    lastSeenAt:
+      type: string
+      format: date-time
+      description: Timestamp when the notification was last seen
+    lastOccuredAt:
+      type: string
+      format: date-time
+      description: Timestamp when the notification last occurred
+    actorIds:
+      type: array
+      description: Cap at 3 items
+      items:
+        type: string
+        description: ObjectId of actors
+    actorsCount:
+      type: integer
+      description: No caps on the total number of actors
+    action:
+      type: string
+      enum:
+        - post
+        - poll
+        - comment
+        - reaction
+        - mention
+        - reply
+    trayItemCategory:
+      type: string
+      enum:
+        - mention_in_post
+        - mention_in_comment
+        - react_to_post
+        - react_to_comment
+      description: Category for when action is either "mention" or "reply"
+    targetId:
+      type: string
+      description: ObjectId of the target
+    targetType:
+      type: string
+    referenceId:
+      type: string
+      description: Optional ObjectId of the reference
+    referenceType:
+      type: string
+    selfId:
+      type: string
+      description: Optional ObjectId of self
+    parentId:
+      type: string
+      description: Optional ObjectId of parent
+    data:
+      $ref: '#/TrayItemData'
+    text:
+      type: string
+      description: Ready to render text without any templating
+      example: "Alice and 5 others reacted to your post."
+    templatedText:
+      type: string
+      description: Ready to render text with templating allow client to interpret
+      example: "{{user:67c80e32d8caa9a08de35025}} and 5 others rected to {{post:67c80e539a36ae4790665949}}"
+
+GetNotificationTrayApiResponse:
+  description: Notification tray items list
+  content:
+    application/json:
+      schema: 
+        type: object
+        required:
+          - notificationTrayItems
+          - lastTraySeenAt
+          - lastTrayOccuredAt
+          - users
+        properties:
+          notificationTrayItems:
+            type: array
+            items:
+              $ref: '#/NotificationTrayItem'
+          lastTraySeenAt:
+            type: string
+            format: date-time
+            description: Timestamp when the tray was last seen
+          lastTrayOccuredAt:
+            type: string
+            format: date-time
+            description: Timestamp when the last tray item occurred
+          paging:
+            type: object
+            required:
+              - currentPage
+              - totalPages
+              - totalItems
+              - pageSize
+            properties:
+              currentPage:
+                type: integer
+                example: 1
+                description: The current page number
+              totalPages:
+                type: integer
+                example: 5
+                description: Total number of pages available
+              totalItems:
+                type: integer
+                example: 98
+                description: Total count of items across all pages
+              pageSize:
+                type: integer
+                example: 20
+                description: Number of items per page
+          users:
+            type: array
+            description: Serialized user data
+            items:
+              $ref: '../../schema/user.yaml#/UserV3'

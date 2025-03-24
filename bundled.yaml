@@ -4215,6 +4215,57 @@ paths:
           $ref: '#/components/responses/BadRequestError400'
         '404':
           $ref: '#/components/responses/NotFoundError404'
+  /api/v1/notification-tray/{userId}:
+    get:
+      summary: Get list of notification tray items
+      tags:
+        - Notification Tray
+      security:
+        - BearerAuth: []
+      description: Retrieves the notification tray items for the current user
+      parameters:
+        - $ref: '#/components/parameters/pathUserId'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetNotificationTrayApiResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError400'
+  /api/v1/notification-tray/{userId}/tray/seen:
+    post:
+      summary: Mark all notifications as seen
+      tags:
+        - Notification Tray
+      security:
+        - BearerAuth: []
+      description: Marks all notifications as seen for the specified user
+      parameters:
+        - $ref: '#/components/parameters/pathUserId'
+      requestBody:
+        $ref: '#/components/requestBodies/MarkAllSeenRequest'
+      responses:
+        '200':
+          description: Successfully marked all notifications as seen
+        '400':
+          $ref: '#/components/responses/BadRequestError400'
+  /api/v1/notification-tray/{userId}/items/seen:
+    post:
+      summary: Mark specific notification items as seen
+      tags:
+        - Notification Tray
+      security:
+        - BearerAuth: []
+      description: Marks specific notification tray items as seen for the specified user
+      parameters:
+        - $ref: '#/components/parameters/pathUserId'
+      requestBody:
+        $ref: '#/components/requestBodies/MarkItemsSeenRequest'
+      responses:
+        '200':
+          description: Successfully marked specified notifications as seen
+        '400':
+          $ref: '#/components/responses/BadRequestError400'
   /api/v3/notification/setting:
     get:
       summary: Get push notification setting.
@@ -12280,6 +12331,98 @@ components:
                     description: This field is for terminate threshold.
                     minimum: 0
                     maximum: 1
+    TrayItemData:
+      oneOf:
+        - type: object
+          required:
+            - communityName
+          properties:
+            communityName:
+              type: string
+        - type: object
+          required:
+            - reactionName
+          properties:
+            reactionName:
+              type: string
+    NotificationTrayItem:
+      type: object
+      required:
+        - id
+        - lastSeenAt
+        - lastOccuredAt
+        - actorIds
+        - actorsCount
+        - action
+        - targetId
+        - targetType
+        - data
+        - text
+        - templatedText
+      properties:
+        id:
+          type: string
+          description: ObjectId of the notification tray item
+        lastSeenAt:
+          type: string
+          format: date-time
+          description: Timestamp when the notification was last seen
+        lastOccuredAt:
+          type: string
+          format: date-time
+          description: Timestamp when the notification last occurred
+        actorIds:
+          type: array
+          description: Cap at 3 items
+          items:
+            type: string
+            description: ObjectId of actors
+        actorsCount:
+          type: integer
+          description: No caps on the total number of actors
+        action:
+          type: string
+          enum:
+            - post
+            - poll
+            - comment
+            - reaction
+            - mention
+            - reply
+        trayItemCategory:
+          type: string
+          enum:
+            - mention_in_post
+            - mention_in_comment
+            - react_to_post
+            - react_to_comment
+          description: Category for when action is either "mention" or "reply"
+        targetId:
+          type: string
+          description: ObjectId of the target
+        targetType:
+          type: string
+        referenceId:
+          type: string
+          description: Optional ObjectId of the reference
+        referenceType:
+          type: string
+        selfId:
+          type: string
+          description: Optional ObjectId of self
+        parentId:
+          type: string
+          description: Optional ObjectId of parent
+        data:
+          $ref: '#/components/schemas/TrayItemData'
+        text:
+          type: string
+          description: Ready to render text without any templating
+          example: Alice and 5 others reacted to your post.
+        templatedText:
+          type: string
+          description: Ready to render text with templating allow client to interpret
+          example: '{{user:67c80e32d8caa9a08de35025}} and 5 others rected to {{post:67c80e539a36ae4790665949}}'
     NotificationSetting:
       type: object
       properties:
@@ -16895,6 +17038,59 @@ components:
                 type: string
               data:
                 type: object
+    GetNotificationTrayApiResponse:
+      description: Notification tray items list
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - notificationTrayItems
+              - lastTraySeenAt
+              - lastTrayOccuredAt
+              - users
+            properties:
+              notificationTrayItems:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NotificationTrayItem'
+              lastTraySeenAt:
+                type: string
+                format: date-time
+                description: Timestamp when the tray was last seen
+              lastTrayOccuredAt:
+                type: string
+                format: date-time
+                description: Timestamp when the last tray item occurred
+              paging:
+                type: object
+                required:
+                  - currentPage
+                  - totalPages
+                  - totalItems
+                  - pageSize
+                properties:
+                  currentPage:
+                    type: integer
+                    example: 1
+                    description: The current page number
+                  totalPages:
+                    type: integer
+                    example: 5
+                    description: Total number of pages available
+                  totalItems:
+                    type: integer
+                    example: 98
+                    description: Total count of items across all pages
+                  pageSize:
+                    type: integer
+                    example: 20
+                    description: Number of items per page
+              users:
+                type: array
+                description: Serialized user data
+                items:
+                  $ref: '#/components/schemas/UserV3'
     setting-response-200:
       description: Notification Setting Information
       content:
@@ -19863,6 +20059,31 @@ components:
       schema:
         type: string
         minLength: 1
+    pathUserId:
+      name: userId
+      type: string
+      in: path
+      description: The ID of the user who is the owner of the notifications
+      required: true
+    page:
+      name: page
+      in: query
+      description: Page number to retrieve
+      required: false
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+    pageSize:
+      name: pageSize
+      in: query
+      description: Number of items per page
+      required: false
+      schema:
+        type: integer
+        default: 20
+        minimum: 1
+        maximum: 100
     level:
       name: level
       required: true
@@ -22123,6 +22344,43 @@ components:
               - platform
               - token
               - userId
+    MarkAllSeenRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - lastSeenAt
+            properties:
+              lastSeenAt:
+                type: string
+                format: date-time
+                description: Timestamp to mark as last seen for all notifications
+    MarkItemsSeenRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - trayItems
+            properties:
+              trayItems:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - lastSeenAt
+                  properties:
+                    id:
+                      type: string
+                      description: The ID of the notification tray item
+                    lastSeenAt:
+                      type: string
+                      format: date-time
+                      description: Timestamp to mark as last seen for this item
     setting-post-request-payload:
       description: |
         Notification setting information to be updated
