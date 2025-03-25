@@ -47,7 +47,7 @@ notification-tray:
       - $ref: "./parameter.yaml#/pageSize"
     responses: 
       200:
-        $ref: "./response.yaml#/GetNotificationTrayApiResponse"
+        $ref: "./response.yaml#/GetNotificationTrayResponse"
       400:
         $ref: "../../global/error.yaml#/BadRequestError400"
 
@@ -65,11 +65,11 @@ notification-tray-seen:
       $ref: "./request.yaml#/MarkAllSeenRequest"
     responses: 
       200:
-        description: Successfully marked all notifications as seen
+        $ref: "./response.yaml#/MarkNotificationTraySeenResponse"
       400:
         $ref: "../../global/error.yaml#/BadRequestError400"
 
-notification-items-seen:
+notification-tray-items-seen:
   post:
     summary: Mark specific notification items as seen
     tags: 
@@ -83,6 +83,6 @@ notification-items-seen:
       $ref: './request.yaml#/MarkItemsSeenRequest'
     responses: 
       200:
-        description: Successfully marked specified notifications as seen
+        $ref: "./response.yaml#/MarkNotificationTrayItemsSeenResponse"
       400:
         $ref: "../../global/error.yaml#/BadRequestError400"

@@ -18,7 +18,9 @@ TrayItemData:
         - reactionName
       properties:
         reactionName:
-          type: string
+          type: array
+          items:
+            type: string
 
 NotificationTrayItem:
   type: object
@@ -99,7 +101,7 @@ NotificationTrayItem:
       description: Ready to render text with templating allow client to interpret
       example: "{{user:67c80e32d8caa9a08de35025}} and 5 others rected to {{post:67c80e539a36ae4790665949}}"
 
-GetNotificationTrayApiResponse:
+GetNotificationTrayResponse:
   description: Notification tray items list
   content:
     application/json:
@@ -152,3 +154,29 @@ GetNotificationTrayApiResponse:
             description: Serialized user data
             items:
               $ref: '../../schema/user.yaml#/UserV3'
+
+MarkNotificationTraySeenResponse:
+  description: Successfully marked all notifications as seen
+  content:
+    application/json:
+      schema: 
+        type: object
+        required:
+          - lastTraySeenAt
+        properties:
+          lastTraySeenAt:
+            type: string
+            format: date-time
+
+MarkNotificationTrayItemsSeenResponse:
+  description: Successfully marked specified notifications as seen
+  content:
+    application/json:
+      schema: 
+        type: object
+        required:
+          - lastTraySeenAt
+        properties:
+          lastSeenAt:
+            type: string
+            format: date-time

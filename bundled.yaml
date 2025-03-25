@@ -4229,7 +4229,7 @@ paths:
         - $ref: '#/components/parameters/pageSize'
       responses:
         '200':
-          $ref: '#/components/responses/GetNotificationTrayApiResponse'
+          $ref: '#/components/responses/GetNotificationTrayResponse'
         '400':
           $ref: '#/components/responses/BadRequestError400'
   /api/v1/notification-tray/{userId}/tray/seen:
@@ -4246,7 +4246,7 @@ paths:
         $ref: '#/components/requestBodies/MarkAllSeenRequest'
       responses:
         '200':
-          description: Successfully marked all notifications as seen
+          $ref: '#/components/responses/MarkNotificationTraySeenResponse'
         '400':
           $ref: '#/components/responses/BadRequestError400'
   /api/v1/notification-tray/{userId}/items/seen:
@@ -4263,7 +4263,7 @@ paths:
         $ref: '#/components/requestBodies/MarkItemsSeenRequest'
       responses:
         '200':
-          description: Successfully marked specified notifications as seen
+          $ref: '#/components/responses/MarkNotificationTrayItemsSeenResponse'
         '400':
           $ref: '#/components/responses/BadRequestError400'
   /api/v3/notification/setting:
@@ -12344,7 +12344,9 @@ components:
             - reactionName
           properties:
             reactionName:
-              type: string
+              type: array
+              items:
+                type: string
     NotificationTrayItem:
       type: object
       required:
@@ -17038,7 +17040,7 @@ components:
                 type: string
               data:
                 type: object
-    GetNotificationTrayApiResponse:
+    GetNotificationTrayResponse:
       description: Notification tray items list
       content:
         application/json:
@@ -17091,6 +17093,30 @@ components:
                 description: Serialized user data
                 items:
                   $ref: '#/components/schemas/UserV3'
+    MarkNotificationTraySeenResponse:
+      description: Successfully marked all notifications as seen
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - lastTraySeenAt
+            properties:
+              lastTraySeenAt:
+                type: string
+                format: date-time
+    MarkNotificationTrayItemsSeenResponse:
+      description: Successfully marked specified notifications as seen
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - lastTraySeenAt
+            properties:
+              lastSeenAt:
+                type: string
+                format: date-time
     setting-response-200:
       description: Notification Setting Information
       content:
