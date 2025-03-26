@@ -25,8 +25,7 @@ TrayItemData:
 NotificationTrayItem:
   type: object
   required:
-    - id
-    - lastSeenAt
+    - _id
     - lastOccuredAt
     - actorIds
     - actorsCount
@@ -37,13 +36,9 @@ NotificationTrayItem:
     - text
     - templatedText
   properties:
-    id:
+    _id:
       type: string
       description: ObjectId of the notification tray item
-    lastSeenAt:
-      type: string
-      format: date-time
-      description: Timestamp when the notification was last seen
     lastOccuredAt:
       type: string
       format: date-time
@@ -101,6 +96,20 @@ NotificationTrayItem:
       description: Ready to render text with templating allow client to interpret
       example: "{{user:67c80e32d8caa9a08de35025}} and 5 others rected to {{post:67c80e539a36ae4790665949}}"
 
+NotificationTrayItemSeen: 
+  type: object
+  required:
+    - _id
+    - lastSeenAt
+  properties:
+    _id:
+      type: string
+      description: ObjectId of the notification tray item
+    lastSeenAt:
+      type: string
+      format: date-time
+      description: Timestamp when the notification was last seen
+
 GetNotificationTrayResponse:
   description: Notification tray items list
   content:
@@ -109,22 +118,16 @@ GetNotificationTrayResponse:
         type: object
         required:
           - notificationTrayItems
-          - lastTraySeenAt
-          - lastTrayOccuredAt
           - users
         properties:
           notificationTrayItems:
             type: array
             items:
               $ref: '#/NotificationTrayItem'
-          lastTraySeenAt:
-            type: string
-            format: date-time
-            description: Timestamp when the tray was last seen
-          lastTrayOccuredAt:
-            type: string
-            format: date-time
-            description: Timestamp when the last tray item occurred
+          notificationTrayItemSeens:
+            type: array
+            items:
+              $ref: '#/NotificationTrayItemSeen'
           paging:
             type: object
             required:
@@ -154,6 +157,26 @@ GetNotificationTrayResponse:
             description: Serialized user data
             items:
               $ref: '../../schema/user.yaml#/UserV3'
+
+GetNotificationTraySeenResponse:
+  description: Notification tray seen data
+  content:
+    application/json:
+      schema: 
+        type: object
+        required:
+          - lastTraySeenAt
+          - lastTrayOccuredAt
+        properties:
+          lastTraySeenAt:
+            type: string
+            format: date-time
+            description: Timestamp when the tray was last seen
+          lastTrayOccuredAt:
+            type: string
+            format: date-time
+            description: Timestamp when the last tray item occurred
+
 
 MarkNotificationTraySeenResponse:
   description: Successfully marked all notifications as seen

@@ -4233,6 +4233,20 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequestError400'
   /api/v1/notification-tray/{userId}/tray/seen:
+    get:
+      summary: Get notification tray seen data
+      tags:
+        - Notification Tray
+      security:
+        - BearerAuth: []
+      description: Retrieves the notification tray seen data
+      parameters:
+        - $ref: '#/components/parameters/pathUserId'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetNotificationTraySeenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError400'
     post:
       summary: Mark all notifications as seen
       tags:
@@ -12350,8 +12364,7 @@ components:
     NotificationTrayItem:
       type: object
       required:
-        - id
-        - lastSeenAt
+        - _id
         - lastOccuredAt
         - actorIds
         - actorsCount
@@ -12362,13 +12375,9 @@ components:
         - text
         - templatedText
       properties:
-        id:
+        _id:
           type: string
           description: ObjectId of the notification tray item
-        lastSeenAt:
-          type: string
-          format: date-time
-          description: Timestamp when the notification was last seen
         lastOccuredAt:
           type: string
           format: date-time
@@ -12425,6 +12434,19 @@ components:
           type: string
           description: Ready to render text with templating allow client to interpret
           example: '{{user:67c80e32d8caa9a08de35025}} and 5 others rected to {{post:67c80e539a36ae4790665949}}'
+    NotificationTrayItemSeen:
+      type: object
+      required:
+        - _id
+        - lastSeenAt
+      properties:
+        _id:
+          type: string
+          description: ObjectId of the notification tray item
+        lastSeenAt:
+          type: string
+          format: date-time
+          description: Timestamp when the notification was last seen
     NotificationSetting:
       type: object
       properties:
@@ -17048,22 +17070,16 @@ components:
             type: object
             required:
               - notificationTrayItems
-              - lastTraySeenAt
-              - lastTrayOccuredAt
               - users
             properties:
               notificationTrayItems:
                 type: array
                 items:
                   $ref: '#/components/schemas/NotificationTrayItem'
-              lastTraySeenAt:
-                type: string
-                format: date-time
-                description: Timestamp when the tray was last seen
-              lastTrayOccuredAt:
-                type: string
-                format: date-time
-                description: Timestamp when the last tray item occurred
+              notificationTrayItemSeens:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NotificationTrayItemSeen'
               paging:
                 type: object
                 required:
@@ -17093,6 +17109,24 @@ components:
                 description: Serialized user data
                 items:
                   $ref: '#/components/schemas/UserV3'
+    GetNotificationTraySeenResponse:
+      description: Notification tray seen data
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - lastTraySeenAt
+              - lastTrayOccuredAt
+            properties:
+              lastTraySeenAt:
+                type: string
+                format: date-time
+                description: Timestamp when the tray was last seen
+              lastTrayOccuredAt:
+                type: string
+                format: date-time
+                description: Timestamp when the last tray item occurred
     MarkNotificationTraySeenResponse:
       description: Successfully marked all notifications as seen
       content:

@@ -52,6 +52,20 @@ notification-tray:
         $ref: "../../global/error.yaml#/BadRequestError400"
 
 notification-tray-seen:
+  get:
+    summary: Get notification tray seen data
+    tags:
+      - Notification Tray
+    security: 
+      - BearerAuth: []
+    description: Retrieves the notification tray seen data 
+    parameters: 
+      - $ref: "./parameter.yaml#/pathUserId"
+    responses:
+      200:
+        $ref: "./response.yaml#/GetNotificationTraySeenResponse"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError400"
   post:
     summary: Mark all notifications as seen
     tags: 
