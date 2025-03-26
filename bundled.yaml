@@ -12366,6 +12366,7 @@ components:
       required:
         - _id
         - lastOccuredAt
+        - lastSeenAt
         - actorIds
         - actorsCount
         - action
@@ -12378,6 +12379,10 @@ components:
         _id:
           type: string
           description: ObjectId of the notification tray item
+        lastSeenAt:
+          type: string
+          format: date-time
+          description: Timestamp when the notification was last seen
         lastOccuredAt:
           type: string
           format: date-time
@@ -12418,9 +12423,9 @@ components:
           description: Optional ObjectId of the reference
         referenceType:
           type: string
-        selfId:
+        actionReferenceId:
           type: string
-          description: Optional ObjectId of self
+          description: Optional ObjectId of the action object
         parentId:
           type: string
           description: Optional ObjectId of parent
@@ -12434,19 +12439,6 @@ components:
           type: string
           description: Ready to render text with templating allow client to interpret
           example: '{{user:67c80e32d8caa9a08de35025}} and 5 others rected to {{post:67c80e539a36ae4790665949}}'
-    NotificationTrayItemSeen:
-      type: object
-      required:
-        - _id
-        - lastSeenAt
-      properties:
-        _id:
-          type: string
-          description: ObjectId of the notification tray item
-        lastSeenAt:
-          type: string
-          format: date-time
-          description: Timestamp when the notification was last seen
     NotificationSetting:
       type: object
       properties:
@@ -17076,10 +17068,6 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/NotificationTrayItem'
-              notificationTrayItemSeens:
-                type: array
-                items:
-                  $ref: '#/components/schemas/NotificationTrayItemSeen'
               paging:
                 type: object
                 required:
