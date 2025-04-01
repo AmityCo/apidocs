@@ -135,7 +135,7 @@ paths:
               enum:
                 - post
                 - comment
-                - photo
+                - image
                 - video
                 - file
         - name: creatorIds
@@ -153,6 +153,7 @@ paths:
             items:
               type: string
               maxLength: 24
+            max: 5
         - name: isDeleted
           in: query
           description: |
@@ -165,6 +166,13 @@ paths:
           description: |
             For filter content that flag is cleared while reviewing <br>
             Will filter manualReview.reviewedType == "clearFlag"
+          schema:
+            type: boolean
+        - name: isReviewed
+          in: query
+          description: |
+            For filter content that is reviewed or not reviewed <br>
+            Will filter lastReviewedAt exists
           schema:
             type: boolean
         - name: options[token]
@@ -206,40 +214,6 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
-  /admin/v1/contents:
-    delete:
-      summary: Delete multiple content
-      description: Delete multiple content. Use when review item in moderation feeds.
-      tags:
-        - Moderation Feed
-      security:
-        - BearerAuth: []
-      requestBody:
-        $ref: '#/components/requestBodies/root-delete-request-payload'
-      responses:
-        '200':
-          $ref: '#/components/responses/root-delete-response-200'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '500':
-          $ref: '#/components/responses/UnexpectedError'
-  /admin/v1/contents/flags:
-    delete:
-      summary: Clear multiple content flags
-      description: Clear multiple content flags. Use when review item in moderation feeds.
-      tags:
-        - Moderation Feed
-      security:
-        - BearerAuth: []
-      requestBody:
-        $ref: '#/components/requestBodies/flags-delete-request-payload'
-      responses:
-        '200':
-          $ref: '#/components/responses/flags-delete-response-200'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '500':
-          $ref: '#/components/responses/UnexpectedError'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -259,6 +233,9 @@ components:
       properties:
         contentId:
           type: string
+          description: Internal ID of the content.
+        contentPublicId:
+          type: string
           description: Public ID of the content.
         contentType:
           type: string
@@ -266,6 +243,81 @@ components:
             - post
             - comment
           description: Type of the content.
+        flagCount:
+          type: integer
+          description: Number of flags on the content.
+        lastFlaggedAt:
+          type: string
+          format: date-time
+          description: Timestamp of the last flag on the content.
+        lastReviewedAt:
+          type: string
+          format: date-time
+          description: Timestamp of the last review on the content.
+        manualReview:
+          type: object
+          properties:
+            reviewedType:
+              type: string
+              enum:
+                - delete
+                - clearFlag
+              description: Type of manual review action.
+            reviewedAt:
+              type: string
+              format: date-time
+              description: Timestamp of the manual review action.
+            reviewedBy:
+              type: string
+              description: Internal ID of the user who performed the manual review.
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 24
+          max: 5
+          description: List of tags associated with the content.
+        aiModeration:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - text
+                - image
+                - video
+            moderatedAction:
+              type: string
+              enum:
+                - delete
+                - flag
+              description: Type of AI moderation action.
+            moderatedAt:
+              type: string
+              format: date-time
+              description: Timestamp of the AI moderation action.
+            categories:
+              type: array
+              items:
+                type: object
+                description: List of categories identified by AI moderation.
+                properties:
+                  name:
+                    type: string
+                    description: Category name.
+                  score:
+                    type: number
+                    format: float
+                    description: Confidence score of the category.
+        targetId:
+          type: string
+          description: ID of the target (user or community) associated with the content.
+        targetType:
+          type: string
+          description: Type of the target (user or community) associated with the content.
+        userId:
+          type: string
+          description: ID of the user who created the content.
     Error:
       type: object
       properties:
@@ -304,6 +356,10 @@ components:
                     type: string
                   previous:
                     type: string
+              total:
+                type: integer
+                description: Total number of contents that match the filter.
+                example: 100
     BadRequestError:
       description: Bad Request error.
       content:
@@ -324,78 +380,3 @@ components:
             status: error
             code: 500000
             message: Unexpected error
-    root-delete-response-200:
-      description: Delete multiple content successfully.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-                enum:
-                  - success
-                description: Status of the delete operation.
-    flags-delete-response-200:
-      description: Clear multiple content flags successfully.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-                enum:
-                  - success
-                description: Status of the clear operation.
-  requestBodies:
-    root-delete-request-payload:
-      description: Information of content to be deleted
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              contents:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    contentId:
-                      type: string
-                      maxLength: 900
-                    contentType:
-                      type: string
-                      enum:
-                        - post
-                        - comment
-                maxItems: 100
-            required:
-              - contents
-            description: |
-              Payload to delete multiple content by their IDs.
-    flags-delete-request-payload:
-      description: Information of content to be cleared
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              contents:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    contentId:
-                      type: string
-                      maxLength: 900
-                    contentType:
-                      type: string
-                      enum:
-                        - post
-                        - comment
-                maxItems: 100
-            required:
-              - contentIds
-            description: |
-              Payload to clear multiple content flags by their IDs.

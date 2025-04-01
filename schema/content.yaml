@@ -3,6 +3,9 @@ Content:
   properties:
     contentId:
       type: string
+      description: Internal ID of the content.
+    contentPublicId:
+      type: string
       description: Public ID of the content.
     contentType:
       type: string
@@ -10,3 +13,78 @@ Content:
         - post
         - comment
       description: Type of the content.
+    flagCount:
+      type: integer
+      description: Number of flags on the content.
+    lastFlaggedAt:
+      type: string
+      format: date-time
+      description: Timestamp of the last flag on the content.
+    lastReviewedAt:
+      type: string
+      format: date-time
+      description: Timestamp of the last review on the content.
+    manualReview:
+      type: object
+      properties:
+        reviewedType:
+          type: string
+          enum:
+            - delete
+            - clearFlag
+          description: Type of manual review action.
+        reviewedAt:
+          type: string
+          format: date-time
+          description: Timestamp of the manual review action.
+        reviewedBy:
+          type: string
+          description: Internal ID of the user who performed the manual review.
+    tags:
+      type: array
+      items:
+        type: string
+        maxLength: 24
+      max: 5
+      description: List of tags associated with the content.
+    aiModeration:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - text
+            - image
+            - video
+        moderatedAction:
+          type: string
+          enum:
+            - delete
+            - flag
+          description: Type of AI moderation action.
+        moderatedAt:
+          type: string
+          format: date-time
+          description: Timestamp of the AI moderation action.
+        categories:
+          type: array
+          items:
+            type: object
+            description: List of categories identified by AI moderation.
+            properties:
+              name:
+                type: string
+                description: Category name.
+              score:
+                type: number
+                format: float
+                description: Confidence score of the category.
+    targetId:
+      type: string
+      description: ID of the target (user or community) associated with the content.
+    targetType:
+      type: string
+      description: Type of the target (user or community) associated with the content.
+    userId:
+      type: string
+      description: ID of the user who created the content.

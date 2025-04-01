@@ -23,7 +23,7 @@ root-get-request-parameters:
         enum:
           - post
           - comment
-          - photo
+          - image
           - video
           - file
   - name: creatorIds
@@ -41,6 +41,7 @@ root-get-request-parameters:
       items:
         type: string
         maxLength: 24
+      max: 5
   - name: isDeleted
     in: query
     description: |
@@ -53,6 +54,13 @@ root-get-request-parameters:
     description: |
       For filter content that flag is cleared while reviewing <br>
       Will filter manualReview.reviewedType == "clearFlag"
+    schema:
+      type: boolean
+  - name: isReviewed
+    in: query
+    description: |
+      For filter content that is reviewed or not reviewed <br>
+      Will filter lastReviewedAt exists
     schema:
       type: boolean
   - name: options[token]
