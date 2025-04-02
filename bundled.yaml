@@ -4215,7 +4215,7 @@ paths:
           $ref: '#/components/responses/BadRequestError400'
         '404':
           $ref: '#/components/responses/NotFoundError404'
-  /api/v1/notification-tray/{userId}:
+  /api/v1/notification-tray:
     get:
       summary: Get list of notification tray items
       tags:
@@ -4223,16 +4223,12 @@ paths:
       security:
         - BearerAuth: []
       description: Retrieves the notification tray items for the current user. Ordered by newest first as a default.
-      parameters:
-        - $ref: '#/components/parameters/pathUserId'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/pageSize'
       responses:
         '200':
           $ref: '#/components/responses/GetNotificationTrayResponse'
         '400':
           $ref: '#/components/responses/BadRequestError400'
-  /api/v1/notification-tray/{userId}/tray/seen:
+  /api/v1/notification-tray/tray/seen:
     get:
       summary: Get notification tray seen data
       tags:
@@ -4240,8 +4236,6 @@ paths:
       security:
         - BearerAuth: []
       description: Retrieves the notification tray seen data
-      parameters:
-        - $ref: '#/components/parameters/pathUserId'
       responses:
         '200':
           $ref: '#/components/responses/GetNotificationTraySeenResponse'
@@ -4254,8 +4248,6 @@ paths:
       security:
         - BearerAuth: []
       description: Marks all notifications as seen for the specified user
-      parameters:
-        - $ref: '#/components/parameters/pathUserId'
       requestBody:
         $ref: '#/components/requestBodies/MarkAllSeenRequest'
       responses:
@@ -4263,7 +4255,7 @@ paths:
           $ref: '#/components/responses/MarkNotificationTraySeenResponse'
         '400':
           $ref: '#/components/responses/BadRequestError400'
-  /api/v1/notification-tray/{userId}/items/seen:
+  /api/v1/notification-tray/items/seen:
     post:
       summary: Mark specific notification items as seen
       tags:
@@ -4271,8 +4263,6 @@ paths:
       security:
         - BearerAuth: []
       description: Marks specific notification tray items as seen for the specified user
-      parameters:
-        - $ref: '#/components/parameters/pathUserId'
       requestBody:
         $ref: '#/components/requestBodies/MarkItemsSeenRequest'
       responses:
@@ -12345,6 +12335,14 @@ components:
                     description: This field is for terminate threshold.
                     minimum: 0
                     maximum: 1
+    NotificationTrayItemActor:
+      type: object
+      properties:
+        _id:
+          type: string
+        lastActedAt:
+          type: string
+          format: date-time
     TrayItemData:
       oneOf:
         - type: object
@@ -12391,8 +12389,7 @@ components:
           type: array
           description: Cap at 3 items
           items:
-            type: string
-            description: ObjectId of actors
+            $ref: '#/components/schemas/NotificationTrayItemActor'
         actorsCount:
           type: integer
           description: No caps on the total number of actors
@@ -17070,33 +17067,23 @@ components:
                   $ref: '#/components/schemas/NotificationTrayItem'
               paging:
                 type: object
-                required:
-                  - currentPage
-                  - totalPages
-                  - totalItems
-                  - pageSize
                 properties:
-                  currentPage:
-                    type: integer
-                    example: 1
-                    description: The current page number
-                  totalPages:
-                    type: integer
-                    example: 5
-                    description: Total number of pages available
-                  totalItems:
-                    type: integer
-                    example: 98
-                    description: Total count of items across all pages
-                  pageSize:
-                    type: integer
-                    example: 20
-                    description: Number of items per page
+                  next:
+                    type: string
+                  previous:
+                    type: string
+                  limit:
+                    type: number
               users:
                 type: array
                 description: Serialized user data
                 items:
                   $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                description: Serialize file data
+                items:
+                  $ref: '#/components/schemas/File'
     GetNotificationTraySeenResponse:
       description: Notification tray seen data
       content:
@@ -20107,31 +20094,6 @@ components:
       schema:
         type: string
         minLength: 1
-    pathUserId:
-      name: userId
-      type: string
-      in: path
-      description: The ID of the user who is the owner of the notifications
-      required: true
-    page:
-      name: page
-      in: query
-      description: Page number to retrieve
-      required: false
-      schema:
-        type: integer
-        default: 1
-        minimum: 1
-    pageSize:
-      name: pageSize
-      in: query
-      description: Number of items per page
-      required: false
-      schema:
-        type: integer
-        default: 20
-        minimum: 1
-        maximum: 100
     level:
       name: level
       required: true

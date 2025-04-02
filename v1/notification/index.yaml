@@ -41,10 +41,6 @@ notification-tray:
     security: 
       - BearerAuth: [] 
     description: Retrieves the notification tray items for the current user. Ordered by newest first as a default. 
-    parameters:
-      - $ref: "./parameter.yaml#/pathUserId"
-      - $ref: "./parameter.yaml#/page"
-      - $ref: "./parameter.yaml#/pageSize"
     responses: 
       200:
         $ref: "./response.yaml#/GetNotificationTrayResponse"
@@ -59,8 +55,6 @@ notification-tray-seen:
     security: 
       - BearerAuth: []
     description: Retrieves the notification tray seen data 
-    parameters: 
-      - $ref: "./parameter.yaml#/pathUserId"
     responses:
       200:
         $ref: "./response.yaml#/GetNotificationTraySeenResponse"
@@ -73,8 +67,6 @@ notification-tray-seen:
     security: 
       - BearerAuth: [] 
     description: Marks all notifications as seen for the specified user
-    parameters:
-      - $ref: "./parameter.yaml#/pathUserId"
     requestBody:
       $ref: "./request.yaml#/MarkAllSeenRequest"
     responses: 
@@ -91,8 +83,6 @@ notification-tray-items-seen:
     security: 
       - BearerAuth: [] 
     description: Marks specific notification tray items as seen for the specified user
-    parameters:
-      - $ref: "./parameter.yaml#/pathUserId"
     requestBody:
       $ref: './request.yaml#/MarkItemsSeenRequest'
     responses: 

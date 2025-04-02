@@ -22,6 +22,15 @@ TrayItemData:
           items:
             type: string
 
+NotificationTrayItemActor:
+  type: object
+  properties:
+    _id: 
+      type: string
+    lastActedAt: 
+      type: string
+      format: date-time
+
 NotificationTrayItem:
   type: object
   required:
@@ -52,8 +61,7 @@ NotificationTrayItem:
       type: array
       description: Cap at 3 items
       items:
-        type: string
-        description: ObjectId of actors
+        $ref: '#/NotificationTrayItemActor'
     actorsCount:
       type: integer
       description: No caps on the total number of actors
@@ -118,32 +126,26 @@ GetNotificationTrayResponse:
           paging:
             type: object
             required:
-              - currentPage
-              - totalPages
-              - totalItems
-              - pageSize
+              - next
+              - previous
+              - limit
             properties:
-              currentPage:
-                type: integer
-                example: 1
-                description: The current page number
-              totalPages:
-                type: integer
-                example: 5
-                description: Total number of pages available
-              totalItems:
-                type: integer
-                example: 98
-                description: Total count of items across all pages
-              pageSize:
-                type: integer
-                example: 20
-                description: Number of items per page
+              next:
+                type: string
+              previous:
+                type: string
+              limit:
+                type: number
           users:
             type: array
             description: Serialized user data
             items:
               $ref: '../../schema/user.yaml#/UserV3'
+          files:
+            type: array
+            description: Serialize file data
+            items:
+              $ref: '../../schema/file.yaml#/File'
 
 GetNotificationTraySeenResponse:
   description: Notification tray seen data
