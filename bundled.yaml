@@ -4222,6 +4222,9 @@ paths:
         - Notification Tray
       security:
         - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/parameter_token-3'
+        - $ref: '#/components/parameters/parameter_limit-2'
       description: Retrieves the notification tray items for the current user. Ordered by newest first as a default.
       responses:
         '200':
@@ -5371,7 +5374,7 @@ paths:
       description: |
         Get message ids by the most of reactions.
       parameters:
-        - $ref: '#/components/parameters/parameter_limit-2'
+        - $ref: '#/components/parameters/parameter_limit-3'
         - $ref: '#/components/parameters/reactionName'
       responses:
         '200':
@@ -6338,8 +6341,8 @@ paths:
         - Story
       parameters:
         - $ref: '#/components/parameters/seenState'
-        - $ref: '#/components/parameters/parameter_limit-3'
-        - $ref: '#/components/parameters/parameter_token-3'
+        - $ref: '#/components/parameters/parameter_limit-4'
+        - $ref: '#/components/parameters/parameter_token-4'
       responses:
         '200':
           description: Global Story Information
@@ -6598,7 +6601,7 @@ paths:
         - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/parameter_limit'
-        - $ref: '#/components/parameters/parameter_token-4'
+        - $ref: '#/components/parameters/parameter_token-5'
       responses:
         '200':
           $ref: '#/components/responses/me-user-blocks-get-response-200'
@@ -17067,6 +17070,10 @@ components:
                   $ref: '#/components/schemas/NotificationTrayItem'
               paging:
                 type: object
+                required:
+                  - next
+                  - previous
+                  - limit
                 properties:
                   next:
                     type: string
@@ -20094,6 +20101,23 @@ components:
       schema:
         type: string
         minLength: 1
+    parameter_token-3:
+      name: token
+      description: pagination token
+      in: query
+      optional: true
+      schema:
+        type: string
+    parameter_limit-2:
+      name: limit
+      description: pagination limit
+      in: query
+      optional: true
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
     level:
       name: level
       required: true
@@ -20451,7 +20475,7 @@ components:
         enum:
           - asc
           - desc
-    parameter_limit-2:
+    parameter_limit-3:
       name: limit
       in: query
       schema:
@@ -20774,7 +20798,7 @@ components:
           - seen
           - unseen
         default: unseen
-    parameter_limit-3:
+    parameter_limit-4:
       name: limit
       in: query
       description: the amount of story targets per query
@@ -20784,7 +20808,7 @@ components:
         default: 10
         minimum: 1
         maximum: 100
-    parameter_token-3:
+    parameter_token-4:
       name: token
       in: query
       required: false
@@ -20894,7 +20918,7 @@ components:
         type: boolean
         default: false
       description: true - it will hard delete this user comments after user is deleted.
-    parameter_token-4:
+    parameter_token-5:
       name: token
       in: query
       schema:
