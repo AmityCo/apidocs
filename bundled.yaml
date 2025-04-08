@@ -12368,9 +12368,9 @@ components:
         - _id
         - lastOccuredAt
         - lastSeenAt
-        - actorIds
+        - actors
         - actorsCount
-        - action
+        - actionType
         - targetId
         - targetType
         - data
@@ -12388,7 +12388,7 @@ components:
           type: string
           format: date-time
           description: Timestamp when the notification last occurred
-        actorIds:
+        actors:
           type: array
           description: Cap at 3 items
           items:
@@ -12396,7 +12396,7 @@ components:
         actorsCount:
           type: integer
           description: No caps on the total number of actors
-        action:
+        actionType:
           type: string
           enum:
             - post
@@ -12438,7 +12438,7 @@ components:
         templatedText:
           type: string
           description: Ready to render text with templating allow client to interpret
-          example: '{{user:67c80e32d8caa9a08de35025}} and 5 others rected to {{post:67c80e539a36ae4790665949}}'
+          example: '{{ userId: 67f4e40030a5dea19d8a187f }} replied to your comment in {{ communityId: 67f4e4c07af04a145b1e684a }}'
     NotificationSetting:
       type: object
       properties:
