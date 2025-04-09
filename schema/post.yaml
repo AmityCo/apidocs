@@ -176,8 +176,8 @@ Post:
           type:
             type: string
             description: >
-                type:
-                * `user` - need to specific userIds and notification mentions individual user
+              type:
+              * `user` - need to specific userIds and notification mentions individual user
             enum:
               - user
           userIds:
@@ -199,6 +199,25 @@ Post:
       type: integer
     reach:
       type: integer
+    flags:
+      type: array
+      description: Information about users who have flagged this post
+      items:
+        type: object
+        properties:
+          userId:
+            type: string
+            description: ID of the user who flagged the post
+          reason:
+            type: string
+            description: Reason for flagging the post
+          details:
+            type: string
+            description: Additional details about the flag
+          createdAt:
+            type: string
+            format: date-time
+            description: When the post was flagged
   required:
     - postId
     - data
@@ -375,8 +394,8 @@ PostForRealtime:
           type:
             type: string
             description: >
-                type:
-                * `user` - need to specific userIds and notification mentions individual user
+              type:
+              * `user` - need to specific userIds and notification mentions individual user
             enum:
               - user
           userIds:
@@ -409,7 +428,7 @@ PostWithPrivateId:
         _id:
           type: string
           description: Private ID of a post.
-    - $ref: '#/PostV4'
+    - $ref: "#/PostV4"
 
 PostV4:
   type: object
@@ -589,8 +608,8 @@ PostV4:
           type:
             type: string
             description: >
-                type:
-                * `user` - need to specific userIds and notification mentions individual user
+              type:
+              * `user` - need to specific userIds and notification mentions individual user
             enum:
               - user
           userIds:
@@ -612,6 +631,25 @@ PostV4:
       type: integer
     reach:
       type: integer
+    flags:
+      type: array
+      description: Information about users who have flagged this post
+      items:
+        type: object
+        properties:
+          userId:
+            type: string
+            description: ID of the user who flagged the post
+          reason:
+            type: string
+            description: Reason for flagging the post
+          details:
+            type: string
+            description: Additional details about the flag
+          createdAt:
+            type: string
+            format: date-time
+            description: When the post was flagged
   required:
     - postId
     - data

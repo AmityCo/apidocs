@@ -4779,6 +4779,8 @@ paths:
         - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/_postId'
+      requestBody:
+        $ref: '#/components/requestBodies/_postId-flag-request-payload'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-6'
@@ -10689,6 +10691,25 @@ components:
           type: integer
         reach:
           type: integer
+        flags:
+          type: array
+          description: Information about users who have flagged this post
+          items:
+            type: object
+            properties:
+              userId:
+                type: string
+                description: ID of the user who flagged the post
+              reason:
+                type: string
+                description: Reason for flagging the post
+              details:
+                type: string
+                description: Additional details about the flag
+              createdAt:
+                type: string
+                format: date-time
+                description: When the post was flagged
       required:
         - postId
         - data
@@ -12435,6 +12456,25 @@ components:
           type: integer
         reach:
           type: integer
+        flags:
+          type: array
+          description: Information about users who have flagged this post
+          items:
+            type: object
+            properties:
+              userId:
+                type: string
+                description: ID of the user who flagged the post
+              reason:
+                type: string
+                description: Reason for flagging the post
+              details:
+                type: string
+                description: Additional details about the flag
+              createdAt:
+                type: string
+                format: date-time
+                description: When the post was flagged
       required:
         - postId
         - data
@@ -22082,6 +22122,33 @@ components:
                   description: tags
             required:
               - postId
+    _postId-flag-request-payload:
+      description: Information required to flag a post.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              reason:
+                type: string
+                enum:
+                  - AGAINST_COMMUNITY_GUIDELINES
+                  - HARASSMENT_OR_BULLYING
+                  - VIOLENCE_OR_THREATENING_CONTENT
+                  - SELF_HARM_OR_SUICIDE
+                  - SEXUAL_CONTENT_OR_NUDITY
+                  - SPAM_OR_SCAMS
+                  - FALSE_INFORMATION_OR_MISINFORMATION
+                  - OTHERS
+                description: The reason for flagging this post
+              detail:
+                type: string
+                maximum: 1000
+                optional: true
+                description: Additional details about the flag
+            required:
+              - reason
     request__postId-put-request-payload:
       description: |
         information of a post to be updated.
