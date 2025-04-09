@@ -101,3 +101,28 @@ _postId-put-request-payload:
               description: "tags"
         required:
           - "postId"
+
+_postId-flag-request-payload:
+  description: "Information required to flag a post."
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          reason:
+            type: "string"
+            enum:
+              - "AGAINST_COMMUNITY_GUIDELINES"
+              - "HARASSMENT_OR_BULLYING"
+              - "VIOLENCE_OR_THREATENING_CONTENT"
+              - "SELF_HARM_OR_SUICIDE"
+              - "SEXUAL_CONTENT_OR_NUDITY"
+              - "SPAM_OR_SCAMS"
+              - "FALSE_INFORMATION_OR_MISINFORMATION"
+              - "OTHERS"
+            description: "The reason for flagging this post"
+          detail:
+            type: "string"
+            maxLength: 1000
+            description: "Additional details about the flag"
