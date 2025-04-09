@@ -10691,25 +10691,6 @@ components:
           type: integer
         reach:
           type: integer
-        flags:
-          type: array
-          description: Information about users who have flagged this post
-          items:
-            type: object
-            properties:
-              userId:
-                type: string
-                description: ID of the user who flagged the post
-              reason:
-                type: string
-                description: Reason for flagging the post
-              details:
-                type: string
-                description: Additional details about the flag
-              createdAt:
-                type: string
-                format: date-time
-                description: When the post was flagged
       required:
         - postId
         - data
@@ -12456,25 +12437,6 @@ components:
           type: integer
         reach:
           type: integer
-        flags:
-          type: array
-          description: Information about users who have flagged this post
-          items:
-            type: object
-            properties:
-              userId:
-                type: string
-                description: ID of the user who flagged the post
-              reason:
-                type: string
-                description: Reason for flagging the post
-              details:
-                type: string
-                description: Additional details about the flag
-              createdAt:
-                type: string
-                format: date-time
-                description: When the post was flagged
       required:
         - postId
         - data
@@ -22132,6 +22094,7 @@ components:
             properties:
               reason:
                 type: string
+                default: Others
                 description: The reason for flagging this post
               detail:
                 type: string
