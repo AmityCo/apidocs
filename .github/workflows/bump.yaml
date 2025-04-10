@@ -1,0 +1,52 @@
+name: bump and publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "release type"
+        type: choice
+        required: true
+        default: "patch"
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      actions: read
+      checks: write
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: install deps
+        run: npm install --frozen-lockfile
+
+      - name: changelog
+        run: npm run changelog:gen
+
+      - name: bump version
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          set +e
+          git add CHANGELOG.md
+          git commit -m "chore: update changelog"
+          npm version ${{ github.event.inputs.release }} -m "chore: bummp version to %s" --no-git-tag-version
+          version=$(jq -r .version package.json)
+          git tag $version
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git develop
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git $version
