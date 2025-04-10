@@ -16,6 +16,11 @@ on:
 jobs:
   bump:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      actions: read
+      checks: write
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -35,4 +40,13 @@ jobs:
 
       - name: bump version
         run: |
-          npm version ${{ github.event.inputs.release }}
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          set +e
+          git add CHANGELOG.md
+          git commit -m "chore: update changelog"
+          npm version ${{ github.event.inputs.release }} -m "chore: bummp version to %s" --no-git-tag-version
+          version=$(jq -r .version package.json)
+          git tag $version
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git develop
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git $version
