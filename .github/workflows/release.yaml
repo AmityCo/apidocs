@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: release
-      url: https://${{ vars.AWS_S3_BUCKET_DOCS }}/
+      url: https://${{ vars.AWS_S3_BUCKET_DOCS }}
     permissions:
       id-token: write
       contents: read
@@ -50,8 +50,7 @@ jobs:
         if: always()
         shell: bash
         run: |
-          aws s3 sync $SOURCE_DIR s3://$AWS_S3_BUCKET/$DEST_DIR --follow-symlinks --delete --exclude '[0-9]*/*'
+          aws s3 sync $SOURCE_DIR s3://$AWS_S3_BUCKET/ --follow-symlinks --delete --exclude '[0-9]*/*'
         env:
           AWS_S3_BUCKET: ${{ vars.AWS_S3_BUCKET_DOCS }}
           SOURCE_DIR: build
-          DEST_DIR: ${{ github.ref_name }}
