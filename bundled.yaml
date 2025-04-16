@@ -12410,14 +12410,13 @@ components:
         trayItemCategory:
           type: string
           enum:
-            - mention_in_post
             - mention_in_poll
+            - mention_in_post
             - mention_in_comment
             - mention_in_reply
-            - react_to_post
-            - react_to_poll
-            - react_to_comment
-            - react_to_reply
+            - reaction_on_post
+            - reaction_on_comment
+            - reaction_on_reply
           description: Category for when action is either "mention" or "reply"
         targetId:
           type: string
@@ -12436,6 +12435,7 @@ components:
           type: string
           description: Optional ObjectId of parent
         data:
+          deprecated: true
           $ref: '#/components/schemas/TrayItemData'
         text:
           type: string
