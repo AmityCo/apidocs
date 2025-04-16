@@ -22396,7 +22396,7 @@ components:
               lastSeenAt:
                 type: string
                 format: date-time
-                description: Timestamp to mark as last seen for all notifications
+                description: Timestamp to mark as last seen for all notifications (should not be out of sync in the future with server time than 10 seconds)
     MarkItemsSeenRequest:
       required: true
       content:
@@ -22420,7 +22420,7 @@ components:
                     lastSeenAt:
                       type: string
                       format: date-time
-                      description: Timestamp to mark as last seen for this item
+                      description: Timestamp to mark as last seen for this item (should not be out of sync in the future with server time than 10 seconds)
     setting-post-request-payload:
       description: |
         Notification setting information to be updated

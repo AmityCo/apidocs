@@ -40,7 +40,7 @@ MarkAllSeenRequest:
           lastSeenAt:
             type: string
             format: date-time
-            description: Timestamp to mark as last seen for all notifications
+            description: Timestamp to mark as last seen for all notifications (should not be out of sync in the future with server time than 10 seconds)
 
 MarkItemsSeenRequest:
   required: true
@@ -65,4 +65,4 @@ MarkItemsSeenRequest:
                 lastSeenAt:
                   type: string
                   format: date-time
-                  description: Timestamp to mark as last seen for this item
+                  description: Timestamp to mark as last seen for this item (should not be out of sync in the future with server time than 10 seconds)
