@@ -1962,6 +1962,25 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '422':
           $ref: '#/components/responses/ValidationError'
+    put:
+      summary: Update file metadata.
+      tags:
+        - File
+      security:
+        - BearerAuth: []
+      description: |
+        Update file metadata
+      requestBody:
+        $ref: '#/components/requestBodies/update-file-data'
+      responses:
+        '200':
+          $ref: '#/components/responses/root-post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/FileNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v3/files/{fileId}/download:
     get:
       summary: Download file
@@ -15484,6 +15503,16 @@ components:
                             type: number
                           isFull:
                             type: boolean
+    FileNotFoundError:
+      description: Given file id is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400400
+            message: File not found ${fileId}.
     _fileId-delete-response-200:
       description: File Information
       content:
@@ -21202,6 +21231,16 @@ components:
             required:
               - files
               - file
+    update-file-data:
+      description: information of a file to be updated.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              altText:
+                type: string
+                description: Alternative text for the file.
     common-post-request-payload:
       description: |
         `file` and `files` are required but must not provide both. `altText` requires `file` to be provided.

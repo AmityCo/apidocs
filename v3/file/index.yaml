@@ -49,7 +49,24 @@ _fileId:
         $ref: "../../global/error.yaml#/NotFoundError"
       422:
         $ref: "../../global/error.yaml#/ValidationError"
-
+  put:
+    summary: "Update file metadata."
+    tags:
+      - "File"
+    security:
+      - BearerAuth: []
+    description: "Update file metadata\n"
+    requestBody:
+      $ref: "./request.yaml#/update-file-data"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-post-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/FileNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
 _fileId-download:
   get:
     summary: "Download file"
