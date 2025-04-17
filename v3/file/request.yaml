@@ -5,11 +5,19 @@ root-post-request-payload:
       schema:
         type: "object"
         properties:
+          files:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
           file:
             type: "array"
             items:
               type: "string"
               format: "binary"
+          altText:
+            type: "string"
+            maxLength: 1000
           fullImage:
             type: "boolean"
             nullable: true
