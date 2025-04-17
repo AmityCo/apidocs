@@ -1,5 +1,5 @@
 root-post-request-payload:
-  description: "Information of file to be created. It will be applied to every attachment. `file` and `files` are required but must not provide both.\n"
+  description: "Information of file to be created. It will be applied to every attachment. `file` and `files` must not be provided at the same time.\n"
   content:
     multipart/form-data:
       schema:
@@ -11,6 +11,7 @@ root-post-request-payload:
               type: "string"
               format: "binary"
               description: "A list of file data, `file` is optional when this is provided."
+            deprecated: true
           file:
             type: "array"
             items:
@@ -31,7 +32,6 @@ root-post-request-payload:
               - network
             default: public
         required:
-          - "files"
           - "file"
 
 update-file-data:

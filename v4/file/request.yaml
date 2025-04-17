@@ -1,6 +1,6 @@
 common-post-request-payload:
   description: >
-      `file` and `files` are required but must not provide both. `altText` requires `file` to be provided.
+      `file` and `files` must not be provided at the same time. `altText` requires `file` to be provided.
   content:
     multipart/form-data:
       schema:
@@ -12,6 +12,7 @@ common-post-request-payload:
               type: "string"
               format: "binary"
               description: "A list of file data, `file` is optional when this is provided."
+            deprecated: true
           file:
             type: "array"
             items:
