@@ -35,3 +35,71 @@ common-post-request-payload:
         required:
           - "files"
           - "file"
+upload-file-request-payload:
+  description: >
+      `file` and `files` must not be provided at the same time. `altText` requires `file` to be provided.
+  content:
+    multipart/form-data:
+      schema:
+        type: "object"
+        properties:
+          files:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+              description: "A list of file data, `file` is optional when this is provided."
+            deprecated: true
+          file:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+              description: "A list of file data, `files` is optional when this is provided."
+          preferredFilename:
+            type: "string"
+            maxLength: 1024
+          accessType:
+            type: string
+            description: File access type. `network` type requires authentication to download.
+            enum:
+              - public
+              - network
+            default: public
+        required:
+          - "files"
+          - "file"
+upload-video-request-payload:
+  description: >
+      `file` and `files` must not be provided at the same time. `altText` requires `file` to be provided.
+  content:
+    multipart/form-data:
+      schema:
+        type: "object"
+        properties:
+          files:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+              description: "A list of file data, `file` is optional when this is provided."
+            deprecated: true
+          file:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+              description: "A list of file data, `files` is optional when this is provided."
+          preferredFilename:
+            type: "string"
+            maxLength: 1024
+          accessType:
+            type: string
+            description: File access type. `network` type requires authentication to download.
+            enum:
+              - public
+              - network
+            default: public
+        required:
+          - "files"
+          - "file"

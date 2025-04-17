@@ -1979,6 +1979,8 @@ paths:
           $ref: '#/components/responses/root-post-response-200'
         '400':
           $ref: '#/components/responses/BadRequestError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '404':
           $ref: '#/components/responses/FileNotFoundError'
         '500':
@@ -2025,6 +2027,8 @@ paths:
           $ref: '#/components/responses/images-response-200'
         '400':
           $ref: '#/components/responses/BadRequestError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '413':
           $ref: '#/components/responses/PayloadTooLargeError'
         '500':
@@ -2043,7 +2047,7 @@ paths:
 
         File size limit: 1,073,741,824 byte
       requestBody:
-        $ref: '#/components/requestBodies/common-post-request-payload'
+        $ref: '#/components/requestBodies/upload-file-request-payload'
       responses:
         '200':
           $ref: '#/components/responses/files-response-200'
@@ -2067,7 +2071,7 @@ paths:
 
         Video size limit: 2,147,483,648 byte (2GB)
       requestBody:
-        $ref: '#/components/requestBodies/common-post-request-payload'
+        $ref: '#/components/requestBodies/upload-video-request-payload'
       responses:
         '200':
           $ref: '#/components/responses/videos-response-200'
@@ -21256,6 +21260,13 @@ components:
           schema:
             type: object
             properties:
+              fileId:
+                type: string
+                description: The ID of the file to be updated.
+                required: true
+              isUsed:
+                type: boolean
+                description: Indicates if the file is currently in use.
               altText:
                 type: string
                 description: Alternative text for the file.
@@ -21283,6 +21294,74 @@ components:
               altText:
                 type: string
                 description: Alternative text for the file.
+              preferredFilename:
+                type: string
+                maxLength: 1024
+              accessType:
+                type: string
+                description: File access type. `network` type requires authentication to download.
+                enum:
+                  - public
+                  - network
+                default: public
+            required:
+              - files
+              - file
+    upload-file-request-payload:
+      description: |
+        `file` and `files` must not be provided at the same time. `altText` requires `file` to be provided.
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              files:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                  description: A list of file data, `file` is optional when this is provided.
+                deprecated: true
+              file:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                  description: A list of file data, `files` is optional when this is provided.
+              preferredFilename:
+                type: string
+                maxLength: 1024
+              accessType:
+                type: string
+                description: File access type. `network` type requires authentication to download.
+                enum:
+                  - public
+                  - network
+                default: public
+            required:
+              - files
+              - file
+    upload-video-request-payload:
+      description: |
+        `file` and `files` must not be provided at the same time. `altText` requires `file` to be provided.
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              files:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                  description: A list of file data, `file` is optional when this is provided.
+                deprecated: true
+              file:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                  description: A list of file data, `files` is optional when this is provided.
               preferredFilename:
                 type: string
                 maxLength: 1024
