@@ -15363,6 +15363,9 @@ components:
                         - public
                         - network
                       default: public
+                    altText:
+                      type: string
+                      description: Alternative text for the file.
                     createdAt:
                       type: string
                       description: The date/time when a file is uploaded.
@@ -21159,17 +21162,24 @@ components:
               - categoryId
     request_root-post-request-payload-4:
       description: |
-        Information of file to be created. It will be applied to every attachment
+        Information of file to be created. It will be applied to every attachment. `file` and `files` are required but must not provide both.
       content:
         multipart/form-data:
           schema:
             type: object
             properties:
+              files:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                  description: A list of file data, `file` is optional when this is provided.
               file:
                 type: array
                 items:
                   type: string
                   format: binary
+                  description: A list of file data, `files` is optional when this is provided.
               fullImage:
                 type: boolean
                 nullable: true
@@ -21183,6 +21193,9 @@ components:
                   - public
                   - network
                 default: public
+            required:
+              - files
+              - file
     common-post-request-payload:
       content:
         multipart/form-data:
