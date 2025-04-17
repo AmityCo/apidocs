@@ -9,7 +9,13 @@ common-post-request-payload:
             items:
               type: "string"
               format: "binary"
-              description: "file data"
+              description: "A list of file data, `file` is optional when this is provided."
+          file:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+              description: "A list of file data, `files` is optional when this is provided."
           preferredFilename:
             type: "string"
             maxLength: 1024
@@ -22,3 +28,4 @@ common-post-request-payload:
             default: public
         required:
           - "files"
+          - "file"
