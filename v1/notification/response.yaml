@@ -180,9 +180,9 @@ MarkNotificationTraySeenResponse:
       schema: 
         type: object
         required:
-          - lastTraySeenAt
+          - lastSeenAt
         properties:
-          lastTraySeenAt:
+          lastSeenAt:
             type: string
             format: date-time
 
@@ -193,8 +193,18 @@ MarkNotificationTrayItemsSeenResponse:
       schema: 
         type: object
         required:
-          - lastTraySeenAt
+          - trayItems
         properties:
-          lastSeenAt:
-            type: string
-            format: date-time
+          trayItems:
+            type: array
+            items:
+              type: object
+              required:
+                - id
+                - lastSeenAt
+              properties:
+                id:
+                  type: string
+                lastSeenAt:
+                  type: string
+                  format: date-time
