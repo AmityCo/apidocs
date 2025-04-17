@@ -15602,13 +15602,16 @@ components:
                     - file
                     - video
                   example: file
-                acceType:
+                accessType:
                   type: string
                   description: File access type. `network` type requires authentication to download.
                   enum:
                     - public
                     - network
                   default: public
+                altText:
+                  type: string
+                  description: Alternative text for the file.
                 createdAt:
                   type: string
                   description: The date/time when a file is uploaded.
@@ -15669,6 +15672,9 @@ components:
                     - public
                     - network
                   default: public
+                altText:
+                  type: string
+                  description: Alternative text for the file.
                 createdAt:
                   type: string
                   description: The date/time when a file is uploaded.
@@ -21197,6 +21203,8 @@ components:
               - files
               - file
     common-post-request-payload:
+      description: |
+        `file` and `files` are required but must not provide both. `altText` requires `file` to be provided.
       content:
         multipart/form-data:
           schema:
@@ -21214,6 +21222,9 @@ components:
                   type: string
                   format: binary
                   description: A list of file data, `files` is optional when this is provided.
+              altText:
+                type: string
+                description: Alternative text for the file.
               preferredFilename:
                 type: string
                 maxLength: 1024
