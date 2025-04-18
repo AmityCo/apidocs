@@ -9819,6 +9819,8 @@ components:
         updatedAt:
           type: string
           format: date-time
+        isDeleted:
+          type: boolean
       required:
         - userId
         - createdAt
@@ -10300,6 +10302,9 @@ components:
           description: ID of a community.
         communityMembership:
           $ref: '#/components/schemas/ChannelMembership'
+        notMemberReason:
+          type: string
+          description: Reason why a user is not a member of the community.
         isBanned:
           type: boolean
           default: false
@@ -10642,6 +10647,9 @@ components:
           items:
             type: string
             description: ID of a children post.
+        childrenNumber:
+          type: integer
+          description: The number of all children posts for this post.
         isDeleted:
           type: boolean
           default: false
@@ -10698,104 +10706,6 @@ components:
       required:
         - postId
         - data
-    Follow:
-      type: object
-      properties:
-        from:
-          type: string
-        fromUserPublicId:
-          type: string
-        fromUserInternalId:
-          type: string
-        to:
-          type: string
-        toUserPublicId:
-          type: string
-        toUserInternalId:
-          type: string
-        status:
-          type: string
-          enum:
-            - pending
-            - accepted
-            - none
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    FollowCount:
-      type: object
-      properties:
-        userId:
-          type: string
-        followerCount:
-          type: integer
-        followingCount:
-          type: integer
-        pendingCount:
-          type: integer
-    FollowV5:
-      type: object
-      properties:
-        from:
-          type: string
-        fromUserPublicId:
-          type: string
-        fromUserInternalId:
-          type: string
-        to:
-          type: string
-        toUserPublicId:
-          type: string
-        toUserInternalId:
-          type: string
-        status:
-          type: string
-          enum:
-            - blocked
-            - pending
-            - accepted
-            - none
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    PinTarget:
-      type: object
-      properties:
-        targetId:
-          type: string
-          description: Id of target. (postId or messageFeedId or networkId )
-        targetType:
-          type: string
-          description: type of target. (community or messageFeed or network)
-        lastPinsUpdatedAt:
-          type: string
-          description: Latest date/time when pinned content is updated.
-          format: date-time
-    Pin:
-      type: object
-      properties:
-        referenceId:
-          type: string
-          description: Id of content. (post or messageFeed or network)
-        referenceType:
-          type: string
-          description: type of content. (post or or messageFeed or network)
-        placement:
-          type: string
-          description: type of pin. (default or announcement or global)
-        pinnedBy:
-          type: string
-          description: user id who pinned the content.
-        pinnedAt:
-          type: string
-          description: The date/time when a content is pinned.
-          format: date-time
     VideoStreaming:
       type: object
       properties:
@@ -11019,6 +10929,104 @@ components:
           default: open
         closedIn:
           type: number
+    Follow:
+      type: object
+      properties:
+        from:
+          type: string
+        fromUserPublicId:
+          type: string
+        fromUserInternalId:
+          type: string
+        to:
+          type: string
+        toUserPublicId:
+          type: string
+        toUserInternalId:
+          type: string
+        status:
+          type: string
+          enum:
+            - pending
+            - accepted
+            - none
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    FollowCount:
+      type: object
+      properties:
+        userId:
+          type: string
+        followerCount:
+          type: integer
+        followingCount:
+          type: integer
+        pendingCount:
+          type: integer
+    FollowV5:
+      type: object
+      properties:
+        from:
+          type: string
+        fromUserPublicId:
+          type: string
+        fromUserInternalId:
+          type: string
+        to:
+          type: string
+        toUserPublicId:
+          type: string
+        toUserInternalId:
+          type: string
+        status:
+          type: string
+          enum:
+            - blocked
+            - pending
+            - accepted
+            - none
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    PinTarget:
+      type: object
+      properties:
+        targetId:
+          type: string
+          description: Id of target. (postId or messageFeedId or networkId )
+        targetType:
+          type: string
+          description: type of target. (community or messageFeed or network)
+        lastPinsUpdatedAt:
+          type: string
+          description: Latest date/time when pinned content is updated.
+          format: date-time
+    Pin:
+      type: object
+      properties:
+        referenceId:
+          type: string
+          description: Id of content. (post or messageFeed or network)
+        referenceType:
+          type: string
+          description: type of content. (post or or messageFeed or network)
+        placement:
+          type: string
+          description: type of pin. (default or announcement or global)
+        pinnedBy:
+          type: string
+          description: user id who pinned the content.
+        pinnedAt:
+          type: string
+          description: The date/time when a content is pinned.
+          format: date-time
     UserMarkers:
       type: object
       properties:
@@ -12244,6 +12252,12 @@ components:
     PostV4:
       type: object
       properties:
+        _id:
+          type: string
+          description: Private ID of a post. (for real-time event)
+        path:
+          type: string
+          description: Path of a post. (for real-time event)
         postId:
           type: string
           description: ID of a post.
@@ -12388,6 +12402,9 @@ components:
           items:
             type: string
             description: ID of a children post.
+        childrenNumber:
+          type: integer
+          description: The number of all children posts for this post.
         isDeleted:
           type: boolean
           default: false
@@ -15131,6 +15148,10 @@ components:
                     type: array
                     items:
                       $ref: '#/components/schemas/Post'
+                  postChildren:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
                   comments:
                     type: array
                     items:
@@ -15143,6 +15164,30 @@ components:
                     type: array
                     items:
                       $ref: '#/components/schemas/File'
+                  communities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Community'
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityCategory'
+                  communityUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityUser'
+                  feeds:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Feed'
+                  videoStreamings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoStreaming'
+                  polls:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Poll'
                   paging:
                     type: object
                     properties:
@@ -15186,14 +15231,33 @@ components:
                     type: array
                     items:
                       $ref: '#/components/schemas/Community'
-                  communityUsers:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/CommunityUser'
                   categories:
                     type: array
                     items:
                       $ref: '#/components/schemas/CommunityCategory'
+                  communityUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityUser'
+                  feeds:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Feed'
+                  videoStreamings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoStreaming'
+                  polls:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Poll'
+                  paging:
+                    type: object
+                    properties:
+                      next:
+                        type: string
+                      previous:
+                        type: string
     response_root-get-response-200-3:
       description: Global Feed Information
       content:

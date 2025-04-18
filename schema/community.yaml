@@ -89,7 +89,7 @@ Community:
     moderatorMemberCount:
       type: integer
     allowCommentInStory:
-      type: 'boolean'
+      type: "boolean"
       default: true
     notificationMode:
       type: string
@@ -195,7 +195,7 @@ CommunityForRealtime:
     moderatorMemberCount:
       type: integer
     allowCommentInStory:
-      type: 'boolean'
+      type: "boolean"
       default: true
   required:
     - communityId
@@ -249,7 +249,10 @@ CommunityUser:
       type: string
       description: ID of a community.
     communityMembership:
-      $ref: './channel.yaml#/ChannelMembership'
+      $ref: "./channel.yaml#/ChannelMembership"
+    notMemberReason:
+      type: string
+      description: Reason why a user is not a member of the community.
     isBanned:
       type: boolean
       default: false
@@ -264,7 +267,7 @@ CommunityUser:
     permissions:
       type: array
       items:
-        $ref: './role.yaml#/PermissionEnum'
+        $ref: "./role.yaml#/PermissionEnum"
     createdAt:
       type: string
       description: The date/time when a community user is created.
