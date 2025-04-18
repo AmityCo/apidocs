@@ -1927,6 +1927,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/root-post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
         '413':
           $ref: '#/components/responses/PayloadTooLargeError'
         '500':
@@ -1966,6 +1968,25 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '422':
           $ref: '#/components/responses/ValidationError'
+    put:
+      summary: Update file metadata.
+      tags:
+        - File
+      security:
+        - BearerAuth: []
+      description: |
+        Update file metadata
+      requestBody:
+        $ref: '#/components/requestBodies/update-file-data'
+      responses:
+        '200':
+          $ref: '#/components/responses/root-post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/FileNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v3/files/{fileId}/download:
     get:
       summary: Download file
@@ -2006,6 +2027,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/images-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
         '413':
           $ref: '#/components/responses/PayloadTooLargeError'
         '500':
@@ -2028,6 +2051,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/files-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
         '413':
           $ref: '#/components/responses/PayloadTooLargeError'
         '500':
@@ -2050,6 +2075,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/videos-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
         '413':
           $ref: '#/components/responses/PayloadTooLargeError'
         '500':
@@ -9613,6 +9640,16 @@ components:
             - image
             - file
             - video
+        accessType:
+          type: string
+          description: File access type. `network` type requires authentication to download.
+          enum:
+            - public
+            - network
+          default: public
+        altText:
+          type: string
+          description: Alternative text for the file.
         createdAt:
           type: string
           description: The date/time when a file is uploaded.
@@ -15367,6 +15404,9 @@ components:
                         - public
                         - network
                       default: public
+                    altText:
+                      type: string
+                      description: Alternative text for the file.
                     createdAt:
                       type: string
                       description: The date/time when a file is uploaded.
@@ -15429,12 +15469,25 @@ components:
                   fileId:
                     type: string
                     description: Root file key on cloud storage.
+                  fileUrl:
+                    type: string
+                    description: File URL.
                   type:
                     type: enum
                     description: File type.
                     enum:
                       - image
                       - file
+                  accessType:
+                    type: string
+                    description: File access type. `network` type requires authentication to download.
+                    enum:
+                      - public
+                      - network
+                    default: public
+                  altText:
+                    type: string
+                    description: Alternative text for the file.
                   createdAt:
                     type: string
                     description: The date/time when a file is uploaded.
@@ -15472,6 +15525,16 @@ components:
                             type: number
                           isFull:
                             type: boolean
+    FileNotFoundError:
+      description: Given file id is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400400
+            message: File not found ${fileId}.
     _fileId-delete-response-200:
       description: File Information
       content:
@@ -15527,6 +15590,9 @@ components:
                     - public
                     - network
                   default: public
+                altText:
+                  type: string
+                  description: Alternative text for the file.
                 createdAt:
                   type: string
                   description: The date/time when a file is uploaded.
@@ -15587,13 +15653,16 @@ components:
                     - file
                     - video
                   example: file
-                acceType:
+                accessType:
                   type: string
                   description: File access type. `network` type requires authentication to download.
                   enum:
                     - public
                     - network
                   default: public
+                altText:
+                  type: string
+                  description: Alternative text for the file.
                 createdAt:
                   type: string
                   description: The date/time when a file is uploaded.
@@ -15654,6 +15723,9 @@ components:
                     - public
                     - network
                   default: public
+                altText:
+                  type: string
+                  description: Alternative text for the file.
                 createdAt:
                   type: string
                   description: The date/time when a file is uploaded.
@@ -21204,17 +21276,25 @@ components:
               - categoryId
     request_root-post-request-payload-4:
       description: |
-        Information of file to be created. It will be applied to every attachment
+        Information of file to be created. It will be applied to every attachment. `file` and `files` must not be provided at the same time.
       content:
         multipart/form-data:
           schema:
             type: object
             properties:
+              files:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                  description: A list of file data, `file` is optional when this is provided.
+                deprecated: true
               file:
                 type: array
                 items:
                   type: string
                   format: binary
+                  description: A list of file data, `files` is optional when this is provided.
               fullImage:
                 type: boolean
                 nullable: true
@@ -21228,7 +21308,21 @@ components:
                   - public
                   - network
                 default: public
+            required:
+              - file
+    update-file-data:
+      description: information of a file to be updated.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              altText:
+                type: string
+                description: Alternative text for the file.
     common-post-request-payload:
+      description: |
+        `file` and `files` must not be provided at the same time. `altText` requires `file` to be provided.
       content:
         multipart/form-data:
           schema:
@@ -21239,7 +21333,17 @@ components:
                 items:
                   type: string
                   format: binary
-                  description: file data
+                  description: A list of file data, `file` is optional when this is provided.
+                deprecated: true
+              file:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                  description: A list of file data, `files` is optional when this is provided.
+              altText:
+                type: string
+                description: Alternative text for the file.
               preferredFilename:
                 type: string
                 maxLength: 1024
@@ -21252,6 +21356,7 @@ components:
                 default: public
             required:
               - files
+              - file
     message-feeds_messageFeedId-mark-delivering-request-payload:
       description: Mark delivering
       content:
