@@ -93,7 +93,7 @@ info:
     ## Select Region Endpoint
 
     Before making server-to-server API calls, be sure to select the correct API endpoint for your region in the **Servers** dropdown below.
-  version: 4.99.1
+  version: 4.101.0
 servers:
   - url: https://apix.us.amity.co
     description: API Endpoint for US Region
@@ -853,13 +853,17 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/comments:
     get:
-      summary: query comments (pagination support).
+      summary: query comments
       tags:
         - Comment
       security:
         - ApiKeyAuth: []
       description: |
-        query comments.
+        query comments (pagination support).
+        * `scrollable` - 'after', 'first', 'before' and 'last' will be set for page size with direction.
+        * `pagination` - 'skip' and 'limit' will be the number of records to skip and max records size.
+
+        (default: scrollable)
       parameters:
         - $ref: '#/components/parameters/authorization'
         - $ref: '#/components/parameters/content-type'
@@ -1626,7 +1630,7 @@ paths:
         query community categories.
       parameters:
         - $ref: '#/components/parameters/parameter_sortBy-4'
-        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_isDeleted-4'
         - $ref: '#/components/parameters/parameter_options-5'
       responses:
         '200':
@@ -1774,7 +1778,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_sortBy-5'
         - $ref: '#/components/parameters/parameter_hasFlag-2'
-        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_isDeleted-4'
         - $ref: '#/components/parameters/parameter_options-5'
       responses:
         '200':
@@ -1796,7 +1800,7 @@ paths:
         - $ref: '#/components/parameters/parameter__communityId'
         - $ref: '#/components/parameters/parameter_sortBy-5'
         - $ref: '#/components/parameters/parameter_hasFlag-3'
-        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_isDeleted-4'
         - $ref: '#/components/parameters/parameter_options-5'
         - $ref: '#/components/parameters/parameter_dataTypes'
       responses:
@@ -1841,7 +1845,7 @@ paths:
         - $ref: '#/components/parameters/_userId'
         - $ref: '#/components/parameters/parameter_sortBy-5'
         - $ref: '#/components/parameters/parameter_hasFlag-4'
-        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_isDeleted-4'
         - $ref: '#/components/parameters/parameter_options-5'
         - $ref: '#/components/parameters/parameter_dataTypes'
       responses:
@@ -1862,7 +1866,7 @@ paths:
         Get number of post.
       parameters:
         - $ref: '#/components/parameters/_userId'
-        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_isDeleted-4'
       responses:
         '200':
           $ref: '#/components/responses/_userId-count-get-response-200'
@@ -3175,7 +3179,7 @@ paths:
       operationId: findMessageFeedsByConditions
       parameters:
         - $ref: '#/components/parameters/parameter__channelId'
-        - $ref: '#/components/parameters/parameter_isDeleted-4'
+        - $ref: '#/components/parameters/parameter_isDeleted-5'
         - $ref: '#/components/parameters/paging-options'
       responses:
         '200':
@@ -3208,7 +3212,7 @@ paths:
       operationId: findMessageFeedsByCreatorId
       parameters:
         - $ref: '#/components/parameters/_creatorId'
-        - $ref: '#/components/parameters/parameter_isDeleted-4'
+        - $ref: '#/components/parameters/parameter_isDeleted-5'
         - $ref: '#/components/parameters/paging-options'
       responses:
         '200':
@@ -3230,7 +3234,7 @@ paths:
         - $ref: '#/components/parameters/parameter_parentId'
         - $ref: '#/components/parameters/parameter_filterByParentId'
         - $ref: '#/components/parameters/parameter_hasFlag-5'
-        - $ref: '#/components/parameters/parameter_isDeleted-5'
+        - $ref: '#/components/parameters/parameter_isDeleted-6'
         - $ref: '#/components/parameters/parameter_tags-3'
         - $ref: '#/components/parameters/parameter_excludeTags'
         - $ref: '#/components/parameters/parameter_options-7'
@@ -3490,7 +3494,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_messageFeedId'
         - $ref: '#/components/parameters/parameter_parentId-2'
-        - $ref: '#/components/parameters/parameter_isDeleted-6'
+        - $ref: '#/components/parameters/parameter_isDeleted-7'
         - $ref: '#/components/parameters/includeTags'
         - $ref: '#/components/parameters/parameter_excludeTags-2'
         - $ref: '#/components/parameters/hasFlags'
@@ -4643,7 +4647,7 @@ paths:
         - $ref: '#/components/parameters/parameter_sortBy-5'
         - $ref: '#/components/parameters/parameter_dataType'
         - $ref: '#/components/parameters/parameter_hasFlag-6'
-        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_isDeleted-4'
         - $ref: '#/components/parameters/parameter_options-5'
         - $ref: '#/components/parameters/parameter_dataTypes-2'
         - $ref: '#/components/parameters/parameter_tags-4'
@@ -5043,7 +5047,7 @@ paths:
         - $ref: '#/components/parameters/parameter_targetType'
         - $ref: '#/components/parameters/parameter_sortBy-8'
         - $ref: '#/components/parameters/parameter_hasFlag-4'
-        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_isDeleted-4'
         - $ref: '#/components/parameters/parameter_options-10'
         - $ref: '#/components/parameters/feedType'
         - $ref: '#/components/parameters/parameter_dataTypes-3'
@@ -5340,7 +5344,7 @@ paths:
       description: |
         Get paginable list of reactions.
       parameters:
-        - $ref: '#/components/parameters/referenceId'
+        - $ref: '#/components/parameters/parameter_referenceId-2'
         - $ref: '#/components/parameters/parameter_referenceType-2'
         - $ref: '#/components/parameters/parameter_referenceVersion'
         - $ref: '#/components/parameters/parameter_reactionName'
@@ -6326,7 +6330,7 @@ paths:
         - $ref: '#/components/parameters/parameter_filter-3'
         - $ref: '#/components/parameters/parameter_sortBy-10'
         - $ref: '#/components/parameters/parameter_options-5'
-        - $ref: '#/components/parameters/parameter_isDeleted-7'
+        - $ref: '#/components/parameters/parameter_isDeleted-8'
         - $ref: '#/components/parameters/isBrand'
       responses:
         '200':
@@ -6574,7 +6578,7 @@ paths:
         - $ref: '#/components/parameters/statuses'
         - $ref: '#/components/parameters/userPublicIds'
         - $ref: '#/components/parameters/parameter_sortBy-6'
-        - $ref: '#/components/parameters/parameter_isDeleted-8'
+        - $ref: '#/components/parameters/parameter_isDeleted-9'
         - $ref: '#/components/parameters/parameter_options-14'
       responses:
         '200':
@@ -18689,10 +18693,10 @@ components:
     referenceId:
       name: referenceId
       in: query
-      required: true
       schema:
         type: string
         maxLength: 900
+      description: ID of the reference **(post, content, or story)**
     referenceType:
       name: referenceType
       in: query
@@ -18702,59 +18706,50 @@ components:
           - post
           - content
           - story
+      description: Type of the reference **(post, content, or story)**
     filterByParentId:
       name: filterByParentId
       in: query
       schema:
         type: boolean
         default: true
+      description: Whether to filter by parent ID **(defaults to true)**
     parentId:
       name: parentId
       in: query
       schema:
         type: string
         maxLength: 900
+      description: ID of the parent comment **(when filterByParentId is true)**
     hasFlag:
       name: hasFlag
       in: query
       schema:
         type: boolean
         default: false
+      description: Filter by flagged comments
     parameter_isDeleted-2:
       name: isDeleted
       in: query
       schema:
         type: boolean
         default: null
+      description: Filter by deleted status
     parameter_sortBy-2:
       name: sortBy
       in: query
       schema:
         type: string
         enum:
-          - firstCreated
           - lastCreated
+          - firstCreated
           - lastUpdated
           - firstUpdated
-        default: lastCreated
-      description: |
-        type:
-          * `scrollable(default)` - sort by segment number only.
-          * `pagination` - can sort by 'lastCreated(default)', 'firstCreated', 'lastUpdated', 'firstUpdated'.
+      description: Sort order for comments **(only for pagination type)**
     parameter_options-3:
       name: options
       in: query
-      style: deepObject
-      description: |
-        type:
-          * `scrollable(default)` - 'after', 'first', 'before' and 'last' will be set for page size with direction.
-          * `pagination` - 'skip' and 'limit' will be the number of records to skip and max records size.
-
-        limit/skip:
-          * support pagination type only
-
-        before/after/first/last:
-          * support scrollable type only
+      required: false
       schema:
         type: object
         properties:
@@ -18764,43 +18759,53 @@ components:
               - scrollable
               - pagination
             default: scrollable
+            example: options[type]=pagination
+            description: |
+              Type of pagination. **(default: scrollable)**
+              * `scrollable(default)` - 'after', 'first', 'before' and 'last' will be set for page size with direction.
+              * `pagination` - 'skip' and 'limit' will be the number of records to skip and max records size.
           limit:
             type: integer
             minimum: 1
             maximum: 100
+            example: options[limit]=10
+            description: Page size **(for pagination type)**
           skip:
             type: integer
             minimum: 0
             maximum: 100
+            example: options[skip]=0
+            description: Number of records to skip **(for pagination type)**
           after:
             type: integer
             minimum: 1
+            example: options[after]=1
+            description: Cursor value to get records after **(for scrollable type)**
           first:
             type: integer
             minimum: 1
             maximum: 100
+            example: options[first]=10
+            description: Number of records to fetch after cursor **(for scrollable type)**
           before:
             type: integer
             minimum: 1
+            example: options[before]=1
+            description: Cursor value to get records before **(for scrollable type)**
           last:
             type: integer
             minimum: 1
             maximum: 100
+            example: options[last]=10
+            description: Number of records to fetch before cursor **(for scrollable type)**
           token:
             type: string
             maxLength: 1000
+            example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
+            description: Pagination token
     dataTypes:
       name: dataTypes
       in: query
-      style: deepObject
-      description: |
-        Option to set how the returned comments dataTypes will be contained:
-          * `values`: the dataTypes values want to be contained in the comment (available values: `text`, `image`)
-          * `matchType`: how the dataTypes must be contained in the comment
-            * `any`: the dataTypes could match only partial of the provided field
-            * `exact`: the dataTypes must contain exactly the same as provided in values
-
-        Example query params: `GET /api/v3/comments?dataTypes[values][]=text&dataTypes[values][]=image&dataTypes[matchType]=any`
       schema:
         type: object
         properties:
@@ -18808,17 +18813,27 @@ components:
             type: array
             items:
               type: string
+              enum:
+                - text
+                - image
+            example: dataTypes[values][]=text
+            description: |
+              The dataTypes values want to be contained in the comment (available values: `text`, `image`)
           matchType:
             type: string
             enum:
               - any
               - exact
+            example: dataTypes[matchType]=any
+            description: |
+              How the dataTypes must be contained in the comment.
+              * `any`: the dataTypes could match only partial of the provided field
+              * `exact`: the dataTypes must contain exactly the same as provided in values
     commentId:
       name: commentId
       in: path
       required: true
-      description: |
-        Get comment by ID.
+      description: Get comment by ID.
       schema:
         type: string
     preserve-edited-at:
@@ -19061,6 +19076,12 @@ components:
           - lastCreated
           - name
         default: name
+    parameter_isDeleted-4:
+      name: isDeleted
+      in: query
+      schema:
+        type: boolean
+        default: null
     parameter_options-5:
       name: options
       in: query
@@ -19401,7 +19422,7 @@ components:
       description: channel ID of message feed that needs to be find
       schema:
         $ref: '#/components/schemas/MessageFeed_channelId'
-    parameter_isDeleted-4:
+    parameter_isDeleted-5:
       name: isDeleted
       in: query
       description: deleted flag of message feed
@@ -19479,7 +19500,7 @@ components:
       in: query
       schema:
         type: boolean
-    parameter_isDeleted-5:
+    parameter_isDeleted-6:
       name: isDeleted
       in: query
       schema:
@@ -19564,7 +19585,7 @@ components:
       description: parent ID of a message (max length=50)
       schema:
         $ref: '#/components/schemas/MessageV5_parentId'
-    parameter_isDeleted-6:
+    parameter_isDeleted-7:
       name: isDeleted
       in: query
       description: deleted flag of message that needs to be find
@@ -20072,6 +20093,13 @@ components:
       schema:
         type: integer
       description: The API version of the document (Ex. If using with message v5, the referenceVersion will be 5)
+    parameter_referenceId-2:
+      name: referenceId
+      in: query
+      required: true
+      schema:
+        type: string
+        maxLength: 900
     parameter_referenceType-2:
       name: referenceType
       in: query
@@ -20366,7 +20394,7 @@ components:
           - lastCreated
           - displayName
         default: displayName
-    parameter_isDeleted-7:
+    parameter_isDeleted-8:
       name: isDeleted
       in: query
       schema:
@@ -20476,7 +20504,7 @@ components:
         items:
           type: string
           maxLength: 50
-    parameter_isDeleted-8:
+    parameter_isDeleted-9:
       name: isDeleted
       in: query
       schema:
