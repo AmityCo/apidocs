@@ -21270,6 +21270,20 @@ components:
               altText:
                 type: string
                 description: Alternative text for the file.
+              status:
+                type: string
+                enum:
+                  - uploading
+                  - done
+                  - error
+                  - removed
+                description: The status of the file.
+              videoUrl:
+                type: string
+                description: URL of the video if applicable.
+              thumbnailFileId:
+                type: string
+                description: The ID of the thumbnail file.
     common-post-request-payload:
       description: |
         `file` and `files` must not be provided at the same time. `altText` requires `file` to be provided.
