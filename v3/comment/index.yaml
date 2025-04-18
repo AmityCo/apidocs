@@ -5,7 +5,12 @@ root:
       - "Comment"
     security:
       - ApiKeyAuth: []
-    description: "query comments.\n"
+    description: |
+      query comments (pagination support).
+      * `scrollable` - 'after', 'first', 'before' and 'last' will be set for page size with direction.
+      * `pagination` - 'skip' and 'limit' will be the number of records to skip and max records size.
+
+      (default: scrollable)
     parameters:
       - $ref: "./parameter.yaml#/authorization"
       - $ref: "./parameter.yaml#/content-type"
