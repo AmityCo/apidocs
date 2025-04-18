@@ -41,8 +41,6 @@ uploadVideo:
   responses:
     "200":
       $ref: "./response.yaml#/FileVideoUploadResponse"
-    "400":
-      $ref: "../../global/error.yaml#/BadRequestError"
     "413":
       $ref: "../../global/error.yaml#/PayloadTooLargeError"
     "500":
@@ -68,8 +66,6 @@ uploadImage:
 
     Image size limit: 1,073,741,824 byte
   requestBody:
-    description: >
-      `file` and `files` must not be provided at the same time.
     content:
       multipart/form-data:
         schema:
@@ -91,8 +87,6 @@ uploadImage:
   responses:
     "200":
       $ref: "./response.yaml#/FileImageUploadResponse"
-    "400":
-      $ref: "../../global/error.yaml#/BadRequestError"
     "413":
       $ref: "../../global/error.yaml#/PayloadTooLargeError"
     "500":
@@ -118,8 +112,6 @@ uploadFile:
 
     File size limit: 1,073,741,824 byte
   requestBody:
-    description: >
-      `file` and `files` must not be provided at the same time and `altText` required `file` to be provided.
     content:
       multipart/form-data:
         schema:
@@ -141,8 +133,6 @@ uploadFile:
   responses:
     "200":
       $ref: "./response.yaml#/FileUploadResponse"
-    "400":
-      $ref: "../../global/error.yaml#/BadRequestError"
     "413":
       $ref: "../../global/error.yaml#/PayloadTooLargeError"
     "500":

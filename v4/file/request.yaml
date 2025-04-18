@@ -1,6 +1,4 @@
 common-post-request-payload:
-  description: >
-      `file` and `files` must not be provided at the same time. `altText` requires `file` to be provided.
   content:
     multipart/form-data:
       schema:
@@ -11,17 +9,7 @@ common-post-request-payload:
             items:
               type: "string"
               format: "binary"
-              description: "A list of file data, `file` is optional when this is provided."
-            deprecated: true
-          file:
-            type: "array"
-            items:
-              type: "string"
-              format: "binary"
-              description: "A list of file data, `files` is optional when this is provided."
-          altText:
-            type: string
-            description: Alternative text for the file.
+              description: "file data"
           preferredFilename:
             type: "string"
             maxLength: 1024
@@ -34,4 +22,3 @@ common-post-request-payload:
             default: public
         required:
           - "files"
-          - "file"
