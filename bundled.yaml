@@ -4894,6 +4894,36 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v4/posts:
+    get:
+      summary: query posts
+      tags:
+        - Post
+      security:
+        - BearerAuth: []
+      description: |
+        Query posts
+      parameters:
+        - $ref: '#/components/parameters/parameter_targetId'
+        - $ref: '#/components/parameters/parameter_targetType'
+        - $ref: '#/components/parameters/parameter_sortBy-8'
+        - $ref: '#/components/parameters/parameter_hasFlag-7'
+        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/parameter_options-10'
+        - $ref: '#/components/parameters/feedType'
+        - $ref: '#/components/parameters/parameter_dataTypes-3'
+        - $ref: '#/components/parameters/parameter_tags-5'
+        - $ref: '#/components/parameters/parameter_matchingOnlyParentPost'
+      responses:
+        '200':
+          $ref: '#/components/responses/post-pagination-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
     post:
       summary: create a post
       tags:
@@ -5032,36 +5062,6 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
-        '500':
-          $ref: '#/components/responses/UnexpectedError'
-    get:
-      summary: query a post
-      tags:
-        - Post
-      security:
-        - BearerAuth: []
-      description: |
-        Query posts
-      parameters:
-        - $ref: '#/components/parameters/parameter_targetId'
-        - $ref: '#/components/parameters/parameter_targetType'
-        - $ref: '#/components/parameters/parameter_sortBy-8'
-        - $ref: '#/components/parameters/parameter_hasFlag-4'
-        - $ref: '#/components/parameters/parameter_isDeleted-4'
-        - $ref: '#/components/parameters/parameter_options-10'
-        - $ref: '#/components/parameters/feedType'
-        - $ref: '#/components/parameters/parameter_dataTypes-3'
-        - $ref: '#/components/parameters/parameter_tags-5'
-        - $ref: '#/components/parameters/parameter_matchingOnlyParentPost'
-      responses:
-        '200':
-          $ref: '#/components/responses/post-pagination-response-200'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '429':
-          $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v4/posts/{postId}:
@@ -5505,7 +5505,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_query'
         - $ref: '#/components/parameters/targetId'
-        - $ref: '#/components/parameters/parameter_targetType'
+        - $ref: '#/components/parameters/parameter_targetType-2'
         - $ref: '#/components/parameters/parameter_options-5'
         - $ref: '#/components/parameters/parameter_dataTypes-4'
         - $ref: '#/components/parameters/parameter_tags-4'
@@ -5766,8 +5766,8 @@ paths:
       tags:
         - Story
       parameters:
-        - $ref: '#/components/parameters/parameter_targetId'
-        - $ref: '#/components/parameters/parameter_targetType-2'
+        - $ref: '#/components/parameters/parameter_targetId-2'
+        - $ref: '#/components/parameters/parameter_targetType-3'
         - $ref: '#/components/parameters/parameter_dataType-2'
         - $ref: '#/components/parameters/isExpired'
         - $ref: '#/components/parameters/parameter_options-13'
@@ -5827,8 +5827,8 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/parameter_targetId'
-        - $ref: '#/components/parameters/parameter_targetType-2'
+        - $ref: '#/components/parameters/parameter_targetId-2'
+        - $ref: '#/components/parameters/parameter_targetType-3'
       responses:
         '200':
           description: Story Count
@@ -19905,19 +19905,25 @@ components:
     parameter_targetId:
       name: targetId
       in: query
-      required: true
       schema:
         type: string
         maxLength: 900
+      description: ID of the target.
     parameter_targetType:
       name: targetType
       in: query
+      required: true
       schema:
         type: string
         enum:
           - community
           - user
           - content
+      description: |
+        Type of the target.
+        * `community` - Community
+        * `user` - User
+        * `content` - Content
     parameter_sortBy-8:
       name: sortBy
       in: query
@@ -19929,52 +19935,62 @@ components:
           - lastUpdated
           - firstUpdated
         default: lastCreated
+      description: Sort order for posts.
+    parameter_hasFlag-7:
+      name: hasFlag
+      in: query
+      schema:
+        type: boolean
+        default: null
+      description: Filter by flag status
     parameter_options-10:
       name: options
       in: query
-      style: deepObject
       schema:
         type: object
         properties:
+          after:
+            type: string
+            maxLength: 24
+            description: Cursor value to get records after
+          before:
+            type: string
+            maxLength: 24
+            description: Cursor value to get records before
+          updatedAt:
+            type: string
+            maxLength: 30
+            description: use updatedAt when sorting by first or last updated
           limit:
             type: integer
             minimum: 1
             maximum: 100
             default: 10
+            example: options[limit]=5
+            description: Page size
           token:
             type: string
             maxLength: 1000
-          before:
-            type: string
-            maxLength: 24
-          after:
-            type: string
-            maxLength: 24
-          updatedAt:
-            type: string
-            maxLength: 100
-      description: use updatedAt when sort by first/lastUpdated
+            example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
+            description: Pagination token
     feedType:
       name: feedType
       in: query
       schema:
-        type: array
-        minItems: 1
-        maxItems: 4
-        items:
-          type: string
-          enum:
-            - reviewing
-            - published
-        example:
+        type: string
+        enum:
+          - reviewing
           - published
+          - declined
+        example: published
+      description: Feed type to filter
     parameter_dataTypes-3:
       name: dataTypes
       in: query
       schema:
         type: array
         minItems: 1
-        maxItems: 4
+        maxItems: 5
         items:
           type: string
           maxLength: 100
@@ -20002,7 +20018,8 @@ components:
       schema:
         type: boolean
         default: true
-      description: An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts
+      description: |
+        An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts
     parameter__postId:
       name: postId
       in: path
@@ -20175,6 +20192,15 @@ components:
       schema:
         type: string
         maxLength: 1024
+    parameter_targetType-2:
+      name: targetType
+      in: query
+      schema:
+        type: string
+        enum:
+          - community
+          - user
+          - content
     parameter_dataTypes-4:
       name: dataTypes
       in: query
@@ -20243,7 +20269,14 @@ components:
         minLength: 1
         maxLength: 50
       description: User id for revocation
-    parameter_targetType-2:
+    parameter_targetId-2:
+      name: targetId
+      in: query
+      required: true
+      schema:
+        type: string
+        maxLength: 900
+    parameter_targetType-3:
       name: targetType
       in: query
       required: true

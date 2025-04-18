@@ -1,149 +1,161 @@
 _postId:
-  name: "postId"
-  in: "path"
+  name: postId
+  in: path
   required: true
   schema:
-    type: "string"
+    type: string
 
 preserve-edited-at:
-  name: "preserve-edited-at"
-  in: "header"
+  name: preserve-edited-at
+  in: header
   required: false
   description: |
     Preserve the `editedAt` value when updating a post.
     If the value is `true`, the `editedAt` value will not be updated.
     If the value is `false`, the `editedAt` value will be updated.
   schema:
-    type: "boolean"
+    type: boolean
     default: false
 
 permanent:
-  name: "permanent"
-  in: "query"
+  name: permanent
+  in: query
   schema:
-    type: "boolean"
+    type: boolean
     default: false
-    description: "If permanent data will be hard deleted"
+    description: If permanent data will be hard deleted
 
 targetId:
-  name: "targetId"
-  in: "query"
-  required: true
+  name: targetId
+  in: query
   schema:
-    type: "string"
+    type: string
     maxLength: 900
+  description: ID of the target.
 
 targetType:
-  name: "targetType"
-  in: "query"
+  name: targetType
+  in: query
+  required: true
   schema:
-    type: "string"
+    type: string
     enum:
-      - "community"
-      - "user"
-      - "content"
+      - community
+      - user
+      - content
+  description: |
+    Type of the target.
+    * `community` - Community
+    * `user` - User
+    * `content` - Content
 
 sortBy:
-  name: "sortBy"
-  in: "query"
+  name: sortBy
+  in: query
   schema:
-    type: "string"
+    type: string
     enum:
-      - "lastCreated"
-      - "firstCreated"
-      - "lastUpdated"
-      - "firstUpdated"
-    default: "lastCreated"
+      - lastCreated
+      - firstCreated
+      - lastUpdated
+      - firstUpdated
+    default: lastCreated
+  description: Sort order for posts.
 
 hasFlag:
-  name: "hasFlag"
-  in: "query"
+  name: hasFlag
+  in: query
   schema:
-    type: "boolean"
+    type: boolean
     default: null
-  description: "hasFlag:\n  * `null(default)` - Show all posts.\n  * `true` - Show only flagged post(or children) or has flagged comment.\n  * `false` - Show only no flagged post(and children) and has no flagged comment.\n"
+  description: Filter by flag status
 
 isDeleted:
-  name: "isDeleted"
-  in: "query"
+  name: isDeleted
+  in: query
   schema:
-    type: "boolean"
+    type: boolean
     default: null
+  description: Filter by deleted status
 
 options:
-  name: "options"
-  in: "query"
-  style: "deepObject"
+  name: options
+  in: query
   schema:
-    type: "object"
+    type: object
     properties:
+      after:
+        type: string
+        maxLength: 24
+        description: Cursor value to get records after
+      before:
+        type: string
+        maxLength: 24
+        description: Cursor value to get records before
+      updatedAt:
+        type: string
+        maxLength: 30
+        description: use updatedAt when sorting by first or last updated
       limit:
-        type: "integer"
+        type: integer
         minimum: 1
         maximum: 100
         default: 10
+        example: options[limit]=5
+        description: Page size
       token:
-        type: "string"
+        type: string
         maxLength: 1000
-      before:
-        type: "string"
-        maxLength: 24
-      after:
-        type: "string"
-        maxLength: 24
-      updatedAt:
-        type: "string"
-        maxLength: 100
-  description: "use updatedAt when sort by first/lastUpdated"
+        example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
+        description: Pagination token
 
 feedType:
-  name: "feedType"
-  in: "query"
+  name: feedType
+  in: query
   schema:
-    type: "array"
-    minItems: 1
-    maxItems: 4
-    items:
-      type: "string"
-      enum:
-        - "reviewing"
-        - "published"
-    example: ["published"]
+    type: string
+    enum:
+      - reviewing
+      - published
+      - declined
+    example: published
+  description: Feed type to filter
 
 dataTypes:
-  name: "dataTypes"
-  in: "query"
+  name: dataTypes
+  in: query
   schema:
-    type: "array"
+    type: array
     minItems: 1
-    maxItems: 4
+    maxItems: 5
     items:
-      type: "string"
+      type: string
       maxLength: 100
       enum:
-        - "video"
-        - "image"
-        - "file"
-        - "liveStream"
-        - "poll"
-  description: "Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`"
+        - video
+        - image
+        - file
+        - liveStream
+        - poll
+  description: Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`
 
 tags:
-  name: "tags"
-  in: "query"
+  name: tags
+  in: query
   schema:
-    type: "array"
+    type: array
     minItems: 0
     maxItems: 5
     items:
-      type: "string"
+      type: string
       maximum: 24
-  description: "tags"
+  description: tags
 
 matchingOnlyParentPost:
-  name: "matchingOnlyParentPost"
-  in: "query"
+  name: matchingOnlyParentPost
+  in: query
   schema:
-    type: "boolean"
+    type: boolean
     default: true
-  description: "An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts"
+  description: |
+    An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts
