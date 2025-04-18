@@ -13,25 +13,12 @@ _fileId-get-response-200:
               fileId:
                 type: string
                 description: Root file key on cloud storage.
-              fileUrl:
-                type: string
-                description: File URL.
               type:
                 type: enum
                 description: File type.
                 enum:
                   - image
                   - file
-              accessType:
-                type: string
-                description: File access type. `network` type requires authentication to download.
-                enum:
-                  - public
-                  - network
-                default: public
-              altText:
-                type: string
-                description: Alternative text for the file.
               createdAt:
                 type: string
                 description: The date/time when a file is uploaded.
@@ -100,9 +87,6 @@ root-post-response-200:
                     - public
                     - network
                   default: public
-                altText:
-                  type: string
-                  description: Alternative text for the file.
                 createdAt:
                   type: string
                   description: The date/time when a file is uploaded.
