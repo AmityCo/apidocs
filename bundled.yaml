@@ -4223,8 +4223,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/parameter_token-3'
-        - $ref: '#/components/parameters/parameter_limit-2'
+        - $ref: '#/components/parameters/parameter_options-8'
       description: Retrieves the notification tray items for the current user. Ordered by newest first as a default.
       responses:
         '200':
@@ -4327,7 +4326,7 @@ paths:
         List all pinned posts in a community
       parameters:
         - $ref: '#/components/parameters/parameter_communityId-2'
-        - $ref: '#/components/parameters/parameter_options-8'
+        - $ref: '#/components/parameters/parameter_options-9'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-3'
@@ -4412,7 +4411,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_communityId-2'
         - $ref: '#/components/parameters/placement'
-        - $ref: '#/components/parameters/parameter_options-8'
+        - $ref: '#/components/parameters/parameter_options-9'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-3'
@@ -4733,7 +4732,7 @@ paths:
         - $ref: '#/components/parameters/authorization'
         - $ref: '#/components/parameters/content-type'
         - $ref: '#/components/parameters/parameter_sortBy-7'
-        - $ref: '#/components/parameters/parameter_options-9'
+        - $ref: '#/components/parameters/parameter_options-10'
       responses:
         '200':
           $ref: '#/components/responses/poll-pagination-response-200'
@@ -5374,7 +5373,7 @@ paths:
       description: |
         Get message ids by the most of reactions.
       parameters:
-        - $ref: '#/components/parameters/parameter_limit-3'
+        - $ref: '#/components/parameters/parameter_limit-2'
         - $ref: '#/components/parameters/reactionName'
       responses:
         '200':
@@ -5398,7 +5397,7 @@ paths:
         - $ref: '#/components/parameters/parameter_referenceId'
         - $ref: '#/components/parameters/parameter_referenceType'
         - $ref: '#/components/parameters/reactionName'
-        - $ref: '#/components/parameters/parameter_options-11'
+        - $ref: '#/components/parameters/parameter_options-12'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-payload-200'
@@ -5457,7 +5456,7 @@ paths:
         - $ref: '#/components/parameters/parameter_referenceType-2'
         - $ref: '#/components/parameters/parameter_referenceVersion'
         - $ref: '#/components/parameters/parameter_reactionName'
-        - $ref: '#/components/parameters/parameter_options-12'
+        - $ref: '#/components/parameters/parameter_options-13'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-6'
@@ -5879,7 +5878,7 @@ paths:
         - $ref: '#/components/parameters/parameter_targetType-3'
         - $ref: '#/components/parameters/parameter_dataType-2'
         - $ref: '#/components/parameters/isExpired'
-        - $ref: '#/components/parameters/parameter_options-13'
+        - $ref: '#/components/parameters/parameter_options-14'
       responses:
         '200':
           description: Story Information
@@ -6039,7 +6038,7 @@ paths:
         - Story
       parameters:
         - $ref: '#/components/parameters/targets'
-        - $ref: '#/components/parameters/parameter_options-13'
+        - $ref: '#/components/parameters/parameter_options-14'
       responses:
         '200':
           description: Story Information, sorted by the target order in the request then the sort option
@@ -6341,8 +6340,8 @@ paths:
         - Story
       parameters:
         - $ref: '#/components/parameters/seenState'
-        - $ref: '#/components/parameters/parameter_limit-4'
-        - $ref: '#/components/parameters/parameter_token-4'
+        - $ref: '#/components/parameters/parameter_limit-3'
+        - $ref: '#/components/parameters/parameter_token-3'
       responses:
         '200':
           description: Global Story Information
@@ -6601,7 +6600,7 @@ paths:
         - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/parameter_limit'
-        - $ref: '#/components/parameters/parameter_token-5'
+        - $ref: '#/components/parameters/parameter_token-4'
       responses:
         '200':
           $ref: '#/components/responses/me-user-blocks-get-response-200'
@@ -12378,10 +12377,15 @@ components:
         - data
         - text
         - templatedText
+        - daySegment
       properties:
         _id:
           type: string
           description: ObjectId of the notification tray item
+        daySegment:
+          type: string
+          format: date-time
+          description: Timestamp to tell which day this notification is in
         lastSeenAt:
           type: string
           format: date-time
@@ -20117,23 +20121,25 @@ components:
       schema:
         type: string
         minLength: 1
-    parameter_token-3:
-      name: token
-      description: pagination token
+    parameter_options-8:
+      name: options
+      description: pagination optins
       in: query
       optional: true
       schema:
-        type: string
-    parameter_limit-2:
-      name: limit
-      description: pagination limit
-      in: query
-      optional: true
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 100
-        default: 20
+        type: object
+        properties:
+          token:
+            optional: true
+            description: pagination token
+            type: string
+          limit:
+            optional: true
+            description: pagination limit
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
     level:
       name: level
       required: true
@@ -20165,7 +20171,7 @@ components:
       schema:
         type: string
         maxLength: 900
-    parameter_options-8:
+    parameter_options-9:
       name: options
       in: query
       schema:
@@ -20212,7 +20218,7 @@ components:
         enum:
           - lastCreated
           - firstCreated
-    parameter_options-9:
+    parameter_options-10:
       name: options
       in: query
       style: deepObject
@@ -20371,15 +20377,7 @@ components:
           - lastUpdated
           - firstUpdated
         default: lastCreated
-      description: Sort order for posts.
-    parameter_hasFlag-7:
-      name: hasFlag
-      in: query
-      schema:
-        type: boolean
-        default: null
-      description: Filter by flag status
-    parameter_options-10:
+    parameter_options-11:
       name: options
       in: query
       schema:
@@ -20491,7 +20489,7 @@ components:
         enum:
           - asc
           - desc
-    parameter_limit-3:
+    parameter_limit-2:
       name: limit
       in: query
       schema:
@@ -20524,7 +20522,7 @@ components:
           - post
           - comment
           - story
-    parameter_options-11:
+    parameter_options-12:
       name: options
       in: query
       style: deepObject
@@ -20575,7 +20573,7 @@ components:
       schema:
         type: string
         maxLength: 100
-    parameter_options-12:
+    parameter_options-13:
       name: options
       in: query
       style: deepObject
@@ -20738,7 +20736,7 @@ components:
           Whether to include expired stories. Only admin can query with this parameter = true.
         type: boolean
         default: false
-    parameter_options-13:
+    parameter_options-14:
       name: options
       in: query
       schema:
@@ -20814,7 +20812,7 @@ components:
           - seen
           - unseen
         default: unseen
-    parameter_limit-4:
+    parameter_limit-3:
       name: limit
       in: query
       description: the amount of story targets per query
@@ -20824,7 +20822,7 @@ components:
         default: 10
         minimum: 1
         maximum: 100
-    parameter_token-4:
+    parameter_token-3:
       name: token
       in: query
       required: false
@@ -20934,7 +20932,7 @@ components:
         type: boolean
         default: false
       description: true - it will hard delete this user comments after user is deleted.
-    parameter_token-5:
+    parameter_token-4:
       name: token
       in: query
       schema:
@@ -20984,7 +20982,7 @@ components:
           * `null(default)` - Show both video streaming is activated and video streaming is inactivated.
           * `true` - Show video streaming is inactivated only.
           * `false` - Show video streaming is activated only.
-    parameter_options-14:
+    parameter_options-15:
       name: options
       in: query
       style: deepObject
