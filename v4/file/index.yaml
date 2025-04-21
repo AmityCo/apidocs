@@ -13,6 +13,10 @@ images:
     responses:
       200:
         $ref: "./response.yaml#/images-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
       413:
         $ref: "../../global/error.yaml#/PayloadTooLargeError"
       500:
@@ -29,7 +33,7 @@ files:
       - $ref: "./parameter.yaml#/content-type"
     description: "Upload file to cloud storage\n\nFile size limit: 1,073,741,824 byte\n"
     requestBody:
-      $ref: "./request.yaml#/common-post-request-payload"
+      $ref: "./request.yaml#/upload-file-request-payload"
     responses:
       200:
         $ref: "./response.yaml#/files-response-200"
@@ -49,7 +53,7 @@ videos:
       - $ref: "./parameter.yaml#/content-type"
     description: "Upload video to cloud storage\n\nVideo size limit: 2,147,483,648 byte (2GB)\n"
     requestBody:
-      $ref: "./request.yaml#/common-post-request-payload"
+      $ref: "./request.yaml#/upload-video-request-payload"
     responses:
       200:
         $ref: "./response.yaml#/videos-response-200"

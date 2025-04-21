@@ -1966,6 +1966,27 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '422':
           $ref: '#/components/responses/ValidationError'
+    put:
+      summary: Update file info.
+      tags:
+        - File
+      security:
+        - BearerAuth: []
+      description: |
+        Update file info
+      requestBody:
+        $ref: '#/components/requestBodies/update-file-data'
+      responses:
+        '200':
+          $ref: '#/components/responses/root-post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/FileNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v3/files/{fileId}/download:
     get:
       summary: Download file
@@ -2006,6 +2027,10 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/images-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '413':
           $ref: '#/components/responses/PayloadTooLargeError'
         '500':
@@ -2024,7 +2049,7 @@ paths:
 
         File size limit: 1,073,741,824 byte
       requestBody:
-        $ref: '#/components/requestBodies/common-post-request-payload'
+        $ref: '#/components/requestBodies/upload-file-request-payload'
       responses:
         '200':
           $ref: '#/components/responses/files-response-200'
@@ -2046,7 +2071,7 @@ paths:
 
         Video size limit: 2,147,483,648 byte (2GB)
       requestBody:
-        $ref: '#/components/requestBodies/common-post-request-payload'
+        $ref: '#/components/requestBodies/upload-video-request-payload'
       responses:
         '200':
           $ref: '#/components/responses/videos-response-200'
@@ -9613,6 +9638,17 @@ components:
             - image
             - file
             - video
+        accessType:
+          type: string
+          description: File access type. `network` type requires authentication to download.
+          enum:
+            - public
+            - network
+          default: public
+        altText:
+          type: string
+          description: Alternative text for the file.
+          maxLength: 125
         createdAt:
           type: string
           description: The date/time when a file is uploaded.
@@ -15536,6 +15572,16 @@ components:
                             type: number
                           isFull:
                             type: boolean
+    FileNotFoundError:
+      description: Given file id is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400400
+            message: File not found ${fileId}.
     _fileId-delete-response-200:
       description: File Information
       content:
@@ -15591,6 +15637,9 @@ components:
                     - public
                     - network
                   default: public
+                altText:
+                  type: string
+                  description: Alternative text for the file.
                 createdAt:
                   type: string
                   description: The date/time when a file is uploaded.
@@ -15651,13 +15700,16 @@ components:
                     - file
                     - video
                   example: file
-                acceType:
+                accessType:
                   type: string
                   description: File access type. `network` type requires authentication to download.
                   enum:
                     - public
                     - network
                   default: public
+                altText:
+                  type: string
+                  description: Alternative text for the file.
                 createdAt:
                   type: string
                   description: The date/time when a file is uploaded.
@@ -15718,6 +15770,9 @@ components:
                     - public
                     - network
                   default: public
+                altText:
+                  type: string
+                  description: Alternative text for the file.
                 createdAt:
                   type: string
                   description: The date/time when a file is uploaded.
@@ -21279,6 +21334,14 @@ components:
                 items:
                   type: string
                   format: binary
+                description: An array of file. Must have exactly one file.
+              files:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                description: An array of files. Must not be provided at the same time as `file`.
+                deprecated: true
               fullImage:
                 type: boolean
                 nullable: true
@@ -21292,18 +21355,96 @@ components:
                   - public
                   - network
                 default: public
+            required:
+              - file
+    update-file-data:
+      description: information of a file to be updated.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              fileId:
+                type: string
+                description: The ID of the file to be updated.
+                required: true
+              isUsed:
+                type: boolean
+                description: Indicates if the file is currently in use.
+              altText:
+                type: string
+                description: Alternative text for the file.
+              status:
+                type: string
+                enum:
+                  - uploading
+                  - done
+                  - error
+                  - removed
+                description: The status of the file.
+              videoUrl:
+                type: string
+                description: URL of the video if applicable.
+              thumbnailFileId:
+                type: string
+                description: The ID of the thumbnail file.
+              metadata:
+                type: object
+                description: Metadata associated with the file. Do not provide `isFull` key as it is reserved for internal use and this `metadata` field is limited to 5kb.
     common-post-request-payload:
       content:
         multipart/form-data:
           schema:
             type: object
             properties:
+              file:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                description: An array of file. Must have exactly one file.
               files:
                 type: array
                 items:
                   type: string
                   format: binary
-                  description: file data
+                description: An array of files. Must not be provided at the same time as `file`.
+                deprecated: true
+              preferredFilename:
+                type: string
+                maxLength: 1024
+              accessType:
+                type: string
+                description: File access type. `network` type requires authentication to download.
+                enum:
+                  - public
+                  - network
+                default: public
+              altText:
+                type: string
+                description: Alternative text for the file. Must be provided when `file` is provided.
+                maxLength: 125
+            required:
+              - file
+    upload-file-request-payload:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                description: An array of file. Must have exactly one file.
+              files:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                description: An array of files. Must not be provided at the same time as `file`.
+                deprecated: true
               preferredFilename:
                 type: string
                 maxLength: 1024
@@ -21315,7 +21456,38 @@ components:
                   - network
                 default: public
             required:
-              - files
+              - file
+    upload-video-request-payload:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                description: An array of file. Must have exactly one file.
+              files:
+                type: array
+                items:
+                  type: string
+                  format: binary
+                description: An array of files. Must not be provided at the same time as `file`.
+                deprecated: true
+              preferredFilename:
+                type: string
+                maxLength: 1024
+              accessType:
+                type: string
+                description: File access type. `network` type requires authentication to download.
+                enum:
+                  - public
+                  - network
+                default: public
+            required:
+              - file
     message-feeds_messageFeedId-mark-delivering-request-payload:
       description: Mark delivering
       content:

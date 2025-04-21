@@ -10,6 +10,14 @@ root-post-request-payload:
             items:
               type: "string"
               format: "binary"
+            description: An array of file. Must have exactly one file.
+          files:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+            description: An array of files. Must not be provided at the same time as `file`.
+            deprecated: true
           fullImage:
             type: "boolean"
             nullable: true
@@ -23,3 +31,40 @@ root-post-request-payload:
               - public
               - network
             default: public
+        required:
+          - "file"
+
+update-file-data:
+  description: "information of a file to be updated."
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          fileId:
+            type: string
+            description: The ID of the file to be updated.
+            required: true
+          isUsed:
+            type: boolean
+            description: Indicates if the file is currently in use.
+          altText:
+            type: string
+            description: Alternative text for the file.
+          status:
+            type: string
+            enum:
+              - uploading
+              - done
+              - error
+              - removed
+            description: The status of the file.
+          videoUrl:
+            type: string
+            description: URL of the video if applicable.
+          thumbnailFileId:
+            type: string
+            description: The ID of the thumbnail file.
+          metadata:
+            type: object
+            description: Metadata associated with the file. Do not provide `isFull` key as it is reserved for internal use and this `metadata` field is limited to 5kb.
