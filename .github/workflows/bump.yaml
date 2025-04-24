@@ -42,12 +42,12 @@ jobs:
       - name: bump version
         id: bump
         run: |
+          npm version ${{ github.event.inputs.release }} -m "chore: bummp version to %s" --no-git-tag-version
+          version=$(jq -r .version package.json)
+
           branch_name="chore-bump-$version"
           git checkout -b $branch_name
           git push --set-upstream origin $branch_name
-
-          npm version ${{ github.event.inputs.release }} -m "chore: bummp version to %s" --no-git-tag-version
-          version=$(jq -r .version package.json)
 
           yq e '.info.version = "'$version'"' -i swagger.yaml
           npm run build
