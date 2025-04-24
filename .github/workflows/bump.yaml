@@ -19,6 +19,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
+      pull-requests: write
       actions: read
       checks: write
     steps:
@@ -39,6 +40,7 @@ jobs:
         run: npm run changelog:gen
 
       - name: bump version
+        id: bump
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
@@ -52,5 +54,22 @@ jobs:
           git add bundled.yaml CHANGELOG.md swagger.yaml package.json package-lock.json
           git commit -m "chore: update changelog and bump version to $version"
 
-          git checkout -b chore-bump-$version
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git chore-bump-$version
+          branch_name="chore-bump-$version"
+          git checkout -b $branch_name
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git $branch_name
+          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "branch=$branch_name" >> $GITHUB_OUTPUT
+
+      - name: create pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "chore: update changelog and bump version to ${{ steps.bump.outputs.version }}"
+          body: |
+            ## Changes
+            - Bump version to ${{ steps.bump.outputs.version }}
+            - Update changelog
+            - Update bundled.yaml
+            - Update swagger.yaml
+          branch: ${{ steps.bump.outputs.branch }}
+          base: develop
