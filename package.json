@@ -1,6 +1,6 @@
 {
   "name": "apidocs",
-  "version": "4.101.0",
+  "version": "4.102.0",
   "description": "Documentation for the Social+ API Reference",
   "private": true,
   "scripts": {
@@ -8,7 +8,10 @@
     "build": "redocly bundle swagger.yaml -o bundled.yaml",
     "prepare-local": "npm run build && rm -rf ./local && cp -r build local && cp ./bundled.yaml ./local/bundled.yaml && sh ./scripts/prepare-local.sh",
     "prepare": "husky",
-    "changelog:gen": "git-cliff --bump --unreleased --output CHANGELOG.md"
+    "changelog:gen": "git-cliff --output CHANGELOG.md",
+    "changelog:patch": "git-cliff --bump patch --output CHANGELOG.md",
+    "changelog:minor": "git-cliff --bump minor --output CHANGELOG.md",
+    "changelog:major": "git-cliff --bump major --output CHANGELOG.md"
   },
   "dependencies": {
     "@redocly/cli": "^1.33.0"
