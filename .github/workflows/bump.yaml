@@ -37,7 +37,7 @@ jobs:
         run: npm install --frozen-lockfile
 
       - name: changelog
-        run: npm run changelog:gen
+        run: npm run changelog:${{ github.event.inputs.release }}
 
       - name: bump version
         id: bump
