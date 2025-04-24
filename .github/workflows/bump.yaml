@@ -42,15 +42,15 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          set +e
-
-          git add CHANGELOG.md && git commit -m "chore: update changelog"
 
           npm version ${{ github.event.inputs.release }} -m "chore: bummp version to %s" --no-git-tag-version
           version=$(jq -r .version package.json)
 
           yq e '.info.version = "'$version'"' -i swagger.yaml
-          git add swagger.yaml && git commit -m "chore: update swagger.yaml version to $version"
+          npm run build
+
+          git add bundled.yaml CHANGELOG.md swagger.yaml package.json package-lock.json
+          git commit -m "chore: update changelog and bump version to $version"
 
           git checkout -b chore-bump-$version
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git chore-bump-$version
