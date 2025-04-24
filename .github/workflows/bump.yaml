@@ -42,8 +42,9 @@ jobs:
       - name: bump version
         id: bump
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          branch_name="chore-bump-$version"
+          git checkout -b $branch_name
+          git push --set-upstream origin $branch_name
 
           npm version ${{ github.event.inputs.release }} -m "chore: bummp version to %s" --no-git-tag-version
           version=$(jq -r .version package.json)
@@ -51,12 +52,6 @@ jobs:
           yq e '.info.version = "'$version'"' -i swagger.yaml
           npm run build
 
-          git add bundled.yaml CHANGELOG.md swagger.yaml package.json package-lock.json
-          git commit -m "chore: update changelog and bump version to $version"
-
-          branch_name="chore-bump-$version"
-          git checkout -b $branch_name
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git $branch_name
           echo "version=$version" >> $GITHUB_OUTPUT
           echo "branch=$branch_name" >> $GITHUB_OUTPUT
 
@@ -71,5 +66,6 @@ jobs:
             - Update changelog
             - Update bundled.yaml
             - Update swagger.yaml
+          commit-message: "chore: update changelog and bump version to ${{ steps.bump.outputs.version }}"
           branch: ${{ steps.bump.outputs.branch }}
           base: develop
