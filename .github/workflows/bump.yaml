@@ -1,4 +1,4 @@
-name: bump and publish
+name: bump
 
 on:
   workflow_dispatch:
@@ -43,10 +43,14 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           set +e
-          git add CHANGELOG.md
-          git commit -m "chore: update changelog"
+
+          git add CHANGELOG.md && git commit -m "chore: update changelog"
+
           npm version ${{ github.event.inputs.release }} -m "chore: bummp version to %s" --no-git-tag-version
           version=$(jq -r .version package.json)
-          git tag $version
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git develop
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git $version
+
+          yq e '.info.version = "'$version'"' -i swagger.yaml
+          git add swagger.yaml && git commit -m "chore: update swagger.yaml version to $version"
+
+          git checkout -b chore-bump-$version
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git chore-bump-$version
