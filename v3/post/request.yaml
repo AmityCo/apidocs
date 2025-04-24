@@ -101,3 +101,21 @@ _postId-put-request-payload:
               description: "tags"
         required:
           - "postId"
+
+_postId-flag-request-payload:
+  description: "Information required to flag a post."
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          reason:
+            type: "string"
+            maxLength: 300
+            default: "Others"
+            description: "The reason for flagging this post"
+          detail:
+            type: "string"
+            maxLength: 300
+            description: "Additional details about the flag"

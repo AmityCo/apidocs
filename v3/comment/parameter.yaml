@@ -1,162 +1,180 @@
 authorization:
-  name: "Authorization"
-  in: "header"
+  name: Authorization
+  in: header
   required: true
   schema:
-    type: "string"
+    type: string
 
 content-type:
-  name: "Content-Type"
-  in: "header"
+  name: Content-Type
+  in: header
   required: true
   schema:
-    type: "string"
-
-referenceId:
-  name: "referenceId"
-  required: true
-  in: "query"
-  schema:
-    type: "string"
-    maxLength: 900
+    type: string
 
 referenceType:
-  name: "referenceType"
-  in: "query"
+  name: referenceType
+  in: query
   schema:
-    type: "string"
-    enum:
-      - "post"
-      - "content"
-      - "story"
+    type: string
+    enum: [post, content, story]
+  description: Type of the reference **(post, content, or story)**
+
+referenceId:
+  name: referenceId
+  in: query
+  schema:
+    type: string
+    maxLength: 900
+  description: ID of the reference **(post, content, or story)**
 
 filterByParentId:
-  name: "filterByParentId"
-  in: "query"
+  name: filterByParentId
+  in: query
   schema:
-    type: "boolean"
+    type: boolean
     default: true
+  description: Whether to filter by parent ID **(defaults to true)**
 
 parentId:
-  name: "parentId"
-  in: "query"
+  name: parentId
+  in: query
   schema:
-    type: "string"
+    type: string
     maxLength: 900
+  description: ID of the parent comment **(when filterByParentId is true)**
 
 hasFlag:
-  name: "hasFlag"
-  in: "query"
+  name: hasFlag
+  in: query
   schema:
-    type: "boolean"
+    type: boolean
     default: false
+  description: Filter by flagged comments
 
 isDeleted:
-  name: "isDeleted"
-  in: "query"
+  name: isDeleted
+  in: query
   schema:
-    type: "boolean"
+    type: boolean
     default: null
+  description: Filter by deleted status
 
 sortBy:
-  name: "sortBy"
-  in: "query"
+  name: sortBy
+  in: query
   schema:
-    type: "string"
-    enum:
-      - "firstCreated"
-      - "lastCreated"
-      - "lastUpdated"
-      - "firstUpdated"
-    default: "lastCreated"
-  description: "type:\n  * `scrollable(default)` - sort by segment number only.\n  * `pagination` - can sort by 'lastCreated(default)', 'firstCreated', 'lastUpdated', 'firstUpdated'.\n"
+    type: string
+    enum: [lastCreated, firstCreated, lastUpdated, firstUpdated]
+  description: Sort order for comments **(only for pagination type)**
 
 options:
-  name: "options"
-  in: "query"
-  style: "deepObject"
-  description: "type:\n  * `scrollable(default)` - 'after', 'first', 'before' and 'last' will be set for page size with direction.\n  * `pagination` - 'skip' and 'limit' will be the number of records to skip and max records size.\n\nlimit/skip:\n  * support pagination type only\n\nbefore/after/first/last:\n  * support scrollable type only\n"
+  name: options
+  in: query
+  required: false
   schema:
-    type: "object"
+    type: object
     properties:
       type:
-        type: "string"
-        enum:
-          - "scrollable"
-          - "pagination"
-        default: "scrollable"
+        type: string
+        enum: [scrollable, pagination]
+        default: scrollable
+        example: options[type]=pagination
+        description: |
+          Type of pagination. **(default: scrollable)**
+          * `scrollable(default)` - 'after', 'first', 'before' and 'last' will be set for page size with direction.
+          * `pagination` - 'skip' and 'limit' will be the number of records to skip and max records size.
       limit:
-        type: "integer"
+        type: integer
         minimum: 1
         maximum: 100
+        example: options[limit]=10
+        description: Page size **(for pagination type)**
       skip:
-        type: "integer"
+        type: integer
         minimum: 0
         maximum: 100
+        example: options[skip]=0
+        description: Number of records to skip **(for pagination type)**
       after:
-        type: "integer"
+        type: integer
         minimum: 1
+        example: options[after]=1
+        description: Cursor value to get records after **(for scrollable type)**
       first:
-        type: "integer"
+        type: integer
         minimum: 1
         maximum: 100
+        example: options[first]=10
+        description: Number of records to fetch after cursor **(for scrollable type)**
       before:
-        type: "integer"
+        type: integer
         minimum: 1
+        example: options[before]=1
+        description: Cursor value to get records before **(for scrollable type)**
       last:
-        type: "integer"
+        type: integer
         minimum: 1
         maximum: 100
+        example: options[last]=10
+        description: Number of records to fetch before cursor **(for scrollable type)**
       token:
-        type: "string"
+        type: string
         maxLength: 1000
+        example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
+        description: Pagination token
 
 dataTypes:
-  name: "dataTypes"
-  in: "query"
-  style: "deepObject"
-  description: "Option to set how the returned comments dataTypes will be contained:\n  * `values`: the dataTypes values want to be contained in the comment (available values: `text`, `image`)\n  * `matchType`: how the dataTypes must be contained in the comment\n    * `any`: the dataTypes could match only partial of the provided field\n    * `exact`: the dataTypes must contain exactly the same as provided in values\n\nExample query params: `GET /api/v3/comments?dataTypes[values][]=text&dataTypes[values][]=image&dataTypes[matchType]=any`\n"
+  name: dataTypes
+  in: query
   schema:
-    type: "object"
+    type: object
     properties:
       values:
-        type: "array"
+        type: array
         items:
-          type: "string"
+          type: string
+          enum: [text, image]
+        example: dataTypes[values][]=text
+        description: |
+          The dataTypes values want to be contained in the comment (available values: `text`, `image`)
       matchType:
-        type: "string"
-        enum:
-          - "any"
-          - "exact"
+        type: string
+        enum: [any, exact]
+        example: dataTypes[matchType]=any
+        description: |
+          How the dataTypes must be contained in the comment.
+          * `any`: the dataTypes could match only partial of the provided field
+          * `exact`: the dataTypes must contain exactly the same as provided in values
 
 commentId:
-  name: "commentId"
-  in: "path"
+  name: commentId
+  in: path
   required: true
-  description: "Get comment by ID.\n"
+  description: Get comment by ID.
   schema:
-    type: "string"
+    type: string
 
 commentIds:
-  name: "commentIds"
-  in: "query"
+  name: commentIds
+  in: query
   required: true
   schema:
-    type: "array"
+    type: array
     minItems: 1
     maxItems: 10
     items:
-      type: "string"
+      type: string
       maxLength: 50
 
 preserve-edited-at:
-  name: "preserve-edited-at"
-  in: "header"
+  name: preserve-edited-at
+  in: header
   required: false
   description: |
     Preserve the `editedAt` value when updating a comment.
     If the value is `true`, the `editedAt` value will not be updated.
     If the value is `false`, the `editedAt` value will be updated.
   schema:
-    type: "boolean"
+    type: boolean
     default: false

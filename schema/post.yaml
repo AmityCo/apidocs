@@ -145,6 +145,9 @@ Post:
       items:
         type: string
         description: ID of a children post.
+    childrenNumber:
+      type: integer
+      description: The number of all children posts for this post.
     isDeleted:
       type: boolean
       default: false
@@ -176,8 +179,8 @@ Post:
           type:
             type: string
             description: >
-                type:
-                * `user` - need to specific userIds and notification mentions individual user
+              type:
+              * `user` - need to specific userIds and notification mentions individual user
             enum:
               - user
           userIds:
@@ -375,8 +378,8 @@ PostForRealtime:
           type:
             type: string
             description: >
-                type:
-                * `user` - need to specific userIds and notification mentions individual user
+              type:
+              * `user` - need to specific userIds and notification mentions individual user
             enum:
               - user
           userIds:
@@ -402,18 +405,15 @@ PostForRealtime:
     - postId
     - data
 
-PostWithPrivateId:
-  allOf:
-    - type: object
-      properties:
-        _id:
-          type: string
-          description: Private ID of a post.
-    - $ref: '#/PostV4'
-
 PostV4:
   type: object
   properties:
+    _id:
+      type: string
+      description: Private ID of a post. (for real-time event)
+    path:
+      type: string
+      description: Path of a post. (for real-time event)
     postId:
       type: string
       description: ID of a post.
@@ -558,6 +558,9 @@ PostV4:
       items:
         type: string
         description: ID of a children post.
+    childrenNumber:
+      type: integer
+      description: The number of all children posts for this post.
     isDeleted:
       type: boolean
       default: false
@@ -589,8 +592,8 @@ PostV4:
           type:
             type: string
             description: >
-                type:
-                * `user` - need to specific userIds and notification mentions individual user
+              type:
+              * `user` - need to specific userIds and notification mentions individual user
             enum:
               - user
           userIds:

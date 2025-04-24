@@ -1,0 +1,71 @@
+name: bump
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "release type"
+        type: choice
+        required: true
+        default: "patch"
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+      actions: read
+      checks: write
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: install deps
+        run: npm install --frozen-lockfile
+
+      - name: changelog
+        run: npm run changelog:${{ github.event.inputs.release }}
+
+      - name: bump version
+        id: bump
+        run: |
+          npm version ${{ github.event.inputs.release }} -m "chore: bummp version to %s" --no-git-tag-version
+          version=$(jq -r .version package.json)
+
+          branch_name="chore-bump-$version"
+          git checkout -b $branch_name
+          git push --set-upstream origin $branch_name
+
+          yq e '.info.version = "'$version'"' -i swagger.yaml
+          npm run build
+
+          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "branch=$branch_name" >> $GITHUB_OUTPUT
+
+      - name: create pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "chore: update changelog and bump version to ${{ steps.bump.outputs.version }}"
+          body: |
+            ## Changes
+            - Bump version to ${{ steps.bump.outputs.version }}
+            - Update changelog
+            - Update bundled.yaml
+            - Update swagger.yaml
+          commit-message: "chore: update changelog and bump version to ${{ steps.bump.outputs.version }}"
+          branch: ${{ steps.bump.outputs.branch }}
+          base: develop
