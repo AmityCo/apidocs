@@ -2,13 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [4.103.0] - 2025-04-25
+
+### 🚀 Features
+
+- Add endpoints for uploading images, videos, and files from URL (#383)
+
+### 🐛 Bug Fixes
+
+- Bump workflow create pr (#379)
+- Bump workflow create pr (version missing) (#381)
 
 ### ⚙️ Miscellaneous Tasks
 
 - Update flag post schema (#366)
 - Update schema (#374)
 - Add actions for publish (#375)
+- Manual bump 4.102.0 and fix bump workflow (#376)
+- Add create pr after bump (#377)
+- Changelog convention command (#378)
 
 ## [4.102.0] - 2025-04-18
 
