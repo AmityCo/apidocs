@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+- Add v3.post.didModerate, v3.comment.didModerate for webhook (#386)
+- Support bump workflow with rc (#387)
+
+### 🐛 Bug Fixes
+
+- Publish tag with PLATFORM_CHORES_TOKEN instead of github app (#385)
+
 ## [4.103.0] - 2025-04-25
 
 ### 🚀 Features
@@ -21,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Manual bump 4.102.0 and fix bump workflow (#376)
 - Add create pr after bump (#377)
 - Changelog convention command (#378)
+- Update changelog and bump version to 4.103.0 (#384)
 
 ## [4.102.0] - 2025-04-18
 
