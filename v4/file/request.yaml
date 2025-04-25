@@ -22,3 +22,24 @@ common-post-request-payload:
             default: public
         required:
           - "files"
+upload-from-url-payload:
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          fileUrl:
+            type: "string"
+            description: "A file URL to upload"
+          preferredFilename:
+            type: "string"
+            maxLength: 1024
+          accessType:
+            type: string
+            description: File access type. `network` type requires authentication to download.
+            enum:
+              - public
+              - network
+            default: public
+        required:
+          - "fileUrl"

@@ -57,3 +57,87 @@ videos:
         $ref: "../../global/error.yaml#/PayloadTooLargeError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+images-from-url:
+  post:
+    summary: "Upload image from URL."
+    security:
+      - BearerAuth: []
+    tags:
+      - "File"
+    parameters:
+      - $ref: "./parameter.yaml#/content-type"
+    description: "This endpoint allows you to upload an image from a URL to SocialPlus cloud storage.\n\nFile size limit: 1,073,741,824 byte\n"
+    requestBody:
+      $ref: "./request.yaml#/upload-from-url-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/images-response-200"
+      401:
+        $ref: "../../global/error.yaml#/UnAuthorizedError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      413:
+        $ref: "../../global/error.yaml#/PayloadTooLargeError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+videos-from-url:
+  post:
+    summary: "Upload video from URL."
+    security:
+      - BearerAuth: []
+    tags:
+      - "File"
+    parameters:
+      - $ref: "./parameter.yaml#/content-type"
+    description: "This endpoint allows you to upload an video from a URL to SocialPlus cloud storage.\n\nFile size limit: 1,073,741,824 byte\n"
+    requestBody:
+      $ref: "./request.yaml#/upload-from-url-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/videos-response-200"
+      401:
+        $ref: "../../global/error.yaml#/UnAuthorizedError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      413:
+        $ref: "../../global/error.yaml#/PayloadTooLargeError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+files-from-url:
+  post:
+    summary: "Upload file from URL."
+    security:
+      - BearerAuth: []
+    tags:
+      - "File"
+    parameters:
+      - $ref: "./parameter.yaml#/content-type"
+    description: "This endpoint allows you to upload a file from a URL to SocialPlus cloud storage.\n\nFile size limit: 1,073,741,824 byte\n"
+    requestBody:
+      $ref: "./request.yaml#/upload-from-url-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/files-response-200"
+      401:
+        $ref: "../../global/error.yaml#/UnAuthorizedError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      413:
+        $ref: "../../global/error.yaml#/PayloadTooLargeError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
