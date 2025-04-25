@@ -4181,13 +4181,12 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /v1/notification:
     post:
-      summary: register a device to get push notification
+      summary: Register a device for push notifications
       tags:
         - Notification
       security:
         - ApiKeyAuth: []
-      description: |
-        Register a device to a notification service provider.
+      description: Register a device with a notification service provider to enable push notifications
       requestBody:
         $ref: '#/components/requestBodies/request_root-post-request-payload-7'
       responses:
@@ -4198,13 +4197,12 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError404'
     delete:
-      summary: unregister a device from a notification service provider
+      summary: Unregister a device from push notifications
       tags:
         - Notification
       security:
         - ApiKeyAuth: []
-      description: |
-        Unregister a device from a notification service provider.
+      description: Remove a device from the notification service provider to stop push notifications
       parameters:
         - $ref: '#/components/parameters/parameter_userId-2'
         - $ref: '#/components/parameters/deviceId'
@@ -4217,31 +4215,31 @@ paths:
           $ref: '#/components/responses/NotFoundError404'
   /api/v1/notification-tray:
     get:
-      summary: Get list of notification tray items
+      summary: Get user's notification tray items
       tags:
         - Notification Tray
       security:
         - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/parameter_options-8'
-      description: Retrieves the notification tray items for the current user. Ordered by newest first as a default.
+      description: Retrieves the user's notification tray items, sorted by newest first. Results are cached for 30 seconds.
       responses:
         '200':
           $ref: '#/components/responses/GetNotificationTrayResponse'
-        '400':
+        '422':
           $ref: '#/components/responses/BadRequestError400'
   /api/v1/notification-tray/tray/seen:
     get:
-      summary: Get notification tray seen data
+      summary: Get notification tray seen status
       tags:
         - Notification Tray
       security:
         - BearerAuth: []
-      description: Retrieves the notification tray seen data
+      description: Retrieves timestamps for when the user last viewed their notification tray and when the most recent notification occurred
       responses:
         '200':
           $ref: '#/components/responses/GetNotificationTraySeenResponse'
-        '400':
+        '422':
           $ref: '#/components/responses/BadRequestError400'
     post:
       summary: Mark all notifications as seen
@@ -4249,28 +4247,28 @@ paths:
         - Notification Tray
       security:
         - BearerAuth: []
-      description: Marks all notifications as seen for the specified user
+      description: Updates the seen status for all notifications in the user's tray
       requestBody:
         $ref: '#/components/requestBodies/MarkAllSeenRequest'
       responses:
         '200':
           $ref: '#/components/responses/MarkNotificationTraySeenResponse'
-        '400':
+        '422':
           $ref: '#/components/responses/BadRequestError400'
   /api/v1/notification-tray/items/seen:
     post:
-      summary: Mark specific notification items as seen
+      summary: Mark specific notifications as seen
       tags:
         - Notification Tray
       security:
         - BearerAuth: []
-      description: Marks specific notification tray items as seen for the specified user
+      description: Updates the seen status for specific notification items in the user's tray
       requestBody:
         $ref: '#/components/requestBodies/MarkItemsSeenRequest'
       responses:
         '200':
           $ref: '#/components/responses/MarkNotificationTrayItemsSeenResponse'
-        '400':
+        '422':
           $ref: '#/components/responses/BadRequestError400'
   /api/v3/notification/setting:
     get:
@@ -5016,7 +5014,7 @@ paths:
         - $ref: '#/components/parameters/parameter_sortBy-8'
         - $ref: '#/components/parameters/parameter_hasFlag-7'
         - $ref: '#/components/parameters/parameter_isDeleted-2'
-        - $ref: '#/components/parameters/parameter_options-10'
+        - $ref: '#/components/parameters/parameter_options-11'
         - $ref: '#/components/parameters/feedType'
         - $ref: '#/components/parameters/parameter_dataTypes-3'
         - $ref: '#/components/parameters/parameter_tags-5'
@@ -6687,7 +6685,7 @@ paths:
         - $ref: '#/components/parameters/userPublicIds'
         - $ref: '#/components/parameters/parameter_sortBy-6'
         - $ref: '#/components/parameters/parameter_isDeleted-9'
-        - $ref: '#/components/parameters/parameter_options-14'
+        - $ref: '#/components/parameters/parameter_options-15'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-9'
@@ -12339,14 +12337,18 @@ components:
                     maximum: 1
     NotificationTrayItemActor:
       type: object
+      description: Represents a user who performed an action that triggered a notification
       properties:
         _id:
           type: string
+          description: Unique identifier of the actor
         publicId:
           type: string
+          description: Public identifier of the actor
         lastActedAt:
           type: string
           format: date-time
+          description: Timestamp when the actor last performed the action
     TrayItemData:
       oneOf:
         - type: object
@@ -12355,6 +12357,7 @@ components:
           properties:
             communityName:
               type: string
+              description: Name of the community where the action occurred
         - type: object
           required:
             - reactionName
@@ -12363,8 +12366,10 @@ components:
               type: array
               items:
                 type: string
+              description: List of reaction names used
     NotificationTrayItem:
       type: object
+      description: Represents a single notification item in the notification tray
       required:
         - _id
         - lastOccurredAt
@@ -12374,36 +12379,36 @@ components:
         - actionType
         - targetId
         - targetType
-        - data
         - text
         - templatedText
         - daySegment
       properties:
         _id:
           type: string
-          description: ObjectId of the notification tray item
+          description: Unique identifier of the notification tray item
         daySegment:
           type: string
           format: date-time
-          description: Timestamp to tell which day this notification is in
+          description: Timestamp indicating which day this notification belongs to for grouping purposes
         lastSeenAt:
           type: string
           format: date-time
-          description: Timestamp when the notification was last seen
+          description: Timestamp when the user last saw this notification
         lastOccurredAt:
           type: string
           format: date-time
           description: Timestamp when the notification last occurred
         actors:
           type: array
-          description: Cap at 3 items
+          description: List of users who performed the action (limited to 3 most recent)
           items:
             $ref: '#/components/schemas/NotificationTrayItemActor'
         actorsCount:
           type: integer
-          description: No caps on the total number of actors
+          description: Total count of actors who performed the action
         actionType:
           type: string
+          description: Type of action that triggered the notification
           enum:
             - post
             - poll
@@ -12413,6 +12418,7 @@ components:
             - reply
         trayItemCategory:
           type: string
+          description: More specific category for certain action types
           enum:
             - mention_in_poll
             - mention_in_post
@@ -12421,33 +12427,34 @@ components:
             - reaction_on_post
             - reaction_on_comment
             - reaction_on_reply
-          description: Category for when action is either "mention" or "reply"
         targetId:
           type: string
-          description: ObjectId of the target
+          description: Identifier of the content being acted upon
         targetType:
           type: string
+          description: Type of content being acted upon
         referenceId:
           type: string
-          description: Optional ObjectId of the reference
+          description: Optional identifier of related content for context
         referenceType:
           type: string
+          description: Optional type of the referenced content
         actionReferenceId:
           type: string
-          description: Optional ObjectId of the action object
+          description: Optional identifier of the specific action object
         parentId:
           type: string
-          description: Optional ObjectId of parent
+          description: Optional identifier of parent content
         data:
           deprecated: true
           $ref: '#/components/schemas/TrayItemData'
         text:
           type: string
-          description: Ready to render text without any templating
+          description: Human-readable notification text
           example: Alice and 5 others reacted to your post.
         templatedText:
           type: string
-          description: Ready to render text with templating allow client to interpret
+          description: Notification text with template variables for client-side processing
           example: '{{ userId: 67f4e40030a5dea19d8a187f }} replied to your comment in {{ communityId: 67f4e4c07af04a145b1e684a }}'
     NotificationSetting:
       type: object
@@ -17065,7 +17072,7 @@ components:
               data:
                 type: object
     GetNotificationTrayResponse:
-      description: Notification tray items list
+      description: Response containing a list of notification tray items and associated data
       content:
         application/json:
           schema:
@@ -17076,33 +17083,36 @@ components:
             properties:
               notificationTrayItems:
                 type: array
+                description: List of notification items to display
                 items:
                   $ref: '#/components/schemas/NotificationTrayItem'
               paging:
                 type: object
+                description: Pagination information for navigating through results
                 required:
-                  - next
-                  - previous
                   - limit
                 properties:
                   next:
                     type: string
+                    description: Token to retrieve the next page of results
                   previous:
                     type: string
+                    description: Token to retrieve the previous page of results
                   limit:
                     type: number
+                    description: Number of items per page
               users:
                 type: array
-                description: Serialized user data
+                description: User information for actors referenced in the notifications
                 items:
                   $ref: '#/components/schemas/UserV3'
               files:
                 type: array
-                description: Serialize file data
+                description: File information for any media referenced in notifications
                 items:
                   $ref: '#/components/schemas/File'
     GetNotificationTraySeenResponse:
-      description: Notification tray seen data
+      description: Response containing the user's notification tray seen timestamps
       content:
         application/json:
           schema:
@@ -17114,13 +17124,13 @@ components:
               lastTraySeenAt:
                 type: string
                 format: date-time
-                description: Timestamp when the tray was last seen
+                description: Timestamp when the user last viewed their notification tray
               lastTrayOccurredAt:
                 type: string
                 format: date-time
-                description: Timestamp when the last tray item occurred
+                description: Timestamp of the most recent notification in the tray
     MarkNotificationTraySeenResponse:
-      description: Successfully marked all notifications as seen
+      description: Response after successfully marking all notifications as seen
       content:
         application/json:
           schema:
@@ -17131,8 +17141,9 @@ components:
               lastSeenAt:
                 type: string
                 format: date-time
+                description: Updated timestamp for when all notifications were marked as seen
     MarkNotificationTrayItemsSeenResponse:
-      description: Successfully marked specified notifications as seen
+      description: Response after successfully marking specific notifications as seen
       content:
         application/json:
           schema:
@@ -17142,6 +17153,7 @@ components:
             properties:
               trayItems:
                 type: array
+                description: List of updated notification items with their new seen status
                 items:
                   type: object
                   required:
@@ -17150,9 +17162,11 @@ components:
                   properties:
                     id:
                       type: string
+                      description: Identifier of the notification item
                     lastSeenAt:
                       type: string
                       format: date-time
+                      description: Updated timestamp when the notification was marked as seen
     setting-response-200:
       description: Notification Setting Information
       content:
@@ -20123,20 +20137,18 @@ components:
         minLength: 1
     parameter_options-8:
       name: options
-      description: pagination optins
+      description: Pagination options for controlling result set size and navigation
       in: query
-      optional: true
+      required: false
       schema:
         type: object
         properties:
           token:
-            optional: true
-            description: pagination token
             type: string
+            description: Token for pagination to retrieve the next or previous page of results
           limit:
-            optional: true
-            description: pagination limit
             type: integer
+            description: Maximum number of items to return per page
             minimum: 1
             maximum: 100
             default: 20
@@ -20377,6 +20389,14 @@ components:
           - lastUpdated
           - firstUpdated
         default: lastCreated
+      description: Sort order for posts.
+    parameter_hasFlag-7:
+      name: hasFlag
+      in: query
+      schema:
+        type: boolean
+        default: null
+      description: Filter by flag status
     parameter_options-11:
       name: options
       in: query
@@ -22363,8 +22383,7 @@ components:
                   background_shade1_color: '#40434E'
                   highlight_color: '#1054DE'
     request_root-post-request-payload-7:
-      description: |
-        information of a device to be registered.
+      description: Information required to register a device for push notifications
       required: true
       content:
         application/json:
@@ -22374,25 +22393,30 @@ components:
               deviceId:
                 type: string
                 maxLength: 150
+                description: Unique identifier for the device
               platform:
                 type: string
                 enum:
                   - android
                   - ios
+                description: Operating system platform of the device
               token:
                 type: string
-                description: device token for push notification. For ios platform, the token length must be less than or equals 400 characters and they must be hexadecimal.
+                description: Device token for push notification. For iOS, token must be ≤ 400 characters and in hexadecimal format
                 maxLength: 1000
               userId:
                 type: string
+                description: Identifier of the user associated with this device
               provider:
                 type: string
+                description: Push notification service provider
             required:
               - deviceId
               - platform
               - token
               - userId
     MarkAllSeenRequest:
+      description: Request to mark all notifications as seen
       required: true
       content:
         application/json:
@@ -22404,8 +22428,9 @@ components:
               lastSeenAt:
                 type: string
                 format: date-time
-                description: Timestamp to mark as last seen for all notifications (should not be out of sync in the future with server time than 10 seconds)
+                description: Timestamp to mark as last seen for all notifications (should not exceed server time by more than 10 seconds)
     MarkItemsSeenRequest:
+      description: Request to mark specific notification items as seen
       required: true
       content:
         application/json:
@@ -22416,6 +22441,7 @@ components:
             properties:
               trayItems:
                 type: array
+                description: List of notification items to mark as seen
                 items:
                   type: object
                   required:
@@ -22424,11 +22450,11 @@ components:
                   properties:
                     id:
                       type: string
-                      description: The ID of the notification tray item
+                      description: Identifier of the notification tray item
                     lastSeenAt:
                       type: string
                       format: date-time
-                      description: Timestamp to mark as last seen for this item (should not be out of sync in the future with server time than 10 seconds)
+                      description: Timestamp to mark as last seen for this item (should not exceed server time by more than 10 seconds)
     setting-post-request-payload:
       description: |
         Notification setting information to be updated

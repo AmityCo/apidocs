@@ -35,60 +35,60 @@ root:
 
 notification-tray:
   get:
-    summary: Get list of notification tray items
+    summary: "Get user's notification tray items"
     tags: 
-      - Notification Tray
+      - "Notification Tray"
     security: 
       - BearerAuth: [] 
     parameters:
       - $ref: './parameter.yaml#/options'
-    description: Retrieves the notification tray items for the current user. Ordered by newest first as a default. 
+    description: "Retrieves the user's notification tray items, sorted by newest first. Results are cached for 30 seconds."
     responses: 
       200:
         $ref: "./response.yaml#/GetNotificationTrayResponse"
-      400:
+      422:
         $ref: "../../global/error.yaml#/BadRequestError400"
 
 notification-tray-seen:
   get:
-    summary: Get notification tray seen data
+    summary: "Get notification tray seen status"
     tags:
-      - Notification Tray
+      - "Notification Tray"
     security: 
       - BearerAuth: []
-    description: Retrieves the notification tray seen data 
+    description: "Retrieves timestamps for when the user last viewed their notification tray and when the most recent notification occurred"
     responses:
       200:
         $ref: "./response.yaml#/GetNotificationTraySeenResponse"
-      400:
+      422:
         $ref: "../../global/error.yaml#/BadRequestError400"
   post:
-    summary: Mark all notifications as seen
+    summary: "Mark all notifications as seen"
     tags: 
-      - Notification Tray
+      - "Notification Tray"
     security: 
       - BearerAuth: [] 
-    description: Marks all notifications as seen for the specified user
+    description: "Updates the seen status for all notifications in the user's tray"
     requestBody:
       $ref: "./request.yaml#/MarkAllSeenRequest"
     responses: 
       200:
         $ref: "./response.yaml#/MarkNotificationTraySeenResponse"
-      400:
+      422:
         $ref: "../../global/error.yaml#/BadRequestError400"
 
 notification-tray-items-seen:
   post:
-    summary: Mark specific notification items as seen
+    summary: "Mark specific notifications as seen"
     tags: 
-      - Notification Tray
+      - "Notification Tray"
     security: 
       - BearerAuth: [] 
-    description: Marks specific notification tray items as seen for the specified user
+    description: "Updates the seen status for specific notification items in the user's tray"
     requestBody:
       $ref: './request.yaml#/MarkItemsSeenRequest'
     responses: 
       200:
         $ref: "./response.yaml#/MarkNotificationTrayItemsSeenResponse"
-      400:
+      422:
         $ref: "../../global/error.yaml#/BadRequestError400"

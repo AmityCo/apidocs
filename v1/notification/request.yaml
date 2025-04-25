@@ -1,5 +1,5 @@
 root-post-request-payload:
-  description: "information of a device to be registered.\n"
+  description: "Information required to register a device for push notifications"
   required: true
   content:
     application/json:
@@ -9,26 +9,32 @@ root-post-request-payload:
           deviceId:
             type: "string"
             maxLength: 150
+            description: "Unique identifier for the device"
           platform:
             type: "string"
             enum:
               - "android"
               - "ios"
+            description: "Operating system platform of the device"
           token:
             type: "string"
-            description: "device token for push notification. For ios platform, the token length must be less than or equals 400 characters and they must be hexadecimal."
+            description: "Device token for push notification. For iOS, token must be ≤ 400 characters and in hexadecimal format"
             maxLength: 1000
           userId:
             type: "string"
+            description: "Identifier of the user associated with this device"
           provider:
             type: "string"
+            description: "Push notification service provider"
         required:
           - "deviceId"
           - "platform"
           - "token"
           - "userId"
 
+# Notification Tray Marking Requests
 MarkAllSeenRequest:
+  description: "Request to mark all notifications as seen"
   required: true
   content:
     application/json:
@@ -40,9 +46,10 @@ MarkAllSeenRequest:
           lastSeenAt:
             type: string
             format: date-time
-            description: Timestamp to mark as last seen for all notifications (should not be out of sync in the future with server time than 10 seconds)
+            description: "Timestamp to mark as last seen for all notifications (should not exceed server time by more than 10 seconds)"
 
 MarkItemsSeenRequest:
+  description: "Request to mark specific notification items as seen"
   required: true
   content:
     application/json:
@@ -53,6 +60,7 @@ MarkItemsSeenRequest:
         properties:
           trayItems:
             type: array
+            description: "List of notification items to mark as seen"
             items:
               type: object
               required:
@@ -61,8 +69,8 @@ MarkItemsSeenRequest:
               properties:
                 id:
                   type: string
-                  description: The ID of the notification tray item
+                  description: "Identifier of the notification tray item"
                 lastSeenAt:
                   type: string
                   format: date-time
-                  description: Timestamp to mark as last seen for this item (should not be out of sync in the future with server time than 10 seconds)
+                  description: "Timestamp to mark as last seen for this item (should not exceed server time by more than 10 seconds)"

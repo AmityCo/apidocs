@@ -1,10 +1,27 @@
 NotificationSettingApiResponse:
-  description: Notification Setting Information
+  description: Response containing notification setting information
   content:
     application/json:
       schema:
         $ref: "../../schema/notification.yaml#/NotificationSetting"
 
+# Notification Tray Actor Schema
+NotificationTrayItemActor:
+  type: object
+  description: Represents a user who performed an action that triggered a notification
+  properties:
+    _id: 
+      type: string
+      description: Unique identifier of the actor
+    publicId: 
+      type: string
+      description: Public identifier of the actor
+    lastActedAt: 
+      type: string
+      format: date-time
+      description: Timestamp when the actor last performed the action
+
+# Notification Tray Item Data Schema (Deprecated)
 TrayItemData:
   oneOf:
     - type: object
@@ -13,6 +30,7 @@ TrayItemData:
       properties:
         communityName:
           type: string
+          description: Name of the community where the action occurred
     - type: object
       required:
         - reactionName
@@ -21,20 +39,12 @@ TrayItemData:
           type: array
           items:
             type: string
+          description: List of reaction names used
 
-NotificationTrayItemActor:
-  type: object
-  properties:
-    _id: 
-      type: string
-    publicId: 
-      type: string
-    lastActedAt: 
-      type: string
-      format: date-time
-
+# Main Notification Tray Item Schema
 NotificationTrayItem:
   type: object
+  description: Represents a single notification item in the notification tray
   required:
     - _id
     - lastOccurredAt
@@ -44,36 +54,36 @@ NotificationTrayItem:
     - actionType
     - targetId
     - targetType
-    - data
     - text
     - templatedText
     - daySegment
   properties:
     _id:
       type: string
-      description: ObjectId of the notification tray item
+      description: Unique identifier of the notification tray item
     daySegment:
       type: string
       format: date-time
-      description: Timestamp to tell which day this notification is in
+      description: Timestamp indicating which day this notification belongs to for grouping purposes
     lastSeenAt:
       type: string
       format: date-time
-      description: Timestamp when the notification was last seen
+      description: Timestamp when the user last saw this notification
     lastOccurredAt:
       type: string
       format: date-time
       description: Timestamp when the notification last occurred
     actors:
       type: array
-      description: Cap at 3 items
+      description: List of users who performed the action (limited to 3 most recent)
       items:
         $ref: '#/NotificationTrayItemActor'
     actorsCount:
       type: integer
-      description: No caps on the total number of actors
+      description: Total count of actors who performed the action
     actionType:
       type: string
+      description: Type of action that triggered the notification
       enum:
         - post
         - poll
@@ -83,6 +93,7 @@ NotificationTrayItem:
         - reply
     trayItemCategory:
       type: string
+      description: More specific category for certain action types
       enum:
         - mention_in_poll
         - mention_in_post
@@ -91,37 +102,39 @@ NotificationTrayItem:
         - reaction_on_post
         - reaction_on_comment
         - reaction_on_reply
-      description: Category for when action is either "mention" or "reply"
     targetId:
       type: string
-      description: ObjectId of the target
+      description: Identifier of the content being acted upon
     targetType:
       type: string
+      description: Type of content being acted upon
     referenceId:
       type: string
-      description: Optional ObjectId of the reference
+      description: Optional identifier of related content for context
     referenceType:
       type: string
+      description: Optional type of the referenced content
     actionReferenceId:
       type: string
-      description: Optional ObjectId of the action object
+      description: Optional identifier of the specific action object
     parentId:
       type: string
-      description: Optional ObjectId of parent
+      description: Optional identifier of parent content
     data:
       deprecated: true
       $ref: '#/TrayItemData'
     text:
       type: string
-      description: Ready to render text without any templating
+      description: Human-readable notification text
       example: "Alice and 5 others reacted to your post."
     templatedText:
       type: string
-      description: Ready to render text with templating allow client to interpret
+      description: Notification text with template variables for client-side processing
       example: "{{ userId: 67f4e40030a5dea19d8a187f }} replied to your comment in {{ communityId: 67f4e4c07af04a145b1e684a }}"
 
+# Response Schemas
 GetNotificationTrayResponse:
-  description: Notification tray items list
+  description: Response containing a list of notification tray items and associated data
   content:
     application/json:
       schema: 
@@ -132,34 +145,37 @@ GetNotificationTrayResponse:
         properties:
           notificationTrayItems:
             type: array
+            description: List of notification items to display
             items:
               $ref: '#/NotificationTrayItem'
           paging:
             type: object
+            description: Pagination information for navigating through results
             required:
-              - next
-              - previous
               - limit
             properties:
               next:
                 type: string
+                description: Token to retrieve the next page of results
               previous:
                 type: string
+                description: Token to retrieve the previous page of results
               limit:
                 type: number
+                description: Number of items per page
           users:
             type: array
-            description: Serialized user data
+            description: User information for actors referenced in the notifications
             items:
               $ref: '../../schema/user.yaml#/UserV3'
           files:
             type: array
-            description: Serialize file data
+            description: File information for any media referenced in notifications
             items:
               $ref: '../../schema/file.yaml#/File'
 
 GetNotificationTraySeenResponse:
-  description: Notification tray seen data
+  description: Response containing the user's notification tray seen timestamps
   content:
     application/json:
       schema: 
@@ -171,15 +187,14 @@ GetNotificationTraySeenResponse:
           lastTraySeenAt:
             type: string
             format: date-time
-            description: Timestamp when the tray was last seen
+            description: Timestamp when the user last viewed their notification tray
           lastTrayOccurredAt:
             type: string
             format: date-time
-            description: Timestamp when the last tray item occurred
-
+            description: Timestamp of the most recent notification in the tray
 
 MarkNotificationTraySeenResponse:
-  description: Successfully marked all notifications as seen
+  description: Response after successfully marking all notifications as seen
   content:
     application/json:
       schema: 
@@ -190,9 +205,10 @@ MarkNotificationTraySeenResponse:
           lastSeenAt:
             type: string
             format: date-time
+            description: Updated timestamp for when all notifications were marked as seen
 
 MarkNotificationTrayItemsSeenResponse:
-  description: Successfully marked specified notifications as seen
+  description: Response after successfully marking specific notifications as seen
   content:
     application/json:
       schema: 
@@ -202,6 +218,7 @@ MarkNotificationTrayItemsSeenResponse:
         properties:
           trayItems:
             type: array
+            description: List of updated notification items with their new seen status
             items:
               type: object
               required:
@@ -210,6 +227,8 @@ MarkNotificationTrayItemsSeenResponse:
               properties:
                 id:
                   type: string
+                  description: Identifier of the notification item
                 lastSeenAt:
                   type: string
                   format: date-time
+                  description: Updated timestamp when the notification was marked as seen
