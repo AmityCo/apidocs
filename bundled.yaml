@@ -236,7 +236,7 @@ paths:
       tags:
         - Premium Report
       security:
-        - basicAuth: []
+        - cookieAuth: []
       parameters:
         - name: options[token]
           in: query
@@ -261,25 +261,25 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
-  /admin/v1/premium-reports/{key}/download:
+  /admin/v1/premium-reports/{fileName}/download:
     get:
-      summary: Download report items
-      description: Download the report items in CSV format.
+      summary: Download report item
+      description: Download the report item from S3
       tags:
         - Premium Report
       security:
-        - basicAuth: []
+        - cookieAuth: []
       parameters:
-        - name: key
+        - name: fileName
           in: path
-          description: File S3 key for the report items.
+          description: File name of the report items.
           required: true
           schema:
             type: string
             example: report-xyz-2023-10-01T00:00:00Z.csv
       responses:
         '302':
-          $ref: '#/components/responses/_key-download-response-200'
+          $ref: '#/components/responses/_key-download-response-302'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '500':
@@ -549,7 +549,7 @@ components:
                 properties:
                   next:
                     type: string
-    _key-download-response-200:
+    _key-download-response-302:
       description: |
         Redirect to S3 signed URL for downloading the report.
       headers:
