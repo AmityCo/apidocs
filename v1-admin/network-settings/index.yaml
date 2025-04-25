@@ -1,0 +1,15 @@
+premium-reports:
+  get:
+    summary: "Get premium report settings"
+    description: "Get premium report settings."
+    tags:
+      - "Premium Report"
+    security:
+      - cookieAuth: []
+    responses:
+      200:
+        $ref: "./response.yaml#/premium-reports-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

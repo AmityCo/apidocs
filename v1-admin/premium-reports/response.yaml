@@ -1,0 +1,27 @@
+root-get-response-200:
+  description: |
+    Premium report list.
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          reports:
+            type: "array"
+            items:
+              $ref: "../../schema/premium-report.yaml#/PremiumReport"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+
+_key-download-response-302:
+  description: |
+    Redirect to S3 signed URL for downloading the report.
+  headers:
+    Location:
+      schema:
+        type: string
+        format: uri
+      example: "https://s3.amazonaws.com/bucket-name/report.csv?AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Expires=1234567890&Signature=example"

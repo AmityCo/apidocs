@@ -1,0 +1,97 @@
+root-get-request-parameters:
+  - name: targetType
+    in: query
+    schema:
+      type: string
+      enum:
+        - user
+        - community
+  - name: targetIds
+    in: query
+    description: Target internal id
+    schema:
+      type: array
+      items:
+        type: string
+        maxLength: 900
+  - name: contentTypes
+    in: query
+    schema:
+      type: array
+      items:
+        type: string
+        enum:
+          - post
+          - comment
+          - image
+          - video
+          - file
+  - name: creatorIds
+    in: query
+    description: Creator internal id
+    schema:
+      type: array
+      items:
+        type: string
+        maxLength: 900
+  - name: tags
+    in: query
+    schema:
+      type: array
+      items:
+        type: string
+        maxLength: 24
+      max: 5
+  - name: isDeleted
+    in: query
+    description: |
+      For filter content that is deleted while reviewing <br>
+      Will filter manualReview.reviewedType == 'deleted' || aiModeration.moderatedAction == 'deleted'
+    schema:
+      type: boolean
+  - name: isFlagCleared
+    in: query
+    description: |
+      For filter content that flag is cleared while reviewing <br>
+      Will filter manualReview.reviewedType == "clearFlag"
+    schema:
+      type: boolean
+  - name: isReviewed
+    in: query
+    description: |
+      For filter content that is reviewed or not reviewed <br>
+      Will filter lastReviewedAt exists
+    schema:
+      type: boolean
+  - name: options[token]
+    in: query
+    description: "Token for pagination. Use the token from the previous response to get the next page."
+    schema:
+      type: string
+      maxLength: 1000
+  - name: options[limit]
+    in: query
+    description: "Limit the number of items in the response. Default is 20."
+    schema:
+      type: integer
+      minimum: 1
+      maximum: 100
+      default: 20
+  - name: sortBy[type]
+    in: query
+    description: "Sort by type."
+    schema:
+      type: string
+      default: lastFlaggedAt
+      enum:
+        - lastFlaggedAt
+        - flagCount
+        - lastReviewedAt
+  - name: sortBy[order]
+    in: query
+    description: "Sort order. Default is desc."
+    schema:
+      type: string
+      enum:
+        - asc
+        - desc

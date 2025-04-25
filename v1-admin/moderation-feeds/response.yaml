@@ -1,0 +1,23 @@
+root-response-200:
+  description: |
+    Moderation feeds information. To display actual content, use the contentId and contentType to get the content from the list API (ex. Post list, Comment list).
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          contents:
+            type: "array"
+            items:
+              $ref: "../../schema/content.yaml#/Content"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              previous:
+                type: string
+          total:
+            type: integer
+            description: Total number of contents that match the filter.
+            example: 100

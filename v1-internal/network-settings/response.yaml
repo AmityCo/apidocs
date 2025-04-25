@@ -1,0 +1,30 @@
+premium-reports-put-response-200:
+  description: |
+    Premium report settings response.
+  content:
+    application/json:
+      schema:
+        $ref: "../../schema/network-setting.yaml#/PremiumReportNetworkSetting"
+
+premium-reports-list-networks-get-response-200:
+  description: |
+    List settings of networks that have the premium report enabled.
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          premiumReportSettings:
+            type: "array"
+            items:
+              type: object
+              properties:
+                networkId:
+                  type: string
+                  description: Network ID.
+                  example: "507f1f77bcf86cd799439011"
+                enabled:
+                  type: boolean
+                  description: Whether the premium report is enabled or not.
+                  example: true
+            description: List of settings of networks that have the premium report enabled.
