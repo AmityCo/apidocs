@@ -15,6 +15,21 @@ paths:
   /admin/v1/moderation-feeds:
     $ref: "./v1-admin/moderation-feeds/index.yaml#/root"
 
+  /admin/v1/network-settings/premium-reports:
+    $ref: "./v1-admin/network-settings/index.yaml#/premium-reports"
+
+  /admin/v1/premium-reports:
+    $ref: "./v1-admin/premium-reports/index.yaml#/root"
+
+  /admin/v1/premium-reports/{key}/download:
+    $ref: "./v1-admin/premium-reports/index.yaml#/_key-download"
+
+  /internal/v1/network-settings/premium-reports:
+    $ref: "./v1-internal/network-settings/index.yaml#/premium-reports"
+
+  /internal/v1/network-settings/premium-reports/list-networks:
+    $ref: "./v1-internal/network-settings/index.yaml#/premium-reports-list-networks"
+
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -28,3 +43,6 @@ components:
       type: apiKey
       in: cookie
       name: connect.sid # cookie name
+    basicAuth:
+      type: http
+      scheme: basic

@@ -1,0 +1,56 @@
+root:
+  get:
+    summary: "Query report items"
+    description: "Retrieve the existing report"
+    tags:
+      - "Premium Report"
+    security:
+      - cookieAuth: []
+    parameters:
+      - name: "options[token]"
+        in: "query"
+        description: "Next page token for pagination."
+        required: false
+        schema:
+          type: "string"
+          example: "1w41l63U0xa8q7smH50vCxyTQqdxo69O3EmK28Bi5PcROI4wI/EyIJg=="
+          maxLength: 1000
+      - name: "options[limit]"
+        in: "query"
+        description: "The limit for the number of report items."
+        schema:
+          type: "integer"
+          minimum: 1
+          maximum: 100
+          default: 20
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_key-download:
+  get:
+    summary: "Download report items"
+    description: "Download the report items in CSV format."
+    tags:
+      - "Premium Report"
+    security:
+      - cookieAuth: []
+    parameters:
+      - name: "key"
+        in: "path"
+        description: "File S3 key for the report items."
+        required: true
+        schema:
+          type: "string"
+          example: "report-xyz-2023-10-01T00:00:00Z.csv"
+    responses:
+      302:
+        $ref: "./response.yaml#/_key-download-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
