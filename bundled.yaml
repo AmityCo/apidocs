@@ -8561,6 +8561,17 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/comment-webhook-response'
+  /webhook/v3.comment.didModerate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when comment is moderated
+      responses:
+        '200':
+          $ref: '#/components/responses/comment-webhook-response'
   /webhook/v3.community.didAddUsers:
     get:
       tags:
@@ -8767,6 +8778,17 @@ paths:
         - BearerAuth: []
       description: |
         This is called when post is updated
+      responses:
+        '200':
+          $ref: '#/components/responses/post-webhook-response'
+  /webhook/v3.post.didModerate:
+    get:
+      tags:
+        - Webhook event
+      security:
+        - BearerAuth: []
+      description: |
+        This is called when post is moderated
       responses:
         '200':
           $ref: '#/components/responses/post-webhook-response'
