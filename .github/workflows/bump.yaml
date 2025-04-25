@@ -9,6 +9,7 @@ on:
         required: true
         default: "patch"
         options:
+          - rc
           - patch
           - minor
           - major
@@ -42,15 +43,23 @@ jobs:
       - name: bump version
         id: bump
         run: |
-          npm version ${{ github.event.inputs.release }} -m "chore: bummp version to %s" --no-git-tag-version
+          if [[ ${{ github.event.inputs.release }} == "rc" ]]; then
+            npm version prerelease -m "chore: bummp version to %s" --no-git-tag-version --preid ${{ github.event.inputs.release }}
+          else
+            npm version ${{ github.event.inputs.release }} -m "chore: bummp version to %s" --no-git-tag-version
+          fi
           version=$(jq -r .version package.json)
 
           branch_name="chore-bump-$version"
           git checkout -b $branch_name
           git push --set-upstream origin $branch_name
 
-          yq e '.info.version = "'$version'"' -i swagger.yaml
-          npm run build
+          if [[ ${{ github.event.inputs.release }} == "rc" ]]; then
+            echo "skip update swagger.yaml and bundled.yaml for rc"
+          else
+            yq e '.info.version = "'$version'"' -i swagger.yaml
+            npm run build
+          fi
 
           echo "version=$version" >> $GITHUB_OUTPUT
           echo "branch=$branch_name" >> $GITHUB_OUTPUT
