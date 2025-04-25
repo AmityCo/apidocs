@@ -93,7 +93,7 @@ info:
     ## Select Region Endpoint
 
     Before making server-to-server API calls, be sure to select the correct API endpoint for your region in the **Servers** dropdown below.
-  version: 4.103.0
+  version: 4.99.1
 servers:
   - url: https://apix.us.amity.co
     description: API Endpoint for US Region
@@ -567,13 +567,13 @@ components:
             $ref: '#/components/schemas/PremiumReportNetworkSetting'
     premium-reports-list-networks-get-response-200:
       description: |
-        List of networks that have the premium report enabled.
+        List settings of networks that have the premium report enabled.
       content:
         application/json:
           schema:
             type: object
             properties:
-              networks:
+              premiumReportSettings:
                 type: array
                 items:
                   type: object
@@ -586,4 +586,4 @@ components:
                       type: boolean
                       description: Whether the premium report is enabled or not.
                       example: true
-                description: List of networks that have the premium report enabled.
+                description: List of settings of networks that have the premium report enabled.
