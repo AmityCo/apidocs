@@ -2103,8 +2103,16 @@ paths:
           $ref: '#/components/responses/UnAuthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '408':
+          $ref: '#/components/responses/RequestTimeoutError'
+        '413':
+          $ref: '#/components/responses/PayloadTooLargeError'
         '422':
           $ref: '#/components/responses/UnProcessableError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v4/videos/from-url:
@@ -2129,8 +2137,16 @@ paths:
           $ref: '#/components/responses/UnAuthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '408':
+          $ref: '#/components/responses/RequestTimeoutError'
+        '413':
+          $ref: '#/components/responses/PayloadTooLargeError'
         '422':
           $ref: '#/components/responses/UnProcessableError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v4/files/from-url:
@@ -2155,8 +2171,16 @@ paths:
           $ref: '#/components/responses/UnAuthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '408':
+          $ref: '#/components/responses/RequestTimeoutError'
+        '413':
+          $ref: '#/components/responses/PayloadTooLargeError'
         '422':
           $ref: '#/components/responses/UnProcessableError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v4/me/following/{userId}:
@@ -15651,7 +15675,7 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             status: error
-            code: 500000
+            code: 413000
             message: Payload too large.
     _fileId-get-response-200:
       description: File Information
@@ -15942,6 +15966,16 @@ components:
                     metadata:
                       type: object
                       description: Video metadata (width, height etc.).
+    RequestTimeoutError:
+      description: Request Timeout error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 408000
+            message: Request Timeout
     follow-response-200:
       description: Follow Response Object
       content:
