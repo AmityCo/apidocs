@@ -4,12 +4,54 @@ common-post-request-payload:
       schema:
         type: "object"
         properties:
+          file:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+            description: An array containing a single file.
           files:
             type: "array"
             items:
               type: "string"
               format: "binary"
-              description: "file data"
+            description: An array of files. Must not be provided at the same time as `file`.
+            deprecated: true
+          preferredFilename:
+            type: "string"
+            maxLength: 1024
+          accessType:
+            type: string
+            description: File access type. `network` type requires authentication to download.
+            enum:
+              - public
+              - network
+            default: public
+          altText:
+            type: string
+            description: Alternative text for the file. Not compatible with `files` property.
+            maxLength: 180
+        required:
+          - "file"
+upload-file-request-payload:
+  content:
+    multipart/form-data:
+      schema:
+        type: "object"
+        properties:
+          file:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+            description: An array containing a single file.
+          files:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+            description: An array of files. Must not be provided at the same time as `file`.
+            deprecated: true
           preferredFilename:
             type: "string"
             maxLength: 1024
@@ -21,7 +63,64 @@ common-post-request-payload:
               - network
             default: public
         required:
-          - "files"
+          - "file"
+upload-video-request-payload:
+  content:
+    multipart/form-data:
+      schema:
+        type: "object"
+        properties:
+          file:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+            description: An array containing a single file.
+          files:
+            type: "array"
+            items:
+              type: "string"
+              format: "binary"
+            description: An array of files. Must not be provided at the same time as `file`.
+            deprecated: true
+          preferredFilename:
+            type: "string"
+            maxLength: 1024
+          accessType:
+            type: string
+            description: File access type. `network` type requires authentication to download.
+            enum:
+              - public
+              - network
+            default: public
+        required:
+          - "file"
+upload-image-from-url-payload:
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          fileUrl:
+            type: "string"
+            description: "A file URL to upload"
+          preferredFilename:
+            type: "string"
+            maxLength: 1024
+          accessType:
+            type: string
+            description: File access type. `network` type requires authentication to download.
+            enum:
+              - public
+              - network
+            default: public
+          altText:
+            type: string
+            description: Alternative text for the file.
+            maxLength: 180
+        required:
+          - "fileUrl"
+
 upload-from-url-payload:
   content:
     application/json:

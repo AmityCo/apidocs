@@ -13,8 +13,14 @@ images:
     responses:
       200:
         $ref: "./response.yaml#/images-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
       413:
         $ref: "../../global/error.yaml#/PayloadTooLargeError"
+      422:
+        $ref: "../../global/error.yaml#/ValidationError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
@@ -29,7 +35,7 @@ files:
       - $ref: "./parameter.yaml#/content-type"
     description: "Upload file to cloud storage\n\nFile size limit: 1,073,741,824 byte\n"
     requestBody:
-      $ref: "./request.yaml#/common-post-request-payload"
+      $ref: "./request.yaml#/upload-file-request-payload"
     responses:
       200:
         $ref: "./response.yaml#/files-response-200"
@@ -49,7 +55,7 @@ videos:
       - $ref: "./parameter.yaml#/content-type"
     description: "Upload video to cloud storage\n\nVideo size limit: 2,147,483,648 byte (2GB)\n"
     requestBody:
-      $ref: "./request.yaml#/common-post-request-payload"
+      $ref: "./request.yaml#/upload-video-request-payload"
     responses:
       200:
         $ref: "./response.yaml#/videos-response-200"
@@ -69,7 +75,7 @@ images-from-url:
       - $ref: "./parameter.yaml#/content-type"
     description: "This endpoint allows you to upload an image from a URL to Social+ cloud storage.\n\nFile size limit: 1,073,741,824 byte\n"
     requestBody:
-      $ref: "./request.yaml#/upload-from-url-payload"
+      $ref: "./request.yaml#/upload-image-from-url-payload"
     responses:
       200:
         $ref: "./response.yaml#/images-response-200"
@@ -77,8 +83,16 @@ images-from-url:
         $ref: "../../global/error.yaml#/UnAuthorizedError"
       403:
         $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      408:
+        $ref: "../../global/error.yaml#/RequestTimeoutError"
+      413:
+        $ref: "../../global/error.yaml#/PayloadTooLargeError"
       422:
         $ref: "../../global/error.yaml#/UnProcessableError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
@@ -101,8 +115,16 @@ videos-from-url:
         $ref: "../../global/error.yaml#/UnAuthorizedError"
       403:
         $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      408:
+        $ref: "../../global/error.yaml#/RequestTimeoutError"
+      413:
+        $ref: "../../global/error.yaml#/PayloadTooLargeError"
       422:
         $ref: "../../global/error.yaml#/UnProcessableError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
@@ -125,7 +147,15 @@ files-from-url:
         $ref: "../../global/error.yaml#/UnAuthorizedError"
       403:
         $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      408:
+        $ref: "../../global/error.yaml#/RequestTimeoutError"
+      413:
+        $ref: "../../global/error.yaml#/PayloadTooLargeError"
       422:
         $ref: "../../global/error.yaml#/UnProcessableError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
