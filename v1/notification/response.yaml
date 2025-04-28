@@ -100,6 +100,7 @@ NotificationTrayItem:
         - mention_in_comment
         - mention_in_reply
         - reaction_on_post
+        - reaction_on_poll
         - reaction_on_comment
         - reaction_on_reply
     targetId:
@@ -126,11 +127,12 @@ NotificationTrayItem:
     text:
       type: string
       description: Human-readable notification text
-      example: "Alice and 5 others reacted to your post."
+      example: "Alice and 4 others reacted to a comment on their feed"
     templatedText:
       type: string
-      description: Notification text with template variables for client-side processing
-      example: "{{ userId: 67f4e40030a5dea19d8a187f }} replied to your comment in {{ communityId: 67f4e4c07af04a145b1e684a }}"
+      description: 'Notification text with template variables for client-side processing, 
+        where template variables will be {{ userId: ... }}, {{ communityId: ...}} and {{ text: ... }}'
+      example: "{{ userId: AlicePublicId }} and {{ text: 4 others }} reacted to a comment on their feed"
 
 # Response Schemas
 GetNotificationTrayResponse:

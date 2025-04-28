@@ -42,7 +42,10 @@ notification-tray:
       - BearerAuth: [] 
     parameters:
       - $ref: './parameter.yaml#/options'
-    description: "Retrieves the user's notification tray items, sorted by newest first. Results are cached for 30 seconds."
+    description: "
+      Retrieves the user's notification tray items, sorted by newest first.\n
+      - Notification tray items will be updated shortly after calling related APIs (e.g. `POST api/v4/posts`) but are not real-time.\n
+      - The results are cached for 30 seconds, meaning updates for new events and `lastSeenAt` time may take up to 30 seconds to reflect"
     responses: 
       200:
         $ref: "./response.yaml#/GetNotificationTrayResponse"
@@ -68,7 +71,7 @@ notification-tray-seen:
       - "Notification Tray"
     security: 
       - BearerAuth: [] 
-    description: "Updates the seen status for all notifications in the user's tray"
+    description: "Updates the seen status for the user's notification tray"
     requestBody:
       $ref: "./request.yaml#/MarkAllSeenRequest"
     responses: 
@@ -84,7 +87,7 @@ notification-tray-items-seen:
       - "Notification Tray"
     security: 
       - BearerAuth: [] 
-    description: "Updates the seen status for specific notification items in the user's tray"
+    description: "Updates the seen status for specific notification items in the user's notification tray"
     requestBody:
       $ref: './request.yaml#/MarkItemsSeenRequest'
     responses: 

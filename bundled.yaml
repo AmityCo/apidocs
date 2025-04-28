@@ -4181,12 +4181,13 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /v1/notification:
     post:
-      summary: Register a device for push notifications
+      summary: register a device to get push notification
       tags:
         - Notification
       security:
         - ApiKeyAuth: []
-      description: Register a device with a notification service provider to enable push notifications
+      description: |
+        Register a device to a notification service provider.
       requestBody:
         $ref: '#/components/requestBodies/request_root-post-request-payload-7'
       responses:
@@ -4197,12 +4198,13 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError404'
     delete:
-      summary: Unregister a device from push notifications
+      summary: unregister a device from a notification service provider
       tags:
         - Notification
       security:
         - ApiKeyAuth: []
-      description: Remove a device from the notification service provider to stop push notifications
+      description: |
+        Unregister a device from a notification service provider.
       parameters:
         - $ref: '#/components/parameters/parameter_userId-2'
         - $ref: '#/components/parameters/deviceId'
@@ -4222,7 +4224,10 @@ paths:
         - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/parameter_options-8'
-      description: Retrieves the user's notification tray items, sorted by newest first. Results are cached for 30 seconds.
+      description: |2-
+         Retrieves the user's notification tray items, sorted by newest first.
+         - Notification tray items will be updated shortly after calling related APIs (e.g. `POST api/v4/posts`) but are not real-time.
+         - The results are cached for 30 seconds, meaning updates for new events and `lastSeenAt` time may take up to 30 seconds to reflect
       responses:
         '200':
           $ref: '#/components/responses/GetNotificationTrayResponse'
@@ -4247,7 +4252,7 @@ paths:
         - Notification Tray
       security:
         - BearerAuth: []
-      description: Updates the seen status for all notifications in the user's tray
+      description: Updates the seen status for the user's notification tray
       requestBody:
         $ref: '#/components/requestBodies/MarkAllSeenRequest'
       responses:
@@ -4262,7 +4267,7 @@ paths:
         - Notification Tray
       security:
         - BearerAuth: []
-      description: Updates the seen status for specific notification items in the user's tray
+      description: Updates the seen status for specific notification items in the user's notification tray
       requestBody:
         $ref: '#/components/requestBodies/MarkItemsSeenRequest'
       responses:
@@ -12425,6 +12430,7 @@ components:
             - mention_in_comment
             - mention_in_reply
             - reaction_on_post
+            - reaction_on_poll
             - reaction_on_comment
             - reaction_on_reply
         targetId:
@@ -12451,11 +12457,11 @@ components:
         text:
           type: string
           description: Human-readable notification text
-          example: Alice and 5 others reacted to your post.
+          example: Alice and 4 others reacted to a comment on their feed
         templatedText:
           type: string
-          description: Notification text with template variables for client-side processing
-          example: '{{ userId: 67f4e40030a5dea19d8a187f }} replied to your comment in {{ communityId: 67f4e4c07af04a145b1e684a }}'
+          description: 'Notification text with template variables for client-side processing,  where template variables will be {{ userId: ... }}, {{ communityId: ...}} and {{ text: ... }}'
+          example: '{{ userId: AlicePublicId }} and {{ text: 4 others }} reacted to a comment on their feed'
     NotificationSetting:
       type: object
       properties:
