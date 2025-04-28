@@ -31,7 +31,7 @@ root:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
-_fileName-download:
+download:
   get:
     summary: "Download report item"
     description: "Download the report item from S3"
@@ -41,15 +41,15 @@ _fileName-download:
       - cookieAuth: []
     parameters:
       - name: "fileName"
-        in: "path"
-        description: "File name of the report items."
+        in: "query"
+        description: "Base64 encoded file name of the report items."
         required: true
         schema:
           type: "string"
-          example: "report-xyz-2023-10-01T00:00:00Z.csv"
+          example: "c2FtcGxlLXRleHQtZmlsZS5qcGc="
     responses:
       302:
-        $ref: "./response.yaml#/_key-download-response-302"
+        $ref: "./response.yaml#/download-response-302"
       400:
         $ref: "../../global/error.yaml#/BadRequestError"
       500:

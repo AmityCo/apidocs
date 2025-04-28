@@ -1,4 +1,4 @@
-premium-reports:
+premium-report:
   put:
     summary: "Update premium report settings"
     description: "Update premium report settings."
@@ -32,22 +32,6 @@ premium-reports:
     responses:
       200:
         $ref: "./response.yaml#/premium-reports-put-response-200"
-      400:
-        $ref: "../../global/error.yaml#/BadRequestError"
-      500:
-        $ref: "../../global/error.yaml#/UnexpectedError"
-
-premium-reports-list-networks:
-  get:
-    summary: "List enabled networks"
-    description: "List networks that have the premium report enabled."
-    tags:
-      - "Premium Report"
-    security:
-      - basicAuth: []
-    responses:
-      200:
-        $ref: "./response.yaml#/premium-reports-list-networks-get-response-200"
       400:
         $ref: "../../global/error.yaml#/BadRequestError"
       500:

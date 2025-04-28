@@ -261,7 +261,7 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
-  /admin/v1/premium-reports/{fileName}/download:
+  /admin/v1/premium-reports/download:
     get:
       summary: Download report item
       description: Download the report item from S3
@@ -271,20 +271,35 @@ paths:
         - cookieAuth: []
       parameters:
         - name: fileName
-          in: path
-          description: File name of the report items.
+          in: query
+          description: Base64 encoded file name of the report items.
           required: true
           schema:
             type: string
-            example: report-xyz-2023-10-01T00:00:00Z.csv
+            example: c2FtcGxlLXRleHQtZmlsZS5qcGc=
       responses:
         '302':
-          $ref: '#/components/responses/_key-download-response-302'
+          $ref: '#/components/responses/download-response-302'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
-  /internal/v1/network-settings/premium-reports:
+  /internal/v1/premium-reports/list-networks:
+    get:
+      summary: List enabled networks
+      description: List networks that have the premium report enabled.
+      tags:
+        - Premium Report
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/list-networks-get-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /internal/v1/network-settings/premium-report:
     put:
       summary: Update premium report settings
       description: Update premium report settings.
@@ -318,21 +333,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/premium-reports-put-response-200'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '500':
-          $ref: '#/components/responses/UnexpectedError'
-  /internal/v1/network-settings/premium-reports/list-networks:
-    get:
-      summary: List enabled networks
-      description: List networks that have the premium report enabled.
-      tags:
-        - Premium Report
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          $ref: '#/components/responses/premium-reports-list-networks-get-response-200'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '500':
@@ -549,7 +549,7 @@ components:
                 properties:
                   next:
                     type: string
-    _key-download-response-302:
+    download-response-302:
       description: |
         Redirect to S3 signed URL for downloading the report.
       headers:
@@ -558,14 +558,7 @@ components:
             type: string
             format: uri
           example: https://s3.amazonaws.com/bucket-name/report.csv?AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Expires=1234567890&Signature=example
-    premium-reports-put-response-200:
-      description: |
-        Premium report settings response.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/PremiumReportNetworkSetting'
-    premium-reports-list-networks-get-response-200:
+    list-networks-get-response-200:
       description: |
         List settings of networks that have the premium report enabled.
       content:
@@ -587,3 +580,10 @@ components:
                       description: Whether the premium report is enabled or not.
                       example: true
                 description: List of settings of networks that have the premium report enabled.
+    premium-reports-put-response-200:
+      description: |
+        Premium report settings response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PremiumReportNetworkSetting'

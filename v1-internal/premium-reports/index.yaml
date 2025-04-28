@@ -1,0 +1,15 @@
+list-networks:
+  get:
+    summary: "List enabled networks"
+    description: "List networks that have the premium report enabled."
+    tags:
+      - "Premium Report"
+    security:
+      - basicAuth: []
+    responses:
+      200:
+        $ref: "./response.yaml#/list-networks-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
