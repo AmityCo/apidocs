@@ -2,6 +2,11 @@
 
 For comprehensive information, please visit [Social+ API Docs](https://api.docs.social.plus).
 
+## Links 
+|Stage|URL|
+|-----|---|
+|develop|https://api-dev.docs.social.plus/develop|
+
 ## Validation
 
 To validate `swagger.yaml`, you can use the [redocly-cli](https://github.com/Redocly/redocly-cli) tool.
@@ -31,7 +36,4 @@ To run a local server, follow these steps:
 3. Start Live server in `local/index.html` file:
 
 ![Example](./resources/live-server-sample.png)
-
-
-
 

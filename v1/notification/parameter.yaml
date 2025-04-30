@@ -14,3 +14,22 @@ deviceId:
   schema:
     type: string
     minLength: 1
+
+options: 
+  name: options
+  description: Pagination options for controlling result set size and navigation
+  in: query
+  required: false
+  schema: 
+    type: object
+    properties: 
+      token:
+        type: string
+        description: Token for pagination to retrieve the next or previous page of results
+      limit: 
+        type: integer
+        description: Maximum number of items to return per page
+        minimum: 1
+        maximum: 100
+        default: 20
+

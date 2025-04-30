@@ -32,3 +32,66 @@ root:
         $ref: "../../global/error.yaml#/BadRequestError400"
       404:
         $ref: "../../global/error.yaml#/NotFoundError404"
+
+notification-tray:
+  get:
+    summary: "Get user's notification tray items"
+    tags: 
+      - "Notification Tray"
+    security: 
+      - BearerAuth: [] 
+    parameters:
+      - $ref: './parameter.yaml#/options'
+    description: "
+      Retrieves the user's notification tray items, sorted by newest first.\n
+      - Notification tray items will be updated shortly after calling related APIs (e.g. `POST api/v4/posts`) but are not real-time.\n
+      - The results are cached for 30 seconds, meaning updates for new events and `lastSeenAt` time may take up to 30 seconds to reflect"
+    responses: 
+      200:
+        $ref: "./response.yaml#/GetNotificationTrayResponse"
+      422:
+        $ref: "../../global/error.yaml#/BadRequestError400"
+
+notification-tray-seen:
+  get:
+    summary: "Get notification tray seen status"
+    tags:
+      - "Notification Tray"
+    security: 
+      - BearerAuth: []
+    description: "Retrieves timestamps for when the user last viewed their notification tray and when the most recent notification occurred"
+    responses:
+      200:
+        $ref: "./response.yaml#/GetNotificationTraySeenResponse"
+      422:
+        $ref: "../../global/error.yaml#/BadRequestError400"
+  post:
+    summary: "Mark all notifications as seen"
+    tags: 
+      - "Notification Tray"
+    security: 
+      - BearerAuth: [] 
+    description: "Updates the seen status for the user's notification tray"
+    requestBody:
+      $ref: "./request.yaml#/MarkAllSeenRequest"
+    responses: 
+      200:
+        $ref: "./response.yaml#/MarkNotificationTraySeenResponse"
+      422:
+        $ref: "../../global/error.yaml#/BadRequestError400"
+
+notification-tray-items-seen:
+  post:
+    summary: "Mark specific notifications as seen"
+    tags: 
+      - "Notification Tray"
+    security: 
+      - BearerAuth: [] 
+    description: "Updates the seen status for specific notification items in the user's notification tray"
+    requestBody:
+      $ref: './request.yaml#/MarkItemsSeenRequest'
+    responses: 
+      200:
+        $ref: "./response.yaml#/MarkNotificationTrayItemsSeenResponse"
+      422:
+        $ref: "../../global/error.yaml#/BadRequestError400"
