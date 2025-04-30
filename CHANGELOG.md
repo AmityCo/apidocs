@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [4.103.2] - 2025-04-30
+
+### 🚀 Features
+
+- Add altText and changes file URL upload responses (#389)
+- Added notification-tray APIs  (#360)
+
+## [4.103.1-rc.0] - 2025-04-25
 
 ### 🚀 Features
 
@@ -12,6 +19,10 @@ All notable changes to this project will be documented in this file.
 ### 🐛 Bug Fixes
 
 - Publish tag with PLATFORM_CHORES_TOKEN instead of github app (#385)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.103.1-rc.0 (#388)
 
 ## [4.103.0] - 2025-04-25
 
