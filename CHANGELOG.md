@@ -2,12 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-## [4.103.2] - 2025-04-30
+## [unreleased]
+
+### 🚀 Features
+
+- Add fileUrl, accessType, and altText properties to file respons… (#391)
+
+## [4.103.1] - 2025-04-30
 
 ### 🚀 Features
 
 - Add altText and changes file URL upload responses (#389)
 - Added notification-tray APIs  (#360)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.103.1 (#390)
 
 ## [4.103.1-rc.0] - 2025-04-25
 
