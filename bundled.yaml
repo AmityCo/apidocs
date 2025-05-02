@@ -15874,12 +15874,26 @@ components:
                   fileId:
                     type: string
                     description: Root file key on cloud storage.
+                  fileUrl:
+                    type: string
+                    description: url to download the file
                   type:
                     type: enum
                     description: File type.
                     enum:
                       - image
                       - file
+                      - video
+                  accessType:
+                    type: string
+                    description: File access type. `network` type requires authentication to download.
+                    enum:
+                      - public
+                      - network
+                    default: public
+                  altText:
+                    type: string
+                    description: Alternative text for the file.
                   createdAt:
                     type: string
                     description: The date/time when a file is uploaded.
