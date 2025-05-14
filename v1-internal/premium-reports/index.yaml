@@ -2,6 +2,14 @@ list-networks:
   get:
     summary: "List enabled networks"
     description: "List networks that have the premium report enabled."
+    parameters:
+      - name: x-caller-context
+        in: header
+        description: The caller context header is used to identify the caller context. Must be a JSON string.
+        required: true
+        type: string
+        example: |
+          {}
     tags:
       - "Premium Report"
     security:

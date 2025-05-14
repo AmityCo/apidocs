@@ -288,6 +288,14 @@ paths:
     get:
       summary: List enabled networks
       description: List networks that have the premium report enabled.
+      parameters:
+        - name: x-caller-context
+          in: header
+          description: The caller context header is used to identify the caller context. Must be a JSON string.
+          required: true
+          type: string
+          example: |
+            {}
       tags:
         - Premium Report
       security:
@@ -307,16 +315,12 @@ paths:
         - Premium Report
       security:
         - basicAuth: []
-      headers:
-        x-caller-context:
+      parameters:
+        - name: x-internal-api-key
+          in: header
+          description: The internal API key of network to update
           required: true
-          schema:
-            type: string
-            description: |
-              The caller context header is used to identify the caller context.
-              Must be a JSON string.
-            example: |
-              {"networkId": "1234567890","apiKey": "xxxxxxxx"}
+          type: string
       requestBody:
         required: true
         content:

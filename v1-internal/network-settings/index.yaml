@@ -6,16 +6,12 @@ premium-report:
       - "Premium Report"
     security:
       - basicAuth: []
-    headers:
-      x-caller-context:
+    parameters:
+      - name: x-internal-api-key
+        in: header
+        description: The internal API key of network to update
         required: true
-        schema:
-          type: string
-          description: |
-            The caller context header is used to identify the caller context.
-            Must be a JSON string.
-          example: |
-            {"networkId": "1234567890","apiKey": "xxxxxxxx"}
+        type: string
     requestBody:
       required: true
       content:
