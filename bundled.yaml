@@ -348,7 +348,7 @@ paths:
       tags:
         - Admin
       security:
-        - BearerAuth: []
+        - cookieAuth: []
       requestBody:
         required: true
         content:
@@ -473,7 +473,7 @@ paths:
       tags:
         - Admin
       security:
-        - BearerAuth: []
+        - cookieAuth: []
       requestBody:
         required: true
         content:
@@ -591,13 +591,29 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /admin/v1/admin/roles:
+    get:
+      summary: Query admin roles
+      description: Retrieve a list of admin roles based on query parameters.
+      tags:
+        - Admin
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/roles-post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnAuthorizedError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
     post:
       summary: Create a new admin role
       description: Creates a new admin role with the specified details and permissions. Role create from this API will have type as 'consoleAdmin'.
       tags:
         - Admin
       security:
-        - BearerAuth: []
+        - cookieAuth: []
       requestBody:
         required: true
         content:
@@ -680,13 +696,39 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /admin/v1/admin/roles/{roleId}:
+    get:
+      summary: Get admin role details
+      description: Retrieve details of a specific admin role by its ID.
+      tags:
+        - Admin
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          description: The ID of the role to retrieve.
+          schema:
+            type: string
+            example: f74c96f3-eab5-4cda-b7a9-5d8e9402a43c
+      responses:
+        '200':
+          $ref: '#/components/responses/roles-post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnAuthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
     put:
       summary: Update an admin role
       description: Updates the details of an existing admin role.
       tags:
         - Admin
       security:
-        - BearerAuth: []
+        - cookieAuth: []
       parameters:
         - name: roleId
           in: path
@@ -1123,3 +1165,13 @@ components:
                       type: string
                       description: A brief description of the role.
                       example: test
+    NotFoundError:
+      description: Resource Not Found error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400400
+            message: Resource Not Found.

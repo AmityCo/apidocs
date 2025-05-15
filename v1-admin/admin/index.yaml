@@ -5,7 +5,7 @@ root:
     tags:
       - "Admin"
     security:
-      - BearerAuth: []
+      - cookieAuth: []
     requestBody:
       required: true
       content:
@@ -131,7 +131,7 @@ update:
     tags:
       - "Admin"
     security:
-      - BearerAuth: []
+      - cookieAuth: []
     requestBody:
       required: true
       content:
@@ -249,13 +249,29 @@ update:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 roles:
+  get:
+    summary: "Query admin roles"
+    description: "Retrieve a list of admin roles based on query parameters."
+    tags:
+      - "Admin"
+    security:
+      - cookieAuth: []
+    responses:
+      200:
+        $ref: "./response.yaml#/roles-post-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      401:
+        $ref: "../../global/error.yaml#/UnAuthorizedError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
   post:
     summary: "Create a new admin role"
     description: "Creates a new admin role with the specified details and permissions. Role create from this API will have type as 'consoleAdmin'."
     tags:
       - "Admin"
     security:
-      - BearerAuth: []
+      - cookieAuth: []
     requestBody:
       required: true
       content:
@@ -339,13 +355,39 @@ roles:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
 _roleId:
+  get:
+    summary: "Get admin role details"
+    description: "Retrieve details of a specific admin role by its ID."
+    tags:
+      - "Admin"
+    security:
+      - cookieAuth: []
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+        description: "The ID of the role to retrieve."
+        schema:
+          type: string
+          example: "f74c96f3-eab5-4cda-b7a9-5d8e9402a43c"
+    responses:
+      200:
+        $ref: "./response.yaml#/roles-post-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      401:
+        $ref: "../../global/error.yaml#/UnAuthorizedError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
   put:
     summary: "Update an admin role"
     description: "Updates the details of an existing admin role."
     tags:
       - "Admin"
     security:
-      - BearerAuth: []
+      - cookieAuth: []
     parameters:
       - name: roleId
         in: path
