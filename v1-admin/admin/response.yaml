@@ -1,0 +1,92 @@
+root-post-response-200:
+  description: "Successful response"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "success"
+
+roles-post-response-200:
+  description: "Successful response for create role API"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          roles:
+            type: array
+            items:
+              type: object
+              properties:
+                roleId:
+                  type: string
+                  description: "The unique ID of the role."
+                  example: "test"
+                displayName:
+                  type: string
+                  description: "The display name of the role."
+                  example: "test"
+                permissions:
+                  type: array
+                  items:
+                    type: string
+                  description: "List of permissions assigned to the role."
+                  example:
+                    - "VIEW_DYNAMIC_UI"
+                    - "VIEW_CHANNEL_MANAGEMENT"
+                    - "MANAGE_CHANNEL"
+                    - "MODERATE_CHANNEL"
+                    - "VIEW_STORY_MANAGEMENT"
+                    - "MANAGE_STORY"
+                    - "VIEW_POST_AND_COMMENT_MANAGEMENT"
+                    - "MODERATE_POST_AND_COMMENT"
+                    - "MANAGE_POST_AND_COMMENT"
+                    - "CAN_USE_BRAND_USERS"
+                    - "CAN_MANAGE_BRAND_USERS"
+                    - "CAN_MANAGE_GLOBAL_PINNED_POST"
+                    - "CAN_MANAGE_PINNED_POST"
+                    - "CAN_MANAGE_FEATURED_POST"
+                    - "VIEW_LIVE_STREAMING_MANAGEMENT"
+                    - "MANAGE_LIVE_STREAMING"
+                    - "MODERATE_LIVE_STREAMING"
+                    - "VIEW_COMMUNITY_MANAGEMENT"
+                    - "MANAGE_COMMUNITY"
+                    - "MODERATE_COMMUNITY"
+                    - "DELETE_COMMUNITY"
+                    - "VIEW_COMMUNITY_CATEGORY_MANAGEMENT"
+                    - "MANAGE_COMMUNITY_CATEGORY"
+                    - "VIEW_SPONSORED_CONTENT_MANAGEMENT"
+                    - "MANAGE_SPONSORED_CONTENT"
+                    - "MANAGE_AD_SETTING"
+                    - "VIEW_USAGE"
+                    - "VIEW_MODERATION_FEED"
+                    - "MANAGE_ALLOW_LIST"
+                    - "MANAGE_BLOCK_LIST"
+                    - "MANAGE_IMAGE_MODERATION_SETTING"
+                    - "MANAGE_LIVE_STREAMING_MODERATION_SETTING"
+                    - "VIEW_USER_MANAGEMENT"
+                    - "MANAGE_USER"
+                    - "MODERATE_USER"
+                    - "VIEW_USER_ROLE_MANAGEMENT"
+                    - "MANAGE_USER_ROLE"
+                    - "VIEW_ADMIN_USER"
+                    - "MANAGE_ADMIN"
+                    - "VIEW_ADMIN_ROLE"
+                    - "VIEW_SETTING"
+                    - "MANAGE_SETTING"
+                    - "MANAGE_SECURITY"
+                isDeleted:
+                  type: boolean
+                  description: "Indicates if the role is deleted."
+                  example: false
+                type:
+                  type: string
+                  description: "The type of the role."
+                  example: "consoleAdmin"
+                description:
+                  type: string
+                  description: "A brief description of the role."
+                  example: "test"

@@ -341,6 +341,437 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /admin/v1/admin:
+    post:
+      summary: Create a new admin user
+      description: Creates a new admin user with the specified details and permissions.
+      tags:
+        - Admin
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: The username for the new admin.
+                  example: newadmin
+                displayName:
+                  type: string
+                  description: The display name for the new admin.
+                  example: New Admin
+                password:
+                  type: string
+                  description: The password for the new admin.
+                  example: securepassword123
+                firstname:
+                  type: string
+                  description: The first name of the new admin.
+                  example: John
+                lastname:
+                  type: string
+                  description: The last name of the new admin.
+                  example: Doe
+                permissions:
+                  type: array
+                  items:
+                    type: string
+                  description: List of permissions assigned to the new admin.
+                  example:
+                    - VIEW_DYNAMIC_UI
+                    - VIEW_CHANNEL_MANAGEMENT
+                    - MANAGE_CHANNEL
+                    - MODERATE_CHANNEL
+                    - VIEW_STORY_MANAGEMENT
+                    - MANAGE_STORY
+                    - VIEW_POST_AND_COMMENT_MANAGEMENT
+                    - MODERATE_POST_AND_COMMENT
+                    - MANAGE_POST_AND_COMMENT
+                    - CAN_USE_BRAND_USERS
+                    - CAN_MANAGE_BRAND_USERS
+                    - CAN_MANAGE_GLOBAL_PINNED_POST
+                    - CAN_MANAGE_PINNED_POST
+                    - CAN_MANAGE_FEATURED_POST
+                    - VIEW_LIVE_STREAMING_MANAGEMENT
+                    - MANAGE_LIVE_STREAMING
+                    - MODERATE_LIVE_STREAMING
+                    - VIEW_COMMUNITY_MANAGEMENT
+                    - MANAGE_COMMUNITY
+                    - MODERATE_COMMUNITY
+                    - DELETE_COMMUNITY
+                    - VIEW_COMMUNITY_CATEGORY_MANAGEMENT
+                    - MANAGE_COMMUNITY_CATEGORY
+                    - VIEW_SPONSORED_CONTENT_MANAGEMENT
+                    - MANAGE_SPONSORED_CONTENT
+                    - MANAGE_AD_SETTING
+                    - VIEW_USAGE
+                    - VIEW_MODERATION_FEED
+                    - MANAGE_ALLOW_LIST
+                    - MANAGE_BLOCK_LIST
+                    - MANAGE_IMAGE_MODERATION_SETTING
+                    - MANAGE_LIVE_STREAMING_MODERATION_SETTING
+                    - VIEW_USER_MANAGEMENT
+                    - MANAGE_USER
+                    - MODERATE_USER
+                    - VIEW_USER_ROLE_MANAGEMENT
+                    - MANAGE_USER_ROLE
+                    - VIEW_ADMIN_USER
+                    - MANAGE_ADMIN
+                    - VIEW_ADMIN_ROLE
+                    - VIEW_SETTING
+                    - MANAGE_SETTING
+                    - MANAGE_SECURITY
+                avatarFileId:
+                  type: string
+                  description: The file ID of the avatar for the new admin.
+                  example: file-12345
+                roleAssignments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      roleId:
+                        type: string
+                        description: The ID of the role to assign.
+                      scope:
+                        type: object
+                        description: The scope of the role assignment.
+                        properties:
+                          communityIds:
+                            type: array
+                            description: Community internal id for the role assignment.
+                            items:
+                              type: string
+                  example:
+                    - roleId: role-12345
+                      scope:
+                        communityIds:
+                          - community-67890
+                  description: List of role assignments for the new admin.
+              required:
+                - username
+                - displayName
+                - password
+                - roleAssignments
+      responses:
+        '200':
+          $ref: '#/components/responses/root-post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnAuthorizedError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /admin/v1/admin/update:
+    post:
+      summary: Update admin user details
+      description: Updates the details of an existing admin user.
+      tags:
+        - Admin
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: The ID of the admin user to update.
+                  example: 68259ab53825b47fcb5a518e
+                displayName:
+                  type: string
+                  description: The updated display name for the admin.
+                  example: test
+                firstname:
+                  type: string
+                  description: The updated first name of the admin.
+                  example: Test
+                lastname:
+                  type: string
+                  description: The updated last name of the admin.
+                  example: test
+                permissions:
+                  type: array
+                  items:
+                    type: string
+                  description: Updated list of permissions assigned to the admin.
+                  example:
+                    - VIEW_DYNAMIC_UI
+                    - VIEW_CHANNEL_MANAGEMENT
+                    - MANAGE_CHANNEL
+                    - MODERATE_CHANNEL
+                    - VIEW_STORY_MANAGEMENT
+                    - MANAGE_STORY
+                    - VIEW_POST_AND_COMMENT_MANAGEMENT
+                    - MODERATE_POST_AND_COMMENT
+                    - MANAGE_POST_AND_COMMENT
+                    - CAN_USE_BRAND_USERS
+                    - CAN_MANAGE_BRAND_USERS
+                    - CAN_MANAGE_GLOBAL_PINNED_POST
+                    - CAN_MANAGE_PINNED_POST
+                    - CAN_MANAGE_FEATURED_POST
+                    - VIEW_LIVE_STREAMING_MANAGEMENT
+                    - MANAGE_LIVE_STREAMING
+                    - MODERATE_LIVE_STREAMING
+                    - VIEW_COMMUNITY_MANAGEMENT
+                    - MANAGE_COMMUNITY
+                    - MODERATE_COMMUNITY
+                    - DELETE_COMMUNITY
+                    - VIEW_COMMUNITY_CATEGORY_MANAGEMENT
+                    - MANAGE_COMMUNITY_CATEGORY
+                    - VIEW_SPONSORED_CONTENT_MANAGEMENT
+                    - MANAGE_SPONSORED_CONTENT
+                    - MANAGE_AD_SETTING
+                    - VIEW_USAGE
+                    - VIEW_MODERATION_FEED
+                    - MANAGE_ALLOW_LIST
+                    - MANAGE_BLOCK_LIST
+                    - MANAGE_IMAGE_MODERATION_SETTING
+                    - MANAGE_LIVE_STREAMING_MODERATION_SETTING
+                    - VIEW_USER_MANAGEMENT
+                    - MANAGE_USER
+                    - MODERATE_USER
+                    - VIEW_USER_ROLE_MANAGEMENT
+                    - MANAGE_USER_ROLE
+                    - VIEW_ADMIN_USER
+                    - MANAGE_ADMIN
+                    - VIEW_ADMIN_ROLE
+                    - VIEW_SETTING
+                    - MANAGE_SETTING
+                    - MANAGE_SECURITY
+                avatarFileId:
+                  type: string
+                  description: The updated file ID of the avatar for the admin.
+                  example: 3b05fe26320945438543a34e3d19e648
+                roleAssignments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      roleId:
+                        type: string
+                        description: The ID of the role to assign.
+                      scope:
+                        type: object
+                        description: The scope of the role assignment.
+                        properties:
+                          communityIds:
+                            type: array
+                            description: Community internal id for the role assignment.
+                            items:
+                              type: string
+                  example:
+                    - roleId: role-12345
+                      scope:
+                        communityIds:
+                          - community-67890
+                  description: List of role assignments for the admin.
+              required:
+                - userId
+                - displayName
+                - firstname
+                - lastname
+                - permissions
+                - avatarFileId
+                - roleAssignments
+      responses:
+        '200':
+          $ref: '#/components/responses/root-post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnAuthorizedError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /admin/v1/admin/roles:
+    post:
+      summary: Create a new admin role
+      description: Creates a new admin role with the specified details and permissions. Role create from this API will have type as 'consoleAdmin'.
+      tags:
+        - Admin
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleId:
+                  type: string
+                  description: The unique ID of the role.
+                  example: f74c96f3-eab5-4cda-b7a9-5d8e9402a43c
+                displayName:
+                  type: string
+                  description: The display name of the role.
+                  example: some role test
+                description:
+                  type: string
+                  description: A brief description of the role.
+                  example: This is a test role
+                permissions:
+                  type: array
+                  items:
+                    type: string
+                  description: List of permissions assigned to the role.
+                  example:
+                    - VIEW_DYNAMIC_UI
+                    - VIEW_CHANNEL_MANAGEMENT
+                    - MANAGE_CHANNEL
+                    - MODERATE_CHANNEL
+                    - VIEW_STORY_MANAGEMENT
+                    - MANAGE_STORY
+                    - VIEW_POST_AND_COMMENT_MANAGEMENT
+                    - MODERATE_POST_AND_COMMENT
+                    - MANAGE_POST_AND_COMMENT
+                    - CAN_USE_BRAND_USERS
+                    - CAN_MANAGE_BRAND_USERS
+                    - CAN_MANAGE_GLOBAL_PINNED_POST
+                    - CAN_MANAGE_PINNED_POST
+                    - CAN_MANAGE_FEATURED_POST
+                    - VIEW_LIVE_STREAMING_MANAGEMENT
+                    - MANAGE_LIVE_STREAMING
+                    - MODERATE_LIVE_STREAMING
+                    - VIEW_COMMUNITY_MANAGEMENT
+                    - MANAGE_COMMUNITY
+                    - MODERATE_COMMUNITY
+                    - DELETE_COMMUNITY
+                    - VIEW_COMMUNITY_CATEGORY_MANAGEMENT
+                    - MANAGE_COMMUNITY_CATEGORY
+                    - VIEW_SPONSORED_CONTENT_MANAGEMENT
+                    - MANAGE_SPONSORED_CONTENT
+                    - MANAGE_AD_SETTING
+                    - VIEW_USAGE
+                    - VIEW_MODERATION_FEED
+                    - MANAGE_ALLOW_LIST
+                    - MANAGE_BLOCK_LIST
+                    - MANAGE_IMAGE_MODERATION_SETTING
+                    - MANAGE_LIVE_STREAMING_MODERATION_SETTING
+                    - VIEW_USER_MANAGEMENT
+                    - MANAGE_USER
+                    - MODERATE_USER
+                    - VIEW_USER_ROLE_MANAGEMENT
+                    - MANAGE_USER_ROLE
+                    - VIEW_ADMIN_USER
+                    - MANAGE_ADMIN
+                    - VIEW_ADMIN_ROLE
+                    - VIEW_SETTING
+                    - MANAGE_SETTING
+                    - MANAGE_SECURITY
+              required:
+                - roleId
+                - displayName
+                - permissions
+      responses:
+        '200':
+          $ref: '#/components/responses/roles-post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnAuthorizedError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /admin/v1/admin/roles/{roleId}:
+    put:
+      summary: Update an admin role
+      description: Updates the details of an existing admin role.
+      tags:
+        - Admin
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          description: The ID of the role to update.
+          schema:
+            type: string
+            example: f74c96f3-eab5-4cda-b7a9-5d8e9402a43c
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  type: string
+                  description: The updated display name of the role.
+                  example: updated role test
+                description:
+                  type: string
+                  description: An updated brief description of the role.
+                  example: This is an updated test role
+                permissions:
+                  type: array
+                  items:
+                    type: string
+                  description: Updated list of permissions assigned to the role.
+                  example:
+                    - VIEW_DYNAMIC_UI
+                    - VIEW_CHANNEL_MANAGEMENT
+                    - MANAGE_CHANNEL
+                    - MODERATE_CHANNEL
+                    - VIEW_STORY_MANAGEMENT
+                    - MANAGE_STORY
+                    - VIEW_POST_AND_COMMENT_MANAGEMENT
+                    - MODERATE_POST_AND_COMMENT
+                    - MANAGE_POST_AND_COMMENT
+                    - CAN_USE_BRAND_USERS
+                    - CAN_MANAGE_BRAND_USERS
+                    - CAN_MANAGE_GLOBAL_PINNED_POST
+                    - CAN_MANAGE_PINNED_POST
+                    - CAN_MANAGE_FEATURED_POST
+                    - VIEW_LIVE_STREAMING_MANAGEMENT
+                    - MANAGE_LIVE_STREAMING
+                    - MODERATE_LIVE_STREAMING
+                    - VIEW_COMMUNITY_MANAGEMENT
+                    - MANAGE_COMMUNITY
+                    - MODERATE_COMMUNITY
+                    - DELETE_COMMUNITY
+                    - VIEW_COMMUNITY_CATEGORY_MANAGEMENT
+                    - MANAGE_COMMUNITY_CATEGORY
+                    - VIEW_SPONSORED_CONTENT_MANAGEMENT
+                    - MANAGE_SPONSORED_CONTENT
+                    - MANAGE_AD_SETTING
+                    - VIEW_USAGE
+                    - VIEW_MODERATION_FEED
+                    - MANAGE_ALLOW_LIST
+                    - MANAGE_BLOCK_LIST
+                    - MANAGE_IMAGE_MODERATION_SETTING
+                    - MANAGE_LIVE_STREAMING_MODERATION_SETTING
+                    - VIEW_USER_MANAGEMENT
+                    - MANAGE_USER
+                    - MODERATE_USER
+                    - VIEW_USER_ROLE_MANAGEMENT
+                    - MANAGE_USER_ROLE
+                    - VIEW_ADMIN_USER
+                    - MANAGE_ADMIN
+                    - VIEW_ADMIN_ROLE
+                    - VIEW_SETTING
+                    - MANAGE_SETTING
+                    - MANAGE_SECURITY
+              required:
+                - roleId
+                - displayName
+                - permissions
+      responses:
+        '200':
+          $ref: '#/components/responses/roles-post-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnAuthorizedError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -591,3 +1022,104 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/PremiumReportNetworkSetting'
+    root-post-response-200:
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: success
+    UnAuthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400100
+            message: Unauthorized
+    roles-post-response-200:
+      description: Successful response for create role API
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              roles:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    roleId:
+                      type: string
+                      description: The unique ID of the role.
+                      example: test
+                    displayName:
+                      type: string
+                      description: The display name of the role.
+                      example: test
+                    permissions:
+                      type: array
+                      items:
+                        type: string
+                      description: List of permissions assigned to the role.
+                      example:
+                        - VIEW_DYNAMIC_UI
+                        - VIEW_CHANNEL_MANAGEMENT
+                        - MANAGE_CHANNEL
+                        - MODERATE_CHANNEL
+                        - VIEW_STORY_MANAGEMENT
+                        - MANAGE_STORY
+                        - VIEW_POST_AND_COMMENT_MANAGEMENT
+                        - MODERATE_POST_AND_COMMENT
+                        - MANAGE_POST_AND_COMMENT
+                        - CAN_USE_BRAND_USERS
+                        - CAN_MANAGE_BRAND_USERS
+                        - CAN_MANAGE_GLOBAL_PINNED_POST
+                        - CAN_MANAGE_PINNED_POST
+                        - CAN_MANAGE_FEATURED_POST
+                        - VIEW_LIVE_STREAMING_MANAGEMENT
+                        - MANAGE_LIVE_STREAMING
+                        - MODERATE_LIVE_STREAMING
+                        - VIEW_COMMUNITY_MANAGEMENT
+                        - MANAGE_COMMUNITY
+                        - MODERATE_COMMUNITY
+                        - DELETE_COMMUNITY
+                        - VIEW_COMMUNITY_CATEGORY_MANAGEMENT
+                        - MANAGE_COMMUNITY_CATEGORY
+                        - VIEW_SPONSORED_CONTENT_MANAGEMENT
+                        - MANAGE_SPONSORED_CONTENT
+                        - MANAGE_AD_SETTING
+                        - VIEW_USAGE
+                        - VIEW_MODERATION_FEED
+                        - MANAGE_ALLOW_LIST
+                        - MANAGE_BLOCK_LIST
+                        - MANAGE_IMAGE_MODERATION_SETTING
+                        - MANAGE_LIVE_STREAMING_MODERATION_SETTING
+                        - VIEW_USER_MANAGEMENT
+                        - MANAGE_USER
+                        - MODERATE_USER
+                        - VIEW_USER_ROLE_MANAGEMENT
+                        - MANAGE_USER_ROLE
+                        - VIEW_ADMIN_USER
+                        - MANAGE_ADMIN
+                        - VIEW_ADMIN_ROLE
+                        - VIEW_SETTING
+                        - MANAGE_SETTING
+                        - MANAGE_SECURITY
+                    isDeleted:
+                      type: boolean
+                      description: Indicates if the role is deleted.
+                      example: false
+                    type:
+                      type: string
+                      description: The type of the role.
+                      example: consoleAdmin
+                    description:
+                      type: string
+                      description: A brief description of the role.
+                      example: test
