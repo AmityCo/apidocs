@@ -88,6 +88,7 @@ root:
                 example: "file-12345"
               roleAssignments:
                 type: array
+                maxLength: 10
                 items:
                   type: object
                   properties:
@@ -103,6 +104,7 @@ root:
                           description: "Community internal id for the role assignment."
                           items:
                             type: string
+                          maxLength: 250
                 example:
                   - roleId: "role-12345"
                     scope:
@@ -212,6 +214,7 @@ update:
                 type: array
                 items:
                   type: object
+                  maxLength: 10
                   properties:
                     roleId:
                       type: string
@@ -222,6 +225,7 @@ update:
                       properties:
                         communityIds:
                           type: array
+                          maxLength: 250
                           description: "Community internal id for the role assignment."
                           items:
                             type: string
@@ -283,12 +287,15 @@ roles:
                 type: string
                 description: "The unique ID of the role."
                 example: "f74c96f3-eab5-4cda-b7a9-5d8e9402a43c"
+                maxLength: 100
               displayName:
                 type: string
                 description: "The display name of the role."
                 example: "some role test"
+                maxLength: 100
               description:
                 type: string
+                maxLength: 1024
                 description: "A brief description of the role."
                 example: "This is a test role"
               permissions:
@@ -407,10 +414,12 @@ _roleId:
                 type: string
                 description: "The updated display name of the role."
                 example: "updated role test"
+                maxLength: 100
               description:
                 type: string
                 description: "An updated brief description of the role."
                 example: "This is an updated test role"
+                maxLength: 1024
               permissions:
                 type: array
                 items:
