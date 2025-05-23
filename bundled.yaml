@@ -22911,7 +22911,6 @@ components:
             type: object
             properties:
               answerIds:
-                description: poll id
                 type: array
                 items:
                   type: string
@@ -22920,7 +22919,7 @@ components:
     _pollId-votes-put-request-payload:
       description: |
         Information of poll answers to be updated.
-        Backend will ignore invalid answer id. The answers will be updated from valid ids only.
+        The invalid answer id will be ignored.
         If answerIds is empty, meaning that the user unvote all answers.
       required: true
       content:
@@ -22929,7 +22928,6 @@ components:
             type: object
             properties:
               answerIds:
-                description: poll id
                 type: array
                 items:
                   type: string
