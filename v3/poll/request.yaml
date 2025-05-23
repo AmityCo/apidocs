@@ -71,3 +71,19 @@ _pollId-votes-post-request-payload:
               type: "string"
         required:
           - "data"
+
+_pollId-votes-put-request-payload:
+  description: "Information of poll answers to be updated. Backend will ignore invalid answer id. The answers will be updated from valid ids only. If answerIds is empty, meaning that the user unvote all answers."
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          answerIds:
+            description: "poll id"
+            type: "array"
+            items:
+              type: "string"
+        required:
+          - "data"

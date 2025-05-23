@@ -229,6 +229,68 @@ vote:
     "500000":
       $ref: "../../global/error.yaml#/UnexpectedError"
 
+updateVote:
+  summary: Update poll votes
+  tags:
+    - Poll v3
+  security:
+    - BearerAuth: []
+  description: >
+    Update poll answers.
+
+    Backend will ignore the invalid answer id. The answers will be updated from valid ids only.
+
+    If answerIds is empty, meaning that the user unvote all answers.
+  parameters:
+    - name: pollId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: Authorization
+      in: header
+      value: Bearer {{accessToken}}
+      required: true
+      schema:
+        type: string
+    - name: Content-Type
+      in: header
+      value: application/json
+      required: true
+      schema:
+        type: string
+  consumes:
+    - application/json
+  requestBody:
+    description: >
+      Information of poll answers to be updated.
+
+      ### Required
+
+      - answerIds for vote the poll
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            answerIds:
+              description: poll id
+              type: array
+              items:
+                type: string
+          required:
+            - data
+  responses:
+    "200000":
+      $ref: "./response.yaml#/PollResponse"
+    "400000":
+      $ref: "../../global/error.yaml#/BadRequestError"
+    "400400":
+      $ref: "../../global/error.yaml#/PollNotFoundError"
+    "500000":
+      $ref: "../../global/error.yaml#/UnexpectedError"
+
 getUsersAnswered:
   summary: List user who vote the poll with specific answer
   tags:

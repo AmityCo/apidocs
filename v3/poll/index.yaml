@@ -112,6 +112,29 @@ _pollId-votes:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
+  put:
+    summary: "update poll votes"
+    tags:
+      - "Poll"
+    security:
+      - BearerAuth: []
+    description: "Update poll answers\nBackend will ignore invalid answer id. The answers will be updated from valid ids only.\nIf answerIds is empty, meaning that the user unvote all answers."
+    parameters:
+      - $ref: "./parameter.yaml#/pollId"
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/content-type"
+    requestBody:
+      $ref: "./request.yaml#/_pollId-votes-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/PollNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
 _pollId-answers_answerId:
   get:
     summary: "List users who vote the poll with specific answer"
