@@ -1,19 +1,23 @@
 root:
   get:
-    summary: "Get users."
+    summary: "Query Users"
     tags:
       - "User"
     security:
       - BearerAuth: []
-    description: "Get users (pagination supported)\n"
+    description: |
+      Retrieves a paginated list of users with advanced filtering capabilities. <br>
+      Supports searching by userId, displayName, or profileHandle with different matching strategies.
     parameters:
       - $ref: "./parameter.yaml#/keyword"
       - $ref: "./parameter.yaml#/exactMatchKeyword"
       - $ref: "./parameter.yaml#/filter"
       - $ref: "./parameter.yaml#/sortBy"
-      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/searchBy"
+      - $ref: "./parameter.yaml#/options.limit"
+      - $ref: "./parameter.yaml#/options.token"
       - $ref: "./parameter.yaml#/isDeleted"
-      - $ref: "./parameter.yaml#/isBrand"
+      #- $ref: "./parameter.yaml#/isBrand"
     responses:
       200:
         $ref: "./response.yaml#/root-get-response-200"
@@ -24,7 +28,7 @@ root:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
   put:
-    summary: "Update user."
+    summary: "Update a User"
     tags:
       - "User"
     security:
@@ -44,7 +48,7 @@ root:
 
 list:
   get:
-    summary: "Get list of users by user ids."
+    summary: "Get Users"
     tags:
       - "User"
     security:
@@ -64,12 +68,12 @@ list:
 
 _userId:
   get:
-    summary: "Get one user."
+    summary: "Get a User"
     tags:
       - "User"
     security:
       - BearerAuth: []
-    description: "Get one user.\n"
+    description: "Get a User.\n"
     parameters:
       - $ref: "./parameter.yaml#/_userId"
       - $ref: "./parameter.yaml#/type"
@@ -85,8 +89,8 @@ _userId:
 
 _userId-isFlagByMe:
   get:
-    summary: "Check whether user flag a given user."
-    description: "Check whether user flag a given user.\n"
+    summary: "Check whether User Flagged a given User"
+    description: "Check whether User flagged a given User."
     tags:
       - "User"
     security:

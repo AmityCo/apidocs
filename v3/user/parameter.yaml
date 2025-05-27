@@ -4,6 +4,34 @@ keyword:
   schema:
     type: "string"
     maxLength: 100
+  description: Keyword to search for in user information such as displayName, profileHandle, and userId. The search is case-insensitive and supports partial matches.
+
+searchBy:
+  name: "searchBy"
+  in: "query"
+  schema:
+    type: "array"
+    maxItems: 3
+    items:
+      type: "string"
+      enum:
+        - "displayName"
+        - "profileHandle"
+        - "userId"
+      default: ["displayName", "profileHandle", "userId"]
+  examples:
+    singleField:
+      summary: Search by display name
+      value: [displayName]
+    multipleFields:
+      summary: Search by userId and profileHandle
+      value: [userId, profileHandle]
+  description: |
+    Fields to search users for the keyword **(up to 3 fields can be specified)** <br>
+    `displayName` - search by display name <br>
+    `profileHandle` - search by profile handle <br>
+    `userId` - search by user id <br>
+    Default is all three fields
 
 exactMatchKeyword:
   name: "exactMatchKeyword"
@@ -22,6 +50,7 @@ filter:
       - "all"
       - "flagged"
     default: "all"
+  description: Filter users either by all users or only flagged users
 
 sortBy:
   name: "sortBy"
@@ -32,23 +61,39 @@ sortBy:
       - "firstCreated"
       - "lastCreated"
       - "displayName"
+      - "profileHandle"
     default: "displayName"
+  examples:
+    lastCreated:
+      summary: Sort by creation date (newest first)
+      value: lastCreated
+    displayName:
+      summary: Sort by display name (alphabetical order)
+      value: displayName
+  description: |
+    Sort users by specified criteria, criteria to consider when using `sortBy` with `searchBy`: <br>
+      * if `searchBy` is `displayName`, then `sortBy` is default to `displayName` and can be changed to `lastCreated` or `firstCreated` <br>
+      * if `searchBy` is `profileHandle`, then `sortBy` is default to `profileHandle` and can be changed to `lastCreated` or `firstCreated` <br>
+      * if `searchBy` is `userId`, then `sortBy` is default to `lastCreated` and can be changed to `firstCreated` <br>
+      * if `searchBy` is not specified, then `sortBy` is default to `displayName` and can be changed to `lastCreated` or `firstCreated` <br>
 
-options:
-  name: "options"
-  in: "query"
-  style: "deepObject"
+options.limit:
+  name: options[limit]
+  in: query
+  description: Number of results per page (1-100)
   schema:
-    type: "object"
-    properties:
-      limit:
-        type: "integer"
-        minimum: 1
-        maximum: 100
-        default: 10
-      token:
-        type: "string"
-        maxLength: 1000
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 10
+
+options.token:
+  name: options[token]
+  in: query
+  description: Pagination token for getting next/previous pages
+  schema:
+    type: string
+    maxLength: 100
 
 isDeleted:
   name: "isDeleted"
@@ -56,7 +101,7 @@ isDeleted:
   schema:
     type: "boolean"
     default: false
-  description: "filter only deleted deleted users when true"
+  description: "filter only deleted users when true"
 
 isBrand:
   name: "isBrand"

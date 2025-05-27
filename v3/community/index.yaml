@@ -11,10 +11,11 @@ root:
       - $ref: "./parameter.yaml#/tags"
       - $ref: "./parameter.yaml#/filter"
       - $ref: "./parameter.yaml#/categoryId"
-      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/sortBy-communities"
       - $ref: "./parameter.yaml#/isDeleted"
       - $ref: "./parameter.yaml#/hasFlag"
-      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/options.limit"
+      - $ref: "./parameter.yaml#/options.token"
     responses:
       200:
         $ref: "./response.yaml#/common-get-response-200"
@@ -167,19 +168,24 @@ _communityId-leave:
 
 _communityId-users:
   get:
-    summary: "query community users"
+    summary: "Query Community Users"
     tags:
       - "Community"
     security:
       - BearerAuth: []
-    description: "query community users.\n"
+    description: |
+      Retrieves a paginated list of users associated with a specific community. <br>
+      Supports filtering by membership status, roles, and search criteria. <br>
+      Results can be sorted using various options and searched by different user attributes. <br>
     parameters:
       - $ref: "./parameter.yaml#/communityId"
       - $ref: "./parameter.yaml#/memberships"
       - $ref: "./parameter.yaml#/roles"
-      - $ref: "./parameter.yaml#/sortBy"
-      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/sortBy-comm-users"
+      - $ref: "./parameter.yaml#/options.limit"
+      - $ref: "./parameter.yaml#/options.token"
       - $ref: "./parameter.yaml#/search"
+      - $ref: "./parameter.yaml#/searchBy"
       - $ref: "./parameter.yaml#/type"
       - $ref: "./parameter.yaml#/isDeleted-users"
       - $ref: "./parameter.yaml#/isBrand"

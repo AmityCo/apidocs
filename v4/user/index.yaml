@@ -1,6 +1,6 @@
 _userId:
   delete:
-    summary: "Delete user"
+    summary: "Delete a User"
     security:
       - BearerAuth: []
     tags:
@@ -23,14 +23,14 @@ _userId:
 
 me-flags_userId:
   post:
-    summary: "Report user (flag user)"
+    summary: "Report a User"
     security:
       - BearerAuth: []
     tags:
       - "User"
     parameters:
       - $ref: "./parameter.yaml#/_userId"
-    description: "Report user by user id.\n"
+    description: "Report a User by User ID (Flag User).\n"
     responses:
       200:
         $ref: "./response.yaml#/me-flags_userId-post-response-200"
@@ -39,14 +39,14 @@ me-flags_userId:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
   delete:
-    summary: "Unreported user (unflag user)"
+    summary: "Unreported a User"
     security:
       - BearerAuth: []
     tags:
       - "User"
     parameters:
       - $ref: "./parameter.yaml#/_userId"
-    description: "Unreported user by user id.\n"
+    description: "Unreported a User by User ID (Unflag User).\n"
     responses:
       200:
         $ref: "./response.yaml#/me-flags_userId-delete-response-200"
@@ -57,8 +57,8 @@ me-flags_userId:
 
 me-user-blocks:
   get:
-    summary: Get list of blocked users
-    description: "Get list of blocked users\n"
+    summary: Get Blocked Users
+    description: "Get Blocked Users\n"
     tags:
       - User
     security:
@@ -74,10 +74,10 @@ me-user-blocks:
 
 me-user-blocks_userId:
   post:
-    summary: Block a user.
+    summary: Block a User
     tags:
       - User
-    description: "Blocking a user\n"
+    description: "Block a User\n"
     security:
       - BearerAuth: []
     parameters:
@@ -92,10 +92,10 @@ me-user-blocks_userId:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
   delete:
-    summary: Unblock a user
+    summary: Unblock a User
     tags:
       - User
-    description: "Unblocking a user\n"
+    description: "Unblock a User\n"
     security:
       - BearerAuth: []
     parameters:

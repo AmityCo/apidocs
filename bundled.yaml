@@ -826,7 +826,11 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v4/channels/{channelId}/users:
     get:
-      summary: query channel users
+      summary: Query Channel Users
+      description: |
+        Retrieves a paginated list of users associated with a specific channel. <br>
+        Supports filtering by membership status, roles, and search criteria. <br>
+        Results can be sorted using various options and searched by different user attributes. <br>
       tags:
         - Channel
       security:
@@ -836,8 +840,10 @@ paths:
         - $ref: '#/components/parameters/parameter_role'
         - $ref: '#/components/parameters/parameter_sortBy'
         - $ref: '#/components/parameters/memberships'
-        - $ref: '#/components/parameters/parameter_options-2'
+        - $ref: '#/components/parameters/options.limit'
+        - $ref: '#/components/parameters/options.token'
         - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/searchBy'
         - $ref: '#/components/parameters/parameter_isDeleted'
         - $ref: '#/components/parameters/isBrand'
       responses:
@@ -874,7 +880,7 @@ paths:
         - $ref: '#/components/parameters/hasFlag'
         - $ref: '#/components/parameters/parameter_isDeleted-2'
         - $ref: '#/components/parameters/parameter_sortBy-2'
-        - $ref: '#/components/parameters/parameter_options-3'
+        - $ref: '#/components/parameters/parameter_options-2'
         - $ref: '#/components/parameters/dataTypes'
       responses:
         '200':
@@ -1099,10 +1105,11 @@ paths:
         - $ref: '#/components/parameters/parameter_tags-2'
         - $ref: '#/components/parameters/parameter_filter'
         - $ref: '#/components/parameters/categoryId'
-        - $ref: '#/components/parameters/parameter_sortBy-3'
+        - $ref: '#/components/parameters/sortBy-communities'
         - $ref: '#/components/parameters/parameter_isDeleted-3'
         - $ref: '#/components/parameters/parameter_hasFlag'
-        - $ref: '#/components/parameters/parameter_options-4'
+        - $ref: '#/components/parameters/options.limit'
+        - $ref: '#/components/parameters/options.token'
       responses:
         '200':
           $ref: '#/components/responses/common-get-response-200'
@@ -1254,20 +1261,24 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/communities/{communityId}/users:
     get:
-      summary: query community users
+      summary: Query Community Users
       tags:
         - Community
       security:
         - BearerAuth: []
       description: |
-        query community users.
+        Retrieves a paginated list of users associated with a specific community. <br>
+        Supports filtering by membership status, roles, and search criteria. <br>
+        Results can be sorted using various options and searched by different user attributes. <br>
       parameters:
         - $ref: '#/components/parameters/communityId'
         - $ref: '#/components/parameters/parameter_memberships'
         - $ref: '#/components/parameters/parameter_roles'
-        - $ref: '#/components/parameters/parameter_sortBy-3'
-        - $ref: '#/components/parameters/parameter_options-4'
+        - $ref: '#/components/parameters/sortBy-comm-users'
+        - $ref: '#/components/parameters/options.limit'
+        - $ref: '#/components/parameters/options.token'
         - $ref: '#/components/parameters/parameter_search'
+        - $ref: '#/components/parameters/parameter_searchBy'
         - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/isDeleted-users'
         - $ref: '#/components/parameters/isBrand'
@@ -1629,9 +1640,9 @@ paths:
       description: |
         query community categories.
       parameters:
-        - $ref: '#/components/parameters/parameter_sortBy-4'
+        - $ref: '#/components/parameters/parameter_sortBy-3'
         - $ref: '#/components/parameters/parameter_isDeleted-4'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_options-3'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-2'
@@ -1776,10 +1787,10 @@ paths:
       description: |
         Get paginable list of contents.
       parameters:
-        - $ref: '#/components/parameters/parameter_sortBy-5'
+        - $ref: '#/components/parameters/parameter_sortBy-4'
         - $ref: '#/components/parameters/parameter_hasFlag-2'
         - $ref: '#/components/parameters/parameter_isDeleted-4'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_options-3'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-2'
@@ -1798,10 +1809,10 @@ paths:
         Get paginable list of posts.
       parameters:
         - $ref: '#/components/parameters/parameter__communityId'
-        - $ref: '#/components/parameters/parameter_sortBy-5'
+        - $ref: '#/components/parameters/parameter_sortBy-4'
         - $ref: '#/components/parameters/parameter_hasFlag-3'
         - $ref: '#/components/parameters/parameter_isDeleted-4'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_options-3'
         - $ref: '#/components/parameters/parameter_dataTypes'
       responses:
         '200':
@@ -1824,7 +1835,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/showOnlyMyFeed'
         - $ref: '#/components/parameters/parameter_dataTypes'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_options-3'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-3'
@@ -1843,10 +1854,10 @@ paths:
         Get paginable list of posts.
       parameters:
         - $ref: '#/components/parameters/_userId'
-        - $ref: '#/components/parameters/parameter_sortBy-5'
+        - $ref: '#/components/parameters/parameter_sortBy-4'
         - $ref: '#/components/parameters/parameter_hasFlag-4'
         - $ref: '#/components/parameters/parameter_isDeleted-4'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_options-3'
         - $ref: '#/components/parameters/parameter_dataTypes'
       responses:
         '200':
@@ -3060,8 +3071,8 @@ paths:
         - Moderation
       parameters:
         - $ref: '#/components/parameters/regex'
-        - $ref: '#/components/parameters/parameter_sortBy-6'
-        - $ref: '#/components/parameters/parameter_options-6'
+        - $ref: '#/components/parameters/parameter_sortBy-5'
+        - $ref: '#/components/parameters/parameter_options-4'
       responses:
         '200':
           $ref: '#/components/responses/allowlists-get-response-200'
@@ -3098,8 +3109,8 @@ paths:
         - Moderation
       parameters:
         - $ref: '#/components/parameters/regex'
-        - $ref: '#/components/parameters/parameter_sortBy-6'
-        - $ref: '#/components/parameters/parameter_options-6'
+        - $ref: '#/components/parameters/parameter_sortBy-5'
+        - $ref: '#/components/parameters/parameter_options-4'
       responses:
         '200':
           $ref: '#/components/responses/blocklists-get-response-200'
@@ -3339,7 +3350,7 @@ paths:
         - $ref: '#/components/parameters/parameter_isDeleted-6'
         - $ref: '#/components/parameters/parameter_tags-3'
         - $ref: '#/components/parameters/parameter_excludeTags'
-        - $ref: '#/components/parameters/parameter_options-7'
+        - $ref: '#/components/parameters/parameter_options-5'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-4'
@@ -4274,7 +4285,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/parameter_options-8'
+        - $ref: '#/components/parameters/parameter_options-6'
       description: |2-
          Retrieves the user's notification tray items, sorted by newest first.
          - Notification tray items will be updated shortly after calling related APIs (e.g. `POST api/v4/posts`) but are not real-time.
@@ -4380,7 +4391,7 @@ paths:
         List all pinned posts in a community
       parameters:
         - $ref: '#/components/parameters/parameter_communityId-2'
-        - $ref: '#/components/parameters/parameter_options-9'
+        - $ref: '#/components/parameters/parameter_options-7'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-3'
@@ -4465,7 +4476,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_communityId-2'
         - $ref: '#/components/parameters/placement'
-        - $ref: '#/components/parameters/parameter_options-9'
+        - $ref: '#/components/parameters/parameter_options-7'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-3'
@@ -4785,8 +4796,8 @@ paths:
         - $ref: '#/components/parameters/answerId'
         - $ref: '#/components/parameters/authorization'
         - $ref: '#/components/parameters/content-type'
-        - $ref: '#/components/parameters/parameter_sortBy-7'
-        - $ref: '#/components/parameters/parameter_options-10'
+        - $ref: '#/components/parameters/parameter_sortBy-6'
+        - $ref: '#/components/parameters/parameter_options-8'
       responses:
         '200':
           $ref: '#/components/responses/poll-pagination-response-200'
@@ -4806,11 +4817,11 @@ paths:
       parameters:
         - $ref: '#/components/parameters/targetId'
         - $ref: '#/components/parameters/targetType'
-        - $ref: '#/components/parameters/parameter_sortBy-5'
+        - $ref: '#/components/parameters/parameter_sortBy-4'
         - $ref: '#/components/parameters/parameter_dataType'
         - $ref: '#/components/parameters/parameter_hasFlag-6'
         - $ref: '#/components/parameters/parameter_isDeleted-4'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_options-3'
         - $ref: '#/components/parameters/parameter_dataTypes-2'
         - $ref: '#/components/parameters/parameter_tags-4'
         - $ref: '#/components/parameters/matchingOnlyParentPost'
@@ -5067,10 +5078,10 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_targetId'
         - $ref: '#/components/parameters/parameter_targetType'
-        - $ref: '#/components/parameters/parameter_sortBy-8'
+        - $ref: '#/components/parameters/parameter_sortBy-7'
         - $ref: '#/components/parameters/parameter_hasFlag-7'
         - $ref: '#/components/parameters/parameter_isDeleted-2'
-        - $ref: '#/components/parameters/parameter_options-11'
+        - $ref: '#/components/parameters/parameter_options-9'
         - $ref: '#/components/parameters/feedType'
         - $ref: '#/components/parameters/parameter_dataTypes-3'
         - $ref: '#/components/parameters/parameter_tags-5'
@@ -5451,7 +5462,7 @@ paths:
         - $ref: '#/components/parameters/parameter_referenceId'
         - $ref: '#/components/parameters/parameter_referenceType'
         - $ref: '#/components/parameters/reactionName'
-        - $ref: '#/components/parameters/parameter_options-12'
+        - $ref: '#/components/parameters/parameter_options-10'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-payload-200'
@@ -5510,7 +5521,7 @@ paths:
         - $ref: '#/components/parameters/parameter_referenceType-2'
         - $ref: '#/components/parameters/parameter_referenceVersion'
         - $ref: '#/components/parameters/parameter_reactionName'
-        - $ref: '#/components/parameters/parameter_options-13'
+        - $ref: '#/components/parameters/parameter_options-11'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-6'
@@ -5568,8 +5579,8 @@ paths:
         Get roles (pagination support)
       parameters:
         - $ref: '#/components/parameters/parameter_keyword-2'
-        - $ref: '#/components/parameters/parameter_sortBy-9'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_sortBy-8'
+        - $ref: '#/components/parameters/parameter_options-3'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-8'
@@ -5668,7 +5679,7 @@ paths:
         - $ref: '#/components/parameters/parameter_query'
         - $ref: '#/components/parameters/targetId'
         - $ref: '#/components/parameters/parameter_targetType-2'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_options-3'
         - $ref: '#/components/parameters/parameter_dataTypes-4'
         - $ref: '#/components/parameters/parameter_tags-4'
         - $ref: '#/components/parameters/matchingOnlyParentPost'
@@ -5697,7 +5708,7 @@ paths:
         - $ref: '#/components/parameters/parameter_filter-2'
         - $ref: '#/components/parameters/parameter_tags-4'
         - $ref: '#/components/parameters/categoryIds'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_options-3'
       responses:
         '200':
           $ref: '#/components/responses/communities-response-payload-200'
@@ -5932,7 +5943,7 @@ paths:
         - $ref: '#/components/parameters/parameter_targetType-3'
         - $ref: '#/components/parameters/parameter_dataType-2'
         - $ref: '#/components/parameters/isExpired'
-        - $ref: '#/components/parameters/parameter_options-14'
+        - $ref: '#/components/parameters/parameter_options-12'
       responses:
         '200':
           description: Story Information
@@ -6092,7 +6103,7 @@ paths:
         - Story
       parameters:
         - $ref: '#/components/parameters/targets'
-        - $ref: '#/components/parameters/parameter_options-14'
+        - $ref: '#/components/parameters/parameter_options-12'
       responses:
         '200':
           description: Story Information, sorted by the target order in the request then the sort option
@@ -6413,106 +6424,18 @@ paths:
                 status: error
                 code: 500000
                 message: Unexpected error
-  /api/v2/users/ban:
-    post:
-      summary: ban a user.
-      tags:
-        - User
-      security:
-        - ApiKeyAuth: []
-      description: |
-        Ban a user
-      requestBody:
-        $ref: '#/components/requestBodies/request_common-post-request-payload'
-        description: |
-          User to be baned
-      responses:
-        '200':
-          description: OK
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '429':
-          $ref: '#/components/responses/RateLimitError'
-        '500':
-          $ref: '#/components/responses/UnexpectedError'
-  /api/v2/users/unban:
-    post:
-      summary: unban a user.
-      tags:
-        - User
-      security:
-        - BearerAuth: []
-      description: |
-        Unban a user
-      requestBody:
-        $ref: '#/components/requestBodies/request_common-post-request-payload'
-        description: |
-          User to be unbaned
-      responses:
-        '200':
-          description: OK
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '429':
-          $ref: '#/components/responses/RateLimitError'
-        '500':
-          $ref: '#/components/responses/UnexpectedError'
-  /api/v2/users/{userId}/flags:
-    delete:
-      summary: clear flag a user.
-      tags:
-        - User
-      security:
-        - BearerAuth: []
-      description: |
-        Clear flag a user
-      parameters:
-        - $ref: '#/components/parameters/parameter_userId-4'
-      responses:
-        '200':
-          $ref: '#/components/responses/_userId-flags-delete-response-payload-200'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '429':
-          $ref: '#/components/responses/RateLimitError'
-        '500':
-          $ref: '#/components/responses/UnexpectedError'
-  /api/v3/users:
+  /api/v3/users/{userId}:
     get:
-      summary: Get users.
+      summary: Get a User
       tags:
         - User
       security:
         - BearerAuth: []
       description: |
-        Get users (pagination supported)
+        Get a User.
       parameters:
-        - $ref: '#/components/parameters/keyword'
-        - $ref: '#/components/parameters/exactMatchKeyword'
-        - $ref: '#/components/parameters/parameter_filter-3'
-        - $ref: '#/components/parameters/parameter_sortBy-10'
-        - $ref: '#/components/parameters/parameter_options-5'
-        - $ref: '#/components/parameters/parameter_isDeleted-8'
-        - $ref: '#/components/parameters/isBrand'
-      responses:
-        '200':
-          $ref: '#/components/responses/response_root-get-response-200-8'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-        '500':
-          $ref: '#/components/responses/UnexpectedError'
-    put:
-      summary: Update user.
-      tags:
-        - User
-      security:
-        - BearerAuth: []
-      description: |
-        Update user such as displayName, roles, avatar and metadata
-      requestBody:
-        $ref: '#/components/requestBodies/request_root-put-request-payload-2'
+        - $ref: '#/components/parameters/parameter__userId-3'
+        - $ref: '#/components/parameters/parameter_type-2'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-9'
@@ -6524,7 +6447,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/users/list:
     get:
-      summary: Get list of users by user ids.
+      summary: Get Users
       tags:
         - User
       security:
@@ -6542,18 +6465,44 @@ paths:
           $ref: '#/components/responses/ForbiddenError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
-  /api/v3/users/{userId}:
+  /api/v3/users:
     get:
-      summary: Get one user.
+      summary: Query Users
       tags:
         - User
       security:
         - BearerAuth: []
       description: |
-        Get one user.
+        Retrieves a paginated list of users with advanced filtering capabilities. <br>
+        Supports searching by userId, displayName, or profileHandle with different matching strategies.
       parameters:
-        - $ref: '#/components/parameters/parameter__userId-3'
-        - $ref: '#/components/parameters/parameter_type-2'
+        - $ref: '#/components/parameters/parameter_keyword-3'
+        - $ref: '#/components/parameters/exactMatchKeyword'
+        - $ref: '#/components/parameters/parameter_filter-3'
+        - $ref: '#/components/parameters/parameter_sortBy-9'
+        - $ref: '#/components/parameters/parameter_searchBy-2'
+        - $ref: '#/components/parameters/options.limit'
+        - $ref: '#/components/parameters/parameter_options.token'
+        - $ref: '#/components/parameters/parameter_isDeleted-8'
+      responses:
+        '200':
+          $ref: '#/components/responses/response_root-get-response-200-8'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      summary: Update a User
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      description: |
+        Update user such as displayName, roles, avatar and metadata
+      requestBody:
+        $ref: '#/components/requestBodies/request_root-put-request-payload-2'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-9'
@@ -6565,9 +6514,8 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /api/v3/users/{userId}/isFlagByMe:
     get:
-      summary: Check whether user flag a given user.
-      description: |
-        Check whether user flag a given user.
+      summary: Check whether User Flagged a given User
+      description: Check whether User flagged a given User.
       tags:
         - User
       security:
@@ -6586,9 +6534,125 @@ paths:
                     type: boolean
         '404':
           $ref: '#/components/responses/UserNotFoundError'
+  /api/v4/me/user-blocks:
+    get:
+      summary: Get Blocked Users
+      description: |
+        Get Blocked Users
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/parameter_limit'
+        - $ref: '#/components/parameters/parameter_token-4'
+      responses:
+        '200':
+          $ref: '#/components/responses/me-user-blocks-get-response-200'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v2/users/ban:
+    post:
+      summary: Ban a User
+      tags:
+        - User
+      security:
+        - ApiKeyAuth: []
+      description: |
+        Ban a User
+      requestBody:
+        $ref: '#/components/requestBodies/request_common-post-request-payload'
+        description: |
+          User to be baned
+      responses:
+        '200':
+          description: OK
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v2/users/unban:
+    post:
+      summary: Unban a User
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      description: |
+        Unban a User
+      requestBody:
+        $ref: '#/components/requestBodies/request_common-post-request-payload'
+        description: |
+          User to be unbanned
+      responses:
+        '200':
+          description: OK
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/me/flags/{userId}:
+    post:
+      summary: Report a User
+      security:
+        - BearerAuth: []
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/parameter__userId-4'
+      description: |
+        Report a User by User ID (Flag User).
+      responses:
+        '200':
+          $ref: '#/components/responses/me-flags_userId-post-response-200'
+        '404':
+          $ref: '#/components/responses/UserNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      summary: Unreported a User
+      security:
+        - BearerAuth: []
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/parameter__userId-4'
+      description: |
+        Unreported a User by User ID (Unflag User).
+      responses:
+        '200':
+          $ref: '#/components/responses/me-flags_userId-delete-response-200'
+        '404':
+          $ref: '#/components/responses/UserNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v2/users/{userId}/flags:
+    delete:
+      summary: Clear Flag a User
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      description: |
+        Clear Flag a User
+      parameters:
+        - $ref: '#/components/parameters/parameter_userId-4'
+      responses:
+        '200':
+          $ref: '#/components/responses/_userId-flags-delete-response-payload-200'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v4/users/{userId}:
     delete:
-      summary: Delete user
+      summary: Delete a User
       security:
         - BearerAuth: []
       tags:
@@ -6608,65 +6672,13 @@ paths:
           $ref: '#/components/responses/UserNotFoundError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
-  /api/v4/me/flags/{userId}:
-    post:
-      summary: Report user (flag user)
-      security:
-        - BearerAuth: []
-      tags:
-        - User
-      parameters:
-        - $ref: '#/components/parameters/parameter__userId-4'
-      description: |
-        Report user by user id.
-      responses:
-        '200':
-          $ref: '#/components/responses/me-flags_userId-post-response-200'
-        '404':
-          $ref: '#/components/responses/UserNotFoundError'
-        '500':
-          $ref: '#/components/responses/UnexpectedError'
-    delete:
-      summary: Unreported user (unflag user)
-      security:
-        - BearerAuth: []
-      tags:
-        - User
-      parameters:
-        - $ref: '#/components/parameters/parameter__userId-4'
-      description: |
-        Unreported user by user id.
-      responses:
-        '200':
-          $ref: '#/components/responses/me-flags_userId-delete-response-200'
-        '404':
-          $ref: '#/components/responses/UserNotFoundError'
-        '500':
-          $ref: '#/components/responses/UnexpectedError'
-  /api/v4/me/user-blocks:
-    get:
-      summary: Get list of blocked users
-      description: |
-        Get list of blocked users
-      tags:
-        - User
-      security:
-        - BearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/parameter_limit'
-        - $ref: '#/components/parameters/parameter_token-4'
-      responses:
-        '200':
-          $ref: '#/components/responses/me-user-blocks-get-response-200'
-        '500':
-          $ref: '#/components/responses/UnexpectedError'
   /api/v4/me/user-blocks/{userId}:
     post:
-      summary: Block a user.
+      summary: Block a User
       tags:
         - User
       description: |
-        Blocking a user
+        Block a User
       security:
         - BearerAuth: []
       parameters:
@@ -6681,11 +6693,11 @@ paths:
         '500':
           $ref: '#/components/responses/UnexpectedError'
     delete:
-      summary: Unblock a user
+      summary: Unblock a User
       tags:
         - User
       description: |
-        Unblocking a user
+        Unblock a User
       security:
         - BearerAuth: []
       parameters:
@@ -6739,9 +6751,9 @@ paths:
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/statuses'
         - $ref: '#/components/parameters/userPublicIds'
-        - $ref: '#/components/parameters/parameter_sortBy-6'
+        - $ref: '#/components/parameters/parameter_sortBy-5'
         - $ref: '#/components/parameters/parameter_isDeleted-9'
-        - $ref: '#/components/parameters/parameter_options-15'
+        - $ref: '#/components/parameters/parameter_options-13'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-9'
@@ -10007,6 +10019,8 @@ components:
           items:
             $ref: '#/components/schemas/PermissionEnum'
         displayName:
+          type: string
+        profileHandle:
           type: string
         description:
           type: string
@@ -17985,12 +17999,25 @@ components:
             status: error
             code: 400400
             message: userId Not Found.
-    _userId-flags-delete-response-payload-200:
+    response_common-response-200-9:
       description: User
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/User'
+            type: object
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              roles:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
     response_root-get-response-200-8:
       description: User
       content:
@@ -18015,25 +18042,6 @@ components:
                 properties:
                   next:
                     type: string
-    response_common-response-200-9:
-      description: User
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              users:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserV3'
-              roles:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RoleV3'
-              files:
-                type: array
-                items:
-                  $ref: '#/components/schemas/File'
     UserNotFoundError:
       description: User Not Found error.
       content:
@@ -18044,56 +18052,6 @@ components:
             status: error
             code: 400400
             message: User Not Found.
-    _userId-delete-response-200:
-      description: return success:'true' when deletion is successful
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                example: true
-    UserIsAlreadyDeletedError:
-      description: Bad Request error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            status: error
-            code: 400000
-            message: User is already deleted
-    me-flags_userId-post-response-200:
-      description: Flag user response
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              users:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserV3'
-              files:
-                type: array
-                items:
-                  $ref: '#/components/schemas/File'
-    me-flags_userId-delete-response-200:
-      description: Unflag user response
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              users:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserV3'
-              files:
-                type: array
-                items:
-                  $ref: '#/components/schemas/File'
     me-user-blocks-get-response-200:
       description: Get blockedU uer list response
       content:
@@ -18127,6 +18085,62 @@ components:
                   total:
                     type: number
                     description: total number of blockers
+    me-flags_userId-post-response-200:
+      description: Flag user response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+    me-flags_userId-delete-response-200:
+      description: Unflag user response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+    _userId-flags-delete-response-payload-200:
+      description: User
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    _userId-delete-response-200:
+      description: return success:'true' when deletion is successful
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+    UserIsAlreadyDeletedError:
+      description: Bad Request error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: error
+            code: 400000
+            message: User is already deleted
     me-user-blocks_userId-post-response-200:
       description: Block user response
       content:
@@ -19144,6 +19158,7 @@ components:
       name: channelId
       in: path
       required: true
+      description: Channel ID to query users from
       schema:
         type: string
         minLength: 1
@@ -19163,6 +19178,8 @@ components:
     parameter_sortBy:
       name: sortBy
       in: query
+      description: |
+        Sort channel users by createdAt or updatedAt, default is lastCreated
       schema:
         type: string
         enum:
@@ -19186,29 +19203,62 @@ components:
             - member
         default:
           - member
-    parameter_options-2:
-      name: options
+    options.limit:
+      name: options[limit]
       in: query
-      style: deepObject
+      description: Number of results per page (1-100)
       schema:
-        type: object
-        properties:
-          limit:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 10
-          token:
-            type: string
-            maxLength: 1000
-      description: use updatedAt when sort by first/lastUpdated
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+    options.token:
+      name: options[token]
+      in: query
+      description: Pagination token for getting next/previous pages
+      schema:
+        type: string
+        maxLength: 1000
     search:
       name: search
       in: query
+      description: Keyword to search for in user information such as displayName, profileHandle, and userId. The search is case-insensitive and supports partial matches.
       schema:
         type: string
         minLength: 0
         maxLength: 10000
+    searchBy:
+      name: searchBy
+      in: query
+      schema:
+        type: array
+        maxItems: 3
+        items:
+          type: string
+          enum:
+            - displayName
+            - profileHandle
+            - userId
+          default:
+            - displayName
+            - profileHandle
+            - userId
+      examples:
+        singleField:
+          summary: Search by display name
+          value:
+            - displayName
+        multipleFields:
+          summary: Search by userId and profileHandle
+          value:
+            - userId
+            - profileHandle
+      description: |
+        Fields to search channel users for the keyword **(up to 3 fields can be specified)** <br>
+        `displayName` - search by display name <br>
+        `profileHandle` - search by profile handle <br>
+        `userId` - search by user id <br>
+        Default is all three fields
     parameter_isDeleted:
       name: isDeleted
       in: query
@@ -19294,7 +19344,7 @@ components:
           - lastUpdated
           - firstUpdated
       description: Sort order for comments **(only for pagination type)**
-    parameter_options-3:
+    parameter_options-2:
       name: options
       in: query
       required: false
@@ -19446,6 +19496,7 @@ components:
           - member
           - notMember
         default: all
+      description: ''
     categoryId:
       name: categoryId
       in: query
@@ -19453,7 +19504,7 @@ components:
         type: string
         minLength: 50
         maxLength: 50
-    parameter_sortBy-3:
+    sortBy-communities:
       name: sortBy
       in: query
       description: |
@@ -19489,20 +19540,6 @@ components:
             * `null(default)` - Show all communities.
             * `true` - Show only community has flagged post(or children post) or has flagged comment.
             * `false` - Show only community has no flagged post(and children post) and has no flagged comment.
-    parameter_options-4:
-      name: options
-      in: query
-      style: deepObject
-      schema:
-        type: object
-        properties:
-          limit:
-            type: integer
-            minimum: 1
-            maximum: 100
-          token:
-            type: string
-            maxLength: 1000
     communityId:
       name: communityId
       in: path
@@ -19537,7 +19574,7 @@ components:
     parameter_roles:
       name: roles
       in: query
-      description: Role to filter
+      description: Filter users by their community roles
       schema:
         type: array
         minItems: 1
@@ -19546,13 +19583,72 @@ components:
           type: string
           minLength: 1
           maxLength: 100
+    sortBy-comm-users:
+      name: sortBy
+      in: query
+      description: |
+        The default value depends on the 'search' parameter.
+          * If 'search' parameter is not set, the default value is 'lastCreated'.
+          * If 'search' parameter is set, the default value is 'displayName'.
+        More criteria to consider when using `sortBy` with `searchBy` <br>
+          * if `searchBy` is `displayName`, then `sortBy` is default to `lastCreated` and can be changed to `displayName` or `firstCreated` <br>
+          * if `searchBy` is `profileHandle`, then `sortBy` is default to `lastCreated` and can be changed to `profileHandle` or `firstCreated` <br>
+          * if `searchBy` is `userId`, then `sortBy` is default to `lastCreated` and can be changed to `firstCreated` <br>
+          * if `searchBy` is not specified, then `sortBy` is default to `lastCreated` and can be changed to `firstCreated` <br>
+      schema:
+        type: string
+        enum:
+          - firstCreated
+          - lastCreated
+          - displayName
+          - profileHandle
+        default: lastCreated
+      examples:
+        lastCreated:
+          summary: Sort by creation date (newest first)
+          value: lastCreated
+        displayName:
+          summary: Sort by display name (alphabetical order)
+          value: displayName
     parameter_search:
       name: search
-      description: Input text for searching display name and user id
+      description: Keyword to search for in user information such as displayName, profileHandle, and userId. The search is case-insensitive and supports partial matches.
       in: query
       schema:
         type: string
         maxLength: 10000
+    parameter_searchBy:
+      name: searchBy
+      in: query
+      schema:
+        type: array
+        maxItems: 3
+        items:
+          type: string
+          enum:
+            - displayName
+            - profileHandle
+            - userId
+          default:
+            - displayName
+            - profileHandle
+            - userId
+      examples:
+        singleField:
+          summary: Search by display name
+          value:
+            - displayName
+        multipleFields:
+          summary: Search by userId and profileHandle
+          value:
+            - userId
+            - profileHandle
+      description: |
+        Fields to search community users for the keyword **(up to 3 fields can be specified)** <br>
+        `displayName` - search by display name <br>
+        `profileHandle` - search by profile handle <br>
+        `userId` - search by user id <br>
+        Default is all three fields
     isDeleted-users:
       name: isDeleted
       in: query
@@ -19614,7 +19710,7 @@ components:
           minLength: 1
           maxLength: 100
       description: list of role id
-    parameter_sortBy-4:
+    parameter_sortBy-3:
       name: sortBy
       in: query
       schema:
@@ -19630,7 +19726,7 @@ components:
       schema:
         type: boolean
         default: null
-    parameter_options-5:
+    parameter_options-3:
       name: options
       in: query
       style: deepObject
@@ -19695,7 +19791,7 @@ components:
       schema:
         type: string
         maxLength: 100
-    parameter_sortBy-5:
+    parameter_sortBy-4:
       name: sortBy
       in: query
       schema:
@@ -19925,7 +20021,7 @@ components:
       schema:
         type: string
       description: search keyword from start
-    parameter_sortBy-6:
+    parameter_sortBy-5:
       name: sortBy
       in: query
       schema:
@@ -19933,7 +20029,7 @@ components:
         enum:
           - firstCreated
           - lastCreated
-    parameter_options-6:
+    parameter_options-4:
       name: options
       in: query
       style: deepObject
@@ -20079,7 +20175,7 @@ components:
           type: string
           maxLength: 100
       description: Used for querying messages by excluding all specified tags. When a query includes multiple tags (e.g., `excludeTags=['tag1', 'tag2', 'tag3']`), the system will return all messages that do not have any of the specified tags.
-    parameter_options-7:
+    parameter_options-5:
       name: options
       in: query
       style: deepObject
@@ -20246,7 +20342,7 @@ components:
       schema:
         type: string
         minLength: 1
-    parameter_options-8:
+    parameter_options-6:
       name: options
       description: Pagination options for controlling result set size and navigation
       in: query
@@ -20294,7 +20390,7 @@ components:
       schema:
         type: string
         maxLength: 900
-    parameter_options-9:
+    parameter_options-7:
       name: options
       in: query
       schema:
@@ -20333,7 +20429,7 @@ components:
       schema:
         type: string
         maxLength: 900
-    parameter_sortBy-7:
+    parameter_sortBy-6:
       name: sortBy
       in: query
       schema:
@@ -20341,7 +20437,7 @@ components:
         enum:
           - lastCreated
           - firstCreated
-    parameter_options-10:
+    parameter_options-8:
       name: options
       in: query
       style: deepObject
@@ -20489,7 +20585,7 @@ components:
         * `community` - Community
         * `user` - User
         * `content` - Content
-    parameter_sortBy-8:
+    parameter_sortBy-7:
       name: sortBy
       in: query
       schema:
@@ -20508,7 +20604,7 @@ components:
         type: boolean
         default: null
       description: Filter by flag status
-    parameter_options-11:
+    parameter_options-9:
       name: options
       in: query
       schema:
@@ -20653,7 +20749,7 @@ components:
           - post
           - comment
           - story
-    parameter_options-12:
+    parameter_options-10:
       name: options
       in: query
       style: deepObject
@@ -20704,7 +20800,7 @@ components:
       schema:
         type: string
         maxLength: 100
-    parameter_options-13:
+    parameter_options-11:
       name: options
       in: query
       style: deepObject
@@ -20726,7 +20822,7 @@ components:
         minLength: 0
         maxLength: 100
       description: search keyword
-    parameter_sortBy-9:
+    parameter_sortBy-8:
       name: sortBy
       in: query
       schema:
@@ -20867,7 +20963,7 @@ components:
           Whether to include expired stories. Only admin can query with this parameter = true.
         type: boolean
         default: false
-    parameter_options-14:
+    parameter_options-12:
       name: options
       in: query
       schema:
@@ -20960,55 +21056,6 @@ components:
       schema:
         type: string
         maxLength: 900
-    parameter_userId-4:
-      name: userId
-      in: path
-      required: true
-      schema:
-        type: string
-    exactMatchKeyword:
-      name: exactMatchKeyword
-      in: query
-      schema:
-        type: boolean
-        default: false
-      description: Return exact match search result when true
-    parameter_filter-3:
-      name: filter
-      in: query
-      schema:
-        type: string
-        enum:
-          - all
-          - flagged
-        default: all
-    parameter_sortBy-10:
-      name: sortBy
-      in: query
-      schema:
-        type: string
-        enum:
-          - firstCreated
-          - lastCreated
-          - displayName
-        default: displayName
-    parameter_isDeleted-8:
-      name: isDeleted
-      in: query
-      schema:
-        type: boolean
-        default: false
-      description: filter only deleted deleted users when true
-    parameter_userIds-3:
-      name: userIds
-      in: query
-      required: true
-      schema:
-        type: array
-        maxItems: 100
-        items:
-          type: string
-          maxLength: 900
     parameter__userId-3:
       name: userId
       in: path
@@ -21026,6 +21073,115 @@ components:
           - public
           - internal
         default: public
+    parameter_userIds-3:
+      name: userIds
+      in: query
+      required: true
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+          maxLength: 900
+    parameter_keyword-3:
+      name: keyword
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+      description: Keyword to search for in user information such as displayName, profileHandle, and userId. The search is case-insensitive and supports partial matches.
+    exactMatchKeyword:
+      name: exactMatchKeyword
+      in: query
+      schema:
+        type: boolean
+        default: false
+      description: Return exact match search result when true
+    parameter_filter-3:
+      name: filter
+      in: query
+      schema:
+        type: string
+        enum:
+          - all
+          - flagged
+        default: all
+      description: Filter users either by all users or only flagged users
+    parameter_sortBy-9:
+      name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - firstCreated
+          - lastCreated
+          - displayName
+          - profileHandle
+        default: displayName
+      examples:
+        lastCreated:
+          summary: Sort by creation date (newest first)
+          value: lastCreated
+        displayName:
+          summary: Sort by display name (alphabetical order)
+          value: displayName
+      description: |
+        Sort users by specified criteria, criteria to consider when using `sortBy` with `searchBy`: <br>
+          * if `searchBy` is `displayName`, then `sortBy` is default to `displayName` and can be changed to `lastCreated` or `firstCreated` <br>
+          * if `searchBy` is `profileHandle`, then `sortBy` is default to `profileHandle` and can be changed to `lastCreated` or `firstCreated` <br>
+          * if `searchBy` is `userId`, then `sortBy` is default to `lastCreated` and can be changed to `firstCreated` <br>
+          * if `searchBy` is not specified, then `sortBy` is default to `displayName` and can be changed to `lastCreated` or `firstCreated` <br>
+    parameter_searchBy-2:
+      name: searchBy
+      in: query
+      schema:
+        type: array
+        maxItems: 3
+        items:
+          type: string
+          enum:
+            - displayName
+            - profileHandle
+            - userId
+          default:
+            - displayName
+            - profileHandle
+            - userId
+      examples:
+        singleField:
+          summary: Search by display name
+          value:
+            - displayName
+        multipleFields:
+          summary: Search by userId and profileHandle
+          value:
+            - userId
+            - profileHandle
+      description: |
+        Fields to search users for the keyword **(up to 3 fields can be specified)** <br>
+        `displayName` - search by display name <br>
+        `profileHandle` - search by profile handle <br>
+        `userId` - search by user id <br>
+        Default is all three fields
+    parameter_options.token:
+      name: options[token]
+      in: query
+      description: Pagination token for getting next/previous pages
+      schema:
+        type: string
+        maxLength: 100
+    parameter_isDeleted-8:
+      name: isDeleted
+      in: query
+      schema:
+        type: boolean
+        default: false
+      description: filter only deleted users when true
+    parameter_token-4:
+      name: token
+      in: query
+      schema:
+        type: string
     parameter__userId-4:
       in: path
       name: userId
@@ -21035,6 +21191,12 @@ components:
         minimum: 1
         maximum: 50
       description: User public id
+    parameter_userId-4:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: string
     deleteAll:
       in: query
       name: deleteAll
@@ -21063,11 +21225,6 @@ components:
         type: boolean
         default: false
       description: true - it will hard delete this user comments after user is deleted.
-    parameter_token-4:
-      name: token
-      in: query
-      schema:
-        type: string
     isLive:
       name: isLive
       in: query
@@ -21113,7 +21270,7 @@ components:
           * `null(default)` - Show both video streaming is activated and video streaming is inactivated.
           * `true` - Show video streaming is inactivated only.
           * `false` - Show video streaming is activated only.
-    parameter_options-15:
+    parameter_options-13:
       name: options
       in: query
       style: deepObject
@@ -23273,6 +23430,9 @@ components:
               displayName:
                 type: string
                 maxLength: 100
+              profileHandle:
+                type: string
+                maxLength: 100
               authToken:
                 type: string
                 description: Authentication token from /api/v3/authentication/token
@@ -23341,17 +23501,6 @@ components:
               - targetId
               - targetType
               - referenceId
-    request_common-post-request-payload:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              userId:
-                type: string
-            required:
-              - userId
     request_root-put-request-payload-2:
       description: |
         User to be updated
@@ -23365,6 +23514,9 @@ components:
                 type: string
                 maxLength: 50
               displayName:
+                type: string
+                maxLength: 100
+              profileHandle:
                 type: string
                 maxLength: 100
               roles:
@@ -23387,6 +23539,17 @@ components:
               description:
                 type: string
                 maxLength: 500
+    request_common-post-request-payload:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+            required:
+              - userId
     user-event-video-streaming-request-payload:
       description: A group of user activity on startTime, endTime and watchSeconds.
       required: true
