@@ -61,13 +61,6 @@ sortBy-comm-users:
     The default value depends on the `search` parameter. <br>
       * If `search` parameter is not set, the default value is `lastCreated`.
       * If `search` parameter is set, the default value is `displayName`.
-
-    More criteria to consider when using `sortBy` with `searchBy` <br>
-      * if `searchBy` is `displayName`, then `sortBy` is default to `lastCreated` and can be changed to `displayName` or `firstCreated` <br>
-      * if `searchBy` is `profileHandle`, then `sortBy` is default to `lastCreated` and can be changed to `profileHandle` or `firstCreated`.
-      Sort by `profileHandle` only works when `search` parameter is provided. <br>
-      * if `searchBy` is `userId`, then `sortBy` is default to `lastCreated` and can be changed to `firstCreated` <br>
-      * if `searchBy` is not specified, then `sortBy` is default to `lastCreated` and can be changed to `firstCreated` <br>
   schema:
     type: "string"
     enum:
@@ -234,11 +227,10 @@ searchBy:
       summary: Search by userId and profileHandle
       value: [userId, profileHandle]
   description: |
-    Fields to search community users for the keyword **(up to 3 fields can be specified)** <br>
-    `displayName` - search by display name <br>
-    `profileHandle` - search by profile handle <br>
-    `userId` - search by user id <br>
-    Default is all three fields
+    Fields to search community users for the search keyword **(must be used with a search parameter)**, Default is all three fields <br>
+      * `displayName` - Search by display name. When using with `sortBy` parameter the applicable sort order is `displayName`, `lastCreated` or `firstCreated`. Default to `lastCreated`.<br>
+      * `profileHandle` - Search by profile handle, when using with `sortBy` parameter the applicable sort order is `profileHandle`, `lastCreated` or `firstCreated`. Default to `lastCreated`.<br>
+      * `userId` - Search by user id, when using with `sortBy` parameter the applicable sort order is `lastCreated`, `firstCreated` or `displayName`. Default to `lastCreated`.<br>
 
 userIds:
   in: query

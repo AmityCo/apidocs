@@ -27,11 +27,11 @@ searchBy:
       summary: Search by userId and profileHandle
       value: [userId, profileHandle]
   description: |
-    Fields to search users for the keyword **(up to 3 fields can be specified)** <br>
-    `displayName` - search by display name <br>
-    `profileHandle` - search by profile handle <br>
-    `userId` - search by user id <br>
-    Default is all three fields
+    Fields to search users for the keyword **(must be used with a keyword parameter)**, Default is all three fields <br>
+      * `displayName` - Search by display name. When using with `sortBy` parameter the applicable sort order is `displayName`, `lastCreated` or `firstCreated`. Default to `displayName`.<br>
+      * `profileHandle` - Search by profile handle, when using with `sortBy` parameter the applicable sort order is `profileHandle`, `lastCreated` or `firstCreated`. Default to `profileHandle`.  <br>
+      * `userId` - Search by user id, when using with `sortBy` parameter the applicable sort order is `lastCreated`, `firstCreated` or `displayName`. Default to `displayName`.<br>
+      Default is all three fields
 
 exactMatchKeyword:
   name: "exactMatchKeyword"
@@ -71,12 +71,7 @@ sortBy:
       summary: Sort by display name (alphabetical order)
       value: displayName
   description: |
-    Sort users by specified criteria default to `displayName`, criteria to consider when using `sortBy` with `searchBy`: <br>
-      * if `searchBy` is `displayName`, then `sortBy` is default to `displayName` and can be changed to `lastCreated` or `firstCreated` <br>
-      * if `searchBy` is `profileHandle`, then `sortBy` is default to `profileHandle` and can be changed to `lastCreated` or `firstCreated`.
-      Sort by `profileHandle` only works when `keyword` parameter is provided. <br>
-      * if `searchBy` is `userId`, then `sortBy` is default to `lastCreated` and can be changed to `firstCreated` <br>
-      * if `searchBy` is not specified, then `sortBy` is default to `displayName` and can be changed to `lastCreated` or `firstCreated` <br>
+    Sort users by specified criteria default to `displayName`.
 
 options.limit:
   name: options[limit]
