@@ -845,7 +845,6 @@ paths:
         - $ref: '#/components/parameters/search'
         - $ref: '#/components/parameters/searchBy'
         - $ref: '#/components/parameters/parameter_isDeleted'
-        - $ref: '#/components/parameters/isBrand'
       responses:
         '200':
           $ref: '#/components/responses/_channelId-users-response-200'
@@ -1281,7 +1280,6 @@ paths:
         - $ref: '#/components/parameters/parameter_searchBy'
         - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/isDeleted-users'
-        - $ref: '#/components/parameters/isBrand'
       responses:
         '200':
           $ref: '#/components/responses/common-get-response-200'
@@ -1801,6 +1799,7 @@ paths:
   /api/v3/community-feeds/{communityId}:
     get:
       summary: Get list of posts.
+      deprecated: true
       tags:
         - Feed
       security:
@@ -1846,6 +1845,7 @@ paths:
   /api/v3/user-feeds/{userId}:
     get:
       summary: Get list of posts.
+      deprecated: true
       tags:
         - Feed
       security:
@@ -19266,16 +19266,6 @@ components:
         type: boolean
         default: null
       description: filter deleted members if isDeleted is null, will return both deleted and non-deleted members
-    isBrand:
-      name: isBrand
-      in: query
-      schema:
-        type: boolean
-      description: |
-        Filter brand user <br>
-        ```undefined``` - return all user <br>
-        ```true``` - return only brand user <br>
-        ```false``` - return only non-brand user
     authorization:
       name: Authorization
       in: header
