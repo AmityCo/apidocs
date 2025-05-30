@@ -28,6 +28,8 @@ filter:
       - "member"
       - "notMember"
     default: "all"
+  description: |
+
 
 categoryId:
   name: "categoryId"
@@ -37,7 +39,7 @@ categoryId:
     minLength: 50
     maxLength: 50
 
-sortBy:
+sortBy-communities:
   name: "sortBy"
   in: "query"
   description: >
@@ -51,6 +53,29 @@ sortBy:
       - "lastCreated"
       - "displayName"
     default: "lastCreated"
+
+sortBy-comm-users:
+  name: "sortBy"
+  in: "query"
+  description: >
+    The default value depends on the `search` parameter. <br>
+      * If `search` parameter is not set, the default value is `lastCreated`.
+      * If `search` parameter is set, the default value is `displayName`.
+  schema:
+    type: "string"
+    enum:
+      - "firstCreated"
+      - "lastCreated"
+      - "displayName"
+      - "profileHandle"
+    default: "lastCreated"
+  examples:
+    lastCreated:
+      summary: Sort by creation date (newest first)
+      value: lastCreated
+    displayName:
+      summary: Sort by display name (alphabetical order)
+      value: displayName
 
 isDeleted:
   name: "isDeleted"
@@ -87,20 +112,23 @@ hasFlag:
     default: null
   description: "hasFlag:\n    * `null(default)` - Show all communities.\n    * `true` - Show only community has flagged post(or children post) or has flagged comment.\n    * `false` - Show only community has no flagged post(and children post) and has no flagged comment.\n"
 
-options:
-  name: "options"
-  in: "query"
-  style: "deepObject"
+options.limit:
+  name: options[limit]
+  in: query
+  description: Number of results per page (1-100)
   schema:
-    type: "object"
-    properties:
-      limit:
-        type: "integer"
-        minimum: 1
-        maximum: 100
-      token:
-        type: "string"
-        maxLength: 1000
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 10
+
+options.token:
+  name: options[token]
+  in: query
+  description: Pagination token for getting next/previous pages
+  schema:
+    type: string
+    maxLength: 1000
 
 communityId:
   name: "communityId"
@@ -160,7 +188,7 @@ role:
 roles:
   name: "roles"
   in: "query"
-  description: "Role to filter"
+  description: "Filter users by their community roles"
   schema:
     type: "array"
     minItems: 1
@@ -172,11 +200,37 @@ roles:
 
 search:
   name: "search"
-  description: "Input text for searching display name and user id"
+  description: "Keyword to search for in user information such as displayName, profileHandle, and userId. The search is case-insensitive and supports partial matches."
   in: "query"
   schema:
     type: "string"
     maxLength: 10000
+
+searchBy:
+  name: "searchBy"
+  in: "query"
+  schema:
+    type: "array"
+    maxItems: 3
+    items:
+      type: "string"
+      enum:
+        - "displayName"
+        - "profileHandle"
+        - "userId"
+      default: ["displayName", "profileHandle", "userId"]
+  examples:
+    singleField:
+      summary: Search by display name
+      value: [displayName]
+    multipleFields:
+      summary: Search by userId and profileHandle
+      value: [userId, profileHandle]
+  description: |
+    Fields to search community users for the search keyword **(must be used with a search parameter)**, Default is all three fields <br>
+      * `displayName` - Search by display name. When using with `sortBy` parameter the applicable sort order is `displayName`, `lastCreated` or `firstCreated`. Default to `lastCreated`.<br>
+      * `profileHandle` - Search by profile handle, when using with `sortBy` parameter the applicable sort order is `profileHandle`, `lastCreated` or `firstCreated`. Default to `lastCreated`.<br>
+      * `userId` - Search by user id, when using with `sortBy` parameter the applicable sort order is `lastCreated`, `firstCreated` or `displayName`. Default to `lastCreated`.<br>
 
 userIds:
   in: query

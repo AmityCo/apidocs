@@ -2,6 +2,7 @@ _channelId:
   name: "channelId"
   in: "path"
   required: true
+  description: "Channel ID to query users from"
   schema:
     type: "string"
     minLength: 1
@@ -23,6 +24,8 @@ role:
 sortBy:
   name: "sortBy"
   in: "query"
+  description: |
+    Sort channel users by createdAt or updatedAt, default is lastCreated
   schema:
     type: "string"
     enum:
@@ -47,30 +50,59 @@ memberships:
     default:
       - "member"
 
-options:
-  name: "options"
-  in: "query"
-  style: "deepObject"
+options.limit:
+  name: options[limit]
+  in: query
+  description: Number of results per page (1-100)
   schema:
-    type: "object"
-    properties:
-      limit:
-        type: "integer"
-        minimum: 1
-        maximum: 100
-        default: 10
-      token:
-        type: "string"
-        maxLength: 1000
-  description: "use updatedAt when sort by first/lastUpdated"
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 10
+
+options.token:
+  name: options[token]
+  in: query
+  description: Pagination token for getting next/previous pages
+  schema:
+    type: string
+    maxLength: 1000
 
 search:
   name: "search"
   in: "query"
+  description: "Keyword to search for in user information such as displayName, profileHandle, and userId. The search is case-insensitive and supports partial matches."
   schema:
     type: "string"
     minLength: 0
     maxLength: 10000
+
+searchBy:
+  name: "searchBy"
+  in: "query"
+  schema:
+    type: "array"
+    maxItems: 3
+    items:
+      type: "string"
+      enum:
+        - "displayName"
+        - "profileHandle"
+        - "userId"
+      default: ["displayName", "profileHandle", "userId"]
+  examples:
+    singleField:
+      summary: Search by display name
+      value: [displayName]
+    multipleFields:
+      summary: Search by userId and profileHandle
+      value: [userId, profileHandle]
+  description: |
+    Fields to search channel users for the keyword **(up to 3 fields can be specified)** <br>
+    `displayName` - search by display name <br>
+    `profileHandle` - search by profile handle <br>
+    `userId` - search by user id <br>
+    Default is all three fields
 
 isDeleted:
   name: "isDeleted"

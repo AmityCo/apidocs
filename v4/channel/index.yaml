@@ -1,6 +1,10 @@
 _channelId-users:
   get:
-    summary: "query channel users"
+    summary: "Query Channel Users"
+    description: |
+      Retrieves a paginated list of users associated with a specific channel. <br>
+      Supports filtering by membership status, roles, and search criteria. <br>
+      Results can be sorted using various options and searched by different user attributes. <br>
     tags:
       - "Channel"
     security:
@@ -10,10 +14,11 @@ _channelId-users:
       - $ref: "./parameter.yaml#/role"
       - $ref: "./parameter.yaml#/sortBy"
       - $ref: "./parameter.yaml#/memberships"
-      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/options.limit"
+      - $ref: "./parameter.yaml#/options.token"
       - $ref: "./parameter.yaml#/search"
+      - $ref: "./parameter.yaml#/searchBy"
       - $ref: "./parameter.yaml#/isDeleted"
-      - $ref: "./parameter.yaml#/isBrand"
     responses:
       200:
         $ref: "./response.yaml#/_channelId-users-response-200"
