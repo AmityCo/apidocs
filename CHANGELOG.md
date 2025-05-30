@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [4.105.2] - 2025-05-30
+
+### 🚀 Features
+
+- Update v3/user, v3/community/{id}/users, v4/channels/{id}/users, sessions to support searchBy, profileHandle (#396)
+
+## [4.103.2-rc.0] - 2025-05-02
 
 ### 🚀 Features
 
 - Add fileUrl, accessType, and altText properties to file respons… (#391)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.103.2-rc.0 (#392)
 
 ## [4.103.1] - 2025-04-30
 
