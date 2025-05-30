@@ -56,11 +56,10 @@ root:
         \n- `attachments` will be ignored
         \n- Poll info will be in `polls` object in response
         \n\n### Clip post
-        \n- When put `dataType` as `clip` and put `data.fileId` that we get from `POST v4/clips`, post will be created as a clip post.
-        \n- Optionally we can add `data.text` as a caption of that clip.
-        \n- Optionally we can add `data.isMuted` to set the clip to mute for displaying on UI.
-        \n- Optionally we can add `data.displayMode` to set the clip displayMode for displaying on UI.
-        \n- `attachments` will be ignored"
+        \n- Put `type = clip` with `fileId` (from POST /v4/clips) in `attachments`
+        \n- Optionally we can add `isMuted` on the attachment to set the clip to mute for displaying on UI.
+        \n- Optionally we can add `displayMode` on the attachment to set the clip displayMode for displaying on UI.
+        \n- `fileId`, `isMuted`, `displayMode` will be in `data` object in child post"
       required: true
       content:
         $ref: "./request.yaml#/root-post-request-payload"
