@@ -107,6 +107,8 @@ paths:
       summary: Query all network ads and settings
       tags:
         - Ads
+      security:
+        - BearerAuth: []
       responses:
         '200':
           $ref: '#/components/responses/me-response-payload-200'
@@ -161,7 +163,7 @@ paths:
     post:
       summary: send analytic activities
       description: |-
-        Send a batch of analytic activities to the server, currently only support viewing post/story and story link clicked activities.
+        Send a batch of analytic activities to the server, currently only support viewing post/story and story link clicked activities. 
          - For viewing post/story activity, the `impression` and `reach` of the post/story will be updated list of users from `/api/v1/analytics/views/posts/{postId}/users` will be updated too. (but not immediately)
       tags:
         - Analytic
@@ -230,6 +232,7 @@ paths:
       deprecated: true
       tags:
         - Authentication
+      security: []
       parameters:
         - $ref: '#/components/parameters/x-server-key'
         - $ref: '#/components/parameters/userId'
@@ -245,6 +248,7 @@ paths:
       summary: Create authentication token for session creation API
       tags:
         - Authentication
+      security: []
       parameters:
         - $ref: '#/components/parameters/x-server-key'
       description: |
@@ -919,6 +923,7 @@ paths:
       description: |
         get a comment.
       parameters:
+        - $ref: '#/components/parameters/commentId'
         - $ref: '#/components/parameters/authorization'
       responses:
         '200':
@@ -1985,6 +1990,8 @@ paths:
         - BearerAuth: []
       description: |
         Update file info
+      parameters:
+        - $ref: '#/components/parameters/_fileId'
       requestBody:
         $ref: '#/components/requestBodies/update-file-data'
       responses:
@@ -2003,6 +2010,7 @@ paths:
       summary: Download file
       tags:
         - File
+      security: []
       description: Download file data
       parameters:
         - $ref: '#/components/parameters/parameter_authorization'
@@ -2696,7 +2704,7 @@ paths:
         - BearerAuth: []
       description: Get list of users who delivered the message
       parameters:
-        - $ref: '#/components/parameters/parameter_channelId-2'
+        - $ref: '#/components/parameters/messageId'
       responses:
         '200':
           $ref: '#/components/responses/messages_messageId-delivered-users-get-response-payload-200'
@@ -2713,7 +2721,7 @@ paths:
         - BearerAuth: []
       description: Get list of users who read the message
       parameters:
-        - $ref: '#/components/parameters/parameter_channelId-2'
+        - $ref: '#/components/parameters/messageId'
       responses:
         '200':
           $ref: '#/components/responses/messages_messageId-read-users-get-response-payload-200'
@@ -2901,6 +2909,7 @@ paths:
       description: |
         Update rule of blacklist.
       parameters:
+        - $ref: '#/components/parameters/ruleId'
         - $ref: '#/components/parameters/authorization'
         - $ref: '#/components/parameters/content-type'
       requestBody:
@@ -3051,6 +3060,7 @@ paths:
       description: |
         Update rule of whitelist.
       parameters:
+        - $ref: '#/components/parameters/ruleId'
         - $ref: '#/components/parameters/authorization'
         - $ref: '#/components/parameters/content-type'
       requestBody:
@@ -3305,6 +3315,8 @@ paths:
     get:
       tags:
         - Message Feed
+      security:
+        - BearerAuth: []
       summary: Find message feeds by list of ID's
       description: Multiple message feed id values can be provided with array format
       parameters:
@@ -3320,6 +3332,8 @@ paths:
     get:
       tags:
         - Message Feed
+      security:
+        - BearerAuth: []
       summary: Finds message feeds by creatorId and multiple conditions
       description: Conditions can be provided in query string
       operationId: findMessageFeedsByCreatorId
@@ -3424,7 +3438,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/messageId'
+        - $ref: '#/components/parameters/parameter_messageId'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-5'
@@ -3441,7 +3455,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/messageId'
+        - $ref: '#/components/parameters/parameter_messageId'
       requestBody:
         $ref: '#/components/requestBodies/_messageId-post-request-payload'
       responses:
@@ -3475,7 +3489,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/messageId'
+        - $ref: '#/components/parameters/parameter_messageId'
       responses:
         '200':
           description: OK
@@ -3509,7 +3523,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/messageId'
+        - $ref: '#/components/parameters/parameter_messageId'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-5'
@@ -3536,7 +3550,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/messageId'
+        - $ref: '#/components/parameters/parameter_messageId'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-5'
@@ -3554,7 +3568,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/messageId'
+        - $ref: '#/components/parameters/parameter_messageId'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-5'
@@ -3572,7 +3586,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/messageId'
+        - $ref: '#/components/parameters/parameter_messageId'
       responses:
         '200':
           $ref: '#/components/responses/IsSocialFlagByMeResponse'
@@ -3931,25 +3945,9 @@ paths:
         '200':
           $ref: '#/components/responses/prehook-get-response-200'
         '403':
-          description: Permission denied.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PermissionDeniedError'
-              example:
-                status: error
-                code: 400301
-                message: Only administrator can do this
+          $ref: '#/components/responses/PermissionDeniedError'
         '500':
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnexpectedError'
-              example:
-                status: error
-                code: 500000
-                message: Unexpected error
+          $ref: '#/components/responses/UnexpectedError'
     put:
       tags:
         - Network Setting
@@ -3963,35 +3961,11 @@ paths:
         '200':
           $ref: '#/components/responses/prehook-put-response-200'
         '400':
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestError'
-              example:
-                status: error
-                code: 400000
-                message: This feature is not available on your network
+          $ref: '#/components/responses/BadRequestError'
         '403':
-          description: Permission denied.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PermissionDeniedError'
-              example:
-                status: error
-                code: 400301
-                message: Only administrator can do this
+          $ref: '#/components/responses/PermissionDeniedError'
         '500':
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnexpectedError'
-              example:
-                status: error
-                code: 500000
-                message: Unexpected error
+          $ref: '#/components/responses/UnexpectedError'
   /api/v3/network-settings/social:
     put:
       summary: Update social configuration.
@@ -4070,25 +4044,9 @@ paths:
         '200':
           $ref: '#/components/responses/users-response-200'
         '403':
-          description: Permission denied.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PermissionDeniedError'
-              example:
-                status: error
-                code: 400301
-                message: Only administrator can do this
+          $ref: '#/components/responses/PermissionDeniedError'
         '500':
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnexpectedError'
-              example:
-                status: error
-                code: 500000
-                message: Unexpected error
+          $ref: '#/components/responses/UnexpectedError'
     put:
       tags:
         - Network Setting
@@ -4102,35 +4060,11 @@ paths:
         '200':
           $ref: '#/components/responses/users-response-200'
         '400':
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestError'
-              example:
-                status: error
-                code: 400000
-                message: This feature is not available on your network
+          $ref: '#/components/responses/BadRequestError'
         '403':
-          description: Permission denied.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PermissionDeniedError'
-              example:
-                status: error
-                code: 400301
-                message: Only administrator can do this
+          $ref: '#/components/responses/PermissionDeniedError'
         '500':
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnexpectedError'
-              example:
-                status: error
-                code: 500000
-                message: Unexpected error
+          $ref: '#/components/responses/UnexpectedError'
   /api/v3/network-settings/video-streaming:
     get:
       summary: Get video streaming setting check configuration.
@@ -5315,15 +5249,7 @@ paths:
         '200':
           $ref: '#/components/responses/settings-user-response-payload-200'
         '403':
-          description: Forbidden error due to feature is not enabled.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenError'
-              example:
-                status: error
-                code: 400300
-                message: The feature is not enabled!
+          $ref: '#/components/responses/ForbiddenError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
       security:
@@ -5337,21 +5263,15 @@ paths:
           - Each id max length up to 300
       tags:
         - Presence
+      security:
+        - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/parameter_userIds-2'
       responses:
         '200':
           $ref: '#/components/responses/users-list-response-payload-200'
         '403':
-          description: Forbidden error due to feature is not enabled.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenError'
-              example:
-                status: error
-                code: 400300
-                message: The feature is not enabled!
+          $ref: '#/components/responses/ForbiddenError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v1/presence/network/users:
@@ -5369,15 +5289,7 @@ paths:
         '200':
           $ref: '#/components/responses/network-users-response-payload-200'
         '403':
-          description: Forbidden error due to feature is not enabled.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenError'
-              example:
-                status: error
-                code: 400300
-                message: The feature is not enabled!
+          $ref: '#/components/responses/ForbiddenError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
       security:
@@ -5392,15 +5304,7 @@ paths:
         '200':
           $ref: '#/components/responses/network-users-count-response-payload-200'
         '403':
-          description: Forbidden error due to feature is not enabled.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenError'
-              example:
-                status: error
-                code: 400300
-                message: The feature is not enabled!
+          $ref: '#/components/responses/ForbiddenError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
       security:
@@ -5415,15 +5319,7 @@ paths:
         '202':
           $ref: '#/components/responses/heartbeat-response-payload-200'
         '403':
-          description: Forbidden error due to feature is not enabled.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenError'
-              example:
-                status: error
-                code: 400300
-                message: The feature is not enabled!
+          $ref: '#/components/responses/ForbiddenError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
       security:
@@ -5726,6 +5622,7 @@ paths:
       deprecated: true
       tags:
         - Session
+      security: []
       parameters:
         - $ref: '#/components/parameters/x-api-key'
       description: |
@@ -5764,6 +5661,7 @@ paths:
       summary: Register a session
       tags:
         - Session
+      security: []
       parameters:
         - $ref: '#/components/parameters/x-api-key'
       description: |
@@ -5840,6 +5738,8 @@ paths:
       description: Create a story
       tags:
         - Story
+      security:
+        - BearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/request_root-post-request-payload-13'
       responses:
@@ -5938,6 +5838,8 @@ paths:
       description: Query stories by target
       tags:
         - Story
+      security:
+        - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/parameter_targetId-2'
         - $ref: '#/components/parameters/parameter_targetType-3'
@@ -6049,6 +5951,8 @@ paths:
       description: Query story targets by multiple targets
       tags:
         - Story
+      security:
+        - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/targets'
       responses:
@@ -6101,6 +6005,8 @@ paths:
       description: Query stories by multiple targets
       tags:
         - Story
+      security:
+        - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/targets'
         - $ref: '#/components/parameters/parameter_options-12'
@@ -6154,6 +6060,8 @@ paths:
       summary: Get a story
       tags:
         - Story
+      security:
+        - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/_storyId'
       responses:
@@ -6198,6 +6106,8 @@ paths:
       summary: Delete a story
       tags:
         - Story
+      security:
+        - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/_storyId'
         - $ref: '#/components/parameters/parameter_permanent-4'
@@ -6403,6 +6313,8 @@ paths:
       description: Get global story targets. Return a list of story targets
       tags:
         - Story
+      security:
+        - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/seenState'
         - $ref: '#/components/parameters/parameter_limit-3'
@@ -6845,8 +6757,10 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   /webhook/channel.didAddUsers:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Channel users added webhook
       description: Send user added event information whenever new member got added to a channel.
       responses:
         '200':
@@ -6879,8 +6793,10 @@ paths:
                         type: string
   /webhook/channel.didBan:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Channel Didban webhook event
       description: Send channel banned event whenever a channel got banned.
       responses:
         '200':
@@ -6913,8 +6829,10 @@ paths:
                           type: string
   /webhook/channel.didClose:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Channel Didclose webhook event
       description: Send channel close event information whenever a channel close.
       responses:
         '200':
@@ -6937,8 +6855,10 @@ paths:
                           $ref: '#/components/schemas/ChannelV1'
   /webhook/channel.didCreate:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Channel Didcreate webhook event
       description: Send new created channel whenever a channel got create
       responses:
         '200':
@@ -6969,8 +6889,10 @@ paths:
                           type: string
   /webhook/channel.didJoin:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Channel Didjoin webhook event
       description: Send join event information whenever a channel got joined
       responses:
         '200':
@@ -7001,8 +6923,10 @@ paths:
                           type: string
   /webhook/channel.didLeave:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Channel Didleave webhook event
       description: Send channel leave event information whenever someone leave a channel.
       responses:
         '200':
@@ -7033,8 +6957,10 @@ paths:
                           type: string
   /webhook/channel.didRemoveUsers:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Channel Didremoveusers webhook event
       description: Send user removed event information whenever member got remove from channel.
       responses:
         '200':
@@ -7067,8 +6993,10 @@ paths:
                         type: string
   /webhook/channel.didUpdate:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Channel Didupdate webhook event
       description: Send channel updated event information whenever a channel got updated.
       responses:
         '200':
@@ -7097,8 +7025,10 @@ paths:
                         type: string
   /webhook/channel.didUpdateMeta:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Channel Didupdatemeta webhook event
       description: Send channel's meta data updated event information whenever a channel's meta data got updated.
       responses:
         '200':
@@ -7129,6 +7059,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Follow Didacceptrequest webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7141,6 +7072,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Follow Didcancelrequest webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7153,6 +7085,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Follow Didcreate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7165,6 +7098,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Follow Diddeclinerequest webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7177,6 +7111,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Follow Diddeletefollower webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7189,6 +7124,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Follow Didrequest webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7201,6 +7137,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Follow Didunfollow webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7213,14 +7150,18 @@ paths:
     get:
       tags:
         - Webhook event
+      security: []
+      summary: Message Didaddreaction webhook event
       description: Send updated message whenever add reaction to this message.
       responses:
         '200':
           $ref: '#/components/responses/message-add-reaction-with-reactor-webhook-response'
   /webhook/message.didClearflag:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Message Didclearflag webhook event
       description: Send updated message whenever all message flags are cleared.
       responses:
         '200':
@@ -7247,8 +7188,10 @@ paths:
                           $ref: '#/components/schemas/User'
   /webhook/message.didCreate:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Message Didcreate webhook event
       description: Send new created message whenever a message got created in a channel
       responses:
         '200':
@@ -7275,8 +7218,10 @@ paths:
                           $ref: '#/components/schemas/User'
   /webhook/message.didDelete:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Message Diddelete webhook event
       description: Send deleted message whenever a message got deleted in a channel
       responses:
         '200':
@@ -7303,8 +7248,10 @@ paths:
                           $ref: '#/components/schemas/User'
   /webhook/message.didFlag:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Message Didflag webhook event
       description: Send updated message whenever a message got flag
       responses:
         '200':
@@ -7331,16 +7278,20 @@ paths:
                           $ref: '#/components/schemas/User'
   /webhook/message.didRemoveReaction:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Message Didremovereaction webhook event
       description: Send updated message whenever remove reaction to this message.
       responses:
         '200':
           $ref: '#/components/responses/message-remove-reaction-with-reactor-webhook-response'
   /webhook/message.didUnflag:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Message Didunflag webhook event
       description: Send updated message whenever a message flag is removed.
       responses:
         '200':
@@ -7367,8 +7318,10 @@ paths:
                           $ref: '#/components/schemas/User'
   /webhook/message.didUpdate:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Message Didupdate webhook event
       description: Send updated message whenever a message got updated in a channel
       responses:
         '200':
@@ -7395,8 +7348,10 @@ paths:
                           $ref: '#/components/schemas/User'
   /webhook/moderation.didBan:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Moderation Didban webhook event
       description: Send banned event whenever a system detect message that contain in the blacklist
       responses:
         '200':
@@ -7427,6 +7382,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Poll Didcreate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7438,6 +7394,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Poll Didupdate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7449,6 +7406,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Poll Didvote webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7460,6 +7418,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Channel Created webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7514,6 +7473,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Channel Joined webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7568,6 +7528,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Comment Created webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7622,6 +7583,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Comment Reacted webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7676,6 +7638,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Comment Replied webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7730,6 +7693,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Follow Accepted webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7784,6 +7748,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Follow Created webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7838,6 +7803,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Follow Requested webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7892,6 +7858,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Message Created webhook event
       security:
         - BearerAuth: []
       description: |
@@ -7946,6 +7913,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Approved webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8000,6 +7968,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Created webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8054,6 +8023,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Need Reviewing webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8108,6 +8078,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Reacted webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8162,6 +8133,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Video Streaming Started webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8216,6 +8188,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Mention Comment Created webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8270,6 +8243,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Mention Comment Replied webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8324,6 +8298,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Mention Post Created webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8378,6 +8353,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Mention User Feed Comment Created webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8432,6 +8408,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Mention User Feed Comment Replied webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8486,6 +8463,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Mention User Feed Post Created webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8540,6 +8518,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: User Didclearflag webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8552,6 +8531,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: User Didcreate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8564,6 +8544,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: User Didflag webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8576,6 +8557,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: User Didunflag webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8588,6 +8570,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: User Didupdate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8600,6 +8583,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Comment Didaddreaction webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8611,6 +8595,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Comment Didcreate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8622,6 +8607,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Comment Diddelete webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8633,6 +8619,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Comment Didflag webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8644,6 +8631,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Comment Didremovereaction webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8655,6 +8643,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Comment Didreply webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8666,6 +8655,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Comment Didunflag webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8677,6 +8667,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Comment Didupdate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8688,6 +8679,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Comment Didmoderate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8699,6 +8691,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Community Didaddusers webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8710,6 +8703,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Community Didban webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8721,6 +8715,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Community Didcreate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8732,6 +8727,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Community Diddelete webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8743,6 +8739,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Community Didjoin webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8754,6 +8751,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Community Didleave webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8765,6 +8763,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Community Didremoveusers webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8776,6 +8775,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Community Didrolechange webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8787,6 +8787,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Community Didunban webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8798,6 +8799,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Community Didupdate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8809,6 +8811,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Didaddreaction webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8820,6 +8823,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Didapprove webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8831,6 +8835,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Didcreate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8842,6 +8847,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Diddecline webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8853,6 +8859,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Diddelete webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8864,6 +8871,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Didflag webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8875,6 +8883,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Didremovereaction webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8886,6 +8895,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Didunflag webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8897,6 +8907,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Didupdate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8908,6 +8919,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Post Didmoderate webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8919,6 +8931,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Video Streaming Didrecord webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8930,6 +8943,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Video Streaming Didstart webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8941,6 +8955,7 @@ paths:
     get:
       tags:
         - Webhook event
+      summary: Video Streaming Didstop webhook event
       security:
         - BearerAuth: []
       description: |
@@ -8950,8 +8965,10 @@ paths:
           $ref: '#/components/responses/video-streaming-webhook-response'
   /webhook/v5.message.didCreate:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Message Didcreate webhook event
       description: Send created message whenever a message got created in a channel
       responses:
         '200':
@@ -8990,8 +9007,10 @@ paths:
                           $ref: '#/components/schemas/User'
   /webhook/v5.message.didDelete:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Message Diddelete webhook event
       description: Send deleted message whenever a message got deleted in a channel
       responses:
         '200':
@@ -9030,8 +9049,10 @@ paths:
                           $ref: '#/components/schemas/User'
   /webhook/v5.message.didUpdate:
     get:
+      security: []
       tags:
         - Webhook event
+      summary: Message Didupdate webhook event
       description: Send updated message whenever a message got updated in a channel
       responses:
         '200':
@@ -9070,6 +9091,7 @@ paths:
                           $ref: '#/components/schemas/User'
   /realtime/channel.banned:
     get:
+      security: []
       summary: user is banned from the channel
       tags:
         - Realtime event
@@ -9078,6 +9100,7 @@ paths:
           $ref: '#/components/responses/Response'
   /realtime/channel.created:
     get:
+      security: []
       summary: channel created
       tags:
         - Realtime event
@@ -9086,6 +9109,7 @@ paths:
           $ref: '#/components/responses/Response'
   /realtime/channel.deleted:
     get:
+      security: []
       summary: channel deleted
       tags:
         - Realtime event
@@ -9094,6 +9118,7 @@ paths:
           $ref: '#/components/responses/Response'
   /realtime/channel.joined:
     get:
+      security: []
       summary: user joined the channel
       tags:
         - Realtime event
@@ -9102,6 +9127,7 @@ paths:
           $ref: '#/components/responses/Response'
   /realtime/channel.left:
     get:
+      security: []
       summary: user left the channel
       tags:
         - Realtime event
@@ -9110,6 +9136,7 @@ paths:
           $ref: '#/components/responses/Response'
   /realtime/channel.membersAdded:
     get:
+      security: []
       summary: users were added to the channel
       tags:
         - Realtime event
@@ -9118,6 +9145,7 @@ paths:
           $ref: '#/components/responses/Response'
   /realtime/channel.membersRemoved:
     get:
+      security: []
       summary: users were removed from the channel
       tags:
         - Realtime event
@@ -9126,6 +9154,7 @@ paths:
           $ref: '#/components/responses/Response'
   /realtime/channel.unbanned:
     get:
+      security: []
       summary: user is unbanned from the channel
       tags:
         - Realtime event
@@ -9134,6 +9163,7 @@ paths:
           $ref: '#/components/responses/Response'
   /realtime/channel.updated:
     get:
+      security: []
       summary: channel updated
       tags:
         - Realtime event
@@ -9142,6 +9172,7 @@ paths:
           $ref: '#/components/responses/Response'
   /realtime/comment.addReaction:
     get:
+      security: []
       summary: comment add reaction
       description: |
         Event has occurred when a reaction is added to comment
@@ -9152,6 +9183,7 @@ paths:
           $ref: '#/components/responses/ResponseWithReactor'
   /realtime/comment.created:
     get:
+      security: []
       summary: comment created
       description: |
         Event has occurred when comment was created
@@ -9162,6 +9194,7 @@ paths:
           $ref: '#/components/responses/response_Response'
   /realtime/comment.deleted:
     get:
+      security: []
       summary: comment deleted
       description: |
         Event has occurred when comment was deleted
@@ -9172,6 +9205,7 @@ paths:
           $ref: '#/components/responses/response_Response'
   /realtime/comment.flagged:
     get:
+      security: []
       summary: comment flagged
       description: |
         Event has occurred when comment was flagged
@@ -9182,6 +9216,7 @@ paths:
           $ref: '#/components/responses/ResponseWithFlag'
   /realtime/comment.flagsCleared:
     get:
+      security: []
       summary: comment flag cleared
       description: |
         Event has occurred when comment flag was cleared
@@ -9192,6 +9227,7 @@ paths:
           $ref: '#/components/responses/ResponseWithFlag'
   /realtime/comment.removeReaction:
     get:
+      security: []
       summary: comment remove reaction
       description: |
         Event has occurred when a reaction is removed from comment
@@ -9202,6 +9238,7 @@ paths:
           $ref: '#/components/responses/ResponseWithReactor'
   /realtime/comment.unflagged:
     get:
+      security: []
       summary: comment unflagged
       description: |
         Event has occurred when comment was unflagged
@@ -9212,6 +9249,7 @@ paths:
           $ref: '#/components/responses/ResponseWithFlag'
   /realtime/comment.updated:
     get:
+      security: []
       summary: comment updated
       description: |
         Event has occurred when comment was updated
@@ -9222,6 +9260,7 @@ paths:
           $ref: '#/components/responses/response_Response'
   /realtime/community.created:
     get:
+      security: []
       summary: community created
       description: |
         Event has occurred when community was created
@@ -9232,6 +9271,7 @@ paths:
           $ref: '#/components/responses/response_Response-2'
   /realtime/community.deleted:
     get:
+      security: []
       summary: community deleted
       description: |
         Event has occurred when community was deleted
@@ -9242,6 +9282,7 @@ paths:
           $ref: '#/components/responses/response_Response-2'
   /realtime/community.joined:
     get:
+      security: []
       summary: community joined
       description: |
         Event has occurred when joined community
@@ -9252,6 +9293,7 @@ paths:
           $ref: '#/components/responses/response_Response-2'
   /realtime/community.left:
     get:
+      security: []
       summary: community left
       description: |
         Event has occurred when left community
@@ -9262,6 +9304,7 @@ paths:
           $ref: '#/components/responses/response_Response-2'
   /realtime/community.updated:
     get:
+      security: []
       summary: community updated
       description: |
         Event has occurred when community was updated
@@ -9272,6 +9315,7 @@ paths:
           $ref: '#/components/responses/response_Response-2'
   /realtime/community.userAdded:
     get:
+      security: []
       summary: community user added
       description: |
         Event has occurred when user was added to community
@@ -9282,6 +9326,7 @@ paths:
           $ref: '#/components/responses/response_Response-2'
   /realtime/community.userBanned:
     get:
+      security: []
       summary: community user banned
       description: |
         Event has occurred when user was banned from community
@@ -9292,6 +9337,7 @@ paths:
           $ref: '#/components/responses/response_Response-2'
   /realtime/community.userChanged:
     get:
+      security: []
       summary: community user changed
       description: |
         Event has occurred when the number of user was changed in community
@@ -9302,6 +9348,7 @@ paths:
           $ref: '#/components/responses/response_Response-2'
   /realtime/community.userRemoved:
     get:
+      security: []
       summary: community user removed
       description: |
         Event has occurred when user was removed from community
@@ -9312,6 +9359,7 @@ paths:
           $ref: '#/components/responses/response_Response-2'
   /realtime/community.userUnbanned:
     get:
+      security: []
       summary: community user unbanned
       description: |
         Event has occurred when user was unbanned from community
@@ -9322,6 +9370,7 @@ paths:
           $ref: '#/components/responses/response_Response-2'
   /realtime/follow.accepted:
     get:
+      security: []
       summary: follow accepted
       description: |
         Event has occurred when follow was accepted
@@ -9332,6 +9381,7 @@ paths:
           $ref: '#/components/responses/response_Response-3'
   /realtime/follow.created:
     get:
+      security: []
       summary: follow created
       description: |
         Event has occurred when follow was created
@@ -9342,6 +9392,7 @@ paths:
           $ref: '#/components/responses/response_Response-3'
   /realtime/follow.followerDeleted:
     get:
+      security: []
       summary: delete follower
       description: |
         Event has occurred when follower was deleted
@@ -9352,6 +9403,7 @@ paths:
           $ref: '#/components/responses/response_Response-3'
   /realtime/follow.requestCanceled:
     get:
+      security: []
       summary: follow request canceled
       description: |
         Event has occurred when follow request was canceled
@@ -9362,6 +9414,7 @@ paths:
           $ref: '#/components/responses/response_Response-3'
   /realtime/follow.requestDeclined:
     get:
+      security: []
       summary: decline follow request
       description: |
         Event has occurred when follow request was declined
@@ -9372,6 +9425,7 @@ paths:
           $ref: '#/components/responses/response_Response-3'
   /realtime/follow.requested:
     get:
+      security: []
       summary: follow requested
       description: |
         Event has occurred when follow was requested
@@ -9382,6 +9436,7 @@ paths:
           $ref: '#/components/responses/response_Response-3'
   /realtime/follow.unfollowed:
     get:
+      security: []
       summary: unfollowed
       description: |
         Event has occurred when unfollow was created
@@ -9392,6 +9447,7 @@ paths:
           $ref: '#/components/responses/response_Response-3'
   /realtime/marker.marked-message:
     get:
+      security: []
       summary: marked message in marker
       tags:
         - Realtime event
@@ -9400,6 +9456,7 @@ paths:
           $ref: '#/components/responses/MarkedMessageResponse'
   /realtime/marker.marker.user-sync:
     get:
+      security: []
       summary: user sync in marker
       tags:
         - Realtime event
@@ -9408,6 +9465,7 @@ paths:
           $ref: '#/components/responses/UserSyncResponse'
   /realtime/marker.userFeed-updated:
     get:
+      security: []
       summary: user feed updated in marker
       tags:
         - Realtime event
@@ -9416,6 +9474,7 @@ paths:
           $ref: '#/components/responses/UserFeedUpdatedResponse'
   /realtime/marker.feed-updated:
     get:
+      security: []
       summary: feed updated in marker
       tags:
         - Realtime event
@@ -9424,6 +9483,7 @@ paths:
           $ref: '#/components/responses/FeedUpdatedResponse'
   /realtime/message-feed.created:
     get:
+      security: []
       summary: message feed created
       tags:
         - Realtime event
@@ -9432,6 +9492,7 @@ paths:
           $ref: '#/components/responses/response_Response-4'
   /realtime/message-feed.deleted:
     get:
+      security: []
       summary: message feed deleted
       tags:
         - Realtime event
@@ -9440,6 +9501,7 @@ paths:
           $ref: '#/components/responses/response_Response-4'
   /realtime/message-feed.updated:
     get:
+      security: []
       summary: message feed updated
       tags:
         - Realtime event
@@ -9448,6 +9510,7 @@ paths:
           $ref: '#/components/responses/response_Response-4'
   /realtime/message.addReaction:
     get:
+      security: []
       summary: message reaction added
       tags:
         - Realtime event
@@ -9456,6 +9519,7 @@ paths:
           $ref: '#/components/responses/ResponseWithReaction'
   /realtime/message.created:
     get:
+      security: []
       summary: message created
       tags:
         - Realtime event
@@ -9464,6 +9528,7 @@ paths:
           $ref: '#/components/responses/CreatedResponse'
   /realtime/message.deleted:
     get:
+      security: []
       summary: message deleted
       tags:
         - Realtime event
@@ -9472,6 +9537,7 @@ paths:
           $ref: '#/components/responses/response_Response-5'
   /realtime/message.flagCleared:
     get:
+      security: []
       summary: message flag cleared
       tags:
         - Realtime event
@@ -9480,6 +9546,7 @@ paths:
           $ref: '#/components/responses/response_Response-5'
   /realtime/message.flagged:
     get:
+      security: []
       summary: message flagged
       tags:
         - Realtime event
@@ -9488,6 +9555,7 @@ paths:
           $ref: '#/components/responses/response_Response-5'
   /realtime/message.reactionAdded:
     get:
+      security: []
       summary: message reaction added
       tags:
         - Realtime event
@@ -9496,6 +9564,7 @@ paths:
           $ref: '#/components/responses/ResponseWithReaction'
   /realtime/message.reactionRemoved:
     get:
+      security: []
       summary: message reaction removed
       tags:
         - Realtime event
@@ -9504,6 +9573,7 @@ paths:
           $ref: '#/components/responses/ResponseWithReaction'
   /realtime/message.unflagged:
     get:
+      security: []
       summary: message unflagged
       tags:
         - Realtime event
@@ -9512,6 +9582,7 @@ paths:
           $ref: '#/components/responses/response_Response-5'
   /realtime/message.updated:
     get:
+      security: []
       summary: message updated
       tags:
         - Realtime event
@@ -9520,6 +9591,7 @@ paths:
           $ref: '#/components/responses/response_Response-5'
   /realtime/post.addReaction:
     get:
+      security: []
       summary: post add reaction
       description: |
         Event has occurred when a reaction is added to post
@@ -9530,6 +9602,7 @@ paths:
           $ref: '#/components/responses/response_ResponseWithReactor'
   /realtime/post.approved:
     get:
+      security: []
       summary: post approved
       description: |
         Event has occurred when post was approved
@@ -9540,6 +9613,7 @@ paths:
           $ref: '#/components/responses/response_ResponseWithFlag'
   /realtime/post.created:
     get:
+      security: []
       summary: post created
       description: |
         Event has occurred when post was created
@@ -9550,6 +9624,7 @@ paths:
           $ref: '#/components/responses/response_Response-6'
   /realtime/post.declined:
     get:
+      security: []
       summary: post declined
       description: |
         Event has occurred when post was declined
@@ -9560,6 +9635,7 @@ paths:
           $ref: '#/components/responses/response_ResponseWithFlag'
   /realtime/post.deleted:
     get:
+      security: []
       summary: post deleted
       description: |
         Event has occurred post was deleted
@@ -9570,6 +9646,7 @@ paths:
           $ref: '#/components/responses/response_Response-6'
   /realtime/post.flagged:
     get:
+      security: []
       summary: post flagged
       description: |
         Event has occurred when post was flagged
@@ -9580,6 +9657,7 @@ paths:
           $ref: '#/components/responses/response_ResponseWithFlag'
   /realtime/post.flagsCleared:
     get:
+      security: []
       summary: post flag cleared
       description: |
         Event has occurred when post flag was cleared
@@ -9590,6 +9668,7 @@ paths:
           $ref: '#/components/responses/response_ResponseWithFlag'
   /realtime/post.removeReaction:
     get:
+      security: []
       summary: post remove reaction
       description: |
         Event has occurred when a reaction is removed from post
@@ -9600,6 +9679,7 @@ paths:
           $ref: '#/components/responses/response_ResponseWithReactor'
   /realtime/post.unflagged:
     get:
+      security: []
       summary: post unflagged
       description: |
         Event has occurred when post was unflagged
@@ -9610,6 +9690,7 @@ paths:
           $ref: '#/components/responses/response_ResponseWithFlag'
   /realtime/post.updated:
     get:
+      security: []
       summary: post updated
       description: |
         Event has occurred when post was updated
@@ -9620,6 +9701,7 @@ paths:
           $ref: '#/components/responses/response_Response-6'
   /realtime/story.created:
     get:
+      security: []
       summary: story created
       description: |
         Event has occurred when story was created
@@ -9630,6 +9712,7 @@ paths:
           $ref: '#/components/responses/response_Response-7'
   /realtime/story.deleted:
     get:
+      security: []
       summary: story deleted
       description: |
         Event has occurred when story was deleted
@@ -9640,6 +9723,7 @@ paths:
           $ref: '#/components/responses/response_Response-7'
   /realtime/story.reactionAdded:
     get:
+      security: []
       summary: story reaction added
       description: |
         Event has occurred when a reaction is added to story
@@ -9650,6 +9734,7 @@ paths:
           $ref: '#/components/responses/response_ResponseWithReactor-2'
   /realtime/story.reactionRemoved:
     get:
+      security: []
       summary: story reaction removed
       description: |
         Event has occurred when a reaction is removed to story
@@ -9660,6 +9745,7 @@ paths:
           $ref: '#/components/responses/response_ResponseWithReactor-2'
   /realtime/user.deleted:
     get:
+      security: []
       summary: user deleted
       description: |
         Event has occurred when user was deleted
@@ -9670,6 +9756,7 @@ paths:
           $ref: '#/components/responses/response_Response-8'
   /realtime/user.didGlobalBan:
     get:
+      security: []
       summary: user global banned
       description: |
         Event has occurred when user was global banned
@@ -9680,6 +9767,7 @@ paths:
           $ref: '#/components/responses/response_Response-8'
   /realtime/user.flagCleared:
     get:
+      security: []
       summary: user flag cleared
       description: |
         Event has occurred when the user flag was cleared
@@ -9690,6 +9778,7 @@ paths:
           $ref: '#/components/responses/response_Response-8'
   /realtime/user.flagged:
     get:
+      security: []
       summary: user flagged
       description: |
         Event has occurred when user was flagged
@@ -9700,6 +9789,7 @@ paths:
           $ref: '#/components/responses/response_Response-8'
   /realtime/user.unflagged:
     get:
+      security: []
       summary: user unflagged
       description: |
         Event has occurred when user was unflagged
@@ -9710,6 +9800,7 @@ paths:
           $ref: '#/components/responses/response_Response-8'
   /realtime/user.updated:
     get:
+      security: []
       summary: user updated
       description: |
         Event has occurred when user was updated
@@ -9760,7 +9851,6 @@ components:
         body:
           type: string
           maxLength: 180
-          optional: true
         image1_1:
           type: string
           description: File ID of an image with 1:1 aspect ratio.
@@ -9809,7 +9899,6 @@ components:
         avatarFileId:
           type: string
           description: File ID of an advertiser's avatar.
-          required: false
         adsCount:
           type: number
           description: Number of ads created by the advertiser.
@@ -9830,7 +9919,7 @@ components:
           type: string
           description: Http link for download file
         type:
-          type: enum
+          type: string
           description: File type.
           enum:
             - image
@@ -9935,6 +10024,17 @@ components:
                   minimum: 1
                   maximum: 65535
                   default: 10
+    ArchiveChannelResponsePayload:
+      type: object
+      properties:
+        channelId:
+          type: string
+          description: Channel ID
+        archivedAt:
+          type: string
+          description: Date of the archive
+          format: date-time
+          example: '2022-07-07T04:24:20.444Z'
     Error:
       type: object
       properties:
@@ -10734,7 +10834,7 @@ components:
           type: string
           description: Target public id (community id or user id)
         targetType:
-          type: enum
+          type: string
           description: Target that feed belong to
           enum:
             - community
@@ -10743,7 +10843,7 @@ components:
           type: number
           description: Post count in feed
         feedType:
-          type: enum
+          type: string
           description: |
             Feed type
             - published: main feed
@@ -10997,7 +11097,7 @@ components:
             - ended
             - recorded
           description: |
-            Status of livestreaming   * idle - streaming is just created   * live - streamer is streaming now or streamer is reconnecting   * ended - streamer stop streaming or streamer disconnect and not connect back in time period   * recorded - live stream recordings available
+            Status of livestreaming   * idle - streaming is just created   * live - streamer is streaming now or streamer is reconnecting   * ended - streamer stop streaming or streamer disconnect and not connect back in time period   * recorded - live stream recordings available 
         isLive:
           type: boolean
           description: Deprecated (was used before for checking live status)
@@ -12313,26 +12413,6 @@ components:
           enum:
             - allow
             - deny
-    PermissionDeniedError:
-      description: Permission denied.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            status: error
-            code: 400301
-            message: User is not a member of a channel
-    UnexpectedError:
-      description: Unexpected error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            status: error
-            code: 500000
-            message: Unexpected error
     PrehookSettingWithSecretKey:
       allOf:
         - $ref: '#/components/schemas/PrehookSetting'
@@ -12341,16 +12421,6 @@ components:
             secretKey:
               type: string
               description: This will be available only when regenerateKey or enable the feature for the first time
-    BadRequestError:
-      description: Bad Request error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            status: error
-            code: 400000
-            message: Bad Request.
     SemanticSearchNetworkSetting:
       type: object
       properties:
@@ -12878,16 +12948,6 @@ components:
       required:
         - heartbeatInterval
         - presenceSyncInterval
-    ForbiddenError:
-      description: No permission to access this resource.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            status: error
-            code: 400300
-            message: Forbidden error.
     Presence:
       description: Presence Object
       type: object
@@ -13744,7 +13804,7 @@ components:
             - ended
             - recorded
           description: |
-            Status of livestreaming   * idle - streaming is just created   * live - streamer is streaming now or streamer is reconnecting   * ended - streamer stop streaming or streamer disconnect and not connect back in time period   * recorded - live stream recordings available
+            Status of livestreaming   * idle - streaming is just created   * live - streamer is streaming now or streamer is reconnecting   * ended - streamer stop streaming or streamer disconnect and not connect back in time period   * recorded - live stream recordings available 
         isLive:
           type: boolean
           description: Deprecated (was used before for checking live status)
@@ -14800,15 +14860,12 @@ components:
         application/json:
           schema:
             description: Archive Channel Information
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    archives:
-                      type: array
-                      items:
-                        $ref: '#/ArchiveChannelResponsePayload'
+            type: object
+            properties:
+              archives:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArchiveChannelResponsePayload'
     channels_channelId-post-response-payload-200:
       description: List of archived channels
       content:
@@ -15485,7 +15542,7 @@ components:
       content:
         application/json:
           schema:
-            description: null
+            description: Following feed Information
             type: object
             properties:
               posts:
@@ -15814,7 +15871,7 @@ components:
                       type: string
                       description: Root file key on cloud storage.
                     type:
-                      type: enum
+                      type: string
                       description: File type.
                       enum:
                         - image
@@ -15892,7 +15949,7 @@ components:
                     type: string
                     description: url to download the file
                   type:
-                    type: enum
+                    type: string
                     description: File type.
                     enum:
                       - image
@@ -15996,7 +16053,7 @@ components:
                   type: string
                   description: url to download the file
                 type:
-                  type: enum
+                  type: string
                   description: File type.
                   enum:
                     - image
@@ -16066,7 +16123,7 @@ components:
                   type: string
                   description: url to download the file
                 type:
-                  type: enum
+                  type: string
                   description: File type.
                   enum:
                     - image
@@ -16129,7 +16186,7 @@ components:
                   type: string
                   description: url to download the file
                 type:
-                  type: enum
+                  type: string
                   description: File type.
                   enum:
                     - image
@@ -18251,6 +18308,7 @@ components:
                 items:
                   $ref: '#/components/schemas/File'
     follow-webhook-response:
+      description: Follow webhook response
       content:
         application/json:
           schema:
@@ -18352,6 +18410,7 @@ components:
                     items:
                       $ref: '#/components/schemas/UserV3'
     user-webhook-response:
+      description: User webhook response
       content:
         application/json:
           schema:
@@ -19974,6 +20033,14 @@ components:
         items:
           type: string
           description: list of message id (internal)
+    messageId:
+      name: messageId
+      description: message id (internal)
+      in: path
+      required: true
+      schema:
+        type: string
+        description: message id (internal)
     ruleIds:
       name: ruleIds
       description: |
@@ -19999,6 +20066,13 @@ components:
         type: array
         items:
           type: string
+    ruleId:
+      in: path
+      name: ruleId
+      description: Rule ID to be updated.
+      required: true
+      schema:
+        type: string
     regex:
       name: regex
       in: query
@@ -20193,7 +20267,7 @@ components:
         items:
           type: string
           maxLength: 150
-    messageId:
+    parameter_messageId:
       name: messageId
       in: path
       required: true
@@ -20476,7 +20550,7 @@ components:
         hasFlag:
           * `null(default)` - Show all posts.
           * `true` - Show only flagged post(or children) or has flagged comment.
-          * `false` - Show only no flagged post(and children) and has no flagged comment.
+          * `false` - Show only no flagged post(and children) and has no flagged comment.  
     parameter_dataTypes-2:
       name: dataTypes
       in: query
@@ -20985,15 +21059,13 @@ components:
           type: object
           properties:
             targetId:
-              schema:
-                type: string
-                maxLength: 900
+              type: string
+              maxLength: 900
             targetType:
-              schema:
-                type: string
-                enum:
-                  - community
-                  - user
+              type: string
+              enum:
+                - community
+                - user
         maxItems: 10
         minItems: 1
     _storyId:
@@ -21225,11 +21297,11 @@ components:
             - ended
             - recorded
       description: |
-        Status of livestreaming
-          * idle - streaming is just created
-          * live - streamer is streaming now or streamer is reconnecting
-          * ended - streamer stop streaming or streamer disconnect and not connect back in time period
-          * recorded - live stream recordings available
+        Status of livestreaming  
+          * idle - streaming is just created  
+          * live - streamer is streaming now or streamer is reconnecting  
+          * ended - streamer stop streaming or streamer disconnect and not connect back in time period  
+          * recorded - live stream recordings available 
     userPublicIds:
       name: userPublicIds
       in: query
@@ -22985,7 +23057,7 @@ components:
                 enum:
                   - single
                   - multiple
-                  - null
+                nullable: true
                 default: null
               closedIn:
                 type: number

@@ -4,6 +4,8 @@ root:
     description: Create a story
     tags:
       - Story
+    security:
+      - BearerAuth: []
     requestBody:
       $ref: "./request.yaml#/root-post-request-payload"
     responses:
@@ -102,6 +104,8 @@ root:
     description: Query stories by target
     tags:
       - Story
+    security:
+      - BearerAuth: []
     parameters:
       - $ref: "./parameter.yaml#/targetId"
       - $ref: "./parameter.yaml#/targetType"
@@ -215,6 +219,8 @@ seen:
     description: Query story targets by multiple targets
     tags:
       - Story
+    security:
+      - BearerAuth: []
     parameters:
       - $ref: "./parameter.yaml#/targets"
     responses:
@@ -268,6 +274,8 @@ stories-by-targets:
     description: Query stories by multiple targets
     tags:
       - Story
+    security:
+      - BearerAuth: []
     parameters:
       - $ref: "./parameter.yaml#/targets"
       - $ref: "./parameter.yaml#/options"
@@ -322,6 +330,8 @@ _storyId:
     summary: Get a story
     tags:
       - Story
+    security:
+      - BearerAuth: []
     parameters:
       - $ref: "./parameter.yaml#/_storyId"
     responses:
@@ -366,6 +376,8 @@ _storyId:
     summary: Delete a story
     tags:
       - Story
+    security:
+      - BearerAuth: []
     parameters:
       - $ref: "./parameter.yaml#/_storyId"
       - $ref: "./parameter.yaml#/permanent"

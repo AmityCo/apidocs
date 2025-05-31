@@ -138,25 +138,9 @@ prehook:
       200:
         $ref: "./response.yaml#/prehook-get-response-200"
       403:
-        description: Permission denied.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/PermissionDeniedError"
-            example:
-              status: error
-              code: 400301
-              message: Only administrator can do this
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
       500:
-        description: Unexpected error.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/UnexpectedError"
-            example:
-              status: error
-              code: 500000
-              message: Unexpected error
+        $ref: "../../global/error.yaml#/UnexpectedError"
   put:
     tags:
       - Network Setting
@@ -170,35 +154,11 @@ prehook:
       200:
         $ref: "./response.yaml#/prehook-put-response-200"
       400:
-        description: Bad request.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/BadRequestError"
-            example:
-              status: error
-              code: 400000
-              message: This feature is not available on your network
+        $ref: "../../global/error.yaml#/BadRequestError"
       403:
-        description: Permission denied.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/PermissionDeniedError"
-            example:
-              status: error
-              code: 400301
-              message: Only administrator can do this
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
       500:
-        description: Unexpected error.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/UnexpectedError"
-            example:
-              status: error
-              code: 500000
-              message: Unexpected error
+        $ref: "../../global/error.yaml#/UnexpectedError"
 
 social:
   put:
@@ -276,25 +236,9 @@ users:
       200:
         $ref: "./response.yaml#/users-response-200"
       403:
-        description: Permission denied.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/PermissionDeniedError"
-            example:
-              status: error
-              code: 400301
-              message: Only administrator can do this
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
       500:
-        description: Unexpected error.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/UnexpectedError"
-            example:
-              status: error
-              code: 500000
-              message: Unexpected error
+        $ref: "../../global/error.yaml#/UnexpectedError"
   put:
     tags:
       - Network Setting
@@ -308,35 +252,11 @@ users:
       200:
         $ref: "./response.yaml#/users-response-200"
       400:
-        description: Bad request.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/BadRequestError"
-            example:
-              status: error
-              code: 400000
-              message: This feature is not available on your network
+        $ref: "../../global/error.yaml#/BadRequestError"
       403:
-        description: Permission denied.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/PermissionDeniedError"
-            example:
-              status: error
-              code: 400301
-              message: Only administrator can do this
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
       500:
-        description: Unexpected error.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/UnexpectedError"
-            example:
-              status: error
-              code: 500000
-              message: Unexpected error
+        $ref: "../../global/error.yaml#/UnexpectedError"
 
 video-streaming:
   get:
@@ -411,10 +331,10 @@ webhook:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
-uikit: 
-  get: 
+uikit:
+  get:
     summary: Get UIKit config
-    tags: 
+    tags:
       - Network Setting
     security:
       - BearerAuth: []
@@ -429,17 +349,17 @@ uikit:
         $ref: "../../global/error.yaml#/UnexpectedError"
   put:
     summary: Update UIKit config
-    tags: 
+    tags:
       - Network Setting
     security:
       - BearerAuth: []
     description: >
       Update or create a UIKit config for a network.
-      
+
       Only admin is allowed to call this.
     requestBody:
       $ref: "./request.yaml#/uikit-put-request-payload"
-    responses: 
+    responses:
       200:
         $ref: "./response.yaml#/uikit-response-200"
       400:

@@ -24,15 +24,7 @@ settings-user:
       200:
         $ref: "./response.yaml#/settings-user-response-payload-200"
       403:
-        description: Forbidden error due to feature is not enabled.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/ForbiddenError"
-            example:
-              status: error
-              code: 400300
-              message: The feature is not enabled!
+        $ref: "../../global/error.yaml#/ForbiddenError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
     security:
@@ -47,21 +39,15 @@ users-list:
         - Each id max length up to 300
     tags:
       - Presence
+    security:
+      - BearerAuth: []
     parameters:
       - $ref: "./parameter.yaml#/userIds"
     responses:
       200:
         $ref: "./response.yaml#/users-list-response-payload-200"
       403:
-        description: Forbidden error due to feature is not enabled.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/ForbiddenError"
-            example:
-              status: error
-              code: 400300
-              message: The feature is not enabled!
+        $ref: "../../global/error.yaml#/ForbiddenError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
@@ -80,15 +66,7 @@ network-users:
       200:
         $ref: "./response.yaml#/network-users-response-payload-200"
       403:
-        description: Forbidden error due to feature is not enabled.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/ForbiddenError"
-            example:
-              status: error
-              code: 400300
-              message: The feature is not enabled!
+        $ref: "../../global/error.yaml#/ForbiddenError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
     security:
@@ -104,15 +82,7 @@ network-users-count:
       200:
         $ref: "./response.yaml#/network-users-count-response-payload-200"
       403:
-        description: Forbidden error due to feature is not enabled.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/ForbiddenError"
-            example:
-              status: error
-              code: 400300
-              message: The feature is not enabled!
+        $ref: "../../global/error.yaml#/ForbiddenError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
     security:
@@ -128,15 +98,7 @@ heartbeat:
       202:
         $ref: "./response.yaml#/heartbeat-response-payload-200"
       403:
-        description: Forbidden error due to feature is not enabled.
-        content:
-          application/json:
-            schema:
-              $ref: "../../global/error.yaml#/ForbiddenError"
-            example:
-              status: error
-              code: 400300
-              message: The feature is not enabled!
+        $ref: "../../global/error.yaml#/ForbiddenError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
     security:
