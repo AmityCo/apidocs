@@ -1903,6 +1903,7 @@ paths:
         - $ref: '#/components/parameters/parameter_limit'
         - $ref: '#/components/parameters/parameter_token'
         - $ref: '#/components/parameters/parameter_dataTypes-2'
+        - $ref: '#/components/parameters/resolveParent'
       responses:
         '200':
           $ref: '#/components/responses/root-response-200'
@@ -20349,6 +20350,12 @@ components:
             - liveStream
             - clip
         description: post data type to filter
+    resolveParent:
+      name: resolveParent
+      in: query
+      schema:
+        type: boolean
+        description: whether to include parent when filtering by dataTypes that only have child posts e.g. `dataTypes=['video', 'clip']`
     parameter_token-2:
       name: token
       in: query
