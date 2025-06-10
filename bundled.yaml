@@ -1926,7 +1926,7 @@ paths:
         - $ref: '#/components/parameters/dataType'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-3'
+          $ref: '#/components/responses/response_root-get-response-200-4'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '500':
@@ -3424,7 +3424,7 @@ paths:
         - $ref: '#/components/parameters/parameter_options-6'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-4'
+          $ref: '#/components/responses/response_root-get-response-200-5'
         '404':
           $ref: '#/components/responses/NotFoundError'
         '429':
@@ -4818,7 +4818,7 @@ paths:
         - $ref: '#/components/parameters/parameter_matchingOnlyParentPost'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-5'
+          $ref: '#/components/responses/response_root-get-response-200-6'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '404':
@@ -5498,7 +5498,7 @@ paths:
         - $ref: '#/components/parameters/parameter_options-11'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-6'
+          $ref: '#/components/responses/response_root-get-response-200-7'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v2/roles:
@@ -5723,7 +5723,7 @@ paths:
       description: Verify access token. The caller must add accessToken in header.
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-7'
+          $ref: '#/components/responses/response_root-get-response-200-8'
         '401':
           description: Access token is invalid or expired
         '403':
@@ -6476,7 +6476,7 @@ paths:
         - $ref: '#/components/parameters/parameter_isDeleted-8'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-8'
+          $ref: '#/components/responses/response_root-get-response-200-9'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '403':
@@ -6746,7 +6746,7 @@ paths:
         - $ref: '#/components/parameters/parameter_options-13'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-9'
+          $ref: '#/components/responses/response_root-get-response-200-10'
         '404':
           $ref: '#/components/responses/NotFoundError'
         '500':
@@ -11435,37 +11435,61 @@ components:
           description: Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).
           default: text
         data:
-          type: object
-          description: Body of a post. (It can be anything when dataType is not text, image, file)
-          properties:
-            text:
-              type: string
-              description: post text.
-            fileId:
-              type: string
-              description: file key on cloud storage (for image, file post).
-            thumbnailFileId:
-              type: string
-              description: video thumbnail file id (for video post).
-            videoFileId:
-              type: object
-              description: video file id for each quality (for video post).
+          description: Body of a post. Can be different types based on content type.
+          oneOf:
+            - type: object
+              title: normal post
+              description: Standard post data (text, image, file, video)
               properties:
-                original:
+                text:
                   type: string
-                  description: original file id
-                low:
+                  description: post text.
+                fileId:
                   type: string
-                  description: low video quality file id
-                medium:
+                  description: file key on cloud storage (for image, file post).
+                thumbnailFileId:
                   type: string
-                  description: medium video quality file id
-                high:
+                  description: video thumbnail file id (for video post).
+                videoFileId:
+                  type: object
+                  description: video file id for each quality (for video post).
+                  properties:
+                    original:
+                      type: string
+                      description: original file id
+                    low:
+                      type: string
+                      description: low video quality file id
+                    medium:
+                      type: string
+                      description: medium video quality file id
+                    high:
+                      type: string
+                      description: high video quality file id
+                streamId:
                   type: string
-                  description: high video quality file id
-            streamId:
-              type: string
-              description: video streaming id (for video streaming post)
+                  description: video streaming id (for video streaming post)
+            - type: object
+              title: clip post
+              description: clip post data
+              properties:
+                fileId:
+                  type: string
+                  description: file key on cloud storage.
+                thumbnailId:
+                  type: string
+                  description: thumbnail file id.
+                isMuted:
+                  type: boolean
+                  description: whether the video is muted.
+                  default: false
+                displayMode:
+                  type: string
+                  description: display mode for the video.
+                  enum:
+                    - fill
+                    - fit
+                  default: fill
         metadata:
           type: object
           description: Additional properties to support custom fields.
@@ -16108,7 +16132,58 @@ components:
                   posts:
                     type: array
                     items:
+                      $ref: '#/components/schemas/PostV5'
+                  postChildren:
+                    type: array
+                    items:
                       $ref: '#/components/schemas/Post'
+                  comments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+                  communities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Community'
+                  communityUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityUser'
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityCategory'
+                  paging:
+                    type: object
+                    properties:
+                      next:
+                        type: string
+                      previous:
+                        type: string
+    response_root-get-response-200-4:
+      description: Global Feed Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostV5'
                   postChildren:
                     type: array
                     items:
@@ -17346,7 +17421,7 @@ components:
                   $ref: '#/components/schemas/UserV3'
               paging:
                 $ref: '#/components/schemas/Generic_paging'
-    response_root-get-response-200-4:
+    response_root-get-response-200-5:
       description: Messages Information
       content:
         application/json:
@@ -17849,7 +17924,7 @@ components:
                     type: string
                   previous:
                     type: string
-    response_root-get-response-200-5:
+    response_root-get-response-200-6:
       description: Post Information
       content:
         application/json:
@@ -18022,7 +18097,7 @@ components:
               posts:
                 type: array
                 items:
-                  $ref: '#/components/schemas/PostV4'
+                  $ref: '#/components/schemas/PostV5'
               postChildren:
                 type: array
                 items:
@@ -18190,7 +18265,7 @@ components:
             properties:
               removedId:
                 type: string
-    response_root-get-response-200-6:
+    response_root-get-response-200-7:
       description: Reaction information.
       content:
         application/json:
@@ -18365,7 +18440,7 @@ components:
                     type: string
                   previous:
                     type: string
-    response_root-get-response-200-7:
+    response_root-get-response-200-8:
       description: Session Information
       content:
         application/json:
@@ -18484,7 +18559,7 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/File'
-    response_root-get-response-200-8:
+    response_root-get-response-200-9:
       description: User
       content:
         application/json:
@@ -18662,7 +18737,7 @@ components:
             code: 500000,
             message: Information mismatch
             status: error
-    response_root-get-response-200-9:
+    response_root-get-response-200-10:
       description: list of video streaming
       content:
         application/json:
