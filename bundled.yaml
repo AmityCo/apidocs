@@ -1923,7 +1923,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_limit'
         - $ref: '#/components/parameters/parameter_token-2'
-        - $ref: '#/components/parameters/dataType'
+        - $ref: '#/components/parameters/parameter_dataTypes-3'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-4'
@@ -1948,7 +1948,7 @@ paths:
         - $ref: '#/components/parameters/parameter_isDeleted-2'
         - $ref: '#/components/parameters/parameter_options-4'
         - $ref: '#/components/parameters/feedType'
-        - $ref: '#/components/parameters/parameter_dataTypes-3'
+        - $ref: '#/components/parameters/parameter_dataTypes-4'
         - $ref: '#/components/parameters/parameter_tags-3'
         - $ref: '#/components/parameters/matchingOnlyParentPost'
       responses:
@@ -3682,7 +3682,7 @@ paths:
         - $ref: '#/components/parameters/includeTags'
         - $ref: '#/components/parameters/parameter_excludeTags-2'
         - $ref: '#/components/parameters/hasFlags'
-        - $ref: '#/components/parameters/parameter_dataType'
+        - $ref: '#/components/parameters/dataType'
         - $ref: '#/components/parameters/parameter_paging-options'
       responses:
         '200':
@@ -4809,11 +4809,11 @@ paths:
         - $ref: '#/components/parameters/parameter_targetId'
         - $ref: '#/components/parameters/parameter_targetType'
         - $ref: '#/components/parameters/parameter_sortBy-4'
-        - $ref: '#/components/parameters/parameter_dataType-2'
+        - $ref: '#/components/parameters/parameter_dataType'
         - $ref: '#/components/parameters/parameter_hasFlag-7'
         - $ref: '#/components/parameters/parameter_isDeleted-4'
         - $ref: '#/components/parameters/parameter_options-3'
-        - $ref: '#/components/parameters/parameter_dataTypes-4'
+        - $ref: '#/components/parameters/parameter_dataTypes-5'
         - $ref: '#/components/parameters/parameter_tags-5'
         - $ref: '#/components/parameters/parameter_matchingOnlyParentPost'
       responses:
@@ -5074,7 +5074,7 @@ paths:
         - $ref: '#/components/parameters/parameter_isDeleted-2'
         - $ref: '#/components/parameters/parameter_options-4'
         - $ref: '#/components/parameters/feedType'
-        - $ref: '#/components/parameters/parameter_dataTypes-5'
+        - $ref: '#/components/parameters/parameter_dataTypes-6'
         - $ref: '#/components/parameters/parameter_tags-3'
         - $ref: '#/components/parameters/matchingOnlyParentPost'
       responses:
@@ -5654,7 +5654,7 @@ paths:
         - $ref: '#/components/parameters/parameter_targetId'
         - $ref: '#/components/parameters/parameter_targetType-2'
         - $ref: '#/components/parameters/parameter_options-3'
-        - $ref: '#/components/parameters/parameter_dataTypes-6'
+        - $ref: '#/components/parameters/parameter_dataTypes-7'
         - $ref: '#/components/parameters/parameter_tags-5'
         - $ref: '#/components/parameters/parameter_matchingOnlyParentPost'
       responses:
@@ -5921,7 +5921,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_targetId-2'
         - $ref: '#/components/parameters/parameter_targetType-3'
-        - $ref: '#/components/parameters/parameter_dataType-3'
+        - $ref: '#/components/parameters/parameter_dataType-2'
         - $ref: '#/components/parameters/isExpired'
         - $ref: '#/components/parameters/parameter_options-12'
       responses:
@@ -20438,16 +20438,21 @@ components:
         type: string
         minLength: 1
         maxLength: 1000
-    dataType:
-      name: dataType
+    parameter_dataTypes-3:
+      name: dataTypes
       in: query
       optional: true
       schema:
-        type: string
-        enum:
-          - video
-          - clip
-        description: optional dataType to specified, if we send 'video' to the API the feed will be from  post with dataType=video only
+        type: array
+        minItems: 1
+        maxItems: 2
+        items:
+          type: string
+          enum:
+            - video
+            - clip
+          description: dataTypes to specified, if we send 'video' to the API the feed will be from  post with dataType=video only
+        description: Post `dataTypes` to filter
     targetId:
       name: targetId
       in: query
@@ -20530,7 +20535,7 @@ components:
           - declined
         example: published
       description: Feed type to filter
-    parameter_dataTypes-3:
+    parameter_dataTypes-4:
       name: dataTypes
       in: query
       schema:
@@ -20946,7 +20951,7 @@ components:
       description: flag to filter only flagged message
       schema:
         $ref: '#/components/schemas/MessageV5_hasFlags'
-    parameter_dataType:
+    dataType:
       name: dataType
       in: query
       description: data type of message (max length=20)
@@ -21166,7 +21171,7 @@ components:
           - community
           - user
           - content
-    parameter_dataType-2:
+    parameter_dataType:
       name: dataType
       in: query
       schema:
@@ -21186,7 +21191,7 @@ components:
           * `null(default)` - Show all posts.
           * `true` - Show only flagged post(or children) or has flagged comment.
           * `false` - Show only no flagged post(and children) and has no flagged comment.  
-    parameter_dataTypes-4:
+    parameter_dataTypes-5:
       name: dataTypes
       in: query
       description: |
@@ -21256,7 +21261,7 @@ components:
         items:
           type: string
           maxLength: 50
-    parameter_dataTypes-5:
+    parameter_dataTypes-6:
       name: dataTypes
       in: query
       schema:
@@ -21454,7 +21459,7 @@ components:
           - community
           - user
           - content
-    parameter_dataTypes-6:
+    parameter_dataTypes-7:
       name: dataTypes
       in: query
       description: |
@@ -21538,7 +21543,7 @@ components:
         enum:
           - community
           - user
-    parameter_dataType-3:
+    parameter_dataType-2:
       name: dataType
       in: query
       schema:

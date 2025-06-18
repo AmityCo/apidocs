@@ -15,15 +15,20 @@ token:
     minLength: 1
     maxLength: 1000
 
-dataType:
-  name: "dataType"
+dataTypes:
+  name: "dataTypes"
   in: "query"
   optional: true
   schema:
-    type: "string"
-    enum:
-      - "video"
-      - "clip"
-    description: "optional dataType to specified, if we send 'video' to the API the feed will be from 
-      post with dataType=video only"
+    type: "array"
+    minItems: 1
+    maxItems: 2
+    items:
+      type: "string"
+      enum:
+        - "video"
+        - "clip"
+      description: "dataTypes to specified, if we send 'video' to the API the feed will be from 
+        post with dataType=video only"
+    description: "Post `dataTypes` to filter"
 
