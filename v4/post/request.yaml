@@ -18,19 +18,6 @@ root-post-request-payload:
               type: "string"
               description: "poll id for create poll post"
               example: "53a9fd8b5aaa1af6c5a1bbd245ce4a9b1627373735551"
-            fileId: 
-              type: "string"
-              description: "file id for create clip/video post"
-              example: "682b0ef420288f0abc0deb16"
-            displayMode: 
-              type: "string"
-              enum: ["fill", "fit"]
-              description: "displayMode of the clip on clip post"
-              example: "fill"
-            isMuted: 
-              type: "boolean"
-              description: "Whether the clip should be muted or not"
-              example: "true"
         attachments:
           type: "array"
           items:
@@ -48,6 +35,16 @@ root-post-request-payload:
                   - "image"
                   - "file"
                   - "video"
+                  - "clip"
+              displayMode: 
+                type: "string"
+                enum: ["fill", "fit"]
+                description: "displayMode of the clip"
+                example: "fill"
+              isMuted: 
+                type: "boolean"
+                description: "Whether the clip should be muted or not"
+                example: "true"
         dataType:
           type: "string"
           example: "upstra.customtype"
