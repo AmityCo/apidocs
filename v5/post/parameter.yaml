@@ -54,41 +54,46 @@ isDeleted:
 options.limit:
   name: options[limit]
   in: query
-  type: integer
-  minimum: 1
-  maximum: 100
-  default: 10
-  example: options[limit]=5
-  description: Page size
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 10
+    example: options[limit]=5
+    description: Page size
 
 options.after:
   name: options[after]
   in: query
-  type: string
-  maxLength: 24
-  description: Cursor value to get records after
+  schema:
+    type: string
+    maxLength: 24
+    description: Cursor value to get records after
 
 options.before:
   name: options[before]
   in: query
-  type: string
-  maxLength: 24
-  description: Cursor value to get records before
+  schema:
+    type: string
+    maxLength: 24
+    description: Cursor value to get records before
 
 options.updatedAt:
   name: options[updatedAt]
   in: query
-  type: string
-  maxLength: 30
-  description: Use updatedAt when sorting by first or last updated
+  schema:
+    type: string
+    maxLength: 30
+    description: Use updatedAt when sorting by first or last updated
 
 options.token:
   name: options[token]
   in: query
-  type: string
-  maxLength: 1000
-  example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
-  description: Pagination token
+  schema:
+    type: string
+    maxLength: 1000
+    example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
+    description: Pagination token
 
 feedType:
   name: feedType
