@@ -1919,7 +1919,7 @@ paths:
       security:
         - BearerAuth: []
       description: |
-        Get posts from your wall,  people you follow and communities you join sorted by custom rannking algorithm
+        Get posts from your wall,  people you follow and communities you join sorted by custom ranking algorithm
       parameters:
         - $ref: '#/components/parameters/parameter_limit'
         - $ref: '#/components/parameters/parameter_token-2'
@@ -5097,35 +5097,35 @@ paths:
       description: |
         Create a post
       requestBody:
-        description: |-
-          information of a post to be created. 
+        description: |
+          information of a post to be created.
 
-          require text or at least 1 attachments 
+          require text or at least 1 attachments
 
-          ### Custom post 
-          - When `dataType` is set as the custom name (dot separated string format, see the `dataType` field section), `data` payload can be anything but it will not support normal data capability (ex. `text` data will not be created) 
-          and `data` payload size will be limit to `100kb` 
-          - `attachments` will be ignored, users need to keep them in `data` field and handle the file info by themselves 
+          ### Custom post
+          - When `dataType` is set as the custom name (dot separated string format, see the `dataType` field section), `data` payload can be anything but it will not support normal data capability (ex. `text` data will not be created)
+          and `data` payload size will be limit to `100kb`
+          - `attachments` will be ignored, users need to keep them in `data` field and handle the file info by themselves
 
-          ### Image, File, Video post 
-          - Put `type` with file id in `attachments` 
-          - Image and File data can be picked from `fileId` in `data` object in child post 
-          - Video fileId for each resolution will be in `videoFileId` in `data` object in child post 
+          ### Image, File, Video post
+          - Put `type` with file id in `attachments`
+          - Image and File data can be picked from `fileId` in `data` object in child post
+          - Video fileId for each resolution will be in `videoFileId` in `data` object in child post
 
-          ### Live streaming post 
-          - When put `dataType` as `liveStream` and `streamId` in `data`, post will be created as live streaming post 
-          - `attachments` will be ignored 
-          - Video streaming info will be in `videoStreamings` object in response 
+          ### Live streaming post
+          - When put `dataType` as `liveStream` and `streamId` in `data`, post will be created as live streaming post
+          - `attachments` will be ignored
+          - Video streaming info will be in `videoStreamings` object in response
 
-          ### Poll post 
-          - When put `dataType` as `poll` and `pollId` in `data`, post will be created as poll post 
-          - `attachments` will be ignored 
-          - Poll info will be in `polls` object in response 
+          ### Poll post
+          - When put `dataType` as `poll` and `pollId` in `data`, post will be created as poll post
+          - `attachments` will be ignored
+          - Poll info will be in `polls` object in response
 
-          ### Clip post 
-          - Put `type = clip` with `fileId` (from POST /v4/clips) in `attachments` 
-          - Optionally we can add `isMuted` on the attachment to set the clip to mute for displaying on UI. 
-          - Optionally we can add `displayMode` on the attachment to set the clip displayMode for displaying on UI. 
+          ### Clip post
+          - Put `type = clip` with `fileId` (from POST /v4/clips) in `attachments`
+          - Optionally we can add `isMuted` on the attachment to set the clip to mute for displaying on UI.
+          - Optionally we can add `displayMode` on the attachment to set the clip displayMode for displaying on UI.
           - `fileId`, `isMuted`, `displayMode` will be in `data` object in child post
         required: true
         content:
@@ -16666,7 +16666,7 @@ components:
                   type: string
                   description: url to download the file
                 type:
-                  type: enum
+                  type: string
                   description: File type.
                   enum:
                     - image
