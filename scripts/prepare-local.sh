@@ -8,18 +8,21 @@ OS=$(uname)
 
 echo "Updating script tag in $FILE..."
 
-# Use perl for reliable multiline pattern matching across platforms
+# Use perl for reliable search and replace across platforms.
+# The -p flag reads the file line by line.
+# \x27 is the hex code for a single quote '.
+# The '$' in $branch is escaped for the perl regex.
 if [ "$OS" = "Darwin" ]; then
     # macOS version
-    perl -i -0pe 's|<script\n      id="api-reference"\n      data-url="https://raw.githubusercontent.com/AmityCo/apidocs/\$branch/bundled.yaml"\n    ></script>|<script id="api-reference" data-url="./bundled.yaml"></script>|g' "$FILE"
+    perl -i -pe 's|url: \x27https://raw.githubusercontent.com/AmityCo/apidocs/\$branch/bundled.yaml\x27|url: \x27./bundled.yaml\x27|g' "$FILE"
 else
     # Linux version
-    perl -i -0pe 's|<script\n      id="api-reference"\n      data-url="https://raw.githubusercontent.com/AmityCo/apidocs/\$branch/bundled.yaml"\n    ></script>|<script id="api-reference" data-url="./bundled.yaml"></script>|g' "$FILE"
+    perl -i -pe 's|url: \x27https://raw.githubusercontent.com/AmityCo/apidocs/\$branch/bundled.yaml\x27|url: \x27./bundled.yaml\x27|g' "$FILE"
 fi
 
 # Check if replacement was successful
-if grep -q 'data-url="./bundled.yaml"' "$FILE"; then
-    echo "✅ Script tag replacement successful in $FILE"
+if grep -q "url: './bundled.yaml'" "$FILE"; then
+    echo "✅ URL replacement successful in $FILE"
 else
-    echo "❌ Script tag replacement failed. Please check the file manually."
+    echo "❌ URL replacement failed. Please check the file manually."
 fi
