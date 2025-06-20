@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.106.0] - 2025-06-20
+
+### 🚀 Features
+
+- Added an API spec of the vertical video (#393)
+
+### 🐛 Bug Fixes
+
+- All lint openapi v3 (#399)
+
 ## [4.105.2] - 2025-05-30
 
 ### 🚀 Features
