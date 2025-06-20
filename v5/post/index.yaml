@@ -1,6 +1,6 @@
 root:
   get:
-    summary: "query posts v5"
+    summary: "query posts"
     tags:
       - "Post"
     security:
@@ -13,11 +13,15 @@ root:
       - $ref: "./parameter.yaml#/sortBy"
       - $ref: "./parameter.yaml#/hasFlag"
       - $ref: "./parameter.yaml#/isDeleted"
-      - $ref: "./parameter.yaml#/options"
       - $ref: "./parameter.yaml#/feedType"
       - $ref: "./parameter.yaml#/dataTypes"
       - $ref: "./parameter.yaml#/tags"
       - $ref: "./parameter.yaml#/matchingOnlyParentPost"
+      - $ref: "./parameter.yaml#/options.limit"
+      - $ref: "./parameter.yaml#/options.after"
+      - $ref: "./parameter.yaml#/options.before"
+      - $ref: "./parameter.yaml#/options.updatedAt"
+      - $ref: "./parameter.yaml#/options.token"
     responses:
       200:
         $ref: "./response.yaml#/post-pagination-response-200"

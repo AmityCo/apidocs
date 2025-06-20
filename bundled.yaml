@@ -1931,37 +1931,6 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
-  /api/v5/posts:
-    get:
-      summary: query posts v5
-      tags:
-        - Post
-      security:
-        - BearerAuth: []
-      description: |
-        Query posts, (this will include new post dataType `clip` in the response).
-      parameters:
-        - $ref: '#/components/parameters/targetId'
-        - $ref: '#/components/parameters/targetType'
-        - $ref: '#/components/parameters/parameter_sortBy-5'
-        - $ref: '#/components/parameters/parameter_hasFlag-5'
-        - $ref: '#/components/parameters/parameter_isDeleted-2'
-        - $ref: '#/components/parameters/parameter_options-4'
-        - $ref: '#/components/parameters/feedType'
-        - $ref: '#/components/parameters/parameter_dataTypes-4'
-        - $ref: '#/components/parameters/parameter_tags-3'
-        - $ref: '#/components/parameters/matchingOnlyParentPost'
-      responses:
-        '200':
-          $ref: '#/components/responses/post-pagination-response-200'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '429':
-          $ref: '#/components/responses/RateLimitError'
-        '500':
-          $ref: '#/components/responses/UnexpectedError'
   /api/v3/files:
     post:
       summary: Upload file.
@@ -3138,8 +3107,8 @@ paths:
         - Moderation
       parameters:
         - $ref: '#/components/parameters/regex'
-        - $ref: '#/components/parameters/parameter_sortBy-6'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_sortBy-5'
+        - $ref: '#/components/parameters/parameter_options-4'
       responses:
         '200':
           $ref: '#/components/responses/allowlists-get-response-200'
@@ -3176,8 +3145,8 @@ paths:
         - Moderation
       parameters:
         - $ref: '#/components/parameters/regex'
-        - $ref: '#/components/parameters/parameter_sortBy-6'
-        - $ref: '#/components/parameters/parameter_options-5'
+        - $ref: '#/components/parameters/parameter_sortBy-5'
+        - $ref: '#/components/parameters/parameter_options-4'
       responses:
         '200':
           $ref: '#/components/responses/blocklists-get-response-200'
@@ -3417,11 +3386,11 @@ paths:
         - $ref: '#/components/parameters/parameter_type'
         - $ref: '#/components/parameters/parameter_parentId'
         - $ref: '#/components/parameters/parameter_filterByParentId'
-        - $ref: '#/components/parameters/parameter_hasFlag-6'
+        - $ref: '#/components/parameters/parameter_hasFlag-5'
         - $ref: '#/components/parameters/parameter_isDeleted-6'
-        - $ref: '#/components/parameters/parameter_tags-4'
+        - $ref: '#/components/parameters/parameter_tags-3'
         - $ref: '#/components/parameters/parameter_excludeTags'
-        - $ref: '#/components/parameters/parameter_options-6'
+        - $ref: '#/components/parameters/parameter_options-5'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-5'
@@ -4276,7 +4245,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/parameter_options-7'
+        - $ref: '#/components/parameters/parameter_options-6'
       description: |2-
          Retrieves the user's notification tray items, sorted by newest first.
          - Notification tray items will be updated shortly after calling related APIs (e.g. `POST api/v4/posts`) but are not real-time.
@@ -4382,7 +4351,7 @@ paths:
         List all pinned posts in a community
       parameters:
         - $ref: '#/components/parameters/parameter_communityId-2'
-        - $ref: '#/components/parameters/parameter_options-8'
+        - $ref: '#/components/parameters/parameter_options-7'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-3'
@@ -4467,7 +4436,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_communityId-2'
         - $ref: '#/components/parameters/placement'
-        - $ref: '#/components/parameters/parameter_options-8'
+        - $ref: '#/components/parameters/parameter_options-7'
       responses:
         '200':
           $ref: '#/components/responses/response_common-response-200-3'
@@ -4787,8 +4756,8 @@ paths:
         - $ref: '#/components/parameters/answerId'
         - $ref: '#/components/parameters/authorization'
         - $ref: '#/components/parameters/content-type'
-        - $ref: '#/components/parameters/parameter_sortBy-7'
-        - $ref: '#/components/parameters/parameter_options-9'
+        - $ref: '#/components/parameters/parameter_sortBy-6'
+        - $ref: '#/components/parameters/parameter_options-8'
       responses:
         '200':
           $ref: '#/components/responses/poll-pagination-response-200'
@@ -4806,16 +4775,16 @@ paths:
       description: |
         Query posts
       parameters:
-        - $ref: '#/components/parameters/parameter_targetId'
-        - $ref: '#/components/parameters/parameter_targetType'
+        - $ref: '#/components/parameters/targetId'
+        - $ref: '#/components/parameters/targetType'
         - $ref: '#/components/parameters/parameter_sortBy-4'
         - $ref: '#/components/parameters/parameter_dataType'
-        - $ref: '#/components/parameters/parameter_hasFlag-7'
+        - $ref: '#/components/parameters/parameter_hasFlag-6'
         - $ref: '#/components/parameters/parameter_isDeleted-4'
         - $ref: '#/components/parameters/parameter_options-3'
-        - $ref: '#/components/parameters/parameter_dataTypes-5'
-        - $ref: '#/components/parameters/parameter_tags-5'
-        - $ref: '#/components/parameters/parameter_matchingOnlyParentPost'
+        - $ref: '#/components/parameters/parameter_dataTypes-4'
+        - $ref: '#/components/parameters/parameter_tags-4'
+        - $ref: '#/components/parameters/matchingOnlyParentPost'
       responses:
         '200':
           $ref: '#/components/responses/response_root-get-response-200-6'
@@ -5067,19 +5036,19 @@ paths:
       description: |
         Query posts
       parameters:
-        - $ref: '#/components/parameters/targetId'
-        - $ref: '#/components/parameters/targetType'
-        - $ref: '#/components/parameters/parameter_sortBy-5'
-        - $ref: '#/components/parameters/parameter_hasFlag-5'
+        - $ref: '#/components/parameters/parameter_targetId'
+        - $ref: '#/components/parameters/parameter_targetType'
+        - $ref: '#/components/parameters/parameter_sortBy-7'
+        - $ref: '#/components/parameters/parameter_hasFlag-7'
         - $ref: '#/components/parameters/parameter_isDeleted-2'
-        - $ref: '#/components/parameters/parameter_options-4'
+        - $ref: '#/components/parameters/parameter_options-9'
         - $ref: '#/components/parameters/feedType'
-        - $ref: '#/components/parameters/parameter_dataTypes-6'
-        - $ref: '#/components/parameters/parameter_tags-3'
-        - $ref: '#/components/parameters/matchingOnlyParentPost'
+        - $ref: '#/components/parameters/parameter_dataTypes-5'
+        - $ref: '#/components/parameters/parameter_tags-5'
+        - $ref: '#/components/parameters/parameter_matchingOnlyParentPost'
       responses:
         '200':
-          $ref: '#/components/responses/response_post-pagination-response-200'
+          $ref: '#/components/responses/post-pagination-response-200'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '404':
@@ -5297,6 +5266,41 @@ paths:
                         type: boolean
         '400':
           $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v5/posts:
+    get:
+      summary: query posts
+      tags:
+        - Post
+      security:
+        - BearerAuth: []
+      description: |
+        Query posts, (this will include new post dataType `clip` in the response).
+      parameters:
+        - $ref: '#/components/parameters/parameter_targetId'
+        - $ref: '#/components/parameters/parameter_targetType'
+        - $ref: '#/components/parameters/parameter_sortBy-7'
+        - $ref: '#/components/parameters/parameter_hasFlag-7'
+        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/feedType'
+        - $ref: '#/components/parameters/parameter_dataTypes-6'
+        - $ref: '#/components/parameters/parameter_tags-5'
+        - $ref: '#/components/parameters/parameter_matchingOnlyParentPost'
+        - $ref: '#/components/parameters/parameter_options.limit'
+        - $ref: '#/components/parameters/options.after'
+        - $ref: '#/components/parameters/options.before'
+        - $ref: '#/components/parameters/options.updatedAt'
+        - $ref: '#/components/parameters/parameter_options.token'
+      responses:
+        '200':
+          $ref: '#/components/responses/response_post-pagination-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v1/presence/settings:
@@ -5648,12 +5652,12 @@ paths:
         Semantic search posts
       parameters:
         - $ref: '#/components/parameters/parameter_query'
-        - $ref: '#/components/parameters/parameter_targetId'
+        - $ref: '#/components/parameters/targetId'
         - $ref: '#/components/parameters/parameter_targetType-2'
         - $ref: '#/components/parameters/parameter_options-3'
         - $ref: '#/components/parameters/parameter_dataTypes-7'
-        - $ref: '#/components/parameters/parameter_tags-5'
-        - $ref: '#/components/parameters/parameter_matchingOnlyParentPost'
+        - $ref: '#/components/parameters/parameter_tags-4'
+        - $ref: '#/components/parameters/matchingOnlyParentPost'
       responses:
         '200':
           $ref: '#/components/responses/posts-response-payload-200'
@@ -5677,7 +5681,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_query'
         - $ref: '#/components/parameters/parameter_filter-2'
-        - $ref: '#/components/parameters/parameter_tags-5'
+        - $ref: '#/components/parameters/parameter_tags-4'
         - $ref: '#/components/parameters/categoryIds'
         - $ref: '#/components/parameters/parameter_options-3'
       responses:
@@ -6469,7 +6473,7 @@ paths:
         - $ref: '#/components/parameters/parameter_sortBy-9'
         - $ref: '#/components/parameters/parameter_searchBy-2'
         - $ref: '#/components/parameters/options.limit'
-        - $ref: '#/components/parameters/parameter_options.token'
+        - $ref: '#/components/parameters/parameter_options.token-2'
         - $ref: '#/components/parameters/parameter_isDeleted-8'
       responses:
         '200':
@@ -6738,7 +6742,7 @@ paths:
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/statuses'
         - $ref: '#/components/parameters/userPublicIds'
-        - $ref: '#/components/parameters/parameter_sortBy-6'
+        - $ref: '#/components/parameters/parameter_sortBy-5'
         - $ref: '#/components/parameters/parameter_isDeleted-9'
         - $ref: '#/components/parameters/parameter_options-13'
       responses:
@@ -10921,7 +10925,7 @@ components:
           type: string
           description: |
             Feed type
-            - published: main feed 
+            - published: main feed
             - reviewing: feed for things that have to be reviewed
             - declined: feed for things that is rejected from reviewing
           enum:
@@ -11487,218 +11491,6 @@ components:
                     - fill
                     - fit
                   default: fill
-        metadata:
-          type: object
-          description: Additional properties to support custom fields.
-        flagCount:
-          type: integer
-          description: The number of users that has read this post.
-        hashFlag:
-          type: object
-          description: The flag for checking internally that this post is reported or not.
-          properties:
-            bits:
-              type: integer
-            hashes:
-              type: integer
-            hash:
-              type: array
-              items:
-                type: string
-        editedAt:
-          type: string
-          description: The date/time when text or metadata of post is updated.
-          format: date-time
-        createdAt:
-          type: string
-          description: The date/time when a post is created.
-          format: date-time
-        updatedAt:
-          type: string
-          description: The date/time when a post is updated or deleted.
-          format: date-time
-        reactions:
-          type: object
-          description: The mapping of reaction with reactionCounter.
-          example:
-            like: 1
-        reactionsCount:
-          type: integer
-          description: The number of all reactions for this post.
-          example: 1
-        myReactions:
-          type: array
-          items:
-            type: string
-            example: like
-          description: The list of my reactions to this post.
-        commentsCount:
-          type: integer
-          description: The number of all comments for this post.
-          example: 1
-        comments:
-          type: array
-          items:
-            type: string
-            description: ID of a comment.
-        children:
-          type: array
-          items:
-            type: string
-            description: ID of a children post.
-        childrenNumber:
-          type: integer
-          description: The number of all children posts for this post.
-        isDeleted:
-          type: boolean
-          default: false
-          description: A flag to deleted a post.
-        hasFlaggedComment:
-          type: boolean
-          default: false
-          description: The flag for checking internally that comments inside post is reported or not.
-        hasFlaggedChildren:
-          type: boolean
-          default: false
-          description: The flag for checking internally that children post is reported or not.
-        feedId:
-          type: string
-          description: Feed public id
-        tags:
-          type: array
-          minItems: 0
-          maxItems: 5
-          items:
-            type: string
-            maxLength: 24
-        mentionees:
-          type: array
-          description: The object of the mentions type and user who get a notification from the post.
-          items:
-            type: object
-            properties:
-              type:
-                type: string
-                description: |
-                  type: * `user` - need to specific userIds and notification mentions individual user
-                enum:
-                  - user
-              userIds:
-                type: array
-                description: Array of UserId.
-                items:
-                  type: string
-              userPublicIds:
-                type: array
-                description: Array of UserPublicId.
-                items:
-                  type: string
-              userInternalIds:
-                type: array
-                description: Array of UserInternalId.
-                items:
-                  type: string
-        impression:
-          type: integer
-        reach:
-          type: integer
-      required:
-        - postId
-        - data
-    PostV4:
-      type: object
-      properties:
-        _id:
-          type: string
-          description: Private ID of a post. (for real-time event)
-        path:
-          type: string
-          description: Path of a post. (for real-time event)
-        postId:
-          type: string
-          description: ID of a post.
-        parentPostId:
-          type: string
-          description: ID of a parent post.
-        postedUserId:
-          type: string
-          description: ID of a creator.
-        postedUserPublicId:
-          type: string
-          description: Public ID of a creator.
-        postedUserInternalId:
-          type: string
-          description: Internal ID of a creator.
-        publisherId:
-          type: string
-          description: ID of an original publisher when creating a post as brand.
-        publisherPublicId:
-          type: string
-          description: Public ID of an original publisher when creating a post as brand.
-        sharedUserId:
-          type: string
-          description: ID of a shared owner.
-        sharedCount:
-          type: integer
-          description: number of shared post.
-        targetId:
-          type: string
-          description: ID of a target.
-        targetPublicId:
-          type: string
-          description: Public ID of a target.
-        targetInternalId:
-          type: string
-          description: Internal ID of a target.
-        targetType:
-          type: string
-          enum:
-            - user
-            - community
-            - content
-          description: Type of a target (user, community, content).
-        dataType:
-          type: string
-          enum:
-            - text
-            - image
-            - file
-            - video
-            - liveStream
-          description: Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).
-          default: text
-        data:
-          type: object
-          description: Body of a post. (It can be anything when dataType is not text, image, file)
-          properties:
-            text:
-              type: string
-              description: post text.
-            fileId:
-              type: string
-              description: file key on cloud storage (for image, file post).
-            thumbnailFileId:
-              type: string
-              description: video thumbnail file id (for video post).
-            videoFileId:
-              type: object
-              description: video file id for each quality (for video post).
-              properties:
-                original:
-                  type: string
-                  description: original file id
-                low:
-                  type: string
-                  description: low video quality file id
-                medium:
-                  type: string
-                  description: medium video quality file id
-                high:
-                  type: string
-                  description: high video quality file id
-            streamId:
-              type: string
-              description: video streaming id (for video streaming post)
         metadata:
           type: object
           description: Additional properties to support custom fields.
@@ -13229,6 +13021,218 @@ components:
             type: string
         createdAt:
           type: string
+    PostV4:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Private ID of a post. (for real-time event)
+        path:
+          type: string
+          description: Path of a post. (for real-time event)
+        postId:
+          type: string
+          description: ID of a post.
+        parentPostId:
+          type: string
+          description: ID of a parent post.
+        postedUserId:
+          type: string
+          description: ID of a creator.
+        postedUserPublicId:
+          type: string
+          description: Public ID of a creator.
+        postedUserInternalId:
+          type: string
+          description: Internal ID of a creator.
+        publisherId:
+          type: string
+          description: ID of an original publisher when creating a post as brand.
+        publisherPublicId:
+          type: string
+          description: Public ID of an original publisher when creating a post as brand.
+        sharedUserId:
+          type: string
+          description: ID of a shared owner.
+        sharedCount:
+          type: integer
+          description: number of shared post.
+        targetId:
+          type: string
+          description: ID of a target.
+        targetPublicId:
+          type: string
+          description: Public ID of a target.
+        targetInternalId:
+          type: string
+          description: Internal ID of a target.
+        targetType:
+          type: string
+          enum:
+            - user
+            - community
+            - content
+          description: Type of a target (user, community, content).
+        dataType:
+          type: string
+          enum:
+            - text
+            - image
+            - file
+            - video
+            - liveStream
+          description: Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).
+          default: text
+        data:
+          type: object
+          description: Body of a post. (It can be anything when dataType is not text, image, file)
+          properties:
+            text:
+              type: string
+              description: post text.
+            fileId:
+              type: string
+              description: file key on cloud storage (for image, file post).
+            thumbnailFileId:
+              type: string
+              description: video thumbnail file id (for video post).
+            videoFileId:
+              type: object
+              description: video file id for each quality (for video post).
+              properties:
+                original:
+                  type: string
+                  description: original file id
+                low:
+                  type: string
+                  description: low video quality file id
+                medium:
+                  type: string
+                  description: medium video quality file id
+                high:
+                  type: string
+                  description: high video quality file id
+            streamId:
+              type: string
+              description: video streaming id (for video streaming post)
+        metadata:
+          type: object
+          description: Additional properties to support custom fields.
+        flagCount:
+          type: integer
+          description: The number of users that has read this post.
+        hashFlag:
+          type: object
+          description: The flag for checking internally that this post is reported or not.
+          properties:
+            bits:
+              type: integer
+            hashes:
+              type: integer
+            hash:
+              type: array
+              items:
+                type: string
+        editedAt:
+          type: string
+          description: The date/time when text or metadata of post is updated.
+          format: date-time
+        createdAt:
+          type: string
+          description: The date/time when a post is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a post is updated or deleted.
+          format: date-time
+        reactions:
+          type: object
+          description: The mapping of reaction with reactionCounter.
+          example:
+            like: 1
+        reactionsCount:
+          type: integer
+          description: The number of all reactions for this post.
+          example: 1
+        myReactions:
+          type: array
+          items:
+            type: string
+            example: like
+          description: The list of my reactions to this post.
+        commentsCount:
+          type: integer
+          description: The number of all comments for this post.
+          example: 1
+        comments:
+          type: array
+          items:
+            type: string
+            description: ID of a comment.
+        children:
+          type: array
+          items:
+            type: string
+            description: ID of a children post.
+        childrenNumber:
+          type: integer
+          description: The number of all children posts for this post.
+        isDeleted:
+          type: boolean
+          default: false
+          description: A flag to deleted a post.
+        hasFlaggedComment:
+          type: boolean
+          default: false
+          description: The flag for checking internally that comments inside post is reported or not.
+        hasFlaggedChildren:
+          type: boolean
+          default: false
+          description: The flag for checking internally that children post is reported or not.
+        feedId:
+          type: string
+          description: Feed public id
+        tags:
+          type: array
+          minItems: 0
+          maxItems: 5
+          items:
+            type: string
+            maxLength: 24
+        mentionees:
+          type: array
+          description: The object of the mentions type and user who get a notification from the post.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: |
+                  type: * `user` - need to specific userIds and notification mentions individual user
+                enum:
+                  - user
+              userIds:
+                type: array
+                description: Array of UserId.
+                items:
+                  type: string
+              userPublicIds:
+                type: array
+                description: Array of UserPublicId.
+                items:
+                  type: string
+              userInternalIds:
+                type: array
+                description: Array of UserInternalId.
+                items:
+                  type: string
+        impression:
+          type: integer
+        reach:
+          type: integer
+      required:
+        - postId
+        - data
     PresenceUserSetting:
       description: Presence user setting
       type: object
@@ -16216,60 +16220,6 @@ components:
                         type: string
                       previous:
                         type: string
-    post-pagination-response-200:
-      description: Post Information
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              posts:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PostV5'
-              postChildren:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PostV4'
-              comments:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Comment'
-              users:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserV3'
-              files:
-                type: array
-                items:
-                  $ref: '#/components/schemas/File'
-              communities:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Community'
-              communityUsers:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CommunityUser'
-              categories:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CommunityCategory'
-              feeds:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Feed'
-              videoStreamings:
-                type: array
-                items:
-                  $ref: '#/components/schemas/VideoStreaming'
-              paging:
-                type: object
-                properties:
-                  next:
-                    type: string
-                  previous:
-                    type: string
     root-post-response-200:
       description: File Upload Result
       content:
@@ -18030,7 +17980,7 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/Poll'
-    response_post-pagination-response-200:
+    post-pagination-response-200:
       description: Post Information
       content:
         application/json:
@@ -18139,6 +18089,60 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/Poll'
+    response_post-pagination-response-200:
+      description: Post Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              posts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostV5'
+              postChildren:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostV4'
+              comments:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+              communities:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Community'
+              communityUsers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommunityUser'
+              categories:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommunityCategory'
+              feeds:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feed'
+              videoStreamings:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VideoStreaming'
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  previous:
+                    type: string
     settings-response-payload-200:
       description: Get presence feature setting response
       content:
@@ -20450,125 +20454,6 @@ components:
             - clip
           description: dataTypes to specified, if we send 'video' to the API the feed will be from  post with dataType=video only
         description: Post `dataTypes` to filter
-    targetId:
-      name: targetId
-      in: query
-      schema:
-        type: string
-        maxLength: 900
-      description: ID of the target.
-    targetType:
-      name: targetType
-      in: query
-      required: true
-      schema:
-        type: string
-        enum:
-          - community
-          - user
-          - content
-      description: |
-        Type of the target.
-        * `community` - Community
-        * `user` - User
-        * `content` - Content
-    parameter_sortBy-5:
-      name: sortBy
-      in: query
-      schema:
-        type: string
-        enum:
-          - lastCreated
-          - firstCreated
-          - lastUpdated
-          - firstUpdated
-        default: lastCreated
-      description: Sort order for posts.
-    parameter_hasFlag-5:
-      name: hasFlag
-      in: query
-      schema:
-        type: boolean
-        default: null
-      description: Filter by flag status
-    parameter_options-4:
-      name: options
-      in: query
-      schema:
-        type: object
-        properties:
-          after:
-            type: string
-            maxLength: 24
-            description: Cursor value to get records after
-          before:
-            type: string
-            maxLength: 24
-            description: Cursor value to get records before
-          updatedAt:
-            type: string
-            maxLength: 30
-            description: use updatedAt when sorting by first or last updated
-          limit:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 10
-            example: options[limit]=5
-            description: Page size
-          token:
-            type: string
-            maxLength: 1000
-            example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
-            description: Pagination token
-    feedType:
-      name: feedType
-      in: query
-      schema:
-        type: string
-        enum:
-          - reviewing
-          - published
-          - declined
-        example: published
-      description: Feed type to filter
-    parameter_dataTypes-4:
-      name: dataTypes
-      in: query
-      schema:
-        type: array
-        minItems: 1
-        maxItems: 6
-        items:
-          type: string
-          maxLength: 100
-          enum:
-            - video
-            - image
-            - file
-            - liveStream
-            - poll
-            - clip
-      description: Post data type to filter (include child posts too).
-    parameter_tags-3:
-      name: tags
-      in: query
-      schema:
-        type: array
-        minItems: 0
-        maxItems: 5
-        items:
-          type: string
-          maximum: 24
-      description: tags
-    matchingOnlyParentPost:
-      name: matchingOnlyParentPost
-      in: query
-      schema:
-        type: boolean
-        default: true
-      description: |
-        An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts
     _fileId:
       in: path
       name: fileId
@@ -20716,7 +20601,7 @@ components:
       schema:
         type: string
       description: search keyword from start
-    parameter_sortBy-6:
+    parameter_sortBy-5:
       name: sortBy
       in: query
       schema:
@@ -20724,7 +20609,7 @@ components:
         enum:
           - firstCreated
           - lastCreated
-    parameter_options-5:
+    parameter_options-4:
       name: options
       in: query
       style: deepObject
@@ -20834,7 +20719,7 @@ components:
       schema:
         type: boolean
         default: false
-    parameter_hasFlag-6:
+    parameter_hasFlag-5:
       name: hasFlag
       in: query
       schema:
@@ -20850,7 +20735,7 @@ components:
           * `null(default)` - Show both message is actived and message is inactived.
           * `true` - Show message is inactived only.
           * `false` - Show message is actived only.
-    parameter_tags-4:
+    parameter_tags-3:
       name: tags
       in: query
       schema:
@@ -20870,7 +20755,7 @@ components:
           type: string
           maxLength: 100
       description: Used for querying messages by excluding all specified tags. When a query includes multiple tags (e.g., `excludeTags=['tag1', 'tag2', 'tag3']`), the system will return all messages that do not have any of the specified tags.
-    parameter_options-6:
+    parameter_options-5:
       name: options
       in: query
       style: deepObject
@@ -21037,7 +20922,7 @@ components:
       schema:
         type: string
         minLength: 1
-    parameter_options-7:
+    parameter_options-6:
       name: options
       description: Pagination options for controlling result set size and navigation
       in: query
@@ -21085,7 +20970,7 @@ components:
       schema:
         type: string
         maxLength: 900
-    parameter_options-8:
+    parameter_options-7:
       name: options
       in: query
       schema:
@@ -21124,7 +21009,7 @@ components:
       schema:
         type: string
         maxLength: 900
-    parameter_sortBy-7:
+    parameter_sortBy-6:
       name: sortBy
       in: query
       schema:
@@ -21132,7 +21017,7 @@ components:
         enum:
           - lastCreated
           - firstCreated
-    parameter_options-9:
+    parameter_options-8:
       name: options
       in: query
       style: deepObject
@@ -21152,13 +21037,13 @@ components:
             maxLength: 24
           after:
             type: string
-    parameter_targetId:
+    targetId:
       name: targetId
       in: query
       schema:
         type: string
         maxLength: 900
-    parameter_targetType:
+    targetType:
       name: targetType
       required: true
       in: query
@@ -21177,7 +21062,7 @@ components:
       example: upstra.customtype
       description: must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")
       deprecated: true
-    parameter_hasFlag-7:
+    parameter_hasFlag-6:
       name: hasFlag
       in: query
       schema:
@@ -21188,7 +21073,7 @@ components:
           * `null(default)` - Show all posts.
           * `true` - Show only flagged post(or children) or has flagged comment.
           * `false` - Show only no flagged post(and children) and has no flagged comment.  
-    parameter_dataTypes-5:
+    parameter_dataTypes-4:
       name: dataTypes
       in: query
       description: |
@@ -21214,7 +21099,7 @@ components:
             - type: string
               example: upstra.customtype
               description: custom post type - must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")
-    parameter_tags-5:
+    parameter_tags-4:
       name: tags
       in: query
       schema:
@@ -21224,7 +21109,7 @@ components:
         items:
           type: string
           maxLength: 24
-    parameter_matchingOnlyParentPost:
+    matchingOnlyParentPost:
       name: matchingOnlyParentPost
       in: query
       schema:
@@ -21258,7 +21143,89 @@ components:
         items:
           type: string
           maxLength: 50
-    parameter_dataTypes-6:
+    parameter_targetId:
+      name: targetId
+      in: query
+      schema:
+        type: string
+        maxLength: 900
+      description: ID of the target.
+    parameter_targetType:
+      name: targetType
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - community
+          - user
+          - content
+      description: |
+        Type of the target.
+        * `community` - Community
+        * `user` - User
+        * `content` - Content
+    parameter_sortBy-7:
+      name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - lastCreated
+          - firstCreated
+          - lastUpdated
+          - firstUpdated
+        default: lastCreated
+      description: Sort order for posts.
+    parameter_hasFlag-7:
+      name: hasFlag
+      in: query
+      schema:
+        type: boolean
+        default: null
+      description: Filter by flag status
+    parameter_options-9:
+      name: options
+      in: query
+      schema:
+        type: object
+        properties:
+          after:
+            type: string
+            maxLength: 24
+            description: Cursor value to get records after
+          before:
+            type: string
+            maxLength: 24
+            description: Cursor value to get records before
+          updatedAt:
+            type: string
+            maxLength: 30
+            description: use updatedAt when sorting by first or last updated
+          limit:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+            example: options[limit]=5
+            description: Page size
+          token:
+            type: string
+            maxLength: 1000
+            example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
+            description: Pagination token
+    feedType:
+      name: feedType
+      in: query
+      schema:
+        type: string
+        enum:
+          - reviewing
+          - published
+          - declined
+        example: published
+      description: Feed type to filter
+    parameter_dataTypes-5:
       name: dataTypes
       in: query
       schema:
@@ -21275,6 +21242,25 @@ components:
             - liveStream
             - poll
       description: Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`
+    parameter_tags-5:
+      name: tags
+      in: query
+      schema:
+        type: array
+        minItems: 0
+        maxItems: 5
+        items:
+          type: string
+          maximum: 24
+      description: tags
+    parameter_matchingOnlyParentPost:
+      name: matchingOnlyParentPost
+      in: query
+      schema:
+        type: boolean
+        default: true
+      description: |
+        An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts
     parameter__postId:
       name: postId
       in: path
@@ -21288,6 +21274,58 @@ components:
         type: boolean
         default: false
         description: If permanent data will be hard deleted
+    parameter_dataTypes-6:
+      name: dataTypes
+      in: query
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 6
+        items:
+          type: string
+          maxLength: 100
+          enum:
+            - video
+            - image
+            - file
+            - liveStream
+            - poll
+            - clip
+      description: Post data type to filter (include child posts too).
+    parameter_options.limit:
+      name: options[limit]
+      in: query
+      type: integer
+      minimum: 1
+      maximum: 100
+      default: 10
+      example: options[limit]=5
+      description: Page size
+    options.after:
+      name: options[after]
+      in: query
+      type: string
+      maxLength: 24
+      description: Cursor value to get records after
+    options.before:
+      name: options[before]
+      in: query
+      type: string
+      maxLength: 24
+      description: Cursor value to get records before
+    options.updatedAt:
+      name: options[updatedAt]
+      in: query
+      type: string
+      maxLength: 30
+      description: Use updatedAt when sorting by first or last updated
+    parameter_options.token:
+      name: options[token]
+      in: query
+      type: string
+      maxLength: 1000
+      example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
+      description: Pagination token
     parameter_userIds-2:
       name: userIds
       in: query
@@ -21751,7 +21789,7 @@ components:
           * `profileHandle` - Search by profile handle, when using with `sortBy` parameter the applicable sort order is `profileHandle`, `lastCreated` or `firstCreated`. Default to `profileHandle`.  <br>
           * `userId` - Search by user id, when using with `sortBy` parameter the applicable sort order is `lastCreated`, `firstCreated` or `displayName`. Default to `displayName`.<br>
           Default is all three fields
-    parameter_options.token:
+    parameter_options.token-2:
       name: options[token]
       in: query
       description: Pagination token for getting next/previous pages
