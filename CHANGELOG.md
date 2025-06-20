@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### ⚙️ Miscellaneous Tasks
+
+- Update deps and fixed version scalar (#402)
+
 ## [4.106.0] - 2025-06-20
 
 ### 🚀 Features
@@ -11,6 +17,10 @@ All notable changes to this project will be documented in this file.
 ### 🐛 Bug Fixes
 
 - All lint openapi v3 (#399)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.106.0 (#401)
 
 ## [4.105.2] - 2025-05-30
 
