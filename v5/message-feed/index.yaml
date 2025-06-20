@@ -98,6 +98,8 @@ list:
   get:
     tags:
       - "Message Feed"
+    security:
+      - BearerAuth: []
     summary: "Find message feeds by list of ID's"
     description: "Multiple message feed id values can be provided with array format"
     parameters:
@@ -114,6 +116,8 @@ user_creatorId:
   get:
     tags:
       - "Message Feed"
+    security:
+      - BearerAuth: []
     summary: "Finds message feeds by creatorId and multiple conditions"
     description: "Conditions can be provided in query string"
     operationId: "findMessageFeedsByCreatorId"

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>Social+ API Reference</title>
@@ -17,24 +17,17 @@
         <a href="https://social.plus">Home</a>
       </nav>
     </header>
-    <script
-      id="api-reference"
-      data-url="https://raw.githubusercontent.com/AmityCo/apidocs/$branch/bundled.yaml"
-    ></script>
-
-    <!-- Optional: You can set a full configuration object like this: -->
-    <script>
-      var configuration = {
-        theme: "kepler",
-        layout: "modern",
-        hideModels: true,
-        favicon: "./favicon-scp.ico",
-      };
-
-      document.getElementById("api-reference").dataset.configuration =
-        JSON.stringify(configuration);
-    </script>
-
+    <div id="app"></div>
     <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+    <script>
+      Scalar.createApiReference('#app', {
+        // The URL of the OpenAPI/Swagger document
+        url: 'https://raw.githubusercontent.com/AmityCo/apidocs/$branch/bundled.yaml',
+        theme: 'kepler',
+        layout: 'modern',
+        hideModels: true,
+        favicon: './favicon-scp.ico',
+      })
+    </script>
   </body>
 </html>

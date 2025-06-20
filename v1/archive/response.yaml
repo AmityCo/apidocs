@@ -4,15 +4,12 @@ channels-response-payload-200:
     application/json:
       schema:
         description: Archive Channel Information
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                archives:
-                  type: array
-                  items:
-                    $ref: "#/ArchiveChannelResponsePayload"
+        type: object
+        properties:
+          archives:
+            type: array
+            items:
+              $ref: "#/ArchiveChannelResponsePayload"
 
 channels_channelId-post-response-payload-200:
   description: List of archived channels
@@ -30,3 +27,15 @@ channels_channelId-post-response-payload-200:
             description: Date of the archive
             format: "date-time"
             example: "2022-07-07T04:24:20.444Z"
+
+ArchiveChannelResponsePayload:
+  type: object
+  properties:
+    channelId:
+      type: string
+      description: Channel ID
+    archivedAt:
+      type: string
+      description: Date of the archive
+      format: "date-time"
+      example: "2022-07-07T04:24:20.444Z"

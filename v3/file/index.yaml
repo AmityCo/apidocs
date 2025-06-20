@@ -56,6 +56,8 @@ _fileId:
     security:
       - BearerAuth: []
     description: "Update file info\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_fileId"
     requestBody:
       $ref: "./request.yaml#/update-file-data"
     responses:
@@ -75,6 +77,7 @@ _fileId-download:
     summary: "Download file"
     tags:
       - "File"
+    security: []
     description: "Download file data"
     parameters:
       - $ref: "./parameter.yaml#/authorization"
