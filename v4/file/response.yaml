@@ -196,3 +196,68 @@ files-response-200:
                 metadata:
                   type: object
                   description: File metadata.
+
+clips-response-200:
+  description: Clip Video Upload Result
+  content:
+    application/json:
+      schema:
+        type: array
+        items:
+          type: object
+          properties:
+            fileId:
+              type: string
+              description: Root file key on cloud storage.
+            fileUrl:
+              type: string
+              description: url to download the file
+            type:
+              type: string
+              description: File type.
+              enum:
+                - image
+                - file
+                - video
+                - clip
+              example: clip
+            accessType:
+              type: string
+              description: File access type. `network` type requires authentication to download.
+              enum:
+                - public
+                - network
+              default: public
+            altText:
+              type: string
+              description: Alternative text for the file.
+            createdAt:
+              type: string
+              description: The date/time when a file is uploaded.
+              format: date-time
+            updatedAt:
+              type: string
+              description: The date/time when a file is updated.
+              format: date-time
+            attributes:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: File name.
+                  example: big_buck_bunny_720p_2mb.mp4
+                extension:
+                  type: string
+                  description: File format.
+                  example: mp4
+                size:
+                  type: number
+                  description: File size.
+                  example: 2107842
+                mimeType:
+                  type: string
+                  description: File mime-type.
+                  example: video/mp4
+                metadata:
+                  type: object
+                  description: Video metadata (width, height etc.).

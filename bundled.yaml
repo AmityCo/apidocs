@@ -1902,7 +1902,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/parameter_limit'
         - $ref: '#/components/parameters/parameter_token'
-        - $ref: '#/components/parameters/parameter_dataTypes'
+        - $ref: '#/components/parameters/parameter_dataTypes-2'
+        - $ref: '#/components/parameters/resolveParent'
       responses:
         '200':
           $ref: '#/components/responses/root-response-200'
@@ -1918,13 +1919,14 @@ paths:
       security:
         - BearerAuth: []
       description: |
-        Get posts from your wall, people you follow and communities you join sorted by custom rannking algorithm
+        Get posts from your wall,  people you follow and communities you join sorted by custom ranking algorithm
       parameters:
         - $ref: '#/components/parameters/parameter_limit'
         - $ref: '#/components/parameters/parameter_token-2'
+        - $ref: '#/components/parameters/parameter_dataTypes-3'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-3'
+          $ref: '#/components/responses/response_root-get-response-200-4'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '500':
@@ -2096,6 +2098,30 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/videos-response-200'
+        '413':
+          $ref: '#/components/responses/PayloadTooLargeError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v4/clips:
+    post:
+      summary: Upload clip file.
+      security:
+        - BearerAuth: []
+      tags:
+        - File
+      parameters:
+        - $ref: '#/components/parameters/content-type'
+      description: |-
+        Upload a clip to cloud storage 
+
+        Video size limit: 2,147,483,648 byte (2GB) 
+
+        Video duration limit: 15 minutes
+      requestBody:
+        $ref: '#/components/requestBodies/upload-video-request-payload'
+      responses:
+        '200':
+          $ref: '#/components/responses/clips-response-200'
         '413':
           $ref: '#/components/responses/PayloadTooLargeError'
         '500':
@@ -3367,7 +3393,7 @@ paths:
         - $ref: '#/components/parameters/parameter_options-5'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-4'
+          $ref: '#/components/responses/response_root-get-response-200-5'
         '404':
           $ref: '#/components/responses/NotFoundError'
         '429':
@@ -4756,12 +4782,12 @@ paths:
         - $ref: '#/components/parameters/parameter_hasFlag-6'
         - $ref: '#/components/parameters/parameter_isDeleted-4'
         - $ref: '#/components/parameters/parameter_options-3'
-        - $ref: '#/components/parameters/parameter_dataTypes-2'
+        - $ref: '#/components/parameters/parameter_dataTypes-4'
         - $ref: '#/components/parameters/parameter_tags-4'
         - $ref: '#/components/parameters/matchingOnlyParentPost'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-5'
+          $ref: '#/components/responses/response_root-get-response-200-6'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '404':
@@ -5017,7 +5043,7 @@ paths:
         - $ref: '#/components/parameters/parameter_isDeleted-2'
         - $ref: '#/components/parameters/parameter_options-9'
         - $ref: '#/components/parameters/feedType'
-        - $ref: '#/components/parameters/parameter_dataTypes-3'
+        - $ref: '#/components/parameters/parameter_dataTypes-5'
         - $ref: '#/components/parameters/parameter_tags-5'
         - $ref: '#/components/parameters/parameter_matchingOnlyParentPost'
       responses:
@@ -5064,6 +5090,12 @@ paths:
           - When put `dataType` as `poll` and `pollId` in `data`, post will be created as poll post
           - `attachments` will be ignored
           - Poll info will be in `polls` object in response
+
+          ### Clip post
+          - Put `type = clip` with `fileId` (from POST /v4/clips) in `attachments`
+          - Optionally we can add `isMuted` on the attachment to set the clip to mute for displaying on UI.
+          - Optionally we can add `displayMode` on the attachment to set the clip displayMode for displaying on UI.
+          - `fileId`, `isMuted`, `displayMode` will be in `data` object in child post
         required: true
         content:
           application/json:
@@ -5102,6 +5134,18 @@ paths:
                           - image
                           - file
                           - video
+                          - clip
+                      displayMode:
+                        type: string
+                        enum:
+                          - fill
+                          - fit
+                        description: displayMode of the clip
+                        example: fill
+                      isMuted:
+                        type: boolean
+                        description: Whether the clip should be muted or not
+                        example: 'true'
                 dataType:
                   type: string
                   example: upstra.customtype
@@ -5222,6 +5266,41 @@ paths:
                         type: boolean
         '400':
           $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /api/v5/posts:
+    get:
+      summary: query posts
+      tags:
+        - Post
+      security:
+        - BearerAuth: []
+      description: |
+        Query posts, (this will include new post dataType `clip` in the response).
+      parameters:
+        - $ref: '#/components/parameters/parameter_targetId'
+        - $ref: '#/components/parameters/parameter_targetType'
+        - $ref: '#/components/parameters/parameter_sortBy-7'
+        - $ref: '#/components/parameters/parameter_hasFlag-7'
+        - $ref: '#/components/parameters/parameter_isDeleted-2'
+        - $ref: '#/components/parameters/feedType'
+        - $ref: '#/components/parameters/parameter_dataTypes-6'
+        - $ref: '#/components/parameters/parameter_tags-5'
+        - $ref: '#/components/parameters/parameter_matchingOnlyParentPost'
+        - $ref: '#/components/parameters/parameter_options.limit'
+        - $ref: '#/components/parameters/options.after'
+        - $ref: '#/components/parameters/options.before'
+        - $ref: '#/components/parameters/options.updatedAt'
+        - $ref: '#/components/parameters/parameter_options.token'
+      responses:
+        '200':
+          $ref: '#/components/responses/response_post-pagination-response-200'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v1/presence/settings:
@@ -5420,7 +5499,7 @@ paths:
         - $ref: '#/components/parameters/parameter_options-11'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-6'
+          $ref: '#/components/responses/response_root-get-response-200-7'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /api/v2/roles:
@@ -5576,7 +5655,7 @@ paths:
         - $ref: '#/components/parameters/targetId'
         - $ref: '#/components/parameters/parameter_targetType-2'
         - $ref: '#/components/parameters/parameter_options-3'
-        - $ref: '#/components/parameters/parameter_dataTypes-4'
+        - $ref: '#/components/parameters/parameter_dataTypes-7'
         - $ref: '#/components/parameters/parameter_tags-4'
         - $ref: '#/components/parameters/matchingOnlyParentPost'
       responses:
@@ -5645,7 +5724,7 @@ paths:
       description: Verify access token. The caller must add accessToken in header.
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-7'
+          $ref: '#/components/responses/response_root-get-response-200-8'
         '401':
           description: Access token is invalid or expired
         '403':
@@ -6394,11 +6473,11 @@ paths:
         - $ref: '#/components/parameters/parameter_sortBy-9'
         - $ref: '#/components/parameters/parameter_searchBy-2'
         - $ref: '#/components/parameters/options.limit'
-        - $ref: '#/components/parameters/parameter_options.token'
+        - $ref: '#/components/parameters/parameter_options.token-2'
         - $ref: '#/components/parameters/parameter_isDeleted-8'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-8'
+          $ref: '#/components/responses/response_root-get-response-200-9'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '403':
@@ -6668,7 +6747,7 @@ paths:
         - $ref: '#/components/parameters/parameter_options-13'
       responses:
         '200':
-          $ref: '#/components/responses/response_root-get-response-200-9'
+          $ref: '#/components/responses/response_root-get-response-200-10'
         '404':
           $ref: '#/components/responses/NotFoundError'
         '500':
@@ -11293,6 +11372,243 @@ components:
           default: open
         closedIn:
           type: number
+    PostV5:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Private ID of a post. (for real-time event)
+        path:
+          type: string
+          description: Path of a post. (for real-time event)
+        postId:
+          type: string
+          description: ID of a post.
+        parentPostId:
+          type: string
+          description: ID of a parent post.
+        postedUserId:
+          type: string
+          description: ID of a creator.
+        postedUserPublicId:
+          type: string
+          description: Public ID of a creator.
+        postedUserInternalId:
+          type: string
+          description: Internal ID of a creator.
+        publisherId:
+          type: string
+          description: ID of an original publisher when creating a post as brand.
+        publisherPublicId:
+          type: string
+          description: Public ID of an original publisher when creating a post as brand.
+        sharedUserId:
+          type: string
+          description: ID of a shared owner.
+        sharedCount:
+          type: integer
+          description: number of shared post.
+        targetId:
+          type: string
+          description: ID of a target.
+        targetPublicId:
+          type: string
+          description: Public ID of a target.
+        targetInternalId:
+          type: string
+          description: Internal ID of a target.
+        targetType:
+          type: string
+          enum:
+            - user
+            - community
+            - content
+          description: Type of a target (user, community, content).
+        dataType:
+          type: string
+          enum:
+            - text
+            - image
+            - file
+            - video
+            - liveStream
+            - clip
+          description: Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).
+          default: text
+        data:
+          description: Body of a post. Can be different types based on content type.
+          oneOf:
+            - type: object
+              title: normal post
+              description: Standard post data (text, image, file, video)
+              properties:
+                text:
+                  type: string
+                  description: post text.
+                fileId:
+                  type: string
+                  description: file key on cloud storage (for image, file post).
+                thumbnailFileId:
+                  type: string
+                  description: video thumbnail file id (for video post).
+                videoFileId:
+                  type: object
+                  description: video file id for each quality (for video post).
+                  properties:
+                    original:
+                      type: string
+                      description: original file id
+                    low:
+                      type: string
+                      description: low video quality file id
+                    medium:
+                      type: string
+                      description: medium video quality file id
+                    high:
+                      type: string
+                      description: high video quality file id
+                streamId:
+                  type: string
+                  description: video streaming id (for video streaming post)
+            - type: object
+              title: clip post
+              description: clip post data
+              properties:
+                fileId:
+                  type: string
+                  description: file key on cloud storage.
+                thumbnailId:
+                  type: string
+                  description: thumbnail file id.
+                isMuted:
+                  type: boolean
+                  description: whether the video is muted.
+                  default: false
+                displayMode:
+                  type: string
+                  description: display mode for the video.
+                  enum:
+                    - fill
+                    - fit
+                  default: fill
+        metadata:
+          type: object
+          description: Additional properties to support custom fields.
+        flagCount:
+          type: integer
+          description: The number of users that has read this post.
+        hashFlag:
+          type: object
+          description: The flag for checking internally that this post is reported or not.
+          properties:
+            bits:
+              type: integer
+            hashes:
+              type: integer
+            hash:
+              type: array
+              items:
+                type: string
+        editedAt:
+          type: string
+          description: The date/time when text or metadata of post is updated.
+          format: date-time
+        createdAt:
+          type: string
+          description: The date/time when a post is created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date/time when a post is updated or deleted.
+          format: date-time
+        reactions:
+          type: object
+          description: The mapping of reaction with reactionCounter.
+          example:
+            like: 1
+        reactionsCount:
+          type: integer
+          description: The number of all reactions for this post.
+          example: 1
+        myReactions:
+          type: array
+          items:
+            type: string
+            example: like
+          description: The list of my reactions to this post.
+        commentsCount:
+          type: integer
+          description: The number of all comments for this post.
+          example: 1
+        comments:
+          type: array
+          items:
+            type: string
+            description: ID of a comment.
+        children:
+          type: array
+          items:
+            type: string
+            description: ID of a children post.
+        childrenNumber:
+          type: integer
+          description: The number of all children posts for this post.
+        isDeleted:
+          type: boolean
+          default: false
+          description: A flag to deleted a post.
+        hasFlaggedComment:
+          type: boolean
+          default: false
+          description: The flag for checking internally that comments inside post is reported or not.
+        hasFlaggedChildren:
+          type: boolean
+          default: false
+          description: The flag for checking internally that children post is reported or not.
+        feedId:
+          type: string
+          description: Feed public id
+        tags:
+          type: array
+          minItems: 0
+          maxItems: 5
+          items:
+            type: string
+            maxLength: 24
+        mentionees:
+          type: array
+          description: The object of the mentions type and user who get a notification from the post.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: |
+                  type: * `user` - need to specific userIds and notification mentions individual user
+                enum:
+                  - user
+              userIds:
+                type: array
+                description: Array of UserId.
+                items:
+                  type: string
+              userPublicIds:
+                type: array
+                description: Array of UserPublicId.
+                items:
+                  type: string
+              userInternalIds:
+                type: array
+                description: Array of UserInternalId.
+                items:
+                  type: string
+        impression:
+          type: integer
+        reach:
+          type: integer
+      required:
+        - postId
+        - data
     Follow:
       type: object
       properties:
@@ -15817,7 +16133,58 @@ components:
                   posts:
                     type: array
                     items:
+                      $ref: '#/components/schemas/PostV5'
+                  postChildren:
+                    type: array
+                    items:
                       $ref: '#/components/schemas/Post'
+                  comments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserV3'
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/File'
+                  communities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Community'
+                  communityUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityUser'
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CommunityCategory'
+                  paging:
+                    type: object
+                    properties:
+                      next:
+                        type: string
+                      previous:
+                        type: string
+    response_root-get-response-200-4:
+      description: Global Feed Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostV5'
                   postChildren:
                     type: array
                     items:
@@ -16193,6 +16560,70 @@ components:
                     - file
                     - video
                   example: video
+                accessType:
+                  type: string
+                  description: File access type. `network` type requires authentication to download.
+                  enum:
+                    - public
+                    - network
+                  default: public
+                altText:
+                  type: string
+                  description: Alternative text for the file.
+                createdAt:
+                  type: string
+                  description: The date/time when a file is uploaded.
+                  format: date-time
+                updatedAt:
+                  type: string
+                  description: The date/time when a file is updated.
+                  format: date-time
+                attributes:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: File name.
+                      example: big_buck_bunny_720p_2mb.mp4
+                    extension:
+                      type: string
+                      description: File format.
+                      example: mp4
+                    size:
+                      type: number
+                      description: File size.
+                      example: 2107842
+                    mimeType:
+                      type: string
+                      description: File mime-type.
+                      example: video/mp4
+                    metadata:
+                      type: object
+                      description: Video metadata (width, height etc.).
+    clips-response-200:
+      description: Clip Video Upload Result
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                  description: Root file key on cloud storage.
+                fileUrl:
+                  type: string
+                  description: url to download the file
+                type:
+                  type: string
+                  description: File type.
+                  enum:
+                    - image
+                    - file
+                    - video
+                    - clip
+                  example: clip
                 accessType:
                   type: string
                   description: File access type. `network` type requires authentication to download.
@@ -16937,7 +17368,7 @@ components:
                   $ref: '#/components/schemas/UserV3'
               paging:
                 $ref: '#/components/schemas/Generic_paging'
-    response_root-get-response-200-4:
+    response_root-get-response-200-5:
       description: Messages Information
       content:
         application/json:
@@ -17440,7 +17871,7 @@ components:
                     type: string
                   previous:
                     type: string
-    response_root-get-response-200-5:
+    response_root-get-response-200-6:
       description: Post Information
       content:
         application/json:
@@ -17613,7 +18044,7 @@ components:
               posts:
                 type: array
                 items:
-                  $ref: '#/components/schemas/PostV4'
+                  $ref: '#/components/schemas/PostV5'
               postChildren:
                 type: array
                 items:
@@ -17658,6 +18089,60 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/Poll'
+    response_post-pagination-response-200:
+      description: Post Information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              posts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostV5'
+              postChildren:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostV4'
+              comments:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+              files:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+              communities:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Community'
+              communityUsers:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommunityUser'
+              categories:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommunityCategory'
+              feeds:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feed'
+              videoStreamings:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VideoStreaming'
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  previous:
+                    type: string
     settings-response-payload-200:
       description: Get presence feature setting response
       content:
@@ -17781,7 +18266,7 @@ components:
             properties:
               removedId:
                 type: string
-    response_root-get-response-200-6:
+    response_root-get-response-200-7:
       description: Reaction information.
       content:
         application/json:
@@ -17956,7 +18441,7 @@ components:
                     type: string
                   previous:
                     type: string
-    response_root-get-response-200-7:
+    response_root-get-response-200-8:
       description: Session Information
       content:
         application/json:
@@ -18075,7 +18560,7 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/File'
-    response_root-get-response-200-8:
+    response_root-get-response-200-9:
       description: User
       content:
         application/json:
@@ -18253,7 +18738,7 @@ components:
             code: 500000,
             message: Information mismatch
             status: error
-    response_root-get-response-200-9:
+    response_root-get-response-200-10:
       description: list of video streaming
       content:
         application/json:
@@ -19925,6 +20410,28 @@ components:
         type: string
         minLength: 1
         maxLength: 100
+    parameter_dataTypes-2:
+      name: dataTypes
+      in: query
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 5
+        items:
+          type: string
+          enum:
+            - video
+            - image
+            - file
+            - liveStream
+            - clip
+        description: post data type to filter
+    resolveParent:
+      name: resolveParent
+      in: query
+      schema:
+        type: boolean
+        description: whether to include parent when filtering by dataTypes that only have child posts e.g. `dataTypes=['video', 'clip']`
     parameter_token-2:
       name: token
       in: query
@@ -19932,6 +20439,20 @@ components:
         type: string
         minLength: 1
         maxLength: 1000
+    parameter_dataTypes-3:
+      name: dataTypes
+      in: query
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 2
+        items:
+          type: string
+          enum:
+            - video
+            - clip
+          description: dataTypes to specified, if we send 'video' to the API the feed will be from  post with dataType=video only
+        description: Post `dataTypes` to filter
     _fileId:
       in: path
       name: fileId
@@ -20551,7 +21072,7 @@ components:
           * `null(default)` - Show all posts.
           * `true` - Show only flagged post(or children) or has flagged comment.
           * `false` - Show only no flagged post(and children) and has no flagged comment.  
-    parameter_dataTypes-2:
+    parameter_dataTypes-4:
       name: dataTypes
       in: query
       description: |
@@ -20703,7 +21224,7 @@ components:
           - declined
         example: published
       description: Feed type to filter
-    parameter_dataTypes-3:
+    parameter_dataTypes-5:
       name: dataTypes
       in: query
       schema:
@@ -20752,6 +21273,63 @@ components:
         type: boolean
         default: false
         description: If permanent data will be hard deleted
+    parameter_dataTypes-6:
+      name: dataTypes
+      in: query
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 6
+        items:
+          type: string
+          maxLength: 100
+          enum:
+            - video
+            - image
+            - file
+            - liveStream
+            - poll
+            - clip
+      description: Post data type to filter (include child posts too).
+    parameter_options.limit:
+      name: options[limit]
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+        example: options[limit]=5
+        description: Page size
+    options.after:
+      name: options[after]
+      in: query
+      schema:
+        type: string
+        maxLength: 24
+        description: Cursor value to get records after
+    options.before:
+      name: options[before]
+      in: query
+      schema:
+        type: string
+        maxLength: 24
+        description: Cursor value to get records before
+    options.updatedAt:
+      name: options[updatedAt]
+      in: query
+      schema:
+        type: string
+        maxLength: 30
+        description: Use updatedAt when sorting by first or last updated
+    parameter_options.token:
+      name: options[token]
+      in: query
+      schema:
+        type: string
+        maxLength: 1000
+        example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
+        description: Pagination token
     parameter_userIds-2:
       name: userIds
       in: query
@@ -20920,7 +21498,7 @@ components:
           - community
           - user
           - content
-    parameter_dataTypes-4:
+    parameter_dataTypes-7:
       name: dataTypes
       in: query
       description: |
@@ -21215,7 +21793,7 @@ components:
           * `profileHandle` - Search by profile handle, when using with `sortBy` parameter the applicable sort order is `profileHandle`, `lastCreated` or `firstCreated`. Default to `profileHandle`.  <br>
           * `userId` - Search by user id, when using with `sortBy` parameter the applicable sort order is `lastCreated`, `firstCreated` or `displayName`. Default to `displayName`.<br>
           Default is all three fields
-    parameter_options.token:
+    parameter_options.token-2:
       name: options[token]
       in: query
       description: Pagination token for getting next/previous pages

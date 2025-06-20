@@ -64,6 +64,28 @@ videos:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
+clips:
+  post:
+    summary: "Upload clip file."
+    security:
+      - BearerAuth: []
+    tags:
+      - "File"
+    parameters:
+      - $ref: "./parameter.yaml#/content-type"
+    description: "Upload a clip to cloud storage
+      \n\nVideo size limit: 2,147,483,648 byte (2GB)
+      \n\nVideo duration limit: 15 minutes"
+    requestBody:
+      $ref: "./request.yaml#/upload-video-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/clips-response-200"
+      413:
+        $ref: "../../global/error.yaml#/PayloadTooLargeError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
 images-from-url:
   post:
     summary: "Upload image from URL."

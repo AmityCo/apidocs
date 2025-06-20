@@ -1,0 +1,35 @@
+root:
+  get:
+    summary: "query posts"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: |
+      Query posts, (this will include new post dataType `clip` in the response).
+    parameters:
+      - $ref: "./parameter.yaml#/targetId"
+      - $ref: "./parameter.yaml#/targetType"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/hasFlag"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/feedType"
+      - $ref: "./parameter.yaml#/dataTypes"
+      - $ref: "./parameter.yaml#/tags"
+      - $ref: "./parameter.yaml#/matchingOnlyParentPost"
+      - $ref: "./parameter.yaml#/options.limit"
+      - $ref: "./parameter.yaml#/options.after"
+      - $ref: "./parameter.yaml#/options.before"
+      - $ref: "./parameter.yaml#/options.updatedAt"
+      - $ref: "./parameter.yaml#/options.token"
+    responses:
+      200:
+        $ref: "./response.yaml#/post-pagination-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
