@@ -4742,6 +4742,29 @@ paths:
           $ref: '#/components/responses/PollNotFoundError'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+    put:
+      summary: update poll votes
+      tags:
+        - Poll
+      security:
+        - BearerAuth: []
+      description: |
+        Update poll answers.
+      parameters:
+        - $ref: '#/components/parameters/pollId'
+        - $ref: '#/components/parameters/authorization'
+        - $ref: '#/components/parameters/content-type'
+      requestBody:
+        $ref: '#/components/requestBodies/_pollId-votes-put-request-payload'
+      responses:
+        '200':
+          $ref: '#/components/responses/response_common-response-200-6'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/PollNotFoundError'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /api/v3/polls/{pollId}/answers/{answerId}:
     get:
       summary: List users who vote the poll with specific answer
@@ -23673,7 +23696,23 @@ components:
             type: object
             properties:
               answerIds:
-                description: poll id
+                type: array
+                items:
+                  type: string
+            required:
+              - data
+    _pollId-votes-put-request-payload:
+      description: |
+        The desired poll answers to be updated.
+        The invalid answer id will be ignored.
+        If answerIds is empty, meaning that the user unvote all answers.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              answerIds:
                 type: array
                 items:
                   type: string
