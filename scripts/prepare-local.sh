@@ -14,14 +14,14 @@ echo "Updating script tag in $FILE..."
 # The '$' in $branch is escaped for the perl regex.
 if [ "$OS" = "Darwin" ]; then
     # macOS version
-    perl -i -pe 's|url: \x27https://raw.githubusercontent.com/AmityCo/apidocs/\$branch/bundled.yaml\x27|url: \x27./bundled.yaml\x27|g' "$FILE"
+    perl -i -pe 's|url: \x27https://raw.githubusercontent.com/AmityCo/apidocs/\$branch/bundled.json\x27|url: \x27./bundled.json\x27|g' "$FILE"
 else
     # Linux version
-    perl -i -pe 's|url: \x27https://raw.githubusercontent.com/AmityCo/apidocs/\$branch/bundled.yaml\x27|url: \x27./bundled.yaml\x27|g' "$FILE"
+    perl -i -pe 's|url: \x27https://raw.githubusercontent.com/AmityCo/apidocs/\$branch/bundled.json\x27|url: \x27./bundled.json\x27|g' "$FILE"
 fi
 
 # Check if replacement was successful
-if grep -q "url: './bundled.yaml'" "$FILE"; then
+if grep -q "url: './bundled.json'" "$FILE"; then
     echo "✅ URL replacement successful in $FILE"
 else
     echo "❌ URL replacement failed. Please check the file manually."

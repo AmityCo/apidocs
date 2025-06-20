@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "lint": "redocly lint swagger.yaml",
-    "build": "redocly bundle swagger.yaml -o bundled.yaml",
-    "prepare-local": "npm run build && rm -rf ./local && cp -r build local && cp ./bundled.yaml ./local/bundled.yaml && sh ./scripts/prepare-local.sh",
+    "build": "redocly bundle swagger.yaml -o bundled.json",
+    "prepare-local": "npm run build && rm -rf ./local && cp -r build local && cp ./bundled.json ./local/bundled.json && sh ./scripts/prepare-local.sh",
     "prepare": "husky",
     "changelog:gen": "git-cliff --output CHANGELOG.md",
     "changelog:rc": "git-cliff --output CHANGELOG.md",
@@ -15,10 +15,10 @@
     "changelog:major": "git-cliff --bump major --output CHANGELOG.md"
   },
   "dependencies": {
-    "@redocly/cli": "^1.34.0"
+    "@redocly/cli": "1.34.3"
   },
   "devDependencies": {
-    "git-cliff": "^2.8.0",
+    "git-cliff": "2.9.1",
     "husky": "^9.1.7"
   }
 }

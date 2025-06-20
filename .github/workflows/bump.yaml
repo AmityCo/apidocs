@@ -55,7 +55,7 @@ jobs:
           git push --set-upstream origin $branch_name
 
           if [[ ${{ github.event.inputs.release }} == "rc" ]]; then
-            echo "skip update swagger.yaml and bundled.yaml for rc"
+            echo "skip update swagger.yaml and bundled.json for rc"
           else
             yq e '.info.version = "'$version'"' -i swagger.yaml
             npm run build
@@ -73,7 +73,7 @@ jobs:
             ## Changes
             - Bump version to ${{ steps.bump.outputs.version }}
             - Update changelog
-            - Update bundled.yaml
+            - Update bundled.json
             - Update swagger.yaml
           commit-message: "chore: update changelog and bump version to ${{ steps.bump.outputs.version }}"
           branch: ${{ steps.bump.outputs.branch }}
