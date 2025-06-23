@@ -1,0 +1,202 @@
+root:
+  get:
+    summary: "Get invitations"
+    tags:
+      - "Invitation"
+    security:
+      - BearerAuth: []
+    description: |
+      Retrieves a paginated list of invitations that belong to a specific community.
+
+    parameters:
+      - $ref: "./parameter.yaml#/type"
+      - $ref: "./parameter.yaml#/targetType"
+      - $ref: "./parameter.yaml#/targetId"
+      - $ref: "./parameter.yaml#/options-after"
+      - $ref: "./parameter.yaml#/options-before"
+      - $ref: "./parameter.yaml#/options-limit"
+      - $ref: "./parameter.yaml#/options-token"
+      - $ref: "./parameter.yaml#/statuses"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/sortOrder"
+    responses:
+      200:
+        $ref: "./response.yaml#/invitations-query-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  post:
+    summary: "Create invitations"
+    tags:
+      - "Invitation"
+    security:
+      - BearerAuth: []
+    description: |
+      Creates new invitations for the specified users to join a target entity (community, group, or event).
+
+    requestBody:
+      $ref: "./request.yaml#/create-invitation-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/create-invitation-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+invitationId-accept:
+  post:
+    summary: "Accept an invitation"
+    tags:
+      - "Invitation"
+    security:
+      - BearerAuth: []
+    description: |
+      Accepts a pending invitation. This will change the invitation status to "approved" and perform the associated action (e.g., adding the user to a community).
+    parameters:
+      - $ref: "./parameter.yaml#/invitationId"
+    responses:
+      200:
+        $ref: "./response.yaml#/accept-invitation-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+invitationId-reject:
+  post:
+    summary: "Reject an invitation"
+    tags:
+      - "Invitation"
+    security:
+      - BearerAuth: []
+    description: |
+      Rejects a pending invitation. This will change the invitation status to "rejected".
+    parameters:
+      - $ref: "./parameter.yaml#/invitationId"
+    responses:
+      200:
+        $ref: "./response.yaml#/reject-invitation-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+invitationId-cancel:
+  delete:
+    summary: "Cancel an invitation"
+    tags:
+      - "Invitation"
+    security:
+      - BearerAuth: []
+    description: |
+      Cancels an existing invitation.
+    parameters:
+      - $ref: "./parameter.yaml#/invitationId"
+    responses:
+      200:
+        $ref: "./response.yaml#/cancel-invitation-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+me:
+  get:
+    summary: "Get my invitations"
+    tags:
+      - "Invitation"
+    security:
+      - BearerAuth: []
+    description: |
+      Retrieves a paginated list of invitations for the authenticated user. This endpoint returns invitations where the authenticated user is the invitee.
+    parameters:
+      - $ref: "./parameter.yaml#/type-optional"
+      - $ref: "./parameter.yaml#/targetType-optional"
+      - $ref: "./parameter.yaml#/targetId-optional"
+      - $ref: "./parameter.yaml#/options-after"
+      - $ref: "./parameter.yaml#/options-before"
+      - $ref: "./parameter.yaml#/options-limit"
+      - $ref: "./parameter.yaml#/options-token"
+    responses:
+      200:
+        $ref: "./response.yaml#/invitations-query-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+count:
+  get:
+    summary: "Count invitations"
+    tags:
+      - "Invitation"
+    security:
+      - BearerAuth: []
+    description: |
+      Returns the total count of invitations matching the specified criteria. This endpoint is useful for displaying invitation counts in UI without needing to fetch all invitation data.
+
+    parameters:
+      - $ref: "./parameter.yaml#/targetId"
+      - $ref: "./parameter.yaml#/targetType"
+      - $ref: "./parameter.yaml#/type"
+      - $ref: "./parameter.yaml#/statuses"
+    responses:
+      200:
+        $ref: "./response.yaml#/count-invitations-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+invitationId-resend:
+  post:
+    summary: "Resend an invitation"
+    tags:
+      - "Invitation"
+    security:
+      - BearerAuth: []
+    description: |
+      This API allows invitation creators or authorized users to resend invitations that were declined.
+
+    parameters:
+      - $ref: "./parameter.yaml#/invitationId"
+      - $ref: "./parameter.yaml#/communityId"
+    responses:
+      200:
+        $ref: "./response.yaml#/resend-invitation-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

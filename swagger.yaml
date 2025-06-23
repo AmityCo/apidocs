@@ -104,12 +104,38 @@ paths:
     $ref: "./v3/community/index.yaml#/top-trending"
   /api/v4/communities/{communityId}/users/roles:
     $ref: "./v4/community/index.yaml#/_communityId-users-roles"
+  /api/v4/communities/{communityId}/join:
+    $ref: "./v4/community/index.yaml#/_communityId-join"
+  /api/v4/communities/{communityId}/join/me:
+    $ref: "./v4/community/index.yaml#/my-join-requests"
+  /api/v4/communities/{communityId}/join/approve:
+    $ref: "./v4/community/index.yaml#/_approve-join-request"
+  /api/v4/communities/{communityId}/join/reject:
+    $ref: "./v4/community/index.yaml#/_reject-join-request"
+  /api/v4/communities/{communityId}/join/count:
+    $ref: "./v4/community/index.yaml#/_count-join-request"
+  /api/v4/communities/{communityId}/join/requests:
+    $ref: "./v4/community/index.yaml#/join-requests"
   /api/v3/community-categories:
     $ref: "./v3/community-category/index.yaml#/root"
   /api/v3/community-categories/{categoryId}:
     $ref: "./v3/community-category/index.yaml#/_categoryId"
   /api/v3/community-categories/list:
     $ref: "./v3/community-category/index.yaml#/list"
+  /api/v1/invitations:
+    $ref: "./v1/invitation/index.yaml#/root"
+  /api/v1/invitations/{invitationId}/accept:
+    $ref: "./v1/invitation/index.yaml#/invitationId-accept"
+  /api/v1/invitations/{invitationId}/reject:
+    $ref: "./v1/invitation/index.yaml#/invitationId-reject"
+  /api/v1/invitations/{invitationId}:
+    $ref: "./v1/invitation/index.yaml#/invitationId-cancel"
+  /api/v1/invitations/me:
+    $ref: "./v1/invitation/index.yaml#/me"
+  /api/v1/invitations/count:
+    $ref: "./v1/invitation/index.yaml#/count"
+  /api/v1/invitations/{invitationId}/resend:
+    $ref: "./v1/invitation/index.yaml#/invitationId-resend"
   /api/v1/me/following-feeds:
     $ref: "./v1/following-feed/index.yaml#/root"
   /api/v3/content-feeds:
@@ -547,6 +573,18 @@ paths:
     $ref: "./webhook/community-v3/index.yaml#/community.didUnban"
   /webhook/v3.community.didUpdate:
     $ref: "./webhook/community-v3/index.yaml#/community.didUpdate"
+  /webhook/v3.communityJoinRequest.didCreate:
+    $ref: "./webhook/community-v3/index.yaml#/communityJoinRequest.didCreate"
+  /webhook/v3.communityJoinRequest.didAccept:
+    $ref: "./webhook/community-v3/index.yaml#/communityJoinRequest.didAccept"
+  /webhook/v3.communityJoinRequest.didReject:
+    $ref: "./webhook/community-v3/index.yaml#/communityJoinRequest.didReject"
+  /webhook/v3.communityMemberInvitation.didCreate:
+    $ref: "./webhook/community-v3/index.yaml#/communityMemberInvitation.didCreate"
+  /webhook/v3.communityMemberInvitation.didAccept:
+    $ref: "./webhook/community-v3/index.yaml#/communityMemberInvitation.didAccept"
+  /webhook/v3.communityMemberInvitation.didReject:
+    $ref: "./webhook/community-v3/index.yaml#/communityMemberInvitation.didReject"
   /webhook/v3.post.didAddReaction:
     $ref: "./webhook/post-v3/index.yaml#/post.didAddReaction"
   /webhook/v3.post.didApprove:

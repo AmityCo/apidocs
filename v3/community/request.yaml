@@ -73,6 +73,18 @@ root-post-request-payload:
                 * `default` - Auto register push notification.
                 * `silent` - Do not send notification.
                 * `subscribe` - Send notification to subscribed users only.
+          isDiscoverable:
+            type: "boolean"
+            default: false
+            description: |
+              * If true, this private community will be discoverable in the query response.
+              * If false, this private community will not appear in the list but can still be accessed via its ID.
+          requiresJoinApproval:
+            type: "boolean"
+            default: false
+            description: |
+              * If true, users will need to be approved by an admin before they can join the community.
+              * If false, users can join the community without approval.
         required:
           - "displayName"
 
@@ -144,6 +156,18 @@ _communityId-put-request-payload:
                 * `default` - Auto register push notification.
                 * `silent` - Do not send notification.
                 * `subscribe` - Send notification to subscribed users only.
+          isDiscoverable:
+            type: "boolean"
+            default: false
+            description: |
+              * If true, this private community will be discoverable in the query response.
+              * If false, this private community will not appear in the list but can still be accessed via its ID.
+          requiresJoinApproval:
+            type: "boolean"
+            default: false
+            description: |
+              * If true, users will need to be approved by an admin before they can join the community.
+              * If false, users can join the community without approval.
         required:
           - "communityId"
 

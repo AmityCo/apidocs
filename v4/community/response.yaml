@@ -29,3 +29,98 @@ common-response-200:
             type: array
             items:
               $ref: "../../schema/feed.yaml#/Feed"
+          joinRequests:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/JoinRequest"
+
+join-response-200:
+  description: Join Community Response
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          joinRequests:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/JoinRequest"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          roles:
+            type: array
+            items:
+              $ref: "../../schema/role.yaml#/RoleV3"
+
+query-join-request-response-200:
+  description: Query Join Request Response
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          joinRequests:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/JoinRequest"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          roles:
+            type: array
+            items:
+              $ref: "../../schema/role.yaml#/RoleV3"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+                example: "eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=="
+              previous:
+                type: string
+                example: "eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=="
+
+get-join-request-response-200:
+  description: Query Join Request Response
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          joinRequests:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/JoinRequest"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          roles:
+            type: array
+            items:
+              $ref: "../../schema/role.yaml#/RoleV3"
+
+approve-and-reject-join-request-response-200:
+  description: Approve and Reject Join Request Response
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean

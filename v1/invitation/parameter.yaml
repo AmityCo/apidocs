@@ -1,0 +1,186 @@
+_communityId:
+  name: "communityId"
+  in: "path"
+  required: true
+  schema:
+    type: "string"
+    minLength: 1
+    maxLength: 900
+
+authorization:
+  name: "Authorization"
+  in: "header"
+  required: true
+  schema:
+    type: "string"
+
+content-type:
+  name: "Content-Type"
+  in: "header"
+  required: true
+  schema:
+    type: "string"
+
+type:
+  name: "type"
+  in: "query"
+  description: "Filter invitations by type"
+  required: true
+  schema:
+    type: "string"
+    enum:
+      - "communityMemberInvite"
+  example: "communityMemberInvite"
+
+targetType:
+  name: "targetType"
+  in: "query"
+  description: "Filter by target entity type"
+  required: true
+  schema:
+    type: "string"
+    enum:
+      - "community"
+  example: "community"
+
+targetId:
+  name: "targetId"
+  in: "query"
+  description: "Filter by specific target entity ID"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 900
+  example: "60f1234567890abcdef12345"
+
+options-after:
+  name: "options[after]"
+  in: "query"
+  description: "Pagination after cursor"
+  schema:
+    type: "string"
+    maxLength: 24
+  example: "60f1234567890abcdef12"
+
+options-before:
+  name: "options[before]"
+  in: "query"
+  description: "Pagination before cursor"
+  schema:
+    type: "string"
+    maxLength: 24
+  example: "60f1234567890abcdef12"
+
+options-limit:
+  name: "options[limit]"
+  in: "query"
+  description: "Number of results per page (positive integer)"
+  schema:
+    type: "integer"
+    minimum: 1
+    default: 10
+  example: 10
+
+options-token:
+  name: "options[token]"
+  in: "query"
+  description: "Pagination token"
+  schema:
+    type: "string"
+    maxLength: 1000
+  example: "eyJhZnRlciI6eyJfaWQiOiI2MDZmMzdhM2FlNjAxZWYzNzRlYmFhMDEifX0="
+
+statuses:
+  name: "statuses"
+  in: "query"
+  description: "Filter invitations by status (array)"
+  style: "form"
+  explode: true
+  schema:
+    type: "array"
+    items:
+      type: "string"
+      enum:
+        - "pending"
+        - "approved"
+        - "rejected"
+        - "cancelled"
+  example: ["pending", "approved"]
+
+sortBy:
+  name: "sortBy"
+  in: "query"
+  description: "Sort invitations by field"
+  schema:
+    type: "string"
+    enum:
+      - "_id"
+      - "createdAt"
+      - "respondedAt"
+    default: "createdAt"
+  example: "createdAt"
+
+sortOrder:
+  name: "sortOrder"
+  in: "query"
+  description: "Sort order"
+  schema:
+    type: "string"
+    enum:
+      - "asc"
+      - "desc"
+    default: "desc"
+  example: "desc"
+
+invitationId:
+  name: "invitationId"
+  in: "path"
+  required: true
+  description: "ID of the invitation"
+  schema:
+    type: "string"
+    minLength: 1
+    maxLength: 50
+  example: "6858374aeae5300158b6d1be"
+
+type-optional:
+  name: "type"
+  in: "query"
+  description: "Filter invitations by type (optional)"
+  required: false
+  schema:
+    type: "string"
+    enum:
+      - "communityMemberInvite"
+  example: "communityMemberInvite"
+
+targetType-optional:
+  name: "targetType"
+  in: "query"
+  description: "Filter by target entity type (optional)"
+  required: false
+  schema:
+    type: "string"
+    enum:
+      - "community"
+  example: "community"
+
+targetId-optional:
+  name: "targetId"
+  in: "query"
+  description: "Filter by specific target entity ID (optional)"
+  required: false
+  schema:
+    type: "string"
+    maxLength: 900
+  example: "60f1234567890abcdef12345"
+
+communityId:
+  name: "communityId"
+  in: "query"
+  required: true
+  description: "Community ID for permission check purpose"
+  schema:
+    type: "string"
+    maxLength: 900
+  example: "68583742eae5300158b6d144"

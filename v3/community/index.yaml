@@ -14,6 +14,7 @@ root:
       - $ref: "./parameter.yaml#/sortBy-communities"
       - $ref: "./parameter.yaml#/isDeleted"
       - $ref: "./parameter.yaml#/hasFlag"
+      - $ref: "./parameter.yaml#/includeDiscoverablePrivateCommunity"
       - $ref: "./parameter.yaml#/options.limit"
       - $ref: "./parameter.yaml#/options.token"
     responses:
@@ -127,7 +128,16 @@ _communityId-join:
       - "Community"
     security:
       - BearerAuth: []
-    description: "Join community by ID\n"
+    deprecated: true
+    description: |
+      This API will make the requesting user to become a member of a community.
+
+      **⚠️ DEPRECATED NOTICE**
+
+      This API is deprecated and only supports UIKit v3. If you're using UIKit v4 or later versions, please migrate to the updated join community API:
+
+      - **New API**: `POST /api/v4/communities/{communityId}/join`
+
     parameters:
       - $ref: "./parameter.yaml#/communityId"
     responses:
@@ -203,7 +213,16 @@ _communityId-users:
       - "Community"
     security:
       - BearerAuth: []
-    description: "add community users\n"
+    deprecated: true
+    description: |
+      This API will add multiple users to a community.
+
+      **⚠️ DEPRECATED NOTICE**
+
+      This API is deprecated and only supports UIKit v3. If you're using UIKit v4 or later versions, please migrate to the new invitation system:
+
+      - **New API**: `POST /api/v1/invitations`
+
     parameters:
       - $ref: "./parameter.yaml#/communityId"
     requestBody:
@@ -423,6 +442,7 @@ recommended:
     description: "Get list of recommended community\n"
     parameters:
       - $ref: "./parameter.yaml#/content-type"
+      - $ref: "./parameter.yaml#/includeDiscoverablePrivateCommunity"
       - name: "options"
         in: "query"
         style: "deepObject"
@@ -452,6 +472,7 @@ top-trending:
     description: "Get list of top trend community\n"
     parameters:
       - $ref: "./parameter.yaml#/content-type"
+      - $ref: "./parameter.yaml#/includeDiscoverablePrivateCommunity"
       - name: "options"
         in: "query"
         style: "deepObject"

@@ -91,6 +91,18 @@ Community:
     allowCommentInStory:
       type: "boolean"
       default: true
+    isDiscoverable:
+      type: "boolean"
+      default: false
+      description: |
+        * If true, this private community will be discoverable in the query response.
+        * If false, this private community will not appear in the list but can still be accessed via its ID.
+    requiresJoinApproval:
+      type: "boolean"
+      default: false
+      description: |
+        * If true, users will need to be approved by an admin before they can join the community.
+        * If false, users can join the community without approval.
     notificationMode:
       type: string
       enum:
@@ -276,3 +288,65 @@ CommunityUser:
       type: string
       description: The date/time when a community user is updated or deleted.
       format: date-time
+
+JoinRequest:
+  type: object
+  properties:
+    _id:
+      type: string
+      description: Private ID of a join request.
+    networkId:
+      type: string
+      description: ID of the network.
+    targetId:
+      type: string
+      description: ID of the target entity (community).
+    targetType:
+      type: string
+      description: Type of the target entity.
+    type:
+      type: string
+      description: Type of the request.
+    userId:
+      type: string
+      description: ID of the user making the request.
+    status:
+      type: string
+      description: Current status of the join request.
+    respondedAt:
+      type: string
+      nullable: true
+      format: date-time
+      description: The date/time when the request was responded to (approved/rejected).
+    updatedAt:
+      type: string
+      format: date-time
+      description: The date/time when the join request was last updated.
+    createdAt:
+      type: string
+      format: date-time
+      description: The date/time when the join request was created.
+    joinRequestId:
+      type: string
+      description: Public ID of the join request.
+    requestorId:
+      type: string
+      description: Public ID of the user who made the request.
+    requestorPublicId:
+      type: string
+      description: Public ID of the requestor.
+    requestorInternalId:
+      type: string
+      description: Internal ID of the requestor.
+    responderId:
+      type: string
+      nullable: true
+      description: ID of the user who responded to the request.
+    responderPublicId:
+      type: string
+      nullable: true
+      description: Public ID of the responder.
+    responderInternalId:
+      type: string
+      nullable: true
+      description: Internal ID of the responder.

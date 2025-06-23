@@ -335,8 +335,18 @@ join:
     - Community
   security:
     - BearerAuth: []
-  description: >
-    Join community by ID
+  deprecated: true
+  description: |
+    Allows a user to join a community by providing the community ID. This endpoint enables users to become members of public communities or request to join private communities.
+
+    **⚠️ DEPRECATED NOTICE**
+    
+    This API is deprecated and only supports UIKit v3. If you're using UIKit v4 or later versions, please migrate to the updated join community API:
+    
+    - **New API**: `POST /api/v4/communities/{communityId}/join`
+    - **Migration Guide**: The v4 API provides enhanced functionality and improved performance for community joining.
+    
+    Please update your integration to use the v4 endpoint for continued support.
   parameters:
     - name: communityId
       in: path
@@ -627,8 +637,11 @@ addUsers:
     - Community
   security:
     - BearerAuth: [] 
+  deprecated: true
   description: >
     add community users
+
+    **DEPRECATED**: This API only supports UIKit v3. For later versions, migrate to `POST /api/v1/invitations` API.
   parameters:
     - in: path
       name: communityId

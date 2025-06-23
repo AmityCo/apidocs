@@ -1,0 +1,107 @@
+invitations-query-response-200:
+  description: "List of invitations"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          invitations:
+            type: array
+            description: "List of invitation objects"
+            items:
+              $ref: "../../schema/invitation.yaml#/Invitation"
+          users:
+            type: array
+            description: "User details for inviters and invitees"
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              previous:
+                type: string
+
+accept-invitation-response-200:
+  description: "Accept invitation response"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean
+            description: "Whether the invitation was successfully accepted"
+            example: true
+
+reject-invitation-response-200:
+  description: "Reject invitation response"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean
+            description: "Whether the invitation was successfully rejected"
+            example: true
+
+cancel-invitation-response-200:
+  description: "Cancel invitation response"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean
+            description: "Whether the invitation was successfully canceled"
+            example: true     
+
+create-invitation-response-200:
+  description: "Create invitation response"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          invitations:
+            type: array
+            description: "Array of created invitation objects"
+            items:
+              $ref: "../../schema/invitation.yaml#/Invitation"
+          users:
+            type: array
+            description: "User details for invited users"
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+
+count-invitations-response-200:
+  description: "Count invitations response"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          count:
+            type: integer
+            description: "Total number of invitations matching the criteria"
+            example: 5
+      examples:
+        success:
+          summary: "Invitation count"
+          value:
+            count: 5
+
+resend-invitation-response-200:
+  description: "Resend invitation response"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean
+            description: "Whether the invitation was successfully resent"
+            example: true
