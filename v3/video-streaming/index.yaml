@@ -180,24 +180,7 @@ _streamId-viewer-bans:
       - $ref: "./parameter.yaml#/_streamId"
     responses:
       200:
-        description: "List of banned users"
-        content:
-          application/json:
-            schema:
-              type: "object"
-              properties:
-                data:
-                  type: "array"
-                  items:
-                    type: "object"
-                    properties:
-                      userId:
-                        type: "string"
-                      username:
-                        type: "string"
-                      bannedAt:
-                        type: "string"
-                        format: "date-time"
+        $ref: "./response.yaml#/video-streaming-banned-users-response"
       404:
         $ref: "../../global/error.yaml#/NotFoundError"
       500:
