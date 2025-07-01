@@ -1,0 +1,49 @@
+live-reaction-response-200:
+  description: Live reaction submission response.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          liveStreamId:
+            type: string
+            description: Live stream ID.
+          reactions:
+            type: array
+            description: List of processed live reactions.
+            items:
+              type: object
+              description: Live reaction submission response.
+              properties:
+                userId:
+                  type: string
+                  description: The public ID of user who reacted.
+                liveStreamId:
+                  type: string
+                  description: Live stream ID.
+                targetId:
+                  type: string
+                  description: The public ID of user or community.
+                targetType:
+                  type: string
+                  enum:
+                    - user
+                    - community
+                referencePublicId:
+                  type: string
+                  description: The public ID of the post.
+                referenceId:
+                  type: string
+                  description: The internal ID of the post.
+                referenceType:
+                  type: string
+                  enum:
+                    - post
+                  description: Type of reference (must be 'post').
+                reactionName:
+                  type: string
+                  description: Name of the reaction.
+                occurredAt:
+                  type: string
+                  format: date-time
+                  description: The date/time when the reaction occurred.

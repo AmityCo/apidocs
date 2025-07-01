@@ -1,0 +1,37 @@
+Response:
+  description: User
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          reactions:
+            type: array
+            items:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: "The public ID of the user who reacted"
+                referenceId:
+                  type: string
+                  description: "The internal ID of the post"
+                referencePublicId:
+                  type: string
+                  description: "The public ID of the post"
+                referenceType:
+                  type: string
+                  description: "The type of the post (e.g., 'post', 'comment')"
+                targetId:
+                  type: string
+                  description: "The public ID of the target (community, user, etc.)"
+                targetType:
+                  type: string
+                  description: "The type of the target (e.g., 'community', 'user')"
+                reactionName:
+                  type: string
+                  description: "The name of the reaction (e.g., 'like', 'love')"
+                occurredAt:
+                  type: string
+                  format: date-time
+                  description: "The timestamp when the reaction occurred"
