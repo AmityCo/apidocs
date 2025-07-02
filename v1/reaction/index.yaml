@@ -11,6 +11,9 @@ live:
           schema:
             type: object
             properties:
+              liveStreamId:
+                type: string
+                description: Live stream ID.
               reactions:
                 type: array
                 description: List of live reactions to submit.
@@ -39,12 +42,12 @@ live:
     responses:
       202:
         $ref: "./response.yaml#/live-reaction-response-200"
-    #   403:
-    #     $ref: "../../global/error.yaml#/ForbiddenError"
-      # 404:
-      # #   $ref: "../../global/error.yaml#/NotFoundError"
-      # 422:
-      #   $ref: "../../global/error.yaml#/UnprocessableEntityError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
     security:
