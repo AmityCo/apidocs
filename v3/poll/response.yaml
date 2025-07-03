@@ -17,6 +17,11 @@ common-response-200:
             type: array
             items:
               $ref: "../../schema/role.yaml#/RoleV3"
+          files:
+            type: array
+            description: "File objects referenced by image answers"
+            items:
+              $ref: "../../schema/file.yaml#/File"
 
 poll-pagination-response-200:
   description: Poll Information and users respondent.
@@ -37,6 +42,11 @@ poll-pagination-response-200:
             type: array
             items:
               $ref: "../../schema/poll.yaml#/UsersAnswered"
+          files:
+            type: array
+            description: "File objects referenced by image answers"
+            items:
+              $ref: "../../schema/file.yaml#/File"
           paging:
             type: object
             properties:
@@ -65,3 +75,8 @@ poll-webhook-response:
                 type: array
                 items:
                   $ref: "../../schema/user.yaml#/UserV3"
+              files:
+                type: array
+                description: "File objects referenced by image answers"
+                items:
+                  $ref: "../../schema/file.yaml#/File"

@@ -20,21 +20,25 @@ Poll:
       items:
         type: object
         properties:
+          id:
+            type: string
+            description: Option id
           dataType:
             type: string
             enum:
               - text
+              - image
           data:
             type: string
+          fileId:
+            type: string
+            description: "Present when dataType is 'image'"
           voteCount:
             type: number
             default: 0
           isVotedByUser:
             type: boolean
             default: false
-          id:
-            type: string
-            description: Option id
     answerType:
       type: string
     closedAt:
