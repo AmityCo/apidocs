@@ -178,3 +178,80 @@ uikit-response-200:
               base_inverse_color: "#FFFFFF"
               background_shade1_color: "#40434E"
               highlight_color: "#1054DE"
+
+shareable-deep-links-response-200:
+  description: Shareable deep links configuration
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          domain:
+            type: string
+            maxLength: 100
+            description: "The domain for the shareable deep links"
+            example: "myapp.com"
+          posts:
+            type: object
+            description: "Deep link patterns for posts"
+            properties:
+              webPattern:
+                type: string
+                maxLength: 100
+                description: "Web pattern for posts"
+                example: "/posts/{postId}"
+              mobilePattern:
+                type: string
+                maxLength: 100
+                description: "Mobile pattern for posts"
+                example: "/app/posts/{postId}"
+          communities:
+            type: object
+            description: "Deep link patterns for communities"
+            properties:
+              webPattern:
+                type: string
+                maxLength: 100
+                description: "Web pattern for communities"
+                example: "/communities/{communityId}"
+              mobilePattern:
+                type: string
+                maxLength: 100
+                description: "Mobile pattern for communities"
+                example: "/app/communities/{communityId}"
+          users:
+            type: object
+            description: "Deep link patterns for users"
+            properties:
+              webPattern:
+                type: string
+                maxLength: 100
+                description: "Web pattern for users"
+                example: "/users/{userId}"
+              mobilePattern:
+                type: string
+                maxLength: 100
+                description: "Mobile pattern for users"
+                example: "/app/users/{userId}"
+          livestreams:
+            type: object
+            description: "Deep link patterns for livestreams"
+            properties:
+              webPattern:
+                type: string
+                maxLength: 100
+                description: "Web pattern for livestreams"
+                example: "/livestreams/{livestreamId}"
+              mobilePattern:
+                type: string
+                maxLength: 100
+                description: "Mobile pattern for livestreams"
+                example: "/app/livestreams/{livestreamId}"
+          createdAt:
+            type: string
+            format: date-time
+            description: "Configuration creation timestamp"
+          updatedAt:
+            type: string
+            format: date-time
+            description: "Configuration last update timestamp"

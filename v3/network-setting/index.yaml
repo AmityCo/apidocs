@@ -366,3 +366,35 @@ uikit:
         $ref: "../../global/error.yaml#/BadRequestError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+shareable-deep-links: 
+  put:
+    summary: "Create shareable deep links configuration"
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Create or update shareable deep links configuration with domain and path patterns.\n"
+    requestBody:
+      $ref: "./request.yaml#/shareable-deep-links-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/shareable-deep-links-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "Get shareable deep links configuration"
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Get shareable deep links configuration.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/shareable-deep-links-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

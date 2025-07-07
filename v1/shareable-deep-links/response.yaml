@@ -1,0 +1,25 @@
+root-get-response-200:
+  description: Generated shareable deep link
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          url:
+            type: string
+            description: "The generated shareable deep link URL"
+            example: "https://myapp.com/content/12345/view"
+          contentType:
+            type: string
+            description: "Type of content being shared"
+            enum: ["posts", "communities", "users", "livestream"]
+            example: "posts"
+          contentId:
+            type: string
+            description: "ID of the content being shared"
+            example: "12345"
+          variant:
+            type: string
+            description: "Platform variant for the link"
+            enum: ["web", "mobile"]
+            example: "web"
