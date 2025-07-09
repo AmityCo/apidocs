@@ -233,66 +233,34 @@ shareable-deep-links-post-request-payload:
         type: "object"
         required:
           - domain
+          - patterns
         properties:
           domain:
             type: "string"
             maxLength: 100
             description: "The domain for the shareable deep links"
             example: "myapp.com"
-          posts:
+          patterns:
             type: "object"
-            description: "Deep link patterns for posts"
             properties:
-              webPattern:
+              posts:
                 type: "string"
                 maxLength: 100
                 description: "Web pattern for posts (e.g., /posts/{postId})"
                 example: "/posts/{postId}"
-              mobilePattern:
-                type: "string"
-                maxLength: 100
-                description: "Mobile pattern for posts (e.g., /app/posts/{postId})"
-                example: "/app/posts/{postId}"
-          communities:
-            type: "object"
-            description: "Deep link patterns for communities"
-            properties:
-              webPattern:
+              communities:
                 type: "string"
                 maxLength: 100
                 description: "Web pattern for communities (e.g., /communities/{communityId})"
                 example: "/communities/{communityId}"
-              mobilePattern:
-                type: "string"
-                maxLength: 100
-                description: "Mobile pattern for communities (e.g., /app/communities/{communityId})"
-                example: "/app/communities/{communityId}"
-          users:
-            type: "object"
-            description: "Deep link patterns for users"
-            properties:
-              webPattern:
+              users:
                 type: "string"
                 maxLength: 100
                 description: "Web pattern for users (e.g., /users/{userId})"
                 example: "/users/{userId}"
-              mobilePattern:
-                type: "string"
-                maxLength: 100
-                description: "Mobile pattern for users (e.g., /app/users/{userId})"
-                example: "/app/users/{userId}"
-          livestreams:
-            type: "object"
-            description: "Deep link patterns for livestreams"
-            properties:
-              webPattern:
+              livestreams:
                 type: "string"
                 maxLength: 100
                 description: "Web pattern for livestreams (e.g., /livestreams/{livestreamId})"
                 example: "/livestreams/{livestreamId}"
-              mobilePattern:
-                type: "string"
-                maxLength: 100
-                description: "Mobile pattern for livestreams (e.g., /app/livestreams/{livestreamId})"
-                example: "/app/livestreams/{livestreamId}"
 
