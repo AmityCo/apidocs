@@ -13,6 +13,9 @@ root-post-request-payload:
             type: "object"
             description: "require text or images or files (can't add images with files)"
             properties:
+              title:
+                type: "string"
+                maxLength: 150
               text:
                 type: "string"
               images:
@@ -73,6 +76,9 @@ _postId-put-request-payload:
           data:
             type: "object"
             properties:
+              title:
+                type: "string"
+                maxLength: 150
               text:
                 type: "string"
                 maximum: 50000
