@@ -122,9 +122,16 @@ social-put-request-payload:
             description: "Allow all user to create story (default will allow only user that have permission to create story)"
           allowJoinPrivateCommunity:
             type: "boolean"
+            deprecated: true
             description: |
-              true - Allow user to join private community by themselves
-              false - User need to be added to join private community
+              Controls whether users can join private communities directly or need to be added by moderators.
+
+              - `true` - Allow users to join private communities by themselves
+              - `false` - Users need to be added to join private communities
+
+              **⚠️ DEPRECATED NOTICE**
+
+              Community moderators are now be able to respond whether to allow users to become members of private communities.
           maxGlobalPinnedPost:
             description: "Maximum number of global pinned post (only super admin)"
             type: "integer"

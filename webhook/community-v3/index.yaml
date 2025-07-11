@@ -108,3 +108,69 @@ community.didUpdate:
     responses:
       200:
         $ref: "../../v3/community/response.yaml#/community-webhook-response"
+communityJoinRequest.didCreate:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "Community Join Request Did Create webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when a community join request is created\n"
+    responses:
+      200:
+        $ref: "../../v4/community/response.yaml#/join-response-200"
+communityJoinRequest.didAccept:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "Community Join Request Did Accept webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when a community join request is accepted\n"
+    responses:
+      200:
+        $ref: "../../v4/community/response.yaml#/join-response-200"
+communityJoinRequest.didReject:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "Community Join Request Did Reject webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when a community join request is rejected\n"
+    responses:
+      200:
+        $ref: "../../v4/community/response.yaml#/join-response-200"
+communityMemberInvitation.didCreate:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "Community Member Invitation Did Create webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when a community member invitation is created\n"
+    responses:
+      200:
+        $ref: "../../v1/invitation/response.yaml#/create-invitation-response-200"
+communityMemberInvitation.didAccept:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "Community Member Invitation Did Accept webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when a community member invitation is accepted\n"
+    responses:
+      200:
+        $ref: "../../v1/invitation/response.yaml#/create-invitation-response-200"
+communityMemberInvitation.didReject:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "Community Member Invitation Did Reject webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when a community member invitation is rejected\n"
+    responses:
+      200:
+        $ref: "../../v1/invitation/response.yaml#/create-invitation-response-200"

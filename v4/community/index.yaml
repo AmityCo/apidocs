@@ -59,3 +59,245 @@ _communityId-users-roles:
         $ref: "../../global/error.yaml#/NotFoundError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+_communityId-join:
+  post:
+    summary: "Join a community"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: |
+      Creates a community membership request for the requesting user and once approved by moderators, that user will become a member of the community.
+
+      **Key Features:**
+      - If the community set property `requiresJoinApproval` to `false`, the user will be added to the community immediately with approved request created.
+      - If the community set property `requiresJoinApproval` to `true`, the user will have pending request created, and the moderators will need to approve or decline.
+      - If the user is already having a pending invitation from moderators, the request will be auto-approved.
+    parameters:
+      - $ref: "./parameter.yaml#/_communityId"
+    responses:
+      200:
+        $ref: "./response.yaml#/join-response-200"
+      403:
+        description: Error Response
+        content:
+          application/json:
+            examples:
+              UserIsBannedError:
+                $ref: "../../global/error-example.yaml#/UserIsBannedError"
+              DuplicateEntryError:
+                $ref: "../../global/error-example.yaml#/DuplicateEntryError"
+              MaxRepetitionExceed:
+                $ref: "../../global/error-example.yaml#/MaxRepetitionExceed"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      409:
+        $ref: "../../global/error.yaml#/ConflictError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "Query join requests"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: |
+      Retrieves a paginated list of join requests associated with a specific community.
+    parameters:
+      - $ref: "./parameter.yaml#/_communityId"
+      - $ref: "./parameter.yaml#/join-request-type-required"
+      - $ref: "./parameter.yaml#/join-request-target-type-required"
+      - $ref: "./parameter.yaml#/join-request-statuses"
+      - $ref: "./parameter.yaml#/join-request-sort-by"
+      - $ref: "./parameter.yaml#/join-request-sort-order"
+      - $ref: "./parameter.yaml#/options.limit"
+      - $ref: "./parameter.yaml#/options.token"
+    responses:
+      200:
+        $ref: "./response.yaml#/query-join-request-response-200"
+      403:
+        description: You are not allowed to do this
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "Users do not have permission.":
+                value:
+                  status: error
+                  code: 400300
+                  message: You are not allowed to do this
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+      summary: "Cancel join requests"
+      tags:
+        - "Community"
+      security:
+        - BearerAuth: []
+      description: |
+        Cancels a user's pending join request to a specific community.
+      parameters:
+        - $ref: "./parameter.yaml#/_communityId"
+      responses:
+        200:
+          description: Count of join requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        404:
+          $ref: "../../global/error.yaml#/NotFoundError"
+        422:
+          $ref: "../../global/error.yaml#/UnProcessableError"
+        500:
+          $ref: "../../global/error.yaml#/UnexpectedError"
+
+my-join-requests:
+  get:
+    summary: "Get user's join requests"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: |
+      Retrieves a list of join requests associated with the user's account that belong to a specific community.
+    parameters:
+      - $ref: "./parameter.yaml#/_communityId"
+    responses:
+      200:
+        $ref: "./response.yaml#/query-join-request-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_approve-join-request:
+  post:
+    summary: "Approve a join request"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: |
+      This API allows moderators to approve a community join requests and add the user to the community.
+
+    parameters:
+      - $ref: "./parameter.yaml#/_communityId"
+    requestBody:
+      $ref: "./request.yaml#/_community-approve-join-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/approve-and-reject-join-request-response-200"
+      403:
+        description: You are not allowed to do this
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "Users do not have permission.":
+                value:
+                  status: error
+                  code: 400300
+                  message: You are not allowed to do this
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_reject-join-request:
+  post:
+    summary: "Reject a join request"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: |
+      This API allows moderators to reject a community join requests.
+
+    parameters:
+      - $ref: "./parameter.yaml#/_communityId"
+    requestBody:
+      $ref: "./request.yaml#/_community-reject-join-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/approve-and-reject-join-request-response-200"
+      403:
+        description: You are not allowed to do this
+        content:
+          application/json:
+            schema:
+              $ref: "../../global/error.yaml#/Error"
+            examples:
+              "Users do not have permission.":
+                value:
+                  status: error
+                  code: 400300
+                  message: You are not allowed to do this
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_count-join-request:
+  get:
+    summary: "Count join requests"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: |
+      This API allows user to count the number of pending join requests in a community.
+    parameters:
+      - $ref: "./parameter.yaml#/_communityId"
+    responses:
+      200:
+        description: Count of join requests
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                count:
+                  type: integer
+
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+join-requests:
+  get:
+    summary: "Get join request list"
+    tags:
+      - "Community"
+    security:
+      - BearerAuth: []
+    description: |
+      Retrieves a list of latest join requests associated with the user's account that belong to a specific community.
+    parameters:
+      - $ref: "./parameter.yaml#/_communityId"
+    responses:
+      200:
+        $ref: "./response.yaml#/get-join-request-response-200"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

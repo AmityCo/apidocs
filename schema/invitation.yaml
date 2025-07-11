@@ -1,0 +1,92 @@
+Invitation:
+  type: object
+  properties:
+    _id:
+      type: string
+      description: Private ID of the invitation.
+    networkId:
+      type: string
+      description: ID of the network.
+    type:
+      type: string
+      description: Type of invitation.
+      enum: 
+        - "communityMemberInvite"
+    targetId:
+      type: string
+      description: ID of the target entity (community, group, etc.).
+    targetType:
+      type: string
+      description: Type of target entity.
+      enum:
+        - "community"
+    userId:
+      type: string
+      description: ID of the user who received the invitation.
+    status:
+      type: string
+      description: Current status of the invitation.
+      enum:
+        - "pending"
+        - "approved"
+        - "rejected"
+        - "cancelled"
+    createdBy:
+      type: string
+      description: ID of the user who created the invitation.
+    respondedAt:
+      type: string
+      nullable: true
+      format: date-time
+      description: When the invitation was responded to (approved/rejected).
+    updatedAt:
+      type: string
+      format: date-time
+      description: When the invitation was last updated.
+    createdAt:
+      type: string
+      format: date-time
+      description: When the invitation was created.
+    invitationId:
+      type: string
+      description: Public ID of the invitation.
+    invitedUserId:
+      type: string
+      description: User ID of the invited user.
+    invitedUserPublicId:
+      type: string
+      description: Public ID of the invited user.
+    invitedUserInternalId:
+      type: string
+      description: Internal ID of the invited user.
+    inviterUserId:
+      type: string
+      description: User ID of the inviter.
+    inviterUserPublicId:
+      type: string
+      description: Public ID of the inviter.
+    inviterUserInternalId:
+      type: string
+      description: Internal ID of the inviter.
+    communityId:
+      type: string
+      description: ID of the community (for community invitations).
+      nullable: true
+  required:
+    - _id
+    - networkId
+    - type
+    - targetId
+    - targetType
+    - userId
+    - status
+    - createdBy
+    - createdAt
+    - updatedAt
+    - invitationId
+    - invitedUserId
+    - invitedUserPublicId
+    - invitedUserInternalId
+    - inviterUserId
+    - inviterUserPublicId
+    - inviterUserInternalId
