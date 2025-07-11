@@ -2,11 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [4.107.0] - 2025-07-11
+
+### 🚀 Features
+
+- Add title to post (#412)
+- Add default role api doc (#406)
+- Update community APIs to support invitation and join request. (#404)
+
+### 🐛 Bug Fixes
+
+- Added redocly to dereferenced and remove unused things (#405)
+
+## [4.106.1-rc.0] - 2025-06-20
 
 ### ⚙️ Miscellaneous Tasks
 
 - Update deps and fixed version scalar (#402)
+- Update changelog and bump version to 4.106.1-rc.0 (#403)
 
 ## [4.106.0] - 2025-06-20
 
