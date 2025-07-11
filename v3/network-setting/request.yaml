@@ -160,6 +160,12 @@ users-put-request-payload:
         properties:
           isAllowUpdateDisplayName:
             type: boolean
+          fallbackRoleIds:
+            type: array
+            items:
+              type: string
+              maxLength: 10
+            description: "When fallback role is enabled, these roles will be assigned to users who don't have any role in the network."
 
 webhook-put-request-payload:
   description: "information for a network setting\n"
@@ -176,9 +182,9 @@ webhook-put-request-payload:
 uikit-put-request-payload:
   description: UIKit config in json
   required: true
-  content: 
+  content:
     application/json:
-      schema: 
+      schema:
         type: object
       example:
         config:
@@ -210,4 +216,3 @@ uikit-put-request-payload:
               base_inverse_color: "#FFFFFF"
               background_shade1_color: "#40434E"
               highlight_color: "#1054DE"
-
