@@ -1,5 +1,11 @@
 root-post-request-payload:
-  description: "Information of a poll to be created.\n### Required\n- at least 2 options\n- dataType currently support only `text`\n- closedIn unit must be `milliseconds`\n"
+  description: 
+    "Information of a poll to be created.
+    \n### Required
+    \n- at least 2 options
+    \n- dataType currently support `text` and `image`, we can also mix dataType in one poll.
+    \n- closedIn unit must be `milliseconds`
+    \n"
   required: true
   content:
     application/json:
@@ -27,7 +33,11 @@ root-post-request-payload:
                   type: "string"
                   enum:
                     - "text"
+                    - "image"
                 data:
+                  type: "string"
+                fileId: 
+                  description: "image fileId, required only when dataType is image"
                   type: "string"
           answerType:
             description: "single or multiple."
