@@ -146,3 +146,18 @@ matchingOnlyParentPost:
     default: true
   description: |
     An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts
+
+hashtags:
+  name: hashtags
+  in: query
+  schema:
+    type: array
+    minItems: 0
+    maxItems: 30
+    items:
+      type: string
+      maxLength: 100
+      pattern: "^[a-zA-Z0-9_]+$"
+      example: "search_query"
+    example: ["technology", "AI_trends", "programming", "web_development"]
+  description: Filter posts by hashtags. Only alphanumeric characters and underscores are allowed. Case-insensitive matching.
