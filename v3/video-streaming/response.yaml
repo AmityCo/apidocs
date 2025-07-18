@@ -105,3 +105,50 @@ user-event-video-streaming-response-200:
           ok:
             type: boolean
             example: true
+
+video-streaming-banned-users-response:
+  description: "List of banned users"
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          videoStreamingBannedUsers:
+            type: "array"
+            items:
+              type: "object"
+              required:
+                - userId
+                - banBy
+                - userPublicId
+                - banByPublicId
+                - createdAt
+              properties:
+                userId:
+                  type: "string"
+                banBy:
+                  type: "string"
+                userPublicId:
+                  type: "string"
+                banByPublicId:
+                  type: "string"
+                createdAt:
+                  type: "string"
+                  format: "date-time"
+          videoStreamings: 
+            $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+          videoStreamingModerations:
+            $ref: "../../schema/video-streaming.yml#/VideoStreamingModeration"
+          users:
+            $ref: "../../schema/user.yaml#/User"
+          communities:
+            $ref: "../../schema/community.yaml#/Community"
+          posts:
+            $ref: "../../schema/post.yaml#/PostV5"
+          files:
+            $ref: "../../schema/file.yaml#/File"
+          paging:
+            type: "object"
+            properties: 
+              next: 
+                type: string

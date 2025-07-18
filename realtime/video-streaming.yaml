@@ -1,0 +1,74 @@
+video-streaming.viewerDidBan:
+  get:
+    security: []
+    summary: "video-streaming viewer did ban"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for video-streaming.viewerDidBan event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The message ID.
+                    data:
+                      type: object
+                      properties:
+                        list: 
+                          type: array
+                          items: 
+                            type: object 
+                            properties:
+                              networkId: 
+                                type: string
+                              channelId: 
+                                type: string
+                              userId:
+                                type: string
+                              actor: 
+                                type: string
+                              createdAt:
+                                type: number
+                - $ref: '../schema/realtime.yaml#/Wrapper'
+video-streaming.viewerDidUnban:
+  get:
+    security: []
+    summary: "video-streaming viewer did unban"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for video-streaming.viewerDidUnBan event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The message ID.
+                    data:
+                      type: object
+                      properties:
+                        list: 
+                          type: array
+                          items: 
+                            type: object 
+                            properties:
+                              networkId: 
+                                type: string
+                              channelId: 
+                                type: string
+                              userId:
+                                type: string
+                              actor: 
+                                type: string
+                              createdAt:
+                                type: number
+                - $ref: '../schema/realtime.yaml#/Wrapper'

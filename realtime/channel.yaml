@@ -79,3 +79,63 @@ channel.updated:
     responses:
       200:
         $ref: "../v3/realtime/channel/response.yaml#/Response"
+channel.setMuted:
+  get:
+    security: []
+    summary: "channel setMuted"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: Channel Information
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The message ID.
+                    data:
+                      type: object 
+                      properties:
+                        channelId: 
+                          type: string
+                        muteTimeout:
+                          type: string
+                        actor:
+                          type: string
+                - $ref: '../schema/realtime.yaml#/Wrapper'
+channel.setMutedUsers:
+  get:
+    security: []
+    summary: "channel setMutedUsers"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: Channel Information
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The message ID.
+                    data:
+                      type: object 
+                      properties:
+                        channelId: 
+                          type: string
+                        userIds:
+                          type: array
+                          items:
+                            type: string
+                        muteTimeout:
+                          type: string
+                        actor:
+                          type: string
+                - $ref: '../schema/realtime.yaml#/Wrapper'

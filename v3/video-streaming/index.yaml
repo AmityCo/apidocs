@@ -131,3 +131,94 @@ _streamId-streaming-url:
         $ref: "../../global/error.yaml#/NotFoundError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+_streamId-viewer-bans:
+  post:
+    summary: "ban viewers from a live stream"
+    tags:
+      - "Video streaming"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_streamId"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: "object"
+            required:
+              - "userIds"
+            properties:
+              userIds:
+                type: "array"
+                items:
+                  type: "string"
+                description: "List of user IDs to ban from the live stream"
+    responses:
+      200:
+        description: "Successfully banned users"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                success:
+                  type: "boolean"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "get list of banned viewers"
+    tags:
+      - "Video streaming"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_streamId"
+    responses:
+      200:
+        $ref: "./response.yaml#/video-streaming-banned-users-response"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "unban viewers from a live stream"
+    tags:
+      - "Video streaming"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_streamId"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: "object"
+            required:
+              - "userIds"
+            properties:
+              userIds:
+                type: "array"
+                items:
+                  type: "string"
+                description: "List of user IDs to unban from the live stream"
+    responses:
+      200:
+        description: "Successfully unbanned users"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                success:
+                  type: "boolean"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
