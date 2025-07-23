@@ -1,0 +1,31 @@
+_userId:
+  get:
+    summary: "Query user feed v4"
+    tags:
+      - "Feed"
+    security:
+      - BearerAuth: []
+    description: |
+      Query posts in user feed.
+    parameters:
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/dataTypes"
+      - $ref: "./parameter.yaml#/matchingOnlyParentPost"
+      - $ref: "./parameter.yaml#/includePostedFeed"
+      - $ref: "./parameter.yaml#/options.limit"
+      - $ref: "./parameter.yaml#/options.after"
+      - $ref: "./parameter.yaml#/options.before"
+      - $ref: "./parameter.yaml#/options.updatedAt"
+      - $ref: "./parameter.yaml#/options.token"
+    responses:
+      200:
+        $ref: "../../v5/post/response.yaml#/post-pagination-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
