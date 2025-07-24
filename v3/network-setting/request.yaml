@@ -223,3 +223,44 @@ uikit-put-request-payload:
               base_inverse_color: "#FFFFFF"
               background_shade1_color: "#40434E"
               highlight_color: "#1054DE"
+
+shareable-deep-links-post-request-payload:
+  description: "Configuration for shareable deep links"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        required:
+          - domain
+          - patterns
+        properties:
+          domain:
+            type: "string"
+            maxLength: 100
+            description: "The domain for the shareable deep links"
+            example: "myapp.com"
+          patterns:
+            type: "object"
+            properties:
+              posts:
+                type: "string"
+                maxLength: 100
+                description: "URL path for posts, {postId} is required (e.g., /posts/{postId})"
+                example: "/posts/{postId}"
+              communities:
+                type: "string"
+                maxLength: 100
+                description: "URL path for communities, {communityId} is required (e.g., /communities/{communityId})"
+                example: "/communities/{communityId}"
+              users:
+                type: "string"
+                maxLength: 100
+                description: "URL path for users, {userId} is required (e.g., /users/{userId})"
+                example: "/users/{userId}"
+              livestreams:
+                type: "string"
+                maxLength: 100
+                description: "URL path for livestreams, {livestreamId} is required (e.g., /livestreams/{livestreamId})"
+                example: "/livestreams/{livestreamId}"
+
