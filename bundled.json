@@ -99700,6 +99700,366 @@
         }
       }
     },
+    "/api/v3/network-settings/shareable-deep-links": {
+      "put": {
+        "summary": "Create shareable deep links configuration",
+        "tags": [
+          "Network Setting"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Create or update shareable deep links configuration with domain and path patterns.\n",
+        "requestBody": {
+          "description": "Configuration for shareable deep links",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "domain",
+                  "patterns"
+                ],
+                "properties": {
+                  "domain": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "description": "The domain for the shareable deep links",
+                    "example": "myapp.com"
+                  },
+                  "patterns": {
+                    "type": "object",
+                    "properties": {
+                      "posts": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "description": "URL path for posts, {postId} is required (e.g., /posts/{postId})",
+                        "example": "/posts/{postId}"
+                      },
+                      "communities": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "description": "URL path for communities, {communityId} is required (e.g., /communities/{communityId})",
+                        "example": "/communities/{communityId}"
+                      },
+                      "users": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "description": "URL path for users, {userId} is required (e.g., /users/{userId})",
+                        "example": "/users/{userId}"
+                      },
+                      "livestreams": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "description": "URL path for livestreams, {livestreamId} is required (e.g., /livestreams/{livestreamId})",
+                        "example": "/livestreams/{livestreamId}"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shareable deep links configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "domain",
+                    "patterns"
+                  ],
+                  "properties": {
+                    "domain": {
+                      "type": "string",
+                      "maxLength": 100,
+                      "description": "The domain for the shareable deep links",
+                      "example": "myapp.com"
+                    },
+                    "patterns": {
+                      "type": "object",
+                      "properties": {
+                        "posts": {
+                          "type": "string",
+                          "maxLength": 100,
+                          "description": "URL path for posts, {postId} is required (e.g., /posts/{postId})",
+                          "example": "/posts/{postId}"
+                        },
+                        "communities": {
+                          "type": "string",
+                          "maxLength": 100,
+                          "description": "URL path for communities, {communityId} is required (e.g., /communities/{communityId})",
+                          "example": "/communities/{communityId}"
+                        },
+                        "users": {
+                          "type": "string",
+                          "maxLength": 100,
+                          "description": "URL path for users, {userId} is required (e.g., /users/{userId})",
+                          "example": "/users/{userId}"
+                        },
+                        "livestreams": {
+                          "type": "string",
+                          "maxLength": 100,
+                          "description": "URL path for livestreams, {livestreamId} is required (e.g., /livestreams/{livestreamId})",
+                          "example": "/livestreams/{livestreamId}"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get shareable deep links configuration",
+        "tags": [
+          "Network Setting"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Get shareable deep links configuration.\n",
+        "responses": {
+          "200": {
+            "description": "Shareable deep links configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "domain",
+                    "patterns"
+                  ],
+                  "properties": {
+                    "domain": {
+                      "type": "string",
+                      "maxLength": 100,
+                      "description": "The domain for the shareable deep links",
+                      "example": "myapp.com"
+                    },
+                    "patterns": {
+                      "type": "object",
+                      "properties": {
+                        "posts": {
+                          "type": "string",
+                          "maxLength": 100,
+                          "description": "URL path for posts, {postId} is required (e.g., /posts/{postId})",
+                          "example": "/posts/{postId}"
+                        },
+                        "communities": {
+                          "type": "string",
+                          "maxLength": 100,
+                          "description": "URL path for communities, {communityId} is required (e.g., /communities/{communityId})",
+                          "example": "/communities/{communityId}"
+                        },
+                        "users": {
+                          "type": "string",
+                          "maxLength": 100,
+                          "description": "URL path for users, {userId} is required (e.g., /users/{userId})",
+                          "example": "/users/{userId}"
+                        },
+                        "livestreams": {
+                          "type": "string",
+                          "maxLength": 100,
+                          "description": "URL path for livestreams, {livestreamId} is required (e.g., /livestreams/{livestreamId})",
+                          "example": "/livestreams/{livestreamId}"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/notification": {
       "post": {
         "summary": "register a device to get push notification",
