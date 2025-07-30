@@ -68,6 +68,12 @@ root-post-request-payload:
                 * `default` - Automatically register push notifications.
                 * `silent` - Do not send notifications.
                 * `subscribe` - Send notifications only to subscribed users.
+          videoStreamId:
+            type: "string"
+            description: "The ID of the live video stream. This is required when `postId` is provided. When provided, the channel will be associated with this live stream so that users can perform live chat and live reaction."
+          postId:
+            type: "string"
+            description: "The ID of the post that `videoStreamId` belongs to. This required when `videoStreamId` is provided."
 
 seen-post-request-payload:
   description: "Information of read sengment to be updated\n"

@@ -1,0 +1,54 @@
+live:
+  post:
+    summary: Send live reactions
+    description: Send reactions to a live streaming.
+    tags:
+      - Reaction
+    requestBody:
+      description: List of live reactions to submit.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              liveStreamId:
+                type: string
+                description: Live stream ID.
+              reactions:
+                type: array
+                description: List of live reactions to submit.
+                items:
+                  type: object
+                  properties:
+                    userId:
+                      type: string
+                      description: user's publicId.
+                    referenceId:
+                      type: string
+                      description: Post's internal ID.
+                    referencePublicId:
+                      type: string
+                      description: Post's public ID.
+                    referenceType:
+                      type: string
+                      description: Type of reference (must be 'post').
+                    reactionName:
+                      type: string
+                      description: Name of the reaction.
+                    occurredAt:
+                      type: string
+                      description: The date/time when the reaction occurred.
+                      format: date-time
+    responses:
+      202:
+        $ref: "./response.yaml#/live-reaction-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+    security:
+      - BearerAuth: []
