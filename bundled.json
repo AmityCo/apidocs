@@ -20982,6 +20982,11 @@
                         "fileId"
                       ]
                     }
+                  },
+                  "editReason": {
+                    "type": "string",
+                    "maxLength": 300,
+                    "description": "Optional reason for the edit (admin only, ignored for regular users)"
                   }
                 }
               }
@@ -47133,6 +47138,413 @@
                   "status": "error",
                   "code": 400311,
                   "message": "RateLimit Exceed."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/content-histories": {
+      "get": {
+        "summary": "Retrieve edit history for content",
+        "tags": [
+          "Content"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Retrieve the edit history for a specific piece of content (post or comment).\nOnly administrators with EDIT_POST_AND_COMMENT permission can access this endpoint.\n",
+        "parameters": [
+          {
+            "name": "contentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the content (post or comment)"
+          },
+          {
+            "name": "contentType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "post",
+                "comment"
+              ]
+            },
+            "description": "The type of content"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content edit history retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "histories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "_id",
+                          "networkId",
+                          "contentId",
+                          "contentType",
+                          "version",
+                          "data",
+                          "editedBy",
+                          "editedAt",
+                          "createdAt",
+                          "updatedAt"
+                        ],
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "MongoDB ObjectId",
+                            "example": "507f1f77bcf86cd799439011"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network identifier",
+                            "example": "network123"
+                          },
+                          "contentId": {
+                            "type": "string",
+                            "description": "Post or Comment ID",
+                            "example": "post456"
+                          },
+                          "contentType": {
+                            "type": "string",
+                            "enum": [
+                              "post",
+                              "comment"
+                            ],
+                            "description": "Type of content",
+                            "example": "post"
+                          },
+                          "version": {
+                            "type": "integer",
+                            "description": "Version number of the edit (0 = original)",
+                            "example": 1
+                          },
+                          "data": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "data": {
+                                    "type": "object",
+                                    "description": "Complete post data payload"
+                                  },
+                                  "metadata": {
+                                    "type": "object",
+                                    "nullable": true,
+                                    "description": "Additional metadata"
+                                  },
+                                  "tags": {
+                                    "type": "array",
+                                    "nullable": true,
+                                    "description": "Tags for categorization",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "hashtags": {
+                                    "type": "array",
+                                    "nullable": true,
+                                    "description": "Hashtags used in the post",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "mentionees": {
+                                    "type": "array",
+                                    "nullable": true,
+                                    "description": "Mentioned users",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "attachments": {
+                                    "type": "array",
+                                    "nullable": true,
+                                    "description": "Attachments in the post",
+                                    "items": {
+                                      "type": "object",
+                                      "required": [
+                                        "fileId"
+                                      ],
+                                      "properties": {
+                                        "fileId": {
+                                          "type": "string",
+                                          "description": "File identifier",
+                                          "example": "file789"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "data": {
+                                    "type": "object",
+                                    "description": "Complete comment data payload"
+                                  },
+                                  "metadata": {
+                                    "type": "object",
+                                    "nullable": true,
+                                    "description": "Additional metadata"
+                                  },
+                                  "mentionees": {
+                                    "type": "array",
+                                    "nullable": true,
+                                    "description": "Mentioned users",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "attachments": {
+                                    "type": "array",
+                                    "nullable": true,
+                                    "description": "Attachments in the comment",
+                                    "items": {
+                                      "type": "object",
+                                      "required": [
+                                        "fileId"
+                                      ],
+                                      "properties": {
+                                        "fileId": {
+                                          "type": "string",
+                                          "description": "File identifier",
+                                          "example": "file789"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ],
+                            "description": "Complete content payload snapshot at this version"
+                          },
+                          "editedBy": {
+                            "type": "string",
+                            "description": "Admin user ID who made the edit",
+                            "example": "admin123"
+                          },
+                          "editedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the edit was made",
+                            "example": "2025-01-15T10:30:00Z"
+                          },
+                          "editReason": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Optional reason provided for the edit (max 500 chars)",
+                            "example": "Fixed spelling error"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the history record was created",
+                            "example": "2025-01-15T10:30:00Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the history record was last updated",
+                            "example": "2025-01-15T10:30:00Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
                 }
               }
             }
@@ -137219,6 +137631,11 @@
                         }
                       }
                     }
+                  },
+                  "editReason": {
+                    "type": "string",
+                    "maxLength": 300,
+                    "description": "Optional reason for the edit (admin only, ignored for regular users)"
                   }
                 }
               }
@@ -139369,10 +139786,11 @@
               "enum": [
                 "community",
                 "user",
-                "content"
+                "content",
+                "all"
               ]
             },
-            "description": "Type of the target.\n* `community` - Community\n* `user` - User\n* `content` - Content\n"
+            "description": "Type of the target.\n* `community` - Community\n* `user` - User\n* `content` - Content\n* `all` - All \n"
           },
           {
             "name": "sortBy",

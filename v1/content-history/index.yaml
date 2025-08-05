@@ -1,0 +1,24 @@
+root:
+  get:
+    summary: "Retrieve edit history for content"
+    tags:
+      - "Content"
+    security:
+      - BearerAuth: []
+    description: |
+      Retrieve the edit history for a specific piece of content (post or comment).
+      Only administrators with EDIT_POST_AND_COMMENT permission can access this endpoint.
+    parameters:
+      - $ref: "./parameter.yaml#/contentId"
+      - $ref: "./parameter.yaml#/contentType"
+    responses:
+      200:
+        $ref: "./response.yaml#/content-history-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
