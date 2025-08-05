@@ -88,11 +88,10 @@ root-post-request-payload:
           items:
             type: "string"
             maxLength: 100
-            pattern: "^[\\p{L}\\p{N}_]+$"
             example: "tech_news"
           example:
             ["tech_news", "startup_life", "product_launch", "innovation_2025"]
-          description: "Hashtags for the post. Only letter characters, numbers and underscores are allowed. Tags and hashtags is a different thing. Tags are used to categorize posts, while hashtags are used to tag content with relevant keywords or phrases."
+          description: "Hashtags for the post."
         mentionees:
           type: "array"
           description: "The object of the mentions type and user who get a notification from the post."
@@ -172,7 +171,6 @@ _postId-put-request-payload:
             items:
               type: "string"
               maxLength: 100
-              pattern: "^[a-zA-Z0-9_]+$"
               example: "content_update"
             example:
               [
@@ -181,7 +179,7 @@ _postId-put-request-payload:
                 "community_feedback",
                 "enhanced_version",
               ]
-            description: "Hashtags for the post. Only alphanumeric characters and underscores are allowed. Tags and hashtags is a different thing. Tags are used to categorize posts, while hashtags are used to tag content with relevant keywords or phrases."
+            description: "Hashtags for the post."
           mentionees:
             type: "array"
             description: "The object of the mentions type and user who get a notification from the post."
