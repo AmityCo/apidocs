@@ -40,12 +40,12 @@ root-post-request-payload:
                   - "file"
                   - "video"
                   - "clip"
-              displayMode: 
+              displayMode:
                 type: "string"
                 enum: ["fill", "fit"]
                 description: "displayMode of the clip"
                 example: "fill"
-              isMuted: 
+              isMuted:
                 type: "boolean"
                 description: "Whether the clip should be muted or not"
                 example: "true"
@@ -81,6 +81,17 @@ root-post-request-payload:
             type: "string"
             description: "tags"
             maximum: 24
+        hashtags:
+          type: "array"
+          minItems: 0
+          maxItems: 30
+          items:
+            type: "string"
+            maxLength: 100
+            example: "tech_news"
+          example:
+            ["tech_news", "startup_life", "product_launch", "innovation_2025"]
+          description: "Hashtags for the post."
         mentionees:
           type: "array"
           description: "The object of the mentions type and user who get a notification from the post."
@@ -153,6 +164,22 @@ _postId-put-request-payload:
               type: "string"
               maximum: 24
               description: "tags"
+          hashtags:
+            type: "array"
+            minItems: 0
+            maxItems: 30
+            items:
+              type: "string"
+              maxLength: 100
+              example: "content_update"
+            example:
+              [
+                "content_update",
+                "revised_post",
+                "community_feedback",
+                "enhanced_version",
+              ]
+            description: "Hashtags for the post."
           mentionees:
             type: "array"
             description: "The object of the mentions type and user who get a notification from the post."
