@@ -218,3 +218,36 @@ shareable-deep-links-response-200:
                 description: "URL path for livestreams, {livestreamId} is required (e.g., /livestreams/{livestreamId})"
                 example: "/livestreams/{livestreamId}"
 
+security-configs-response-200:
+  description: Security configuration
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          securityConfigs:
+            type: "object"
+            properties:
+              serverKey:
+                type: "object"
+                properties:
+                  expiresInHours:
+                    type: "number"
+                    description: "Server key expiration time in hours"
+                  apiScopeEnabled:
+                    type: "boolean"
+                    description: "Whether API scope is enabled for server key"
+              adminToken:
+                type: "object"
+                properties:
+                  expiresInHours:
+                    type: "number"
+                    description: "Admin token expiration time in hours"
+        example:
+          securityConfigs:
+            serverKey:
+              expiresInHours: 168
+              apiScopeEnabled: true
+            adminToken:
+              expiresInHours: 24
+

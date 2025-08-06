@@ -98634,300 +98634,6 @@
         ]
       }
     },
-    "/api/v3/network-settings": {
-      "put": {
-        "summary": "Update network setting configuration.",
-        "tags": [
-          "Network Setting"
-        ],
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "description": "Update network setting configuration.\n",
-        "requestBody": {
-          "description": "information for a network setting\n",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "networkId": {
-                    "type": "string"
-                  },
-                  "tierHandler": {
-                    "type": "string",
-                    "maxLength": 200
-                  },
-                  "socialEnabled": {
-                    "type": "boolean"
-                  },
-                  "videoStreamingEnabled": {
-                    "type": "boolean"
-                  },
-                  "chatEnabled": {
-                    "type": "boolean"
-                  },
-                  "isWhitelistEnabled": {
-                    "type": "boolean"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "network setting configuration",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "videoStreaming": {
-                      "type": "object",
-                      "properties": {
-                        "enabled": {
-                          "type": "boolean"
-                        }
-                      }
-                    },
-                    "chat": {
-                      "type": "object",
-                      "properties": {
-                        "enabled": {
-                          "type": "boolean"
-                        },
-                        "mention": {
-                          "type": "object",
-                          "properties": {
-                            "isAllowMentionedChannelEnabled": {
-                              "type": "boolean",
-                              "default": true
-                            }
-                          }
-                        },
-                        "messagePreview": {
-                          "type": "object",
-                          "properties": {
-                            "enabled": {
-                              "type": "boolean",
-                              "default": false
-                            },
-                            "isIncludeDeleted": {
-                              "type": "boolean",
-                              "default": false
-                            }
-                          }
-                        },
-                        "isAllowAdminViewConversationMessage": {
-                          "type": "boolean",
-                          "default": true
-                        },
-                        "isAllowAdminManageConversationMessage": {
-                          "type": "boolean",
-                          "default": true
-                        },
-                        "allowMemberToUpdateConversationChannel": {
-                          "type": "boolean",
-                          "default": false,
-                          "description": "`true` - When conversation channel have more than 2 members, all members can edit the channel.<br> `false` - When conversation channel have more than 2 members, Only people that has permission can edit the conversation channel."
-                        }
-                      }
-                    },
-                    "social": {
-                      "type": "object",
-                      "properties": {
-                        "enabled": {
-                          "type": "boolean"
-                        },
-                        "userPrivacySetting": {
-                          "type": "string",
-                          "enum": [
-                            "public",
-                            "private"
-                          ]
-                        },
-                        "membershipAcceptance": {
-                          "type": "string",
-                          "enum": [
-                            "invitation",
-                            "automatic"
-                          ],
-                          "default": "automatic",
-                          "description": "Controls how users can join the network"
-                        },
-                        "isFollowWithRequestEnabled": {
-                          "type": "boolean",
-                          "default": false
-                        },
-                        "isAllowEditPostWhenReviewingEnabled": {
-                          "type": "boolean"
-                        },
-                        "disallowNonMemberInteractInCommunity": {
-                          "type": "boolean"
-                        },
-                        "allowJoinPrivateCommunity": {
-                          "type": "boolean",
-                          "default": false
-                        },
-                        "globalFeed": {
-                          "type": "object",
-                          "properties": {
-                            "showOnlyMyFeed": {
-                              "type": "boolean",
-                              "default": false
-                            },
-                            "showMyPost": {
-                              "type": "boolean"
-                            },
-                            "showEveryonePost": {
-                              "type": "boolean"
-                            },
-                            "showCommunityPost": {
-                              "type": "boolean"
-                            },
-                            "showFollowingPost": {
-                              "type": "boolean"
-                            },
-                            "maxGlobalPinnedPost": {
-                              "type": "number"
-                            }
-                          }
-                        },
-                        "story": {
-                          "type": "object",
-                          "properties": {
-                            "expiryTimeMinutes": {
-                              "type": "integer",
-                              "minimum": 1,
-                              "maximum": 1440
-                            },
-                            "allowAllUserToCreateStory": {
-                              "type": "boolean",
-                              "default": false
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "webhook": {
-                      "type": "object",
-                      "properties": {
-                        "enabled": {
-                          "type": "boolean"
-                        }
-                      }
-                    },
-                    "moderation": {
-                      "type": "object",
-                      "properties": {
-                        "isWhitelistEnabled": {
-                          "type": "boolean"
-                        }
-                      }
-                    },
-                    "tierHandler": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string"
-                    },
-                    "code": {
-                      "type": "number"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "detail": {
-                          "oneOf": [
-                            {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              }
-                            },
-                            {
-                              "type": "object"
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "status": "error",
-                  "code": 400000,
-                  "message": "Bad Request."
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unexpected error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string"
-                    },
-                    "code": {
-                      "type": "number"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "detail": {
-                          "oneOf": [
-                            {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              }
-                            },
-                            {
-                              "type": "object"
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "status": "error",
-                  "code": 500000,
-                  "message": "Unexpected error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v3/network-settings/chat": {
       "put": {
         "summary": "Update chat network setting configuration.",
@@ -102767,6 +102473,366 @@
                           "description": "URL path for livestreams, {livestreamId} is required (e.g., /livestreams/{livestreamId})",
                           "example": "/livestreams/{livestreamId}"
                         }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v3/network-settings/security-configs": {
+      "put": {
+        "summary": "Update network security configuration",
+        "tags": [
+          "Network Setting"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Create or update security configuration for server key and admin token settings.\n",
+        "requestBody": {
+          "description": "Configuration for security settings",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "serverKey": {
+                    "type": "object",
+                    "properties": {
+                      "expiresInHours": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 1000,
+                        "description": "Server key expiration time in hours"
+                      },
+                      "apiScopeEnabled": {
+                        "type": "boolean",
+                        "description": "Enable API scope for server key"
+                      }
+                    },
+                    "required": [
+                      "apiScopeEnabled"
+                    ]
+                  },
+                  "adminToken": {
+                    "type": "object",
+                    "properties": {
+                      "expiresInHours": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 1000,
+                        "description": "Admin token expiration time in hours"
+                      }
+                    }
+                  }
+                },
+                "anyOf": [
+                  {
+                    "required": [
+                      "serverKey"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "adminToken"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Security configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "securityConfigs": {
+                      "type": "object",
+                      "properties": {
+                        "serverKey": {
+                          "type": "object",
+                          "properties": {
+                            "expiresInHours": {
+                              "type": "number",
+                              "description": "Server key expiration time in hours"
+                            },
+                            "apiScopeEnabled": {
+                              "type": "boolean",
+                              "description": "Whether API scope is enabled for server key"
+                            }
+                          }
+                        },
+                        "adminToken": {
+                          "type": "object",
+                          "properties": {
+                            "expiresInHours": {
+                              "type": "number",
+                              "description": "Admin token expiration time in hours"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "securityConfigs": {
+                      "serverKey": {
+                        "expiresInHours": 168,
+                        "apiScopeEnabled": true
+                      },
+                      "adminToken": {
+                        "expiresInHours": 24
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get network security configuration",
+        "tags": [
+          "Network Setting"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Get security configuration for server key and admin token settings.\n",
+        "responses": {
+          "200": {
+            "description": "Security configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "securityConfigs": {
+                      "type": "object",
+                      "properties": {
+                        "serverKey": {
+                          "type": "object",
+                          "properties": {
+                            "expiresInHours": {
+                              "type": "number",
+                              "description": "Server key expiration time in hours"
+                            },
+                            "apiScopeEnabled": {
+                              "type": "boolean",
+                              "description": "Whether API scope is enabled for server key"
+                            }
+                          }
+                        },
+                        "adminToken": {
+                          "type": "object",
+                          "properties": {
+                            "expiresInHours": {
+                              "type": "number",
+                              "description": "Admin token expiration time in hours"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "securityConfigs": {
+                      "serverKey": {
+                        "expiresInHours": 168,
+                        "apiScopeEnabled": true
+                      },
+                      "adminToken": {
+                        "expiresInHours": 24
                       }
                     }
                   }
