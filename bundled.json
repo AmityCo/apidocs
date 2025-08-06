@@ -58506,6 +58506,14 @@
         "description": "Query posts in user feed.\n",
         "parameters": [
           {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "sortBy",
             "in": "query",
             "schema": {
@@ -58915,6 +58923,23 @@
                               "maxLength": 24
                             }
                           },
+                          "hashtags": {
+                            "type": "array",
+                            "minItems": 0,
+                            "maxItems": 30,
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100,
+                              "example": "video_content"
+                            },
+                            "example": [
+                              "video_content",
+                              "clips_feature",
+                              "multimedia_posts",
+                              "next_gen_social"
+                            ],
+                            "description": "Hashtags associated with the post."
+                          },
                           "mentionees": {
                             "type": "array",
                             "description": "The object of the mentions type and user who get a notification from the post.",
@@ -59206,6 +59231,23 @@
                               "type": "string",
                               "maxLength": 24
                             }
+                          },
+                          "hashtags": {
+                            "type": "array",
+                            "minItems": 0,
+                            "maxItems": 30,
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100,
+                              "example": "mobile_app"
+                            },
+                            "example": [
+                              "mobile_app",
+                              "user_experience",
+                              "API_v4",
+                              "social_platform"
+                            ],
+                            "description": "Hashtags associated with the post."
                           },
                           "mentionees": {
                             "type": "array",
@@ -60318,6 +60360,15 @@
                                 }
                               }
                             }
+                          },
+                          "postId": {
+                            "type": "string"
+                          },
+                          "channelId": {
+                            "type": "string"
+                          },
+                          "channelEnabled": {
+                            "type": "boolean"
                           }
                         }
                       }
@@ -150487,6 +150538,15 @@
                                 }
                               }
                             }
+                          },
+                          "postId": {
+                            "type": "string"
+                          },
+                          "channelId": {
+                            "type": "string"
+                          },
+                          "channelEnabled": {
+                            "type": "boolean"
                           }
                         }
                       }
@@ -175127,6 +175187,23 @@
                             "type": "string",
                             "maxLength": 24
                           }
+                        },
+                        "hashtags": {
+                          "type": "array",
+                          "minItems": 0,
+                          "maxItems": 30,
+                          "items": {
+                            "type": "string",
+                            "maxLength": 100,
+                            "example": "video_content"
+                          },
+                          "example": [
+                            "video_content",
+                            "clips_feature",
+                            "multimedia_posts",
+                            "next_gen_social"
+                          ],
+                          "description": "Hashtags associated with the post."
                         },
                         "mentionees": {
                           "type": "array",
