@@ -1,6 +1,5 @@
 root-post-request-payload:
-  description: 
-    "Information of a poll to be created.
+  description: "Information of a poll to be created.
     \n### Required
     \n- at least 2 options
     \n- dataType currently supports `text` and `image`, we can also mix dataType in one poll.
@@ -34,7 +33,7 @@ root-post-request-payload:
                     - "image"
                 data:
                   type: "string"
-                fileId: 
+                fileId:
                   description: "image fileId, required only when dataType is image"
                   type: "string"
           answerType:
@@ -83,3 +82,19 @@ _pollId-votes-post-request-payload:
               type: "string"
         required:
           - "data"
+
+_pollId-votes-update-put-request-payload:
+  description: "Information to update an existing poll vote.\n### Required\n- answerIds for updating the poll vote\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          answerIds:
+            description: "Updated answer IDs for the poll vote"
+            type: "array"
+            items:
+              type: "string"
+        required:
+          - "answerIds"
