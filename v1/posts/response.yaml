@@ -1,0 +1,68 @@
+query-response-200:
+  type: object
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        properties:
+          _id:
+            type: string
+          scheduledAt:
+            type: string
+            format: date-time
+          status:
+            type: object
+            properties:
+              code:
+                type: string
+                enum: ["WAIT", "FAIL", "DONE"]
+              description:
+                type: string
+          postData:
+            $ref: "../../schema/post.yaml#/PostV5"
+          userId:
+            type: string
+          userDisplayName:
+            type: string
+          createdAt:
+            type: string
+            format: date-time
+          updatedAt:
+            type: string
+            format: date-time
+          files:
+            type: array
+            description: "files that are related to this post"
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          communities:
+            type: array
+            description: "communities that are related to this post"
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+    networkId:
+      type: string
+    paging:
+      type: object
+      properties:
+        next:
+          type: string
+        prev:
+          type: string
+    users:
+      type: array
+      items:
+        $ref: "../../schema/user.yaml#/UserV3"
+    files:
+      type: array
+      items:
+        $ref: "../../schema/file.yaml#/File"
+    communities:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/Community"
+    polls:
+      type: array
+      items:
+        $ref: "../../schema/poll.yaml#/Poll"
