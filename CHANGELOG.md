@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.108.0] - 2025-08-15
+
+### 🚀 Features
+
+- Doc for the ban/unban users from livestream APIs (#400)
+- Add title property to poll schema and API requests with descrip… (#416)
+- API docs for shareable-deep-links (#411)
+- Added new dataType `image` on poll API (#413)
+- Added new actionType and trayItemCategory for follow (#418)
+- Update create channel and video streaming API to competible wit… (#407)
+- Remove userId and referenceId from live reaction schema (#419)
+- Extend post api to support hashtag (#415)
+- Add user-feed api (#417)
+- Update vote api (#424)
+- Support hidden post and video in comment attachments (#421)
+- Added security config networking setting APIs (#422)
+
+### 🐛 Bug Fixes
+
+- User feed v4 api (#423)
+
 ## [4.107.0] - 2025-07-11
 
 ### 🚀 Features
@@ -13,6 +34,10 @@ All notable changes to this project will be documented in this file.
 ### 🐛 Bug Fixes
 
 - Added redocly to dereferenced and remove unused things (#405)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.107.0 (#414)
 
 ## [4.106.1-rc.0] - 2025-06-20
 
