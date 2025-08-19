@@ -1,0 +1,40 @@
+file.didDelete:
+  get:
+    security: []
+    tags:
+      - "Webhook event"
+    summary: "File Diddelete webhook event"
+    description: "Send deleted file information whenever a file got deleted"
+    responses:
+      200:
+        description: "File deleted event information with file details"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                networkId:
+                  type: "string"
+                  description: "Network ID where the event occurred"
+                event:
+                  type: "string"
+                  enum:
+                    - "file.didDelete"
+                data:
+                  $ref: "../../schema/file.yaml#/File"
+              example:
+                networkId: "6848030d11c7e8b56c3570b5"
+                event: "file.didDelete"
+                data:
+                  fileId: "fileId"
+                  fileUrl: "https://localhost/api/v3/files/fileId/download"
+                  type: "file"
+                  accessType: "public"
+                  altText: null
+                  createdAt: "1900-01-01T00:00:00.000Z"
+                  updatedAt: "1900-01-01T00:00:00.000Z"
+                  attributes:
+                    name: "foobar.png"
+                    extension: "png"
+                    size: 8658
+                    mimeType: "image/png"
