@@ -178981,6 +178981,147 @@
         }
       }
     },
+    "/webhook/file.didDelete": {
+      "get": {
+        "security": [],
+        "tags": [
+          "Webhook event"
+        ],
+        "summary": "File Diddelete webhook event",
+        "description": "Send deleted file information whenever a file got deleted",
+        "responses": {
+          "200": {
+            "description": "File deleted event information with file details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "networkId": {
+                      "type": "string",
+                      "description": "Network ID where the event occurred"
+                    },
+                    "event": {
+                      "type": "string",
+                      "enum": [
+                        "file.didDelete"
+                      ]
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "fileId": {
+                          "type": "string",
+                          "description": "Root file key on cloud storage."
+                        },
+                        "fileUrl": {
+                          "type": "string",
+                          "description": "Http link for download file"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "File type.",
+                          "enum": [
+                            "image",
+                            "file",
+                            "video"
+                          ]
+                        },
+                        "accessType": {
+                          "type": "string",
+                          "description": "File access type. `network` type requires authentication to download.",
+                          "enum": [
+                            "public",
+                            "network"
+                          ],
+                          "default": "public"
+                        },
+                        "altText": {
+                          "type": "string",
+                          "description": "Alternative text for the file.",
+                          "maxLength": 180
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "description": "The date/time when a file is uploaded.",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "description": "The date/time when a file is updated.",
+                          "format": "date-time"
+                        },
+                        "attributes": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "File name."
+                            },
+                            "extension": {
+                              "type": "string",
+                              "description": "File format."
+                            },
+                            "size": {
+                              "type": "number",
+                              "description": "File size."
+                            },
+                            "mimeType": {
+                              "type": "string",
+                              "description": "File mime-type."
+                            },
+                            "metadata": {
+                              "type": "object",
+                              "description": "File image metadata (width, height etc.).",
+                              "properties": {
+                                "exif": {
+                                  "type": "object"
+                                },
+                                "gps": {
+                                  "type": "object"
+                                },
+                                "height": {
+                                  "type": "number"
+                                },
+                                "width": {
+                                  "type": "number"
+                                },
+                                "isFull": {
+                                  "type": "boolean"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "networkId": "6848030d11c7e8b56c3570b5",
+                    "event": "file.didDelete",
+                    "data": {
+                      "fileId": "fileId",
+                      "fileUrl": "https://localhost/api/v3/files/fileId/download",
+                      "type": "file",
+                      "accessType": "public",
+                      "altText": null,
+                      "createdAt": "1900-01-01T00:00:00.000Z",
+                      "updatedAt": "1900-01-01T00:00:00.000Z",
+                      "attributes": {
+                        "name": "foobar.png",
+                        "extension": "png",
+                        "size": 8658,
+                        "mimeType": "image/png"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/webhook/follow.didAcceptRequest": {
       "get": {
         "tags": [
