@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.109.0] - 2025-08-22
+
+### 🚀 Features
+
+- Add document for file.didDelete webhook event (#427)
+
 ## [4.108.0] - 2025-08-15
 
 ### 🚀 Features
@@ -22,6 +28,10 @@ All notable changes to this project will be documented in this file.
 ### 🐛 Bug Fixes
 
 - User feed v4 api (#423)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.108.0 (#426)
 
 ## [4.107.0] - 2025-07-11
 
