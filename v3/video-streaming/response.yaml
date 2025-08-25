@@ -8,6 +8,10 @@ common-response-200:
             type: array
             items:
               $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+          videoStreamingsChildren:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
           videoStreamModerations:
             type: array
             items:
@@ -31,6 +35,10 @@ root-get-response-200:
             type: object
             properties:
               videoStreamings:
+                type: array
+                items:
+                  $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+              videoStreamingsChildren:
                 type: array
                 items:
                   $ref: "../../schema/video-streaming.yml#/VideoStreaming"
@@ -62,6 +70,10 @@ video-streaming-custom-notification-response:
       type: array
       items:
         $ref: "../../schema/video-streaming.yml#/VideoStreamingCustom"
+    videoStreamingsChildren:
+      type: array
+      items:
+        $ref: "../../schema/video-streaming.yml#/VideoStreamingCustom"
     users:
       type: array
       items:
@@ -84,6 +96,10 @@ video-streaming-webhook-response:
             type: object
             properties:
               videoStreamings:
+                type: array
+                items:
+                  $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+              videoStreamingsChildren:
                 type: array
                 items:
                   $ref: "../../schema/video-streaming.yml#/VideoStreaming"
@@ -136,6 +152,8 @@ video-streaming-banned-users-response:
                   type: "string"
                   format: "date-time"
           videoStreamings: 
+            $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+          videoStreamingsChildren:
             $ref: "../../schema/video-streaming.yml#/VideoStreaming"
           videoStreamingModerations:
             $ref: "../../schema/video-streaming.yml#/VideoStreamingModeration"
