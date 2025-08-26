@@ -181,6 +181,20 @@ VideoStreaming:
       type: string
     channelEnabled:
       type: boolean
+    isParent:
+      type: boolean
+      description: Indicates if this is a parent stream (logical container) or child stream (actual video feed)
+      default: false
+    parentStreamId:
+      type: string
+      description: Public ID of the parent stream (null for parent streams, parent's streamId for child streams)
+      nullable: true
+    childStreamIds:
+      type: array
+      items:
+        type: string
+      description: Array of child stream IDs (for parent streams only, empty for child streams)
+      default: []
 
 VideoStreamingUrl:
   type: object
