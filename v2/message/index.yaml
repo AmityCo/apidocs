@@ -1,0 +1,23 @@
+search-messages:
+  get:
+    tags:
+      - "Message"
+    summary: "Search messages"
+    description: "Retrieve messages based on search criteria"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/query"
+      - $ref: "./parameter.yaml#/exactMatch"
+      - $ref: "./parameter.yaml#/channelId"
+      - $ref: "./parameter.yaml#/messageFeedId"
+      - $ref: "./parameter.yaml#/userIds"
+      - $ref: "./parameter.yaml#/types"
+      - $ref: "./parameter.yaml#/tags"
+      - $ref: "./parameter.yaml#/options"
+
+    responses:
+      200:
+        $ref: "./response.yaml#/search-messages-response-payload-200"
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"

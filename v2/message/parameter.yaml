@@ -1,0 +1,109 @@
+query:
+  name: query
+  in: query
+  required: true
+  description: Keyword for searching
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 1024
+
+exactMatch:
+  name: exactMatch
+  in: query
+  required: false
+  description: Flag to indicate exact match
+  schema:
+    type: boolean
+    default: false
+
+channelId:
+  name: channelId
+  in: query
+  required: false
+  description: Channel ID to scope the search
+  schema:
+    type: string
+
+messageFeedId:
+  name: messageFeedId
+  in: query
+  required: false
+  description: Message Feed ID to scope the search
+  schema:
+    type: string
+
+userIds:
+  name: userIds
+  in: query
+  required: false
+  description: Array of user public IDs to filter creators
+  schema:
+    type: array
+    minItems: 1
+    items:
+      type: string
+      minLength: 1
+    maxItems: 10
+
+types:
+  name: types
+  in: query
+  required: false
+  description: Array of message types to include
+  schema:
+    type: array
+    uniqueItems: true
+    default: [text]
+    items:
+      type: string
+      enum:
+        - text
+        - image
+        - video
+        - audio
+        - file
+    maxItems: 10
+
+tags:
+  name: tags
+  in: query
+  required: false
+  description: Array of tags to include
+  schema:
+    type: array
+    uniqueItems: true
+    items:
+      type: string
+      minLength: 1
+      maxLength: 30
+    maxItems: 10
+
+options:
+  name: options
+  in: query
+  required: false
+  description: Additional search options
+  schema:
+    type: object
+    properties:
+      limit:
+        type: number
+        minimum: 1
+        maximum: 100
+        default: 20
+      orderBy:
+        type: string
+        enum:
+          - desc
+          - asc
+        default: desc
+      sortBy:
+        type: string
+        enum:
+          - createdAt
+          - relevance
+        default: createdAt
+      token:
+        type: string
+        maxLength: 100
