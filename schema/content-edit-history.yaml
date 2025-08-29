@@ -1,0 +1,64 @@
+ContentEditHistory:
+  type: "object"
+  required:
+    - "_id"
+    - "networkId"
+    - "contentId"
+    - "contentType"
+    - "version"
+    - "data"
+    - "editedBy"
+    - "editedAt"
+    - "createdAt"
+    - "updatedAt"
+  properties:
+    _id:
+      type: "string"
+      description: "MongoDB ObjectId"
+      example: "507f1f77bcf86cd799439011"
+    networkId:
+      type: "string"
+      description: "Network identifier"
+      example: "network123"
+    contentId:
+      type: "string"
+      description: "Post or Comment ID"
+      example: "post456"
+    contentType:
+      type: "string"
+      enum: ["post", "comment"]
+      description: "Type of content"
+      example: "post"
+    version:
+      type: "integer"
+      description: "Version number of the edit (0 = original)"
+      example: 1
+    data:
+      oneOf:
+        - $ref: "../v4/post/response.yaml#/post-response-200/content/application~1json/schema"
+        - $ref: "../v3/comment/response.yaml#/common-post-response-200/content/application~1json/schema"
+      description: "Complete content payload snapshot at this version"
+    editedBy:
+      type: "string"
+      description: "Admin user ID who made the edit"
+      example: "admin123"
+    editedAt:
+      type: "string"
+      format: "date-time"
+      description: "Timestamp when the edit was made"
+      example: "2025-01-15T10:30:00Z"
+    editReason:
+      type: "string"
+      nullable: true
+      description: "Optional reason provided for the edit (max 500 chars)"
+      example: "Fixed spelling error"
+    createdAt:
+      type: "string"
+      format: "date-time"
+      description: "Timestamp when the history record was created"
+      example: "2025-01-15T10:30:00Z"
+    updatedAt:
+      type: "string"
+      format: "date-time"
+      description: "Timestamp when the history record was last updated"
+      example: "2025-01-15T10:30:00Z"
