@@ -114069,7 +114069,7 @@
     "/api/v1/posts/schedule": {
       "post": {
         "tags": [
-          "Schedule Posts"
+          "Post"
         ],
         "summary": "Create a scheduled post",
         "description": "Create a new scheduled post for the authenticated user",
@@ -114377,7 +114377,7 @@
       },
       "get": {
         "tags": [
-          "Schedule Posts"
+          "Post"
         ],
         "summary": "Query scheduled posts",
         "description": "Get scheduled posts",
@@ -114615,7 +114615,7 @@
                                       },
                                       "streamId": {
                                         "type": "string",
-                                        "description": "video streaming id (for video streaming post)"
+                                        "description": "parent video streaming id (for video streaming post) - must be a parent stream"
                                       }
                                     }
                                   },
@@ -115585,7 +115585,7 @@
     "/api/v1/posts/schedule/{id}": {
       "put": {
         "tags": [
-          "Schedule Posts"
+          "Post"
         ],
         "summary": "Update a scheduled post",
         "description": "Update an existing scheduled post. Users can only update their own posts, admins can update their own posts and any brand user's posts.",
@@ -115950,7 +115950,7 @@
                                       },
                                       "streamId": {
                                         "type": "string",
-                                        "description": "video streaming id (for video streaming post)"
+                                        "description": "parent video streaming id (for video streaming post) - must be a parent stream"
                                       }
                                     }
                                   },
@@ -117091,7 +117091,7 @@
       },
       "delete": {
         "tags": [
-          "Schedule Posts"
+          "Post"
         ],
         "summary": "Delete a scheduled post",
         "description": "Delete a scheduled post. Users can only delete their own posts, admins can delete any user's posts.",
@@ -145814,12 +145814,6 @@
                     "description": "The date/time when a post is created.",
                     "format": "date-time",
                     "example": "2022-07-07T04:24:20.444Z"
-                  },
-                  "isDiscoverable": {
-                    "type": "boolean",
-                    "description": "Controls whether the post appears in feeds and search results. Hidden posts (isDiscoverable: false) won't appear in any community or global feeds but remain accessible via direct access methods (get list and get by ID). Used for being a container for storing comments with attachments for single images or videos.",
-                    "default": true,
-                    "example": false
                   }
                 },
                 "required": [
