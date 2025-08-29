@@ -19,5 +19,15 @@ search-messages:
     responses:
       200:
         $ref: "./response.yaml#/search-messages-response-payload-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
       422:
         $ref: "../../global/error.yaml#/ParameterValidationError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
