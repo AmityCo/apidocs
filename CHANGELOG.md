@@ -2,11 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.110.0] - 2025-08-29
+
+### 🚀 Features
+
+- Support multi livestream (#428)
+- Added new APIs for schedule post (#425)
+- Add API for get content history (#420)
+
 ## [4.109.0] - 2025-08-22
 
 ### 🚀 Features
 
 - Add document for file.didDelete webhook event (#427)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.109.0 (#430)
 
 ## [4.108.0] - 2025-08-15
 
