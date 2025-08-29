@@ -1,0 +1,180 @@
+schedule:
+  post:
+    tags:
+      - "Post"
+    summary: "Create a scheduled post"
+    description: "Create a new scheduled post for the authenticated user"
+    security:
+      - BearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - scheduledAt
+              - postData
+            properties:
+              scheduledAt:
+                type: string
+                format: date-time
+                description: "When the post should be published"
+                example: "2025-08-15T10:00:00Z"
+              postData:
+                $ref: "../../schema/post.yaml#/CreatePost"
+    responses:
+      201:
+        description: "Scheduled post created successfully"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: "Unique identifier for the scheduled post"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    tags:
+      - "Post"
+    summary: "Query scheduled posts"
+    description: "Get scheduled posts"
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: notPostedOnly
+        in: query
+        schema:
+          type: boolean
+          default: false
+        description: "Filter to show only posts that haven't been published yet"
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          enum: ["lastCreated", "firstCreated", "lastUpdated", "firstUpdated"]
+          default: "lastCreated"
+        description: "Sort order for results"
+      - name: options
+        in: query
+        schema:
+          type: object
+          properties:
+            after:
+              type: string
+              maxLength: 24
+              description: Cursor value to get records after
+            before:
+              type: string
+              maxLength: 24
+              description: Cursor value to get records before
+            updatedAt:
+              type: string
+              maxLength: 30
+              description: use updatedAt when sorting by first or last updated
+            limit:
+              type: integer
+              minimum: 1
+              maximum: 100
+              default: 10
+              example: options[limit]=5
+              description: Page size
+            token:
+              type: string
+              maxLength: 1000
+              example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
+              description: Pagination token
+    responses:
+      200:
+        description: "Scheduled posts retrieved successfully"
+        content:
+          application/json:
+            schema:
+              $ref: "./response.yaml#/query-response-200"
+      401:
+        description: "Unauthorized"
+
+schedule_id:
+  put:
+    tags:
+      - "Post"
+    summary: "Update a scheduled post"
+    description: "Update an existing scheduled post. Users can only update their own posts, admins can update their own posts and any brand user's posts."
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: "Scheduled post ID"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              scheduledAt:
+                type: string
+                format: date-time
+                description: "Updated schedule time"
+              postData:
+                $ref: "../../schema/post.yaml#/CreatePost"
+    responses:
+      200:
+        description: "Scheduled post updated successfully"
+        content:
+          application/json:
+            schema:
+              $ref: "./response.yaml#/query-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  delete:
+    tags:
+      - "Post"
+    summary: "Delete a scheduled post"
+    description: "Delete a scheduled post. Users can only delete their own posts, admins can delete any user's posts."
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: "Scheduled post ID"
+    responses:
+      200:
+        description: "Scheduled post deleted successfully"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "success"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
