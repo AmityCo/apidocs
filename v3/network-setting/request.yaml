@@ -264,3 +264,36 @@ shareable-deep-links-post-request-payload:
                 description: "URL path for livestreams, {livestreamId} is required (e.g., /livestreams/{livestreamId})"
                 example: "/livestreams/{livestreamId}"
 
+security-configs-put-request-payload:
+  description: "Configuration for security settings"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          serverKey:
+            type: "object"
+            properties:
+              expiresInHours:
+                type: "number"
+                minimum: 1
+                maximum: 1000
+                description: "Server key expiration time in hours"
+              apiScopeEnabled:
+                type: "boolean"
+                description: "Enable API scope for server key"
+            required:
+              - apiScopeEnabled
+          adminToken:
+            type: "object"
+            properties:
+              expiresInHours:
+                type: "number"
+                minimum: 1
+                maximum: 1000
+                description: "Admin token expiration time in hours"
+        anyOf:
+          - required: ["serverKey"]
+          - required: ["adminToken"]
+

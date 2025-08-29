@@ -1,0 +1,117 @@
+_userId:
+  name: "userId"
+  in: "path"
+  required: true
+  schema:
+    type: "string"
+
+sortBy:
+  name: sortBy
+  in: query
+  schema:
+    type: string
+    enum:
+      - lastCreated
+      - firstCreated
+      - lastUpdated
+      - firstUpdated
+    default: lastCreated
+  description: Sort order for posts.
+
+isDeleted:
+  name: isDeleted
+  in: query
+  schema:
+    type: boolean
+    default: false
+  description: Filter by deleted status
+
+options.limit:
+  name: options[limit]
+  in: query
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 10
+    example: options[limit]=5
+    description: Page size
+
+options.after:
+  name: options[after]
+  in: query
+  schema:
+    type: string
+    maxLength: 24
+    description: Cursor value to get records after
+
+options.before:
+  name: options[before]
+  in: query
+  schema:
+    type: string
+    maxLength: 24
+    description: Cursor value to get records before
+
+options.updatedAt:
+  name: options[updatedAt]
+  in: query
+  schema:
+    type: string
+    maxLength: 30
+    description: Use updatedAt when sorting by first or last updated
+
+options.token:
+  name: options[token]
+  in: query
+  schema:
+    type: string
+    maxLength: 1000
+    example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
+    description: Pagination token
+
+dataTypes:
+  name: dataTypes
+  in: query
+  schema:
+    type: array
+    minItems: 1
+    maxItems: 6
+    items:
+      type: string
+      maxLength: 100
+      enum:
+        - video
+        - image
+        - file
+        - liveStream
+        - poll
+        - clip
+        - text
+  description: Post data type to filter (include child posts too).
+
+matchingOnlyParentPost:
+  name: matchingOnlyParentPost
+  in: query
+  schema:
+    type: boolean
+    default: true
+  description: |
+    An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts
+
+includePostedFeed:
+  name: includePostedFeed
+  in: query
+  schema:
+    type: array
+    items:
+      type: string
+      enum:
+        - user
+        - community
+    default:
+      - user
+  description: |
+    An option to include posted feed. If `user` will return posted in user feed, if `community` will return posted in community feed.
+    If both are included, will return both user and community posted feed.
+    Default is `user` only.

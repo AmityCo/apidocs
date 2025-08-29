@@ -1,21 +1,3 @@
-root:
-  put:
-    summary: "Update network setting configuration."
-    tags:
-      - "Network Setting"
-    security:
-      - BearerAuth: []
-    description: "Update network setting configuration.\n"
-    requestBody:
-      $ref: "./request.yaml#/root-put-request-payload"
-    responses:
-      200:
-        $ref: "./response.yaml#/root-response-200"
-      400:
-        $ref: "../../global/error.yaml#/BadRequestError"
-      500:
-        $ref: "../../global/error.yaml#/UnexpectedError"
-
 chat:
   put:
     summary: "Update chat network setting configuration."
@@ -394,6 +376,38 @@ shareable-deep-links:
     responses:
       200:
         $ref: "./response.yaml#/shareable-deep-links-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+security-configs:
+  put:
+    summary: "Update network security configuration"
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Create or update security configuration for server key and admin token settings.\n"
+    requestBody:
+      $ref: "./request.yaml#/security-configs-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/security-configs-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "Get network security configuration"
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Get security configuration for server key and admin token settings.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/security-configs-response-200"
       400:
         $ref: "../../global/error.yaml#/BadRequestError"
       500:

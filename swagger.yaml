@@ -3,7 +3,7 @@ info:
   title: "Social+ Cloud SDK"
   description:
     $ref: "./description.md"
-  version: "4.107.0"
+  version: "4.109.0"
 servers:
   - url: "https://apix.us.amity.co"
     description: "API Endpoint for US Region"
@@ -150,6 +150,8 @@ paths:
     $ref: "./v3/user-feed/index.yaml#/_userId"
   /api/v3/user-feeds/{userId}/count:
     $ref: "./v3/user-feed/index.yaml#/_userId-count"
+  /api/v4/user-feeds/{userId}:
+    $ref: "./v4/user-feed/index.yaml#/_userId"
   /api/v4/me/global-feeds:
     $ref: "./v4/global-feed/index.yaml#/root"
   /api/v5/me/global-feeds:
@@ -281,8 +283,6 @@ paths:
     $ref: "./v5/message/index.yaml#/list"
   /api/v5/messages/user/{creatorId}:
     $ref: "./v5/message/index.yaml#/user_creatorId"
-  /api/v3/network-settings:
-    $ref: "./v3/network-setting/index.yaml#/root"
   /api/v3/network-settings/chat:
     $ref: "./v3/network-setting/index.yaml#/chat"
   /api/v3/network-settings/feed-setting:
@@ -305,6 +305,8 @@ paths:
     $ref: "./v3/network-setting/index.yaml#/uikit"
   /api/v3/network-settings/shareable-deep-links:
     $ref: "./v3/network-setting/index.yaml#/shareable-deep-links"
+  /api/v3/network-settings/security-configs:
+    $ref: "./v3/network-setting/index.yaml#/security-configs"
   /v1/notification:
     $ref: "./v1/notification/index.yaml#/root"
   /api/v1/notification-tray:
@@ -457,6 +459,8 @@ paths:
     $ref: "./webhook/channel/index.yaml#/channel.didUpdate"
   /webhook/channel.didUpdateMeta:
     $ref: "./webhook/channel/index.yaml#/channel.didUpdateMeta"
+  /webhook/file.didDelete:
+    $ref: "./webhook/file/index.yaml#/file.didDelete"
   /webhook/follow.didAcceptRequest:
     $ref: "./webhook/follow/index.yaml#/follow.didAcceptRequest"
   /webhook/follow.didCancelRequest:
