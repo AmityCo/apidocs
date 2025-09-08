@@ -1,0 +1,112 @@
+_communityId-activities:
+  get:
+    summary: "Community activity metrics"
+    tags: [Analytic]
+    security:
+      - BearerAuth: []
+    description: |
+      Returns post/comment/reaction activity metrics for a community.
+
+      Modes:
+        - granularity=daily: time series (zero-filled missing dates)
+        - granularity=aggregate: aggregate totals across range
+    parameters:
+      - $ref: "./parameter.yaml#/_communityId"
+      - $ref: "./parameter.yaml#/from"
+      - $ref: "./parameter.yaml#/to"
+      - $ref: "./parameter.yaml#/granularity"
+    responses:
+      200:
+        $ref: "./response.yaml#/activities-response-200"
+      400:
+        $ref: "../../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../../global/error.yaml#/UnexpectedError"
+
+_communityId-members:
+  get:
+    summary: "Community membership metrics"
+    tags: [Analytic]
+    security:
+      - BearerAuth: []
+    description: |
+      Returns membership metrics (total_members, new_members, lost_members).
+
+    parameters:
+      - $ref: "./parameter.yaml#/_communityId"
+      - $ref: "./parameter.yaml#/from"
+      - $ref: "./parameter.yaml#/to"
+      - $ref: "./parameter.yaml#/granularity"
+    responses:
+      200:
+        $ref: "./response.yaml#/members-response-200"
+      400:
+        $ref: "../../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../../global/error.yaml#/UnexpectedError"
+
+_communityId-most-active-day:
+  get:
+    summary: "Community Weekday engagement"
+    tags: [Analytic]
+    security:
+      - BearerAuth: []
+    description: |
+      Aggregates engagements (posts + comments + reactions) per weekday across the date range.
+      Returns all 7 weekdays with sums, counts and average engagements per active day.
+    parameters:
+      - $ref: "./parameter.yaml#/_communityId"
+      - $ref: "./parameter.yaml#/from"
+      - $ref: "./parameter.yaml#/to"
+    responses:
+      200:
+        $ref: "./response.yaml#/most-active-day-response-200"
+      400:
+        $ref: "../../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../../global/error.yaml#/UnexpectedError"
+
+_communityId-most-active-time:
+  get:
+    summary: "Community Hourly engagement"
+    tags: [Analytic]
+    security:
+      - BearerAuth: []
+    description: |
+      Aggregates engagements (posts + comments + reactions) per UTC hour across the date range.
+      Returns 24 hours with sums & average engagements per unique day that had any events in that hour.
+    parameters:
+      - $ref: "./parameter.yaml#/_communityId"
+      - $ref: "./parameter.yaml#/from"
+      - $ref: "./parameter.yaml#/to"
+    responses:
+      200:
+        $ref: "./response.yaml#/most-active-time-response-200"
+      400:
+        $ref: "../../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../../global/error.yaml#/UnexpectedError"

@@ -102375,6 +102375,1578 @@
         ]
       }
     },
+    "/api/v5/analytics/community-metrics/{communityId}/activities": {
+      "get": {
+        "summary": "Community activity metrics",
+        "tags": [
+          "Analytic"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Returns post/comment/reaction activity metrics for a community.\n\nModes:\n  - granularity=daily: time series (zero-filled missing dates)\n  - granularity=aggregate: aggregate totals across range\n",
+        "parameters": [
+          {
+            "name": "communityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Community ID"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Inclusive start date (YYYY-MM-DD). Defaults to 7 days before yesterday."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Inclusive end date (YYYY-MM-DD). Defaults to yesterday."
+          },
+          {
+            "name": "granularity",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "daily",
+                "aggregate"
+              ]
+            },
+            "description": "daily (default) or aggregate."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful activities metrics response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "granularity",
+                        "from",
+                        "to",
+                        "data"
+                      ],
+                      "properties": {
+                        "granularity": {
+                          "type": "string",
+                          "enum": [
+                            "daily"
+                          ]
+                        },
+                        "from": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "to": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "date"
+                            ],
+                            "properties": {
+                              "date": {
+                                "type": "string",
+                                "format": "date"
+                              },
+                              "total_posts": {
+                                "type": "integer"
+                              },
+                              "total_comments": {
+                                "type": "integer"
+                              },
+                              "total_reactions": {
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "granularity",
+                        "from",
+                        "to",
+                        "value"
+                      ],
+                      "properties": {
+                        "granularity": {
+                          "type": "string",
+                          "enum": [
+                            "aggregate"
+                          ]
+                        },
+                        "from": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "to": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "value": {
+                          "type": "object",
+                          "properties": {
+                            "total_posts": {
+                              "type": "integer"
+                            },
+                            "total_comments": {
+                              "type": "integer"
+                            },
+                            "total_reactions": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "examples": {
+                  "daily": {
+                    "value": {
+                      "granularity": "daily",
+                      "from": "2024-05-01",
+                      "to": "2024-05-05",
+                      "data": [
+                        {
+                          "date": "2024-05-01",
+                          "total_posts": 1,
+                          "total_comments": 0,
+                          "total_reactions": 2
+                        },
+                        {
+                          "date": "2024-05-02",
+                          "total_posts": 0,
+                          "total_comments": 0,
+                          "total_reactions": 0
+                        },
+                        {
+                          "date": "2024-05-03",
+                          "total_posts": 5,
+                          "total_comments": 2,
+                          "total_reactions": 1
+                        },
+                        {
+                          "date": "2024-05-04",
+                          "total_posts": 0,
+                          "total_comments": 0,
+                          "total_reactions": 0
+                        },
+                        {
+                          "date": "2024-05-05",
+                          "total_posts": 2,
+                          "total_comments": 1,
+                          "total_reactions": 3
+                        }
+                      ]
+                    }
+                  },
+                  "aggregate": {
+                    "value": {
+                      "granularity": "aggregate",
+                      "from": "2024-05-01",
+                      "to": "2024-05-31",
+                      "value": {
+                        "total_posts": 120,
+                        "total_comments": 340,
+                        "total_reactions": 560
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters validation error!."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/analytics/community-metrics/{communityId}/members": {
+      "get": {
+        "summary": "Community membership metrics",
+        "tags": [
+          "Analytic"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Returns membership metrics (total_members, new_members, lost_members).\n",
+        "parameters": [
+          {
+            "name": "communityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Community ID"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Inclusive start date (YYYY-MM-DD). Defaults to 7 days before yesterday."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Inclusive end date (YYYY-MM-DD). Defaults to yesterday."
+          },
+          {
+            "name": "granularity",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "daily",
+                "aggregate"
+              ]
+            },
+            "description": "daily (default) or aggregate."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful membership metrics response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "granularity",
+                        "from",
+                        "to",
+                        "data"
+                      ],
+                      "properties": {
+                        "granularity": {
+                          "type": "string",
+                          "enum": [
+                            "daily"
+                          ]
+                        },
+                        "from": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "to": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "date"
+                            ],
+                            "properties": {
+                              "date": {
+                                "type": "string",
+                                "format": "date"
+                              },
+                              "total_members": {
+                                "type": "integer"
+                              },
+                              "new_members": {
+                                "type": "integer"
+                              },
+                              "lost_members": {
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "granularity",
+                        "from",
+                        "to",
+                        "value"
+                      ],
+                      "properties": {
+                        "granularity": {
+                          "type": "string",
+                          "enum": [
+                            "aggregate"
+                          ]
+                        },
+                        "from": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "to": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "value": {
+                          "type": "object",
+                          "properties": {
+                            "total_members": {
+                              "type": "integer"
+                            },
+                            "new_members": {
+                              "type": "integer"
+                            },
+                            "lost_members": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "examples": {
+                  "daily": {
+                    "value": {
+                      "granularity": "daily",
+                      "from": "2024-05-01",
+                      "to": "2024-05-05",
+                      "data": [
+                        {
+                          "date": "2024-05-01",
+                          "total_members": 20,
+                          "new_members": 3,
+                          "lost_members": 0
+                        },
+                        {
+                          "date": "2024-05-02",
+                          "total_members": 20,
+                          "new_members": 0,
+                          "lost_members": 0
+                        },
+                        {
+                          "date": "2024-05-03",
+                          "total_members": 50,
+                          "new_members": 30,
+                          "lost_members": 0
+                        },
+                        {
+                          "date": "2024-05-04",
+                          "total_members": 50,
+                          "new_members": 0,
+                          "lost_members": 0
+                        },
+                        {
+                          "date": "2024-05-05",
+                          "total_members": 100,
+                          "new_members": 50,
+                          "lost_members": 0
+                        }
+                      ]
+                    }
+                  },
+                  "aggregate": {
+                    "value": {
+                      "granularity": "aggregate",
+                      "from": "2024-05-01",
+                      "to": "2024-05-31",
+                      "value": {
+                        "total_members": 1000,
+                        "new_members": 150,
+                        "lost_members": 30
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters validation error!."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/analytics/community-metrics/{communityId}/most-active-day": {
+      "get": {
+        "summary": "Community Weekday engagement",
+        "tags": [
+          "Analytic"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Aggregates engagements (posts + comments + reactions) per weekday across the date range.\nReturns all 7 weekdays with sums, counts and average engagements per active day.\n",
+        "parameters": [
+          {
+            "name": "communityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Community ID"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Inclusive start date (YYYY-MM-DD). Defaults to 7 days before yesterday."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Inclusive end date (YYYY-MM-DD). Defaults to yesterday."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful most active day response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "from",
+                    "to",
+                    "most_active_days"
+                  ],
+                  "properties": {
+                    "from": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "to": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "most_active_days": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "weekday",
+                          "sum_engagements",
+                          "days_count",
+                          "avg_engagements"
+                        ],
+                        "properties": {
+                          "weekday": {
+                            "type": "string"
+                          },
+                          "sum_engagements": {
+                            "type": "integer"
+                          },
+                          "days_count": {
+                            "type": "integer"
+                          },
+                          "avg_engagements": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "from": "2024-05-01",
+                  "to": "2024-05-07",
+                  "most_active_days": [
+                    {
+                      "weekday": "monday",
+                      "sum_engagements": 30,
+                      "days_count": 2,
+                      "avg_engagements": 15
+                    },
+                    {
+                      "weekday": "tuesday",
+                      "sum_engagements": 10,
+                      "days_count": 1,
+                      "avg_engagements": 10
+                    },
+                    {
+                      "weekday": "wednesday",
+                      "sum_engagements": 0,
+                      "days_count": 0,
+                      "avg_engagements": 0
+                    },
+                    {
+                      "weekday": "thursday",
+                      "sum_engagements": 0,
+                      "days_count": 0,
+                      "avg_engagements": 0
+                    },
+                    {
+                      "weekday": "friday",
+                      "sum_engagements": 0,
+                      "days_count": 0,
+                      "avg_engagements": 0
+                    },
+                    {
+                      "weekday": "saturday",
+                      "sum_engagements": 0,
+                      "days_count": 0,
+                      "avg_engagements": 0
+                    },
+                    {
+                      "weekday": "sunday",
+                      "sum_engagements": 0,
+                      "days_count": 0,
+                      "avg_engagements": 0
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters validation error!."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/analytics/community-metrics/{communityId}/most-active-time": {
+      "get": {
+        "summary": "Community Hourly engagement",
+        "tags": [
+          "Analytic"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Aggregates engagements (posts + comments + reactions) per UTC hour across the date range.\nReturns 24 hours with sums & average engagements per unique day that had any events in that hour.\n",
+        "parameters": [
+          {
+            "name": "communityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Community ID"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Inclusive start date (YYYY-MM-DD). Defaults to 7 days before yesterday."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Inclusive end date (YYYY-MM-DD). Defaults to yesterday."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful most active time response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "from",
+                    "to",
+                    "most_active_times"
+                  ],
+                  "properties": {
+                    "from": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "to": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "most_active_times": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "hour",
+                          "hour_display",
+                          "sum_engagements",
+                          "avg_engagements"
+                        ],
+                        "properties": {
+                          "hour": {
+                            "type": "integer"
+                          },
+                          "hour_display": {
+                            "type": "string"
+                          },
+                          "sum_engagements": {
+                            "type": "integer"
+                          },
+                          "avg_engagements": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "from": "2024-05-01",
+                  "to": "2024-05-07",
+                  "most_active_times": [
+                    {
+                      "hour": 0,
+                      "hour_display": "12:00 AM",
+                      "sum_engagements": 0,
+                      "avg_engagements": 0
+                    },
+                    {
+                      "hour": 9,
+                      "hour_display": "9:00 AM",
+                      "sum_engagements": 15,
+                      "avg_engagements": 5
+                    },
+                    {
+                      "hour": 20,
+                      "hour_display": "8:00 PM",
+                      "sum_engagements": 10,
+                      "avg_engagements": 5
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters validation error!."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v3/network-settings/chat": {
       "put": {
         "summary": "Update chat network setting configuration.",
