@@ -1,0 +1,31 @@
+_communityId:
+  name: communityId
+  in: path
+  required: true
+  schema:
+    type: string
+  description: Community ID
+from:
+  name: from
+  in: query
+  required: false
+  schema:
+    type: string
+    format: date
+  description: Inclusive start date (YYYY-MM-DD). Defaults to 7 days before yesterday.
+to:
+  name: to
+  in: query
+  required: false
+  schema:
+    type: string
+    format: date
+  description: Inclusive end date (YYYY-MM-DD). Defaults to yesterday.
+granularity:
+  name: granularity
+  in: query
+  required: false
+  schema:
+    type: string
+    enum: [daily, aggregate]
+  description: daily (default) or aggregate.
