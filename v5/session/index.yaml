@@ -20,3 +20,49 @@ root:
         $ref: "../../global/error.yaml#/ValidationError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+guest:
+  post:
+    summary: "Register a guest session"
+    tags:
+      - "Session"
+    security: []
+    parameters:
+      - $ref: "./parameter.yaml#/x-api-key"
+    description: "Register a guest session for read-only access. Guest users can only consume public content and cannot perform write operations."
+    requestBody:
+      $ref: "./request.yaml#/guest-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/session-response-200"
+      401:
+        $ref: "../../global/error.yaml#/UserIsSystemBanned"
+      403:
+        $ref: "../../global/error.yaml#/UserIsGlobalBanned"
+      422:
+        $ref: "../../global/error.yaml#/ValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+bot:
+  post:
+    summary: "Register a bot session"
+    tags:
+      - "Session"
+    security: []
+    parameters:
+      - $ref: "./parameter.yaml#/x-api-key"
+    description: "Register a bot session for SEO crawlers. Bot users have read-only access and are optimized for SEO crawling."
+    requestBody:
+      $ref: "./request.yaml#/bot-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/session-response-200"
+      401:
+        $ref: "../../global/error.yaml#/UserIsSystemBanned"
+      403:
+        $ref: "../../global/error.yaml#/UserIsGlobalBanned"
+      422:
+        $ref: "../../global/error.yaml#/ValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

@@ -64,3 +64,85 @@ root-post-request-payload:
         required:
           - "userId"
           - "deviceId"
+
+guest-post-request-payload:
+  description: "Information about guest user and devices that they use to connect. Guest users have read-only access and cannot perform write operations.\n\nIf userId doesn't exist, a new guest user will be created.\n\naccessToken expires in 30 days by default.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          userId:
+            type: "string"
+            minLength: 1
+            maxLength: 50
+            description: "Unique identifier for the guest user. Cannot start with 'ADMIN_' or 'DELETED_' prefixes."
+          deviceId:
+            type: "string"
+            minLength: 1
+            maxLength: 150
+            description: "Unique identifier for the device"
+          deviceInfo:
+            type: "object"
+            description: "Optional device information for analytics and debugging"
+            properties:
+              kind:
+                type: "string"
+                enum:
+                  - "ios"
+                  - "android"
+                  - "web"
+                  - "node"
+                description: "Type of device/platform"
+              model:
+                type: "string"
+                maxLength: 300
+                description: "Device model information"
+              sdkVersion:
+                type: "string"
+                maxLength: 30
+                description: "SDK version being used"
+        required:
+          - "deviceId"
+
+bot-post-request-payload:
+  description: "Information about bot user and devices that they use to connect. Bot users have read-only access and are typically used for SEO crawlers and automated systems.\n\nIf userId doesn't exist, a new bot user will be created.\n\naccessToken expires in 30 days by default.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          userId:
+            type: "string"
+            minLength: 1
+            maxLength: 50
+            description: "Unique identifier for the bot user. Cannot start with 'ADMIN_' or 'DELETED_' prefixes."
+          deviceId:
+            type: "string"
+            minLength: 1
+            maxLength: 150
+            description: "Unique identifier for the device"
+          deviceInfo:
+            type: "object"
+            description: "Optional device information for analytics and debugging"
+            properties:
+              kind:
+                type: "string"
+                enum:
+                  - "ios"
+                  - "android"
+                  - "web"
+                  - "node"
+                description: "Type of device/platform"
+              model:
+                type: "string"
+                maxLength: 300
+                description: "Device model information"
+              sdkVersion:
+                type: "string"
+                maxLength: 30
+                description: "SDK version being used"
+        required:
+          - "deviceId"
