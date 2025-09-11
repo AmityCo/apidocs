@@ -169229,6 +169229,1146 @@
         }
       }
     },
+    "/api/v5/sessions/guest": {
+      "post": {
+        "summary": "Register a guest session",
+        "tags": [
+          "Session"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for network authentication"
+          }
+        ],
+        "description": "Register a guest session for read-only access. Guest users can only consume public content and cannot perform write operations.",
+        "requestBody": {
+          "description": "Information about guest user and devices that they use to connect. Guest users have read-only access and cannot perform write operations.\n\nIf userId doesn't exist, a new guest user will be created.\n\naccessToken expires in 30 days by default.\n",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 50,
+                    "description": "Unique identifier for the guest user. Cannot start with 'ADMIN_' or 'DELETED_' prefixes."
+                  },
+                  "deviceId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 150,
+                    "description": "Unique identifier for the device"
+                  },
+                  "deviceInfo": {
+                    "type": "object",
+                    "description": "Optional device information for analytics and debugging",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "ios",
+                          "android",
+                          "web",
+                          "node"
+                        ],
+                        "description": "Type of device/platform"
+                      },
+                      "model": {
+                        "type": "string",
+                        "maxLength": 300,
+                        "description": "Device model information"
+                      },
+                      "sdkVersion": {
+                        "type": "string",
+                        "maxLength": 30,
+                        "description": "SDK version being used"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "deviceId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Session Information with access token and user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "description": "JWT access token for API authentication"
+                    },
+                    "issuedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Token issuance timestamp"
+                    },
+                    "expiresAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Token expiration timestamp"
+                    },
+                    "users": {
+                      "type": "array",
+                      "description": "User information array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a user. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a user. (for real-time event)"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string"
+                          },
+                          "userPublicId": {
+                            "type": "string"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "profileHandle": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "avatarFileId": {
+                            "type": "string"
+                          },
+                          "avatarCustomUrl": {
+                            "type": "string"
+                          },
+                          "flagCount": {
+                            "type": "integer"
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "isGlobalBan": {
+                            "type": "boolean",
+                            "description": "Global ban status. Every user can see this flag."
+                          },
+                          "isBrand": {
+                            "type": "boolean",
+                            "description": "Brand user status."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isDeleted": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "roles": {
+                      "type": "array",
+                      "description": "User roles array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "roleId": {
+                            "type": "string"
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a role is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a role is created.",
+                            "format": "date-time"
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "The list of permission for this role. https://docs.amity.co/amity-sdk/core-concepts/user/user-permission#permissions"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false
+                          }
+                        },
+                        "required": [
+                          "roleId",
+                          "permissions",
+                          "updatedAt",
+                          "isDeleted"
+                        ]
+                      }
+                    },
+                    "files": {
+                      "type": "array",
+                      "description": "Associated files array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fileId": {
+                            "type": "string",
+                            "description": "Root file key on cloud storage."
+                          },
+                          "fileUrl": {
+                            "type": "string",
+                            "description": "Http link for download file"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "File type.",
+                            "enum": [
+                              "image",
+                              "file",
+                              "video"
+                            ]
+                          },
+                          "accessType": {
+                            "type": "string",
+                            "description": "File access type. `network` type requires authentication to download.",
+                            "enum": [
+                              "public",
+                              "network"
+                            ],
+                            "default": "public"
+                          },
+                          "altText": {
+                            "type": "string",
+                            "description": "Alternative text for the file.",
+                            "maxLength": 180
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is uploaded.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is updated.",
+                            "format": "date-time"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "File name."
+                              },
+                              "extension": {
+                                "type": "string",
+                                "description": "File format."
+                              },
+                              "size": {
+                                "type": "number",
+                                "description": "File size."
+                              },
+                              "mimeType": {
+                                "type": "string",
+                                "description": "File mime-type."
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "File image metadata (width, height etc.).",
+                                "properties": {
+                                  "exif": {
+                                    "type": "object"
+                                  },
+                                  "gps": {
+                                    "type": "object"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "isFull": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "lastCachePurge": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Date of the last cache purge"
+                    }
+                  },
+                  "required": [
+                    "accessToken",
+                    "issuedAt",
+                    "expiresAt",
+                    "users"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "User is banned from the system.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400100,
+                  "message": "User is banned from the system."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User is global banned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400312,
+                  "message": "User is global banned."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Put a wrong request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters error.",
+                  "data": {
+                    "detail": [
+                      "The 'data.text' field length must be less than or equal to 20000 characters long."
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/sessions/bot": {
+      "post": {
+        "summary": "Register a bot session",
+        "tags": [
+          "Session"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for network authentication"
+          }
+        ],
+        "description": "Register a bot session for SEO crawlers. Bot users have read-only access and are optimized for SEO crawling.",
+        "requestBody": {
+          "description": "Information about bot user and devices that they use to connect. Bot users have read-only access and are typically used for SEO crawlers and automated systems.\n\nIf userId doesn't exist, a new bot user will be created.\n\naccessToken expires in 30 days by default.\n",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 50,
+                    "description": "Unique identifier for the bot user. Cannot start with 'ADMIN_' or 'DELETED_' prefixes."
+                  },
+                  "deviceId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 150,
+                    "description": "Unique identifier for the device"
+                  },
+                  "deviceInfo": {
+                    "type": "object",
+                    "description": "Optional device information for analytics and debugging",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "ios",
+                          "android",
+                          "web",
+                          "node"
+                        ],
+                        "description": "Type of device/platform"
+                      },
+                      "model": {
+                        "type": "string",
+                        "maxLength": 300,
+                        "description": "Device model information"
+                      },
+                      "sdkVersion": {
+                        "type": "string",
+                        "maxLength": 30,
+                        "description": "SDK version being used"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "deviceId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Session Information with access token and user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "description": "JWT access token for API authentication"
+                    },
+                    "issuedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Token issuance timestamp"
+                    },
+                    "expiresAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Token expiration timestamp"
+                    },
+                    "users": {
+                      "type": "array",
+                      "description": "User information array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a user. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a user. (for real-time event)"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string"
+                          },
+                          "userPublicId": {
+                            "type": "string"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "profileHandle": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "avatarFileId": {
+                            "type": "string"
+                          },
+                          "avatarCustomUrl": {
+                            "type": "string"
+                          },
+                          "flagCount": {
+                            "type": "integer"
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "isGlobalBan": {
+                            "type": "boolean",
+                            "description": "Global ban status. Every user can see this flag."
+                          },
+                          "isBrand": {
+                            "type": "boolean",
+                            "description": "Brand user status."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isDeleted": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "roles": {
+                      "type": "array",
+                      "description": "User roles array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "roleId": {
+                            "type": "string"
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a role is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a role is created.",
+                            "format": "date-time"
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "The list of permission for this role. https://docs.amity.co/amity-sdk/core-concepts/user/user-permission#permissions"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false
+                          }
+                        },
+                        "required": [
+                          "roleId",
+                          "permissions",
+                          "updatedAt",
+                          "isDeleted"
+                        ]
+                      }
+                    },
+                    "files": {
+                      "type": "array",
+                      "description": "Associated files array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fileId": {
+                            "type": "string",
+                            "description": "Root file key on cloud storage."
+                          },
+                          "fileUrl": {
+                            "type": "string",
+                            "description": "Http link for download file"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "File type.",
+                            "enum": [
+                              "image",
+                              "file",
+                              "video"
+                            ]
+                          },
+                          "accessType": {
+                            "type": "string",
+                            "description": "File access type. `network` type requires authentication to download.",
+                            "enum": [
+                              "public",
+                              "network"
+                            ],
+                            "default": "public"
+                          },
+                          "altText": {
+                            "type": "string",
+                            "description": "Alternative text for the file.",
+                            "maxLength": 180
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is uploaded.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is updated.",
+                            "format": "date-time"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "File name."
+                              },
+                              "extension": {
+                                "type": "string",
+                                "description": "File format."
+                              },
+                              "size": {
+                                "type": "number",
+                                "description": "File size."
+                              },
+                              "mimeType": {
+                                "type": "string",
+                                "description": "File mime-type."
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "File image metadata (width, height etc.).",
+                                "properties": {
+                                  "exif": {
+                                    "type": "object"
+                                  },
+                                  "gps": {
+                                    "type": "object"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "isFull": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "lastCachePurge": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Date of the last cache purge"
+                    }
+                  },
+                  "required": [
+                    "accessToken",
+                    "issuedAt",
+                    "expiresAt",
+                    "users"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "User is banned from the system.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400100,
+                  "message": "User is banned from the system."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User is global banned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400312,
+                  "message": "User is global banned."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Put a wrong request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters error.",
+                  "data": {
+                    "detail": [
+                      "The 'data.text' field length must be less than or equal to 20000 characters long."
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v4/stories": {
       "post": {
         "summary": "Create a story",
