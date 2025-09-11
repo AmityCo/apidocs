@@ -1,0 +1,42 @@
+session-response-200:
+  description: Session Information with access token and user data
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          accessToken:
+            type: string
+            description: "JWT access token for API authentication"
+          issuedAt:
+            type: string
+            format: date-time
+            description: "Token issuance timestamp"
+          expiresAt:
+            type: string
+            format: date-time
+            description: "Token expiration timestamp"
+          users:
+            type: array
+            description: "User information array"
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          roles:
+            type: array
+            description: "User roles array"
+            items:
+              $ref: "../../schema/role.yaml#/RoleV3"
+          files:
+            type: array
+            description: "Associated files array"
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          lastCachePurge:
+            type: string
+            format: date-time
+            description: "Date of the last cache purge"
+        required:
+          - accessToken
+          - issuedAt
+          - expiresAt
+          - users
