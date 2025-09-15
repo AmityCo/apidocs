@@ -100,6 +100,9 @@ moderation:
               isWhitelistEnabled:
                 type: "boolean"
                 description: "`true` - Enabled whitelist validation.\n`false` - Disabled whitelist validation.\n"
+              isReportEnabled:
+                type: "boolean"
+                description: "`true` - Enabled moderation activity report feature.\n`false` - Disabled moderation activity report feature.\n"
     responses:
       200:
         $ref: "./response.yaml#/moderation-response-200"
@@ -349,7 +352,7 @@ uikit:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
-shareable-deep-links: 
+shareable-deep-links:
   put:
     summary: "Create shareable deep links configuration"
     tags:
