@@ -1,0 +1,59 @@
+moderation-activity-response-payload-200:
+  description: List of available moderation activity report files
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          reports:
+            type: array
+            description: Array of available moderation activity report files
+            items:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                  description: Base64 encoded file identifier used for downloading the report
+                  example: "bW9kZXJhdGlvbi1hY3Rpdml0eS1sb2ctMjAyNS0wNy0xNy5jc3Y="
+                fileName:
+                  type: string
+                  description: Human-readable name of the report file
+                  example: "moderation-activity-log-2025-07-17.csv"
+                fileSize:
+                  type: integer
+                  description: Size of the file in bytes
+                  example: 137065
+                lastModified:
+                  type: string
+                  format: date-time
+                  description: When the file was last modified
+                  example: "2025-07-18T00:06:47.000Z"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+                nullable: true
+                description: Token for the next page of results
+                example: "eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=="
+              previous:
+                type: string
+                nullable: true
+                description: Token for the previous page of results
+                example: "eyJiZWZvcmUiOnsiaWQiOiI2NGYxYTJiM2M0ZDVlNmY3YThiOWMwZDEifX0="
+      examples:
+        success:
+          summary: Successful response with available report files
+          value:
+            reports:
+              - fileId: "bW9kZXJhdGlvbi1hY3Rpdml0eS1sb2ctMjAyNS0wNy0xNy5jc3Y="
+                fileName: "moderation-activity-log-2025-07-17.csv"
+                fileSize: 137065
+                lastModified: "2025-07-18T00:06:47.000Z"
+              - fileId: "bW9kZXJhdGlvbi1hY3Rpdml0eS1sb2ctMjAyNS0wNy0xNi5jc3Y="
+                fileName: "moderation-activity-log-2025-07-16.csv"
+                fileSize: 89432
+                lastModified: "2025-07-17T00:06:12.000Z"
+            paging:
+              next: "eyJhZnRlciI6eyJmaWxlSWQiOiJiVzlrWlhKaGRHbHZiaTFoWTNScGRtbDBlUzFzYjJjdE1qQXlOUzB3Tnkwd05pNWpjM1k9In19"
+              previous: null

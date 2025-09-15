@@ -1,0 +1,39 @@
+limit:
+  name: limit
+  in: query
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 20
+    example: 20
+  description: Number of items to return per page
+
+token:
+  name: token
+  in: query
+  schema:
+    type: string
+    maxLength: 1000
+    example: "eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=="
+  description: Pagination token for retrieving the next or previous page of results
+
+fileId:
+  name: fileId
+  in: query
+  required: false
+  schema:
+    type: string
+    maxLength: 1000
+    example: "64f1a2b3c4d5e6f7a8b9c0d1"
+  description: The unique identifier of the file to download
+
+fileName:
+  name: fileName
+  in: query
+  required: false
+  schema:
+    type: string
+    maxLength: 1000
+    example: "moderation-report-2024-01-15.csv"
+  description: The name of the file to download
