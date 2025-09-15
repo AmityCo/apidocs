@@ -1,0 +1,58 @@
+root:
+  get:
+    summary: Query moderation activity reports
+    description: |
+      Retrieve moderation activity reports with pagination. This endpoint allows administrators to query
+      moderation activities including flagged content, banned users, deleted posts/comments, and other
+      moderation-related events. Requires admin permissions and moderation reporting to be enabled.
+    tags:
+      - Moderation
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
+    responses:
+      200:
+        $ref: "./response.yaml#/moderation-activity-response-payload-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+download:
+  get:
+    summary: Download moderation activity report
+    description: |
+      Download a specific moderation activity report file. Returns a redirect to a signed URL for
+      downloading the report file. Requires admin permissions and moderation reporting to be enabled.
+    tags:
+      - Moderation
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/fileId"
+      - $ref: "./parameter.yaml#/fileName"
+    responses:
+      302:
+        description: Redirect to signed URL for file download
+        headers:
+          Location:
+            description: The signed URL for downloading the file
+            schema:
+              type: string
+              format: uri
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
