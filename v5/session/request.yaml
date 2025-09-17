@@ -97,15 +97,17 @@ guest-post-request-payload:
               ```
 
               Steps to generate:
-              1. Create HMAC-SHA256 hash using payload as message and applicationSecret as key. Payload format: deviceId=<deviceId>&signatureExpiresAt=<signatureExpiresAt>. Device id and signatureExpiresAt must match the values sent in the request.
+              1. Create HMAC-SHA256 hash using payload as message and applicationSecret as key.<br/><br/> Payload format: deviceId=deviceId&authSignatureExpiresAt=authSignatureExpiresAt<br><br> <b>Device id</b> and <b>authSignatureExpiresAt</b> must match the values sent in the request.
+              
               2. Convert the resulting hash to hexadecimal string (64 characters)
               
               The applicationSecret can be found in the console at Feature settings > User section when enabling secure guest sessions.
 
             minLength: 64
             maxLength: 64
-          signatureExpiresAt:
+          authSignatureExpiresAt:
             type: "string"
+            example: "2024-12-31T23:59:59Z"
             description: "ISO 8601 timestamp indicating when the authSignature expires (required for secure guest sessions only)"
         required:
           - "deviceId"

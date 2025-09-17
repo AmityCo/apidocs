@@ -169290,9 +169290,14 @@
                   },
                   "authSignature": {
                     "type": "string",
-                    "description": "Authentication signature for guest user (required for secure guest sessions only)\n\nThe signature must be created using HMAC-SHA256 and returned as hexadecimal:\n```\nHMAC-SHA256(deviceId, applicationSecret)\n```\n\nSteps to generate:\n1. Create HMAC-SHA256 hash using deviceId as message and applicationSecret as key\n2. Convert the resulting hash to hexadecimal string (64 characters)\n\nThe applicationSecret can be found in the console at Feature settings > User section when enabling secure guest sessions.\n",
+                    "description": "Authentication signature for guest user (required for secure guest sessions only)\n\nThe signature must be created using HMAC-SHA256 and returned as hexadecimal:\n```\nHMAC-SHA256(payload, applicationSecret)\n```\n\nSteps to generate:\n1. Create HMAC-SHA256 hash using payload as message and applicationSecret as key.<br><br> Payload format: deviceId=deviceId&authSignatureExpiresAt=authSignatureExpiresAt<br><br> <b>Device id</b> and <b>authSignatureExpiresAt</b> must match the values sent in the request.\n\n2. Convert the resulting hash to hexadecimal string (64 characters)\n\nThe applicationSecret can be found in the console at Feature settings > User section when enabling secure guest sessions.\n",
                     "minLength": 64,
                     "maxLength": 64
+                  },
+                  "authSignatureExpiresAt": {
+                    "type": "string",
+                    "example": "2024-12-31T23:59:59Z",
+                    "description": "ISO 8601 timestamp indicating when the authSignature expires (required for secure guest sessions only)"
                   }
                 },
                 "required": [
