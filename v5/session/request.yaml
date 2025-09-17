@@ -49,24 +49,12 @@ root-post-request-payload:
             description: "Authentication token from /api/v3/authentication/token or /api/v4/authentication/token (required for secure networks)"
             minLength: 1
             maxLength: 100
-          userType:
-            type: "string"
-            enum:
-              - "normal"
-              - "guest"
-              - "bot"
-            default: "normal"
-            description: |
-              Type of user. Can be 'normal', 'guest', or 'bot'. Default is 'normal'.
-              - 'normal': Regular user with full access.
-              - 'guest': Read-only access user, typically for read-only use.
-              - 'bot': Read-only access user, used for SEO bots.
         required:
           - "userId"
           - "deviceId"
 
 guest-post-request-payload:
-  description: "Information about guest user and devices that they use to connect. Guest users have read-only access and cannot perform write operations.\n\nIf userId doesn't exist, a new guest user will be created.\n\naccessToken expires in 30 days by default.\n"
+  description: "Information about guest user and devices that they use to connect. Guest users have read-only access and cannot perform write operations.\n\nIf deviceId haven't been used before, a new guest user will be created.\n\naccessToken expires in 30 days by default.\n"
   required: true
   content:
     application/json:
@@ -98,11 +86,29 @@ guest-post-request-payload:
                 type: "string"
                 maxLength: 30
                 description: "SDK version being used"
+          authSignature:
+            type: "string"
+            description: | 
+              Authentication signature for guest user (required for secure guest sessions only)
+
+              The signature must be created using HMAC-SHA256 and returned as hexadecimal:
+              ```
+              HMAC-SHA256(deviceId, applicationSecret)
+              ```
+
+              Steps to generate:
+              1. Create HMAC-SHA256 hash using deviceId as message and applicationSecret as key
+              2. Convert the resulting hash to hexadecimal string (64 characters)
+              
+              The applicationSecret can be found in the console at Feature settings > User section when enabling secure guest sessions.
+
+            minLength: 64
+            maxLength: 64
         required:
           - "deviceId"
 
 bot-post-request-payload:
-  description: "Information about bot user and devices that they use to connect. Bot users have read-only access and are typically used for SEO crawlers and automated systems.\n\nIf userId doesn't exist, a new bot user will be created.\n\naccessToken expires in 30 days by default.\n"
+  description: "Information about bot user and devices that they use to connect. Bot users have read-only access and are typically used for SEO crawlers and automated systems.\n\naccessToken expires in 30 days by default.\n"
   required: true
   content:
     application/json:

@@ -168712,16 +168712,6 @@
                     "description": "Authentication token from /api/v3/authentication/token or /api/v4/authentication/token (required for secure networks)",
                     "minLength": 1,
                     "maxLength": 100
-                  },
-                  "userType": {
-                    "type": "string",
-                    "enum": [
-                      "normal",
-                      "guest",
-                      "bot"
-                    ],
-                    "default": "normal",
-                    "description": "Type of user. Can be 'normal', 'guest', or 'bot'. Default is 'normal'.\n- 'normal': Regular user with full access.\n- 'guest': Read-only access user, typically for read-only use.\n- 'bot': Read-only access user, used for SEO bots.\n"
                   }
                 },
                 "required": [
@@ -169033,6 +169023,16 @@
                       "type": "string",
                       "format": "date-time",
                       "description": "Date of the last cache purge"
+                    },
+                    "userType": {
+                      "type": "string",
+                      "description": "Type of user (e.g., normal, guest, bot)",
+                      "example": "normal",
+                      "enum": [
+                        "normal",
+                        "guest",
+                        "bot"
+                      ]
                     }
                   },
                   "required": [
@@ -169249,19 +169249,13 @@
         ],
         "description": "Register a guest session for read-only access. Guest users can only consume public content and cannot perform write operations.",
         "requestBody": {
-          "description": "Information about guest user and devices that they use to connect. Guest users have read-only access and cannot perform write operations.\n\nIf userId doesn't exist, a new guest user will be created.\n\naccessToken expires in 30 days by default.\n",
+          "description": "Information about guest user and devices that they use to connect. Guest users have read-only access and cannot perform write operations.\n\nIf deviceId haven't been used before, a new guest user will be created.\n\naccessToken expires in 30 days by default.\n",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "userId": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 50,
-                    "description": "Unique identifier for the guest user. Cannot start with 'ADMIN_' or 'DELETED_' prefixes."
-                  },
                   "deviceId": {
                     "type": "string",
                     "minLength": 1,
@@ -169293,6 +169287,12 @@
                         "description": "SDK version being used"
                       }
                     }
+                  },
+                  "authSignature": {
+                    "type": "string",
+                    "description": "Authentication signature for guest user (required for secure guest sessions only)\n\nThe signature must be created using HMAC-SHA256 and returned as hexadecimal:\n```\nHMAC-SHA256(deviceId, applicationSecret)\n```\n\nSteps to generate:\n1. Create HMAC-SHA256 hash using deviceId as message and applicationSecret as key\n2. Convert the resulting hash to hexadecimal string (64 characters)\n\nThe applicationSecret can be found in the console at Feature settings > User section when enabling secure guest sessions.\n",
+                    "minLength": 64,
+                    "maxLength": 64
                   }
                 },
                 "required": [
@@ -169468,6 +169468,7 @@
                     "roles": {
                       "type": "array",
                       "description": "User roles array",
+                      "example": [],
                       "items": {
                         "type": "object",
                         "properties": {
@@ -169510,6 +169511,7 @@
                     "files": {
                       "type": "array",
                       "description": "Associated files array",
+                      "example": [],
                       "items": {
                         "type": "object",
                         "properties": {
@@ -169603,6 +169605,16 @@
                       "type": "string",
                       "format": "date-time",
                       "description": "Date of the last cache purge"
+                    },
+                    "userType": {
+                      "type": "string",
+                      "description": "Type of user (e.g., normal, guest, bot)",
+                      "example": "guest",
+                      "enum": [
+                        "normal",
+                        "guest",
+                        "bot"
+                      ]
                     }
                   },
                   "required": [
@@ -169819,19 +169831,13 @@
         ],
         "description": "Register a bot session for SEO crawlers. Bot users have read-only access and are optimized for SEO crawling.",
         "requestBody": {
-          "description": "Information about bot user and devices that they use to connect. Bot users have read-only access and are typically used for SEO crawlers and automated systems.\n\nIf userId doesn't exist, a new bot user will be created.\n\naccessToken expires in 30 days by default.\n",
+          "description": "Information about bot user and devices that they use to connect. Bot users have read-only access and are typically used for SEO crawlers and automated systems.\n\naccessToken expires in 30 days by default.\n",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "userId": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 50,
-                    "description": "Unique identifier for the bot user. Cannot start with 'ADMIN_' or 'DELETED_' prefixes."
-                  },
                   "deviceId": {
                     "type": "string",
                     "minLength": 1,
@@ -170038,6 +170044,7 @@
                     "roles": {
                       "type": "array",
                       "description": "User roles array",
+                      "example": [],
                       "items": {
                         "type": "object",
                         "properties": {
@@ -170080,6 +170087,7 @@
                     "files": {
                       "type": "array",
                       "description": "Associated files array",
+                      "example": [],
                       "items": {
                         "type": "object",
                         "properties": {
@@ -170173,6 +170181,16 @@
                       "type": "string",
                       "format": "date-time",
                       "description": "Date of the last cache purge"
+                    },
+                    "userType": {
+                      "type": "string",
+                      "description": "Type of user (e.g., normal, guest, bot)",
+                      "example": "bot",
+                      "enum": [
+                        "normal",
+                        "guest",
+                        "bot"
+                      ]
                     }
                   },
                   "required": [
