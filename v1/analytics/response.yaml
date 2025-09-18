@@ -47,3 +47,78 @@ views-stories_storyId-users-response-payload-200:
               previous:
                 type: string
                 example: "eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=="
+
+users-social-score-response-payload-200:
+  description: List of users with their social scores including contributions and content quality metrics
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          data:
+            type: array
+            items:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  pattern: '^[a-f\d]{24}$'
+                  description: Unique identifier of the user
+                  example: "60e4b1b4b3b2b5c4c4b3b2b5"
+                contributions:
+                  type: object
+                  properties:
+                    posts:
+                      type: number
+                      description: Number of posts created by the user
+                      example: 15
+                    comments:
+                      type: number
+                      description: Number of comments made by the user
+                      example: 42
+                    reactions:
+                      type: number
+                      description: Number of reactions given by the user
+                      example: 87
+                    score:
+                      type: number
+                      description: Calculated contribution score based on weighted activities
+                      example: 156.5
+                    level:
+                      type: string
+                      enum: ["none", "low", "medium", "high", "very_high"]
+                      description: Contribution level based on score thresholds
+                      example: "high"
+                contentsQuality:
+                  type: object
+                  properties:
+                    score:
+                      type: number
+                      description: Average content quality score
+                      example: 4.2
+                    count:
+                      type: number
+                      description: Number of content pieces analyzed for quality
+                      example: 12
+                    level:
+                      type: string
+                      enum: ["broken", "weak", "fair", "good", "excellent"]
+                      description: Content quality level based on average score
+                      example: "good"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+                nullable: true
+                description: Token for retrieving the next page of results
+                example: "eyJmcm9tIjoyMCwibGltaXQiOjEwfQ=="
+              previous:
+                type: string
+                nullable: true
+                description: Token for retrieving the previous page of results
+                example: "eyJmcm9tIjowLCJsaW1pdCI6MTB9"
+              limit:
+                type: number
+                description: Number of items per page
+                example: 10

@@ -32,3 +32,92 @@ limit:
     type: number
     default: 10
     description: number of user in a page
+
+socialScoreInterval:
+  name: interval
+  in: query
+  required: true
+  schema:
+    type: string
+    enum: ["7d", "30d", "90d"]
+    description: Time interval for social score analysis
+    example: "30d"
+
+userIds:
+  name: userIds
+  in: query
+  schema:
+    type: array
+    items:
+      type: string
+      pattern: '^[a-f\d]{24}$'
+    minItems: 1
+    maxItems: 20
+    description: Optional list of specific user IDs to query
+    example: ["60e4b1b4b3b2b5c4c4b3b2b5", "60e4b1b4b3b2b5c4c4b3b2b6"]
+
+sortBy:
+  name: sortBy
+  in: query
+  schema:
+    type: string
+    enum: ["contributions-score", "contents-quality-score"]
+    description: Field to sort results by
+    example: "contributions-score"
+
+sortOrder:
+  name: sortOrder
+  in: query
+  schema:
+    type: string
+    enum: ["desc", "asc"]
+    description: Sort order for results
+    example: "desc"
+
+contributionsLevel:
+  name: contributionsLevel
+  in: query
+  schema:
+    type: array
+    items:
+      type: string
+      enum: ["none", "low", "medium", "high", "very_high"]
+    minItems: 1
+    maxItems: 5
+    description: Filter by contribution levels
+    example: ["high", "very_high"]
+
+contentsQualityLevel:
+  name: contentsQualityLevel
+  in: query
+  schema:
+    type: array
+    items:
+      type: string
+      enum: ["broken", "weak", "fair", "good", "excellent"]
+    minItems: 1
+    maxItems: 5
+    description: Filter by content quality levels
+    example: ["good", "excellent"]
+
+options.limit:
+  name: options[limit]
+  in: query
+  description: Number of results per page (1-100)
+  schema:
+    type: number
+    minimum: 1
+    maximum: 20
+    default: 10
+    description: Number of users to return per page
+    example: 10
+
+options.token:
+  name: options[token]
+  in: query
+  description: Pagination token for getting next/previous pages
+  schema:
+    type: string
+    maxLength: 1000
+    description: Pagination token for retrieving next/previous page
+    example: "eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=="
