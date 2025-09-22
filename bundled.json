@@ -169026,11 +169026,11 @@
                     },
                     "userType": {
                       "type": "string",
-                      "description": "Type of user (e.g., normal, guest, bot)",
+                      "description": "Type of user (e.g., normal, visitor, bot)",
                       "example": "normal",
                       "enum": [
                         "normal",
-                        "guest",
+                        "visitor",
                         "bot"
                       ]
                     }
@@ -169229,9 +169229,9 @@
         }
       }
     },
-    "/api/v5/sessions/guest": {
+    "/api/v5/sessions/visitor": {
       "post": {
-        "summary": "Register a guest session",
+        "summary": "Register a visitor session",
         "tags": [
           "Session"
         ],
@@ -169247,9 +169247,9 @@
             "description": "API key for network authentication"
           }
         ],
-        "description": "Register a guest session for read-only access. Guest users can only consume public content and cannot perform write operations.",
+        "description": "Register a visitor session for read-only access. Visitor users can only consume public content and cannot perform write operations.",
         "requestBody": {
-          "description": "Information about guest user and devices that they use to connect. Guest users have read-only access and cannot perform write operations.\n\nIf deviceId haven't been used before, a new guest user will be created.\n\naccessToken expires in 30 days by default.\n",
+          "description": "Information about visitor user and devices that they use to connect. Visitor users have read-only access and cannot perform write operations.\n\nIf deviceId haven't been used before, a new visitor user will be created.\n\naccessToken expires in 30 days by default.\n",
           "required": true,
           "content": {
             "application/json": {
@@ -169290,14 +169290,14 @@
                   },
                   "authSignature": {
                     "type": "string",
-                    "description": "Authentication signature for guest user (required for secure guest sessions only)\n\nThe signature must be created using HMAC-SHA256 and returned as hexadecimal:\n```\nHMAC-SHA256(payload, applicationSecret)\n```\n\nSteps to generate:\n1. Create HMAC-SHA256 hash using payload as message and applicationSecret as key.<br><br> Payload format: deviceId=deviceId&authSignatureExpiresAt=authSignatureExpiresAt<br><br> <b>Device id</b> and <b>authSignatureExpiresAt</b> must match the values sent in the request.\n\n2. Convert the resulting hash to hexadecimal string (64 characters)\n\nThe applicationSecret can be found in the console at Feature settings > User section when enabling secure guest sessions.\n",
+                    "description": "Authentication signature for visitor user (required for secure visitor sessions only)\n\nThe signature must be created using HMAC-SHA256 and returned as hexadecimal:\n```\nHMAC-SHA256(payload, applicationSecret)\n```\n\nSteps to generate:\n1. Create HMAC-SHA256 hash using payload as message and applicationSecret as key.<br/><br/> Payload format: deviceId=deviceId&authSignatureExpiresAt=authSignatureExpiresAt<br><br> <b>Device id</b> and <b>authSignatureExpiresAt</b> must match the values sent in the request.\n\n2. Convert the resulting hash to hexadecimal string (64 characters)\n\nThe applicationSecret can be found in the console at Feature settings > User section when enabling secure visitor sessions.\n",
                     "minLength": 64,
                     "maxLength": 64
                   },
                   "authSignatureExpiresAt": {
                     "type": "string",
                     "example": "2024-12-31T23:59:59Z",
-                    "description": "ISO 8601 timestamp indicating when the authSignature expires (required for secure guest sessions only)"
+                    "description": "ISO 8601 timestamp indicating when the authSignature expires (required for secure visitor sessions only)"
                   }
                 },
                 "required": [
@@ -169613,11 +169613,11 @@
                     },
                     "userType": {
                       "type": "string",
-                      "description": "Type of user (e.g., normal, guest, bot)",
-                      "example": "guest",
+                      "description": "Type of user (e.g., normal, visitor, bot)",
+                      "example": "visitor",
                       "enum": [
                         "normal",
-                        "guest",
+                        "visitor",
                         "bot"
                       ]
                     }
@@ -170189,11 +170189,11 @@
                     },
                     "userType": {
                       "type": "string",
-                      "description": "Type of user (e.g., normal, guest, bot)",
+                      "description": "Type of user (e.g., normal, visitor, bot)",
                       "example": "bot",
                       "enum": [
                         "normal",
-                        "guest",
+                        "visitor",
                         "bot"
                       ]
                     }

@@ -21,20 +21,20 @@ root:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
-guest:
+visitor:
   post:
-    summary: "Register a guest session"
+    summary: "Register a visitor session"
     tags:
       - "Session"
     security: []
     parameters:
       - $ref: "./parameter.yaml#/x-api-key"
-    description: "Register a guest session for read-only access. Guest users can only consume public content and cannot perform write operations."
+    description: "Register a visitor session for read-only access. Visitor users can only consume public content and cannot perform write operations."
     requestBody:
-      $ref: "./request.yaml#/guest-post-request-payload"
+      $ref: "./request.yaml#/visitor-post-request-payload"
     responses:
       200:
-        $ref: "./response.yaml#/session-response-guest-200"
+        $ref: "./response.yaml#/session-response-visitor-200"
       401:
         $ref: "../../global/error.yaml#/UserIsSystemBanned"
       403:
