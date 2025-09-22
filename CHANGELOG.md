@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.111.0] - 2025-09-22
+
+### 🚀 Features
+
+- Analytic metric api (#434)
+- Moderation activity report (#436)
+- Add moderation activity report setting (#437)
+- Add isDiscoverable property to post schema for search visibility (#433)
+
+### 🐛 Bug Fixes
+
+- Ordering api path (#438)
+
 ## [4.110.0] - 2025-08-29
 
 ### 🚀 Features
@@ -9,6 +22,10 @@ All notable changes to this project will be documented in this file.
 - Support multi livestream (#428)
 - Added new APIs for schedule post (#425)
 - Add API for get content history (#420)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.110.0 (#431)
 
 ## [4.109.0] - 2025-08-22
 
