@@ -1,0 +1,68 @@
+root:
+  post:
+    summary: "Register a session"
+    tags:
+      - "Session"
+    security: []
+    parameters:
+      - $ref: "./parameter.yaml#/x-api-key"
+    description: "Register a session in order to receive access token to perform SDK operations. This is the latest version with enhanced session management capabilities."
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/session-response-200"
+      401:
+        $ref: "../../global/error.yaml#/UserIsSystemBanned"
+      403:
+        $ref: "../../global/error.yaml#/UserIsGlobalBanned"
+      422:
+        $ref: "../../global/error.yaml#/ValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+visitor:
+  post:
+    summary: "Register a visitor session"
+    tags:
+      - "Session"
+    security: []
+    parameters:
+      - $ref: "./parameter.yaml#/x-api-key"
+    description: "Register a visitor session for read-only access. Visitor users can only consume public content and cannot perform write operations."
+    requestBody:
+      $ref: "./request.yaml#/visitor-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/session-response-visitor-200"
+      401:
+        $ref: "../../global/error.yaml#/UserIsSystemBanned"
+      403:
+        $ref: "../../global/error.yaml#/UserIsGlobalBanned"
+      422:
+        $ref: "../../global/error.yaml#/ValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+bot:
+  post:
+    summary: "Register a bot session"
+    tags:
+      - "Session"
+    security: []
+    parameters:
+      - $ref: "./parameter.yaml#/x-api-key"
+    description: "Register a bot session for SEO crawlers. Bot users have read-only access and are optimized for SEO crawling."
+    requestBody:
+      $ref: "./request.yaml#/bot-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/session-response-bot-200"
+      401:
+        $ref: "../../global/error.yaml#/UserIsSystemBanned"
+      403:
+        $ref: "../../global/error.yaml#/UserIsGlobalBanned"
+      422:
+        $ref: "../../global/error.yaml#/ValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

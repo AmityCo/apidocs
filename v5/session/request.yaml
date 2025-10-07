@@ -1,0 +1,149 @@
+root-post-request-payload:
+  description: "Information about user and devices that they use to connect. If displayName is provided, the user's display name is updated as well.\n\nIf userId doesn't exist, a new user will be created.\n\nauthToken needs to be passed when network option is set to secure.\n\naccessToken expires in 30 days by default.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          userId:
+            type: "string"
+            minLength: 1
+            maxLength: 50
+            description: "Unique identifier for the user. Cannot start with 'ADMIN_' or 'DELETED_' prefixes."
+          deviceId:
+            type: "string"
+            minLength: 1
+            maxLength: 150
+            description: "Unique identifier for the device"
+          deviceInfo:
+            type: "object"
+            description: "Optional device information for analytics and debugging"
+            properties:
+              kind:
+                type: "string"
+                enum:
+                  - "ios"
+                  - "android"
+                  - "web"
+                  - "node"
+                description: "Type of device/platform"
+              model:
+                type: "string"
+                maxLength: 300
+                description: "Device model information"
+              sdkVersion:
+                type: "string"
+                maxLength: 30
+                description: "SDK version being used"
+          displayName:
+            type: "string"
+            maxLength: 100
+            description: "User's display name (optional, will update user if provided)"
+          profileHandle:
+            type: "string"
+            maxLength: 100
+            description: "User's profile handle (optional, will update user if provided)"
+          authToken:
+            type: "string"
+            description: "Authentication token from /api/v3/authentication/token or /api/v4/authentication/token (required for secure networks)"
+            minLength: 1
+            maxLength: 100
+        required:
+          - "userId"
+          - "deviceId"
+
+visitor-post-request-payload:
+  description: "Information about visitor user and devices that they use to connect. Visitor users have read-only access and cannot perform write operations.\n\nIf deviceId haven't been used before, a new visitor user will be created.\n\naccessToken expires in 30 days by default.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          deviceId:
+            type: "string"
+            minLength: 1
+            maxLength: 150
+            description: "Unique identifier for the device"
+          deviceInfo:
+            type: "object"
+            description: "Optional device information for analytics and debugging"
+            properties:
+              kind:
+                type: "string"
+                enum:
+                  - "ios"
+                  - "android"
+                  - "web"
+                  - "node"
+                description: "Type of device/platform"
+              model:
+                type: "string"
+                maxLength: 300
+                description: "Device model information"
+              sdkVersion:
+                type: "string"
+                maxLength: 30
+                description: "SDK version being used"
+          authSignature:
+            type: "string"
+            description: | 
+              Authentication signature for visitor user (required for secure visitor sessions only)
+
+              The signature must be created using HMAC-SHA256 and returned as hexadecimal:
+              ```
+              HMAC-SHA256(payload, applicationSecret)
+              ```
+
+              Steps to generate:
+              1. Create HMAC-SHA256 hash using payload as message and applicationSecret as key.<br/><br/> Payload format: deviceId=deviceId&authSignatureExpiresAt=authSignatureExpiresAt<br><br> <b>Device id</b> and <b>authSignatureExpiresAt</b> must match the values sent in the request.
+              
+              2. Convert the resulting hash to hexadecimal string (64 characters)
+              
+              The applicationSecret can be found in the console at Feature settings > User section when enabling secure visitor sessions.
+
+            minLength: 64
+            maxLength: 64
+          authSignatureExpiresAt:
+            type: "string"
+            example: "2024-12-31T23:59:59Z"
+            description: "ISO 8601 timestamp indicating when the authSignature expires (required for secure visitor sessions only)"
+        required:
+          - "deviceId"
+
+bot-post-request-payload:
+  description: "Information about bot user and devices that they use to connect. Bot users have read-only access and are typically used for SEO crawlers and automated systems.\n\naccessToken expires in 30 days by default.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          deviceId:
+            type: "string"
+            minLength: 1
+            maxLength: 150
+            description: "Unique identifier for the device"
+          deviceInfo:
+            type: "object"
+            description: "Optional device information for analytics and debugging"
+            properties:
+              kind:
+                type: "string"
+                enum:
+                  - "ios"
+                  - "android"
+                  - "web"
+                  - "node"
+                description: "Type of device/platform"
+              model:
+                type: "string"
+                maxLength: 300
+                description: "Device model information"
+              sdkVersion:
+                type: "string"
+                maxLength: 30
+                description: "SDK version being used"
+        required:
+          - "deviceId"
