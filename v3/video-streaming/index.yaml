@@ -222,3 +222,25 @@ _streamId-viewer-bans:
         $ref: "../../global/error.yaml#/NotFoundError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+live:
+  get:
+    summary: "Query active live video streaming"
+    tags:
+      - "Video streaming"
+    security:
+      - BearerAuth: []
+    description: "Get video streaming that is currently live\n"
+    parameters:
+      - $ref: "./parameter.yaml#/targetType"
+      - $ref: "./parameter.yaml#/targetIds"
+      - $ref: "./parameter.yaml#/liveOptions"
+    responses:
+      200:
+        $ref: "./response.yaml#/live-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

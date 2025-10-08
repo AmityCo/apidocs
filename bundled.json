@@ -193376,6 +193376,1457 @@
         }
       }
     },
+    "/api/v3/video-streaming/live": {
+      "get": {
+        "summary": "Query active live video streaming",
+        "tags": [
+          "Video streaming"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Get video streaming that is currently live\n",
+        "parameters": [
+          {
+            "name": "targetType",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "community",
+                  "user",
+                  "all"
+                ]
+              },
+              "default": [
+                "all"
+              ]
+            }
+          },
+          {
+            "name": "targetIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "style": "deepObject",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100,
+                  "default": 20,
+                  "description": "Number of items to return"
+                },
+                "token": {
+                  "type": "string",
+                  "description": "Pagination token"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "list of live video streaming",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "videoStreamings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "streamId": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Streaming creator user id"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "example": "64be1f6cb9b4106b5a6bbf3f"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "example": "User123"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnaiil file id"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of livestreaming   * idle - streaming is just created   * live - streamer is streaming now or streamer is reconnecting   * ended - streamer stop streaming or streamer disconnect and not connect back in time period   * recorded - live stream recordings available \n"
+                          },
+                          "isLive": {
+                            "type": "boolean",
+                            "description": "Deprecated (was used before for checking live status)"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Is streaming deleted?"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "platform": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "moderationId": {
+                            "type": "string",
+                            "description": "Moderation id"
+                          },
+                          "startedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "resolution": {
+                            "type": "string",
+                            "enum": [
+                              "SD",
+                              "HD",
+                              "FHD"
+                            ],
+                            "default": "SD"
+                          },
+                          "streamerUrl": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string"
+                              },
+                              "components": {
+                                "type": "object",
+                                "properties": {
+                                  "origin": {
+                                    "type": "string"
+                                  },
+                                  "appName": {
+                                    "type": "string"
+                                  },
+                                  "streamName": {
+                                    "type": "string"
+                                  },
+                                  "query": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "recordings": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "flv": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "duration": {
+                                      "type": "number"
+                                    },
+                                    "startTime": {
+                                      "type": "number"
+                                    },
+                                    "stopTime": {
+                                      "type": "number"
+                                    }
+                                  }
+                                },
+                                "mp4": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "duration": {
+                                      "type": "number"
+                                    },
+                                    "startTime": {
+                                      "type": "number"
+                                    },
+                                    "stopTime": {
+                                      "type": "number"
+                                    }
+                                  }
+                                },
+                                "m3u8": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "duration": {
+                                      "type": "number"
+                                    },
+                                    "startTime": {
+                                      "type": "number"
+                                    },
+                                    "stopTime": {
+                                      "type": "number"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "watcherUrl": {
+                            "type": "object",
+                            "properties": {
+                              "flv": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "components": {
+                                    "type": "object",
+                                    "properties": {
+                                      "origin": {
+                                        "type": "string"
+                                      },
+                                      "appName": {
+                                        "type": "string"
+                                      },
+                                      "streamName": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "hls": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "components": {
+                                    "type": "object",
+                                    "properties": {
+                                      "origin": {
+                                        "type": "string"
+                                      },
+                                      "appName": {
+                                        "type": "string"
+                                      },
+                                      "streamName": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rtmp": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "components": {
+                                    "type": "object",
+                                    "properties": {
+                                      "origin": {
+                                        "type": "string"
+                                      },
+                                      "appName": {
+                                        "type": "string"
+                                      },
+                                      "streamName": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "postId": {
+                            "type": "string"
+                          },
+                          "channelId": {
+                            "type": "string"
+                          },
+                          "channelEnabled": {
+                            "type": "boolean"
+                          },
+                          "isParent": {
+                            "type": "boolean",
+                            "description": "Indicates if this is a parent stream (logical container) or child stream (actual video feed)",
+                            "default": false
+                          },
+                          "parentStreamId": {
+                            "type": "string",
+                            "description": "Public ID of the parent stream (null for parent streams, parent's streamId for child streams)",
+                            "nullable": true
+                          },
+                          "childStreamIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Array of child stream IDs (for parent streams only, empty for child streams)",
+                            "default": []
+                          }
+                        }
+                      }
+                    },
+                    "videoStreamingChildren": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "streamId": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Streaming creator user id"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "example": "64be1f6cb9b4106b5a6bbf3f"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "example": "User123"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnaiil file id"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of livestreaming   * idle - streaming is just created   * live - streamer is streaming now or streamer is reconnecting   * ended - streamer stop streaming or streamer disconnect and not connect back in time period   * recorded - live stream recordings available \n"
+                          },
+                          "isLive": {
+                            "type": "boolean",
+                            "description": "Deprecated (was used before for checking live status)"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Is streaming deleted?"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "platform": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "moderationId": {
+                            "type": "string",
+                            "description": "Moderation id"
+                          },
+                          "startedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "resolution": {
+                            "type": "string",
+                            "enum": [
+                              "SD",
+                              "HD",
+                              "FHD"
+                            ],
+                            "default": "SD"
+                          },
+                          "streamerUrl": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string"
+                              },
+                              "components": {
+                                "type": "object",
+                                "properties": {
+                                  "origin": {
+                                    "type": "string"
+                                  },
+                                  "appName": {
+                                    "type": "string"
+                                  },
+                                  "streamName": {
+                                    "type": "string"
+                                  },
+                                  "query": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "recordings": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "flv": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "duration": {
+                                      "type": "number"
+                                    },
+                                    "startTime": {
+                                      "type": "number"
+                                    },
+                                    "stopTime": {
+                                      "type": "number"
+                                    }
+                                  }
+                                },
+                                "mp4": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "duration": {
+                                      "type": "number"
+                                    },
+                                    "startTime": {
+                                      "type": "number"
+                                    },
+                                    "stopTime": {
+                                      "type": "number"
+                                    }
+                                  }
+                                },
+                                "m3u8": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "duration": {
+                                      "type": "number"
+                                    },
+                                    "startTime": {
+                                      "type": "number"
+                                    },
+                                    "stopTime": {
+                                      "type": "number"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "watcherUrl": {
+                            "type": "object",
+                            "properties": {
+                              "flv": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "components": {
+                                    "type": "object",
+                                    "properties": {
+                                      "origin": {
+                                        "type": "string"
+                                      },
+                                      "appName": {
+                                        "type": "string"
+                                      },
+                                      "streamName": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "hls": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "components": {
+                                    "type": "object",
+                                    "properties": {
+                                      "origin": {
+                                        "type": "string"
+                                      },
+                                      "appName": {
+                                        "type": "string"
+                                      },
+                                      "streamName": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rtmp": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "components": {
+                                    "type": "object",
+                                    "properties": {
+                                      "origin": {
+                                        "type": "string"
+                                      },
+                                      "appName": {
+                                        "type": "string"
+                                      },
+                                      "streamName": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "postId": {
+                            "type": "string"
+                          },
+                          "channelId": {
+                            "type": "string"
+                          },
+                          "channelEnabled": {
+                            "type": "boolean"
+                          },
+                          "isParent": {
+                            "type": "boolean",
+                            "description": "Indicates if this is a parent stream (logical container) or child stream (actual video feed)",
+                            "default": false
+                          },
+                          "parentStreamId": {
+                            "type": "string",
+                            "description": "Public ID of the parent stream (null for parent streams, parent's streamId for child streams)",
+                            "nullable": true
+                          },
+                          "childStreamIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Array of child stream IDs (for parent streams only, empty for child streams)",
+                            "default": []
+                          }
+                        }
+                      }
+                    },
+                    "videoStreamModerations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "moderationId": {
+                            "type": "string",
+                            "description": "Moderation id"
+                          },
+                          "streamId": {
+                            "type": "string",
+                            "description": "Streaming id"
+                          },
+                          "flagLabels": {
+                            "description": "List of flag labels",
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "category": {
+                                  "type": "string",
+                                  "description": "This field is for moderation category names.",
+                                  "enum": [
+                                    "pornography",
+                                    "violence",
+                                    "prohibited",
+                                    "inappropriate",
+                                    "profanity"
+                                  ]
+                                },
+                                "threshold": {
+                                  "description": "This field is for flag threshold.",
+                                  "type": "number"
+                                },
+                                "detectedAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              }
+                            }
+                          },
+                          "terminateLabels": {
+                            "description": "List of terminate labels",
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "category": {
+                                  "type": "string",
+                                  "description": "This field is for moderation category names.",
+                                  "enum": [
+                                    "pornography",
+                                    "violence",
+                                    "prohibited",
+                                    "inappropriate",
+                                    "profanity"
+                                  ]
+                                },
+                                "threshold": {
+                                  "description": "This field is for flag threshold.",
+                                  "type": "number"
+                                },
+                                "detectedAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              }
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a user. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a user. (for real-time event)"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string"
+                          },
+                          "userPublicId": {
+                            "type": "string"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "profileHandle": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "avatarFileId": {
+                            "type": "string"
+                          },
+                          "avatarCustomUrl": {
+                            "type": "string"
+                          },
+                          "flagCount": {
+                            "type": "integer"
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "isGlobalBan": {
+                            "type": "boolean",
+                            "description": "Global ban status. Every user can see this flag."
+                          },
+                          "isBrand": {
+                            "type": "boolean",
+                            "description": "Brand user status."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isDeleted": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fileId": {
+                            "type": "string",
+                            "description": "Root file key on cloud storage."
+                          },
+                          "fileUrl": {
+                            "type": "string",
+                            "description": "Http link for download file"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "File type.",
+                            "enum": [
+                              "image",
+                              "file",
+                              "video"
+                            ]
+                          },
+                          "accessType": {
+                            "type": "string",
+                            "description": "File access type. `network` type requires authentication to download.",
+                            "enum": [
+                              "public",
+                              "network"
+                            ],
+                            "default": "public"
+                          },
+                          "altText": {
+                            "type": "string",
+                            "description": "Alternative text for the file.",
+                            "maxLength": 180
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is uploaded.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is updated.",
+                            "format": "date-time"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "File name."
+                              },
+                              "extension": {
+                                "type": "string",
+                                "description": "File format."
+                              },
+                              "size": {
+                                "type": "number",
+                                "description": "File size."
+                              },
+                              "mimeType": {
+                                "type": "string",
+                                "description": "File mime-type."
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "File image metadata (width, height etc.).",
+                                "properties": {
+                                  "exif": {
+                                    "type": "object"
+                                  },
+                                  "gps": {
+                                    "type": "object"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "isFull": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "communities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a community. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a community. (for real-time event)"
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "description": "Community name for displaying."
+                          },
+                          "avatarFileId": {
+                            "type": "string",
+                            "description": "ID of a avatar file."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Description of a community."
+                          },
+                          "isOfficial": {
+                            "type": "boolean",
+                            "description": "Is this community official?"
+                          },
+                          "isPublic": {
+                            "type": "boolean",
+                            "description": "Is this community public?"
+                          },
+                          "onlyAdminCanPost": {
+                            "type": "boolean",
+                            "description": "Can post by admin only?"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "description": "List of tags. They will be used for searching.",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "postsCount": {
+                            "type": "integer",
+                            "description": "Number of posts in community."
+                          },
+                          "membersCount": {
+                            "type": "integer",
+                            "description": "Number of members in community."
+                          },
+                          "isJoined": {
+                            "type": "boolean",
+                            "description": "Is this community joined?"
+                          },
+                          "categoryIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a category."
+                            }
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Is this community deleted?"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedPost": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that post inside community is reported or not."
+                          },
+                          "needApprovalOnPostCreation": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Determines that this community require an authorize user to review post before post is published"
+                          },
+                          "moderatorMemberCount": {
+                            "type": "integer"
+                          },
+                          "allowCommentInStory": {
+                            "type": "boolean",
+                            "default": true
+                          },
+                          "isDiscoverable": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, this private community will be discoverable in the query response.\n* If false, this private community will not appear in the list but can still be accessed via its ID.\n"
+                          },
+                          "requiresJoinApproval": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, users will need to be approved by an admin before they can join the community.\n* If false, users can join the community without approval.\n"
+                          },
+                          "notificationMode": {
+                            "type": "string",
+                            "enum": [
+                              "default",
+                              "silent",
+                              "subscribe"
+                            ],
+                            "description": "Notification Mode:\n  * `default` - Auto register push notification.\n  * `silent` - Do not send notification.\n  * `subscribe` - Send notification to subscribed users only.\n"
+                          }
+                        },
+                        "required": [
+                          "communityId",
+                          "channelId",
+                          "displayName"
+                        ]
+                      }
+                    },
+                    "communityUsers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a user."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a user."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a user."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "communityMembership": {
+                            "type": "string",
+                            "enum": [
+                              "none",
+                              "member",
+                              "banned"
+                            ]
+                          },
+                          "notMemberReason": {
+                            "type": "string",
+                            "description": "Reason why a user is not a member of the community."
+                          },
+                          "isBanned": {
+                            "type": "boolean",
+                            "default": false
+                          },
+                          "lastActivity": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "The date/time when a user last did something related to the community such as add/remove members ."
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community user is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community user is updated or deleted.",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "categoryId": {
+                            "type": "string",
+                            "description": "ID of a community category."
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Community category name for displaying."
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "avatarFileId": {
+                            "type": "string",
+                            "description": "ID of a avatar file."
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Is this community category deleted?"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community category is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community category is updated or deleted.",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "feeds": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "targetId": {
+                            "type": "string",
+                            "description": "Target public id (community id or user id)"
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "description": "Target that feed belong to",
+                            "enum": [
+                              "community",
+                              "user"
+                            ]
+                          },
+                          "postCount": {
+                            "type": "number",
+                            "description": "Post count in feed"
+                          },
+                          "feedType": {
+                            "type": "string",
+                            "description": "Feed type\n- published: main feed\n- reviewing: feed for things that have to be reviewed\n- declined: feed for things that is rejected from reviewing\n",
+                            "enum": [
+                              "published",
+                              "reviewing",
+                              "declined"
+                            ]
+                          },
+                          "feedId": {
+                            "type": "string",
+                            "description": "Feed public id"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a feed is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a feed is updated.",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "paging": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string"
+                        },
+                        "previous": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/webhook/channel.didAddUsers": {
       "get": {
         "security": [],
