@@ -1,0 +1,69 @@
+user-last-activity:
+  get:
+    summary: Get Users Last Activity Report
+    description: |
+      Retrieve the last activity report for users in the network. Requires admin permissions.
+    tags:
+      - User
+    security:
+      - BearerAuth: []
+    responses:
+      200:
+        $ref: "./response.yaml#/user-last-activity-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+bulk-delete-jobs:
+  post:
+    summary: Create Bulk User Delete Job
+    description: |
+      Create a bulk delete job to delete multiple users. This endpoint accepts a CSV file containing
+      user IDs and creates deletion jobs for processing. Requires admin permissions.
+    tags:
+      - User
+    security:
+      - BearerAuth: []
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            required:
+              - file
+            properties:
+              file:
+                type: string
+                format: binary
+                description: CSV file containing user IDs to delete
+              deleteOptions:
+                type: string
+                description: JSON string containing delete options
+                example: '{"deleteAll":true,"markMessageDeleted":false,"hardDeletePost":false,"hardDeleteComment":false}'
+    responses:
+      202:
+        $ref: "./response.yaml#/bulk-delete-jobs-post-response-202"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: Get Bulk User Delete Jobs
+    description: |
+      Retrieve the list of bulk user delete jobs. This endpoint returns all bulk deletion jobs
+      for the network with their current status. Requires admin permissions.
+    tags:
+      - User
+    security:
+      - BearerAuth: []
+    responses:
+      200:
+        $ref: "./response.yaml#/bulk-delete-jobs-get-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
