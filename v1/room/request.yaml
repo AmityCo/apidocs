@@ -1,0 +1,80 @@
+root-post-request-payload:
+  description: "Information of room to be created\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          title:
+            type: "string"
+            maxLength: 1000
+            description: "Room title"
+          description:
+            type: "string"
+            maxLength: 5000
+            description: "Room description"
+          thumbnailFileId:
+            type: "string"
+            maxLength: 50
+            description: "Thumbnail file ID"
+          metadata:
+            type: "object"
+            description: "Custom metadata"
+          channelEnabled:
+            type: "boolean"
+            description: "Indicates whether the live channel (chat) is enabled for the room"
+            default: true
+          parentRoomId:
+            type: "string"
+            description: "Optional parent room ID for creating child streams"
+            maxLength: 50
+          type:
+            type: "string"
+            enum:
+              - "direct_streaming"
+              - "co_hosts"
+            description: "Type of room: direct_streaming for single participant streaming, co_hosts for multiple participants"
+            default: "direct_streaming"
+
+          participants: 
+            type: "array"
+            items:
+              type: "string"
+            maxItems: 1
+            description: "List of user IDs to be added as participants (applicable only for co_hosts type)"
+        required:
+          - "title"
+
+_roomId-request-payload:
+  description: "Information of room to be updated\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          title:
+            type: "string"
+            maxLength: 1000
+            description: "Room title"
+          description:
+            type: "string"
+            maxLength: 5000
+            description: "Room description"
+          thumbnailFileId:
+            type: "string"
+            maxLength: 50
+            description: "Thumbnail file ID"
+          metadata:
+            type: "object"
+            description: "Custom metadata"
+          channelEnabled:
+            type: "boolean"
+            description: "Enable or disable live channel"
+          participants: 
+            type: "array"
+            items:
+              type: "string"
+            maxItems: 1
+            description: "List of user IDs to be added as participants (applicable only for co_hosts type)"

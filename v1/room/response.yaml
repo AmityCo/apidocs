@@ -1,0 +1,79 @@
+common-response-200:
+  description: room information
+  content:
+    application/json:
+      schema:
+        properties:
+          rooms:
+            type: array
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+
+root-get-response-200:
+  description: list of rooms
+  content:
+    application/json:
+      schema:
+        properties:
+          rooms:
+            type: array
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              prev:
+                type: string
+
+token-response-200:
+  description: ingest data for broadcasting
+  content:
+    application/json:
+      schema:
+        properties:
+          type:
+            type: string
+            enum:
+              - "direct_streaming"
+              - "co_hosts"
+            description: "Room type"
+          directStreamUrl:
+            type: string
+            description: "SRT URL for direct streaming (stream id and passphrase are included in the URL)"
+          coHostToken:
+            type: string
+            description: "Access token for co-hosts"
+          coHostUrl:
+            type: string
+            description: "WebRTC URL for co-hosts"
+            
+
+recorded-response-200:
+  description: Signed recorded playback URLs
+  content:
+    application/json:
+      schema:
+        properties:
+          recordedUrls:
+            type: array
+            items:
+              type: string
+              description: "Signed playback URL for recorded content"

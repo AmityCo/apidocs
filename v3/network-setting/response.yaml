@@ -218,6 +218,29 @@ shareable-deep-links-response-200:
                 description: "URL path for livestreams, {livestreamId} is required (e.g., /livestreams/{livestreamId})"
                 example: "/livestreams/{livestreamId}"
 
+room-response-200:
+  description: Room configuration
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          roomSettings:
+            type: "object"
+            properties:
+              maxCoHostParticipants:
+                type: "integer"
+                description: "Maximum number of co-host participants"
+                default: 2
+              maxStreamingDurationHours:
+                type: "number"
+                description: "Maximum streaming duration in hours"
+                default: 6
+        example:
+          roomSettings:
+            maxCoHostParticipants: 2
+            maxStreamingDurationHours: 6
+
 security-configs-response-200:
   description: Security configuration
   content:

@@ -107509,6 +107509,143 @@
         }
       }
     },
+    "/api/v3/network-settings/room": {
+      "get": {
+        "summary": "Get room network setting configuration",
+        "tags": [
+          "Network Setting"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Get room network setting configuration.\n",
+        "responses": {
+          "200": {
+            "description": "Room configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "roomSettings": {
+                      "type": "object",
+                      "properties": {
+                        "maxCoHostParticipants": {
+                          "type": "integer",
+                          "description": "Maximum number of co-host participants",
+                          "default": 2
+                        },
+                        "maxStreamingDurationHours": {
+                          "type": "number",
+                          "description": "Maximum streaming duration in hours",
+                          "default": 6
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "roomSettings": {
+                      "maxCoHostParticipants": 2,
+                      "maxStreamingDurationHours": 6
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v3/network-settings/webhook": {
       "put": {
         "summary": "Update webhook configuration.",
@@ -161170,6 +161307,3471 @@
                       }
                     }
                   }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rooms": {
+      "post": {
+        "summary": "create room",
+        "tags": [
+          "Room"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Information of room to be created\n",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "maxLength": 1000,
+                    "description": "Room title"
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 5000,
+                    "description": "Room description"
+                  },
+                  "thumbnailFileId": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "description": "Thumbnail file ID"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "description": "Custom metadata"
+                  },
+                  "channelEnabled": {
+                    "type": "boolean",
+                    "description": "Indicates whether the live channel (chat) is enabled for the room",
+                    "default": true
+                  },
+                  "parentRoomId": {
+                    "type": "string",
+                    "description": "Optional parent room ID for creating child streams",
+                    "maxLength": 50
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "direct_streaming",
+                      "co_hosts"
+                    ],
+                    "description": "Type of room: direct_streaming for single participant streaming, co_hosts for multiple participants",
+                    "default": "direct_streaming"
+                  },
+                  "participants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 1,
+                    "description": "List of user IDs to be added as participants (applicable only for co_hosts type)"
+                  }
+                },
+                "required": [
+                  "title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "room information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "rooms": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal room ID"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "description": "Public room ID"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "direct_streaming",
+                              "co_hosts"
+                            ],
+                            "description": "Type of room * direct_streaming - single participant streaming * co_hosts - More than one participant\n"
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "Target ID (community or user)"
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Target type"
+                          },
+                          "targetVisibility": {
+                            "type": "string",
+                            "enum": [
+                              "public",
+                              "private"
+                            ],
+                            "description": "Target visibility"
+                          },
+                          "referenceType": {
+                            "type": "string",
+                            "description": "Reference type (e.g., post, event)"
+                          },
+                          "referenceId": {
+                            "type": "string",
+                            "description": "Reference ID"
+                          },
+                          "liveChannelId": {
+                            "type": "string",
+                            "description": "Associated live channel ID for chat"
+                          },
+                          "liveChannelEnabled": {
+                            "type": "boolean",
+                            "description": "Whether live channel is enabled"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Room title"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Room description"
+                          },
+                          "publicId": {
+                            "type": "string",
+                            "description": "Public identifier"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnail file ID"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "waiting_reconnect",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of room * idle - room is just created * live - broadcasting is active * waiting_reconnect - broadcaster disconnected, waiting for reconnection * ended - broadcasting stopped * recorded - room recordings available\n"
+                          },
+                          "participants": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "user"
+                                  ]
+                                },
+                                "userId": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "description": "List of room participants"
+                          },
+                          "livePlaybackUrl": {
+                            "type": "string",
+                            "description": "Live playback URL"
+                          },
+                          "durationSeconds": {
+                            "type": "number",
+                            "description": "Duration of the broadcast in seconds (only for ended/recorded rooms)"
+                          },
+                          "moderation": {
+                            "type": "object",
+                            "description": "Moderation information"
+                          },
+                          "parentRoomId": {
+                            "type": "string",
+                            "description": "Parent room ID for child streams"
+                          },
+                          "childRoomIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Child room IDs"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Creation timestamp"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "Creator user ID"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Last update timestamp"
+                          },
+                          "liveAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting started"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting ended"
+                          },
+                          "recordedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When recording became available"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether room is deleted"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Deletion timestamp"
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "description": "User who deleted the room"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Room path for realtime events"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Custom metadata"
+                          }
+                        }
+                      }
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a user. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a user. (for real-time event)"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string"
+                          },
+                          "userPublicId": {
+                            "type": "string"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "profileHandle": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "avatarFileId": {
+                            "type": "string"
+                          },
+                          "avatarCustomUrl": {
+                            "type": "string"
+                          },
+                          "flagCount": {
+                            "type": "integer"
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "isGlobalBan": {
+                            "type": "boolean",
+                            "description": "Global ban status. Every user can see this flag."
+                          },
+                          "isBrand": {
+                            "type": "boolean",
+                            "description": "Brand user status."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isDeleted": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fileId": {
+                            "type": "string",
+                            "description": "Root file key on cloud storage."
+                          },
+                          "fileUrl": {
+                            "type": "string",
+                            "description": "Http link for download file"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "File type.",
+                            "enum": [
+                              "image",
+                              "file",
+                              "video"
+                            ]
+                          },
+                          "accessType": {
+                            "type": "string",
+                            "description": "File access type. `network` type requires authentication to download.",
+                            "enum": [
+                              "public",
+                              "network"
+                            ],
+                            "default": "public"
+                          },
+                          "altText": {
+                            "type": "string",
+                            "description": "Alternative text for the file.",
+                            "maxLength": 180
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is uploaded.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is updated.",
+                            "format": "date-time"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "File name."
+                              },
+                              "extension": {
+                                "type": "string",
+                                "description": "File format."
+                              },
+                              "size": {
+                                "type": "number",
+                                "description": "File size."
+                              },
+                              "mimeType": {
+                                "type": "string",
+                                "description": "File mime-type."
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "File image metadata (width, height etc.).",
+                                "properties": {
+                                  "exif": {
+                                    "type": "object"
+                                  },
+                                  "gps": {
+                                    "type": "object"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "isFull": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "get list of rooms",
+        "tags": [
+          "Room"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "statuses",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "maxItems": 10,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "idle",
+                  "live",
+                  "waiting_reconnect",
+                  "ended",
+                  "recorded"
+                ]
+              }
+            },
+            "description": "Status of room  \n  * idle - room is just created  \n  * live - broadcasting is active  \n  * waiting_reconnect - broadcaster disconnected, waiting for reconnection  \n  * ended - broadcasting stopped  \n  * recorded - room recordings available \n"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "direct_streaming",
+                "co_hosts"
+              ]
+            },
+            "description": "Type of room  \n  * direct_streaming - RTMP/SRT streaming  \n  * co_hosts - WebRTC co-hosting with LiveKit \n"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "firstCreated",
+                "lastCreated"
+              ]
+            }
+          },
+          {
+            "name": "isDeleted",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": null
+            },
+            "description": "isDeleted:\n  * `null(default)` - Show both active and inactive rooms.\n  * `true` - Show inactive rooms only.\n  * `false` - Show active rooms only.\n"
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "style": "deepObject",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "limit": {
+                  "type": "integer"
+                },
+                "token": {
+                  "type": "string",
+                  "maxLength": 1000
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "list of rooms",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "rooms": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal room ID"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "description": "Public room ID"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "direct_streaming",
+                              "co_hosts"
+                            ],
+                            "description": "Type of room * direct_streaming - single participant streaming * co_hosts - More than one participant\n"
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "Target ID (community or user)"
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Target type"
+                          },
+                          "targetVisibility": {
+                            "type": "string",
+                            "enum": [
+                              "public",
+                              "private"
+                            ],
+                            "description": "Target visibility"
+                          },
+                          "referenceType": {
+                            "type": "string",
+                            "description": "Reference type (e.g., post, event)"
+                          },
+                          "referenceId": {
+                            "type": "string",
+                            "description": "Reference ID"
+                          },
+                          "liveChannelId": {
+                            "type": "string",
+                            "description": "Associated live channel ID for chat"
+                          },
+                          "liveChannelEnabled": {
+                            "type": "boolean",
+                            "description": "Whether live channel is enabled"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Room title"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Room description"
+                          },
+                          "publicId": {
+                            "type": "string",
+                            "description": "Public identifier"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnail file ID"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "waiting_reconnect",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of room * idle - room is just created * live - broadcasting is active * waiting_reconnect - broadcaster disconnected, waiting for reconnection * ended - broadcasting stopped * recorded - room recordings available\n"
+                          },
+                          "participants": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "user"
+                                  ]
+                                },
+                                "userId": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "description": "List of room participants"
+                          },
+                          "livePlaybackUrl": {
+                            "type": "string",
+                            "description": "Live playback URL"
+                          },
+                          "durationSeconds": {
+                            "type": "number",
+                            "description": "Duration of the broadcast in seconds (only for ended/recorded rooms)"
+                          },
+                          "moderation": {
+                            "type": "object",
+                            "description": "Moderation information"
+                          },
+                          "parentRoomId": {
+                            "type": "string",
+                            "description": "Parent room ID for child streams"
+                          },
+                          "childRoomIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Child room IDs"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Creation timestamp"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "Creator user ID"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Last update timestamp"
+                          },
+                          "liveAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting started"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting ended"
+                          },
+                          "recordedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When recording became available"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether room is deleted"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Deletion timestamp"
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "description": "User who deleted the room"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Room path for realtime events"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Custom metadata"
+                          }
+                        }
+                      }
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a user. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a user. (for real-time event)"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string"
+                          },
+                          "userPublicId": {
+                            "type": "string"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "profileHandle": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "avatarFileId": {
+                            "type": "string"
+                          },
+                          "avatarCustomUrl": {
+                            "type": "string"
+                          },
+                          "flagCount": {
+                            "type": "integer"
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "isGlobalBan": {
+                            "type": "boolean",
+                            "description": "Global ban status. Every user can see this flag."
+                          },
+                          "isBrand": {
+                            "type": "boolean",
+                            "description": "Brand user status."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isDeleted": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fileId": {
+                            "type": "string",
+                            "description": "Root file key on cloud storage."
+                          },
+                          "fileUrl": {
+                            "type": "string",
+                            "description": "Http link for download file"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "File type.",
+                            "enum": [
+                              "image",
+                              "file",
+                              "video"
+                            ]
+                          },
+                          "accessType": {
+                            "type": "string",
+                            "description": "File access type. `network` type requires authentication to download.",
+                            "enum": [
+                              "public",
+                              "network"
+                            ],
+                            "default": "public"
+                          },
+                          "altText": {
+                            "type": "string",
+                            "description": "Alternative text for the file.",
+                            "maxLength": 180
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is uploaded.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is updated.",
+                            "format": "date-time"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "File name."
+                              },
+                              "extension": {
+                                "type": "string",
+                                "description": "File format."
+                              },
+                              "size": {
+                                "type": "number",
+                                "description": "File size."
+                              },
+                              "mimeType": {
+                                "type": "string",
+                                "description": "File mime-type."
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "File image metadata (width, height etc.).",
+                                "properties": {
+                                  "exif": {
+                                    "type": "object"
+                                  },
+                                  "gps": {
+                                    "type": "object"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "isFull": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "paging": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string"
+                        },
+                        "prev": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rooms/{roomId}": {
+      "get": {
+        "summary": "get single room",
+        "tags": [
+          "Room"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "roomId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "description": "Room ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "room information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "rooms": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal room ID"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "description": "Public room ID"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "direct_streaming",
+                              "co_hosts"
+                            ],
+                            "description": "Type of room * direct_streaming - single participant streaming * co_hosts - More than one participant\n"
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "Target ID (community or user)"
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Target type"
+                          },
+                          "targetVisibility": {
+                            "type": "string",
+                            "enum": [
+                              "public",
+                              "private"
+                            ],
+                            "description": "Target visibility"
+                          },
+                          "referenceType": {
+                            "type": "string",
+                            "description": "Reference type (e.g., post, event)"
+                          },
+                          "referenceId": {
+                            "type": "string",
+                            "description": "Reference ID"
+                          },
+                          "liveChannelId": {
+                            "type": "string",
+                            "description": "Associated live channel ID for chat"
+                          },
+                          "liveChannelEnabled": {
+                            "type": "boolean",
+                            "description": "Whether live channel is enabled"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Room title"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Room description"
+                          },
+                          "publicId": {
+                            "type": "string",
+                            "description": "Public identifier"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnail file ID"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "waiting_reconnect",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of room * idle - room is just created * live - broadcasting is active * waiting_reconnect - broadcaster disconnected, waiting for reconnection * ended - broadcasting stopped * recorded - room recordings available\n"
+                          },
+                          "participants": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "user"
+                                  ]
+                                },
+                                "userId": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "description": "List of room participants"
+                          },
+                          "livePlaybackUrl": {
+                            "type": "string",
+                            "description": "Live playback URL"
+                          },
+                          "durationSeconds": {
+                            "type": "number",
+                            "description": "Duration of the broadcast in seconds (only for ended/recorded rooms)"
+                          },
+                          "moderation": {
+                            "type": "object",
+                            "description": "Moderation information"
+                          },
+                          "parentRoomId": {
+                            "type": "string",
+                            "description": "Parent room ID for child streams"
+                          },
+                          "childRoomIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Child room IDs"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Creation timestamp"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "Creator user ID"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Last update timestamp"
+                          },
+                          "liveAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting started"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting ended"
+                          },
+                          "recordedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When recording became available"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether room is deleted"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Deletion timestamp"
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "description": "User who deleted the room"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Room path for realtime events"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Custom metadata"
+                          }
+                        }
+                      }
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a user. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a user. (for real-time event)"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string"
+                          },
+                          "userPublicId": {
+                            "type": "string"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "profileHandle": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "avatarFileId": {
+                            "type": "string"
+                          },
+                          "avatarCustomUrl": {
+                            "type": "string"
+                          },
+                          "flagCount": {
+                            "type": "integer"
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "isGlobalBan": {
+                            "type": "boolean",
+                            "description": "Global ban status. Every user can see this flag."
+                          },
+                          "isBrand": {
+                            "type": "boolean",
+                            "description": "Brand user status."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isDeleted": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fileId": {
+                            "type": "string",
+                            "description": "Root file key on cloud storage."
+                          },
+                          "fileUrl": {
+                            "type": "string",
+                            "description": "Http link for download file"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "File type.",
+                            "enum": [
+                              "image",
+                              "file",
+                              "video"
+                            ]
+                          },
+                          "accessType": {
+                            "type": "string",
+                            "description": "File access type. `network` type requires authentication to download.",
+                            "enum": [
+                              "public",
+                              "network"
+                            ],
+                            "default": "public"
+                          },
+                          "altText": {
+                            "type": "string",
+                            "description": "Alternative text for the file.",
+                            "maxLength": 180
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is uploaded.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is updated.",
+                            "format": "date-time"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "File name."
+                              },
+                              "extension": {
+                                "type": "string",
+                                "description": "File format."
+                              },
+                              "size": {
+                                "type": "number",
+                                "description": "File size."
+                              },
+                              "mimeType": {
+                                "type": "string",
+                                "description": "File mime-type."
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "File image metadata (width, height etc.).",
+                                "properties": {
+                                  "exif": {
+                                    "type": "object"
+                                  },
+                                  "gps": {
+                                    "type": "object"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "isFull": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "update room",
+        "tags": [
+          "Room"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "roomId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "description": "Room ID"
+          }
+        ],
+        "requestBody": {
+          "description": "Information of room to be updated\n",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "maxLength": 1000,
+                    "description": "Room title"
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 5000,
+                    "description": "Room description"
+                  },
+                  "thumbnailFileId": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "description": "Thumbnail file ID"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "description": "Custom metadata"
+                  },
+                  "channelEnabled": {
+                    "type": "boolean",
+                    "description": "Enable or disable live channel"
+                  },
+                  "participants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 1,
+                    "description": "List of user IDs to be added as participants (applicable only for co_hosts type)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "room information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "rooms": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal room ID"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "description": "Public room ID"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "direct_streaming",
+                              "co_hosts"
+                            ],
+                            "description": "Type of room * direct_streaming - single participant streaming * co_hosts - More than one participant\n"
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "Target ID (community or user)"
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Target type"
+                          },
+                          "targetVisibility": {
+                            "type": "string",
+                            "enum": [
+                              "public",
+                              "private"
+                            ],
+                            "description": "Target visibility"
+                          },
+                          "referenceType": {
+                            "type": "string",
+                            "description": "Reference type (e.g., post, event)"
+                          },
+                          "referenceId": {
+                            "type": "string",
+                            "description": "Reference ID"
+                          },
+                          "liveChannelId": {
+                            "type": "string",
+                            "description": "Associated live channel ID for chat"
+                          },
+                          "liveChannelEnabled": {
+                            "type": "boolean",
+                            "description": "Whether live channel is enabled"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Room title"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Room description"
+                          },
+                          "publicId": {
+                            "type": "string",
+                            "description": "Public identifier"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnail file ID"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "waiting_reconnect",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of room * idle - room is just created * live - broadcasting is active * waiting_reconnect - broadcaster disconnected, waiting for reconnection * ended - broadcasting stopped * recorded - room recordings available\n"
+                          },
+                          "participants": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "user"
+                                  ]
+                                },
+                                "userId": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "description": "List of room participants"
+                          },
+                          "livePlaybackUrl": {
+                            "type": "string",
+                            "description": "Live playback URL"
+                          },
+                          "durationSeconds": {
+                            "type": "number",
+                            "description": "Duration of the broadcast in seconds (only for ended/recorded rooms)"
+                          },
+                          "moderation": {
+                            "type": "object",
+                            "description": "Moderation information"
+                          },
+                          "parentRoomId": {
+                            "type": "string",
+                            "description": "Parent room ID for child streams"
+                          },
+                          "childRoomIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Child room IDs"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Creation timestamp"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "Creator user ID"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Last update timestamp"
+                          },
+                          "liveAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting started"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting ended"
+                          },
+                          "recordedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When recording became available"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether room is deleted"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Deletion timestamp"
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "description": "User who deleted the room"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Room path for realtime events"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Custom metadata"
+                          }
+                        }
+                      }
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a user. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a user. (for real-time event)"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string"
+                          },
+                          "userPublicId": {
+                            "type": "string"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "profileHandle": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "avatarFileId": {
+                            "type": "string"
+                          },
+                          "avatarCustomUrl": {
+                            "type": "string"
+                          },
+                          "flagCount": {
+                            "type": "integer"
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "isGlobalBan": {
+                            "type": "boolean",
+                            "description": "Global ban status. Every user can see this flag."
+                          },
+                          "isBrand": {
+                            "type": "boolean",
+                            "description": "Brand user status."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isDeleted": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fileId": {
+                            "type": "string",
+                            "description": "Root file key on cloud storage."
+                          },
+                          "fileUrl": {
+                            "type": "string",
+                            "description": "Http link for download file"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "File type.",
+                            "enum": [
+                              "image",
+                              "file",
+                              "video"
+                            ]
+                          },
+                          "accessType": {
+                            "type": "string",
+                            "description": "File access type. `network` type requires authentication to download.",
+                            "enum": [
+                              "public",
+                              "network"
+                            ],
+                            "default": "public"
+                          },
+                          "altText": {
+                            "type": "string",
+                            "description": "Alternative text for the file.",
+                            "maxLength": 180
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is uploaded.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is updated.",
+                            "format": "date-time"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "File name."
+                              },
+                              "extension": {
+                                "type": "string",
+                                "description": "File format."
+                              },
+                              "size": {
+                                "type": "number",
+                                "description": "File size."
+                              },
+                              "mimeType": {
+                                "type": "string",
+                                "description": "File mime-type."
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "File image metadata (width, height etc.).",
+                                "properties": {
+                                  "exif": {
+                                    "type": "object"
+                                  },
+                                  "gps": {
+                                    "type": "object"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "isFull": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "delete room",
+        "tags": [
+          "Room"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Delete a room\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "roomId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "description": "Room ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "room information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rooms/{roomId}/stop": {
+      "post": {
+        "summary": "stop room",
+        "tags": [
+          "Room"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Stop a room and end the broadcasting\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "roomId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "description": "Room ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "room information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "rooms": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal room ID"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "description": "Public room ID"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "direct_streaming",
+                              "co_hosts"
+                            ],
+                            "description": "Type of room * direct_streaming - single participant streaming * co_hosts - More than one participant\n"
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "Target ID (community or user)"
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Target type"
+                          },
+                          "targetVisibility": {
+                            "type": "string",
+                            "enum": [
+                              "public",
+                              "private"
+                            ],
+                            "description": "Target visibility"
+                          },
+                          "referenceType": {
+                            "type": "string",
+                            "description": "Reference type (e.g., post, event)"
+                          },
+                          "referenceId": {
+                            "type": "string",
+                            "description": "Reference ID"
+                          },
+                          "liveChannelId": {
+                            "type": "string",
+                            "description": "Associated live channel ID for chat"
+                          },
+                          "liveChannelEnabled": {
+                            "type": "boolean",
+                            "description": "Whether live channel is enabled"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Room title"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Room description"
+                          },
+                          "publicId": {
+                            "type": "string",
+                            "description": "Public identifier"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnail file ID"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "waiting_reconnect",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of room * idle - room is just created * live - broadcasting is active * waiting_reconnect - broadcaster disconnected, waiting for reconnection * ended - broadcasting stopped * recorded - room recordings available\n"
+                          },
+                          "participants": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "user"
+                                  ]
+                                },
+                                "userId": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "description": "List of room participants"
+                          },
+                          "livePlaybackUrl": {
+                            "type": "string",
+                            "description": "Live playback URL"
+                          },
+                          "durationSeconds": {
+                            "type": "number",
+                            "description": "Duration of the broadcast in seconds (only for ended/recorded rooms)"
+                          },
+                          "moderation": {
+                            "type": "object",
+                            "description": "Moderation information"
+                          },
+                          "parentRoomId": {
+                            "type": "string",
+                            "description": "Parent room ID for child streams"
+                          },
+                          "childRoomIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Child room IDs"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Creation timestamp"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "Creator user ID"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Last update timestamp"
+                          },
+                          "liveAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting started"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting ended"
+                          },
+                          "recordedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When recording became available"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether room is deleted"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Deletion timestamp"
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "description": "User who deleted the room"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Room path for realtime events"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Custom metadata"
+                          }
+                        }
+                      }
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a user. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a user. (for real-time event)"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string"
+                          },
+                          "userPublicId": {
+                            "type": "string"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "profileHandle": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "avatarFileId": {
+                            "type": "string"
+                          },
+                          "avatarCustomUrl": {
+                            "type": "string"
+                          },
+                          "flagCount": {
+                            "type": "integer"
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "isGlobalBan": {
+                            "type": "boolean",
+                            "description": "Global ban status. Every user can see this flag."
+                          },
+                          "isBrand": {
+                            "type": "boolean",
+                            "description": "Brand user status."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isDeleted": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fileId": {
+                            "type": "string",
+                            "description": "Root file key on cloud storage."
+                          },
+                          "fileUrl": {
+                            "type": "string",
+                            "description": "Http link for download file"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "File type.",
+                            "enum": [
+                              "image",
+                              "file",
+                              "video"
+                            ]
+                          },
+                          "accessType": {
+                            "type": "string",
+                            "description": "File access type. `network` type requires authentication to download.",
+                            "enum": [
+                              "public",
+                              "network"
+                            ],
+                            "default": "public"
+                          },
+                          "altText": {
+                            "type": "string",
+                            "description": "Alternative text for the file.",
+                            "maxLength": 180
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is uploaded.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is updated.",
+                            "format": "date-time"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "File name."
+                              },
+                              "extension": {
+                                "type": "string",
+                                "description": "File format."
+                              },
+                              "size": {
+                                "type": "number",
+                                "description": "File size."
+                              },
+                              "mimeType": {
+                                "type": "string",
+                                "description": "File mime-type."
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "File image metadata (width, height etc.).",
+                                "properties": {
+                                  "exif": {
+                                    "type": "object"
+                                  },
+                                  "gps": {
+                                    "type": "object"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "isFull": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rooms/{roomId}/token": {
+      "get": {
+        "summary": "get ingest data (stream key or livekit token)",
+        "tags": [
+          "Room"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Get ingest data for broadcasting. Returns stream key for direct streaming or LiveKit token for co-hosts.\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "roomId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "description": "Room ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ingest data for broadcasting",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "direct_streaming",
+                        "co_hosts"
+                      ],
+                      "description": "Room type"
+                    },
+                    "directStreamUrl": {
+                      "type": "string",
+                      "description": "SRT URL for direct streaming (stream id and passphrase are included in the URL)"
+                    },
+                    "coHostToken": {
+                      "type": "string",
+                      "description": "Access token for co-hosts"
+                    },
+                    "coHostUrl": {
+                      "type": "string",
+                      "description": "WebRTC URL for co-hosts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rooms/{roomId}/recorded": {
+      "get": {
+        "summary": "get recorded url",
+        "tags": [
+          "Room"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Get recorded playback URLs for a room\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "roomId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "description": "Room ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed recorded playback URLs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "recordedUrls": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "description": "Signed playback URL for recorded content"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
                 }
               }
             }

@@ -1,0 +1,196 @@
+Room:
+  type: object
+  properties:
+    _id:
+      type: string
+      description: Internal room ID
+    roomId:
+      type: string
+      description: Public room ID
+    type:
+      type: string
+      enum:
+        - direct_streaming
+        - co_hosts
+      description: >
+        Type of room
+        * direct_streaming - single participant streaming
+        * co_hosts - More than one participant
+    
+    # Relationship fields
+    targetId:
+      type: string
+      description: Target ID (community or user)
+    targetType:
+      type: string
+      enum:
+        - community
+        - user
+      description: Target type
+    targetVisibility:
+      type: string
+      enum:
+        - public
+        - private
+      description: Target visibility
+    referenceType:
+      type: string
+      description: Reference type (e.g., post, event)
+    referenceId:
+      type: string
+      description: Reference ID
+    
+    # Live channel
+    liveChannelId:
+      type: string
+      description: Associated live channel ID for chat
+    liveChannelEnabled:
+      type: boolean
+      description: Whether live channel is enabled
+    
+    # Room information
+    title:
+      type: string
+      description: Room title
+    description:
+      type: string
+      description: Room description
+    publicId:
+      type: string
+      description: Public identifier
+    thumbnailFileId:
+      type: string
+      description: Thumbnail file ID
+    
+    # Streaming info
+    status:
+      type: string
+      enum:
+        - idle
+        - live
+        - waiting_reconnect
+        - ended
+        - recorded
+      description: >
+        Status of room
+        * idle - room is just created
+        * live - broadcasting is active
+        * waiting_reconnect - broadcaster disconnected, waiting for reconnection
+        * ended - broadcasting stopped
+        * recorded - room recordings available
+    
+    # Participants
+    participants:
+      type: array
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            enum:
+              - user
+          userId:
+            type: string
+      description: List of room participants
+    
+    # Live ingest info (for direct streaming)
+    #liveIngestInfo:
+    #  type: object
+    #  properties:
+    #    streamId:
+    #      type: string
+    #    SRTPassphrase:
+    #      type: string
+    #  description: SRT/RTMP streaming credentials
+    #
+    ## Live playback info
+    #livePlaybackInfo:
+    #  type: object
+    #  properties:
+    #    playbackId:
+    #      type: string
+    #    accessToken:
+    #      type: string
+    #  description: Live playback information
+    #
+    # Recorded playback info
+
+    livePlaybackUrl: 
+      type: string
+      description: Live playback URL
+
+    #recordedPlaybackUrls: 
+    #  type: array
+    #  items:
+    #    type: string
+    #  description: Recorded playback URL  
+    #recordedPlaybackInfo:
+    #  type: object
+    #  properties:
+    #    playbackIds:
+    #      type: array
+    #      items:
+    #        type: string
+    #  description: Recorded playback IDs
+    
+    durationSeconds:
+      type: number
+      description: Duration of the broadcast in seconds (only for ended/recorded rooms)
+    
+    moderation:
+      type: object
+      description: Moderation information
+    
+    # Multi-stream support
+    parentRoomId:
+      type: string
+      description: Parent room ID for child streams
+    childRoomIds:
+      type: array
+      items:
+        type: string
+      description: Child room IDs
+    
+    # Timestamps
+    createdAt:
+      type: string
+      format: date-time
+      description: Creation timestamp
+    createdBy:
+      type: string
+      description: Creator user ID
+    updatedAt:
+      type: string
+      format: date-time
+      description: Last update timestamp
+    liveAt:
+      type: string
+      format: date-time
+      description: When broadcasting started
+    endedAt:
+      type: string
+      format: date-time
+      description: When broadcasting ended
+    recordedAt:
+      type: string
+      format: date-time
+      description: When recording became available
+    
+    isDeleted:
+      type: boolean
+      description: Whether room is deleted
+    deletedAt:
+      type: string
+      format: date-time
+      description: Deletion timestamp
+    deletedBy:
+      type: string
+      description: User who deleted the room
+    
+    path:
+      type: string
+      description: Room path for realtime events
+    
+    metadata:
+      type: object
+      description: Custom metadata

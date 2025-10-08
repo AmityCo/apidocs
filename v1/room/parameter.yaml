@@ -1,0 +1,64 @@
+statuses:
+  name: "statuses"
+  in: "query"
+  schema:
+    type: "array"
+    maxItems: 10
+    items:
+      type: "string"
+      enum:
+        - "idle"
+        - "live"
+        - "waiting_reconnect"
+        - "ended"
+        - "recorded"
+  description: "Status of room  \n  * idle - room is just created  \n  * live - broadcasting is active  \n  * waiting_reconnect - broadcaster disconnected, waiting for reconnection  \n  * ended - broadcasting stopped  \n  * recorded - room recordings available \n"
+
+type:
+  name: "type"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "direct_streaming"
+      - "co_hosts"
+  description: "Type of room  \n  * direct_streaming - RTMP/SRT streaming  \n  * co_hosts - WebRTC co-hosting with LiveKit \n"
+
+sortBy:
+  name: "sortBy"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "firstCreated"
+      - "lastCreated"
+
+isDeleted:
+  name: "isDeleted"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: null
+  description: "isDeleted:\n  * `null(default)` - Show both active and inactive rooms.\n  * `true` - Show inactive rooms only.\n  * `false` - Show active rooms only.\n"
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+      token:
+        type: "string"
+        maxLength: 1000
+
+_roomId:
+  in: "path"
+  name: "roomId"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 50
+  description: "Room ID"
