@@ -243,6 +243,40 @@ users:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
+public-users:
+  get:
+    tags:
+      - Network Setting
+    summary: Get public users configuration.
+    description: Get public users configuration.
+    security:
+      - BearerAuth: []
+    responses:
+      200:
+        $ref: "./response.yaml#/public-users-response-200"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    tags:
+      - Network Setting
+    summary: Update public users configuration
+    description: Update public users configuration
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/public-users-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/public-users-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
 video-streaming:
   get:
     summary: "Get video streaming setting check configuration."
