@@ -18,3 +18,62 @@ user-webhook-response:
                 type: array
                 items:
                   $ref: "../../schema/file.yaml#/File"
+
+user-last-activity-response-200:
+  description: Users last activity report
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          networkId:
+            type: "string"
+          downloadUrl:
+            type: "string"
+            description: "URL to download the last activity report"
+            example: "https://example.com/reports/user-last-activity.csv"
+
+bulk-delete-jobs-post-response-202:
+  description: Bulk delete job created successfully (Accepted)
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          id:
+            type: string
+            description: Unique identifier for the bulk delete job
+            example: "507f1f77bcf86cd799439011"
+
+bulk-delete-jobs-get-response-200:
+  description: List of bulk delete jobs
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          id:
+            type: string
+            description: Unique identifier for the bulk delete job
+            example: "507f1f77bcf86cd799439011"
+          statuses:
+            type: array
+            items: 
+              type: object
+              properties:
+                status: 
+                  type: string
+                  enum: ["WAITING", "RUNNING", "DONE", "FAIL"]
+                _id:
+                  type: string
+          lastUpdatedAt:
+            type: string
+            format: date-time
+            description: Job last update timestamp
+            example: "2025-10-08T11:00:00Z"
+          lastCreatedAt:
+            type: string
+            format: date-time
+            description: Job creation timestamp
+            example: "2025-10-08T10:30:00Z"
+
