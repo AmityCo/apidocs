@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.112.0] - 2025-10-14
+
+### 🚀 Features
+
+- Add api doc for guest user (#435)
+- Add api doc for public user network setting (#444)
+- Add users bulk delete API & get users last activity api (#443)
+
 ## [4.111.0] - 2025-09-22
 
 ### 🚀 Features
@@ -14,6 +22,10 @@ All notable changes to this project will be documented in this file.
 ### 🐛 Bug Fixes
 
 - Ordering api path (#438)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.111.0 (#440)
 
 ## [4.110.0] - 2025-08-29
 
