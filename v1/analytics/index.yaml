@@ -74,3 +74,30 @@ views-stories_storyId-users:
         $ref: "../../global/error.yaml#/UnProcessableError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+users-social-score:
+  get:
+    summary: query users social score
+    description:
+      "Query users' social scores including contributions (posts, comments, reactions) and content quality metrics. 
+      This endpoint provides comprehensive social engagement analytics for users within a network based on configurable time intervals."
+    tags:
+      - Analytic
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/socialScoreInterval"
+      - $ref: "./parameter.yaml#/userIds"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/sortOrder"
+      - $ref: "./parameter.yaml#/contributionsLevel"
+      - $ref: "./parameter.yaml#/contentsQualityLevel"
+      - $ref: "./parameter.yaml#/options.token"
+      - $ref: "./parameter.yaml#/options.limit"
+    responses:
+      200:
+        $ref: "./response.yaml#/users-social-score-response-payload-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

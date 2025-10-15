@@ -258,3 +258,73 @@ security-configs-response-200:
             adminToken:
               expiresInHours: 24
 
+analytic-configs-response-200:
+  description: Analytic configuration for social score and content quality
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          analyticConfigs:
+            type: "object"
+            description: "Analytic configuration settings"
+            properties:
+              contributionsSetting:
+                type: "object"
+                description: "Configuration for user contributions scoring"
+                properties:
+                  scoreWeight:
+                    type: "object"
+                    description: "Weight values for different contribution types"
+                    properties:
+                      post:
+                        type: "number"
+                        description: "Weight for posts in contribution score calculation"
+                      comment:
+                        type: "number"
+                        description: "Weight for comments in contribution score calculation"
+                      reaction:
+                        type: "number"
+                        description: "Weight for reactions in contribution score calculation"
+                  threshold:
+                    type: "object"
+                    description: "Threshold values for contribution levels"
+                    properties:
+                      none:
+                        type: "number"
+                        description: "Minimum score for 'none' level"
+                      low:
+                        type: "number"
+                        description: "Minimum score for 'low' level"
+                      medium:
+                        type: "number"
+                        description: "Minimum score for 'medium' level"
+                      high:
+                        type: "number"
+                        description: "Minimum score for 'high' level"
+                      veryHigh:
+                        type: "number"
+                        description: "Minimum score for 'very_high' level"
+              contentsQualitySetting:
+                type: "object"
+                description: "Configuration for content quality assessment"
+                properties:
+                  qualityDefinition:
+                    type: "string"
+                    description: "Definition or criteria for content quality assessment"
+        example:
+          analyticConfigs:
+            contributionsSetting:
+              scoreWeight:
+                post: 10
+                comment: 3
+                reaction: 1
+              threshold:
+                none: 0
+                low: 10
+                medium: 50
+                high: 100
+                veryHigh: 200
+            contentsQualitySetting:
+              qualityDefinition: "Content quality is assessed based on engagement metrics, community guidelines compliance, and user feedback"
+

@@ -104984,6 +104984,355 @@
         }
       }
     },
+    "/api/v1/analytics/users-social-score": {
+      "get": {
+        "summary": "query users social score",
+        "description": "Query users' social scores including contributions (posts, comments, reactions) and content quality metrics.  This endpoint provides comprehensive social engagement analytics for users within a network based on configurable time intervals.",
+        "tags": [
+          "Analytic"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "interval",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "7d",
+                "30d",
+                "90d"
+              ],
+              "description": "Time interval for social score analysis",
+              "example": "30d"
+            }
+          },
+          {
+            "name": "userIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f\\d]{24}$"
+              },
+              "minItems": 1,
+              "maxItems": 20,
+              "description": "Optional list of specific user IDs to query",
+              "example": [
+                "60e4b1b4b3b2b5c4c4b3b2b5",
+                "60e4b1b4b3b2b5c4c4b3b2b6"
+              ]
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "contributions-score",
+                "contents-quality-score"
+              ],
+              "description": "Field to sort results by",
+              "example": "contributions-score"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "desc",
+                "asc"
+              ],
+              "description": "Sort order for results",
+              "example": "desc"
+            }
+          },
+          {
+            "name": "contributionsLevel",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "low",
+                  "medium",
+                  "high",
+                  "very_high"
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 5,
+              "description": "Filter by contribution levels",
+              "example": [
+                "high",
+                "very_high"
+              ]
+            }
+          },
+          {
+            "name": "contentsQualityLevel",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "broken",
+                  "weak",
+                  "fair",
+                  "good",
+                  "excellent"
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 5,
+              "description": "Filter by content quality levels",
+              "example": [
+                "good",
+                "excellent"
+              ]
+            }
+          },
+          {
+            "name": "options[token]",
+            "in": "query",
+            "description": "Pagination token for getting next/previous pages",
+            "schema": {
+              "type": "string",
+              "maxLength": 1000,
+              "description": "Pagination token for retrieving next/previous page",
+              "example": "eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=="
+            }
+          },
+          {
+            "name": "options[limit]",
+            "in": "query",
+            "description": "Number of results per page (1-100)",
+            "schema": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 20,
+              "default": 10,
+              "description": "Number of users to return per page",
+              "example": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users with their social scores including contributions and content quality metrics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "string",
+                            "pattern": "^[a-f\\d]{24}$",
+                            "description": "Unique identifier of the user",
+                            "example": "60e4b1b4b3b2b5c4c4b3b2b5"
+                          },
+                          "contributions": {
+                            "type": "object",
+                            "properties": {
+                              "posts": {
+                                "type": "number",
+                                "description": "Number of posts created by the user",
+                                "example": 15
+                              },
+                              "comments": {
+                                "type": "number",
+                                "description": "Number of comments made by the user",
+                                "example": 42
+                              },
+                              "reactions": {
+                                "type": "number",
+                                "description": "Number of reactions given by the user",
+                                "example": 87
+                              },
+                              "score": {
+                                "type": "number",
+                                "description": "Calculated contribution score based on weighted activities",
+                                "example": 156.5
+                              },
+                              "level": {
+                                "type": "string",
+                                "enum": [
+                                  "none",
+                                  "low",
+                                  "medium",
+                                  "high",
+                                  "very_high"
+                                ],
+                                "description": "Contribution level based on score thresholds",
+                                "example": "high"
+                              }
+                            }
+                          },
+                          "contentsQuality": {
+                            "type": "object",
+                            "properties": {
+                              "score": {
+                                "type": "number",
+                                "description": "Average content quality score",
+                                "example": 4.2
+                              },
+                              "count": {
+                                "type": "number",
+                                "description": "Number of content pieces analyzed for quality",
+                                "example": 12
+                              },
+                              "level": {
+                                "type": "string",
+                                "enum": [
+                                  "broken",
+                                  "weak",
+                                  "fair",
+                                  "good",
+                                  "excellent"
+                                ],
+                                "description": "Content quality level based on average score",
+                                "example": "good"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "paging": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Token for retrieving the next page of results",
+                          "example": "eyJmcm9tIjoyMCwibGltaXQiOjEwfQ=="
+                        },
+                        "previous": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Token for retrieving the previous page of results",
+                          "example": "eyJmcm9tIjowLCJsaW1pdCI6MTB9"
+                        },
+                        "limit": {
+                          "type": "number",
+                          "description": "Number of items per page",
+                          "example": 10
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v3/network-settings/chat": {
       "put": {
         "summary": "Update chat network setting configuration.",
@@ -109513,6 +109862,492 @@
                       },
                       "adminToken": {
                         "expiresInHours": 24
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v3/network-settings/analytic-configs": {
+      "put": {
+        "summary": "Update network analytic configuration",
+        "tags": [
+          "Network Setting"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Update analytic configuration including contributions scoring and content quality settings for social score analytics.\n",
+        "requestBody": {
+          "description": "Analytic configuration for social score and content quality settings\n",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "contributionsSetting": {
+                    "type": "object",
+                    "description": "Configuration for user contributions scoring",
+                    "properties": {
+                      "scoreWeight": {
+                        "type": "object",
+                        "description": "Weight values for different contribution types",
+                        "properties": {
+                          "post": {
+                            "type": "number",
+                            "description": "Weight for posts in contribution score calculation",
+                            "example": 10
+                          },
+                          "comment": {
+                            "type": "number",
+                            "description": "Weight for comments in contribution score calculation",
+                            "example": 3
+                          },
+                          "reaction": {
+                            "type": "number",
+                            "description": "Weight for reactions in contribution score calculation",
+                            "example": 1
+                          }
+                        }
+                      },
+                      "threshold": {
+                        "type": "object",
+                        "description": "Threshold values for contribution levels",
+                        "properties": {
+                          "none": {
+                            "type": "number",
+                            "description": "Minimum score for 'none' level",
+                            "example": 0
+                          },
+                          "low": {
+                            "type": "number",
+                            "description": "Minimum score for 'low' level",
+                            "example": 10
+                          },
+                          "medium": {
+                            "type": "number",
+                            "description": "Minimum score for 'medium' level",
+                            "example": 50
+                          },
+                          "high": {
+                            "type": "number",
+                            "description": "Minimum score for 'high' level",
+                            "example": 100
+                          },
+                          "veryHigh": {
+                            "type": "number",
+                            "description": "Minimum score for 'very_high' level",
+                            "example": 200
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "contentsQualitySetting": {
+                    "type": "object",
+                    "description": "Configuration for content quality assessment",
+                    "properties": {
+                      "qualityDefinition": {
+                        "type": "string",
+                        "description": "Definition or criteria for content quality assessment",
+                        "example": "Content quality is assessed based on engagement metrics, community guidelines compliance, and user feedback"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Analytic configuration for social score and content quality",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "analyticConfigs": {
+                      "type": "object",
+                      "description": "Analytic configuration settings",
+                      "properties": {
+                        "contributionsSetting": {
+                          "type": "object",
+                          "description": "Configuration for user contributions scoring",
+                          "properties": {
+                            "scoreWeight": {
+                              "type": "object",
+                              "description": "Weight values for different contribution types",
+                              "properties": {
+                                "post": {
+                                  "type": "number",
+                                  "description": "Weight for posts in contribution score calculation"
+                                },
+                                "comment": {
+                                  "type": "number",
+                                  "description": "Weight for comments in contribution score calculation"
+                                },
+                                "reaction": {
+                                  "type": "number",
+                                  "description": "Weight for reactions in contribution score calculation"
+                                }
+                              }
+                            },
+                            "threshold": {
+                              "type": "object",
+                              "description": "Threshold values for contribution levels",
+                              "properties": {
+                                "none": {
+                                  "type": "number",
+                                  "description": "Minimum score for 'none' level"
+                                },
+                                "low": {
+                                  "type": "number",
+                                  "description": "Minimum score for 'low' level"
+                                },
+                                "medium": {
+                                  "type": "number",
+                                  "description": "Minimum score for 'medium' level"
+                                },
+                                "high": {
+                                  "type": "number",
+                                  "description": "Minimum score for 'high' level"
+                                },
+                                "veryHigh": {
+                                  "type": "number",
+                                  "description": "Minimum score for 'very_high' level"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "contentsQualitySetting": {
+                          "type": "object",
+                          "description": "Configuration for content quality assessment",
+                          "properties": {
+                            "qualityDefinition": {
+                              "type": "string",
+                              "description": "Definition or criteria for content quality assessment"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "analyticConfigs": {
+                      "contributionsSetting": {
+                        "scoreWeight": {
+                          "post": 10,
+                          "comment": 3,
+                          "reaction": 1
+                        },
+                        "threshold": {
+                          "none": 0,
+                          "low": 10,
+                          "medium": 50,
+                          "high": 100,
+                          "veryHigh": 200
+                        }
+                      },
+                      "contentsQualitySetting": {
+                        "qualityDefinition": "Content quality is assessed based on engagement metrics, community guidelines compliance, and user feedback"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get network analytic configuration",
+        "tags": [
+          "Network Setting"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Get analytic configuration including contributions scoring and content quality settings for social score analytics.\n",
+        "responses": {
+          "200": {
+            "description": "Analytic configuration for social score and content quality",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "analyticConfigs": {
+                      "type": "object",
+                      "description": "Analytic configuration settings",
+                      "properties": {
+                        "contributionsSetting": {
+                          "type": "object",
+                          "description": "Configuration for user contributions scoring",
+                          "properties": {
+                            "scoreWeight": {
+                              "type": "object",
+                              "description": "Weight values for different contribution types",
+                              "properties": {
+                                "post": {
+                                  "type": "number",
+                                  "description": "Weight for posts in contribution score calculation"
+                                },
+                                "comment": {
+                                  "type": "number",
+                                  "description": "Weight for comments in contribution score calculation"
+                                },
+                                "reaction": {
+                                  "type": "number",
+                                  "description": "Weight for reactions in contribution score calculation"
+                                }
+                              }
+                            },
+                            "threshold": {
+                              "type": "object",
+                              "description": "Threshold values for contribution levels",
+                              "properties": {
+                                "none": {
+                                  "type": "number",
+                                  "description": "Minimum score for 'none' level"
+                                },
+                                "low": {
+                                  "type": "number",
+                                  "description": "Minimum score for 'low' level"
+                                },
+                                "medium": {
+                                  "type": "number",
+                                  "description": "Minimum score for 'medium' level"
+                                },
+                                "high": {
+                                  "type": "number",
+                                  "description": "Minimum score for 'high' level"
+                                },
+                                "veryHigh": {
+                                  "type": "number",
+                                  "description": "Minimum score for 'very_high' level"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "contentsQualitySetting": {
+                          "type": "object",
+                          "description": "Configuration for content quality assessment",
+                          "properties": {
+                            "qualityDefinition": {
+                              "type": "string",
+                              "description": "Definition or criteria for content quality assessment"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "analyticConfigs": {
+                      "contributionsSetting": {
+                        "scoreWeight": {
+                          "post": 10,
+                          "comment": 3,
+                          "reaction": 1
+                        },
+                        "threshold": {
+                          "none": 0,
+                          "low": 10,
+                          "medium": 50,
+                          "high": 100,
+                          "veryHigh": 200
+                        }
+                      },
+                      "contentsQualitySetting": {
+                        "qualityDefinition": "Content quality is assessed based on engagement metrics, community guidelines compliance, and user feedback"
                       }
                     }
                   }

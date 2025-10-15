@@ -449,3 +449,35 @@ security-configs:
         $ref: "../../global/error.yaml#/BadRequestError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+analytic-configs:
+  put:
+    summary: "Update network analytic configuration"
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Update analytic configuration including contributions scoring and content quality settings for social score analytics.\n"
+    requestBody:
+      $ref: "./request.yaml#/analytic-configs-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/analytic-configs-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "Get network analytic configuration"
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Get analytic configuration including contributions scoring and content quality settings for social score analytics.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/analytic-configs-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

@@ -313,3 +313,64 @@ security-configs-put-request-payload:
           - required: ["serverKey"]
           - required: ["adminToken"]
 
+analytic-configs-put-request-payload:
+  description: "Analytic configuration for social score and content quality settings\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          contributionsSetting:
+            type: "object"
+            description: "Configuration for user contributions scoring"
+            properties:
+              scoreWeight:
+                type: "object"
+                description: "Weight values for different contribution types"
+                properties:
+                  post:
+                    type: "number"
+                    description: "Weight for posts in contribution score calculation"
+                    example: 10
+                  comment:
+                    type: "number"
+                    description: "Weight for comments in contribution score calculation"
+                    example: 3
+                  reaction:
+                    type: "number"
+                    description: "Weight for reactions in contribution score calculation"
+                    example: 1
+              threshold:
+                type: "object"
+                description: "Threshold values for contribution levels"
+                properties:
+                  none:
+                    type: "number"
+                    description: "Minimum score for 'none' level"
+                    example: 0
+                  low:
+                    type: "number"
+                    description: "Minimum score for 'low' level"
+                    example: 10
+                  medium:
+                    type: "number"
+                    description: "Minimum score for 'medium' level"
+                    example: 50
+                  high:
+                    type: "number"
+                    description: "Minimum score for 'high' level"
+                    example: 100
+                  veryHigh:
+                    type: "number"
+                    description: "Minimum score for 'very_high' level"
+                    example: 200
+          contentsQualitySetting:
+            type: "object"
+            description: "Configuration for content quality assessment"
+            properties:
+              qualityDefinition:
+                type: "string"
+                description: "Definition or criteria for content quality assessment"
+                example: "Content quality is assessed based on engagement metrics, community guidelines compliance, and user feedback"
+
