@@ -449,3 +449,36 @@ security-configs:
         $ref: "../../global/error.yaml#/BadRequestError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+push-notification:
+  put:
+    summary: "Update push notification configuration"
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Update push notification settings for iOS mutable content and live streaming notifications.\n"
+    requestBody:
+      $ref: "./request.yaml#/push-notification-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/push-notification-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "Get push notification configuration"
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Get push notification settings for iOS mutable content and live streaming notifications.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/push-notification-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
