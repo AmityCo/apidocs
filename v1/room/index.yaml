@@ -155,3 +155,23 @@ _roomId-recorded:
         $ref: "../../global/error.yaml#/NotFoundError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+_roomId-participants: 
+  delete: 
+    summary: "remove participant from room"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    description: "Remove a participant from the room\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+    requestBody:
+      $ref: "./request.yaml#/_roomId-participants-delete-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

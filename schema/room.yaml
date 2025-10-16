@@ -80,16 +80,16 @@ Room:
           type:
             type: string
             enum:
-              - user
+              - coHost
+              - host
           userId:
             type: string
-      description: List of room participants
+      description: List of room streaming participants
     
     # Recorded playback info
     livePlaybackUrl: 
       type: string
       description: Live playback URL
-
     
     durationSeconds:
       type: number
@@ -117,11 +117,11 @@ Room:
       description: Creation timestamp
     createdBy:
       type: string
-      description: Creator user public ID
+      description: Room creator user public ID
     creatorInternalId: 
       type: string
       example: "64be1f6cb9b4106b5a6bbf3f"
-      description: Creator user internal ID
+      description: Room creator user internal ID
     updatedAt:
       type: string
       format: date-time
@@ -138,7 +138,6 @@ Room:
       type: string
       format: date-time
       description: When recording became available
-    
     isDeleted:
       type: boolean
       description: Whether room is deleted
@@ -149,11 +148,9 @@ Room:
     deletedBy:
       type: string
       description: User who deleted the room
-    
     path:
       type: string
       description: Room path for realtime events
-    
     metadata:
       type: object
       description: Custom metadata
