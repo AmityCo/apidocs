@@ -4,9 +4,6 @@ Room:
     _id:
       type: string
       description: Internal room ID
-    roomId:
-      type: string
-      description: Public room ID
     type:
       type: string
       enum:
@@ -47,12 +44,12 @@ Room:
     title:
       type: string
       description: Room title
+    roomId:
+      type: string
+      description: Public room ID
     description:
       type: string
       description: Room description
-    publicId:
-      type: string
-      description: Public identifier
     thumbnailFileId:
       type: string
       description: Thumbnail file ID
@@ -98,9 +95,9 @@ Room:
       type: number
       description: Duration of the broadcast in seconds (only for ended/recorded rooms)
     
-    moderation:
-      type: object
-      description: Moderation information
+    moderationId:
+      type: string
+      description: Moderation ID to match with roomModerations
     
     # Multi-stream support
     parentRoomId:
@@ -111,6 +108,7 @@ Room:
       items:
         type: string
       description: Child room IDs
+      default: []
     
     # Timestamps
     createdAt:
@@ -119,7 +117,11 @@ Room:
       description: Creation timestamp
     createdBy:
       type: string
-      description: Creator user ID
+      description: Creator user public ID
+    creatorInternalId: 
+      type: string
+      example: "64be1f6cb9b4106b5a6bbf3f"
+      description: Creator user internal ID
     updatedAt:
       type: string
       format: date-time

@@ -8,25 +8,14 @@ common-response-200:
             type: array
             items:
               $ref: "../../schema/room.yaml#/Room"
-          users:
-            type: array
-            items:
-              $ref: "../../schema/user.yaml#/UserV3"
-          files:
-            type: array
-            items:
-              $ref: "../../schema/file.yaml#/File"
-
-root-get-response-200:
-  description: list of rooms
-  content:
-    application/json:
-      schema:
-        properties:
-          rooms:
+          roomChildrens:
             type: array
             items:
               $ref: "../../schema/room.yaml#/Room"
+          roomModerations:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreamingModeration"
           users:
             type: array
             items:
@@ -43,18 +32,40 @@ root-get-response-200:
               prev:
                 type: string
 
+root-get-response-200:
+  description: list of rooms
+  content:
+    application/json:
+      schema:
+        properties:
+          rooms:
+            type: array
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          roomChildrens:
+            type: array
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          roomModerations:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreamingModeration"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          
+
 token-response-200:
   description: ingest data for broadcasting
   content:
     application/json:
       schema:
         properties:
-          type:
-            type: string
-            enum:
-              - "directStreaming"
-              - "coHosts"
-            description: "Room type"
           directStreamUrl:
             type: string
             description: "URL for direct streaming"
