@@ -1,0 +1,422 @@
+root:
+  post:
+    summary: "Create event"
+    tags:
+      - "Event"
+    security:
+      - BearerAuth: []
+    description: |
+      Create a new event in a community feed.
+
+      **Event Types:**
+      - `virtual`: Online event (can have external URL or livestream)
+      - `in_person`: Physical event (requires location)
+
+      **Important Notes:**
+      - Start time must be in the future
+      - End time must be after start time
+      - Location is required for in-person events
+      - Only community members can create events in a community
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - title
+              - type
+              - startTime
+              - originType
+              - originId
+            properties:
+              title:
+                type: string
+                minLength: 1
+                maxLength: 60
+              description:
+                type: string
+                maxLength: 1000
+              type:
+                type: string
+                enum: [virtual, in_person]
+              startTime:
+                type: string
+                format: date-time
+              endTime:
+                type: string
+                format: date-time
+              location:
+                type: string
+                maxLength: 200
+              externalUrl:
+                type: string
+              coverImageFileId:
+                type: string
+              originType:
+                type: string
+                enum: [community]
+                default: community
+              originId:
+                type: string
+              tags:
+                type: array
+                maxItems: 5
+                items:
+                  type: string
+                  maxLength: 24
+              isLocationVisible:
+                type: boolean
+                default: true
+              metadata:
+                type: object
+    responses:
+      200:
+        $ref: "./response.yaml#/event-create-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  get:
+    summary: "Query events"
+    tags:
+      - "Event"
+    security:
+      - BearerAuth: []
+    description: |
+      Query events with filters.
+
+      **Access Control:**
+      - Public community events: visible to everyone
+      - Private community events: visible only to members
+
+      **Filtering:**
+      - By origin (community)
+      - By status (scheduled, live, ended, cancelled)
+      - By type (virtual, in_person)
+      - By time range (startTimeGte, startTimeLte)
+      - By tags
+    parameters:
+      - $ref: "./parameter.yaml#/originType"
+      - $ref: "./parameter.yaml#/originId"
+      - $ref: "./parameter.yaml#/status"
+      - $ref: "./parameter.yaml#/eventType"
+      - $ref: "./parameter.yaml#/tags"
+      - $ref: "./parameter.yaml#/startTimeGte"
+      - $ref: "./parameter.yaml#/startTimeLte"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/orderBy"
+      - $ref: "./parameter.yaml#/options.limit"
+      - $ref: "./parameter.yaml#/options.token"
+    responses:
+      200:
+        $ref: "./response.yaml#/event-query-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+eventId:
+  get:
+    summary: "Get event by ID"
+    tags:
+      - "Event"
+    security:
+      - BearerAuth: []
+    description: |
+      Get event details by ID.
+
+      **Access Control:**
+      - Public community events: accessible to everyone
+      - Private community events: accessible only to members
+      - Creator always has access
+    parameters:
+      - $ref: "./parameter.yaml#/eventId"
+    responses:
+      200:
+        $ref: "./response.yaml#/event-get-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  put:
+    summary: "Update event"
+    tags:
+      - "Event"
+    security:
+      - BearerAuth: []
+    description: |
+      Update event details. Only the event creator or admin can update.
+
+      **Important Notes:**
+      - Start time must be in the future
+      - End time must be after start time
+      - Can cancel event by setting status to 'cancelled'
+      - Cancelling an event will delete all scheduled reminders
+    parameters:
+      - $ref: "./parameter.yaml#/eventId"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                minLength: 1
+                maxLength: 60
+              description:
+                type: string
+                maxLength: 1000
+              startTime:
+                type: string
+                format: date-time
+              endTime:
+                type: string
+                format: date-time
+              location:
+                type: string
+                maxLength: 200
+              externalUrl:
+                type: string
+              coverImageFileId:
+                type: string
+              tags:
+                type: array
+                maxItems: 5
+                items:
+                  type: string
+                  maxLength: 24
+              status:
+                type: string
+                enum: [cancelled]
+              metadata:
+                type: object
+    responses:
+      200:
+        $ref: "./response.yaml#/event-update-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  delete:
+    summary: "Delete event"
+    tags:
+      - "Event"
+    security:
+      - BearerAuth: []
+    description: |
+      Soft delete an event. Only the event creator or admin can delete.
+
+      **Important Notes:**
+      - All scheduled reminders will be deleted
+    parameters:
+      - $ref: "./parameter.yaml#/eventId"
+    responses:
+      200:
+        $ref: "./response.yaml#/event-delete-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+me-rsvp:
+  get:
+    summary: "Query my RSVPs"
+    tags:
+      - "Event"
+    security:
+      - BearerAuth: []
+    description: |
+      Get all events the current user has RSVP'd to.
+
+      **Filtering:**
+      - By RSVP status (going, interested, not_going)
+      - Supports pagination
+    parameters:
+      - $ref: "./parameter.yaml#/queryRsvpStatus"
+      - $ref: "./parameter.yaml#/options.limit"
+      - $ref: "./parameter.yaml#/options.token"
+    responses:
+      200:
+        $ref: "./response.yaml#/my-rsvps-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+eventId-rsvp:
+  post:
+    summary: "Create RSVP"
+    tags:
+      - "Event"
+    security:
+      - BearerAuth: []
+    description: |
+      RSVP to an event. Creates a new RSVP entry.
+
+      **RSVP Statuses:**
+      - `going`: User is going to the event (auto-joins event discussion community)
+      - `interested`: User is interested in the event
+      - `not_going`: User is not going to the event
+
+      **Important Notes:**
+      - Cannot RSVP to ended or cancelled events
+      - Cannot change RSVP within 15 minutes before event start (except cancelling)
+      - Community members only can RSVP to community events
+      - Throws error if RSVP already exists (use PUT to update)
+    parameters:
+      - $ref: "./parameter.yaml#/eventId"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - status
+            properties:
+              status:
+                type: string
+                enum: [going, interested, not_going]
+    responses:
+      200:
+        $ref: "./response.yaml#/rsvp-create-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  put:
+    summary: "Update RSVP"
+    tags:
+      - "Event"
+    security:
+      - BearerAuth: []
+    description: |
+      Update an existing RSVP to an event.
+
+      **RSVP Statuses:**
+      - `going`: User is going to the event (auto-joins event discussion community)
+      - `interested`: User is interested in the event (auto-leaves if previously going)
+      - `not_going`: User is not going to the event (auto-leaves if previously going)
+
+      **Important Notes:**
+      - Cannot RSVP to ended or cancelled events
+      - Cannot change RSVP within 15 minutes before event start (except cancelling to not_going)
+      - Community members only can RSVP to community events
+    parameters:
+      - $ref: "./parameter.yaml#/eventId"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - status
+            properties:
+              status:
+                type: string
+                enum: [going, interested, not_going]
+    responses:
+      200:
+        $ref: "./response.yaml#/rsvp-create-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  get:
+    summary: "Get event attendees"
+    tags:
+      - "Event"
+    security:
+      - BearerAuth: []
+    description: |
+      Get list of users who RSVP'd to an event.
+
+      **Filtering:**
+      - By RSVP status (going, interested, not_going)
+      - Supports pagination
+    parameters:
+      - $ref: "./parameter.yaml#/eventId"
+      - $ref: "./parameter.yaml#/queryRsvpStatus"
+      - $ref: "./parameter.yaml#/options.limit"
+      - $ref: "./parameter.yaml#/options.token"
+    responses:
+      200:
+        $ref: "./response.yaml#/rsvp-query-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+eventId-me-rsvp:
+  get:
+    summary: "Get my RSVP for an event"
+    tags:
+      - "Event"
+    security:
+      - BearerAuth: []
+    description: |
+      Get the current user's RSVP for a specific event.
+    parameters:
+      - $ref: "./parameter.yaml#/eventId"
+    responses:
+      200:
+        $ref: "./response.yaml#/rsvp-get-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

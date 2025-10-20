@@ -1,0 +1,254 @@
+eventId:
+  name: eventId
+  in: path
+  required: true
+  schema:
+    type: string
+  description: ID of the event
+
+title:
+  name: title
+  in: query
+  required: true
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 60
+  description: Event title
+
+description:
+  name: description
+  in: query
+  schema:
+    type: string
+    maxLength: 1000
+  description: Event description
+
+type:
+  name: type
+  in: query
+  required: true
+  schema:
+    type: string
+    enum:
+      - virtual
+      - in_person
+  description: |
+    Event type
+    * `virtual` - Virtual event (online)
+    * `in_person` - In-person event (physical location)
+
+startTime:
+  name: startTime
+  in: query
+  required: true
+  schema:
+    type: string
+    format: date-time
+  description: Event start time (ISO 8601 format). Must be in the future.
+
+endTime:
+  name: endTime
+  in: query
+  schema:
+    type: string
+    format: date-time
+  description: Event end time (ISO 8601 format). Must be after start time.
+
+location:
+  name: location
+  in: query
+  schema:
+    type: string
+    maxLength: 200
+  description: Physical location address (required for in-person events)
+
+externalUrl:
+  name: externalUrl
+  in: query
+  schema:
+    type: string
+  description: External URL for virtual events (e.g., Zoom, Teams link)
+
+coverImageFileId:
+  name: coverImageFileId
+  in: query
+  schema:
+    type: string
+  description: File ID of the cover image
+
+originType:
+  name: originType
+  in: query
+  required: true
+  schema:
+    type: string
+    enum:
+      - community
+      - user
+    default: community
+  description: |
+    Origin type of the event
+    * `community` - Event created in a community
+    * `user` - Event created by a user (not yet supported)
+
+originId:
+  name: originId
+  in: query
+  required: true
+  schema:
+    type: string
+  description: ID of the origin (communityId or userId)
+
+tags:
+  name: tags
+  in: query
+  schema:
+    type: array
+    maxItems: 5
+    items:
+      type: string
+      maxLength: 24
+  description: Event tags for categorization
+
+isLocationVisible:
+  name: isLocationVisible
+  in: query
+  schema:
+    type: boolean
+    default: true
+  description: Whether the location is visible to attendees
+
+status:
+  name: status
+  in: query
+  schema:
+    type: string
+    enum:
+      - scheduled
+      - live
+      - ended
+      - cancelled
+    default: scheduled
+  description: |
+    Event status
+    * `scheduled` - Event is scheduled
+    * `live` - Event is currently live
+    * `ended` - Event has ended
+    * `cancelled` - Event is cancelled
+
+rsvpStatus:
+  name: status
+  in: query
+  required: true
+  schema:
+    type: string
+    enum:
+      - going
+      - interested
+      - not_going
+  description: |
+    RSVP status
+    * `going` - User is going to the event
+    * `interested` - User is interested in the event
+    * `not_going` - User is not going to the event
+
+queryRsvpStatus:
+  name: status
+  in: query
+  schema:
+    type: array
+    items:
+      type: string
+      enum:
+        - going
+        - interested
+        - not_going
+    default: [going, interested, not_going]
+  description: Filter RSVPs by status
+
+sortBy:
+  name: sortBy
+  in: query
+  schema:
+    type: string
+    enum:
+      - startTime
+      - createdAt
+    default: startTime
+  description: Sort order for events
+
+orderBy:
+  name: orderBy
+  in: query
+  schema:
+    type: string
+    enum:
+      - asc
+      - desc
+    default: asc
+  description: Sort direction (ascending or descending)
+
+startTimeGte:
+  name: startTimeGte
+  in: query
+  schema:
+    type: string
+    format: date-time
+  description: Filter events with start time greater than or equal to this value
+
+startTimeLte:
+  name: startTimeLte
+  in: query
+  schema:
+    type: string
+    format: date-time
+  description: Filter events with start time less than or equal to this value
+
+userId:
+  name: userId
+  in: query
+  schema:
+    type: string
+  description: Filter events by creator user ID
+
+eventType:
+  name: type
+  in: query
+  schema:
+    type: string
+    enum:
+      - virtual
+      - in_person
+  description: Filter events by type
+
+options.limit:
+  name: options[limit]
+  in: query
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 20
+  description: Page size
+
+options.after:
+  name: options[after]
+  in: query
+  schema:
+    type: string
+  description: Cursor value to get records after
+
+options.before:
+  name: options[before]
+  in: query
+  schema:
+    type: string
+  description: Cursor value to get records before
+
+options.token:
+  name: options[token]
+  in: query
+  schema:
+    type: string
+  description: Pagination token
