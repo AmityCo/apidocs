@@ -104984,6 +104984,431 @@
         }
       }
     },
+    "/api/v1/analytics/contents-quality": {
+      "get": {
+        "summary": "Query contents quality metrics",
+        "description": "Query content quality scores calculated for posts. This endpoint allows admins to:\n- Retrieve quality scores for specific content IDs\n- Filter content by quality levels (excellent, good, fair, weak, broken)\n- Paginate through results\n\nThe quality score ranges from 1-5 with the following levels:\n- excellent: score >= 5\n- good: 4 <= score < 5\n- fair: 3 <= score < 4\n- weak: 2 <= score < 3\n- broken: 1 <= score < 2\n\n**Note:** Either `contentIds` or `levels` must be provided. Cannot provide both `contentIds` and pagination options simultaneously.\n",
+        "tags": [
+          "Analytic"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contentIds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f\\d]{24}$"
+              },
+              "minItems": 1,
+              "maxItems": 100
+            },
+            "description": "Array of content IDs to retrieve quality scores for. Cannot be used with `levels` or pagination options.",
+            "example": [
+              "60e4b1b4b3b2b5c4c4b3b2b5",
+              "60e4b1b4b3b2b5c4c4b3b2b6"
+            ]
+          },
+          {
+            "name": "contentsType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "post.text"
+              ],
+              "default": "post.text"
+            },
+            "description": "Type of content to query. Currently only supports post.text"
+          },
+          {
+            "name": "levels",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "excellent",
+                  "good",
+                  "fair",
+                  "weak",
+                  "broken"
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 5
+            },
+            "description": "Filter contents by quality level. Quality levels map to score ranges:\n- excellent: score >= 5\n- good: 4 <= score < 5\n- fair: 3 <= score < 4\n- weak: 2 <= score < 3\n- broken: 1 <= score < 2\n",
+            "example": [
+              "excellent",
+              "good"
+            ]
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 1000,
+              "example": "eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ==",
+              "description": "token of the page that you need from either `next` or `prev` of `paging`"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "description": "Number of contents per page. Only used with `levels` parameter."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of content quality scores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "contentId",
+                          "contentType",
+                          "qualityScore",
+                          "qualityReason",
+                          "userId",
+                          "contentCreatedAt",
+                          "processedAt",
+                          "model",
+                          "networkId"
+                        ],
+                        "properties": {
+                          "contentId": {
+                            "type": "string",
+                            "description": "ID of the content that was evaluated",
+                            "example": "60e4b1b4b3b2b5c4c4b3b2b5"
+                          },
+                          "contentType": {
+                            "type": "string",
+                            "description": "Type of content",
+                            "example": "post.text"
+                          },
+                          "qualityScore": {
+                            "type": "number",
+                            "description": "Quality score from 1-5",
+                            "minimum": 1,
+                            "maximum": 5,
+                            "example": 4.5
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of the user who created the content",
+                            "example": "60e4b1b4b3b2b5c4c4b3b2b7"
+                          },
+                          "contentCreatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When the content was originally created",
+                            "example": "2024-05-15T10:30:00.000Z"
+                          },
+                          "processedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When the quality score was calculated",
+                            "example": "2024-05-15T10:31:00.000Z"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network ID",
+                            "example": "60e4b1b4b3b2b5c4c4b3b2b8"
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "Community ID (optional)",
+                            "example": "60e4b1b4b3b2b5c4c4b3b2b9"
+                          }
+                        }
+                      }
+                    },
+                    "paging": {
+                      "type": "object",
+                      "description": "Pagination information (only present when using `levels` parameter)",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "description": "Token for next page",
+                          "example": "eyJmcm9tIjoyMCwibGltaXQiOjIwfQ=="
+                        },
+                        "previous": {
+                          "type": "string",
+                          "description": "Token for previous page",
+                          "example": "eyJmcm9tIjowLCJsaW1pdCI6MjB9"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "byContentIds": {
+                    "summary": "Query by content IDs",
+                    "value": {
+                      "data": [
+                        {
+                          "contentId": "60e4b1b4b3b2b5c4c4b3b2b5",
+                          "contentType": "post.text",
+                          "qualityScore": 5,
+                          "userId": "60e4b1b4b3b2b5c4c4b3b2b7",
+                          "contentCreatedAt": "2024-05-15T10:30:00.000Z",
+                          "processedAt": "2024-05-15T10:31:00.000Z",
+                          "networkId": "60e4b1b4b3b2b5c4c4b3b2b8",
+                          "communityId": "60e4b1b4b3b2b5c4c4b3b2b9"
+                        },
+                        {
+                          "contentId": "60e4b1b4b3b2b5c4c4b3b2b6",
+                          "contentType": "post.text",
+                          "qualityScore": 3,
+                          "userId": "60e4b1b4b3b2b5c4c4b3b2b7",
+                          "contentCreatedAt": "2024-05-15T11:00:00.000Z",
+                          "processedAt": "2024-05-15T11:01:00.000Z",
+                          "networkId": "60e4b1b4b3b2b5c4c4b3b2b8",
+                          "communityId": "60e4b1b4b3b2b5c4c4b3b2b9"
+                        }
+                      ]
+                    }
+                  },
+                  "byLevels": {
+                    "summary": "Query by quality levels with pagination",
+                    "value": {
+                      "data": [
+                        {
+                          "contentId": "60e4b1b4b3b2b5c4c4b3b2b5",
+                          "contentType": "post.text",
+                          "qualityScore": 5,
+                          "userId": "60e4b1b4b3b2b5c4c4b3b2b7",
+                          "contentCreatedAt": "2024-05-15T10:30:00.000Z",
+                          "processedAt": "2024-05-15T10:31:00.000Z",
+                          "networkId": "60e4b1b4b3b2b5c4c4b3b2b8",
+                          "communityId": "60e4b1b4b3b2b5c4c4b3b2b9"
+                        },
+                        {
+                          "contentId": "60e4b1b4b3b2b5c4c4b3b2ba",
+                          "contentType": "post.text",
+                          "qualityScore": 4,
+                          "userId": "60e4b1b4b3b2b5c4c4b3b2bb",
+                          "contentCreatedAt": "2024-05-15T12:00:00.000Z",
+                          "processedAt": "2024-05-15T12:01:00.000Z",
+                          "networkId": "60e4b1b4b3b2b5c4c4b3b2b8"
+                        }
+                      ],
+                      "paging": {
+                        "next": "eyJmcm9tIjoyMCwibGltaXQiOjIwfQ=="
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters validation error!."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v3/network-settings/chat": {
       "put": {
         "summary": "Update chat network setting configuration.",

@@ -47,3 +47,109 @@ views-stories_storyId-users-response-payload-200:
               previous:
                 type: string
                 example: "eyJhZnRlciI6eyJfaWQiOnsicG9zdElkIjoiNjUxNjZlZTNlOTVlZTQ4YjkzZWVkMjQ1IiwidXNlcklkIjoiNjUxNjZlZTRlOTVlZTQzZjgzZWVkMjViIn0sIm5ldHdvcmtJZCI6IjYwNmYzN2EzYWU2MDFlZjM3NGViYWEwMSIsInJlYWNoZWRBdCI6IjIwMjMtMDktMjlUMDY6Mjk6NTQuOTQ4WiJ9fQ=="
+
+contents-quality-response-payload-200:
+  description: List of content quality scores
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [data]
+        properties:
+          data:
+            type: array
+            items:
+              type: object
+              required: [contentId, contentType, qualityScore, qualityReason, userId, contentCreatedAt, processedAt, model, networkId]
+              properties:
+                contentId:
+                  type: string
+                  description: ID of the content that was evaluated
+                  example: "60e4b1b4b3b2b5c4c4b3b2b5"
+                contentType:
+                  type: string
+                  description: Type of content
+                  example: "post.text"
+                qualityScore:
+                  type: number
+                  description: Quality score from 1-5
+                  minimum: 1
+                  maximum: 5
+                  example: 4.5
+                userId:
+                  type: string
+                  description: ID of the user who created the content
+                  example: "60e4b1b4b3b2b5c4c4b3b2b7"
+                contentCreatedAt:
+                  type: string
+                  format: date-time
+                  description: When the content was originally created
+                  example: "2024-05-15T10:30:00.000Z"
+                processedAt:
+                  type: string
+                  format: date-time
+                  description: When the quality score was calculated
+                  example: "2024-05-15T10:31:00.000Z"
+                networkId:
+                  type: string
+                  description: Network ID
+                  example: "60e4b1b4b3b2b5c4c4b3b2b8"
+                communityId:
+                  type: string
+                  description: Community ID (optional)
+                  example: "60e4b1b4b3b2b5c4c4b3b2b9"
+          paging:
+            type: object
+            description: Pagination information (only present when using `levels` parameter)
+            properties:
+              next:
+                type: string
+                description: Token for next page
+                example: "eyJmcm9tIjoyMCwibGltaXQiOjIwfQ=="
+              previous:
+                type: string
+                description: Token for previous page
+                example: "eyJmcm9tIjowLCJsaW1pdCI6MjB9"
+      examples:
+        byContentIds:
+          summary: Query by content IDs
+          value:
+            data:
+              - contentId: "60e4b1b4b3b2b5c4c4b3b2b5"
+                contentType: "post.text"
+                qualityScore: 5
+                userId: "60e4b1b4b3b2b5c4c4b3b2b7"
+                contentCreatedAt: "2024-05-15T10:30:00.000Z"
+                processedAt: "2024-05-15T10:31:00.000Z"
+                networkId: "60e4b1b4b3b2b5c4c4b3b2b8"
+                communityId: "60e4b1b4b3b2b5c4c4b3b2b9"
+              - contentId: "60e4b1b4b3b2b5c4c4b3b2b6"
+                contentType: "post.text"
+                qualityScore: 3
+                userId: "60e4b1b4b3b2b5c4c4b3b2b7"
+                contentCreatedAt: "2024-05-15T11:00:00.000Z"
+                processedAt: "2024-05-15T11:01:00.000Z"
+                networkId: "60e4b1b4b3b2b5c4c4b3b2b8"
+                communityId: "60e4b1b4b3b2b5c4c4b3b2b9"
+        byLevels:
+          summary: Query by quality levels with pagination
+          value:
+            data:
+              - contentId: "60e4b1b4b3b2b5c4c4b3b2b5"
+                contentType: "post.text"
+                qualityScore: 5
+                userId: "60e4b1b4b3b2b5c4c4b3b2b7"
+                contentCreatedAt: "2024-05-15T10:30:00.000Z"
+                processedAt: "2024-05-15T10:31:00.000Z"
+                networkId: "60e4b1b4b3b2b5c4c4b3b2b8"
+                communityId: "60e4b1b4b3b2b5c4c4b3b2b9"
+              - contentId: "60e4b1b4b3b2b5c4c4b3b2ba"
+                contentType: "post.text"
+                qualityScore: 4
+                userId: "60e4b1b4b3b2b5c4c4b3b2bb"
+                contentCreatedAt: "2024-05-15T12:00:00.000Z"
+                processedAt: "2024-05-15T12:01:00.000Z"
+                networkId: "60e4b1b4b3b2b5c4c4b3b2b8"
+            paging:
+              next: "eyJmcm9tIjoyMCwibGltaXQiOjIwfQ=="
+

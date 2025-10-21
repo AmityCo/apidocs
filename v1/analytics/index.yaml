@@ -74,3 +74,42 @@ views-stories_storyId-users:
         $ref: "../../global/error.yaml#/UnProcessableError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+contents-quality:
+  get:
+    summary: Query contents quality metrics
+    description: |
+      Query content quality scores calculated for posts. This endpoint allows admins to:
+      - Retrieve quality scores for specific content IDs
+      - Filter content by quality levels (excellent, good, fair, weak, broken)
+      - Paginate through results
+      
+      The quality score ranges from 1-5 with the following levels:
+      - excellent: score >= 5
+      - good: 4 <= score < 5
+      - fair: 3 <= score < 4
+      - weak: 2 <= score < 3
+      - broken: 1 <= score < 2
+      
+      **Note:** Either `contentIds` or `levels` must be provided. Cannot provide both `contentIds` and pagination options simultaneously.
+    tags:
+      - Analytic
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/contentIds"
+      - $ref: "./parameter.yaml#/contentsType"
+      - $ref: "./parameter.yaml#/levels"
+      - $ref: "./parameter.yaml#/token"
+      - $ref: "./parameter.yaml#/contentsQualityLimit"
+    responses:
+      200:
+        $ref: "./response.yaml#/contents-quality-response-payload-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
