@@ -90,6 +90,31 @@ Room:
     livePlaybackUrl: 
       type: string
       description: Live playback URL
+      example: https://stream.example.com/someid.m3u8?token=token
+    
+    liveThumbnailUrl: 
+      type: string
+      description: Live thumbnail URL
+      example: https://image.example.com/someid/thumbnail.png?token=token
+
+    recordedPlaybackInfos: 
+      type: array
+      description: Recorded playback URLs and thumbnails
+      items:
+        type: object
+        properties:
+          playbackId:
+            type: string
+            description: Mux playback ID
+            example: playbackid
+          playbackUrl:
+            type: string
+            description: Recorded playback URL
+            example: https://apix.eu.amity.co/api/v1/rooms/someid/playback/playbackid/watch
+          thumbnailUrl:
+            type: string
+            description: Recorded thumbnail URL
+            example: https://apix.eu.amity.co/api/v1/rooms/someid/playback/playbackid/thumbnail
     
     durationSeconds:
       type: number

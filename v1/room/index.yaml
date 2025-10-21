@@ -175,3 +175,49 @@ _roomId-participants:
         $ref: "../../global/error.yaml#/NotFoundError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+_roomId-recorded_playbackId-watch:
+  get:
+    summary: "Watch recorded playback"
+    tags:
+      - "Room"
+    security: []
+    description: "Get signed URL to watch recorded playback\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/_ascSession"
+      - $ref: "./parameter.yaml#/_roomId"
+      - $ref: "./parameter.yaml#/_playbackId"
+    responses:
+      302:
+        description: "Redirect to watch recorded playback"
+        headers:
+          Location:
+            description: "Signed URL to redirect to"
+            schema:
+              type: string
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+
+_roomId-recorded_playbackId-thumbnail:
+  get:
+    summary: "Download recorded thumbnail"
+    tags:
+      - "Room"
+    security: []
+    description: "Get signed URL to download recorded thumbnail image\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/_ascSession"
+      - $ref: "./parameter.yaml#/_roomId"
+      - $ref: "./parameter.yaml#/_playbackId"
+    responses:
+      302:
+        description: "Redirect to download recorded thumbnail"
+        headers:
+          Location:
+            description: "Signed URL to redirect to"
+            schema:
+              type: string
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
