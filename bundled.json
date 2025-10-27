@@ -47328,19 +47328,11 @@
                         "properties": {
                           "eventId": {
                             "type": "string",
-                            "description": "Unique identifier for the event (same as publicId)"
+                            "description": "Unique identifier for the event"
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the event creator (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the event creator"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the event creator (same as userId)"
+                            "description": "User ID of the event creator"
                           },
                           "title": {
                             "type": "string",
@@ -47400,19 +47392,22 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the origin (communityId or userId)"
+                            "description": "ID of the community where the event is created"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community",
-                              "user"
+                              "community"
                             ],
-                            "description": "Origin type of the event"
+                            "description": "Origin type of the event (currently only 'community')"
                           },
                           "livestreamId": {
                             "type": "string",
-                            "description": "ID of the livestream (for virtual events)"
+                            "description": "ID of the livestream (for virtual events without external URL)"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
                           },
                           "isLocationVisible": {
                             "type": "boolean",
@@ -47420,7 +47415,7 @@
                           },
                           "isOriginPublic": {
                             "type": "boolean",
-                            "description": "Whether the origin (community/user) is public"
+                            "description": "Whether the origin community is public"
                           },
                           "rsvpCount": {
                             "type": "integer",
@@ -47688,6 +47683,308 @@
                             }
                           }
                         }
+                      }
+                    },
+                    "communities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a community. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a community. (for real-time event)"
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "description": "Community name for displaying."
+                          },
+                          "avatarFileId": {
+                            "type": "string",
+                            "description": "ID of a avatar file."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Description of a community."
+                          },
+                          "isOfficial": {
+                            "type": "boolean",
+                            "description": "Is this community official?"
+                          },
+                          "isPublic": {
+                            "type": "boolean",
+                            "description": "Is this community public?"
+                          },
+                          "onlyAdminCanPost": {
+                            "type": "boolean",
+                            "description": "Can post by admin only?"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "description": "List of tags. They will be used for searching.",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "postsCount": {
+                            "type": "integer",
+                            "description": "Number of posts in community."
+                          },
+                          "membersCount": {
+                            "type": "integer",
+                            "description": "Number of members in community."
+                          },
+                          "isJoined": {
+                            "type": "boolean",
+                            "description": "Is this community joined?"
+                          },
+                          "categoryIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a category."
+                            }
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Is this community deleted?"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedPost": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that post inside community is reported or not."
+                          },
+                          "needApprovalOnPostCreation": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Determines that this community require an authorize user to review post before post is published"
+                          },
+                          "moderatorMemberCount": {
+                            "type": "integer"
+                          },
+                          "allowCommentInStory": {
+                            "type": "boolean",
+                            "default": true
+                          },
+                          "isDiscoverable": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, this private community will be discoverable in the query response.\n* If false, this private community will not appear in the list but can still be accessed via its ID.\n"
+                          },
+                          "requiresJoinApproval": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, users will need to be approved by an admin before they can join the community.\n* If false, users can join the community without approval.\n"
+                          },
+                          "notificationMode": {
+                            "type": "string",
+                            "enum": [
+                              "default",
+                              "silent",
+                              "subscribe"
+                            ],
+                            "description": "Notification Mode:\n  * `default` - Auto register push notification.\n  * `silent` - Do not send notification.\n  * `subscribe` - Send notification to subscribed users only.\n"
+                          }
+                        },
+                        "required": [
+                          "communityId",
+                          "channelId",
+                          "displayName"
+                        ]
+                      }
+                    },
+                    "discussionCommunities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a community. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a community. (for real-time event)"
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "description": "Community name for displaying."
+                          },
+                          "avatarFileId": {
+                            "type": "string",
+                            "description": "ID of a avatar file."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Description of a community."
+                          },
+                          "isOfficial": {
+                            "type": "boolean",
+                            "description": "Is this community official?"
+                          },
+                          "isPublic": {
+                            "type": "boolean",
+                            "description": "Is this community public?"
+                          },
+                          "onlyAdminCanPost": {
+                            "type": "boolean",
+                            "description": "Can post by admin only?"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "description": "List of tags. They will be used for searching.",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "postsCount": {
+                            "type": "integer",
+                            "description": "Number of posts in community."
+                          },
+                          "membersCount": {
+                            "type": "integer",
+                            "description": "Number of members in community."
+                          },
+                          "isJoined": {
+                            "type": "boolean",
+                            "description": "Is this community joined?"
+                          },
+                          "categoryIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a category."
+                            }
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Is this community deleted?"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedPost": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that post inside community is reported or not."
+                          },
+                          "needApprovalOnPostCreation": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Determines that this community require an authorize user to review post before post is published"
+                          },
+                          "moderatorMemberCount": {
+                            "type": "integer"
+                          },
+                          "allowCommentInStory": {
+                            "type": "boolean",
+                            "default": true
+                          },
+                          "isDiscoverable": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, this private community will be discoverable in the query response.\n* If false, this private community will not appear in the list but can still be accessed via its ID.\n"
+                          },
+                          "requiresJoinApproval": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, users will need to be approved by an admin before they can join the community.\n* If false, users can join the community without approval.\n"
+                          },
+                          "notificationMode": {
+                            "type": "string",
+                            "enum": [
+                              "default",
+                              "silent",
+                              "subscribe"
+                            ],
+                            "description": "Notification Mode:\n  * `default` - Auto register push notification.\n  * `silent` - Do not send notification.\n  * `subscribe` - Send notification to subscribed users only.\n"
+                          }
+                        },
+                        "required": [
+                          "communityId",
+                          "channelId",
+                          "displayName"
+                        ]
                       }
                     },
                     "videoStreamings": {
@@ -48221,12 +48518,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "community",
-                "user"
+                "community"
               ],
               "default": "community"
             },
-            "description": "Origin type of the event\n* `community` - Event created in a community\n* `user` - Event created by a user (not yet supported)\n"
+            "description": "Origin type of the event (currently only 'community' is supported)\n* `community` - Event created in a community\n"
           },
           {
             "name": "originId",
@@ -48235,7 +48531,24 @@
             "schema": {
               "type": "string"
             },
-            "description": "ID of the origin (communityId or userId)"
+            "description": "ID of the community where the event is created"
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter events by creator user ID (admin only or the user themselves)"
+          },
+          {
+            "name": "onlyAttendee",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Filter events where the specified userId has RSVP'd (requires userId parameter)"
           },
           {
             "name": "status",
@@ -48356,19 +48669,11 @@
                         "properties": {
                           "eventId": {
                             "type": "string",
-                            "description": "Unique identifier for the event (same as publicId)"
+                            "description": "Unique identifier for the event"
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the event creator (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the event creator"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the event creator (same as userId)"
+                            "description": "User ID of the event creator"
                           },
                           "title": {
                             "type": "string",
@@ -48428,19 +48733,22 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the origin (communityId or userId)"
+                            "description": "ID of the community where the event is created"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community",
-                              "user"
+                              "community"
                             ],
-                            "description": "Origin type of the event"
+                            "description": "Origin type of the event (currently only 'community')"
                           },
                           "livestreamId": {
                             "type": "string",
-                            "description": "ID of the livestream (for virtual events)"
+                            "description": "ID of the livestream (for virtual events without external URL)"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
                           },
                           "isLocationVisible": {
                             "type": "boolean",
@@ -48448,7 +48756,7 @@
                           },
                           "isOriginPublic": {
                             "type": "boolean",
-                            "description": "Whether the origin (community/user) is public"
+                            "description": "Whether the origin community is public"
                           },
                           "rsvpCount": {
                             "type": "integer",
@@ -48716,6 +49024,308 @@
                             }
                           }
                         }
+                      }
+                    },
+                    "communities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a community. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a community. (for real-time event)"
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "description": "Community name for displaying."
+                          },
+                          "avatarFileId": {
+                            "type": "string",
+                            "description": "ID of a avatar file."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Description of a community."
+                          },
+                          "isOfficial": {
+                            "type": "boolean",
+                            "description": "Is this community official?"
+                          },
+                          "isPublic": {
+                            "type": "boolean",
+                            "description": "Is this community public?"
+                          },
+                          "onlyAdminCanPost": {
+                            "type": "boolean",
+                            "description": "Can post by admin only?"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "description": "List of tags. They will be used for searching.",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "postsCount": {
+                            "type": "integer",
+                            "description": "Number of posts in community."
+                          },
+                          "membersCount": {
+                            "type": "integer",
+                            "description": "Number of members in community."
+                          },
+                          "isJoined": {
+                            "type": "boolean",
+                            "description": "Is this community joined?"
+                          },
+                          "categoryIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a category."
+                            }
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Is this community deleted?"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedPost": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that post inside community is reported or not."
+                          },
+                          "needApprovalOnPostCreation": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Determines that this community require an authorize user to review post before post is published"
+                          },
+                          "moderatorMemberCount": {
+                            "type": "integer"
+                          },
+                          "allowCommentInStory": {
+                            "type": "boolean",
+                            "default": true
+                          },
+                          "isDiscoverable": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, this private community will be discoverable in the query response.\n* If false, this private community will not appear in the list but can still be accessed via its ID.\n"
+                          },
+                          "requiresJoinApproval": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, users will need to be approved by an admin before they can join the community.\n* If false, users can join the community without approval.\n"
+                          },
+                          "notificationMode": {
+                            "type": "string",
+                            "enum": [
+                              "default",
+                              "silent",
+                              "subscribe"
+                            ],
+                            "description": "Notification Mode:\n  * `default` - Auto register push notification.\n  * `silent` - Do not send notification.\n  * `subscribe` - Send notification to subscribed users only.\n"
+                          }
+                        },
+                        "required": [
+                          "communityId",
+                          "channelId",
+                          "displayName"
+                        ]
+                      }
+                    },
+                    "discussionCommunities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a community. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a community. (for real-time event)"
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "description": "Community name for displaying."
+                          },
+                          "avatarFileId": {
+                            "type": "string",
+                            "description": "ID of a avatar file."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Description of a community."
+                          },
+                          "isOfficial": {
+                            "type": "boolean",
+                            "description": "Is this community official?"
+                          },
+                          "isPublic": {
+                            "type": "boolean",
+                            "description": "Is this community public?"
+                          },
+                          "onlyAdminCanPost": {
+                            "type": "boolean",
+                            "description": "Can post by admin only?"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "description": "List of tags. They will be used for searching.",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "postsCount": {
+                            "type": "integer",
+                            "description": "Number of posts in community."
+                          },
+                          "membersCount": {
+                            "type": "integer",
+                            "description": "Number of members in community."
+                          },
+                          "isJoined": {
+                            "type": "boolean",
+                            "description": "Is this community joined?"
+                          },
+                          "categoryIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a category."
+                            }
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Is this community deleted?"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedPost": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that post inside community is reported or not."
+                          },
+                          "needApprovalOnPostCreation": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Determines that this community require an authorize user to review post before post is published"
+                          },
+                          "moderatorMemberCount": {
+                            "type": "integer"
+                          },
+                          "allowCommentInStory": {
+                            "type": "boolean",
+                            "default": true
+                          },
+                          "isDiscoverable": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, this private community will be discoverable in the query response.\n* If false, this private community will not appear in the list but can still be accessed via its ID.\n"
+                          },
+                          "requiresJoinApproval": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, users will need to be approved by an admin before they can join the community.\n* If false, users can join the community without approval.\n"
+                          },
+                          "notificationMode": {
+                            "type": "string",
+                            "enum": [
+                              "default",
+                              "silent",
+                              "subscribe"
+                            ],
+                            "description": "Notification Mode:\n  * `default` - Auto register push notification.\n  * `silent` - Do not send notification.\n  * `subscribe` - Send notification to subscribed users only.\n"
+                          }
+                        },
+                        "required": [
+                          "communityId",
+                          "channelId",
+                          "displayName"
+                        ]
                       }
                     },
                     "videoStreamings": {
@@ -49311,19 +49921,11 @@
                         "properties": {
                           "eventId": {
                             "type": "string",
-                            "description": "Unique identifier for the event (same as publicId)"
+                            "description": "Unique identifier for the event"
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the event creator (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the event creator"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the event creator (same as userId)"
+                            "description": "User ID of the event creator"
                           },
                           "title": {
                             "type": "string",
@@ -49383,19 +49985,22 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the origin (communityId or userId)"
+                            "description": "ID of the community where the event is created"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community",
-                              "user"
+                              "community"
                             ],
-                            "description": "Origin type of the event"
+                            "description": "Origin type of the event (currently only 'community')"
                           },
                           "livestreamId": {
                             "type": "string",
-                            "description": "ID of the livestream (for virtual events)"
+                            "description": "ID of the livestream (for virtual events without external URL)"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
                           },
                           "isLocationVisible": {
                             "type": "boolean",
@@ -49403,7 +50008,7 @@
                           },
                           "isOriginPublic": {
                             "type": "boolean",
-                            "description": "Whether the origin (community/user) is public"
+                            "description": "Whether the origin community is public"
                           },
                           "rsvpCount": {
                             "type": "integer",
@@ -49442,7 +50047,7 @@
                         }
                       }
                     },
-                    "eventRsvps": {
+                    "eventResponses": {
                       "type": "array",
                       "items": {
                         "type": "object",
@@ -49453,15 +50058,7 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the user who RSVP'd (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the user who RSVP'd"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the user who RSVP'd (same as userId)"
+                            "description": "User ID of the user who RSVP'd"
                           },
                           "status": {
                             "type": "string",
@@ -49910,19 +50507,11 @@
                         "properties": {
                           "eventId": {
                             "type": "string",
-                            "description": "Unique identifier for the event (same as publicId)"
+                            "description": "Unique identifier for the event"
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the event creator (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the event creator"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the event creator (same as userId)"
+                            "description": "User ID of the event creator"
                           },
                           "title": {
                             "type": "string",
@@ -49982,19 +50571,22 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the origin (communityId or userId)"
+                            "description": "ID of the community where the event is created"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community",
-                              "user"
+                              "community"
                             ],
-                            "description": "Origin type of the event"
+                            "description": "Origin type of the event (currently only 'community')"
                           },
                           "livestreamId": {
                             "type": "string",
-                            "description": "ID of the livestream (for virtual events)"
+                            "description": "ID of the livestream (for virtual events without external URL)"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
                           },
                           "isLocationVisible": {
                             "type": "boolean",
@@ -50002,7 +50594,7 @@
                           },
                           "isOriginPublic": {
                             "type": "boolean",
-                            "description": "Whether the origin (community/user) is public"
+                            "description": "Whether the origin community is public"
                           },
                           "rsvpCount": {
                             "type": "integer",
@@ -50040,6 +50632,47 @@
                           }
                         }
                       }
+                    },
+                    "eventResponses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "ID of the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "User ID of the user who RSVP'd"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "going",
+                              "interested",
+                              "not_going"
+                            ],
+                            "description": "RSVP status"
+                          },
+                          "respondedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When the user responded"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "RSVP creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "RSVP last update timestamp"
+                          }
+                        }
+                      },
+                      "description": "Current user's RSVP for this event (if exists)"
                     },
                     "users": {
                       "type": "array",
@@ -50270,6 +50903,308 @@
                             }
                           }
                         }
+                      }
+                    },
+                    "communities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a community. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a community. (for real-time event)"
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "description": "Community name for displaying."
+                          },
+                          "avatarFileId": {
+                            "type": "string",
+                            "description": "ID of a avatar file."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Description of a community."
+                          },
+                          "isOfficial": {
+                            "type": "boolean",
+                            "description": "Is this community official?"
+                          },
+                          "isPublic": {
+                            "type": "boolean",
+                            "description": "Is this community public?"
+                          },
+                          "onlyAdminCanPost": {
+                            "type": "boolean",
+                            "description": "Can post by admin only?"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "description": "List of tags. They will be used for searching.",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "postsCount": {
+                            "type": "integer",
+                            "description": "Number of posts in community."
+                          },
+                          "membersCount": {
+                            "type": "integer",
+                            "description": "Number of members in community."
+                          },
+                          "isJoined": {
+                            "type": "boolean",
+                            "description": "Is this community joined?"
+                          },
+                          "categoryIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a category."
+                            }
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Is this community deleted?"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedPost": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that post inside community is reported or not."
+                          },
+                          "needApprovalOnPostCreation": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Determines that this community require an authorize user to review post before post is published"
+                          },
+                          "moderatorMemberCount": {
+                            "type": "integer"
+                          },
+                          "allowCommentInStory": {
+                            "type": "boolean",
+                            "default": true
+                          },
+                          "isDiscoverable": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, this private community will be discoverable in the query response.\n* If false, this private community will not appear in the list but can still be accessed via its ID.\n"
+                          },
+                          "requiresJoinApproval": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, users will need to be approved by an admin before they can join the community.\n* If false, users can join the community without approval.\n"
+                          },
+                          "notificationMode": {
+                            "type": "string",
+                            "enum": [
+                              "default",
+                              "silent",
+                              "subscribe"
+                            ],
+                            "description": "Notification Mode:\n  * `default` - Auto register push notification.\n  * `silent` - Do not send notification.\n  * `subscribe` - Send notification to subscribed users only.\n"
+                          }
+                        },
+                        "required": [
+                          "communityId",
+                          "channelId",
+                          "displayName"
+                        ]
+                      }
+                    },
+                    "discussionCommunities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a community. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a community. (for real-time event)"
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "description": "Community name for displaying."
+                          },
+                          "avatarFileId": {
+                            "type": "string",
+                            "description": "ID of a avatar file."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Description of a community."
+                          },
+                          "isOfficial": {
+                            "type": "boolean",
+                            "description": "Is this community official?"
+                          },
+                          "isPublic": {
+                            "type": "boolean",
+                            "description": "Is this community public?"
+                          },
+                          "onlyAdminCanPost": {
+                            "type": "boolean",
+                            "description": "Can post by admin only?"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "description": "List of tags. They will be used for searching.",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "postsCount": {
+                            "type": "integer",
+                            "description": "Number of posts in community."
+                          },
+                          "membersCount": {
+                            "type": "integer",
+                            "description": "Number of members in community."
+                          },
+                          "isJoined": {
+                            "type": "boolean",
+                            "description": "Is this community joined?"
+                          },
+                          "categoryIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a category."
+                            }
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Is this community deleted?"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedPost": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that post inside community is reported or not."
+                          },
+                          "needApprovalOnPostCreation": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Determines that this community require an authorize user to review post before post is published"
+                          },
+                          "moderatorMemberCount": {
+                            "type": "integer"
+                          },
+                          "allowCommentInStory": {
+                            "type": "boolean",
+                            "default": true
+                          },
+                          "isDiscoverable": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, this private community will be discoverable in the query response.\n* If false, this private community will not appear in the list but can still be accessed via its ID.\n"
+                          },
+                          "requiresJoinApproval": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, users will need to be approved by an admin before they can join the community.\n* If false, users can join the community without approval.\n"
+                          },
+                          "notificationMode": {
+                            "type": "string",
+                            "enum": [
+                              "default",
+                              "silent",
+                              "subscribe"
+                            ],
+                            "description": "Notification Mode:\n  * `default` - Auto register push notification.\n  * `silent` - Do not send notification.\n  * `subscribe` - Send notification to subscribed users only.\n"
+                          }
+                        },
+                        "required": [
+                          "communityId",
+                          "channelId",
+                          "displayName"
+                        ]
                       }
                     },
                     "videoStreamings": {
@@ -50778,6 +51713,13 @@
                     "type": "string",
                     "maxLength": 1000
                   },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "virtual",
+                      "in_person"
+                    ]
+                  },
                   "startTime": {
                     "type": "string",
                     "format": "date-time"
@@ -50833,19 +51775,11 @@
                         "properties": {
                           "eventId": {
                             "type": "string",
-                            "description": "Unique identifier for the event (same as publicId)"
+                            "description": "Unique identifier for the event"
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the event creator (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the event creator"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the event creator (same as userId)"
+                            "description": "User ID of the event creator"
                           },
                           "title": {
                             "type": "string",
@@ -50905,19 +51839,22 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the origin (communityId or userId)"
+                            "description": "ID of the community where the event is created"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community",
-                              "user"
+                              "community"
                             ],
-                            "description": "Origin type of the event"
+                            "description": "Origin type of the event (currently only 'community')"
                           },
                           "livestreamId": {
                             "type": "string",
-                            "description": "ID of the livestream (for virtual events)"
+                            "description": "ID of the livestream (for virtual events without external URL)"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
                           },
                           "isLocationVisible": {
                             "type": "boolean",
@@ -50925,7 +51862,7 @@
                           },
                           "isOriginPublic": {
                             "type": "boolean",
-                            "description": "Whether the origin (community/user) is public"
+                            "description": "Whether the origin community is public"
                           },
                           "rsvpCount": {
                             "type": "integer",
@@ -51193,6 +52130,308 @@
                             }
                           }
                         }
+                      }
+                    },
+                    "communities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a community. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a community. (for real-time event)"
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "description": "Community name for displaying."
+                          },
+                          "avatarFileId": {
+                            "type": "string",
+                            "description": "ID of a avatar file."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Description of a community."
+                          },
+                          "isOfficial": {
+                            "type": "boolean",
+                            "description": "Is this community official?"
+                          },
+                          "isPublic": {
+                            "type": "boolean",
+                            "description": "Is this community public?"
+                          },
+                          "onlyAdminCanPost": {
+                            "type": "boolean",
+                            "description": "Can post by admin only?"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "description": "List of tags. They will be used for searching.",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "postsCount": {
+                            "type": "integer",
+                            "description": "Number of posts in community."
+                          },
+                          "membersCount": {
+                            "type": "integer",
+                            "description": "Number of members in community."
+                          },
+                          "isJoined": {
+                            "type": "boolean",
+                            "description": "Is this community joined?"
+                          },
+                          "categoryIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a category."
+                            }
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Is this community deleted?"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedPost": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that post inside community is reported or not."
+                          },
+                          "needApprovalOnPostCreation": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Determines that this community require an authorize user to review post before post is published"
+                          },
+                          "moderatorMemberCount": {
+                            "type": "integer"
+                          },
+                          "allowCommentInStory": {
+                            "type": "boolean",
+                            "default": true
+                          },
+                          "isDiscoverable": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, this private community will be discoverable in the query response.\n* If false, this private community will not appear in the list but can still be accessed via its ID.\n"
+                          },
+                          "requiresJoinApproval": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, users will need to be approved by an admin before they can join the community.\n* If false, users can join the community without approval.\n"
+                          },
+                          "notificationMode": {
+                            "type": "string",
+                            "enum": [
+                              "default",
+                              "silent",
+                              "subscribe"
+                            ],
+                            "description": "Notification Mode:\n  * `default` - Auto register push notification.\n  * `silent` - Do not send notification.\n  * `subscribe` - Send notification to subscribed users only.\n"
+                          }
+                        },
+                        "required": [
+                          "communityId",
+                          "channelId",
+                          "displayName"
+                        ]
+                      }
+                    },
+                    "discussionCommunities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a community. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a community. (for real-time event)"
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "description": "Community name for displaying."
+                          },
+                          "avatarFileId": {
+                            "type": "string",
+                            "description": "ID of a avatar file."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Description of a community."
+                          },
+                          "isOfficial": {
+                            "type": "boolean",
+                            "description": "Is this community official?"
+                          },
+                          "isPublic": {
+                            "type": "boolean",
+                            "description": "Is this community public?"
+                          },
+                          "onlyAdminCanPost": {
+                            "type": "boolean",
+                            "description": "Can post by admin only?"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "description": "List of tags. They will be used for searching.",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "postsCount": {
+                            "type": "integer",
+                            "description": "Number of posts in community."
+                          },
+                          "membersCount": {
+                            "type": "integer",
+                            "description": "Number of members in community."
+                          },
+                          "isJoined": {
+                            "type": "boolean",
+                            "description": "Is this community joined?"
+                          },
+                          "categoryIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a category."
+                            }
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Is this community deleted?"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedPost": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that post inside community is reported or not."
+                          },
+                          "needApprovalOnPostCreation": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Determines that this community require an authorize user to review post before post is published"
+                          },
+                          "moderatorMemberCount": {
+                            "type": "integer"
+                          },
+                          "allowCommentInStory": {
+                            "type": "boolean",
+                            "default": true
+                          },
+                          "isDiscoverable": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, this private community will be discoverable in the query response.\n* If false, this private community will not appear in the list but can still be accessed via its ID.\n"
+                          },
+                          "requiresJoinApproval": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, users will need to be approved by an admin before they can join the community.\n* If false, users can join the community without approval.\n"
+                          },
+                          "notificationMode": {
+                            "type": "string",
+                            "enum": [
+                              "default",
+                              "silent",
+                              "subscribe"
+                            ],
+                            "description": "Notification Mode:\n  * `default` - Auto register push notification.\n  * `silent` - Do not send notification.\n  * `subscribe` - Send notification to subscribed users only.\n"
+                          }
+                        },
+                        "required": [
+                          "communityId",
+                          "channelId",
+                          "displayName"
+                        ]
                       }
                     },
                     "videoStreamings": {
@@ -51986,19 +53225,11 @@
                         "properties": {
                           "eventId": {
                             "type": "string",
-                            "description": "Unique identifier for the event (same as publicId)"
+                            "description": "Unique identifier for the event"
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the event creator (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the event creator"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the event creator (same as userId)"
+                            "description": "User ID of the event creator"
                           },
                           "title": {
                             "type": "string",
@@ -52058,19 +53289,22 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the origin (communityId or userId)"
+                            "description": "ID of the community where the event is created"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community",
-                              "user"
+                              "community"
                             ],
-                            "description": "Origin type of the event"
+                            "description": "Origin type of the event (currently only 'community')"
                           },
                           "livestreamId": {
                             "type": "string",
-                            "description": "ID of the livestream (for virtual events)"
+                            "description": "ID of the livestream (for virtual events without external URL)"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
                           },
                           "isLocationVisible": {
                             "type": "boolean",
@@ -52078,7 +53312,7 @@
                           },
                           "isOriginPublic": {
                             "type": "boolean",
-                            "description": "Whether the origin (community/user) is public"
+                            "description": "Whether the origin community is public"
                           },
                           "rsvpCount": {
                             "type": "integer",
@@ -52128,15 +53362,7 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the user who RSVP'd (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the user who RSVP'd"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the user who RSVP'd (same as userId)"
+                            "description": "User ID of the user who RSVP'd"
                           },
                           "status": {
                             "type": "string",
@@ -52683,19 +53909,11 @@
                         "properties": {
                           "eventId": {
                             "type": "string",
-                            "description": "Unique identifier for the event (same as publicId)"
+                            "description": "Unique identifier for the event"
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the event creator (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the event creator"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the event creator (same as userId)"
+                            "description": "User ID of the event creator"
                           },
                           "title": {
                             "type": "string",
@@ -52755,19 +53973,22 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the origin (communityId or userId)"
+                            "description": "ID of the community where the event is created"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community",
-                              "user"
+                              "community"
                             ],
-                            "description": "Origin type of the event"
+                            "description": "Origin type of the event (currently only 'community')"
                           },
                           "livestreamId": {
                             "type": "string",
-                            "description": "ID of the livestream (for virtual events)"
+                            "description": "ID of the livestream (for virtual events without external URL)"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
                           },
                           "isLocationVisible": {
                             "type": "boolean",
@@ -52775,7 +53996,7 @@
                           },
                           "isOriginPublic": {
                             "type": "boolean",
-                            "description": "Whether the origin (community/user) is public"
+                            "description": "Whether the origin community is public"
                           },
                           "rsvpCount": {
                             "type": "integer",
@@ -52825,15 +54046,7 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the user who RSVP'd (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the user who RSVP'd"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the user who RSVP'd (same as userId)"
+                            "description": "User ID of the user who RSVP'd"
                           },
                           "status": {
                             "type": "string",
@@ -53397,19 +54610,11 @@
                         "properties": {
                           "eventId": {
                             "type": "string",
-                            "description": "Unique identifier for the event (same as publicId)"
+                            "description": "Unique identifier for the event"
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the event creator (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the event creator"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the event creator (same as userId)"
+                            "description": "User ID of the event creator"
                           },
                           "title": {
                             "type": "string",
@@ -53469,19 +54674,22 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the origin (communityId or userId)"
+                            "description": "ID of the community where the event is created"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community",
-                              "user"
+                              "community"
                             ],
-                            "description": "Origin type of the event"
+                            "description": "Origin type of the event (currently only 'community')"
                           },
                           "livestreamId": {
                             "type": "string",
-                            "description": "ID of the livestream (for virtual events)"
+                            "description": "ID of the livestream (for virtual events without external URL)"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
                           },
                           "isLocationVisible": {
                             "type": "boolean",
@@ -53489,7 +54697,7 @@
                           },
                           "isOriginPublic": {
                             "type": "boolean",
-                            "description": "Whether the origin (community/user) is public"
+                            "description": "Whether the origin community is public"
                           },
                           "rsvpCount": {
                             "type": "integer",
@@ -53539,15 +54747,7 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the user who RSVP'd (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the user who RSVP'd"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the user who RSVP'd (same as userId)"
+                            "description": "User ID of the user who RSVP'd"
                           },
                           "status": {
                             "type": "string",
@@ -54040,19 +55240,11 @@
                         "properties": {
                           "eventId": {
                             "type": "string",
-                            "description": "Unique identifier for the event (same as publicId)"
+                            "description": "Unique identifier for the event"
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the event creator (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the event creator"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the event creator (same as userId)"
+                            "description": "User ID of the event creator"
                           },
                           "title": {
                             "type": "string",
@@ -54112,19 +55304,22 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the origin (communityId or userId)"
+                            "description": "ID of the community where the event is created"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community",
-                              "user"
+                              "community"
                             ],
-                            "description": "Origin type of the event"
+                            "description": "Origin type of the event (currently only 'community')"
                           },
                           "livestreamId": {
                             "type": "string",
-                            "description": "ID of the livestream (for virtual events)"
+                            "description": "ID of the livestream (for virtual events without external URL)"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
                           },
                           "isLocationVisible": {
                             "type": "boolean",
@@ -54132,7 +55327,7 @@
                           },
                           "isOriginPublic": {
                             "type": "boolean",
-                            "description": "Whether the origin (community/user) is public"
+                            "description": "Whether the origin community is public"
                           },
                           "rsvpCount": {
                             "type": "integer",
@@ -54182,15 +55377,7 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "Public user ID of the user who RSVP'd (for display)"
-                          },
-                          "userInternalId": {
-                            "type": "string",
-                            "description": "Internal MongoDB ObjectId of the user who RSVP'd"
-                          },
-                          "userPublicId": {
-                            "type": "string",
-                            "description": "Public user ID of the user who RSVP'd (same as userId)"
+                            "description": "User ID of the user who RSVP'd"
                           },
                           "status": {
                             "type": "string",

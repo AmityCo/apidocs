@@ -106,6 +106,8 @@ root:
     parameters:
       - $ref: "./parameter.yaml#/originType"
       - $ref: "./parameter.yaml#/originId"
+      - $ref: "./parameter.yaml#/userId"
+      - $ref: "./parameter.yaml#/onlyAttendee"
       - $ref: "./parameter.yaml#/status"
       - $ref: "./parameter.yaml#/eventType"
       - $ref: "./parameter.yaml#/tags"
@@ -187,6 +189,9 @@ eventId:
               description:
                 type: string
                 maxLength: 1000
+              type:
+                type: string
+                enum: [virtual, in_person]
               startTime:
                 type: string
                 format: date-time

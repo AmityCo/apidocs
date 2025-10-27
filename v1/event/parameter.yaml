@@ -85,12 +85,10 @@ originType:
     type: string
     enum:
       - community
-      - user
     default: community
   description: |
-    Origin type of the event
+    Origin type of the event (currently only 'community' is supported)
     * `community` - Event created in a community
-    * `user` - Event created by a user (not yet supported)
 
 originId:
   name: originId
@@ -98,7 +96,7 @@ originId:
   required: true
   schema:
     type: string
-  description: ID of the origin (communityId or userId)
+  description: ID of the community where the event is created
 
 tags:
   name: tags
@@ -210,7 +208,15 @@ userId:
   in: query
   schema:
     type: string
-  description: Filter events by creator user ID
+  description: Filter events by creator user ID (admin only or the user themselves)
+
+onlyAttendee:
+  name: onlyAttendee
+  in: query
+  schema:
+    type: boolean
+    default: false
+  description: Filter events where the specified userId has RSVP'd (requires userId parameter)
 
 eventType:
   name: type

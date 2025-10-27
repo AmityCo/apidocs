@@ -3,16 +3,10 @@ Event:
   properties:
     eventId:
       type: string
-      description: Unique identifier for the event (same as publicId)
+      description: Unique identifier for the event
     userId:
       type: string
-      description: Public user ID of the event creator (for display)
-    userInternalId:
-      type: string
-      description: Internal MongoDB ObjectId of the event creator
-    userPublicId:
-      type: string
-      description: Public user ID of the event creator (same as userId)
+      description: User ID of the event creator
     title:
       type: string
       description: Event title
@@ -59,22 +53,24 @@ Event:
       description: File ID of the cover image
     originId:
       type: string
-      description: ID of the origin (communityId or userId)
+      description: ID of the community where the event is created
     originType:
       type: string
       enum:
         - community
-        - user
-      description: Origin type of the event
+      description: Origin type of the event (currently only 'community')
     livestreamId:
       type: string
-      description: ID of the livestream (for virtual events)
+      description: ID of the livestream (for virtual events without external URL)
+    discussionCommunityId:
+      type: string
+      description: ID of the event discussion community
     isLocationVisible:
       type: boolean
       description: Whether the location is visible to attendees
     isOriginPublic:
       type: boolean
-      description: Whether the origin (community/user) is public
+      description: Whether the origin community is public
     rsvpCount:
       type: integer
       description: Number of users who RSVP'd as 'going'
@@ -110,13 +106,7 @@ EventRSVP:
       description: ID of the event
     userId:
       type: string
-      description: Public user ID of the user who RSVP'd (for display)
-    userInternalId:
-      type: string
-      description: Internal MongoDB ObjectId of the user who RSVP'd
-    userPublicId:
-      type: string
-      description: Public user ID of the user who RSVP'd (same as userId)
+      description: User ID of the user who RSVP'd
     status:
       type: string
       enum:
