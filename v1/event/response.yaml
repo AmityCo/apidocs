@@ -1,0 +1,260 @@
+event-create-response-200:
+  description: Event created successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          events:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/Event"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          communities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          discussionCommunities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          videoStreamings:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+
+event-get-response-200:
+  description: Event details retrieved successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          events:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/Event"
+          eventResponses:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/EventRSVP"
+            description: Current user's RSVP for this event (if exists)
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          communities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          discussionCommunities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          videoStreamings:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+
+event-query-response-200:
+  description: Events retrieved successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          events:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/Event"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          communities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          discussionCommunities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          videoStreamings:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              previous:
+                type: string
+
+event-update-response-200:
+  description: Event updated successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          events:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/Event"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          communities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          discussionCommunities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          videoStreamings:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+
+event-delete-response-200:
+  description: Event deleted successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+
+rsvp-create-response-200:
+  description: RSVP created/updated successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          events:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/Event"
+          eventResponses:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/EventRSVP"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+
+rsvp-get-response-200:
+  description: RSVP retrieved successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          events:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/Event"
+          eventResponses:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/EventRSVP"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+
+rsvp-query-response-200:
+  description: RSVPs retrieved successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          events:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/Event"
+          eventResponses:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/EventRSVP"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              previous:
+                type: string
+
+my-rsvps-response-200:
+  description: My RSVPs retrieved successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          events:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/Event"
+          eventResponses:
+            type: array
+            items:
+              $ref: "../../schema/event.yaml#/EventRSVP"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              previous:
+                type: string
