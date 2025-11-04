@@ -73,7 +73,10 @@ root-post-request-payload:
             description: "The ID of the parent live video stream (must be a parent stream, not a child stream). This is required when `postId` is provided. When provided, the channel will be associated with this live stream so that users can perform live chat and live reaction."
           postId:
             type: "string"
-            description: "The ID of the post that `videoStreamId` belongs to. This required when `videoStreamId` is provided."
+            description: "The ID of the post that `videoStreamId` or `roomId` belongs to. This required when `videoStreamId` is provided."
+          roomId:
+            type: "string"
+            description: "The ID of the parent live room (must be a parent room, not a child room). This is required when `postId` is provided. When provided, the channel will be associated with this live room so that users can perform live chat and live reaction."
 
 seen-post-request-payload:
   description: "Information of read sengment to be updated\n"
