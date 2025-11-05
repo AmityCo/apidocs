@@ -88,3 +88,58 @@ recorded-response-200:
             items:
               type: string
               description: "Signed playback URL for recorded content"
+
+room-banned-users-response:
+  description: "List of banned users from room"
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          roomBannedUsers:
+            type: "array"
+            items:
+              type: "object"
+              required:
+                - userId
+                - banBy
+                - userPublicId
+                - banByPublicId
+                - createdAt
+              properties:
+                userId:
+                  type: "string"
+                banBy:
+                  type: "string"
+                userPublicId:
+                  type: "string"
+                banByPublicId:
+                  type: "string"
+                createdAt:
+                  type: "string"
+                  format: "date-time"
+          rooms: 
+            type: "array"
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          roomChildrens:
+            type: "array"
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          roomModerations:
+            type: "array"
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreamingModeration"
+          users:
+            type: "array"
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: "array"
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          paging:
+            type: "object"
+            properties: 
+              next: 
+                type: string

@@ -94,3 +94,41 @@ _roomId-participants-delete-request-payload:
             maxLength: 50
         required:
           - "participantUserId"
+
+_roomId-viewer-bans-post-request-payload:
+  description: "Information of viewers to be banned from the room\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          userIds:
+            type: "array"
+            items:
+              type: "string"
+              maxLength: 50
+            minItems: 1
+            maxItems: 100
+            description: "List of user IDs to ban from the room"
+        required:
+          - "userIds"
+
+_roomId-viewer-bans-delete-request-payload:
+  description: "Information of viewers to be unbanned from the room\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          userIds:
+            type: "array"
+            items:
+              type: "string"
+              maxLength: 50
+            minItems: 1
+            maxItems: 100
+            description: "List of user IDs to unban from the room"
+        required:
+          - "userIds"

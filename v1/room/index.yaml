@@ -221,3 +221,74 @@ _roomId-recorded_playbackId-thumbnail:
               type: string
       404:
         $ref: "../../global/error.yaml#/NotFoundError"
+
+_roomId-viewer-bans:
+  post:
+    summary: "ban viewers from a room"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+    requestBody:
+      $ref: "./request.yaml#/_roomId-viewer-bans-post-request-payload"
+    responses:
+      200:
+        description: "Successfully banned users"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                success:
+                  type: "boolean"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "get list of banned viewers"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
+    responses:
+      200:
+        $ref: "./response.yaml#/room-banned-users-response"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "unban viewers from a room"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+    requestBody:
+      $ref: "./request.yaml#/_roomId-viewer-bans-delete-request-payload"
+    responses:
+      200:
+        description: "Successfully unbanned users"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                success:
+                  type: "boolean"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
