@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.112.1] - 2025-11-05
+
+### 🚀 Features
+
+- Schedule events api (#447)
+- Add includeMixedStructure flag (#449)
+- Add docs for push noti network setting API (#446)
+
 ## [4.112.0] - 2025-10-14
 
 ### 🚀 Features
@@ -9,6 +17,10 @@ All notable changes to this project will be documented in this file.
 - Add api doc for guest user (#435)
 - Add api doc for public user network setting (#444)
 - Add users bulk delete API & get users last activity api (#443)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.112.0 (#445)
 
 ## [4.111.0] - 2025-09-22
 
