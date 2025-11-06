@@ -51126,7 +51126,8 @@
             "schema": {
               "type": "string",
               "enum": [
-                "communityMemberInvite"
+                "communityMemberInvite",
+                "livestreamCohostInvite"
               ]
             },
             "example": "communityMemberInvite"
@@ -51139,7 +51140,8 @@
             "schema": {
               "type": "string",
               "enum": [
-                "community"
+                "community",
+                "room"
               ]
             },
             "example": "community"
@@ -51199,7 +51201,8 @@
           {
             "name": "statuses",
             "in": "query",
-            "description": "Filter invitations by status (array)",
+            "description": "Filter invitations by status (array, optional)",
+            "required": false,
             "style": "form",
             "explode": true,
             "schema": {
@@ -51222,7 +51225,8 @@
           {
             "name": "sortBy",
             "in": "query",
-            "description": "Sort invitations by field",
+            "description": "Sort invitations by field (optional)",
+            "required": false,
             "schema": {
               "type": "string",
               "enum": [
@@ -51237,7 +51241,8 @@
           {
             "name": "sortOrder",
             "in": "query",
-            "description": "Sort order",
+            "description": "Sort order (optional)",
+            "required": false,
             "schema": {
               "type": "string",
               "enum": [
@@ -51736,7 +51741,8 @@
                     "type": "string",
                     "description": "Type of invitation to create",
                     "enum": [
-                      "communityMemberInvite"
+                      "communityMemberInvite",
+                      "livestreamCohostInvite"
                     ],
                     "example": "communityMemberInvite"
                   },
@@ -51744,7 +51750,8 @@
                     "type": "string",
                     "description": "Type of target entity",
                     "enum": [
-                      "community"
+                      "community",
+                      "room"
                     ],
                     "example": "community"
                   },
@@ -52268,11 +52275,12 @@
             "name": "invitationId",
             "in": "path",
             "required": true,
-            "description": "ID of the invitation",
+            "description": "ID of the invitation (MongoDB ObjectId)",
             "schema": {
               "type": "string",
-              "minLength": 1,
-              "maxLength": 50
+              "minLength": 24,
+              "maxLength": 24,
+              "pattern": "^[a-f0-9]{24}$"
             },
             "example": "6858374aeae5300158b6d1be"
           }
@@ -52491,11 +52499,12 @@
             "name": "invitationId",
             "in": "path",
             "required": true,
-            "description": "ID of the invitation",
+            "description": "ID of the invitation (MongoDB ObjectId)",
             "schema": {
               "type": "string",
-              "minLength": 1,
-              "maxLength": 50
+              "minLength": 24,
+              "maxLength": 24,
+              "pattern": "^[a-f0-9]{24}$"
             },
             "example": "6858374aeae5300158b6d1be"
           }
@@ -52714,11 +52723,12 @@
             "name": "invitationId",
             "in": "path",
             "required": true,
-            "description": "ID of the invitation",
+            "description": "ID of the invitation (MongoDB ObjectId)",
             "schema": {
               "type": "string",
-              "minLength": 1,
-              "maxLength": 50
+              "minLength": 24,
+              "maxLength": 24,
+              "pattern": "^[a-f0-9]{24}$"
             },
             "example": "6858374aeae5300158b6d1be"
           }
@@ -52941,7 +52951,8 @@
             "schema": {
               "type": "string",
               "enum": [
-                "communityMemberInvite"
+                "communityMemberInvite",
+                "livestreamCohostInvite"
               ]
             },
             "example": "communityMemberInvite"
@@ -52954,7 +52965,8 @@
             "schema": {
               "type": "string",
               "enum": [
-                "community"
+                "community",
+                "room"
               ]
             },
             "example": "community"
@@ -53421,7 +53433,8 @@
             "schema": {
               "type": "string",
               "enum": [
-                "community"
+                "community",
+                "room"
               ]
             },
             "example": "community"
@@ -53434,7 +53447,8 @@
             "schema": {
               "type": "string",
               "enum": [
-                "communityMemberInvite"
+                "communityMemberInvite",
+                "livestreamCohostInvite"
               ]
             },
             "example": "communityMemberInvite"
@@ -53442,7 +53456,8 @@
           {
             "name": "statuses",
             "in": "query",
-            "description": "Filter invitations by status (array)",
+            "description": "Filter invitations by status (array, optional)",
+            "required": false,
             "style": "form",
             "explode": true,
             "schema": {
@@ -53685,24 +53700,14 @@
             "name": "invitationId",
             "in": "path",
             "required": true,
-            "description": "ID of the invitation",
+            "description": "ID of the invitation (MongoDB ObjectId)",
             "schema": {
               "type": "string",
-              "minLength": 1,
-              "maxLength": 50
+              "minLength": 24,
+              "maxLength": 24,
+              "pattern": "^[a-f0-9]{24}$"
             },
             "example": "6858374aeae5300158b6d1be"
-          },
-          {
-            "name": "communityId",
-            "in": "query",
-            "required": true,
-            "description": "Community ID for permission check purpose",
-            "schema": {
-              "type": "string",
-              "maxLength": 900
-            },
-            "example": "68583742eae5300158b6d144"
           }
         ],
         "responses": {
