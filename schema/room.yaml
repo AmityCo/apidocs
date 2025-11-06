@@ -116,9 +116,46 @@ Room:
       type: number
       description: Duration of the broadcast in seconds (only for ended/recorded rooms)
     
-    moderationId:
-      type: string
-      description: Moderation ID to match with roomModerations
+    moderation:
+      type: object
+      description: Moderation information including flagged and terminated labels
+      properties:
+        flagLabels:
+          type: array
+          description: Labels that triggered flag actions
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                description: Moderation category
+              threshold:
+                type: number
+                description: Threshold value that triggered the flag
+              detectedAt:
+                type: string
+                format: date-time
+                description: When the flag was detected
+        terminateLabels:
+          type: array
+          description: Labels that triggered terminate actions
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                description: Moderation category
+              threshold:
+                type: number
+                description: Threshold value that triggered termination
+              detectedAt:
+                type: string
+                format: date-time
+                description: When the termination was detected
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last moderation update timestamp
     
     # Multi-stream support
     parentRoomId:
