@@ -120787,6 +120787,7 @@
                     "properties": {
                       "data": {
                         "type": "object",
+                        "description": "Body of a post",
                         "properties": {
                           "title": {
                             "type": "string",
@@ -120795,40 +120796,60 @@
                           },
                           "text": {
                             "type": "string",
-                            "description": "data for text in post parent",
+                            "maxLength": 50000,
+                            "description": "Text content of the post.",
                             "example": "example text"
                           },
-                          "streamId": {
+                          "fileId": {
                             "type": "string",
-                            "description": "video streaming id for create live streaming post",
-                            "example": "81559bcc3a5bb3b6bbd69a83b89d337e"
+                            "maxLength": 100,
+                            "description": "File ID for image/file post.",
+                            "example": "57b916d38eaf8010caddfb7759a2d06c"
                           },
                           "pollId": {
                             "type": "string",
-                            "description": "poll id for create poll post",
+                            "maxLength": 100,
+                            "description": "Poll ID for create poll post.",
                             "example": "53a9fd8b5aaa1af6c5a1bbd245ce4a9b1627373735551"
+                          },
+                          "streamId": {
+                            "type": "string",
+                            "maxLength": 100,
+                            "description": "Video streaming ID for create live streaming post.",
+                            "example": "81559bcc3a5bb3b6bbd69a83b89d337e"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "maxLength": 100,
+                            "description": "Room ID for room post."
                           }
                         }
                       },
                       "attachments": {
                         "type": "array",
+                        "maxItems": 10,
+                        "description": "Array of attachments.",
                         "items": {
                           "type": "object",
-                          "description": "attachment info",
+                          "description": "Attachment info",
+                          "required": [
+                            "fileId",
+                            "type"
+                          ],
                           "properties": {
                             "fileId": {
                               "type": "string",
+                              "maxLength": 100,
                               "example": "57b916d38eaf8010caddfb7759a2d06c",
-                              "description": "file id for attachment"
+                              "description": "File ID for attachment."
                             },
                             "type": {
                               "type": "string",
-                              "description": "attachment type",
+                              "description": "Attachment type.",
                               "enum": [
                                 "image",
                                 "file",
-                                "video",
-                                "clip"
+                                "video"
                               ]
                             },
                             "displayMode": {
@@ -120837,13 +120858,15 @@
                                 "fill",
                                 "fit"
                               ],
-                              "description": "displayMode of the clip",
-                              "example": "fill"
+                              "default": "fit",
+                              "description": "Display mode for the clip.",
+                              "example": "fit"
                             },
                             "isMuted": {
                               "type": "boolean",
-                              "description": "Whether the clip should be muted or not",
-                              "example": "true"
+                              "default": false,
+                              "description": "Whether the video should be muted or not.",
+                              "example": false
                             }
                           }
                         }
@@ -120851,7 +120874,7 @@
                       "dataType": {
                         "type": "string",
                         "example": "upstra.customtype",
-                        "description": "Must be in dot separated string format or system defined format (ex. \"upstra.customtype\", \"com.eko.birthday\", \"liveStream\")"
+                        "description": "Accept \"liveStream\", \"poll\", \"room\" or Custom type. Custom type must be in dot separated string format or system defined format (ex. \"some.customtype\", \"com.foo.bar\")."
                       },
                       "targetType": {
                         "type": "string",
@@ -120861,38 +120884,43 @@
                           "content"
                         ],
                         "default": "user",
-                        "description": "where to create post to"
+                        "description": "Where to create post to (default: user)."
                       },
                       "targetId": {
                         "type": "string",
+                        "maxLength": 900,
                         "example": "public_user_id",
-                        "description": "Resource public id depends on target type (ex. target type is community, target id will be community public id)"
+                        "description": "Resource public ID depends on target type (ex. target type is community, target ID will be community public ID)."
                       },
                       "metadata": {
                         "type": "object",
+                        "description": "Additional properties to support custom fields.",
                         "example": {
                           "anything": "you want"
                         }
                       },
                       "postId": {
                         "type": "string",
+                        "maxLength": 900,
                         "example": "postidiwant",
-                        "description": "for specify public post id on post creation"
+                        "description": "For specify public post ID on post creation."
                       },
                       "tags": {
                         "type": "array",
                         "minItems": 0,
                         "maxItems": 5,
+                        "description": "Tags for the post",
                         "items": {
                           "type": "string",
-                          "description": "tags",
-                          "maximum": 24
+                          "maxLength": 24,
+                          "description": "Tag string"
                         }
                       },
                       "hashtags": {
                         "type": "array",
                         "minItems": 0,
                         "maxItems": 30,
+                        "description": "Hashtags for the post",
                         "items": {
                           "type": "string",
                           "maxLength": 100,
@@ -120903,19 +120931,22 @@
                           "startup_life",
                           "product_launch",
                           "innovation_2025"
-                        ],
-                        "description": "Hashtags for the post."
+                        ]
                       },
                       "mentionees": {
                         "type": "array",
-                        "description": "The object of the mentions type and user who get a notification from the post.",
+                        "maxItems": 2,
+                        "description": "The object of the mentions type and user who get a notification from the post (optional, max 2 items).",
                         "items": {
                           "type": "object",
+                          "required": [
+                            "type"
+                          ],
                           "properties": {
                             "type": {
                               "type": "string",
                               "example": "user",
-                              "description": "type: * `user` - need to specific userIds and notification mentions individual user\n",
+                              "description": "Type: * `user` - need to specify userIds and notification mentions individual user\n",
                               "enum": [
                                 "user"
                               ]
@@ -120926,7 +120957,7 @@
                                 "userId1",
                                 "userId2"
                               ],
-                              "description": "Array of UserId. if the mention type is a channel, doesn't send userIds",
+                              "description": "Array of UserId (required if type is 'user').",
                               "items": {
                                 "type": "string"
                               }
@@ -120942,8 +120973,14 @@
                       },
                       "isDiscoverable": {
                         "type": "boolean",
-                        "description": "Set whether the post is discoverable in search and hashtag feeds. Default is true.",
+                        "description": "Set whether the post is discoverable in search and hashtag feeds (optional, default: true).",
                         "default": true
+                      },
+                      "eventId": {
+                        "type": "string",
+                        "maxLength": 24,
+                        "description": "Event reference for room posts.",
+                        "example": "507f1f77bcf86cd799439011"
                       }
                     },
                     "required": [
@@ -122314,6 +122351,7 @@
                     "properties": {
                       "data": {
                         "type": "object",
+                        "description": "Body of a post",
                         "properties": {
                           "title": {
                             "type": "string",
@@ -122322,40 +122360,60 @@
                           },
                           "text": {
                             "type": "string",
-                            "description": "data for text in post parent",
+                            "maxLength": 50000,
+                            "description": "Text content of the post.",
                             "example": "example text"
                           },
-                          "streamId": {
+                          "fileId": {
                             "type": "string",
-                            "description": "video streaming id for create live streaming post",
-                            "example": "81559bcc3a5bb3b6bbd69a83b89d337e"
+                            "maxLength": 100,
+                            "description": "File ID for image/file post.",
+                            "example": "57b916d38eaf8010caddfb7759a2d06c"
                           },
                           "pollId": {
                             "type": "string",
-                            "description": "poll id for create poll post",
+                            "maxLength": 100,
+                            "description": "Poll ID for create poll post.",
                             "example": "53a9fd8b5aaa1af6c5a1bbd245ce4a9b1627373735551"
+                          },
+                          "streamId": {
+                            "type": "string",
+                            "maxLength": 100,
+                            "description": "Video streaming ID for create live streaming post.",
+                            "example": "81559bcc3a5bb3b6bbd69a83b89d337e"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "maxLength": 100,
+                            "description": "Room ID for room post."
                           }
                         }
                       },
                       "attachments": {
                         "type": "array",
+                        "maxItems": 10,
+                        "description": "Array of attachments.",
                         "items": {
                           "type": "object",
-                          "description": "attachment info",
+                          "description": "Attachment info",
+                          "required": [
+                            "fileId",
+                            "type"
+                          ],
                           "properties": {
                             "fileId": {
                               "type": "string",
+                              "maxLength": 100,
                               "example": "57b916d38eaf8010caddfb7759a2d06c",
-                              "description": "file id for attachment"
+                              "description": "File ID for attachment."
                             },
                             "type": {
                               "type": "string",
-                              "description": "attachment type",
+                              "description": "Attachment type.",
                               "enum": [
                                 "image",
                                 "file",
-                                "video",
-                                "clip"
+                                "video"
                               ]
                             },
                             "displayMode": {
@@ -122364,13 +122422,15 @@
                                 "fill",
                                 "fit"
                               ],
-                              "description": "displayMode of the clip",
-                              "example": "fill"
+                              "default": "fit",
+                              "description": "Display mode for the clip.",
+                              "example": "fit"
                             },
                             "isMuted": {
                               "type": "boolean",
-                              "description": "Whether the clip should be muted or not",
-                              "example": "true"
+                              "default": false,
+                              "description": "Whether the video should be muted or not.",
+                              "example": false
                             }
                           }
                         }
@@ -122378,7 +122438,7 @@
                       "dataType": {
                         "type": "string",
                         "example": "upstra.customtype",
-                        "description": "Must be in dot separated string format or system defined format (ex. \"upstra.customtype\", \"com.eko.birthday\", \"liveStream\")"
+                        "description": "Accept \"liveStream\", \"poll\", \"room\" or Custom type. Custom type must be in dot separated string format or system defined format (ex. \"some.customtype\", \"com.foo.bar\")."
                       },
                       "targetType": {
                         "type": "string",
@@ -122388,38 +122448,43 @@
                           "content"
                         ],
                         "default": "user",
-                        "description": "where to create post to"
+                        "description": "Where to create post to (default: user)."
                       },
                       "targetId": {
                         "type": "string",
+                        "maxLength": 900,
                         "example": "public_user_id",
-                        "description": "Resource public id depends on target type (ex. target type is community, target id will be community public id)"
+                        "description": "Resource public ID depends on target type (ex. target type is community, target ID will be community public ID)."
                       },
                       "metadata": {
                         "type": "object",
+                        "description": "Additional properties to support custom fields.",
                         "example": {
                           "anything": "you want"
                         }
                       },
                       "postId": {
                         "type": "string",
+                        "maxLength": 900,
                         "example": "postidiwant",
-                        "description": "for specify public post id on post creation"
+                        "description": "For specify public post ID on post creation."
                       },
                       "tags": {
                         "type": "array",
                         "minItems": 0,
                         "maxItems": 5,
+                        "description": "Tags for the post",
                         "items": {
                           "type": "string",
-                          "description": "tags",
-                          "maximum": 24
+                          "maxLength": 24,
+                          "description": "Tag string"
                         }
                       },
                       "hashtags": {
                         "type": "array",
                         "minItems": 0,
                         "maxItems": 30,
+                        "description": "Hashtags for the post",
                         "items": {
                           "type": "string",
                           "maxLength": 100,
@@ -122430,19 +122495,22 @@
                           "startup_life",
                           "product_launch",
                           "innovation_2025"
-                        ],
-                        "description": "Hashtags for the post."
+                        ]
                       },
                       "mentionees": {
                         "type": "array",
-                        "description": "The object of the mentions type and user who get a notification from the post.",
+                        "maxItems": 2,
+                        "description": "The object of the mentions type and user who get a notification from the post (optional, max 2 items).",
                         "items": {
                           "type": "object",
+                          "required": [
+                            "type"
+                          ],
                           "properties": {
                             "type": {
                               "type": "string",
                               "example": "user",
-                              "description": "type: * `user` - need to specific userIds and notification mentions individual user\n",
+                              "description": "Type: * `user` - need to specify userIds and notification mentions individual user\n",
                               "enum": [
                                 "user"
                               ]
@@ -122453,7 +122521,7 @@
                                 "userId1",
                                 "userId2"
                               ],
-                              "description": "Array of UserId. if the mention type is a channel, doesn't send userIds",
+                              "description": "Array of UserId (required if type is 'user').",
                               "items": {
                                 "type": "string"
                               }
@@ -122469,8 +122537,14 @@
                       },
                       "isDiscoverable": {
                         "type": "boolean",
-                        "description": "Set whether the post is discoverable in search and hashtag feeds. Default is true.",
+                        "description": "Set whether the post is discoverable in search and hashtag feeds (optional, default: true).",
                         "default": true
+                      },
+                      "eventId": {
+                        "type": "string",
+                        "maxLength": 24,
+                        "description": "Event reference for room posts.",
+                        "example": "507f1f77bcf86cd799439011"
                       }
                     },
                     "required": [
@@ -157894,7 +157968,7 @@
         ],
         "description": "Create a post\n",
         "requestBody": {
-          "description": "information of a post to be created.\n\nrequire text or at least 1 attachments\n\n### Custom post\n- When `dataType` is set as the custom name (dot separated string format, see the `dataType` field section), `data` payload can be anything but it will not support normal data capability (ex. `text` data will not be created)\nand `data` payload size will be limit to `100kb`\n- `attachments` will be ignored, users need to keep them in `data` field and handle the file info by themselves\n\n### Image, File, Video post\n- Put `type` with file id in `attachments`\n- Image and File data can be picked from `fileId` in `data` object in child post\n- Video fileId for each resolution will be in `videoFileId` in `data` object in child post\n\n### Live streaming post\n- When put `dataType` as `liveStream` and `streamId` in `data`, post will be created as live streaming post\n- `attachments` will be ignored\n- Video streaming info will be in `videoStreamings` object in response\n\n### Poll post\n- When put `dataType` as `poll` and `pollId` in `data`, post will be created as poll post\n- `attachments` will be ignored\n- Poll info will be in `polls` object in response\n\n### Clip post\n- Put `type = clip` with `fileId` (from POST /v4/clips) in `attachments`\n- Optionally we can add `isMuted` on the attachment to set the clip to mute for displaying on UI.\n- Optionally we can add `displayMode` on the attachment to set the clip displayMode for displaying on UI.\n- `fileId`, `isMuted`, `displayMode` will be in `data` object in child post\n",
+          "description": "information of a post to be created.\n\nrequire text or at least 1 attachments\n\n### Custom post\n- When `dataType` is set as the custom name (dot separated string format, see the `dataType` field section), `data` payload can be anything but it will not support normal data capability (ex. `text` data will not be created)\nand `data` payload size will be limit to `100kb`\n- `attachments` will be ignored, users need to keep them in `data` field and handle the file info by themselves\n\n### Image, File, Video post\n- Put `type` with file id in `attachments`\n- Image and File data can be picked from `fileId` in `data` object in child post\n- Video fileId for each resolution will be in `videoFileId` in `data` object in child post\n\n### Live streaming post\n- When put `dataType` as `liveStream` and `streamId` in `data`, post will be created as live streaming post\n- `attachments` will be ignored\n- Video streaming info will be in `videoStreamings` object in response\n\n### Poll post\n- When put `dataType` as `poll` and `pollId` in `data`, post will be created as poll post\n- `attachments` will be ignored\n- Poll info will be in `polls` object in response\n\n### Clip post\n- Put `type = clip` with `fileId` (from POST /v4/clips) in `attachments`\n- Optionally we can add `isMuted` on the attachment to set the clip to mute for displaying on UI.\n- Optionally we can add `displayMode` on the attachment to set the clip displayMode for displaying on UI.\n- `fileId`, `isMuted`, `displayMode` will be in `data` object in child post\n\n### Room post\n- When `targetType` is `room` and `roomId` is in `data`, the post will be created as a room post\n",
           "required": true,
           "content": {
             "application/json": {
@@ -157903,6 +157977,7 @@
                 "properties": {
                   "data": {
                     "type": "object",
+                    "description": "Body of a post",
                     "properties": {
                       "title": {
                         "type": "string",
@@ -157911,40 +157986,60 @@
                       },
                       "text": {
                         "type": "string",
-                        "description": "data for text in post parent",
+                        "maxLength": 50000,
+                        "description": "Text content of the post.",
                         "example": "example text"
                       },
-                      "streamId": {
+                      "fileId": {
                         "type": "string",
-                        "description": "video streaming id for create live streaming post",
-                        "example": "81559bcc3a5bb3b6bbd69a83b89d337e"
+                        "maxLength": 100,
+                        "description": "File ID for image/file post.",
+                        "example": "57b916d38eaf8010caddfb7759a2d06c"
                       },
                       "pollId": {
                         "type": "string",
-                        "description": "poll id for create poll post",
+                        "maxLength": 100,
+                        "description": "Poll ID for create poll post.",
                         "example": "53a9fd8b5aaa1af6c5a1bbd245ce4a9b1627373735551"
+                      },
+                      "streamId": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "description": "Video streaming ID for create live streaming post.",
+                        "example": "81559bcc3a5bb3b6bbd69a83b89d337e"
+                      },
+                      "roomId": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "description": "Room ID for room post."
                       }
                     }
                   },
                   "attachments": {
                     "type": "array",
+                    "maxItems": 10,
+                    "description": "Array of attachments.",
                     "items": {
                       "type": "object",
-                      "description": "attachment info",
+                      "description": "Attachment info",
+                      "required": [
+                        "fileId",
+                        "type"
+                      ],
                       "properties": {
                         "fileId": {
                           "type": "string",
+                          "maxLength": 100,
                           "example": "57b916d38eaf8010caddfb7759a2d06c",
-                          "description": "file id for attachment"
+                          "description": "File ID for attachment."
                         },
                         "type": {
                           "type": "string",
-                          "description": "attachment type",
+                          "description": "Attachment type.",
                           "enum": [
                             "image",
                             "file",
-                            "video",
-                            "clip"
+                            "video"
                           ]
                         },
                         "displayMode": {
@@ -157953,13 +158048,15 @@
                             "fill",
                             "fit"
                           ],
-                          "description": "displayMode of the clip",
-                          "example": "fill"
+                          "default": "fit",
+                          "description": "Display mode for the clip.",
+                          "example": "fit"
                         },
                         "isMuted": {
                           "type": "boolean",
-                          "description": "Whether the clip should be muted or not",
-                          "example": "true"
+                          "default": false,
+                          "description": "Whether the video should be muted or not.",
+                          "example": false
                         }
                       }
                     }
@@ -157967,7 +158064,7 @@
                   "dataType": {
                     "type": "string",
                     "example": "upstra.customtype",
-                    "description": "Must be in dot separated string format or system defined format (ex. \"upstra.customtype\", \"com.eko.birthday\", \"liveStream\")"
+                    "description": "Accept \"liveStream\", \"poll\", \"room\" or Custom type. Custom type must be in dot separated string format or system defined format (ex. \"some.customtype\", \"com.foo.bar\")."
                   },
                   "targetType": {
                     "type": "string",
@@ -157977,38 +158074,43 @@
                       "content"
                     ],
                     "default": "user",
-                    "description": "where to create post to"
+                    "description": "Where to create post to (default: user)."
                   },
                   "targetId": {
                     "type": "string",
+                    "maxLength": 900,
                     "example": "public_user_id",
-                    "description": "Resource public id depends on target type (ex. target type is community, target id will be community public id)"
+                    "description": "Resource public ID depends on target type (ex. target type is community, target ID will be community public ID)."
                   },
                   "metadata": {
                     "type": "object",
+                    "description": "Additional properties to support custom fields.",
                     "example": {
                       "anything": "you want"
                     }
                   },
                   "postId": {
                     "type": "string",
+                    "maxLength": 900,
                     "example": "postidiwant",
-                    "description": "for specify public post id on post creation"
+                    "description": "For specify public post ID on post creation."
                   },
                   "tags": {
                     "type": "array",
                     "minItems": 0,
                     "maxItems": 5,
+                    "description": "Tags for the post",
                     "items": {
                       "type": "string",
-                      "description": "tags",
-                      "maximum": 24
+                      "maxLength": 24,
+                      "description": "Tag string"
                     }
                   },
                   "hashtags": {
                     "type": "array",
                     "minItems": 0,
                     "maxItems": 30,
+                    "description": "Hashtags for the post",
                     "items": {
                       "type": "string",
                       "maxLength": 100,
@@ -158019,19 +158121,22 @@
                       "startup_life",
                       "product_launch",
                       "innovation_2025"
-                    ],
-                    "description": "Hashtags for the post."
+                    ]
                   },
                   "mentionees": {
                     "type": "array",
-                    "description": "The object of the mentions type and user who get a notification from the post.",
+                    "maxItems": 2,
+                    "description": "The object of the mentions type and user who get a notification from the post (optional, max 2 items).",
                     "items": {
                       "type": "object",
+                      "required": [
+                        "type"
+                      ],
                       "properties": {
                         "type": {
                           "type": "string",
                           "example": "user",
-                          "description": "type: * `user` - need to specific userIds and notification mentions individual user\n",
+                          "description": "Type: * `user` - need to specify userIds and notification mentions individual user\n",
                           "enum": [
                             "user"
                           ]
@@ -158042,7 +158147,7 @@
                             "userId1",
                             "userId2"
                           ],
-                          "description": "Array of UserId. if the mention type is a channel, doesn't send userIds",
+                          "description": "Array of UserId (required if type is 'user').",
                           "items": {
                             "type": "string"
                           }
@@ -158058,8 +158163,14 @@
                   },
                   "isDiscoverable": {
                     "type": "boolean",
-                    "description": "Set whether the post is discoverable in search and hashtag feeds. Default is true.",
+                    "description": "Set whether the post is discoverable in search and hashtag feeds (optional, default: true).",
                     "default": true
+                  },
+                  "eventId": {
+                    "type": "string",
+                    "maxLength": 24,
+                    "description": "Event reference for room posts.",
+                    "example": "507f1f77bcf86cd799439011"
                   }
                 },
                 "required": [
@@ -169520,7 +169631,7 @@
                     "type": "object",
                     "description": "Custom metadata"
                   },
-                  "channelEnabled": {
+                  "liveChatEnabled": {
                     "type": "boolean",
                     "description": "Indicates whether the live channel (chat) is enabled for the room",
                     "default": true
@@ -169538,15 +169649,6 @@
                     ],
                     "description": "Type of room: directStreaming for single participant streaming, coHosts for multiple participants",
                     "default": "directStreaming"
-                  },
-                  "participants": {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "maxLength": 50
-                    },
-                    "maxItems": 1,
-                    "description": "List of user IDs to be added as participants (applicable only for co_hosts type)"
                   }
                 },
                 "required": [
