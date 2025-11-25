@@ -153,3 +153,50 @@ comment-delete-response-200:
         properties:
           success:
             type: boolean
+
+
+SerializedCommentsWithCheckStatus:
+  description: Serialized comments
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          comments:
+            type: array
+            items:
+              allOf:
+                - $ref: '../../schema/comment.yaml#/Comment'
+                - type: object
+                  properties:
+                    checkNotes:
+                      $ref: "../../schema/moderation.yaml#/CheckNotes"
+                    checkStatus:
+                      $ref: "../../schema/moderation.yaml#/CheckStatus"
+          commentChildren:
+            type: array
+            items:
+              $ref: "../../schema/comment.yaml#/Comment"
+          communityUsers:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/CommunityUser"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          roles:
+            type: array
+            items:
+              $ref: "../../schema/role.yaml#/RoleV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              previous:
+                type: string

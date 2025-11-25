@@ -17,3 +17,98 @@ _commentId:
         $ref: "../../global/error.yaml#/NotFoundError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+commentId-checks:
+  post:
+    summary: "Add check note to comment"
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    description: |
+      Add a check note to a comment for content review purposes. Admin only.
+
+      **Check Actions:**
+      - `check`: Mark the comment as checked/reviewed
+      - `need-follow-up`: Mark the comment as needing follow-up review
+      - `add-note`: Add a note without changing the check status
+
+      **Check Status Updates:**
+      - When action is `check`, checkStatus becomes `checked`
+      - When action is `need-follow-up`, checkStatus becomes `follow-up-needed`
+      - When action is `add-note`, checkStatus remains unchanged
+
+      **Access Control:**
+      - Admin only with ManagePostAndComment permission
+    parameters:
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: '^[0-9a-fA-F]{24}$'
+        description: "MongoDB ObjectId of the comment"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../schema/moderation.yaml#/CreateCheckNote"
+    responses:
+      200:
+        $ref: "./response.yaml#/SerializedCommentsWithCheckStatus"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+commentId-checks-noteId:
+  delete:
+    summary: "Delete check note from comment"
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    description: |
+      Delete a specific check note from a comment. Admin only.
+
+      **Important Notes:**
+      - Soft deletes the check note (marks as deleted)
+      - Does not affect the comment's check status
+      - Admin only with ManagePostAndComment permission
+    parameters:
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: '^[0-9a-fA-F]{24}$'
+        description: "MongoDB ObjectId of the comment"
+      - name: noteId
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: '^[0-9a-fA-F]{24}$'
+        description: "MongoDB ObjectId of the check note"
+    responses:
+      200:
+        description: "Check note deleted successfully"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
