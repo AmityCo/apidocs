@@ -176690,6 +176690,15 @@
             "description": "An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts\n"
           },
           {
+            "name": "includeModerationDetails",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Include moderation details (flags, AI moderation, check notes) in response"
+          },
+          {
             "name": "options[limit]",
             "in": "query",
             "schema": {
@@ -178658,6 +178667,1295 @@
                   "status": "error",
                   "code": 400400,
                   "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error due to a client create the same request with the same parameters exceed the number of time that server limit to.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400311,
+                  "message": "RateLimit Exceed."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/search/comments": {
+      "get": {
+        "summary": "Search comments",
+        "tags": [
+          "Comment"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Search and filter comments with advanced criteria. Admin only.\n\n**Access Control:**\n- Admin only with ViewPostAndCommentManagement permission\n",
+        "parameters": [
+          {
+            "name": "checkStatus",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "to-check",
+                "follow-up-needed",
+                "checked"
+              ],
+              "description": "Current check status of the content"
+            }
+          },
+          {
+            "name": "targetFeedType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "user",
+                "community",
+                "content"
+              ]
+            },
+            "description": "Filter by target feed type"
+          },
+          {
+            "name": "targetCommunityIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{24}$"
+              },
+              "maxItems": 10
+            },
+            "description": "Filter by target community IDs (max 10)",
+            "style": "form",
+            "explode": true
+          },
+          {
+            "name": "targetContentIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 900
+              },
+              "maxItems": 10
+            },
+            "description": "Filter by target content IDs (max 10)",
+            "style": "form",
+            "explode": true
+          },
+          {
+            "name": "targetUserIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{24}$"
+              },
+              "maxItems": 10
+            },
+            "description": "Filter by target user IDs (max 10)",
+            "style": "form",
+            "explode": true
+          },
+          {
+            "name": "creatorIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{24}$"
+              },
+              "maxItems": 10
+            },
+            "description": "Filter by comment creator IDs (max 10)",
+            "style": "form",
+            "explode": true
+          },
+          {
+            "name": "isDeleted",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": null
+            },
+            "description": "Filter by deleted status"
+          },
+          {
+            "name": "referenceType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "post",
+                "content",
+                "story"
+              ]
+            },
+            "description": "Filter by reference type"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "lastCreated",
+                "firstCreated",
+                "lastUpdated",
+                "firstUpdated"
+              ],
+              "default": "lastCreated"
+            },
+            "description": "Sort order for posts."
+          },
+          {
+            "name": "includeModerationDetails",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Include moderation details (flags, AI moderation, check notes) in response"
+          },
+          {
+            "name": "options[limit]",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "example": "options[limit]=5",
+              "description": "Page size"
+            }
+          },
+          {
+            "name": "options[after]",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 24,
+              "description": "Cursor value to get records after"
+            }
+          },
+          {
+            "name": "options[before]",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 24,
+              "description": "Cursor value to get records before"
+            }
+          },
+          {
+            "name": "options[token]",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 1000,
+              "example": "options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==",
+              "description": "Pagination token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Serialized comments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "comments": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "description": "Private ID of a comment. (for real-time event)"
+                              },
+                              "path": {
+                                "type": "string",
+                                "description": "Path of a comment. (for real-time event)"
+                              },
+                              "commentId": {
+                                "type": "string",
+                                "description": "ID of a comment."
+                              },
+                              "userId": {
+                                "type": "string",
+                                "description": "ID of a creator."
+                              },
+                              "userPublicId": {
+                                "type": "string",
+                                "description": "Public ID of a creator."
+                              },
+                              "userInternalId": {
+                                "type": "string",
+                                "description": "Internal ID of a creator."
+                              },
+                              "parentId": {
+                                "type": "string",
+                                "description": "ID of a parent comment."
+                              },
+                              "rootId": {
+                                "type": "string",
+                                "description": "ID of a root comment."
+                              },
+                              "referenceId": {
+                                "type": "string",
+                                "description": "ID of a reference."
+                              },
+                              "referenceType": {
+                                "type": "string",
+                                "enum": [
+                                  "post",
+                                  "content",
+                                  "story"
+                                ],
+                                "description": "Type of a reference (post/content)."
+                              },
+                              "dataType": {
+                                "type": "string",
+                                "description": "Type of a comment (deprecated in new SDK version, will be fixed as \"text\")."
+                              },
+                              "dataTypes": {
+                                "type": "array",
+                                "description": "Types of a comment (a comment can contain multiple types)",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "text",
+                                    "image",
+                                    "video"
+                                  ]
+                                }
+                              },
+                              "data": {
+                                "type": "object",
+                                "description": "Body of a comment."
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "Additional properties to support custom fields."
+                              },
+                              "childrenNumber": {
+                                "type": "number"
+                              },
+                              "flagCount": {
+                                "type": "integer",
+                                "description": "The number of users that has read this comment."
+                              },
+                              "hashFlag": {
+                                "type": "object",
+                                "description": "The flag for checking internally that this comment is reported or not.",
+                                "properties": {
+                                  "bits": {
+                                    "type": "integer"
+                                  },
+                                  "hashes": {
+                                    "type": "integer"
+                                  },
+                                  "hash": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "reactions": {
+                                "type": "object",
+                                "description": "The mapping of reaction with reactionCounter.",
+                                "example": {
+                                  "like": 1
+                                }
+                              },
+                              "reactionsCount": {
+                                "type": "integer",
+                                "description": "The number of all reactions for this comment.",
+                                "example": 1
+                              },
+                              "myReactions": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "example": "like"
+                                },
+                                "description": "The list of my reactions to this comment."
+                              },
+                              "isDeleted": {
+                                "type": "boolean",
+                                "default": false,
+                                "description": "A flag to deleted a comment."
+                              },
+                              "editedAt": {
+                                "type": "string",
+                                "description": "The date/time when comment is updated.",
+                                "format": "date-time"
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "description": "The date/time when a comment is created.",
+                                "format": "date-time"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "description": "The date/time when a comment is updated or deleted.",
+                                "format": "date-time"
+                              },
+                              "children": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "description": "ID of a children comment."
+                                }
+                              },
+                              "segmentNumber": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "mentionees": {
+                                "type": "array",
+                                "description": "The object of the mentions type and user who get a notification from the comment.",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "description": "type: * `user` - need to specific userIds and notification mentions individual user\n",
+                                      "enum": [
+                                        "user"
+                                      ]
+                                    },
+                                    "userIds": {
+                                      "type": "array",
+                                      "description": "Array of UserId.",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "userPublicIds": {
+                                      "type": "array",
+                                      "description": "Array of UserPublicId.",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "userInternalIds": {
+                                      "type": "array",
+                                      "description": "Array of UserInternalId.",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "attachments": {
+                                "type": "array",
+                                "description": "The attachments/medias to be included in the comment",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "image",
+                                        "video"
+                                      ]
+                                    },
+                                    "fileId": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "fileId"
+                                  ]
+                                }
+                              },
+                              "targetId": {
+                                "type": "string",
+                                "description": "ID of a comment target."
+                              },
+                              "targetType": {
+                                "type": "string",
+                                "description": "Type of a comment target.",
+                                "enum": [
+                                  "community",
+                                  "user",
+                                  "content"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "commentId"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "checkNotes": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "noteId": {
+                                      "type": "string",
+                                      "description": "Unique identifier for the check note"
+                                    },
+                                    "userId": {
+                                      "type": "string",
+                                      "description": "ID of the admin who created the note"
+                                    },
+                                    "action": {
+                                      "type": "string",
+                                      "enum": [
+                                        "check",
+                                        "need-follow-up",
+                                        "add-note"
+                                      ],
+                                      "description": "Action type of the check note"
+                                    },
+                                    "note": {
+                                      "type": "string",
+                                      "maxLength": 250,
+                                      "description": "Optional note text (max 250 characters)"
+                                    },
+                                    "createdAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the check note was created"
+                                    },
+                                    "updatedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the check note was last updated"
+                                    }
+                                  }
+                                }
+                              },
+                              "checkStatus": {
+                                "type": "string",
+                                "enum": [
+                                  "to-check",
+                                  "follow-up-needed",
+                                  "checked"
+                                ],
+                                "description": "Current check status of the content"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "commentChildren": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a comment. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a comment. (for real-time event)"
+                          },
+                          "commentId": {
+                            "type": "string",
+                            "description": "ID of a comment."
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "parentId": {
+                            "type": "string",
+                            "description": "ID of a parent comment."
+                          },
+                          "rootId": {
+                            "type": "string",
+                            "description": "ID of a root comment."
+                          },
+                          "referenceId": {
+                            "type": "string",
+                            "description": "ID of a reference."
+                          },
+                          "referenceType": {
+                            "type": "string",
+                            "enum": [
+                              "post",
+                              "content",
+                              "story"
+                            ],
+                            "description": "Type of a reference (post/content)."
+                          },
+                          "dataType": {
+                            "type": "string",
+                            "description": "Type of a comment (deprecated in new SDK version, will be fixed as \"text\")."
+                          },
+                          "dataTypes": {
+                            "type": "array",
+                            "description": "Types of a comment (a comment can contain multiple types)",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "text",
+                                "image",
+                                "video"
+                              ]
+                            }
+                          },
+                          "data": {
+                            "type": "object",
+                            "description": "Body of a comment."
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "childrenNumber": {
+                            "type": "number"
+                          },
+                          "flagCount": {
+                            "type": "integer",
+                            "description": "The number of users that has read this comment."
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "description": "The flag for checking internally that this comment is reported or not.",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "reactions": {
+                            "type": "object",
+                            "description": "The mapping of reaction with reactionCounter.",
+                            "example": {
+                              "like": 1
+                            }
+                          },
+                          "reactionsCount": {
+                            "type": "integer",
+                            "description": "The number of all reactions for this comment.",
+                            "example": 1
+                          },
+                          "myReactions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "like"
+                            },
+                            "description": "The list of my reactions to this comment."
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "A flag to deleted a comment."
+                          },
+                          "editedAt": {
+                            "type": "string",
+                            "description": "The date/time when comment is updated.",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a comment is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a comment is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "children": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a children comment."
+                            }
+                          },
+                          "segmentNumber": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "mentionees": {
+                            "type": "array",
+                            "description": "The object of the mentions type and user who get a notification from the comment.",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "description": "type: * `user` - need to specific userIds and notification mentions individual user\n",
+                                  "enum": [
+                                    "user"
+                                  ]
+                                },
+                                "userIds": {
+                                  "type": "array",
+                                  "description": "Array of UserId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "userPublicIds": {
+                                  "type": "array",
+                                  "description": "Array of UserPublicId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "userInternalIds": {
+                                  "type": "array",
+                                  "description": "Array of UserInternalId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "attachments": {
+                            "type": "array",
+                            "description": "The attachments/medias to be included in the comment",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "image",
+                                    "video"
+                                  ]
+                                },
+                                "fileId": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "fileId"
+                              ]
+                            }
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "ID of a comment target."
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "description": "Type of a comment target.",
+                            "enum": [
+                              "community",
+                              "user",
+                              "content"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "commentId"
+                        ]
+                      }
+                    },
+                    "communityUsers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a user."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a user."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a user."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "communityMembership": {
+                            "type": "string",
+                            "enum": [
+                              "none",
+                              "member",
+                              "banned"
+                            ]
+                          },
+                          "notMemberReason": {
+                            "type": "string",
+                            "description": "Reason why a user is not a member of the community."
+                          },
+                          "isBanned": {
+                            "type": "boolean",
+                            "default": false
+                          },
+                          "lastActivity": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "The date/time when a user last did something related to the community such as add/remove members ."
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community user is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community user is updated or deleted.",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a user. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a user. (for real-time event)"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string"
+                          },
+                          "userPublicId": {
+                            "type": "string"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "profileHandle": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "avatarFileId": {
+                            "type": "string"
+                          },
+                          "avatarCustomUrl": {
+                            "type": "string"
+                          },
+                          "flagCount": {
+                            "type": "integer"
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "isGlobalBan": {
+                            "type": "boolean",
+                            "description": "Global ban status. Every user can see this flag."
+                          },
+                          "isBrand": {
+                            "type": "boolean",
+                            "description": "Brand user status."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isDeleted": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "roles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "roleId": {
+                            "type": "string"
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a role is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a role is created.",
+                            "format": "date-time"
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "The list of permission for this role. https://docs.amity.co/amity-sdk/core-concepts/user/user-permission#permissions"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false
+                          }
+                        },
+                        "required": [
+                          "roleId",
+                          "permissions",
+                          "updatedAt",
+                          "isDeleted"
+                        ]
+                      }
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fileId": {
+                            "type": "string",
+                            "description": "Root file key on cloud storage."
+                          },
+                          "fileUrl": {
+                            "type": "string",
+                            "description": "Http link for download file"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "File type.",
+                            "enum": [
+                              "image",
+                              "file",
+                              "video"
+                            ]
+                          },
+                          "accessType": {
+                            "type": "string",
+                            "description": "File access type. `network` type requires authentication to download.",
+                            "enum": [
+                              "public",
+                              "network"
+                            ],
+                            "default": "public"
+                          },
+                          "altText": {
+                            "type": "string",
+                            "description": "Alternative text for the file.",
+                            "maxLength": 180
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is uploaded.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is updated.",
+                            "format": "date-time"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "File name."
+                              },
+                              "extension": {
+                                "type": "string",
+                                "description": "File format."
+                              },
+                              "size": {
+                                "type": "number",
+                                "description": "File size."
+                              },
+                              "mimeType": {
+                                "type": "string",
+                                "description": "File mime-type."
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "File image metadata (width, height etc.).",
+                                "properties": {
+                                  "exif": {
+                                    "type": "object"
+                                  },
+                                  "gps": {
+                                    "type": "object"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "isFull": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "paging": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string"
+                        },
+                        "previous": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
                 }
               }
             }

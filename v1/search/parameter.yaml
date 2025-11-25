@@ -168,4 +168,86 @@ checkStatus:
   schema: 
     $ref: '../../schema/moderation.yaml#/CheckStatus'
 
+targetFeedType:
+  name: targetFeedType
+  in: query
+  schema:
+    type: string
+    enum:
+      - user
+      - community
+      - content
+  description: Filter by target feed type
+
+targetCommunityIds:
+  name: targetCommunityIds
+  in: query
+  schema:
+    type: array
+    items:
+      type: string
+      pattern: '^[0-9a-fA-F]{24}$'
+    maxItems: 10
+  description: Filter by target community IDs (max 10)
+  style: form
+  explode: true
+
+targetContentIds:
+  name: targetContentIds
+  in: query
+  schema:
+    type: array
+    items:
+      type: string
+      maxLength: 900
+    maxItems: 10
+  description: Filter by target content IDs (max 10)
+  style: form
+  explode: true
+
+targetUserIds:
+  name: targetUserIds
+  in: query
+  schema:
+    type: array
+    items:
+      type: string
+      pattern: '^[0-9a-fA-F]{24}$'
+    maxItems: 10
+  description: Filter by target user IDs (max 10)
+  style: form
+  explode: true
+
+creatorIds:
+  name: creatorIds
+  in: query
+  schema:
+    type: array
+    items:
+      type: string
+      pattern: '^[0-9a-fA-F]{24}$'
+    maxItems: 10
+  description: Filter by comment creator IDs (max 10)
+  style: form
+  explode: true
+
+referenceType:
+  name: referenceType
+  in: query
+  schema:
+    type: string
+    enum:
+      - post
+      - content
+      - story
+  description: Filter by reference type
+
+includeModerationDetails:
+  name: includeModerationDetails
+  in: query
+  schema:
+    type: boolean
+    default: false
+  description: Include moderation details (flags, AI moderation, check notes) in response
+
 
