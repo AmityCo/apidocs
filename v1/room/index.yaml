@@ -1,0 +1,298 @@
+root:
+  post:
+    summary: "create room"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/root-post-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "get list of rooms"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/statuses"
+      - $ref: "./parameter.yaml#/type"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/options"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_roomId:
+  get:
+    summary: "get single room"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "update room"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+    requestBody:
+      $ref: "./request.yaml#/_roomId-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "delete room"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    description: "Delete a room\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+    responses:
+      200:
+        description: "room information"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                success:
+                  type: "boolean"
+                    
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_roomId-stop:
+  post:
+    summary: "stop room"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    description: "Stop a room and end the broadcasting\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_roomId-token:
+  get:
+    summary: "get ingest data (stream key or livekit token)"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    description: "Get ingest data for broadcasting. Returns stream key for direct streaming or LiveKit token for co-hosts.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+    responses:
+      200:
+        $ref: "./response.yaml#/token-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_roomId-recorded:
+  get:
+    summary: "get recorded url"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    description: "Get recorded playback URLs for a room\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+    responses:
+      200:
+        $ref: "./response.yaml#/recorded-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_roomId-participants: 
+  delete: 
+    summary: "remove participant from room"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    description: "Remove a participant from the room\n"
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+    requestBody:
+      $ref: "./request.yaml#/_roomId-participants-delete-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_roomId-recorded_playbackId-watch:
+  get:
+    summary: "Watch recorded playback"
+    tags:
+      - "Room"
+    security: []
+    description: "Get signed URL to watch recorded playback\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/_ascSession"
+      - $ref: "./parameter.yaml#/_roomId"
+      - $ref: "./parameter.yaml#/_playbackId"
+    responses:
+      302:
+        description: "Redirect to watch recorded playback"
+        headers:
+          Location:
+            description: "Signed URL to redirect to"
+            schema:
+              type: string
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+
+_roomId-recorded_playbackId-thumbnail:
+  get:
+    summary: "Download recorded thumbnail"
+    tags:
+      - "Room"
+    security: []
+    description: "Get signed URL to download recorded thumbnail image\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/_ascSession"
+      - $ref: "./parameter.yaml#/_roomId"
+      - $ref: "./parameter.yaml#/_playbackId"
+    responses:
+      302:
+        description: "Redirect to download recorded thumbnail"
+        headers:
+          Location:
+            description: "Signed URL to redirect to"
+            schema:
+              type: string
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+
+_roomId-viewer-bans:
+  post:
+    summary: "ban viewers from a room"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+    requestBody:
+      $ref: "./request.yaml#/_roomId-viewer-bans-post-request-payload"
+    responses:
+      200:
+        description: "Successfully banned users"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                success:
+                  type: "boolean"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  get:
+    summary: "get list of banned viewers"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
+    responses:
+      200:
+        $ref: "./response.yaml#/room-banned-users-response"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "unban viewers from a room"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/_roomId"
+    requestBody:
+      $ref: "./request.yaml#/_roomId-viewer-bans-delete-request-payload"
+    responses:
+      200:
+        description: "Successfully unbanned users"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                success:
+                  type: "boolean"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

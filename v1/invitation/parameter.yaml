@@ -30,6 +30,7 @@ type:
     type: "string"
     enum:
       - "communityMemberInvite"
+      - "livestreamCohostInvite"
   example: "communityMemberInvite"
 
 targetType:
@@ -41,6 +42,7 @@ targetType:
     type: "string"
     enum:
       - "community"
+      - "room"
   example: "community"
 
 targetId:
@@ -93,7 +95,8 @@ options-token:
 statuses:
   name: "statuses"
   in: "query"
-  description: "Filter invitations by status (array)"
+  description: "Filter invitations by status (array, optional)"
+  required: false
   style: "form"
   explode: true
   schema:
@@ -110,7 +113,8 @@ statuses:
 sortBy:
   name: "sortBy"
   in: "query"
-  description: "Sort invitations by field"
+  description: "Sort invitations by field (optional)"
+  required: false
   schema:
     type: "string"
     enum:
@@ -123,7 +127,8 @@ sortBy:
 sortOrder:
   name: "sortOrder"
   in: "query"
-  description: "Sort order"
+  description: "Sort order (optional)"
+  required: false
   schema:
     type: "string"
     enum:
@@ -136,11 +141,12 @@ invitationId:
   name: "invitationId"
   in: "path"
   required: true
-  description: "ID of the invitation"
+  description: "ID of the invitation (MongoDB ObjectId)"
   schema:
     type: "string"
-    minLength: 1
-    maxLength: 50
+    minLength: 24
+    maxLength: 24
+    pattern: "^[a-f0-9]{24}$"
   example: "6858374aeae5300158b6d1be"
 
 type-optional:
@@ -152,6 +158,7 @@ type-optional:
     type: "string"
     enum:
       - "communityMemberInvite"
+      - "livestreamCohostInvite"
   example: "communityMemberInvite"
 
 targetType-optional:
@@ -163,6 +170,7 @@ targetType-optional:
     type: "string"
     enum:
       - "community"
+      - "room"
   example: "community"
 
 targetId-optional:
@@ -178,8 +186,8 @@ targetId-optional:
 communityId:
   name: "communityId"
   in: "query"
-  required: true
-  description: "Community ID for permission check purpose"
+  required: false
+  description: "Community ID for permission check purpose (not used in service implementation, added by hook)"
   schema:
     type: "string"
     maxLength: 900

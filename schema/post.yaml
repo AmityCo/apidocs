@@ -933,6 +933,7 @@ CreatePost:
   properties:
     data:
       type: "object"
+      description: "Body of a post"
       properties:
         title:
           type: "string"
@@ -940,47 +941,66 @@ CreatePost:
           description: "Title of a post."
         text:
           type: "string"
-          description: "data for text in post parent"
+          maxLength: 50000
+          description: "Text content of the post."
           example: "example text"
-        streamId:
+        fileId:
           type: "string"
-          description: "video streaming id for create live streaming post"
-          example: "81559bcc3a5bb3b6bbd69a83b89d337e"
+          maxLength: 100
+          description: "File ID for image/file post."
+          example: "57b916d38eaf8010caddfb7759a2d06c"
         pollId:
           type: "string"
-          description: "poll id for create poll post"
+          maxLength: 100
+          description: "Poll ID for create poll post."
           example: "53a9fd8b5aaa1af6c5a1bbd245ce4a9b1627373735551"
+        streamId:
+          type: "string"
+          maxLength: 100
+          description: "Video streaming ID for create live streaming post."
+          example: "81559bcc3a5bb3b6bbd69a83b89d337e"
+        roomId:
+          type: "string"
+          maxLength: 100
+          description: "Room ID for room post."
     attachments:
       type: "array"
+      maxItems: 10
+      description: "Array of attachments."
       items:
         type: "object"
-        description: "attachment info"
+        description: "Attachment info"
+        required:
+          - fileId
+          - type
         properties:
           fileId:
             type: "string"
+            maxLength: 100
             example: "57b916d38eaf8010caddfb7759a2d06c"
-            description: "file id for attachment"
+            description: "File ID for attachment."
           type:
             type: "string"
-            description: "attachment type"
+            description: "Attachment type."
             enum:
               - "image"
               - "file"
               - "video"
-              - "clip"
           displayMode:
             type: "string"
             enum: ["fill", "fit"]
-            description: "displayMode of the clip"
-            example: "fill"
+            default: "fit"
+            description: "Display mode for the clip."
+            example: "fit"
           isMuted:
             type: "boolean"
-            description: "Whether the clip should be muted or not"
-            example: "true"
+            default: false
+            description: "Whether the video should be muted or not."
+            example: false
     dataType:
       type: "string"
       example: "upstra.customtype"
-      description: 'Must be in dot separated string format or system defined format (ex. "upstra.customtype", "com.eko.birthday", "liveStream")'
+      description: 'Accept "liveStream", "poll", "room" or Custom type. Custom type must be in dot separated string format or system defined format (ex. "some.customtype", "com.foo.bar").'
     targetType:
       type: "string"
       enum:
@@ -988,48 +1008,55 @@ CreatePost:
         - "community"
         - "content"
       default: "user"
-      description: "where to create post to"
+      description: "Where to create post to (default: user)."
     targetId:
       type: "string"
+      maxLength: 900
       example: "public_user_id"
-      description: "Resource public id depends on target type (ex. target type is community, target id will be community public id)"
+      description: "Resource public ID depends on target type (ex. target type is community, target ID will be community public ID)."
     metadata:
       type: "object"
+      description: "Additional properties to support custom fields."
       example:
         anything: "you want"
     postId:
       type: "string"
+      maxLength: 900
       example: "postidiwant"
-      description: "for specify public post id on post creation"
+      description: "For specify public post ID on post creation."
     tags:
       type: "array"
       minItems: 0
       maxItems: 5
+      description: "Tags for the post"
       items:
         type: "string"
-        description: "tags"
-        maximum: 24
+        maxLength: 24
+        description: "Tag string"
     hashtags:
       type: "array"
       minItems: 0
       maxItems: 30
+      description: "Hashtags for the post"
       items:
         type: "string"
         maxLength: 100
         example: "tech_news"
       example:
         ["tech_news", "startup_life", "product_launch", "innovation_2025"]
-      description: "Hashtags for the post."
     mentionees:
       type: "array"
-      description: "The object of the mentions type and user who get a notification from the post."
+      maxItems: 2
+      description: "The object of the mentions type and user who get a notification from the post (optional, max 2 items)."
       items:
         type: "object"
+        required:
+          - type
         properties:
           type:
             type: "string"
             example: "user"
-            description: "type: * `user` - need to specific userIds and notification mentions individual user\n"
+            description: "Type: * `user` - need to specify userIds and notification mentions individual user\n"
             enum:
               - "user"
           userIds:
@@ -1037,7 +1064,7 @@ CreatePost:
             example:
               - "userId1"
               - "userId2"
-            description: "Array of UserId. if the mention type is a channel, doesn't send userIds"
+            description: "Array of UserId (required if type is 'user')."
             items:
               type: "string"
     createdAt:
@@ -1047,7 +1074,12 @@ CreatePost:
       example: "2022-07-07T04:24:20.444Z"
     isDiscoverable:
       type: "boolean"
-      description: "Set whether the post is discoverable in search and hashtag feeds. Default is true."
+      description: "Set whether the post is discoverable in search and hashtag feeds (optional, default: true)."
       default: true
+    eventId:
+      type: "string"
+      maxLength: 24
+      description: "Event reference for room posts."
+      example: "507f1f77bcf86cd799439011"
   required:
     - "data"

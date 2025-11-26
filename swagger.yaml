@@ -328,6 +328,8 @@ paths:
     $ref: "./v3/network-setting/index.yaml#/public-users"
   /api/v3/network-settings/video-streaming:
     $ref: "./v3/network-setting/index.yaml#/video-streaming"
+  /api/v3/network-settings/room:
+    $ref: "./v3/network-setting/index.yaml#/room"
   /api/v3/network-settings/webhook:
     $ref: "./v3/network-setting/index.yaml#/webhook"
   /api/v3/network-settings/uikit:
@@ -410,6 +412,22 @@ paths:
     $ref: "./v2/reaction/index.yaml#/root"
   /api/v3/reactions:
     $ref: "./v3/reaction/index.yaml#/root"
+  /api/v1/rooms:
+    $ref: "./v1/room/index.yaml#/root"
+  /api/v1/rooms/{roomId}:
+    $ref: "./v1/room/index.yaml#/_roomId"
+  /api/v1/rooms/{roomId}/stop:
+    $ref: "./v1/room/index.yaml#/_roomId-stop"
+  /api/v1/rooms/{roomId}/token:
+    $ref: "./v1/room/index.yaml#/_roomId-token"
+  /api/v1/rooms/{roomId}/participants:
+    $ref: "./v1/room/index.yaml#/_roomId-participants"
+  /api/v1/rooms/{roomId}/recorded/{playbackId}/watch:
+    $ref: "./v1/room/index.yaml#/_roomId-recorded_playbackId-watch"
+  /api/v1/rooms/{roomId}/recorded/{playbackId}/thumbnail:
+    $ref: "./v1/room/index.yaml#/_roomId-recorded_playbackId-thumbnail"
+  /api/v1/rooms/{roomId}/viewer-bans:
+    $ref: "./v1/room/index.yaml#/_roomId-viewer-bans"
   /api/v2/roles:
     $ref: "./v2/role/index.yaml#/root"
   /api/v3/roles:
@@ -820,6 +838,36 @@ paths:
     $ref: "./realtime/user.yaml#/user.unflagged"
   /realtime/user.updated:
     $ref: "./realtime/user.yaml#/user.updated"
+  /realtime/room.startBroadcasting:
+    $ref: "./realtime/room.yaml#/room.startBroadcasting"
+  /realtime/room.waitingReconnect:
+    $ref: "./realtime/room.yaml#/room.waitingReconnect"
+  /realtime/room.endBroadcasting:
+    $ref: "./realtime/room.yaml#/room.endBroadcasting"
+  /realtime/room.recordingAvailable:
+    $ref: "./realtime/room.yaml#/room.recordingAvailable"
+  /realtime/room.didUpdate:
+    $ref: "./realtime/room.yaml#/room.didUpdate"
+  /realtime/room.terminated:
+    $ref: "./realtime/room.yaml#/room.terminated"
+  /realtime/room.participantJoined:
+    $ref: "./realtime/room.yaml#/room.participantJoined"
+  /realtime/room.participantLeft:
+    $ref: "./realtime/room.yaml#/room.participantLeft"
+  /realtime/room.participantRemoved:
+    $ref: "./realtime/room.yaml#/room.participantRemoved"
+  /realtime/room.usersBanned:
+    $ref: "./realtime/room.yaml#/room.usersBanned"
+  /realtime/room.usersUnbanned:
+    $ref: "./realtime/room.yaml#/room.usersUnbanned"
+  /realtime/room.didCohostInvite:
+    $ref: "./realtime/room.yaml#/room.didCohostInvite"
+  /realtime/room.didCohostInviteAccept:
+    $ref: "./realtime/room.yaml#/room.didCohostInviteAccept"
+  /realtime/room.didCohostInviteReject:
+    $ref: "./realtime/room.yaml#/room.didCohostInviteReject"
+  /realtime/room.didCohostInviteCancel:
+    $ref: "./realtime/room.yaml#/room.didCohostInviteCancel"
   /realtime/video-streaming.viewerDidBan:
     $ref: "./realtime/video-streaming.yaml#/video-streaming.viewerDidBan"
   /realtime/video-streaming.viewerDidUnban:

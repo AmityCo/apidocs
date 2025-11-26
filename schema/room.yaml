@@ -1,0 +1,214 @@
+Room:
+  type: object
+  properties:
+    _id:
+      type: string
+      description: Internal room ID
+    type:
+      type: string
+      enum:
+        - directStreaming
+        - coHosts
+      description: >
+        Type of room
+        * directStreaming - single participant streaming
+        * coHosts - More than one participant
+
+    # Relationship fields
+    targetId:
+      type: string
+      description: ID of the target of the entity that room belongs to
+    targetType:
+      type: string
+      enum:
+        - community
+        - user
+      description: Target of the entity that room belongs to
+    referenceType:
+      type: string
+      description: Entity that room is associated with
+      enum:
+        - post
+    referenceId:
+      type: string
+      description: Entity ID that room is associated with
+    # Live channel
+    liveChannelId:
+      type: string
+      description: Associated live channel ID for chat
+    liveChatEnabled:
+      type: boolean
+      description: Whether live channel is enabled
+    
+    # Room information
+    title:
+      type: string
+      description: Room title
+    roomId:
+      type: string
+      description: Public room ID
+    description:
+      type: string
+      description: Room description
+    thumbnailFileId:
+      type: string
+      description: Thumbnail file ID
+    
+    # Streaming info
+    status:
+      type: string
+      enum:
+        - idle
+        - live
+        - waitingReconnect
+        - ended
+        - recorded
+      description: >
+        Status of room
+        * idle - room is just created
+        * live - broadcasting is active
+        * waitingReconnect - broadcaster disconnected, waiting for reconnection
+        * ended - broadcasting stopped
+        * recorded - room recordings available
+    
+    # Participants
+    participants:
+      type: array
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            enum:
+              - coHost
+              - host
+          userId:
+            type: string
+      description: List of room streaming participants
+    
+    # Recorded playback info
+    livePlaybackUrl: 
+      type: string
+      description: Live playback URL
+      example: https://stream.example.com/someid.m3u8?token=token
+    
+    liveThumbnailUrl: 
+      type: string
+      description: Live thumbnail URL
+      example: https://image.example.com/someid/thumbnail.png?token=token
+
+    recordedPlaybackInfos: 
+      type: array
+      description: Recorded playback URLs and thumbnails
+      items:
+        type: object
+        properties:
+          url:
+            type: string
+            description: Recorded playback URL
+            example: https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/watch
+          thumbnailUrl:
+            type: string
+            description: Recorded thumbnail URL
+            example: https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/thumbnail
+    
+    durationSeconds:
+      type: number
+      description: Duration of the broadcast in seconds (only for ended/recorded rooms)
+    
+    moderation:
+      type: object
+      description: Moderation information including flagged and terminated labels
+      properties:
+        flagLabels:
+          type: array
+          description: Labels that triggered flag actions
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                description: Moderation category
+              threshold:
+                type: number
+                description: Threshold value that triggered the flag
+              detectedAt:
+                type: string
+                format: date-time
+                description: When the flag was detected
+        terminateLabels:
+          type: array
+          description: Labels that triggered terminate actions
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                description: Moderation category
+              threshold:
+                type: number
+                description: Threshold value that triggered termination
+              detectedAt:
+                type: string
+                format: date-time
+                description: When the termination was detected
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last moderation update timestamp
+    
+    # Multi-stream support
+    parentRoomId:
+      type: string
+      description: Parent room ID for child streams
+    childRoomIds:
+      type: array
+      items:
+        type: string
+      description: Child room IDs
+      default: []
+    
+    # Timestamps
+    createdAt:
+      type: string
+      format: date-time
+      description: Creation timestamp
+    createdBy:
+      type: string
+      description: Room creator user public ID
+    creatorInternalId: 
+      type: string
+      example: "64be1f6cb9b4106b5a6bbf3f"
+      description: Room creator user internal ID
+    updatedAt:
+      type: string
+      format: date-time
+      description: Last update timestamp
+    liveAt:
+      type: string
+      format: date-time
+      description: When broadcasting started
+    endedAt:
+      type: string
+      format: date-time
+      description: When broadcasting ended
+    recordedAt:
+      type: string
+      format: date-time
+      description: When recording became available
+    isDeleted:
+      type: boolean
+      description: Whether room is deleted
+    deletedAt:
+      type: string
+      format: date-time
+      description: Deletion timestamp
+    deletedBy:
+      type: string
+      description: User who deleted the room
+    path:
+      type: string
+      description: Room path for realtime events
+    metadata:
+      type: object
+      description: Custom metadata
