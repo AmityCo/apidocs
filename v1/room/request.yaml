@@ -1,0 +1,120 @@
+root-post-request-payload:
+  description: "Information of room to be created\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          title:
+            type: "string"
+            maxLength: 1000
+            description: "Room title"
+          description:
+            type: "string"
+            maxLength: 5000
+            description: "Room description"
+          thumbnailFileId:
+            type: "string"
+            maxLength: 50
+            description: "Thumbnail file ID"
+          metadata:
+            type: "object"
+            description: "Custom metadata"
+          liveChatEnabled:
+            type: "boolean"
+            description: "Indicates whether the live channel (chat) is enabled for the room"
+            default: true
+          parentRoomId:
+            type: "string"
+            description: "Optional parent room ID for creating child streams"
+            maxLength: 50
+          type:
+            type: "string"
+            enum:
+              - "directStreaming"
+              - "coHosts"
+            description: "Type of room: directStreaming for single participant streaming, coHosts for multiple participants"
+            default: "directStreaming"
+        required:
+          - "title"
+
+_roomId-request-payload:
+  description: "Information of room to be updated\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          title:
+            type: "string"
+            maxLength: 1000
+            description: "Room title"
+          description:
+            type: "string"
+            maxLength: 5000
+            description: "Room description"
+          thumbnailFileId:
+            type: "string"
+            maxLength: 50
+            description: "Thumbnail file ID"
+          metadata:
+            type: "object"
+            description: "Custom metadata"
+          channelEnabled:
+            type: "boolean"
+            description: "Enable or disable live channel"
+
+_roomId-participants-delete-request-payload:
+  description: "Information of participants to be removed from the room\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          participantUserId:
+            type: "string"
+            description: "User ID of the participant to be removed from the room"
+            maxLength: 50
+        required:
+          - "participantUserId"
+
+_roomId-viewer-bans-post-request-payload:
+  description: "Information of viewers to be banned from the room\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          userIds:
+            type: "array"
+            items:
+              type: "string"
+              maxLength: 50
+            minItems: 1
+            maxItems: 100
+            description: "List of user IDs to ban from the room"
+        required:
+          - "userIds"
+
+_roomId-viewer-bans-delete-request-payload:
+  description: "Information of viewers to be unbanned from the room\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          userIds:
+            type: "array"
+            items:
+              type: "string"
+              maxLength: 50
+            minItems: 1
+            maxItems: 100
+            description: "List of user IDs to unban from the room"
+        required:
+          - "userIds"

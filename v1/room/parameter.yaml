@@ -1,0 +1,109 @@
+statuses:
+  name: "statuses"
+  in: "query"
+  schema:
+    type: "array"
+    maxItems: 10
+    items:
+      type: "string"
+      enum:
+        - "idle"
+        - "live"
+        - "waitingReconnect"
+        - "ended"
+        - "recorded"
+  description: "Status of room  \n  * idle - room is just created  \n  * live - broadcasting is active  \n  * waitingReconnect - broadcaster disconnected, waiting for reconnection  \n  * ended - broadcasting stopped  \n  * recorded - room recordings available \n"
+
+type:
+  name: "type"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "directStreaming"
+      - "coHosts"
+  description: "Type of room  \n  * directStreaming - single participant streaming  \n  * coHosts - multiple participant streaming \n"
+
+sortBy:
+  name: "sortBy"
+  in: "query"
+  schema:
+    type: "string"
+    enum:
+      - "firstCreated"
+      - "lastCreated"
+
+isDeleted:
+  name: "isDeleted"
+  in: "query"
+  schema:
+    type: "boolean"
+    default: null
+  description: "isDeleted:\n  * `null(default)` - Show both active and inactive rooms.\n  * `true` - Show inactive rooms only.\n  * `false` - Show active rooms only.\n"
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  schema:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+      token:
+        type: "string"
+        maxLength: 1000
+
+_roomId:
+  in: "path"
+  name: "roomId"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 50
+  description: "Room ID"
+
+_playbackId:
+  in: "path"
+  name: "playbackId"
+  required: true
+  schema:
+    type: "string"
+    maxLength: 50
+  description: "Playback ID"
+
+authorization:
+  name: "Authorization"
+  in: "header"
+  schema:
+    type: "string"
+
+_ascSession:
+  name: "_ascSession"
+  in: "cookie"
+  schema:
+    type: "string"
+  description: "Access token"
+
+content-type:
+  name: "Content-Type"
+  in: "header"
+  required: true
+  schema:
+    type: "string"
+
+limit:
+  name: "limit"
+  in: "query"
+  schema:
+    type: "integer"
+    minimum: 1
+  description: "Maximum number of results to return"
+
+token:
+  name: "token"
+  in: "query"
+  schema:
+    type: "string"
+    maxLength: 1000
+  description: "Pagination token for fetching next set of results"

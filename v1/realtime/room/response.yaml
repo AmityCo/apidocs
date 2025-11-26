@@ -1,0 +1,1049 @@
+room.startBroadcasting:
+  get:
+    security: []
+    summary: "room started broadcasting"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.startBroadcasting event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The room ID
+                      example: "690c6a641b055f909ff1c8e1"
+                    data:
+                      type: object
+                      properties:
+                        rooms:
+                          type: array
+                          items:
+                            $ref: '../../../schema/room.yaml#/Room'
+                          description: Array containing the room that started broadcasting
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved in the room (e.g., host, participants)
+                        files:
+                          type: array
+                          items:
+                            $ref: '../../../schema/file.yaml#/File'
+                          description: Array of files associated with the room (may be empty)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                rooms:
+                  - _id: "690c6a641b055f909ff1c8e1"
+                    roomId: "690c6a641b055f909ff1c8e1"
+                    path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+                    title: "e4920036-3dd4-4fc3-958c-072d520ba716"
+                    liveChatEnabled: false
+                    childRoomIds: []
+                    participants:
+                      - userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                        type: "host"
+                    createdBy: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    type: "directStreaming"
+                    status: "idle"
+                    isDeleted: false
+                    createdAt: "2025-11-06T09:29:08.260Z"
+                    updatedAt: "2025-11-06T09:52:10.553Z"
+                    creatorInternalId: "690c6a0bfb181288c0325726"
+                    recordedPlaybackInfos: []
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                files: []
+              eventType: "room.startBroadcasting"
+              id: "690c6a641b055f909ff1c8e1"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T09:52:29.646Z"
+              version: 1
+
+room.waitingReconnect:
+  get:
+    security: []
+    summary: "room waiting for reconnection"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.waitingReconnect event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The room ID
+                      example: "690c6a641b055f909ff1c8e1"
+                    data:
+                      type: object
+                      properties:
+                        rooms:
+                          type: array
+                          items:
+                            $ref: '../../../schema/room.yaml#/Room'
+                          description: Array containing the room waiting for reconnection
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved in the room
+                        files:
+                          type: array
+                          items:
+                            $ref: '../../../schema/file.yaml#/File'
+                          description: Array of files associated with the room (may be empty)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                rooms:
+                  - _id: "690c6a641b055f909ff1c8e1"
+                    roomId: "690c6a641b055f909ff1c8e1"
+                    path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+                    title: "e4920036-3dd4-4fc3-958c-072d520ba716"
+                    liveChatEnabled: false
+                    childRoomIds: []
+                    participants:
+                      - userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                        type: "host"
+                    createdBy: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    type: "directStreaming"
+                    status: "waitingReconnect"
+                    liveAt: "2025-11-06T09:52:35.917Z"
+                    isDeleted: false
+                    createdAt: "2025-11-06T09:29:08.260Z"
+                    updatedAt: "2025-11-06T09:53:31.644Z"
+                    creatorInternalId: "690c6a0bfb181288c0325726"
+                    livePlaybackUrl: "https://stream.mux.com/bD02uiCium1GTisHi4V2ifIPA1ZrGlzZKDck2IC2Drnc.m3u8?token=eyJhbGci..."
+                    liveThumbnailUrl: "https://image.mux.com/bD02uiCium1GTisHi4V2ifIPA1ZrGlzZKDck2IC2Drnc/thumbnail.png?token=eyJhbGci..."
+                    recordedPlaybackInfos: []
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                files: []
+              eventType: "room.waitingReconnect"
+              id: "690c6a641b055f909ff1c8e1"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T09:53:31.657Z"
+              version: 1
+
+room.endBroadcasting:
+  get:
+    security: []
+    summary: "room ended broadcasting"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.endBroadcasting event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The room ID
+                      example: "690c6a641b055f909ff1c8e1"
+                    data:
+                      type: object
+                      properties:
+                        rooms:
+                          type: array
+                          items:
+                            $ref: '../../../schema/room.yaml#/Room'
+                          description: Array containing the room that ended broadcasting
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved in the room
+                        files:
+                          type: array
+                          items:
+                            $ref: '../../../schema/file.yaml#/File'
+                          description: Array of files associated with the room (may be empty)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                rooms:
+                  - _id: "690c6a641b055f909ff1c8e1"
+                    roomId: "690c6a641b055f909ff1c8e1"
+                    path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+                    title: "e4920036-3dd4-4fc3-958c-072d520ba716"
+                    liveChatEnabled: false
+                    childRoomIds: []
+                    participants:
+                      - userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                        type: "host"
+                    createdBy: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    type: "directStreaming"
+                    status: "ended"
+                    liveAt: "2025-11-06T09:52:35.917Z"
+                    isDeleted: false
+                    createdAt: "2025-11-06T09:29:08.260Z"
+                    updatedAt: "2025-11-06T09:54:15.601Z"
+                    creatorInternalId: "690c6a0bfb181288c0325726"
+                    recordedPlaybackInfos: []
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                files: []
+              eventType: "room.endBroadcasting"
+              id: "690c6a641b055f909ff1c8e1"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T09:54:16.192Z"
+              version: 1
+
+room.recordingAvailable:
+  get:
+    security: []
+    summary: "room recording is available"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.recordingAvailable event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The room ID
+                      example: "690c6a641b055f909ff1c8e1"
+                    data:
+                      type: object
+                      properties:
+                        rooms:
+                          type: array
+                          items:
+                            $ref: '../../../schema/room.yaml#/Room'
+                          description: Array containing the room with available recording
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved in the room
+                        files:
+                          type: array
+                          items:
+                            $ref: '../../../schema/file.yaml#/File'
+                          description: Array of files associated with the room (may be empty)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                rooms:
+                  - _id: "690c6a641b055f909ff1c8e1"
+                    roomId: "690c6a641b055f909ff1c8e1"
+                    path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+                    title: "e4920036-3dd4-4fc3-958c-072d520ba716"
+                    liveChatEnabled: false
+                    childRoomIds: []
+                    participants:
+                      - userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                        type: "host"
+                    createdBy: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    type: "directStreaming"
+                    status: "recorded"
+                    durationSeconds: 101
+                    liveAt: "2025-11-06T09:52:35.917Z"
+                    endedAt: "2025-11-06T09:54:16.180Z"
+                    isDeleted: false
+                    createdAt: "2025-11-06T09:29:08.260Z"
+                    updatedAt: "2025-11-06T09:54:17.147Z"
+                    creatorInternalId: "690c6a0bfb181288c0325726"
+                    recordedAt: "2025-11-06T09:54:17.147Z"
+                    recordedPlaybackInfos:
+                      - url: "https://api.dev.amity.co/api/v1/rooms/690c6a641b055f909ff1c8e1/recorded/3c6uIPDNcOxPxIhFy2A6DcmNRvW2qy5iFp1FE500Fflk/watch"
+                        thumbnailUrl: "https://api.dev.amity.co/api/v1/rooms/690c6a641b055f909ff1c8e1/recorded/3c6uIPDNcOxPxIhFy2A6DcmNRvW2qy5iFp1FE500Fflk/thumbnail"
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                files: []
+              eventType: "room.recordingAvailable"
+              id: "690c6a641b055f909ff1c8e1"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T09:54:17.515Z"
+              version: 1
+
+room.didUpdate:
+  get:
+    security: []
+    summary: "room information updated"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.didUpdate event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The room ID
+                      example: "690c6a641b055f909ff1c8e1"
+                    data:
+                      type: object
+                      properties:
+                        rooms:
+                          type: array
+                          items:
+                            $ref: '../../../schema/room.yaml#/Room'
+                          description: Array containing the updated room
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved in the room
+                        files:
+                          type: array
+                          items:
+                            $ref: '../../../schema/file.yaml#/File'
+                          description: Array of files associated with the room (may be empty)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                rooms:
+                  - _id: "690c6a641b055f909ff1c8e1"
+                    roomId: "690c6a641b055f909ff1c8e1"
+                    path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+                    title: "e4920036-3dd4-4fc3-958c-072d520ba716"
+                    liveChatEnabled: true
+                    childRoomIds: []
+                    participants:
+                      - userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                        type: "host"
+                    createdBy: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    type: "directStreaming"
+                    status: "live"
+                    liveAt: "2025-11-06T09:52:35.917Z"
+                    isDeleted: false
+                    createdAt: "2025-11-06T09:29:08.260Z"
+                    updatedAt: "2025-11-06T09:55:00.000Z"
+                    creatorInternalId: "690c6a0bfb181288c0325726"
+                    livePlaybackUrl: "https://stream.mux.com/bD02uiCium1GTisHi4V2ifIPA1ZrGlzZKDck2IC2Drnc.m3u8?token=eyJhbGci..."
+                    liveThumbnailUrl: "https://image.mux.com/bD02uiCium1GTisHi4V2ifIPA1ZrGlzZKDck2IC2Drnc/thumbnail.png?token=eyJhbGci..."
+                    recordedPlaybackInfos: []
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                files: []
+              eventType: "room.didUpdate"
+              id: "690c6a641b055f909ff1c8e1"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T09:55:00.123Z"
+              version: 1
+
+room.terminated:
+  get:
+    security: []
+    summary: "room was terminated"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.terminated event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The room ID
+                      example: "690c6a641b055f909ff1c8e1"
+                    data:
+                      type: object
+                      properties:
+                        rooms:
+                          type: array
+                          items:
+                            $ref: '../../../schema/room.yaml#/Room'
+                          description: Array containing the terminated room
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved in the room
+                        files:
+                          type: array
+                          items:
+                            $ref: '../../../schema/file.yaml#/File'
+                          description: Array of files associated with the room (may be empty)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                rooms:
+                  - _id: "690c6a641b055f909ff1c8e1"
+                    roomId: "690c6a641b055f909ff1c8e1"
+                    path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+                    title: "e4920036-3dd4-4fc3-958c-072d520ba716"
+                    liveChatEnabled: false
+                    childRoomIds: []
+                    participants:
+                      - userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                        type: "host"
+                    createdBy: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    type: "directStreaming"
+                    status: "terminated"
+                    isDeleted: true
+                    createdAt: "2025-11-06T09:29:08.260Z"
+                    updatedAt: "2025-11-06T10:00:00.000Z"
+                    creatorInternalId: "690c6a0bfb181288c0325726"
+                    recordedPlaybackInfos: []
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                files: []
+              eventType: "room.terminated"
+              id: "690c6a641b055f909ff1c8e1"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T10:00:00.456Z"
+              version: 1
+
+room.participantJoined:
+  get:
+    security: []
+    summary: "room participant joined"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.participantJoined event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The participant user ID
+                      example: "testuser123-456-789"
+                    data:
+                      type: object
+                      properties:
+                        rooms:
+                          type: array
+                          items:
+                            $ref: '../../../schema/room.yaml#/Room'
+                          description: Array containing the room
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved in the room
+                        files:
+                          type: array
+                          items:
+                            $ref: '../../../schema/file.yaml#/File'
+                          description: Array of files associated with the room (may be empty)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                rooms:
+                  - _id: "690c6a641b055f909ff1c8e1"
+                    roomId: "690c6a641b055f909ff1c8e1"
+                    path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+                    title: "e4920036-3dd4-4fc3-958c-072d520ba716"
+                    liveChatEnabled: false
+                    childRoomIds: []
+                    participants:
+                      - userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                        type: "host"
+                      - userId: "testuser123-456-789"
+                        type: "participant"
+                    createdBy: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    type: "directStreaming"
+                    status: "live"
+                    liveAt: "2025-11-06T09:52:35.917Z"
+                    isDeleted: false
+                    createdAt: "2025-11-06T09:29:08.260Z"
+                    updatedAt: "2025-11-06T09:56:00.000Z"
+                    creatorInternalId: "690c6a0bfb181288c0325726"
+                    livePlaybackUrl: "https://stream.mux.com/bD02uiCium1GTisHi4V2ifIPA1ZrGlzZKDck2IC2Drnc.m3u8?token=eyJhbGci..."
+                    liveThumbnailUrl: "https://image.mux.com/bD02uiCium1GTisHi4V2ifIPA1ZrGlzZKDck2IC2Drnc/thumbnail.png?token=eyJhbGci..."
+                    recordedPlaybackInfos: []
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                  - _id: "690c6a0bfb181288c0325727"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325727"
+                    displayName: "New Participant"
+                    userId: "testuser123-456-789"
+                files: []
+              eventType: "room.participantJoined"
+              id: "testuser123-456-789"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T09:56:00.123Z"
+              version: 1
+
+room.participantLeft:
+  get:
+    security: []
+    summary: "room participant left"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.participantLeft event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The participant user ID who left
+                      example: "testuser123-456-789"
+                    data:
+                      type: object
+                      properties:
+                        rooms:
+                          type: array
+                          items:
+                            $ref: '../../../schema/room.yaml#/Room'
+                          description: Array containing the room
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved in the room
+                        files:
+                          type: array
+                          items:
+                            $ref: '../../../schema/file.yaml#/File'
+                          description: Array of files associated with the room (may be empty)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                rooms:
+                  - _id: "690c6a641b055f909ff1c8e1"
+                    roomId: "690c6a641b055f909ff1c8e1"
+                    path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+                    title: "e4920036-3dd4-4fc3-958c-072d520ba716"
+                    liveChatEnabled: false
+                    childRoomIds: []
+                    participants:
+                      - userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                        type: "host"
+                    createdBy: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    type: "directStreaming"
+                    status: "live"
+                    liveAt: "2025-11-06T09:52:35.917Z"
+                    isDeleted: false
+                    createdAt: "2025-11-06T09:29:08.260Z"
+                    updatedAt: "2025-11-06T09:57:00.000Z"
+                    creatorInternalId: "690c6a0bfb181288c0325726"
+                    livePlaybackUrl: "https://stream.mux.com/bD02uiCium1GTisHi4V2ifIPA1ZrGlzZKDck2IC2Drnc.m3u8?token=eyJhbGci..."
+                    liveThumbnailUrl: "https://image.mux.com/bD02uiCium1GTisHi4V2ifIPA1ZrGlzZKDck2IC2Drnc/thumbnail.png?token=eyJhbGci..."
+                    recordedPlaybackInfos: []
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                  - _id: "690c6a0bfb181288c0325727"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325727"
+                    displayName: "New Participant"
+                    userId: "testuser123-456-789"
+                files: []
+              eventType: "room.participantLeft"
+              id: "testuser123-456-789"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T09:57:00.456Z"
+              version: 1
+
+room.participantRemoved:
+  get:
+    security: []
+    summary: "room participant removed"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.participantRemoved event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The participant user ID who was removed
+                      example: "testuser123-456-789"
+                    data:
+                      type: object
+                      properties:
+                        rooms:
+                          type: array
+                          items:
+                            $ref: '../../../schema/room.yaml#/Room'
+                          description: Array containing the room
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved in the room
+                        files:
+                          type: array
+                          items:
+                            $ref: '../../../schema/file.yaml#/File'
+                          description: Array of files associated with the room (may be empty)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                rooms:
+                  - _id: "690c6a641b055f909ff1c8e1"
+                    roomId: "690c6a641b055f909ff1c8e1"
+                    path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+                    title: "e4920036-3dd4-4fc3-958c-072d520ba716"
+                    liveChatEnabled: false
+                    childRoomIds: []
+                    participants:
+                      - userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                        type: "host"
+                    createdBy: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    type: "directStreaming"
+                    status: "live"
+                    liveAt: "2025-11-06T09:52:35.917Z"
+                    isDeleted: false
+                    createdAt: "2025-11-06T09:29:08.260Z"
+                    updatedAt: "2025-11-06T09:58:00.000Z"
+                    creatorInternalId: "690c6a0bfb181288c0325726"
+                    livePlaybackUrl: "https://stream.mux.com/bD02uiCium1GTisHi4V2ifIPA1ZrGlzZKDck2IC2Drnc.m3u8?token=eyJhbGci..."
+                    liveThumbnailUrl: "https://image.mux.com/bD02uiCium1GTisHi4V2ifIPA1ZrGlzZKDck2IC2Drnc/thumbnail.png?token=eyJhbGci..."
+                    recordedPlaybackInfos: []
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                  - _id: "690c6a0bfb181288c0325727"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325727"
+                    displayName: "Removed Participant"
+                    userId: "testuser123-456-789"
+                files: []
+              eventType: "room.participantRemoved"
+              id: "testuser123-456-789"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T09:58:00.789Z"
+              version: 1
+
+room.usersBanned:
+  get:
+    security: []
+    summary: "room users banned"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.usersBanned event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The room ID
+                      example: "690c6a641b055f909ff1c8e1"
+                    data:
+                      type: object
+                      properties:
+                        userIds:
+                          type: array
+                          items:
+                            type: string
+                          description: Array of user IDs that were banned
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                userIds:
+                  - "banneduser1-123-456"
+                  - "banneduser2-789-012"
+              eventType: "room.usersBanned"
+              id: "690c6a641b055f909ff1c8e1"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T09:59:00.123Z"
+              version: 1
+
+room.usersUnbanned:
+  get:
+    security: []
+    summary: "room users unbanned"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.usersUnbanned event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The room ID
+                      example: "690c6a641b055f909ff1c8e1"
+                    data:
+                      type: object
+                      properties:
+                        userIds:
+                          type: array
+                          items:
+                            type: string
+                          description: Array of user IDs that were unbanned
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                userIds:
+                  - "unbanneduser1-123-456"
+                  - "unbanneduser2-789-012"
+              eventType: "room.usersUnbanned"
+              id: "690c6a641b055f909ff1c8e1"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/room/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T10:00:00.456Z"
+              version: 1
+
+room.didCohostInvite:
+  get:
+    security: []
+    summary: "room cohost invitation created"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.didCohostInvite event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The invited user ID (internal)
+                      example: "690c6a0bfb181288c0325727"
+                    data:
+                      type: object
+                      properties:
+                        invitations:
+                          type: array
+                          items:
+                            type: object
+                          description: Array containing the invitation details
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved (inviter and invitee)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                invitations:
+                  - _id: "690c6b1a2b055f909ff1c9a1"
+                    networkId: "606f37a0ae601e3c33eba9e3"
+                    type: "livestreamCohostInvite"
+                    targetId: "690c6a641b055f909ff1c8e1"
+                    targetType: "room"
+                    userId: "690c6a0bfb181288c0325727"
+                    status: "pending"
+                    createdBy: "690c6a0bfb181288c0325726"
+                    respondedAt: null
+                    createdAt: "2025-11-06T10:01:00.000Z"
+                    updatedAt: "2025-11-06T10:01:00.000Z"
+                    invitationId: "690c6b1a2b055f909ff1c9a1"
+                    invitedUserId: "testcohost-456-789"
+                    invitedUserPublicId: "testcohost-456-789"
+                    invitedUserInternalId: "690c6a0bfb181288c0325727"
+                    inviterUserId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    inviterUserPublicId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    inviterUserInternalId: "690c6a0bfb181288c0325726"
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                  - _id: "690c6a0bfb181288c0325727"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325727"
+                    displayName: "Invited Co-host"
+                    userId: "testcohost-456-789"
+              eventType: "room.didCohostInvite"
+              id: "690c6a0bfb181288c0325727"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/rooms/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T10:01:00.123Z"
+              version: 1
+
+room.didCohostInviteAccept:
+  get:
+    security: []
+    summary: "room cohost invitation accepted"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.didCohostInviteAccept event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The accepted user ID (internal)
+                      example: "690c6a0bfb181288c0325727"
+                    data:
+                      type: object
+                      properties:
+                        invitations:
+                          type: array
+                          items:
+                            type: object
+                          description: Array containing the invitation details
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved (inviter and invitee)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                invitations:
+                  - _id: "690c6b1a2b055f909ff1c9a1"
+                    networkId: "606f37a0ae601e3c33eba9e3"
+                    type: "livestreamCohostInvite"
+                    targetId: "690c6a641b055f909ff1c8e1"
+                    targetType: "room"
+                    userId: "690c6a0bfb181288c0325727"
+                    status: "approved"
+                    createdBy: "690c6a0bfb181288c0325726"
+                    respondedAt: "2025-11-06T10:02:00.000Z"
+                    createdAt: "2025-11-06T10:01:00.000Z"
+                    updatedAt: "2025-11-06T10:02:00.000Z"
+                    invitationId: "690c6b1a2b055f909ff1c9a1"
+                    invitedUserId: "testcohost-456-789"
+                    invitedUserPublicId: "testcohost-456-789"
+                    invitedUserInternalId: "690c6a0bfb181288c0325727"
+                    inviterUserId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    inviterUserPublicId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    inviterUserInternalId: "690c6a0bfb181288c0325726"
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                  - _id: "690c6a0bfb181288c0325727"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325727"
+                    displayName: "Invited Co-host"
+                    userId: "testcohost-456-789"
+              eventType: "room.didCohostInviteAccept"
+              id: "690c6a0bfb181288c0325727"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/rooms/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T10:02:00.456Z"
+              version: 1
+
+room.didCohostInviteReject:
+  get:
+    security: []
+    summary: "room cohost invitation rejected"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.didCohostInviteReject event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The rejecting user ID (internal)
+                      example: "690c6a0bfb181288c0325727"
+                    data:
+                      type: object
+                      properties:
+                        invitations:
+                          type: array
+                          items:
+                            type: object
+                          description: Array containing the invitation details
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved (inviter and invitee)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                invitations:
+                  - _id: "690c6b1a2b055f909ff1c9a1"
+                    networkId: "606f37a0ae601e3c33eba9e3"
+                    type: "livestreamCohostInvite"
+                    targetId: "690c6a641b055f909ff1c8e1"
+                    targetType: "room"
+                    userId: "690c6a0bfb181288c0325727"
+                    status: "rejected"
+                    createdBy: "690c6a0bfb181288c0325726"
+                    respondedAt: "2025-11-06T10:03:00.000Z"
+                    createdAt: "2025-11-06T10:01:00.000Z"
+                    updatedAt: "2025-11-06T10:03:00.000Z"
+                    invitationId: "690c6b1a2b055f909ff1c9a1"
+                    invitedUserId: "testcohost-456-789"
+                    invitedUserPublicId: "testcohost-456-789"
+                    invitedUserInternalId: "690c6a0bfb181288c0325727"
+                    inviterUserId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    inviterUserPublicId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    inviterUserInternalId: "690c6a0bfb181288c0325726"
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                  - _id: "690c6a0bfb181288c0325727"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325727"
+                    displayName: "Invited Co-host"
+                    userId: "testcohost-456-789"
+              eventType: "room.didCohostInviteReject"
+              id: "690c6a0bfb181288c0325727"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/rooms/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T10:03:00.789Z"
+              version: 1
+
+room.didCohostInviteCancel:
+  get:
+    security: []
+    summary: "room cohost invitation cancelled"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: 'RTE data for room.didCohostInviteCancel event'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The invited user ID (internal)
+                      example: "690c6a0bfb181288c0325727"
+                    data:
+                      type: object
+                      properties:
+                        invitations:
+                          type: array
+                          items:
+                            type: object
+                          description: Array containing the invitation details
+                        users:
+                          type: array
+                          items:
+                            $ref: '../../../schema/user.yaml#/UserV3'
+                          description: Array of users involved (inviter and invitee)
+                - $ref: '../../../schema/realtime.yaml#/Wrapper'
+            example:
+              data:
+                invitations:
+                  - _id: "690c6b1a2b055f909ff1c9a1"
+                    networkId: "606f37a0ae601e3c33eba9e3"
+                    type: "livestreamCohostInvite"
+                    targetId: "690c6a641b055f909ff1c8e1"
+                    targetType: "room"
+                    userId: "690c6a0bfb181288c0325727"
+                    status: "cancelled"
+                    createdBy: "690c6a0bfb181288c0325726"
+                    respondedAt: "2025-11-06T10:04:00.000Z"
+                    createdAt: "2025-11-06T10:01:00.000Z"
+                    updatedAt: "2025-11-06T10:04:00.000Z"
+                    invitationId: "690c6b1a2b055f909ff1c9a1"
+                    invitedUserId: "testcohost-456-789"
+                    invitedUserPublicId: "testcohost-456-789"
+                    invitedUserInternalId: "690c6a0bfb181288c0325727"
+                    inviterUserId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    inviterUserPublicId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                    inviterUserInternalId: "690c6a0bfb181288c0325726"
+                users:
+                  - _id: "690c6a0bfb181288c0325726"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325726"
+                    displayName: "Stamm - O'Reilly"
+                    userId: "teste2c39fe5-d5fc-4943-a9be-cf54ad4d0825"
+                  - _id: "690c6a0bfb181288c0325727"
+                    path: "606f37a0ae601e3c33eba9e3/user/690c6a0bfb181288c0325727"
+                    displayName: "Invited Co-host"
+                    userId: "testcohost-456-789"
+              eventType: "room.didCohostInviteCancel"
+              id: "690c6a0bfb181288c0325727"
+              networkId: "606f37a0ae601e3c33eba9e3"
+              path: "606f37a0ae601e3c33eba9e3/rooms/690c6a641b055f909ff1c8e1"
+              senderId: "asc-app-c1-588c759896-pmzz8-1"
+              sentTime: "2025-11-06T10:04:00.012Z"
+              version: 1

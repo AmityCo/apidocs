@@ -1,0 +1,133 @@
+common-response-200:
+  description: room information
+  content:
+    application/json:
+      schema:
+        properties:
+          rooms:
+            type: array
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          roomChildrens:
+            type: array
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+              prev:
+                type: string
+
+root-get-response-200:
+  description: list of rooms
+  content:
+    application/json:
+      schema:
+        properties:
+          rooms:
+            type: array
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          roomChildrens:
+            type: array
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          
+
+token-response-200:
+  description: ingest data for broadcasting
+  content:
+    application/json:
+      schema:
+        properties:
+          directStreamUrl:
+            type: string
+            description: "URL for direct streaming"
+          coHostToken:
+            type: string
+            description: "Access token for co-hosts"
+          coHostUrl:
+            type: string
+            description: "URL for co-hosts"
+            
+
+recorded-response-200:
+  description: Signed recorded playback URLs
+  content:
+    application/json:
+      schema:
+        properties:
+          recordedUrls:
+            type: array
+            items:
+              type: string
+              description: "Signed playback URL for recorded content"
+
+room-banned-users-response:
+  description: "List of banned users from room"
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          roomBannedUsers:
+            type: "array"
+            items:
+              type: "object"
+              required:
+                - userId
+                - banBy
+                - userPublicId
+                - banByPublicId
+                - createdAt
+              properties:
+                userId:
+                  type: "string"
+                banBy:
+                  type: "string"
+                userPublicId:
+                  type: "string"
+                banByPublicId:
+                  type: "string"
+                createdAt:
+                  type: "string"
+                  format: "date-time"
+          rooms: 
+            type: "array"
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          roomChildrens:
+            type: "array"
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          users:
+            type: "array"
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: "array"
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          paging:
+            type: "object"
+            properties: 
+              next: 
+                type: string

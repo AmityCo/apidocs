@@ -386,6 +386,22 @@ uikit:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
+room:
+  get:
+    summary: "Get room network setting configuration"
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: "Get room network setting configuration.\n"
+    responses:
+      200:
+        $ref: "./response.yaml#/room-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
 shareable-deep-links:
   put:
     summary: "Create shareable deep links configuration"
