@@ -48358,140 +48358,249 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "description": "Private ID of a room. (for real-time event)"
+                            "description": "Internal room ID"
                           },
-                          "path": {
+                          "type": {
                             "type": "string",
-                            "description": "Path of a room. (for real-time event)",
-                            "example": "631f16be1e440400da5663b0/room/69267e9842ff8f5b401851de"
-                          },
-                          "roomId": {
-                            "type": "string",
-                            "description": "ID of a room."
+                            "enum": [
+                              "directStreaming",
+                              "coHosts"
+                            ],
+                            "description": "Type of room * directStreaming - single participant streaming * coHosts - More than one participant\n"
                           },
                           "targetId": {
                             "type": "string",
-                            "description": "ID of the target entity (community, post, etc)."
+                            "description": "ID of the target of the entity that room belongs to"
                           },
                           "targetType": {
                             "type": "string",
-                            "description": "Type of the target entity.",
                             "enum": [
                               "community",
-                              "post",
                               "user"
                             ],
-                            "example": "community"
-                          },
-                          "referenceId": {
-                            "type": "string",
-                            "description": "ID of the reference entity (post, event, etc)."
+                            "description": "Target of the entity that room belongs to"
                           },
                           "referenceType": {
                             "type": "string",
-                            "description": "Type of the reference entity.",
+                            "description": "Entity that room is associated with",
                             "enum": [
-                              "post",
-                              "event"
-                            ],
-                            "example": "post"
+                              "post"
+                            ]
                           },
-                          "title": {
+                          "referenceId": {
                             "type": "string",
-                            "description": "Title of the room."
+                            "description": "Entity ID that room is associated with"
+                          },
+                          "liveChannelId": {
+                            "type": "string",
+                            "description": "Associated live channel ID for chat"
                           },
                           "liveChatEnabled": {
                             "type": "boolean",
-                            "default": true,
-                            "description": "Whether live chat is enabled for this room."
+                            "description": "Whether live channel is enabled"
                           },
-                          "childRoomIds": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            },
-                            "description": "Array of child room IDs."
+                          "title": {
+                            "type": "string",
+                            "description": "Room title"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "description": "Public room ID"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Room description"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnail file ID"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "waitingReconnect",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of room * idle - room is just created * live - broadcasting is active * waitingReconnect - broadcaster disconnected, waiting for reconnection * ended - broadcasting stopped * recorded - room recordings available\n"
                           },
                           "participants": {
                             "type": "array",
                             "items": {
                               "type": "object",
                               "properties": {
-                                "userId": {
-                                  "type": "string",
-                                  "description": "ID of the participant user."
-                                },
                                 "type": {
                                   "type": "string",
-                                  "description": "Type of participant.",
                                   "enum": [
-                                    "host",
                                     "coHost",
-                                    "speaker",
-                                    "audience"
-                                  ],
-                                  "example": "host"
+                                    "host"
+                                  ]
+                                },
+                                "userId": {
+                                  "type": "string"
                                 }
                               }
                             },
-                            "description": "List of room participants with their roles."
+                            "description": "List of room streaming participants"
                           },
-                          "createdBy": {
+                          "livePlaybackUrl": {
                             "type": "string",
-                            "description": "ID of the user who created the room."
+                            "description": "Live playback URL",
+                            "example": "https://stream.example.com/someid.m3u8?token=token"
                           },
-                          "creatorInternalId": {
+                          "liveThumbnailUrl": {
                             "type": "string",
-                            "description": "Internal ID of the creator."
-                          },
-                          "type": {
-                            "type": "string",
-                            "description": "Type of the room.",
-                            "enum": [
-                              "coHosts",
-                              "speakers",
-                              "default"
-                            ],
-                            "example": "coHosts"
-                          },
-                          "status": {
-                            "type": "string",
-                            "description": "Current status of the room.",
-                            "enum": [
-                              "idle",
-                              "active",
-                              "ended"
-                            ],
-                            "default": "idle"
-                          },
-                          "isDeleted": {
-                            "type": "boolean",
-                            "default": false,
-                            "description": "Whether this room is deleted."
+                            "description": "Live thumbnail URL",
+                            "example": "https://image.example.com/someid/thumbnail.png?token=token"
                           },
                           "recordedPlaybackInfos": {
                             "type": "array",
+                            "description": "Recorded playback URLs and thumbnails",
                             "items": {
-                              "type": "object"
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string",
+                                  "description": "Recorded playback URL",
+                                  "example": "https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/watch"
+                                },
+                                "thumbnailUrl": {
+                                  "type": "string",
+                                  "description": "Recorded thumbnail URL",
+                                  "example": "https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/thumbnail"
+                                }
+                              }
+                            }
+                          },
+                          "durationSeconds": {
+                            "type": "number",
+                            "description": "Duration of the broadcast in seconds (only for ended/recorded rooms)"
+                          },
+                          "moderation": {
+                            "type": "object",
+                            "description": "Moderation information including flagged and terminated labels",
+                            "properties": {
+                              "flagLabels": {
+                                "type": "array",
+                                "description": "Labels that triggered flag actions",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category": {
+                                      "type": "string",
+                                      "description": "Moderation category"
+                                    },
+                                    "threshold": {
+                                      "type": "number",
+                                      "description": "Threshold value that triggered the flag"
+                                    },
+                                    "detectedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the flag was detected"
+                                    }
+                                  }
+                                }
+                              },
+                              "terminateLabels": {
+                                "type": "array",
+                                "description": "Labels that triggered terminate actions",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category": {
+                                      "type": "string",
+                                      "description": "Moderation category"
+                                    },
+                                    "threshold": {
+                                      "type": "number",
+                                      "description": "Threshold value that triggered termination"
+                                    },
+                                    "detectedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the termination was detected"
+                                    }
+                                  }
+                                }
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Last moderation update timestamp"
+                              }
+                            }
+                          },
+                          "parentRoomId": {
+                            "type": "string",
+                            "description": "Parent room ID for child streams"
+                          },
+                          "childRoomIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
                             },
-                            "description": "Information about recorded playback sessions."
+                            "description": "Child room IDs",
+                            "default": []
                           },
                           "createdAt": {
                             "type": "string",
-                            "description": "The date/time when a room is created.",
-                            "format": "date-time"
+                            "format": "date-time",
+                            "description": "Creation timestamp"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "Room creator user public ID"
+                          },
+                          "creatorInternalId": {
+                            "type": "string",
+                            "example": "64be1f6cb9b4106b5a6bbf3f",
+                            "description": "Room creator user internal ID"
                           },
                           "updatedAt": {
                             "type": "string",
-                            "description": "The date/time when a room is updated or deleted.",
-                            "format": "date-time"
+                            "format": "date-time",
+                            "description": "Last update timestamp"
+                          },
+                          "liveAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting started"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting ended"
+                          },
+                          "recordedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When recording became available"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether room is deleted"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Deletion timestamp"
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "description": "User who deleted the room"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Room path for realtime events"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Custom metadata"
                           }
-                        },
-                        "required": [
-                          "roomId",
-                          "targetId",
-                          "targetType"
-                        ]
+                        }
                       }
                     }
                   }
@@ -49722,140 +49831,249 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "description": "Private ID of a room. (for real-time event)"
+                            "description": "Internal room ID"
                           },
-                          "path": {
+                          "type": {
                             "type": "string",
-                            "description": "Path of a room. (for real-time event)",
-                            "example": "631f16be1e440400da5663b0/room/69267e9842ff8f5b401851de"
-                          },
-                          "roomId": {
-                            "type": "string",
-                            "description": "ID of a room."
+                            "enum": [
+                              "directStreaming",
+                              "coHosts"
+                            ],
+                            "description": "Type of room * directStreaming - single participant streaming * coHosts - More than one participant\n"
                           },
                           "targetId": {
                             "type": "string",
-                            "description": "ID of the target entity (community, post, etc)."
+                            "description": "ID of the target of the entity that room belongs to"
                           },
                           "targetType": {
                             "type": "string",
-                            "description": "Type of the target entity.",
                             "enum": [
                               "community",
-                              "post",
                               "user"
                             ],
-                            "example": "community"
-                          },
-                          "referenceId": {
-                            "type": "string",
-                            "description": "ID of the reference entity (post, event, etc)."
+                            "description": "Target of the entity that room belongs to"
                           },
                           "referenceType": {
                             "type": "string",
-                            "description": "Type of the reference entity.",
+                            "description": "Entity that room is associated with",
                             "enum": [
-                              "post",
-                              "event"
-                            ],
-                            "example": "post"
+                              "post"
+                            ]
                           },
-                          "title": {
+                          "referenceId": {
                             "type": "string",
-                            "description": "Title of the room."
+                            "description": "Entity ID that room is associated with"
+                          },
+                          "liveChannelId": {
+                            "type": "string",
+                            "description": "Associated live channel ID for chat"
                           },
                           "liveChatEnabled": {
                             "type": "boolean",
-                            "default": true,
-                            "description": "Whether live chat is enabled for this room."
+                            "description": "Whether live channel is enabled"
                           },
-                          "childRoomIds": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            },
-                            "description": "Array of child room IDs."
+                          "title": {
+                            "type": "string",
+                            "description": "Room title"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "description": "Public room ID"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Room description"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnail file ID"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "waitingReconnect",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of room * idle - room is just created * live - broadcasting is active * waitingReconnect - broadcaster disconnected, waiting for reconnection * ended - broadcasting stopped * recorded - room recordings available\n"
                           },
                           "participants": {
                             "type": "array",
                             "items": {
                               "type": "object",
                               "properties": {
-                                "userId": {
-                                  "type": "string",
-                                  "description": "ID of the participant user."
-                                },
                                 "type": {
                                   "type": "string",
-                                  "description": "Type of participant.",
                                   "enum": [
-                                    "host",
                                     "coHost",
-                                    "speaker",
-                                    "audience"
-                                  ],
-                                  "example": "host"
+                                    "host"
+                                  ]
+                                },
+                                "userId": {
+                                  "type": "string"
                                 }
                               }
                             },
-                            "description": "List of room participants with their roles."
+                            "description": "List of room streaming participants"
                           },
-                          "createdBy": {
+                          "livePlaybackUrl": {
                             "type": "string",
-                            "description": "ID of the user who created the room."
+                            "description": "Live playback URL",
+                            "example": "https://stream.example.com/someid.m3u8?token=token"
                           },
-                          "creatorInternalId": {
+                          "liveThumbnailUrl": {
                             "type": "string",
-                            "description": "Internal ID of the creator."
-                          },
-                          "type": {
-                            "type": "string",
-                            "description": "Type of the room.",
-                            "enum": [
-                              "coHosts",
-                              "speakers",
-                              "default"
-                            ],
-                            "example": "coHosts"
-                          },
-                          "status": {
-                            "type": "string",
-                            "description": "Current status of the room.",
-                            "enum": [
-                              "idle",
-                              "active",
-                              "ended"
-                            ],
-                            "default": "idle"
-                          },
-                          "isDeleted": {
-                            "type": "boolean",
-                            "default": false,
-                            "description": "Whether this room is deleted."
+                            "description": "Live thumbnail URL",
+                            "example": "https://image.example.com/someid/thumbnail.png?token=token"
                           },
                           "recordedPlaybackInfos": {
                             "type": "array",
+                            "description": "Recorded playback URLs and thumbnails",
                             "items": {
-                              "type": "object"
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string",
+                                  "description": "Recorded playback URL",
+                                  "example": "https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/watch"
+                                },
+                                "thumbnailUrl": {
+                                  "type": "string",
+                                  "description": "Recorded thumbnail URL",
+                                  "example": "https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/thumbnail"
+                                }
+                              }
+                            }
+                          },
+                          "durationSeconds": {
+                            "type": "number",
+                            "description": "Duration of the broadcast in seconds (only for ended/recorded rooms)"
+                          },
+                          "moderation": {
+                            "type": "object",
+                            "description": "Moderation information including flagged and terminated labels",
+                            "properties": {
+                              "flagLabels": {
+                                "type": "array",
+                                "description": "Labels that triggered flag actions",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category": {
+                                      "type": "string",
+                                      "description": "Moderation category"
+                                    },
+                                    "threshold": {
+                                      "type": "number",
+                                      "description": "Threshold value that triggered the flag"
+                                    },
+                                    "detectedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the flag was detected"
+                                    }
+                                  }
+                                }
+                              },
+                              "terminateLabels": {
+                                "type": "array",
+                                "description": "Labels that triggered terminate actions",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category": {
+                                      "type": "string",
+                                      "description": "Moderation category"
+                                    },
+                                    "threshold": {
+                                      "type": "number",
+                                      "description": "Threshold value that triggered termination"
+                                    },
+                                    "detectedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the termination was detected"
+                                    }
+                                  }
+                                }
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Last moderation update timestamp"
+                              }
+                            }
+                          },
+                          "parentRoomId": {
+                            "type": "string",
+                            "description": "Parent room ID for child streams"
+                          },
+                          "childRoomIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
                             },
-                            "description": "Information about recorded playback sessions."
+                            "description": "Child room IDs",
+                            "default": []
                           },
                           "createdAt": {
                             "type": "string",
-                            "description": "The date/time when a room is created.",
-                            "format": "date-time"
+                            "format": "date-time",
+                            "description": "Creation timestamp"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "Room creator user public ID"
+                          },
+                          "creatorInternalId": {
+                            "type": "string",
+                            "example": "64be1f6cb9b4106b5a6bbf3f",
+                            "description": "Room creator user internal ID"
                           },
                           "updatedAt": {
                             "type": "string",
-                            "description": "The date/time when a room is updated or deleted.",
-                            "format": "date-time"
+                            "format": "date-time",
+                            "description": "Last update timestamp"
+                          },
+                          "liveAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting started"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting ended"
+                          },
+                          "recordedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When recording became available"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether room is deleted"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Deletion timestamp"
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "description": "User who deleted the room"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Room path for realtime events"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Custom metadata"
                           }
-                        },
-                        "required": [
-                          "roomId",
-                          "targetId",
-                          "targetType"
-                        ]
+                        }
                       }
                     },
                     "paging": {
@@ -51624,140 +51842,249 @@
                         "properties": {
                           "_id": {
                             "type": "string",
-                            "description": "Private ID of a room. (for real-time event)"
+                            "description": "Internal room ID"
                           },
-                          "path": {
+                          "type": {
                             "type": "string",
-                            "description": "Path of a room. (for real-time event)",
-                            "example": "631f16be1e440400da5663b0/room/69267e9842ff8f5b401851de"
-                          },
-                          "roomId": {
-                            "type": "string",
-                            "description": "ID of a room."
+                            "enum": [
+                              "directStreaming",
+                              "coHosts"
+                            ],
+                            "description": "Type of room * directStreaming - single participant streaming * coHosts - More than one participant\n"
                           },
                           "targetId": {
                             "type": "string",
-                            "description": "ID of the target entity (community, post, etc)."
+                            "description": "ID of the target of the entity that room belongs to"
                           },
                           "targetType": {
                             "type": "string",
-                            "description": "Type of the target entity.",
                             "enum": [
                               "community",
-                              "post",
                               "user"
                             ],
-                            "example": "community"
-                          },
-                          "referenceId": {
-                            "type": "string",
-                            "description": "ID of the reference entity (post, event, etc)."
+                            "description": "Target of the entity that room belongs to"
                           },
                           "referenceType": {
                             "type": "string",
-                            "description": "Type of the reference entity.",
+                            "description": "Entity that room is associated with",
                             "enum": [
-                              "post",
-                              "event"
-                            ],
-                            "example": "post"
+                              "post"
+                            ]
                           },
-                          "title": {
+                          "referenceId": {
                             "type": "string",
-                            "description": "Title of the room."
+                            "description": "Entity ID that room is associated with"
+                          },
+                          "liveChannelId": {
+                            "type": "string",
+                            "description": "Associated live channel ID for chat"
                           },
                           "liveChatEnabled": {
                             "type": "boolean",
-                            "default": true,
-                            "description": "Whether live chat is enabled for this room."
+                            "description": "Whether live channel is enabled"
                           },
-                          "childRoomIds": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            },
-                            "description": "Array of child room IDs."
+                          "title": {
+                            "type": "string",
+                            "description": "Room title"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "description": "Public room ID"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Room description"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnail file ID"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "waitingReconnect",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of room * idle - room is just created * live - broadcasting is active * waitingReconnect - broadcaster disconnected, waiting for reconnection * ended - broadcasting stopped * recorded - room recordings available\n"
                           },
                           "participants": {
                             "type": "array",
                             "items": {
                               "type": "object",
                               "properties": {
-                                "userId": {
-                                  "type": "string",
-                                  "description": "ID of the participant user."
-                                },
                                 "type": {
                                   "type": "string",
-                                  "description": "Type of participant.",
                                   "enum": [
-                                    "host",
                                     "coHost",
-                                    "speaker",
-                                    "audience"
-                                  ],
-                                  "example": "host"
+                                    "host"
+                                  ]
+                                },
+                                "userId": {
+                                  "type": "string"
                                 }
                               }
                             },
-                            "description": "List of room participants with their roles."
+                            "description": "List of room streaming participants"
                           },
-                          "createdBy": {
+                          "livePlaybackUrl": {
                             "type": "string",
-                            "description": "ID of the user who created the room."
+                            "description": "Live playback URL",
+                            "example": "https://stream.example.com/someid.m3u8?token=token"
                           },
-                          "creatorInternalId": {
+                          "liveThumbnailUrl": {
                             "type": "string",
-                            "description": "Internal ID of the creator."
-                          },
-                          "type": {
-                            "type": "string",
-                            "description": "Type of the room.",
-                            "enum": [
-                              "coHosts",
-                              "speakers",
-                              "default"
-                            ],
-                            "example": "coHosts"
-                          },
-                          "status": {
-                            "type": "string",
-                            "description": "Current status of the room.",
-                            "enum": [
-                              "idle",
-                              "active",
-                              "ended"
-                            ],
-                            "default": "idle"
-                          },
-                          "isDeleted": {
-                            "type": "boolean",
-                            "default": false,
-                            "description": "Whether this room is deleted."
+                            "description": "Live thumbnail URL",
+                            "example": "https://image.example.com/someid/thumbnail.png?token=token"
                           },
                           "recordedPlaybackInfos": {
                             "type": "array",
+                            "description": "Recorded playback URLs and thumbnails",
                             "items": {
-                              "type": "object"
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string",
+                                  "description": "Recorded playback URL",
+                                  "example": "https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/watch"
+                                },
+                                "thumbnailUrl": {
+                                  "type": "string",
+                                  "description": "Recorded thumbnail URL",
+                                  "example": "https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/thumbnail"
+                                }
+                              }
+                            }
+                          },
+                          "durationSeconds": {
+                            "type": "number",
+                            "description": "Duration of the broadcast in seconds (only for ended/recorded rooms)"
+                          },
+                          "moderation": {
+                            "type": "object",
+                            "description": "Moderation information including flagged and terminated labels",
+                            "properties": {
+                              "flagLabels": {
+                                "type": "array",
+                                "description": "Labels that triggered flag actions",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category": {
+                                      "type": "string",
+                                      "description": "Moderation category"
+                                    },
+                                    "threshold": {
+                                      "type": "number",
+                                      "description": "Threshold value that triggered the flag"
+                                    },
+                                    "detectedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the flag was detected"
+                                    }
+                                  }
+                                }
+                              },
+                              "terminateLabels": {
+                                "type": "array",
+                                "description": "Labels that triggered terminate actions",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category": {
+                                      "type": "string",
+                                      "description": "Moderation category"
+                                    },
+                                    "threshold": {
+                                      "type": "number",
+                                      "description": "Threshold value that triggered termination"
+                                    },
+                                    "detectedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the termination was detected"
+                                    }
+                                  }
+                                }
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Last moderation update timestamp"
+                              }
+                            }
+                          },
+                          "parentRoomId": {
+                            "type": "string",
+                            "description": "Parent room ID for child streams"
+                          },
+                          "childRoomIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
                             },
-                            "description": "Information about recorded playback sessions."
+                            "description": "Child room IDs",
+                            "default": []
                           },
                           "createdAt": {
                             "type": "string",
-                            "description": "The date/time when a room is created.",
-                            "format": "date-time"
+                            "format": "date-time",
+                            "description": "Creation timestamp"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "Room creator user public ID"
+                          },
+                          "creatorInternalId": {
+                            "type": "string",
+                            "example": "64be1f6cb9b4106b5a6bbf3f",
+                            "description": "Room creator user internal ID"
                           },
                           "updatedAt": {
                             "type": "string",
-                            "description": "The date/time when a room is updated or deleted.",
-                            "format": "date-time"
+                            "format": "date-time",
+                            "description": "Last update timestamp"
+                          },
+                          "liveAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting started"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting ended"
+                          },
+                          "recordedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When recording became available"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether room is deleted"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Deletion timestamp"
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "description": "User who deleted the room"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Room path for realtime events"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Custom metadata"
                           }
-                        },
-                        "required": [
-                          "roomId",
-                          "targetId",
-                          "targetType"
-                        ]
+                        }
                       }
                     }
                   }
