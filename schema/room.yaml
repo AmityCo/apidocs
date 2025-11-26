@@ -1,0 +1,107 @@
+Room:
+  type: object
+  properties:
+    _id:
+      type: string
+      description: Private ID of a room. (for real-time event)
+    path:
+      type: string
+      description: Path of a room. (for real-time event)
+      example: "631f16be1e440400da5663b0/room/69267e9842ff8f5b401851de"
+    roomId:
+      type: string
+      description: ID of a room.
+    targetId:
+      type: string
+      description: ID of the target entity (community, post, etc).
+    targetType:
+      type: string
+      description: Type of the target entity.
+      enum:
+        - community
+        - post
+        - user
+      example: community
+    referenceId:
+      type: string
+      description: ID of the reference entity (post, event, etc).
+    referenceType:
+      type: string
+      description: Type of the reference entity.
+      enum:
+        - post
+        - event
+      example: post
+    title:
+      type: string
+      description: Title of the room.
+    liveChatEnabled:
+      type: boolean
+      default: true
+      description: Whether live chat is enabled for this room.
+    childRoomIds:
+      type: array
+      items:
+        type: string
+      description: Array of child room IDs.
+    participants:
+      type: array
+      items:
+        type: object
+        properties:
+          userId:
+            type: string
+            description: ID of the participant user.
+          type:
+            type: string
+            description: Type of participant.
+            enum:
+              - host
+              - coHost
+              - speaker
+              - audience
+            example: host
+      description: List of room participants with their roles.
+    createdBy:
+      type: string
+      description: ID of the user who created the room.
+    creatorInternalId:
+      type: string
+      description: Internal ID of the creator.
+    type:
+      type: string
+      description: Type of the room.
+      enum:
+        - coHosts
+        - speakers
+        - default
+      example: coHosts
+    status:
+      type: string
+      description: Current status of the room.
+      enum:
+        - idle
+        - active
+        - ended
+      default: idle
+    isDeleted:
+      type: boolean
+      default: false
+      description: Whether this room is deleted.
+    recordedPlaybackInfos:
+      type: array
+      items:
+        type: object
+      description: Information about recorded playback sessions.
+    createdAt:
+      type: string
+      description: The date/time when a room is created.
+      format: date-time
+    updatedAt:
+      type: string
+      description: The date/time when a room is updated or deleted.
+      format: date-time
+  required:
+    - roomId
+    - targetId
+    - targetType
