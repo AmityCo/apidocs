@@ -96120,6 +96120,232 @@
         }
       }
     },
+    "/api/v1/1p": {
+      "get": {
+        "summary": "Get first-party data export",
+        "description": "Retrieve a pre-signed URL to download first-party data exports for a network. This endpoint allows \nadministrators to access exported data for various entity types. The endpoint returns a redirect (302) \nto a signed S3 URL where the data file can be downloaded.\n\n**Available Data Types:**\n- `comments_last_90d`: Comments from the last 90 days\n- `communities`: All communities in the network\n- `community_members`: All community membership data\n- `posts_last_90d`: Posts from the last 90 days\n- `reactions_last_90d`: Reactions from the last 90 days\n- `roles`: All roles in the network\n- `users`: All user data\n\n**Important Notes:**\n- Requires admin authentication\n- Data exports must be pre-generated (contact support for export generation)\n- Returns 404 if no export exists for the specified data type\n- The signed URL is temporary and expires after a short period\n",
+        "tags": [
+          "Admin"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataType",
+            "in": "query",
+            "required": true,
+            "description": "The type of first-party data to retrieve. Specifies which data export to download.\n",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "comments_last_90d",
+                "communities",
+                "community_members",
+                "posts_last_90d",
+                "reactions_last_90d",
+                "roles",
+                "users"
+              ]
+            },
+            "example": "users"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to signed URL for file download",
+            "headers": {
+              "Location": {
+                "description": "The signed S3 URL for downloading the first-party data export",
+                "schema": {
+                  "type": "string",
+                  "format": "uri",
+                  "example": "https://s3.amazonaws.com/bucket/1p-data/networkId/users?signature=..."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/blacklist/records": {
       "put": {
         "summary": "Refresh black list",
