@@ -2,24 +2,7 @@ root:
   get:
     summary: Get first-party data export
     description: |
-      Retrieve a pre-signed URL to download first-party data exports for a network. This endpoint allows 
-      administrators to access exported data for various entity types. The endpoint returns a redirect (302) 
-      to a signed S3 URL where the data file can be downloaded.
-
-      **Available Data Types:**
-      - `comments_last_90d`: Comments from the last 90 days
-      - `communities`: All communities in the network
-      - `community_members`: All community membership data
-      - `posts_last_90d`: Posts from the last 90 days
-      - `reactions_last_90d`: Reactions from the last 90 days
-      - `roles`: All roles in the network
-      - `users`: All user data
-
-      **Important Notes:**
-      - Requires admin authentication
-      - Data exports must be pre-generated (contact support for export generation)
-      - Returns 404 if no export exists for the specified data type
-      - The signed URL is temporary and expires after a short period
+      Download first-party data for a network. This endpoint allows administrators to access exported data for various entity types
     tags:
       - Admin
     security:
@@ -28,14 +11,13 @@ root:
       - $ref: "./parameter.yaml#/dataType"
     responses:
       302:
-        description: Redirect to signed URL for file download
+        description: Redirect to URL for file download
         headers:
           Location:
-            description: The signed S3 URL for downloading the first-party data export
+            description: The URL for downloading the first-party data export
             schema:
               type: string
               format: uri
-              example: "https://s3.amazonaws.com/bucket/1p-data/networkId/users?signature=..."
       400:
         $ref: "../../global/error.yaml#/BadRequestError"
       403:
