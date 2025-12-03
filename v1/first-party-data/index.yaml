@@ -1,0 +1,28 @@
+root:
+  get:
+    summary: Get first-party data export
+    description: |
+      Download first-party data for a network. This endpoint allows administrators to access exported data for various entity types
+    tags:
+      - Admin
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/dataType"
+    responses:
+      302:
+        description: Redirect to URL for file download
+        headers:
+          Location:
+            description: The URL for downloading the first-party data export
+            schema:
+              type: string
+              format: uri
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
