@@ -20,6 +20,51 @@
     }
   ],
   "paths": {
+    "/api/v1/admin-token": {
+      "post": {
+        "summary": "Generate admin access token",
+        "description": "Generate admin access token by using existing admin token, once perform will invalidate previous token respect the expiresInHours parameter in network settings.\n",
+        "tags": [
+          "Admin"
+        ],
+        "security": [
+          {
+            "BearerAuth": [
+              "admin"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Admin access token information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Admin access token response payload",
+                  "type": "object",
+                  "properties": {
+                    "adminToken": {
+                      "type": "string",
+                      "description": "The generated admin access token"
+                    },
+                    "issuedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time when the token was issued"
+                    },
+                    "expiresAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The time when the token will expire"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/ads/me": {
       "get": {
         "summary": "Query all network ads and settings",
