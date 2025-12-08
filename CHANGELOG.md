@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.113.1] - 2025-12-08
+
+### 🚀 Features
+
+- Add generate admin token admin api (#458)
+
 ## [4.113.0] - 2025-12-08
 
 ### 🚀 Features
@@ -14,6 +20,7 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Revert event api (#451)
+- Update changelog and bump version to 4.113.0 (#457)
 
 ## [4.112.1] - 2025-11-05
 
