@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.113.0] - 2025-12-08
+
+### 🚀 Features
+
+- Add query active live video streaming API (#441)
+- Api for co-host streaming (#442)
+- Update event response schema (#453)
+- Add API doc for 1p data (#454)
+
+### ⚙️ Miscellaneous Tasks
+
+- Revert event api (#451)
+
 ## [4.112.1] - 2025-11-05
 
 ### 🚀 Features
@@ -9,6 +22,10 @@ All notable changes to this project will be documented in this file.
 - Schedule events api (#447)
 - Add includeMixedStructure flag (#449)
 - Add docs for push noti network setting API (#446)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.112.1 (#450)
 
 ## [4.112.0] - 2025-10-14
 
