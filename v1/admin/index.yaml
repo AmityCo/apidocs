@@ -1,0 +1,12 @@
+root:
+  post:
+    summary: Generate admin access token
+    description: |
+      Generate admin access token by using existing admin token, once perform will invalidate previous token respect the expiresInHours parameter in network settings.
+    tags:
+      - "Admin"
+    security:
+      - BearerAuth: [admin]
+    responses:
+      200:
+        $ref: "./response.yaml#/root-response-payload-200"
