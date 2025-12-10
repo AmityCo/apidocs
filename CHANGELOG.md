@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.113.2] - 2025-12-10
+
+### ⚙️ Miscellaneous Tasks
+
+- Remove note (#460)
+
 ## [4.113.1] - 2025-12-08
 
 ### 🚀 Features
 
 - Add generate admin token admin api (#458)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.113.1 (#459)
 
 ## [4.113.0] - 2025-12-08
 
