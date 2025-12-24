@@ -104,3 +104,116 @@ _postId-put-request-payload:
             type: "string"
             maxLength: 300
             description: "Optional reason for the edit (admin only, ignored for regular users)"
+
+_postId-patch-request-payload:
+  description: |
+    Patch operations for post data and metadata fields.
+
+    Use set/delete operations to partially update fields:
+    - `set`: Add or update key-value pairs
+    - `delete`: Remove keys
+
+    At least one of `data` or `metadata` must be provided.
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          data:
+            type: "object"
+            description: "Patch operations for post data (custom posts only)"
+            properties:
+              set:
+                type: "object"
+                description: "Key-value pairs to set or update. Maximum 100 operations."
+                additionalProperties:
+                  oneOf:
+                    - type: "string"
+                    - type: "number"
+                    - type: "boolean"
+                example:
+                  customField1: "value"
+                  customField2: 123
+                  customField3: true
+                  nullableField: null
+                  "config.api.endpoint": "https://api.example.com"
+                  "key with spaces": "allowed"
+              delete:
+                type: "array"
+                description: "Array of keys to delete. Maximum 100 operations."
+                items:
+                  type: "string"
+                maxItems: 100
+                example:
+                  - "oldField1"
+                  - "oldField2"
+          metadata:
+            type: "object"
+            description: "Patch operations for post metadata (all post types)"
+            properties:
+              set:
+                type: "object"
+                description: "Key-value pairs to set or update. Maximum 100 operations."
+                additionalProperties:
+                  oneOf:
+                    - type: "string"
+                    - type: "number"
+                    - type: "boolean"
+                example:
+                  category: "updated"
+                  priority: 5
+                  featured: true
+              delete:
+                type: "array"
+                description: "Array of keys to delete. Maximum 100 operations."
+                items:
+                  type: "string"
+                maxItems: 100
+                example:
+                  - "oldMeta1"
+                  - "oldMeta2"
+      examples:
+        setDataFields:
+          summary: "Set data fields (custom posts only)"
+          value:
+            data:
+              set:
+                customField1: "new value"
+                customField2: 42
+                customField3: true
+        deleteDataFields:
+          summary: "Delete data fields"
+          value:
+            data:
+              delete:
+                - "oldField1"
+                - "oldField2"
+        setAndDeleteData:
+          summary: "Combine set and delete operations"
+          value:
+            data:
+              set:
+                newField: "value"
+              delete:
+                - "oldField"
+        patchMetadata:
+          summary: "Patch metadata (works for all post types)"
+          value:
+            metadata:
+              set:
+                category: "updated"
+                version: 2
+              delete:
+                - "deprecatedField"
+        patchBothDataAndMetadata:
+          summary: "Patch both data and metadata"
+          value:
+            data:
+              set:
+                customData: "value"
+            metadata:
+              set:
+                status: "active"
+              delete:
+                - "tempField"
