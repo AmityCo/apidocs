@@ -2,11 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.114.0] - 2025-12-24
+
+### 🚀 Features
+
+- Add userInternalId field to room schema
+- Patch post api (#465)
+- Add links field for post and comment (#462)
+- Add sortBy parms (#463)
+
+### 🐛 Bug Fixes
+
+- Correct description for room post creation in API documentation (#464)
+
+### ⚙️ Miscellaneous Tasks
+
+- Remove note (#460)
+- Add bundle
+
 ## [4.113.1] - 2025-12-08
 
 ### 🚀 Features
 
 - Add generate admin token admin api (#458)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.113.1 (#459)
 
 ## [4.113.0] - 2025-12-08
 
