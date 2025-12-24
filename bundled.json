@@ -174673,6 +174673,3113 @@
         }
       }
     },
+    "/api/v4/posts/{postId}/kv": {
+      "patch": {
+        "summary": "patch post data and metadata",
+        "tags": [
+          "Post"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Partially update post data and/or metadata fields using set/delete operations.\n\n### Rules:\n- **Data patching**: Only allowed for custom posts (posts with custom dataType, not standard post types like `text`, `image`, `video`, etc.)\n- **Metadata patching**: Allowed for all post types\n",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Patch operations for post data and metadata fields.\n\nUse set/delete operations to partially update fields:\n- `set`: Add or update key-value pairs\n- `delete`: Remove keys\n\nAt least one of `data` or `metadata` must be provided.\n",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "object",
+                    "description": "Patch operations for post data (custom posts only)",
+                    "properties": {
+                      "set": {
+                        "type": "object",
+                        "description": "Key-value pairs to set or update. Maximum 100 operations.",
+                        "additionalProperties": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "example": {
+                          "customField1": "value",
+                          "customField2": 123,
+                          "customField3": true,
+                          "nullableField": null,
+                          "config.api.endpoint": "https://api.example.com",
+                          "key with spaces": "allowed"
+                        }
+                      },
+                      "delete": {
+                        "type": "array",
+                        "description": "Array of keys to delete. Maximum 100 operations.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "maxItems": 100,
+                        "example": [
+                          "oldField1",
+                          "oldField2"
+                        ]
+                      }
+                    }
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "description": "Patch operations for post metadata (all post types)",
+                    "properties": {
+                      "set": {
+                        "type": "object",
+                        "description": "Key-value pairs to set or update. Maximum 100 operations.",
+                        "additionalProperties": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "example": {
+                          "category": "updated",
+                          "priority": 5,
+                          "featured": true
+                        }
+                      },
+                      "delete": {
+                        "type": "array",
+                        "description": "Array of keys to delete. Maximum 100 operations.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "maxItems": 100,
+                        "example": [
+                          "oldMeta1",
+                          "oldMeta2"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "examples": {
+                "setDataFields": {
+                  "summary": "Set data fields (custom posts only)",
+                  "value": {
+                    "data": {
+                      "set": {
+                        "customField1": "new value",
+                        "customField2": 42,
+                        "customField3": true
+                      }
+                    }
+                  }
+                },
+                "deleteDataFields": {
+                  "summary": "Delete data fields",
+                  "value": {
+                    "data": {
+                      "delete": [
+                        "oldField1",
+                        "oldField2"
+                      ]
+                    }
+                  }
+                },
+                "setAndDeleteData": {
+                  "summary": "Combine set and delete operations",
+                  "value": {
+                    "data": {
+                      "set": {
+                        "newField": "value"
+                      },
+                      "delete": [
+                        "oldField"
+                      ]
+                    }
+                  }
+                },
+                "patchMetadata": {
+                  "summary": "Patch metadata (works for all post types)",
+                  "value": {
+                    "metadata": {
+                      "set": {
+                        "category": "updated",
+                        "version": 2
+                      },
+                      "delete": [
+                        "deprecatedField"
+                      ]
+                    }
+                  }
+                },
+                "patchBothDataAndMetadata": {
+                  "summary": "Patch both data and metadata",
+                  "value": {
+                    "data": {
+                      "set": {
+                        "customData": "value"
+                      }
+                    },
+                    "metadata": {
+                      "set": {
+                        "status": "active"
+                      },
+                      "delete": [
+                        "tempField"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Post Information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "posts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a post. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a post. (for real-time event)"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of a post."
+                          },
+                          "parentPostId": {
+                            "type": "string",
+                            "description": "ID of a parent post."
+                          },
+                          "postedUserId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "postedUserPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "postedUserInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "ID of an original publisher when creating a post as brand."
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public ID of an original publisher when creating a post as brand."
+                          },
+                          "sharedUserId": {
+                            "type": "string",
+                            "description": "ID of a shared owner."
+                          },
+                          "sharedCount": {
+                            "type": "integer",
+                            "description": "number of shared post."
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "ID of a target."
+                          },
+                          "targetPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a target."
+                          },
+                          "targetInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a target."
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "enum": [
+                              "user",
+                              "community",
+                              "content"
+                            ],
+                            "description": "Type of a target (user, community, content)."
+                          },
+                          "dataType": {
+                            "type": "string",
+                            "enum": [
+                              "text",
+                              "image",
+                              "file",
+                              "video",
+                              "liveStream",
+                              "clip"
+                            ],
+                            "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
+                            "default": "text"
+                          },
+                          "data": {
+                            "description": "Body of a post. Can be different types based on content type.",
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "title": "normal post",
+                                "description": "Standard post data (text, image, file, video)",
+                                "properties": {
+                                  "title": {
+                                    "type": "string",
+                                    "description": "Title of a post."
+                                  },
+                                  "text": {
+                                    "type": "string",
+                                    "description": "post text."
+                                  },
+                                  "fileId": {
+                                    "type": "string",
+                                    "description": "file key on cloud storage (for image, file post)."
+                                  },
+                                  "thumbnailFileId": {
+                                    "type": "string",
+                                    "description": "video thumbnail file id (for video post)."
+                                  },
+                                  "videoFileId": {
+                                    "type": "object",
+                                    "description": "video file id for each quality (for video post).",
+                                    "properties": {
+                                      "original": {
+                                        "type": "string",
+                                        "description": "original file id"
+                                      },
+                                      "low": {
+                                        "type": "string",
+                                        "description": "low video quality file id"
+                                      },
+                                      "medium": {
+                                        "type": "string",
+                                        "description": "medium video quality file id"
+                                      },
+                                      "high": {
+                                        "type": "string",
+                                        "description": "high video quality file id"
+                                      }
+                                    }
+                                  },
+                                  "streamId": {
+                                    "type": "string",
+                                    "description": "parent video streaming id (for video streaming post) - must be a parent stream"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "title": "clip post",
+                                "description": "clip post data",
+                                "properties": {
+                                  "fileId": {
+                                    "type": "string",
+                                    "description": "file key on cloud storage."
+                                  },
+                                  "thumbnailId": {
+                                    "type": "string",
+                                    "description": "thumbnail file id."
+                                  },
+                                  "isMuted": {
+                                    "type": "boolean",
+                                    "description": "whether the video is muted.",
+                                    "default": false
+                                  },
+                                  "displayMode": {
+                                    "type": "string",
+                                    "description": "display mode for the video.",
+                                    "enum": [
+                                      "fill",
+                                      "fit"
+                                    ],
+                                    "default": "fill"
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "flagCount": {
+                            "type": "integer",
+                            "description": "The number of users that has read this post."
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "description": "The flag for checking internally that this post is reported or not.",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "editedAt": {
+                            "type": "string",
+                            "description": "The date/time when text or metadata of post is updated.",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a post is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a post is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "reactions": {
+                            "type": "object",
+                            "description": "The mapping of reaction with reactionCounter.",
+                            "example": {
+                              "like": 1
+                            }
+                          },
+                          "reactionsCount": {
+                            "type": "integer",
+                            "description": "The number of all reactions for this post.",
+                            "example": 1
+                          },
+                          "myReactions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "like"
+                            },
+                            "description": "The list of my reactions to this post."
+                          },
+                          "commentsCount": {
+                            "type": "integer",
+                            "description": "The number of all comments for this post.",
+                            "example": 1
+                          },
+                          "comments": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a comment."
+                            }
+                          },
+                          "children": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a children post."
+                            }
+                          },
+                          "childrenNumber": {
+                            "type": "integer",
+                            "description": "The number of all children posts for this post."
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "A flag to deleted a post."
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedChildren": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that children post is reported or not."
+                          },
+                          "feedId": {
+                            "type": "string",
+                            "description": "Feed public id"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "minItems": 0,
+                            "maxItems": 5,
+                            "items": {
+                              "type": "string",
+                              "maxLength": 24
+                            }
+                          },
+                          "hashtags": {
+                            "type": "array",
+                            "minItems": 0,
+                            "maxItems": 30,
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100,
+                              "example": "video_content"
+                            },
+                            "example": [
+                              "video_content",
+                              "clips_feature",
+                              "multimedia_posts",
+                              "next_gen_social"
+                            ],
+                            "description": "Hashtags associated with the post."
+                          },
+                          "mentionees": {
+                            "type": "array",
+                            "description": "The object of the mentions type and user who get a notification from the post.",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "description": "type: * `user` - need to specific userIds and notification mentions individual user\n",
+                                  "enum": [
+                                    "user"
+                                  ]
+                                },
+                                "userIds": {
+                                  "type": "array",
+                                  "description": "Array of UserId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "userPublicIds": {
+                                  "type": "array",
+                                  "description": "Array of UserPublicId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "userInternalIds": {
+                                  "type": "array",
+                                  "description": "Array of UserInternalId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "impression": {
+                            "type": "integer"
+                          },
+                          "reach": {
+                            "type": "integer"
+                          },
+                          "structureType": {
+                            "type": "string",
+                            "description": "Structure type of the post",
+                            "example": "text"
+                          }
+                        },
+                        "required": [
+                          "postId",
+                          "data"
+                        ]
+                      }
+                    },
+                    "postChildren": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a post. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a post. (for real-time event)"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of a post."
+                          },
+                          "parentPostId": {
+                            "type": "string",
+                            "description": "ID of a parent post."
+                          },
+                          "postedUserId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "postedUserPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "postedUserInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "ID of an original publisher when creating a post as brand."
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public ID of an original publisher when creating a post as brand."
+                          },
+                          "sharedUserId": {
+                            "type": "string",
+                            "description": "ID of a shared owner."
+                          },
+                          "sharedCount": {
+                            "type": "integer",
+                            "description": "number of shared post."
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "ID of a target."
+                          },
+                          "targetPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a target."
+                          },
+                          "targetInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a target."
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "enum": [
+                              "user",
+                              "community",
+                              "content"
+                            ],
+                            "description": "Type of a target (user, community, content)."
+                          },
+                          "dataType": {
+                            "type": "string",
+                            "enum": [
+                              "text",
+                              "image",
+                              "file",
+                              "video",
+                              "liveStream"
+                            ],
+                            "description": "Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).",
+                            "default": "text"
+                          },
+                          "data": {
+                            "type": "object",
+                            "description": "Body of a post. (It can be anything when dataType is not text, image, file)",
+                            "properties": {
+                              "title": {
+                                "type": "string",
+                                "description": "Title of a post."
+                              },
+                              "text": {
+                                "type": "string",
+                                "description": "post text."
+                              },
+                              "fileId": {
+                                "type": "string",
+                                "description": "file key on cloud storage (for image, file post)."
+                              },
+                              "thumbnailFileId": {
+                                "type": "string",
+                                "description": "video thumbnail file id (for video post)."
+                              },
+                              "videoFileId": {
+                                "type": "object",
+                                "description": "video file id for each quality (for video post).",
+                                "properties": {
+                                  "original": {
+                                    "type": "string",
+                                    "description": "original file id"
+                                  },
+                                  "low": {
+                                    "type": "string",
+                                    "description": "low video quality file id"
+                                  },
+                                  "medium": {
+                                    "type": "string",
+                                    "description": "medium video quality file id"
+                                  },
+                                  "high": {
+                                    "type": "string",
+                                    "description": "high video quality file id"
+                                  }
+                                }
+                              },
+                              "streamId": {
+                                "type": "string",
+                                "description": "parent video streaming id (for video streaming post) - must be a parent stream"
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "flagCount": {
+                            "type": "integer",
+                            "description": "The number of users that has read this post."
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "description": "The flag for checking internally that this post is reported or not.",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "editedAt": {
+                            "type": "string",
+                            "description": "The date/time when text or metadata of post is updated.",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a post is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a post is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "reactions": {
+                            "type": "object",
+                            "description": "The mapping of reaction with reactionCounter.",
+                            "example": {
+                              "like": 1
+                            }
+                          },
+                          "reactionsCount": {
+                            "type": "integer",
+                            "description": "The number of all reactions for this post.",
+                            "example": 1
+                          },
+                          "myReactions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "like"
+                            },
+                            "description": "The list of my reactions to this post."
+                          },
+                          "commentsCount": {
+                            "type": "integer",
+                            "description": "The number of all comments for this post.",
+                            "example": 1
+                          },
+                          "comments": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a comment."
+                            }
+                          },
+                          "children": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a children post."
+                            }
+                          },
+                          "childrenNumber": {
+                            "type": "integer",
+                            "description": "The number of all children posts for this post."
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "A flag to deleted a post."
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedChildren": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that children post is reported or not."
+                          },
+                          "feedId": {
+                            "type": "string",
+                            "description": "Feed public id"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "minItems": 0,
+                            "maxItems": 5,
+                            "items": {
+                              "type": "string",
+                              "maxLength": 24
+                            }
+                          },
+                          "hashtags": {
+                            "type": "array",
+                            "minItems": 0,
+                            "maxItems": 30,
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100,
+                              "example": "mobile_app"
+                            },
+                            "example": [
+                              "mobile_app",
+                              "user_experience",
+                              "API_v4",
+                              "social_platform"
+                            ],
+                            "description": "Hashtags associated with the post."
+                          },
+                          "mentionees": {
+                            "type": "array",
+                            "description": "The object of the mentions type and user who get a notification from the post.",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "description": "type: * `user` - need to specific userIds and notification mentions individual user\n",
+                                  "enum": [
+                                    "user"
+                                  ]
+                                },
+                                "userIds": {
+                                  "type": "array",
+                                  "description": "Array of UserId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "userPublicIds": {
+                                  "type": "array",
+                                  "description": "Array of UserPublicId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "userInternalIds": {
+                                  "type": "array",
+                                  "description": "Array of UserInternalId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "impression": {
+                            "type": "integer"
+                          },
+                          "reach": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "postId",
+                          "data"
+                        ]
+                      }
+                    },
+                    "comments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a comment. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a comment. (for real-time event)"
+                          },
+                          "commentId": {
+                            "type": "string",
+                            "description": "ID of a comment."
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "parentId": {
+                            "type": "string",
+                            "description": "ID of a parent comment."
+                          },
+                          "rootId": {
+                            "type": "string",
+                            "description": "ID of a root comment."
+                          },
+                          "referenceId": {
+                            "type": "string",
+                            "description": "ID of a reference."
+                          },
+                          "referenceType": {
+                            "type": "string",
+                            "enum": [
+                              "post",
+                              "content",
+                              "story"
+                            ],
+                            "description": "Type of a reference (post/content)."
+                          },
+                          "dataType": {
+                            "type": "string",
+                            "description": "Type of a comment (deprecated in new SDK version, will be fixed as \"text\")."
+                          },
+                          "dataTypes": {
+                            "type": "array",
+                            "description": "Types of a comment (a comment can contain multiple types)",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "text",
+                                "image",
+                                "video"
+                              ]
+                            }
+                          },
+                          "data": {
+                            "type": "object",
+                            "description": "Body of a comment."
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "childrenNumber": {
+                            "type": "number"
+                          },
+                          "flagCount": {
+                            "type": "integer",
+                            "description": "The number of users that has read this comment."
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "description": "The flag for checking internally that this comment is reported or not.",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "reactions": {
+                            "type": "object",
+                            "description": "The mapping of reaction with reactionCounter.",
+                            "example": {
+                              "like": 1
+                            }
+                          },
+                          "reactionsCount": {
+                            "type": "integer",
+                            "description": "The number of all reactions for this comment.",
+                            "example": 1
+                          },
+                          "myReactions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "like"
+                            },
+                            "description": "The list of my reactions to this comment."
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "A flag to deleted a comment."
+                          },
+                          "editedAt": {
+                            "type": "string",
+                            "description": "The date/time when comment is updated.",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a comment is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a comment is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "children": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a children comment."
+                            }
+                          },
+                          "segmentNumber": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "mentionees": {
+                            "type": "array",
+                            "description": "The object of the mentions type and user who get a notification from the comment.",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "description": "type: * `user` - need to specific userIds and notification mentions individual user\n",
+                                  "enum": [
+                                    "user"
+                                  ]
+                                },
+                                "userIds": {
+                                  "type": "array",
+                                  "description": "Array of UserId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "userPublicIds": {
+                                  "type": "array",
+                                  "description": "Array of UserPublicId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "userInternalIds": {
+                                  "type": "array",
+                                  "description": "Array of UserInternalId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "attachments": {
+                            "type": "array",
+                            "description": "The attachments/medias to be included in the comment",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "image",
+                                    "video"
+                                  ]
+                                },
+                                "fileId": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "fileId"
+                              ]
+                            }
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "ID of a comment target."
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "description": "Type of a comment target.",
+                            "enum": [
+                              "community",
+                              "user",
+                              "content"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "commentId"
+                        ]
+                      }
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a user. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a user. (for real-time event)"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string"
+                          },
+                          "userPublicId": {
+                            "type": "string"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "profileHandle": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "avatarFileId": {
+                            "type": "string"
+                          },
+                          "avatarCustomUrl": {
+                            "type": "string"
+                          },
+                          "flagCount": {
+                            "type": "integer"
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "isGlobalBan": {
+                            "type": "boolean",
+                            "description": "Global ban status. Every user can see this flag."
+                          },
+                          "isBrand": {
+                            "type": "boolean",
+                            "description": "Brand user status."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isDeleted": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "roles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "roleId": {
+                            "type": "string"
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a role is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a role is created.",
+                            "format": "date-time"
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "The list of permission for this role. https://docs.amity.co/amity-sdk/core-concepts/user/user-permission#permissions"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false
+                          }
+                        },
+                        "required": [
+                          "roleId",
+                          "permissions",
+                          "updatedAt",
+                          "isDeleted"
+                        ]
+                      }
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fileId": {
+                            "type": "string",
+                            "description": "Root file key on cloud storage."
+                          },
+                          "fileUrl": {
+                            "type": "string",
+                            "description": "Http link for download file"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "File type.",
+                            "enum": [
+                              "image",
+                              "file",
+                              "video"
+                            ]
+                          },
+                          "accessType": {
+                            "type": "string",
+                            "description": "File access type. `network` type requires authentication to download.",
+                            "enum": [
+                              "public",
+                              "network"
+                            ],
+                            "default": "public"
+                          },
+                          "altText": {
+                            "type": "string",
+                            "description": "Alternative text for the file.",
+                            "maxLength": 180
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is uploaded.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is updated.",
+                            "format": "date-time"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "File name."
+                              },
+                              "extension": {
+                                "type": "string",
+                                "description": "File format."
+                              },
+                              "size": {
+                                "type": "number",
+                                "description": "File size."
+                              },
+                              "mimeType": {
+                                "type": "string",
+                                "description": "File mime-type."
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "File image metadata (width, height etc.).",
+                                "properties": {
+                                  "exif": {
+                                    "type": "object"
+                                  },
+                                  "gps": {
+                                    "type": "object"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "isFull": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "communities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a community. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a community. (for real-time event)"
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "displayName": {
+                            "type": "string",
+                            "description": "Community name for displaying."
+                          },
+                          "avatarFileId": {
+                            "type": "string",
+                            "description": "ID of a avatar file."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Description of a community."
+                          },
+                          "isOfficial": {
+                            "type": "boolean",
+                            "description": "Is this community official?"
+                          },
+                          "isPublic": {
+                            "type": "boolean",
+                            "description": "Is this community public?"
+                          },
+                          "onlyAdminCanPost": {
+                            "type": "boolean",
+                            "description": "Can post by admin only?"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "description": "List of tags. They will be used for searching.",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "postsCount": {
+                            "type": "integer",
+                            "description": "Number of posts in community."
+                          },
+                          "membersCount": {
+                            "type": "integer",
+                            "description": "Number of members in community."
+                          },
+                          "isJoined": {
+                            "type": "boolean",
+                            "description": "Is this community joined?"
+                          },
+                          "categoryIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a category."
+                            }
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Is this community deleted?"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedPost": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that post inside community is reported or not."
+                          },
+                          "needApprovalOnPostCreation": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Determines that this community require an authorize user to review post before post is published"
+                          },
+                          "moderatorMemberCount": {
+                            "type": "integer"
+                          },
+                          "allowCommentInStory": {
+                            "type": "boolean",
+                            "default": true
+                          },
+                          "isDiscoverable": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, this private community will be discoverable in the query response.\n* If false, this private community will not appear in the list but can still be accessed via its ID.\n"
+                          },
+                          "requiresJoinApproval": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "* If true, users will need to be approved by an admin before they can join the community.\n* If false, users can join the community without approval.\n"
+                          },
+                          "notificationMode": {
+                            "type": "string",
+                            "enum": [
+                              "default",
+                              "silent",
+                              "subscribe"
+                            ],
+                            "description": "Notification Mode:\n  * `default` - Auto register push notification.\n  * `silent` - Do not send notification.\n  * `subscribe` - Send notification to subscribed users only.\n"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "default",
+                              "event"
+                            ],
+                            "description": "Type of the community."
+                          }
+                        },
+                        "required": [
+                          "communityId",
+                          "channelId",
+                          "displayName"
+                        ]
+                      }
+                    },
+                    "communityUsers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of a user."
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a user."
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a user."
+                          },
+                          "channelId": {
+                            "type": "string",
+                            "description": "ID of a channel."
+                          },
+                          "communityId": {
+                            "type": "string",
+                            "description": "ID of a community."
+                          },
+                          "communityMembership": {
+                            "type": "string",
+                            "enum": [
+                              "none",
+                              "member",
+                              "banned"
+                            ]
+                          },
+                          "notMemberReason": {
+                            "type": "string",
+                            "description": "Reason why a user is not a member of the community."
+                          },
+                          "isBanned": {
+                            "type": "boolean",
+                            "default": false
+                          },
+                          "lastActivity": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "The date/time when a user last did something related to the community such as add/remove members ."
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community user is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community user is updated or deleted.",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "categoryId": {
+                            "type": "string",
+                            "description": "ID of a community category."
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Community category name for displaying."
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "avatarFileId": {
+                            "type": "string",
+                            "description": "ID of a avatar file."
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Is this community category deleted?"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a community category is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a community category is updated or deleted.",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "feeds": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "targetId": {
+                            "type": "string",
+                            "description": "Target public id (community id or user id)"
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "description": "Target that feed belong to",
+                            "enum": [
+                              "community",
+                              "user"
+                            ]
+                          },
+                          "postCount": {
+                            "type": "number",
+                            "description": "Post count in feed"
+                          },
+                          "feedType": {
+                            "type": "string",
+                            "description": "Feed type\n- published: main feed\n- reviewing: feed for things that have to be reviewed\n- declined: feed for things that is rejected from reviewing\n",
+                            "enum": [
+                              "published",
+                              "reviewing",
+                              "declined"
+                            ]
+                          },
+                          "feedId": {
+                            "type": "string",
+                            "description": "Feed public id"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a feed is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a feed is updated.",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "videoStreamings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "streamId": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Streaming creator user id"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "example": "64be1f6cb9b4106b5a6bbf3f"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "example": "User123"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnaiil file id"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of livestreaming   * idle - streaming is just created   * live - streamer is streaming now or streamer is reconnecting   * ended - streamer stop streaming or streamer disconnect and not connect back in time period   * recorded - live stream recordings available \n"
+                          },
+                          "isLive": {
+                            "type": "boolean",
+                            "description": "Deprecated (was used before for checking live status)"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Is streaming deleted?"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "platform": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "moderationId": {
+                            "type": "string",
+                            "description": "Moderation id"
+                          },
+                          "startedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "resolution": {
+                            "type": "string",
+                            "enum": [
+                              "SD",
+                              "HD",
+                              "FHD"
+                            ],
+                            "default": "SD"
+                          },
+                          "streamerUrl": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string"
+                              },
+                              "components": {
+                                "type": "object",
+                                "properties": {
+                                  "origin": {
+                                    "type": "string"
+                                  },
+                                  "appName": {
+                                    "type": "string"
+                                  },
+                                  "streamName": {
+                                    "type": "string"
+                                  },
+                                  "query": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "recordings": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "flv": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "duration": {
+                                      "type": "number"
+                                    },
+                                    "startTime": {
+                                      "type": "number"
+                                    },
+                                    "stopTime": {
+                                      "type": "number"
+                                    }
+                                  }
+                                },
+                                "mp4": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "duration": {
+                                      "type": "number"
+                                    },
+                                    "startTime": {
+                                      "type": "number"
+                                    },
+                                    "stopTime": {
+                                      "type": "number"
+                                    }
+                                  }
+                                },
+                                "m3u8": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "duration": {
+                                      "type": "number"
+                                    },
+                                    "startTime": {
+                                      "type": "number"
+                                    },
+                                    "stopTime": {
+                                      "type": "number"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "watcherUrl": {
+                            "type": "object",
+                            "properties": {
+                              "flv": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "components": {
+                                    "type": "object",
+                                    "properties": {
+                                      "origin": {
+                                        "type": "string"
+                                      },
+                                      "appName": {
+                                        "type": "string"
+                                      },
+                                      "streamName": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "hls": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "components": {
+                                    "type": "object",
+                                    "properties": {
+                                      "origin": {
+                                        "type": "string"
+                                      },
+                                      "appName": {
+                                        "type": "string"
+                                      },
+                                      "streamName": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rtmp": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "components": {
+                                    "type": "object",
+                                    "properties": {
+                                      "origin": {
+                                        "type": "string"
+                                      },
+                                      "appName": {
+                                        "type": "string"
+                                      },
+                                      "streamName": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "postId": {
+                            "type": "string"
+                          },
+                          "channelId": {
+                            "type": "string"
+                          },
+                          "channelEnabled": {
+                            "type": "boolean"
+                          },
+                          "isParent": {
+                            "type": "boolean",
+                            "description": "Indicates if this is a parent stream (logical container) or child stream (actual video feed)",
+                            "default": false
+                          },
+                          "parentStreamId": {
+                            "type": "string",
+                            "description": "Public ID of the parent stream (null for parent streams, parent's streamId for child streams)",
+                            "nullable": true
+                          },
+                          "childStreamIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Array of child stream IDs (for parent streams only, empty for child streams)",
+                            "default": []
+                          }
+                        }
+                      }
+                    },
+                    "videoStreamingChildren": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "streamId": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Streaming creator user id"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "example": "64be1f6cb9b4106b5a6bbf3f"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "example": "User123"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnaiil file id"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of livestreaming   * idle - streaming is just created   * live - streamer is streaming now or streamer is reconnecting   * ended - streamer stop streaming or streamer disconnect and not connect back in time period   * recorded - live stream recordings available \n"
+                          },
+                          "isLive": {
+                            "type": "boolean",
+                            "description": "Deprecated (was used before for checking live status)"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Is streaming deleted?"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "platform": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "moderationId": {
+                            "type": "string",
+                            "description": "Moderation id"
+                          },
+                          "startedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "resolution": {
+                            "type": "string",
+                            "enum": [
+                              "SD",
+                              "HD",
+                              "FHD"
+                            ],
+                            "default": "SD"
+                          },
+                          "streamerUrl": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string"
+                              },
+                              "components": {
+                                "type": "object",
+                                "properties": {
+                                  "origin": {
+                                    "type": "string"
+                                  },
+                                  "appName": {
+                                    "type": "string"
+                                  },
+                                  "streamName": {
+                                    "type": "string"
+                                  },
+                                  "query": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "recordings": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "flv": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "duration": {
+                                      "type": "number"
+                                    },
+                                    "startTime": {
+                                      "type": "number"
+                                    },
+                                    "stopTime": {
+                                      "type": "number"
+                                    }
+                                  }
+                                },
+                                "mp4": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "duration": {
+                                      "type": "number"
+                                    },
+                                    "startTime": {
+                                      "type": "number"
+                                    },
+                                    "stopTime": {
+                                      "type": "number"
+                                    }
+                                  }
+                                },
+                                "m3u8": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "duration": {
+                                      "type": "number"
+                                    },
+                                    "startTime": {
+                                      "type": "number"
+                                    },
+                                    "stopTime": {
+                                      "type": "number"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "watcherUrl": {
+                            "type": "object",
+                            "properties": {
+                              "flv": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "components": {
+                                    "type": "object",
+                                    "properties": {
+                                      "origin": {
+                                        "type": "string"
+                                      },
+                                      "appName": {
+                                        "type": "string"
+                                      },
+                                      "streamName": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "hls": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "components": {
+                                    "type": "object",
+                                    "properties": {
+                                      "origin": {
+                                        "type": "string"
+                                      },
+                                      "appName": {
+                                        "type": "string"
+                                      },
+                                      "streamName": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rtmp": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "components": {
+                                    "type": "object",
+                                    "properties": {
+                                      "origin": {
+                                        "type": "string"
+                                      },
+                                      "appName": {
+                                        "type": "string"
+                                      },
+                                      "streamName": {
+                                        "type": "string"
+                                      },
+                                      "query": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "postId": {
+                            "type": "string"
+                          },
+                          "channelId": {
+                            "type": "string"
+                          },
+                          "channelEnabled": {
+                            "type": "boolean"
+                          },
+                          "isParent": {
+                            "type": "boolean",
+                            "description": "Indicates if this is a parent stream (logical container) or child stream (actual video feed)",
+                            "default": false
+                          },
+                          "parentStreamId": {
+                            "type": "string",
+                            "description": "Public ID of the parent stream (null for parent streams, parent's streamId for child streams)",
+                            "nullable": true
+                          },
+                          "childStreamIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Array of child stream IDs (for parent streams only, empty for child streams)",
+                            "default": []
+                          }
+                        }
+                      }
+                    },
+                    "rooms": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal room ID"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "directStreaming",
+                              "coHosts"
+                            ],
+                            "description": "Type of room * directStreaming - single participant streaming * coHosts - More than one participant\n"
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "ID of the target of the entity that room belongs to"
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Target of the entity that room belongs to"
+                          },
+                          "referenceType": {
+                            "type": "string",
+                            "description": "Entity that room is associated with",
+                            "enum": [
+                              "post"
+                            ]
+                          },
+                          "referenceId": {
+                            "type": "string",
+                            "description": "Entity ID that room is associated with"
+                          },
+                          "liveChannelId": {
+                            "type": "string",
+                            "description": "Associated live channel ID for chat"
+                          },
+                          "liveChatEnabled": {
+                            "type": "boolean",
+                            "description": "Whether live channel is enabled"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Room title"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "description": "Public room ID"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Room description"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnail file ID"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "waitingReconnect",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of room * idle - room is just created * live - broadcasting is active * waitingReconnect - broadcaster disconnected, waiting for reconnection * ended - broadcasting stopped * recorded - room recordings available\n"
+                          },
+                          "participants": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "coHost",
+                                    "host"
+                                  ]
+                                },
+                                "userId": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "description": "List of room streaming participants"
+                          },
+                          "livePlaybackUrl": {
+                            "type": "string",
+                            "description": "Live playback URL",
+                            "example": "https://stream.example.com/someid.m3u8?token=token"
+                          },
+                          "liveThumbnailUrl": {
+                            "type": "string",
+                            "description": "Live thumbnail URL",
+                            "example": "https://image.example.com/someid/thumbnail.png?token=token"
+                          },
+                          "recordedPlaybackInfos": {
+                            "type": "array",
+                            "description": "Recorded playback URLs and thumbnails",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string",
+                                  "description": "Recorded playback URL",
+                                  "example": "https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/watch"
+                                },
+                                "thumbnailUrl": {
+                                  "type": "string",
+                                  "description": "Recorded thumbnail URL",
+                                  "example": "https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/thumbnail"
+                                }
+                              }
+                            }
+                          },
+                          "durationSeconds": {
+                            "type": "number",
+                            "description": "Duration of the broadcast in seconds (only for ended/recorded rooms)"
+                          },
+                          "moderation": {
+                            "type": "object",
+                            "description": "Moderation information including flagged and terminated labels",
+                            "properties": {
+                              "flagLabels": {
+                                "type": "array",
+                                "description": "Labels that triggered flag actions",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category": {
+                                      "type": "string",
+                                      "description": "Moderation category"
+                                    },
+                                    "threshold": {
+                                      "type": "number",
+                                      "description": "Threshold value that triggered the flag"
+                                    },
+                                    "detectedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the flag was detected"
+                                    }
+                                  }
+                                }
+                              },
+                              "terminateLabels": {
+                                "type": "array",
+                                "description": "Labels that triggered terminate actions",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category": {
+                                      "type": "string",
+                                      "description": "Moderation category"
+                                    },
+                                    "threshold": {
+                                      "type": "number",
+                                      "description": "Threshold value that triggered termination"
+                                    },
+                                    "detectedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the termination was detected"
+                                    }
+                                  }
+                                }
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Last moderation update timestamp"
+                              }
+                            }
+                          },
+                          "parentRoomId": {
+                            "type": "string",
+                            "description": "Parent room ID for child streams"
+                          },
+                          "childRoomIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Child room IDs",
+                            "default": []
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Creation timestamp"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "Room creator user public ID"
+                          },
+                          "creatorInternalId": {
+                            "type": "string",
+                            "example": "64be1f6cb9b4106b5a6bbf3f",
+                            "description": "Room creator user internal ID"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Last update timestamp"
+                          },
+                          "liveAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting started"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting ended"
+                          },
+                          "recordedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When recording became available"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether room is deleted"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Deletion timestamp"
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "description": "User who deleted the room"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Room path for realtime events"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Custom metadata"
+                          }
+                        }
+                      }
+                    },
+                    "roomChildrens": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal room ID"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "directStreaming",
+                              "coHosts"
+                            ],
+                            "description": "Type of room * directStreaming - single participant streaming * coHosts - More than one participant\n"
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "ID of the target of the entity that room belongs to"
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Target of the entity that room belongs to"
+                          },
+                          "referenceType": {
+                            "type": "string",
+                            "description": "Entity that room is associated with",
+                            "enum": [
+                              "post"
+                            ]
+                          },
+                          "referenceId": {
+                            "type": "string",
+                            "description": "Entity ID that room is associated with"
+                          },
+                          "liveChannelId": {
+                            "type": "string",
+                            "description": "Associated live channel ID for chat"
+                          },
+                          "liveChatEnabled": {
+                            "type": "boolean",
+                            "description": "Whether live channel is enabled"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Room title"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "description": "Public room ID"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Room description"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnail file ID"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "waitingReconnect",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of room * idle - room is just created * live - broadcasting is active * waitingReconnect - broadcaster disconnected, waiting for reconnection * ended - broadcasting stopped * recorded - room recordings available\n"
+                          },
+                          "participants": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "coHost",
+                                    "host"
+                                  ]
+                                },
+                                "userId": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "description": "List of room streaming participants"
+                          },
+                          "livePlaybackUrl": {
+                            "type": "string",
+                            "description": "Live playback URL",
+                            "example": "https://stream.example.com/someid.m3u8?token=token"
+                          },
+                          "liveThumbnailUrl": {
+                            "type": "string",
+                            "description": "Live thumbnail URL",
+                            "example": "https://image.example.com/someid/thumbnail.png?token=token"
+                          },
+                          "recordedPlaybackInfos": {
+                            "type": "array",
+                            "description": "Recorded playback URLs and thumbnails",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string",
+                                  "description": "Recorded playback URL",
+                                  "example": "https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/watch"
+                                },
+                                "thumbnailUrl": {
+                                  "type": "string",
+                                  "description": "Recorded thumbnail URL",
+                                  "example": "https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/thumbnail"
+                                }
+                              }
+                            }
+                          },
+                          "durationSeconds": {
+                            "type": "number",
+                            "description": "Duration of the broadcast in seconds (only for ended/recorded rooms)"
+                          },
+                          "moderation": {
+                            "type": "object",
+                            "description": "Moderation information including flagged and terminated labels",
+                            "properties": {
+                              "flagLabels": {
+                                "type": "array",
+                                "description": "Labels that triggered flag actions",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category": {
+                                      "type": "string",
+                                      "description": "Moderation category"
+                                    },
+                                    "threshold": {
+                                      "type": "number",
+                                      "description": "Threshold value that triggered the flag"
+                                    },
+                                    "detectedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the flag was detected"
+                                    }
+                                  }
+                                }
+                              },
+                              "terminateLabels": {
+                                "type": "array",
+                                "description": "Labels that triggered terminate actions",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category": {
+                                      "type": "string",
+                                      "description": "Moderation category"
+                                    },
+                                    "threshold": {
+                                      "type": "number",
+                                      "description": "Threshold value that triggered termination"
+                                    },
+                                    "detectedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the termination was detected"
+                                    }
+                                  }
+                                }
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Last moderation update timestamp"
+                              }
+                            }
+                          },
+                          "parentRoomId": {
+                            "type": "string",
+                            "description": "Parent room ID for child streams"
+                          },
+                          "childRoomIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Child room IDs",
+                            "default": []
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Creation timestamp"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "Room creator user public ID"
+                          },
+                          "creatorInternalId": {
+                            "type": "string",
+                            "example": "64be1f6cb9b4106b5a6bbf3f",
+                            "description": "Room creator user internal ID"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Last update timestamp"
+                          },
+                          "liveAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting started"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting ended"
+                          },
+                          "recordedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When recording became available"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether room is deleted"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Deletion timestamp"
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "description": "User who deleted the room"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Room path for realtime events"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Custom metadata"
+                          }
+                        }
+                      }
+                    },
+                    "polls": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "pollId": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "example": "64be1f6cb9b4106b5a6bbf3f"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "example": "User123"
+                          },
+                          "title": {
+                            "type": "string",
+                            "maxLength": 150,
+                            "description": "Poll title with maximum 150 characters"
+                          },
+                          "question": {
+                            "type": "string",
+                            "description": "question."
+                          },
+                          "answers": {
+                            "type": "array",
+                            "maxItems": 10,
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "dataType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "text",
+                                    "image"
+                                  ]
+                                },
+                                "data": {
+                                  "type": "string"
+                                },
+                                "fileId": {
+                                  "description": "image fileId, required only when dataType is image",
+                                  "type": "string"
+                                },
+                                "voteCount": {
+                                  "type": "number",
+                                  "default": 0
+                                },
+                                "isVotedByUser": {
+                                  "type": "boolean",
+                                  "default": false
+                                },
+                                "id": {
+                                  "type": "string",
+                                  "description": "Option id"
+                                }
+                              }
+                            }
+                          },
+                          "answerType": {
+                            "type": "string"
+                          },
+                          "closedAt": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "isVoted": {
+                            "type": "boolean",
+                            "default": false
+                          },
+                          "status": {
+                            "type": "string",
+                            "default": "open"
+                          },
+                          "closedIn": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Parameters validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters validation error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v5/posts": {
       "get": {
         "summary": "query posts",

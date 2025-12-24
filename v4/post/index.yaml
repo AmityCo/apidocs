@@ -136,3 +136,34 @@ _postId:
         $ref: "../../global/error.yaml#/BadRequestError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+_postId-kv:
+  patch:
+    summary: "patch post data and metadata"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: |
+      Partially update post data and/or metadata fields using set/delete operations.
+
+      ### Rules:
+      - **Data patching**: Only allowed for custom posts (posts with custom dataType, not standard post types like `text`, `image`, `video`, etc.)
+      - **Metadata patching**: Allowed for all post types
+    parameters:
+      - $ref: "./parameter.yaml#/_postId"
+    requestBody:
+      $ref: "./request.yaml#/_postId-patch-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/post-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
