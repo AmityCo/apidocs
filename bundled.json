@@ -18868,6 +18868,54 @@
                   "metadata": {
                     "type": "object"
                   },
+                  "links": {
+                    "type": "array",
+                    "maxItems": 100,
+                    "description": "Array of URL links extracted from content with metadata for link preview rendering",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "url"
+                      ],
+                      "properties": {
+                        "index": {
+                          "type": "number",
+                          "minimum": 0,
+                          "description": "Starting position of the URL in the original text content"
+                        },
+                        "length": {
+                          "type": "number",
+                          "minimum": 1,
+                          "description": "Length of the URL string in the original text content"
+                        },
+                        "url": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "The complete URL found in the content"
+                        },
+                        "renderPreview": {
+                          "type": "boolean",
+                          "default": false,
+                          "description": "Flag indicating whether to render a rich preview for this link"
+                        },
+                        "domain": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "Domain name extracted from the URL (e.g., 'example.com')"
+                        },
+                        "title": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "Title of the linked page, typically extracted from Open Graph or meta tags"
+                        },
+                        "imageUrl": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "URL of the preview image for the link, typically extracted from Open Graph tags"
+                        }
+                      }
+                    }
+                  },
                   "commentId": {
                     "type": "string",
                     "maxLength": 900
@@ -21045,6 +21093,54 @@
                   },
                   "metadata": {
                     "type": "object"
+                  },
+                  "links": {
+                    "type": "array",
+                    "maxItems": 100,
+                    "description": "Array of URL links extracted from content with metadata for link preview rendering",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "url"
+                      ],
+                      "properties": {
+                        "index": {
+                          "type": "number",
+                          "minimum": 0,
+                          "description": "Starting position of the URL in the original text content"
+                        },
+                        "length": {
+                          "type": "number",
+                          "minimum": 1,
+                          "description": "Length of the URL string in the original text content"
+                        },
+                        "url": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "The complete URL found in the content"
+                        },
+                        "renderPreview": {
+                          "type": "boolean",
+                          "default": false,
+                          "description": "Flag indicating whether to render a rich preview for this link"
+                        },
+                        "domain": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "Domain name extracted from the URL (e.g., 'example.com')"
+                        },
+                        "title": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "Title of the linked page, typically extracted from Open Graph or meta tags"
+                        },
+                        "imageUrl": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "URL of the preview image for the link, typically extracted from Open Graph tags"
+                        }
+                      }
+                    }
                   },
                   "mentionees": {
                     "type": "array",
@@ -131222,6 +131318,54 @@
                           "anything": "you want"
                         }
                       },
+                      "links": {
+                        "type": "array",
+                        "maxItems": 100,
+                        "description": "Array of URL links extracted from content with metadata for link preview rendering",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "url"
+                          ],
+                          "properties": {
+                            "index": {
+                              "type": "number",
+                              "minimum": 0,
+                              "description": "Starting position of the URL in the original text content"
+                            },
+                            "length": {
+                              "type": "number",
+                              "minimum": 1,
+                              "description": "Length of the URL string in the original text content"
+                            },
+                            "url": {
+                              "type": "string",
+                              "maximum": 2000,
+                              "description": "The complete URL found in the content"
+                            },
+                            "renderPreview": {
+                              "type": "boolean",
+                              "default": false,
+                              "description": "Flag indicating whether to render a rich preview for this link"
+                            },
+                            "domain": {
+                              "type": "string",
+                              "maximum": 2000,
+                              "description": "Domain name extracted from the URL (e.g., 'example.com')"
+                            },
+                            "title": {
+                              "type": "string",
+                              "maximum": 2000,
+                              "description": "Title of the linked page, typically extracted from Open Graph or meta tags"
+                            },
+                            "imageUrl": {
+                              "type": "string",
+                              "maximum": 2000,
+                              "description": "URL of the preview image for the link, typically extracted from Open Graph tags"
+                            }
+                          }
+                        }
+                      },
                       "postId": {
                         "type": "string",
                         "maxLength": 900,
@@ -132805,6 +132949,54 @@
                         "description": "Additional properties to support custom fields.",
                         "example": {
                           "anything": "you want"
+                        }
+                      },
+                      "links": {
+                        "type": "array",
+                        "maxItems": 100,
+                        "description": "Array of URL links extracted from content with metadata for link preview rendering",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "url"
+                          ],
+                          "properties": {
+                            "index": {
+                              "type": "number",
+                              "minimum": 0,
+                              "description": "Starting position of the URL in the original text content"
+                            },
+                            "length": {
+                              "type": "number",
+                              "minimum": 1,
+                              "description": "Length of the URL string in the original text content"
+                            },
+                            "url": {
+                              "type": "string",
+                              "maximum": 2000,
+                              "description": "The complete URL found in the content"
+                            },
+                            "renderPreview": {
+                              "type": "boolean",
+                              "default": false,
+                              "description": "Flag indicating whether to render a rich preview for this link"
+                            },
+                            "domain": {
+                              "type": "string",
+                              "maximum": 2000,
+                              "description": "Domain name extracted from the URL (e.g., 'example.com')"
+                            },
+                            "title": {
+                              "type": "string",
+                              "maximum": 2000,
+                              "description": "Title of the linked page, typically extracted from Open Graph or meta tags"
+                            },
+                            "imageUrl": {
+                              "type": "string",
+                              "maximum": 2000,
+                              "description": "URL of the preview image for the link, typically extracted from Open Graph tags"
+                            }
+                          }
                         }
                       },
                       "postId": {
@@ -168739,6 +168931,54 @@
                       "anything": "you want"
                     }
                   },
+                  "links": {
+                    "type": "array",
+                    "maxItems": 100,
+                    "description": "Array of URL links extracted from content with metadata for link preview rendering",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "url"
+                      ],
+                      "properties": {
+                        "index": {
+                          "type": "number",
+                          "minimum": 0,
+                          "description": "Starting position of the URL in the original text content"
+                        },
+                        "length": {
+                          "type": "number",
+                          "minimum": 1,
+                          "description": "Length of the URL string in the original text content"
+                        },
+                        "url": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "The complete URL found in the content"
+                        },
+                        "renderPreview": {
+                          "type": "boolean",
+                          "default": false,
+                          "description": "Flag indicating whether to render a rich preview for this link"
+                        },
+                        "domain": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "Domain name extracted from the URL (e.g., 'example.com')"
+                        },
+                        "title": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "Title of the linked page, typically extracted from Open Graph or meta tags"
+                        },
+                        "imageUrl": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "URL of the preview image for the link, typically extracted from Open Graph tags"
+                        }
+                      }
+                    }
+                  },
                   "postId": {
                     "type": "string",
                     "maxLength": 900,
@@ -171739,6 +171979,54 @@
                   },
                   "metadata": {
                     "type": "object"
+                  },
+                  "links": {
+                    "type": "array",
+                    "maxItems": 100,
+                    "description": "Array of URL links extracted from content with metadata for link preview rendering",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "url"
+                      ],
+                      "properties": {
+                        "index": {
+                          "type": "number",
+                          "minimum": 0,
+                          "description": "Starting position of the URL in the original text content"
+                        },
+                        "length": {
+                          "type": "number",
+                          "minimum": 1,
+                          "description": "Length of the URL string in the original text content"
+                        },
+                        "url": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "The complete URL found in the content"
+                        },
+                        "renderPreview": {
+                          "type": "boolean",
+                          "default": false,
+                          "description": "Flag indicating whether to render a rich preview for this link"
+                        },
+                        "domain": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "Domain name extracted from the URL (e.g., 'example.com')"
+                        },
+                        "title": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "Title of the linked page, typically extracted from Open Graph or meta tags"
+                        },
+                        "imageUrl": {
+                          "type": "string",
+                          "maximum": 2000,
+                          "description": "URL of the preview image for the link, typically extracted from Open Graph tags"
+                        }
+                      }
+                    }
                   },
                   "tags": {
                     "type": "array",
