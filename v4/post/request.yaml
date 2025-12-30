@@ -102,10 +102,51 @@ _postId-put-request-payload:
                     - "image"
                     - "file"
                     - "video"
+                productTags:
+                  type: "array"
+                  maxItems: 5
+                  description: "Array of product tags for attachments (maximum 5). Complete replacement of existing tags"
+                  items:
+                    type: "object"
+                    required:
+                      - productId
+                    properties:
+                      productId:
+                        type: "string"
+                        description: "ID of the tagged product"
+                        example: "prod_001"
           reason:
             type: "string"
             maxLength: 300
             description: "Optional reason for the edit (admin only, ignored for regular users)"
+          productTags:
+            type: "array"
+            maxItems: 20
+            description: "Array of product tags for text posts (maximum 20). Complete replacement of existing tags. Each tag requires productId, text, index, and length fields."
+            items:
+              type: "object"
+              required:
+                - productId
+                - text
+                - index
+                - length
+              properties:
+                productId:
+                  type: "string"
+                  description: "ID of the tagged product"
+                  example: "prod_001"
+                text:
+                  type: "string"
+                  description: "The actual text being tagged"
+                  example: "Nike Air Max"
+                index:
+                  type: "integer"
+                  description: "Starting character position in post text (0-based)"
+                  example: 13
+                length:
+                  type: "integer"
+                  description: "Length of the tagged text in characters"
+                  example: 12
 
 _postId-patch-request-payload:
   description: |

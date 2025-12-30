@@ -231,6 +231,29 @@ Post:
     - postId
     - data
 
+ProductTag:
+  type: object
+  description: Product tag associated with a post or media attachment
+  properties:
+    productId:
+      type: string
+      description: ID of the tagged product
+      example: "prod_001"
+    text:
+      type: string
+      description: The actual text being tagged (for text posts only)
+      example: "Product 1"
+    index:
+      type: integer
+      description: Starting character position in post text (for text posts only, 0-based)
+      example: 13
+    length:
+      type: integer
+      description: Length of the tagged text in characters (for text posts only)
+      example: 12
+  required:
+    - productId
+
 PostForRealtime:
   type: object
   properties:
@@ -664,6 +687,12 @@ PostV4:
       type: integer
     reach:
       type: integer
+    productTags:
+      type: array
+      description: Array of product tags associated with the post (maximum 20)
+      maxItems: 20
+      items:
+        $ref: "#/ProductTag"
   required:
     - postId
     - data
@@ -924,6 +953,12 @@ PostV5:
       type: string
       description: Structure type of the post
       example: "text"
+    productTags:
+      type: array
+      description: Array of product tags associated with the post (maximum 20)
+      maxItems: 20
+      items:
+        $ref: "#/ProductTag"
   required:
     - postId
     - data
@@ -997,6 +1032,19 @@ CreatePost:
             default: false
             description: "Whether the video should be muted or not."
             example: false
+          productTags:
+            type: "array"
+            maxItems: 5
+            description: "Array of product tags for this media attachment (maximum 5 per attachment). For media posts, only productId is required."
+            items:
+              type: "object"
+              required:
+                - productId
+              properties:
+                productId:
+                  type: "string"
+                  description: "ID of the tagged product"
+                  example: "prod_001"
     dataType:
       type: "string"
       example: "upstra.customtype"
@@ -1083,5 +1131,33 @@ CreatePost:
       maxLength: 24
       description: "Event reference for room posts."
       example: "507f1f77bcf86cd799439011"
+    productTags:
+      type: "array"
+      maxItems: 20
+      description: "Array of product tags for text posts (maximum 20). Each tag requires productId, text, index, and length fields."
+      items:
+        type: "object"
+        required:
+          - productId
+          - text
+          - index
+          - length
+        properties:
+          productId:
+            type: "string"
+            description: "ID of the tagged product"
+            example: "prod_001"
+          text:
+            type: "string"
+            description: "The actual text being tagged"
+            example: "Product 1"
+          index:
+            type: "integer"
+            description: "Starting character position in post text (0-based)"
+            example: 13
+          length:
+            type: "integer"
+            description: "Length of the tagged text in characters"
+            example: 12
   required:
     - "data"
