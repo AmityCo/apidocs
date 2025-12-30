@@ -296,3 +296,18 @@ _roomId-viewer-bans:
         $ref: "../../global/error.yaml#/NotFoundError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+user-event-room:
+  post:
+    summary: "Store watching time analytic for room"
+    tags:
+      - "Room"
+    security:
+      - BearerAuth: []
+    requestBody:
+      $ref: "./request.yaml#/user-event-room-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/user-event-room-response-200"
+      500:
+        $ref: "../../global/error.yaml#/CustomValidationError"
