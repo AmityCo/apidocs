@@ -217466,146 +217466,850 @@
       }
     },
     "/api/v4/users/{userId}/tags": {
-      "summary": "Assign Tags to User",
-      "tags": [
-        "User"
-      ],
-      "security": [
-        {
-          "BearerAuth": []
-        }
-      ],
-      "description": "Assign tags to a user. Requires MANAGE_USER_TAG admin permission.\n\n**Behavior:**\n- Replaces the user's existing tags with the new set (not additive)\n- Maximum 10 tags per user\n- Filters out non-existent or deleted tags\n- Returns 206 status if some tags were skipped\n- Each skipped tag includes a reason in the response\n\n**Validations:**\n- User must exist and not be deleted\n- All tags must exist and not be deleted\n- Total tags must not exceed 10 per user\n- Duplicate tagIds in request are ignored\n\n**Side Effects:**\n- Tag Service adjusts usersCount for added/removed tags\n- Emits `user.updated` event for search sync\n",
-      "parameters": [
-        {
-          "in": "path",
-          "name": "userId",
+      "post": {
+        "summary": "Assign Tags to User",
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Assign tags to a user. Requires MANAGE_USER_TAG admin permission.\n\n**Behavior:**\n- Replaces the user's existing tags with the new set (not additive)\n- Maximum 10 tags per user\n- Filters out non-existent or deleted tags\n- Returns 206 status if some tags were skipped\n- Each skipped tag includes a reason in the response\n\n**Validations:**\n- User must exist and not be deleted\n- All tags must exist and not be deleted\n- Total tags must not exceed 10 per user\n- Duplicate tagIds in request are ignored\n\n**Side Effects:**\n- Tag Service adjusts usersCount for added/removed tags\n- Emits `user.updated` event for search sync\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "description": "User public id"
+          }
+        ],
+        "requestBody": {
+          "description": "Information for assigning tags to a user",
           "required": true,
-          "schema": {
-            "type": "string",
-            "minimum": 1,
-            "maximum": 50
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "tagIds"
+                ],
+                "properties": {
+                  "tagIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 10,
+                    "description": "Array of tag IDs to assign (max 10 tags per user)",
+                    "example": [
+                      "507f1f77bcf86cd799439011",
+                      "507f1f77bcf86cd799439012"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "All tags assigned successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Whether all tags were assigned successfully",
+                      "example": true
+                    },
+                    "assigned": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Successfully assigned tag IDs",
+                      "example": [
+                        "507f1f77bcf86cd799439011"
+                      ]
+                    },
+                    "skipped": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tagId": {
+                            "type": "string",
+                            "example": "507f1f77bcf86cd799439012"
+                          },
+                          "reason": {
+                            "type": "string",
+                            "enum": [
+                              "TAG_NOT_FOUND",
+                              "TAG_LIMIT_EXCEEDED",
+                              "TAG_ALREADY_ASSIGNED"
+                            ],
+                            "example": "TAG_NOT_FOUND"
+                          }
+                        }
+                      },
+                      "description": "Tags that were skipped with reasons"
+                    }
+                  }
+                }
+              }
+            }
           },
-          "description": "User public id"
-        }
-      ],
-      "requestBody": {
-        "$ref": "./request.yaml#/assign-tags-to-user-request-payload"
-      },
-      "responses": {
-        "200": {
-          "$ref": "./response.yaml#/assign-tags-to-user-response-200"
-        },
-        "206": {
-          "$ref": "./response.yaml#/assign-tags-to-user-response-206"
-        },
-        "400": {
-          "$ref": "../../global/error.yaml#/BadRequestError"
-        },
-        "403": {
-          "$ref": "../../global/error.yaml#/ForbiddenError"
-        },
-        "404": {
-          "$ref": "../../global/error.yaml#/NotFoundError"
-        },
-        "500": {
-          "$ref": "../../global/error.yaml#/UnexpectedError"
+          "206": {
+            "description": "Partial success - some tags were skipped",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Whether all tags were assigned successfully",
+                      "example": true
+                    },
+                    "assigned": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Successfully assigned tag IDs",
+                      "example": [
+                        "507f1f77bcf86cd799439011"
+                      ]
+                    },
+                    "skipped": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tagId": {
+                            "type": "string",
+                            "example": "507f1f77bcf86cd799439012"
+                          },
+                          "reason": {
+                            "type": "string",
+                            "enum": [
+                              "TAG_NOT_FOUND",
+                              "TAG_LIMIT_EXCEEDED",
+                              "TAG_ALREADY_ASSIGNED"
+                            ],
+                            "example": "TAG_NOT_FOUND"
+                          }
+                        }
+                      },
+                      "description": "Tags that were skipped with reasons"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
         }
       }
     },
     "/api/v4/users/tags/{tagId}/users": {
-      "summary": "Assign Tag to Multiple Users",
-      "tags": [
-        "User"
-      ],
-      "security": [
-        {
-          "BearerAuth": []
-        }
-      ],
-      "description": "Assign a tag to multiple users in bulk. Requires MANAGE_USER_TAG admin permission.\n\n**Behavior:**\n- Processes up to 100 users per request (configurable via network setting)\n- Continues processing even if some assignments fail\n- Returns 206 status with details of failed assignments\n- Each failed assignment includes a reason\n\n**Validations:**\n- Tag must exist and not be deleted\n- Maximum userIds per request from network setting (default: 100)\n- Each user must exist and not be deleted\n- Each user must have < 10 tags\n- Tag not already assigned to user\n\n**Side Effects:**\n- Tag Service increments usersCount by number of successful assignments\n- Emits `user.updated` events for all successfully assigned users\n",
-      "parameters": [
-        {
-          "in": "path",
-          "name": "tagId",
+      "post": {
+        "summary": "Assign Tag to Multiple Users",
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Assign a tag to multiple users in bulk. Requires MANAGE_USER_TAG admin permission.\n\n**Behavior:**\n- Processes up to 100 users per request (configurable via network setting)\n- Continues processing even if some assignments fail\n- Returns 206 status with details of failed assignments\n- Each failed assignment includes a reason\n\n**Validations:**\n- Tag must exist and not be deleted\n- Maximum userIds per request from network setting (default: 100)\n- Each user must exist and not be deleted\n- Each user must have < 10 tags\n- Tag not already assigned to user\n\n**Side Effects:**\n- Tag Service increments usersCount by number of successful assignments\n- Emits `user.updated` events for all successfully assigned users\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tagId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f\\d]{24}$"
+            },
+            "description": "The tag's MongoDB ObjectId"
+          }
+        ],
+        "requestBody": {
+          "description": "Information for assigning a tag to multiple users",
           "required": true,
-          "schema": {
-            "type": "string",
-            "pattern": "^[a-f\\d]{24}$"
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userIds"
+                ],
+                "properties": {
+                  "userIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "description": "Array of user IDs (max from network setting, default 100)",
+                    "example": [
+                      "user123",
+                      "user456"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "All assignments successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Whether all assignments were successful",
+                      "example": true
+                    },
+                    "assigned": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Successfully assigned user IDs",
+                      "example": [
+                        "user123"
+                      ]
+                    },
+                    "failed": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "string",
+                            "example": "user456"
+                          },
+                          "reason": {
+                            "type": "string",
+                            "enum": [
+                              "USER_NOT_FOUND",
+                              "TAG_LIMIT_EXCEEDED",
+                              "TAG_ALREADY_ASSIGNED"
+                            ],
+                            "example": "TAG_LIMIT_EXCEEDED"
+                          }
+                        }
+                      },
+                      "description": "Failed assignments with reasons"
+                    }
+                  }
+                }
+              }
+            }
           },
-          "description": "The tag's MongoDB ObjectId"
-        }
-      ],
-      "requestBody": {
-        "$ref": "./request.yaml#/assign-tag-to-users-request-payload"
-      },
-      "responses": {
-        "200": {
-          "$ref": "./response.yaml#/assign-tag-to-users-response-200"
-        },
-        "206": {
-          "$ref": "./response.yaml#/assign-tag-to-users-response-206"
-        },
-        "400": {
-          "$ref": "../../global/error.yaml#/BadRequestError"
-        },
-        "403": {
-          "$ref": "../../global/error.yaml#/ForbiddenError"
-        },
-        "404": {
-          "$ref": "../../global/error.yaml#/NotFoundError"
-        },
-        "500": {
-          "$ref": "../../global/error.yaml#/UnexpectedError"
+          "206": {
+            "description": "Partial success - some assignments failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Whether all assignments were successful",
+                      "example": true
+                    },
+                    "assigned": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Successfully assigned user IDs",
+                      "example": [
+                        "user123"
+                      ]
+                    },
+                    "failed": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "string",
+                            "example": "user456"
+                          },
+                          "reason": {
+                            "type": "string",
+                            "enum": [
+                              "USER_NOT_FOUND",
+                              "TAG_LIMIT_EXCEEDED",
+                              "TAG_ALREADY_ASSIGNED"
+                            ],
+                            "example": "TAG_LIMIT_EXCEEDED"
+                          }
+                        }
+                      },
+                      "description": "Failed assignments with reasons"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
         }
       }
     },
     "/api/v4/users/{userId}/tags/{tagId}": {
-      "summary": "Remove Tag from User",
-      "tags": [
-        "User"
-      ],
-      "security": [
-        {
-          "BearerAuth": []
-        }
-      ],
-      "description": "Remove a tag assignment from a user. Requires MANAGE_USER_TAG admin permission.\n\n**Behavior:**\n- Removes tag from user's tags array using atomic $pull operation\n- Decrements tag's usersCount\n- Idempotent: No error if tag not assigned\n\n**Side Effects:**\n- Tag Service decrements usersCount\n- Emits `user.updated` event for search sync\n",
-      "parameters": [
-        {
-          "in": "path",
-          "name": "userId",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "minimum": 1,
-            "maximum": 50
+      "delete": {
+        "summary": "Remove Tag from User",
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Remove a tag assignment from a user. Requires MANAGE_USER_TAG admin permission.\n\n**Behavior:**\n- Removes tag from user's tags array using atomic $pull operation\n- Decrements tag's usersCount\n- Idempotent: No error if tag not assigned\n\n**Side Effects:**\n- Tag Service decrements usersCount\n- Emits `user.updated` event for search sync\n",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "description": "User public id"
           },
-          "description": "User public id"
-        },
-        {
-          "in": "path",
-          "name": "tagId",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "pattern": "^[a-f\\d]{24}$"
+          {
+            "in": "path",
+            "name": "tagId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f\\d]{24}$"
+            },
+            "description": "The tag's MongoDB ObjectId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag removed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
           },
-          "description": "The tag's MongoDB ObjectId"
-        }
-      ],
-      "responses": {
-        "200": {
-          "$ref": "./response.yaml#/remove-tag-from-user-response-200"
-        },
-        "403": {
-          "$ref": "../../global/error.yaml#/ForbiddenError"
-        },
-        "404": {
-          "$ref": "../../global/error.yaml#/NotFoundError"
-        },
-        "500": {
-          "$ref": "../../global/error.yaml#/UnexpectedError"
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
         }
       }
     },
