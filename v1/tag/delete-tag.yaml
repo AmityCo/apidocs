@@ -1,0 +1,28 @@
+delete:
+  summary: "Delete Tag (Soft Delete)"
+  tags:
+    - "Tag"
+  security:
+    - BearerAuth: []
+  description: |
+    Soft delete a tag. Requires MANAGE_USER_TAG admin permission.
+    
+    **Behavior:**
+    - Sets `isDeleted = true` on the tag
+    - Preserves tag in database for historical data
+    - Prevents new assignments to deleted tags
+    - Emits `tag.deleted` event that triggers async cleanup:
+      - User Service removes tag from all users' tags array
+      - Search Sync Worker updates OpenSearch to remove assignments
+    - Existing user tag assignments remain in database temporarily
+  parameters:
+    - $ref: "./parameter.yaml#/_tagId"
+  responses:
+    200:
+      $ref: "./response.yaml#/delete-tag-response-200"
+    403:
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    404:
+      $ref: "../../global/error.yaml#/NotFoundError"
+    500:
+      $ref: "../../global/error.yaml#/UnexpectedError"

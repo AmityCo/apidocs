@@ -62933,6 +62933,1489 @@
         }
       }
     },
+    "/api/v1/tags": {
+      "get": {
+        "summary": "Query Tags",
+        "tags": [
+          "Tag"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Query tags with filtering, sorting, and pagination. Requires MANAGE_USER_TAG or VIEW_USER_TAG_MANAGEMENT admin permission.\n\n**Filtering:**\n- By type (currently only 'user')\n- By deletion status (include or exclude deleted tags)\n- By keyword (case-insensitive search on name field)\n\n**Pagination:**\n- Default limit: 20\n- Maximum limit: 100\n- Use `options[token]` for cursor-based pagination\n",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter by tag type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "user"
+              ],
+              "example": "user"
+            }
+          },
+          {
+            "name": "isDeleted",
+            "in": "query",
+            "description": "Filter by deletion status",
+            "schema": {
+              "type": "boolean",
+              "example": false
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "description": "Search keyword for tag name (case-insensitive)",
+            "schema": {
+              "type": "string",
+              "example": "VIP"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Field to sort by",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "createdAt",
+                "updatedAt",
+                "name"
+              ],
+              "default": "createdAt",
+              "example": "createdAt"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc",
+              "example": "desc"
+            }
+          },
+          {
+            "name": "options[limit]",
+            "in": "query",
+            "description": "Number of results per page (max 100)",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "example": 20
+            }
+          },
+          {
+            "name": "options[token]",
+            "in": "query",
+            "description": "Pagination token from previous response",
+            "schema": {
+              "type": "string",
+              "example": "20"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tags retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tagId": {
+                            "type": "string",
+                            "description": "Unique identifier for the tag (MongoDB ObjectId)",
+                            "example": "507f1f77bcf86cd799439011"
+                          },
+                          "publicId": {
+                            "type": "string",
+                            "description": "Public identifier for the tag (same as _id)",
+                            "example": "507f1f77bcf86cd799439011"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network identifier this tag belongs to",
+                            "example": "507f1f77bcf86cd799439012"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Tag name (1-20 characters)",
+                            "example": "VIP"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "user"
+                            ],
+                            "description": "Type of tag",
+                            "example": "user"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Optional tag description (max 140 characters)",
+                            "example": "VIP members with premium access"
+                          },
+                          "backgroundColor": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Hex color code for tag background",
+                            "example": "#FF5733"
+                          },
+                          "textColor": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Hex color code for tag text",
+                            "example": "#FFFFFF"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Custom metadata for the tag",
+                            "additionalProperties": true,
+                            "example": {
+                              "priority": 1,
+                              "category": "premium"
+                            }
+                          },
+                          "usersCount": {
+                            "type": "integer",
+                            "description": "Number of users assigned to this tag",
+                            "example": 150
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Soft deletion flag",
+                            "example": false
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Tag creation timestamp",
+                            "example": "2024-01-08T10:00:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Tag last update timestamp",
+                            "example": "2024-01-08T10:00:00.000Z"
+                          }
+                        }
+                      }
+                    },
+                    "paging": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "description": "Pagination token for next page",
+                          "example": "20"
+                        },
+                        "previous": {
+                          "type": "string",
+                          "description": "Pagination token for previous page",
+                          "example": "0"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Tag",
+        "tags": [
+          "Tag"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Create a new tag for user categorization. Requires MANAGE_USER_TAG admin permission.\n\n**Validations:**\n- Maximum tags per network enforced (default: 100, configurable via network settings)\n- Tag name must be unique within the network\n- Colors must be valid hex format (#RRGGBB)\n",
+        "requestBody": {
+          "description": "Information for creating a new tag",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "type"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 20,
+                    "description": "Tag name",
+                    "example": "VIP"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "user"
+                    ],
+                    "description": "Type of tag (currently only 'user' is supported)",
+                    "example": "user"
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 140,
+                    "description": "Optional tag description",
+                    "example": "VIP members with premium access"
+                  },
+                  "backgroundColor": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-F]{6}$",
+                    "description": "Hex color code for tag background",
+                    "example": "#FF5733"
+                  },
+                  "textColor": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-F]{6}$",
+                    "description": "Hex color code for tag text",
+                    "example": "#FFFFFF"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "description": "Custom metadata for the tag",
+                    "additionalProperties": true,
+                    "example": {
+                      "priority": 1,
+                      "category": "premium"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tag retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tagId": {
+                      "type": "string",
+                      "description": "Unique identifier for the tag (MongoDB ObjectId)",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "publicId": {
+                      "type": "string",
+                      "description": "Public identifier for the tag (same as _id)",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "networkId": {
+                      "type": "string",
+                      "description": "Network identifier this tag belongs to",
+                      "example": "507f1f77bcf86cd799439012"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Tag name (1-20 characters)",
+                      "example": "VIP"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "user"
+                      ],
+                      "description": "Type of tag",
+                      "example": "user"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Optional tag description (max 140 characters)",
+                      "example": "VIP members with premium access"
+                    },
+                    "backgroundColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$",
+                      "description": "Hex color code for tag background",
+                      "example": "#FF5733"
+                    },
+                    "textColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$",
+                      "description": "Hex color code for tag text",
+                      "example": "#FFFFFF"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "description": "Custom metadata for the tag",
+                      "additionalProperties": true,
+                      "example": {
+                        "priority": 1,
+                        "category": "premium"
+                      }
+                    },
+                    "usersCount": {
+                      "type": "integer",
+                      "description": "Number of users assigned to this tag",
+                      "example": 150
+                    },
+                    "isDeleted": {
+                      "type": "boolean",
+                      "description": "Soft deletion flag",
+                      "example": false
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Tag creation timestamp",
+                      "example": "2024-01-08T10:00:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Tag last update timestamp",
+                      "example": "2024-01-08T10:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400409,
+                  "message": "Conflict error occurred."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tags/{tagId}": {
+      "get": {
+        "summary": "Get Tag by ID",
+        "tags": [
+          "Tag"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Retrieve a tag by its ID. Requires MANAGE_USER_TAG or VIEW_USER_TAG_MANAGEMENT admin permission.\n",
+        "parameters": [
+          {
+            "name": "tagId",
+            "in": "path",
+            "required": true,
+            "description": "The tag's MongoDB ObjectId",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f\\d]{24}$",
+              "example": "507f1f77bcf86cd799439011"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tagId": {
+                      "type": "string",
+                      "description": "Unique identifier for the tag (MongoDB ObjectId)",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "publicId": {
+                      "type": "string",
+                      "description": "Public identifier for the tag (same as _id)",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "networkId": {
+                      "type": "string",
+                      "description": "Network identifier this tag belongs to",
+                      "example": "507f1f77bcf86cd799439012"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Tag name (1-20 characters)",
+                      "example": "VIP"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "user"
+                      ],
+                      "description": "Type of tag",
+                      "example": "user"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Optional tag description (max 140 characters)",
+                      "example": "VIP members with premium access"
+                    },
+                    "backgroundColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$",
+                      "description": "Hex color code for tag background",
+                      "example": "#FF5733"
+                    },
+                    "textColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$",
+                      "description": "Hex color code for tag text",
+                      "example": "#FFFFFF"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "description": "Custom metadata for the tag",
+                      "additionalProperties": true,
+                      "example": {
+                        "priority": 1,
+                        "category": "premium"
+                      }
+                    },
+                    "usersCount": {
+                      "type": "integer",
+                      "description": "Number of users assigned to this tag",
+                      "example": 150
+                    },
+                    "isDeleted": {
+                      "type": "boolean",
+                      "description": "Soft deletion flag",
+                      "example": false
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Tag creation timestamp",
+                      "example": "2024-01-08T10:00:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Tag last update timestamp",
+                      "example": "2024-01-08T10:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Tag",
+        "tags": [
+          "Tag"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Update an existing tag. Requires MANAGE_USER_TAG admin permission.\n\n**Validations:**\n- At least one field must be provided\n- Cannot update deleted tags\n- Name must be unique within network if changed\n- Colors must be valid hex format if provided\n",
+        "parameters": [
+          {
+            "name": "tagId",
+            "in": "path",
+            "required": true,
+            "description": "The tag's MongoDB ObjectId",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f\\d]{24}$",
+              "example": "507f1f77bcf86cd799439011"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Information for updating an existing tag",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 20,
+                    "description": "Tag name",
+                    "example": "Premium VIP"
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 140,
+                    "description": "Tag description",
+                    "example": "Premium VIP members"
+                  },
+                  "backgroundColor": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-F]{6}$",
+                    "description": "Hex color code for tag background",
+                    "example": "#FF5733"
+                  },
+                  "textColor": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-F]{6}$",
+                    "description": "Hex color code for tag text",
+                    "example": "#FFFFFF"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "description": "Custom metadata for the tag",
+                    "additionalProperties": true,
+                    "example": {
+                      "priority": 2
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tag retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tagId": {
+                      "type": "string",
+                      "description": "Unique identifier for the tag (MongoDB ObjectId)",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "publicId": {
+                      "type": "string",
+                      "description": "Public identifier for the tag (same as _id)",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "networkId": {
+                      "type": "string",
+                      "description": "Network identifier this tag belongs to",
+                      "example": "507f1f77bcf86cd799439012"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Tag name (1-20 characters)",
+                      "example": "VIP"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "user"
+                      ],
+                      "description": "Type of tag",
+                      "example": "user"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Optional tag description (max 140 characters)",
+                      "example": "VIP members with premium access"
+                    },
+                    "backgroundColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$",
+                      "description": "Hex color code for tag background",
+                      "example": "#FF5733"
+                    },
+                    "textColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$",
+                      "description": "Hex color code for tag text",
+                      "example": "#FFFFFF"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "description": "Custom metadata for the tag",
+                      "additionalProperties": true,
+                      "example": {
+                        "priority": 1,
+                        "category": "premium"
+                      }
+                    },
+                    "usersCount": {
+                      "type": "integer",
+                      "description": "Number of users assigned to this tag",
+                      "example": 150
+                    },
+                    "isDeleted": {
+                      "type": "boolean",
+                      "description": "Soft deletion flag",
+                      "example": false
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Tag creation timestamp",
+                      "example": "2024-01-08T10:00:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Tag last update timestamp",
+                      "example": "2024-01-08T10:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400409,
+                  "message": "Conflict error occurred."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Tag (Soft Delete)",
+        "tags": [
+          "Tag"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Soft delete a tag. Requires MANAGE_USER_TAG admin permission.\n\n**Behavior:**\n- Sets `isDeleted = true` on the tag\n- Preserves tag in database for historical data\n- Prevents new assignments to deleted tags\n- Emits `tag.deleted` event that triggers async cleanup:\n  - User Service removes tag from all users' tags array\n  - Search Sync Worker updates OpenSearch to remove assignments\n- Existing user tag assignments remain in database temporarily\n",
+        "parameters": [
+          {
+            "name": "tagId",
+            "in": "path",
+            "required": true,
+            "description": "The tag's MongoDB ObjectId",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f\\d]{24}$",
+              "example": "507f1f77bcf86cd799439011"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/me/following-feeds": {
       "get": {
         "summary": "Get following feeds",
@@ -117754,6 +119237,26 @@
                           "description": "This field is for fallback role IDs. If the user does not have any role, this role will be assigned to the user."
                         }
                       }
+                    },
+                    "tags": {
+                      "type": "object",
+                      "description": "Tag configuration for users",
+                      "properties": {
+                        "maxTagsPerNetwork": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 1000,
+                          "default": 100,
+                          "description": "Maximum number of tags allowed per network"
+                        },
+                        "maxUsersPerBulkAssignment": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 1000,
+                          "default": 100,
+                          "description": "Maximum number of users allowed per bulk tag assignment operation"
+                        }
+                      }
                     }
                   }
                 }
@@ -117879,6 +119382,26 @@
                       "maxLength": 10
                     },
                     "description": "When fallback role is enabled, these roles will be assigned to users who don't have any role in the network."
+                  },
+                  "tags": {
+                    "type": "object",
+                    "description": "Tag configuration for users",
+                    "properties": {
+                      "maxTagsPerNetwork": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 1000,
+                        "default": 100,
+                        "description": "Maximum number of tags allowed per network"
+                      },
+                      "maxUsersPerBulkAssignment": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 1000,
+                        "default": 100,
+                        "description": "Maximum number of users allowed per bulk tag assignment operation"
+                      }
+                    }
                   }
                 }
               }
@@ -117909,6 +119432,26 @@
                             "type": "string"
                           },
                           "description": "This field is for fallback role IDs. If the user does not have any role, this role will be assigned to the user."
+                        }
+                      }
+                    },
+                    "tags": {
+                      "type": "object",
+                      "description": "Tag configuration for users",
+                      "properties": {
+                        "maxTagsPerNetwork": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 1000,
+                          "default": 100,
+                          "description": "Maximum number of tags allowed per network"
+                        },
+                        "maxUsersPerBulkAssignment": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 1000,
+                          "default": 100,
+                          "description": "Maximum number of users allowed per bulk tag assignment operation"
                         }
                       }
                     }
@@ -215922,6 +217465,150 @@
         }
       }
     },
+    "/api/v4/users/{userId}/tags": {
+      "summary": "Assign Tags to User",
+      "tags": [
+        "User"
+      ],
+      "security": [
+        {
+          "BearerAuth": []
+        }
+      ],
+      "description": "Assign tags to a user. Requires MANAGE_USER_TAG admin permission.\n\n**Behavior:**\n- Replaces the user's existing tags with the new set (not additive)\n- Maximum 10 tags per user\n- Filters out non-existent or deleted tags\n- Returns 206 status if some tags were skipped\n- Each skipped tag includes a reason in the response\n\n**Validations:**\n- User must exist and not be deleted\n- All tags must exist and not be deleted\n- Total tags must not exceed 10 per user\n- Duplicate tagIds in request are ignored\n\n**Side Effects:**\n- Tag Service adjusts usersCount for added/removed tags\n- Emits `user.updated` event for search sync\n",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "userId",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "description": "User public id"
+        }
+      ],
+      "requestBody": {
+        "$ref": "./request.yaml#/assign-tags-to-user-request-payload"
+      },
+      "responses": {
+        "200": {
+          "$ref": "./response.yaml#/assign-tags-to-user-response-200"
+        },
+        "206": {
+          "$ref": "./response.yaml#/assign-tags-to-user-response-206"
+        },
+        "400": {
+          "$ref": "../../global/error.yaml#/BadRequestError"
+        },
+        "403": {
+          "$ref": "../../global/error.yaml#/ForbiddenError"
+        },
+        "404": {
+          "$ref": "../../global/error.yaml#/NotFoundError"
+        },
+        "500": {
+          "$ref": "../../global/error.yaml#/UnexpectedError"
+        }
+      }
+    },
+    "/api/v4/users/tags/{tagId}/users": {
+      "summary": "Assign Tag to Multiple Users",
+      "tags": [
+        "User"
+      ],
+      "security": [
+        {
+          "BearerAuth": []
+        }
+      ],
+      "description": "Assign a tag to multiple users in bulk. Requires MANAGE_USER_TAG admin permission.\n\n**Behavior:**\n- Processes up to 100 users per request (configurable via network setting)\n- Continues processing even if some assignments fail\n- Returns 206 status with details of failed assignments\n- Each failed assignment includes a reason\n\n**Validations:**\n- Tag must exist and not be deleted\n- Maximum userIds per request from network setting (default: 100)\n- Each user must exist and not be deleted\n- Each user must have < 10 tags\n- Tag not already assigned to user\n\n**Side Effects:**\n- Tag Service increments usersCount by number of successful assignments\n- Emits `user.updated` events for all successfully assigned users\n",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "tagId",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[a-f\\d]{24}$"
+          },
+          "description": "The tag's MongoDB ObjectId"
+        }
+      ],
+      "requestBody": {
+        "$ref": "./request.yaml#/assign-tag-to-users-request-payload"
+      },
+      "responses": {
+        "200": {
+          "$ref": "./response.yaml#/assign-tag-to-users-response-200"
+        },
+        "206": {
+          "$ref": "./response.yaml#/assign-tag-to-users-response-206"
+        },
+        "400": {
+          "$ref": "../../global/error.yaml#/BadRequestError"
+        },
+        "403": {
+          "$ref": "../../global/error.yaml#/ForbiddenError"
+        },
+        "404": {
+          "$ref": "../../global/error.yaml#/NotFoundError"
+        },
+        "500": {
+          "$ref": "../../global/error.yaml#/UnexpectedError"
+        }
+      }
+    },
+    "/api/v4/users/{userId}/tags/{tagId}": {
+      "summary": "Remove Tag from User",
+      "tags": [
+        "User"
+      ],
+      "security": [
+        {
+          "BearerAuth": []
+        }
+      ],
+      "description": "Remove a tag assignment from a user. Requires MANAGE_USER_TAG admin permission.\n\n**Behavior:**\n- Removes tag from user's tags array using atomic $pull operation\n- Decrements tag's usersCount\n- Idempotent: No error if tag not assigned\n\n**Side Effects:**\n- Tag Service decrements usersCount\n- Emits `user.updated` event for search sync\n",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "userId",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "description": "User public id"
+        },
+        {
+          "in": "path",
+          "name": "tagId",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[a-f\\d]{24}$"
+          },
+          "description": "The tag's MongoDB ObjectId"
+        }
+      ],
+      "responses": {
+        "200": {
+          "$ref": "./response.yaml#/remove-tag-from-user-response-200"
+        },
+        "403": {
+          "$ref": "../../global/error.yaml#/ForbiddenError"
+        },
+        "404": {
+          "$ref": "../../global/error.yaml#/NotFoundError"
+        },
+        "500": {
+          "$ref": "../../global/error.yaml#/UnexpectedError"
+        }
+      }
+    },
     "/api/v4/me/user-blocks/{userId}": {
       "post": {
         "summary": "Block a User",
@@ -249493,6 +251180,318 @@
                           }
                         }
                       }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/tag.created": {
+      "get": {
+        "tags": [
+          "Webhook event"
+        ],
+        "summary": "Tag created webhook event",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "This is called when a new tag is created by an admin\n",
+        "responses": {
+          "200": {
+            "description": "Tag created event information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tagId": {
+                      "type": "string",
+                      "description": "Unique identifier for the tag (MongoDB ObjectId)",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "publicId": {
+                      "type": "string",
+                      "description": "Public identifier for the tag (same as _id)",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "networkId": {
+                      "type": "string",
+                      "description": "Network identifier this tag belongs to",
+                      "example": "507f1f77bcf86cd799439012"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Tag name (1-20 characters)",
+                      "example": "VIP"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "user"
+                      ],
+                      "description": "Type of tag",
+                      "example": "user"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Optional tag description (max 140 characters)",
+                      "example": "VIP members with premium access"
+                    },
+                    "backgroundColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$",
+                      "description": "Hex color code for tag background",
+                      "example": "#FF5733"
+                    },
+                    "textColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$",
+                      "description": "Hex color code for tag text",
+                      "example": "#FFFFFF"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "description": "Custom metadata for the tag",
+                      "additionalProperties": true,
+                      "example": {
+                        "priority": 1,
+                        "category": "premium"
+                      }
+                    },
+                    "usersCount": {
+                      "type": "integer",
+                      "description": "Number of users assigned to this tag",
+                      "example": 150
+                    },
+                    "isDeleted": {
+                      "type": "boolean",
+                      "description": "Soft deletion flag",
+                      "example": false
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Tag creation timestamp",
+                      "example": "2024-01-08T10:00:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Tag last update timestamp",
+                      "example": "2024-01-08T10:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/tag.updated": {
+      "get": {
+        "tags": [
+          "Webhook event"
+        ],
+        "summary": "Tag updated webhook event",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "This is called when a tag is updated by an admin\n",
+        "responses": {
+          "200": {
+            "description": "Tag updated event information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tagId": {
+                      "type": "string",
+                      "description": "Unique identifier for the tag (MongoDB ObjectId)",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "publicId": {
+                      "type": "string",
+                      "description": "Public identifier for the tag (same as _id)",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "networkId": {
+                      "type": "string",
+                      "description": "Network identifier this tag belongs to",
+                      "example": "507f1f77bcf86cd799439012"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Tag name (1-20 characters)",
+                      "example": "VIP"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "user"
+                      ],
+                      "description": "Type of tag",
+                      "example": "user"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Optional tag description (max 140 characters)",
+                      "example": "VIP members with premium access"
+                    },
+                    "backgroundColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$",
+                      "description": "Hex color code for tag background",
+                      "example": "#FF5733"
+                    },
+                    "textColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$",
+                      "description": "Hex color code for tag text",
+                      "example": "#FFFFFF"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "description": "Custom metadata for the tag",
+                      "additionalProperties": true,
+                      "example": {
+                        "priority": 1,
+                        "category": "premium"
+                      }
+                    },
+                    "usersCount": {
+                      "type": "integer",
+                      "description": "Number of users assigned to this tag",
+                      "example": 150
+                    },
+                    "isDeleted": {
+                      "type": "boolean",
+                      "description": "Soft deletion flag",
+                      "example": false
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Tag creation timestamp",
+                      "example": "2024-01-08T10:00:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Tag last update timestamp",
+                      "example": "2024-01-08T10:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/tag.deleted": {
+      "get": {
+        "tags": [
+          "Webhook event"
+        ],
+        "summary": "Tag deleted webhook event",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "This is called when a tag is soft deleted by an admin\n",
+        "responses": {
+          "200": {
+            "description": "Tag deleted event information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tagId": {
+                      "type": "string",
+                      "description": "Unique identifier for the tag (MongoDB ObjectId)",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "publicId": {
+                      "type": "string",
+                      "description": "Public identifier for the tag (same as _id)",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "networkId": {
+                      "type": "string",
+                      "description": "Network identifier this tag belongs to",
+                      "example": "507f1f77bcf86cd799439012"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Tag name (1-20 characters)",
+                      "example": "VIP"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "user"
+                      ],
+                      "description": "Type of tag",
+                      "example": "user"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Optional tag description (max 140 characters)",
+                      "example": "VIP members with premium access"
+                    },
+                    "backgroundColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$",
+                      "description": "Hex color code for tag background",
+                      "example": "#FF5733"
+                    },
+                    "textColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$",
+                      "description": "Hex color code for tag text",
+                      "example": "#FFFFFF"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "description": "Custom metadata for the tag",
+                      "additionalProperties": true,
+                      "example": {
+                        "priority": 1,
+                        "category": "premium"
+                      }
+                    },
+                    "usersCount": {
+                      "type": "integer",
+                      "description": "Number of users assigned to this tag",
+                      "example": 150
+                    },
+                    "isDeleted": {
+                      "type": "boolean",
+                      "description": "Soft deletion flag",
+                      "example": false
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Tag creation timestamp",
+                      "example": "2024-01-08T10:00:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Tag last update timestamp",
+                      "example": "2024-01-08T10:00:00.000Z"
                     }
                   }
                 }

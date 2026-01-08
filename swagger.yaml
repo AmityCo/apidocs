@@ -151,6 +151,11 @@ paths:
     $ref: "./v1/invitation/index.yaml#/count"
   /api/v1/invitations/{invitationId}/resend:
     $ref: "./v1/invitation/index.yaml#/invitationId-resend"
+  # Tag Management
+  /api/v1/tags:
+    $ref: "./v1/tag/index.yaml#/root"
+  /api/v1/tags/{tagId}:
+    $ref: "./v1/tag/index.yaml#/_tagId"
   /api/v1/me/following-feeds:
     $ref: "./v1/following-feed/index.yaml#/root"
   /api/v3/content-feeds:
@@ -494,6 +499,13 @@ paths:
     $ref: "./v2/user/index.yaml#/_userId-flags"
   /api/v4/users/{userId}:
     $ref: "./v4/user/index.yaml#/_userId"
+  # User Tags
+  /api/v4/users/{userId}/tags:
+    $ref: "./v4/user/index.yaml#/_userId-tags"
+  /api/v4/users/tags/{tagId}/users:
+    $ref: "./v4/user/index.yaml#/tags_tagId-users"
+  /api/v4/users/{userId}/tags/{tagId}:
+    $ref: "./v4/user/index.yaml#/_userId-tags_tagId"
   /api/v4/me/user-blocks/{userId}:
     $ref: "./v4/user/index.yaml#/me-user-blocks_userId"
   /api/v3/user-event/video-streaming:
@@ -618,6 +630,12 @@ paths:
     $ref: "./webhook/user/index.yaml#/user.didUnflag"
   /webhook/user.didUpdate:
     $ref: "./webhook/user/index.yaml#/user.didUpdate"
+  /webhook/tag.created:
+    $ref: "./webhook/tag/index.yaml#/tag.created"
+  /webhook/tag.updated:
+    $ref: "./webhook/tag/index.yaml#/tag.updated"
+  /webhook/tag.deleted:
+    $ref: "./webhook/tag/index.yaml#/tag.deleted"
   /webhook/v3.comment.didAddReaction:
     $ref: "./webhook/comment-v3/index.yaml#/comment.didAddReaction"
   /webhook/v3.comment.didCreate:
@@ -889,3 +907,22 @@ components:
     BearerAuth:
       type: "http"
       scheme: "bearer"
+  schemas:
+    Tag:
+      $ref: "./schema/tag.yaml#/Tag"
+    CreateTagRequest:
+      $ref: "./schema/tag.yaml#/CreateTagRequest"
+    UpdateTagRequest:
+      $ref: "./schema/tag.yaml#/UpdateTagRequest"
+    QueryTagsResponse:
+      $ref: "./schema/tag.yaml#/QueryTagsResponse"
+    UserTagAssignment:
+      $ref: "./schema/tag.yaml#/UserTagAssignment"
+    AssignTagsToUserRequest:
+      $ref: "./schema/tag.yaml#/AssignTagsToUserRequest"
+    AssignTagsToUserResponse:
+      $ref: "./schema/tag.yaml#/AssignTagsToUserResponse"
+    AssignTagToUsersRequest:
+      $ref: "./schema/tag.yaml#/AssignTagToUsersRequest"
+    AssignTagToUsersResponse:
+      $ref: "./schema/tag.yaml#/AssignTagToUsersResponse"

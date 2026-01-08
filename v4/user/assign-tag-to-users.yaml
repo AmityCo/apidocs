@@ -1,0 +1,42 @@
+post:
+  summary: "Assign Tag to Multiple Users"
+  tags:
+    - "User"
+  security:
+    - BearerAuth: []
+  description: |
+    Assign a tag to multiple users in bulk. Requires MANAGE_USER_TAG admin permission.
+    
+    **Behavior:**
+    - Processes up to 100 users per request (configurable via network setting)
+    - Continues processing even if some assignments fail
+    - Returns 206 status with details of failed assignments
+    - Each failed assignment includes a reason
+    
+    **Validations:**
+    - Tag must exist and not be deleted
+    - Maximum userIds per request from network setting (default: 100)
+    - Each user must exist and not be deleted
+    - Each user must have < 10 tags
+    - Tag not already assigned to user
+    
+    **Side Effects:**
+    - Tag Service increments usersCount by number of successful assignments
+    - Emits `user.updated` events for all successfully assigned users
+  parameters:
+    - $ref: "./parameter.yaml#/_tagId"
+  requestBody:
+    $ref: "./request.yaml#/assign-tag-to-users-request-payload"
+  responses:
+    200:
+      $ref: "./response.yaml#/assign-tag-to-users-response-200"
+    206:
+      $ref: "./response.yaml#/assign-tag-to-users-response-206"
+    400:
+      $ref: "../../global/error.yaml#/BadRequestError"
+    403:
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    404:
+      $ref: "../../global/error.yaml#/NotFoundError"
+    500:
+      $ref: "../../global/error.yaml#/UnexpectedError"

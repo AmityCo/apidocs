@@ -1,0 +1,47 @@
+tag.created:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "Tag created webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when a new tag is created by an admin\n"
+    responses:
+      200:
+        description: "Tag created event information"
+        content:
+          application/json:
+            schema:
+              $ref: '../../schema/tag.yaml#/Tag'
+
+tag.updated:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "Tag updated webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when a tag is updated by an admin\n"
+    responses:
+      200:
+        description: "Tag updated event information"
+        content:
+          application/json:
+            schema:
+              $ref: '../../schema/tag.yaml#/Tag'
+
+tag.deleted:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "Tag deleted webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when a tag is soft deleted by an admin\n"
+    responses:
+      200:
+        description: "Tag deleted event information"
+        content:
+          application/json:
+            schema:
+              $ref: '../../schema/tag.yaml#/Tag'

@@ -1,0 +1,29 @@
+delete:
+  summary: "Remove Tag from User"
+  tags:
+    - "User"
+  security:
+    - BearerAuth: []
+  description: |
+    Remove a tag assignment from a user. Requires MANAGE_USER_TAG admin permission.
+    
+    **Behavior:**
+    - Removes tag from user's tags array using atomic $pull operation
+    - Decrements tag's usersCount
+    - Idempotent: No error if tag not assigned
+    
+    **Side Effects:**
+    - Tag Service decrements usersCount
+    - Emits `user.updated` event for search sync
+  parameters:
+    - $ref: "./parameter.yaml#/_userId"
+    - $ref: "./parameter.yaml#/_tagId"
+  responses:
+    200:
+      $ref: "./response.yaml#/remove-tag-from-user-response-200"
+    403:
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    404:
+      $ref: "../../global/error.yaml#/NotFoundError"
+    500:
+      $ref: "../../global/error.yaml#/UnexpectedError"

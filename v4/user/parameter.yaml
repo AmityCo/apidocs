@@ -8,6 +8,15 @@ _userId:
     maximum: 50
   description: "User public id"
 
+_tagId:
+  in: "path"
+  name: "tagId"
+  required: true
+  schema:
+    type: "string"
+    pattern: '^[a-f\d]{24}$'
+  description: "The tag's MongoDB ObjectId"
+
 deleteAll:
   in: query
   name: deleteAll

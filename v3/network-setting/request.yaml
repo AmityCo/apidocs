@@ -173,6 +173,22 @@ users-put-request-payload:
               type: string
               maxLength: 10
             description: "When fallback role is enabled, these roles will be assigned to users who don't have any role in the network."
+          tags:
+            type: object
+            description: "Tag configuration for users"
+            properties:
+              maxTagsPerNetwork:
+                type: integer
+                minimum: 1
+                maximum: 1000
+                default: 100
+                description: "Maximum number of tags allowed per network"
+              maxUsersPerBulkAssignment:
+                type: integer
+                minimum: 1
+                maximum: 1000
+                default: 100
+                description: "Maximum number of users allowed per bulk tag assignment operation"
 
 public-users-put-request-payload:
   description: >
