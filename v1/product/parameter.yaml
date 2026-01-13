@@ -1,0 +1,77 @@
+productId:
+  name: productId
+  in: path
+  required: true
+  description: "The unique identifier of the product"
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 100
+
+keyword:
+  name: keyword
+  in: query
+  required: false
+  description: "Search keyword for product name"
+  schema:
+    type: string
+    maxLength: 200
+
+isActive:
+  name: isActive
+  in: query
+  required: false
+  description: "Filter by active status"
+  schema:
+    type: boolean
+
+isDeleted:
+  name: isDeleted
+  in: query
+  required: false
+  description: "Filter by deleted status"
+  schema:
+    type: boolean
+
+sortBy:
+  name: sortBy
+  in: query
+  required: false
+  description: "Field to sort by"
+  schema:
+    type: string
+    enum:
+      - createdAt
+      - updatedAt
+      - productName
+
+sortOrder:
+  name: sortOrder
+  in: query
+  required: false
+  description: "Sort order"
+  schema:
+    type: string
+    enum:
+      - asc
+      - desc
+
+options-limit:
+  name: options[limit]
+  in: query
+  required: false
+  description: "Maximum number of items to return (1-100)"
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 20
+
+options-token:
+  name: options[token]
+  in: query
+  required: false
+  description: "Pagination token for fetching next page"
+  schema:
+    type: string
+    maxLength: 1000

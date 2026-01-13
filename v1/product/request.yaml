@@ -1,0 +1,110 @@
+create-product-request-payload:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - productId
+          - productName
+          - productUrl
+          - status
+        properties:
+          productId:
+            type: string
+            description: "Unique identifier for the product"
+            minLength: 1
+            maxLength: 100
+            example: "prod-12345"
+          productName:
+            type: string
+            description: "Name of the product"
+            minLength: 1
+            maxLength: 200
+            example: "Premium Headphones"
+          productUrl:
+            type: string
+            format: uri
+            description: "URL to the product page"
+            example: "https://example.com/products/premium-headphones"
+          status:
+            type: string
+            description: "Product status"
+            enum:
+              - active
+              - inactive
+            example: "active"
+          price:
+            type: number
+            description: "Product price (must be positive)"
+            minimum: 0
+            exclusiveMinimum: true
+            example: 99.99
+          currency:
+            type: string
+            description: "ISO 4217 currency code (3 characters)"
+            minLength: 3
+            maxLength: 3
+            example: "USD"
+          thumbnailUrl:
+            type: string
+            format: uri
+            description: "URL to the product thumbnail image"
+            example: "https://example.com/images/headphones-thumb.jpg"
+          thumbnailMode:
+            type: string
+            description: "How the thumbnail should be displayed"
+            enum:
+              - fit
+              - fill
+            example: "fit"
+
+update-product-request-payload:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          productName:
+            type: string
+            description: "Name of the product"
+            minLength: 1
+            maxLength: 200
+            example: "Premium Wireless Headphones"
+          productUrl:
+            type: string
+            format: uri
+            description: "URL to the product page"
+            example: "https://example.com/products/premium-wireless-headphones"
+          status:
+            type: string
+            description: "Product status"
+            enum:
+              - active
+              - inactive
+            example: "active"
+          price:
+            type: number
+            description: "Product price (must be positive)"
+            minimum: 0
+            exclusiveMinimum: true
+            example: 149.99
+          currency:
+            type: string
+            description: "ISO 4217 currency code (3 characters)"
+            minLength: 3
+            maxLength: 3
+            example: "USD"
+          thumbnailUrl:
+            type: string
+            format: uri
+            description: "URL to the product thumbnail image"
+            example: "https://example.com/images/headphones-new-thumb.jpg"
+          thumbnailMode:
+            type: string
+            description: "How the thumbnail should be displayed"
+            enum:
+              - fit
+              - fill
+            example: "fill"

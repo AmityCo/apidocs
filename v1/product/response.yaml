@@ -1,0 +1,53 @@
+product-response-200:
+  description: "Successful response with product data"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+            example: "success"
+          data:
+            $ref: "../../schema/product.yaml#/Product"
+
+products-query-response-200:
+  description: "Successful response with list of products"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+            example: "success"
+          data:
+            type: array
+            items:
+              $ref: "../../schema/product.yaml#/Product"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+                description: "Token for fetching the next page"
+              previous:
+                type: string
+                description: "Token for fetching the previous page"
+
+product-delete-response-200:
+  description: "Successful response after deleting a product"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+            example: "success"
+          data:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true

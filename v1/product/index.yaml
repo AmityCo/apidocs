@@ -1,0 +1,176 @@
+root:
+  post:
+    summary: "Create product"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Create a new product in the product catalogue.
+
+      **Access Control:**
+      - Requires admin permissions with ManageProducts flag
+
+      **Important Notes:**
+      - Product ID must be unique within the network
+      - Product URL must be a valid URL
+      - Price must be positive if provided
+      - Currency must be a valid ISO 4217 currency code (3 characters)
+    requestBody:
+      $ref: "./request.yaml#/create-product-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/product-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  get:
+    summary: "Query products"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Query products with optional filters.
+
+      **Access Control:**
+      - All authenticated users can query products
+
+      **Filtering:**
+      - Filter by active status
+      - Filter by deleted status
+      - Sort by createdAt, updatedAt, or productName
+    parameters:
+      - $ref: "./parameter.yaml#/isActive"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/sortOrder"
+      - $ref: "./parameter.yaml#/options-limit"
+      - $ref: "./parameter.yaml#/options-token"
+    responses:
+      200:
+        $ref: "./response.yaml#/products-query-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+productId:
+  get:
+    summary: "Get product by ID"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Retrieve a single product by its product ID.
+
+      **Access Control:**
+      - All authenticated users can view products
+    parameters:
+      - $ref: "./parameter.yaml#/productId"
+    responses:
+      200:
+        $ref: "./response.yaml#/product-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  put:
+    summary: "Update product"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Update an existing product.
+
+      **Access Control:**
+      - Requires admin permissions with ManageProducts flag
+
+      **Important Notes:**
+      - Only provided fields will be updated
+      - Product ID cannot be changed
+    parameters:
+      - $ref: "./parameter.yaml#/productId"
+    requestBody:
+      $ref: "./request.yaml#/update-product-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/product-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  delete:
+    summary: "Delete product"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Delete a product from the catalogue.
+
+      **Access Control:**
+      - Requires admin permissions with ManageProducts flag
+
+      **Important Notes:**
+      - This performs a soft delete (marks as deleted)
+    parameters:
+      - $ref: "./parameter.yaml#/productId"
+    responses:
+      200:
+        $ref: "./response.yaml#/product-delete-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+search:
+  get:
+    summary: "Search products"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Search products by keyword with optional filters.
+
+      **Access Control:**
+      - All authenticated users can search products
+
+      **Search Features:**
+      - Full-text search on product name
+      - Filter by active/deleted status
+      - Sortable results
+    parameters:
+      - $ref: "./parameter.yaml#/keyword"
+      - $ref: "./parameter.yaml#/isActive"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/sortOrder"
+      - $ref: "./parameter.yaml#/options-limit"
+      - $ref: "./parameter.yaml#/options-token"
+    responses:
+      200:
+        $ref: "./response.yaml#/products-query-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
