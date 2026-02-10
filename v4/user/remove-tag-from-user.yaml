@@ -11,10 +11,7 @@ delete:
     - Removes tag from user's tags array using atomic $pull operation
     - Decrements tag's usersCount
     - Idempotent: No error if tag not assigned
-    
-    **Side Effects:**
     - Tag Service decrements usersCount
-    - Emits `user.updated` event for search sync
   parameters:
     - $ref: "./parameter.yaml#/_userId"
     - $ref: "./parameter.yaml#/_tagId"

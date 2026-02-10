@@ -11,18 +11,13 @@ post:
     - Replaces the user's existing tags with the new set (not additive)
     - Maximum 10 tags per user
     - Filters out non-existent or deleted tags
-    - Returns 206 status if some tags were skipped
+    - Tag adjusts usersCount for added/removed tags
     - Each skipped tag includes a reason in the response
     
     **Validations:**
     - User must exist and not be deleted
     - All tags must exist and not be deleted
-    - Total tags must not exceed 10 per user
     - Duplicate tagIds in request are ignored
-    
-    **Side Effects:**
-    - Tag Service adjusts usersCount for added/removed tags
-    - Emits `user.updated` event for search sync
   parameters:
     - $ref: "./parameter.yaml#/_userId"
   requestBody:
@@ -30,8 +25,6 @@ post:
   responses:
     200:
       $ref: "./response.yaml#/assign-tags-to-user-response-200"
-    206:
-      $ref: "./response.yaml#/assign-tags-to-user-response-206"
     400:
       $ref: "../../global/error.yaml#/BadRequestError"
     403:

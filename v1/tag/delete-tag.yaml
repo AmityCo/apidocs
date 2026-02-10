@@ -6,15 +6,6 @@ delete:
     - BearerAuth: []
   description: |
     Soft delete a tag. Requires MANAGE_USER_TAG admin permission.
-    
-    **Behavior:**
-    - Sets `isDeleted = true` on the tag
-    - Preserves tag in database for historical data
-    - Prevents new assignments to deleted tags
-    - Emits `tag.deleted` event that triggers async cleanup:
-      - User Service removes tag from all users' tags array
-      - Search Sync Worker updates OpenSearch to remove assignments
-    - Existing user tag assignments remain in database temporarily
   parameters:
     - $ref: "./parameter.yaml#/_tagId"
   responses:

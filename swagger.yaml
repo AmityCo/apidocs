@@ -154,8 +154,17 @@ paths:
   # Tag Management
   /api/v1/tags:
     $ref: "./v1/tag/index.yaml#/root"
+  /api/v1/tags/count:
+    $ref: "./v1/tag/index.yaml#/count"
   /api/v1/tags/{tagId}:
     $ref: "./v1/tag/index.yaml#/_tagId"
+  # User Tag Assignment
+  /api/v4/users/{userId}/tags:
+    $ref: "./v4/user/index.yaml#/_userId-tags"
+  /api/v4/users/{userId}/tags/{tagId}:
+    $ref: "./v4/user/index.yaml#/_userId-tags_tagId"
+  /api/v4/users/tags/{tagId}/users:
+    $ref: "./v4/user/index.yaml#/tags_tagId-users"
   /api/v1/me/following-feeds:
     $ref: "./v1/following-feed/index.yaml#/root"
   /api/v3/content-feeds:
