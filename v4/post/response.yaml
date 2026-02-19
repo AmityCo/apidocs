@@ -1,70 +1,112 @@
+# Base schemas for reusability
+BasePostData:
+  type: object
+  properties:
+    postChildren:
+      type: array
+      items:
+        $ref: "../../schema/post.yaml#/PostV4"
+    comments:
+      type: array
+      items:
+        $ref: "../../schema/comment.yaml#/Comment"
+    users:
+      type: array
+      items:
+        $ref: "../../schema/user.yaml#/UserV3"
+    files:
+      type: array
+      items:
+        $ref: "../../schema/file.yaml#/File"
+    communities:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/Community"
+    communityUsers:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/CommunityUser"
+    categories:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/CommunityCategory"
+    feeds:
+      type: array
+      items:
+        $ref: "../../schema/feed.yaml#/Feed"
+    videoStreamings:
+      type: array
+      items:
+        $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+    videoStreamingChildren:
+      type: array
+      items:
+        $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+    rooms:
+      type: array
+      items:
+        $ref: "../../schema/room.yaml#/Room"
+    roomChildrens:
+      type: array
+      items:
+        $ref: "../../schema/room.yaml#/Room"
+    products:
+      type: array
+      items:
+        $ref: "../../schema/product.yaml#/Product"
+
+BaseWebhookData:
+  allOf:
+    - $ref: '#/BasePostData'
+    - type: object
+      properties:
+        posts:
+          type: array
+          items:
+            $ref: "../../schema/post.yaml#/PostV4"
+
 post-response-200:
   description: Post Information
   content:
     application/json:
       schema:
-        type: object
-        properties:
-          posts:
-            type: array
-            items:
-              $ref: "../../schema/post.yaml#/PostV5"
-          postChildren:
-            type: array
-            items:
-              $ref: "../../schema/post.yaml#/PostV4"
-          comments:
-            type: array
-            items:
-              $ref: "../../schema/comment.yaml#/Comment"
-          users:
-            type: array
-            items:
-              $ref: "../../schema/user.yaml#/UserV3"
-          roles:
-            type: array
-            items:
-              $ref: "../../schema/role.yaml#/RoleV3"
-          files:
-            type: array
-            items:
-              $ref: "../../schema/file.yaml#/File"
-          communities:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/Community"
-          communityUsers:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/CommunityUser"
-          categories:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/CommunityCategory"
-          feeds:
-            type: array
-            items:
-              $ref: "../../schema/feed.yaml#/Feed"
-          videoStreamings:
-            type: array
-            items:
-              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-          videoStreamingChildren:
-            type: array
-            items:
-              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-          rooms: 
-            type: array
-            items:
-              $ref: "../../schema/room.yaml#/Room"
-          roomChildrens:
-            type: array
-            items:
-              $ref: "../../schema/room.yaml#/Room"
-          polls:
-            type: array
-            items:
-              $ref: "../../schema/poll.yaml#/Poll"
+        allOf:
+          - type: object
+            properties:
+              posts:
+                type: array
+                items:
+                  $ref: "../../schema/post.yaml#/PostV5"
+              roles:
+                type: array
+                items:
+                  $ref: "../../schema/role.yaml#/RoleV3"
+              polls:
+                type: array
+                items:
+                  $ref: "../../schema/poll.yaml#/Poll"
+          - $ref: '#/BasePostData'
+
+post-pagination-response-200:
+  description: Post Information
+  content:
+    application/json:
+      schema:
+        allOf:
+          - type: object
+            properties:
+              posts:
+                type: array
+                items:
+                  $ref: "../../schema/post.yaml#/PostV4"
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  previous:
+                    type: string
+          - $ref: '#/BasePostData'
 
 PostWebhookResponse:
   description: Post Information
@@ -76,127 +118,8 @@ PostWebhookResponse:
           event:
             type: string
           data:
-            type: object
-            properties:
-              posts:
-                type: array
-                items:
-                  $ref: "../../schema/post.yaml#/PostV4"
-              postChildren:
-                type: array
-                items:
-                  $ref: "../../schema/post.yaml#/PostV4"
-              comments:
-                type: array
-                items:
-                  $ref: "../../schema/comment.yaml#/Comment"
-              users:
-                type: array
-                items:
-                  $ref: "../../schema/user.yaml#/UserV3"
-              files:
-                type: array
-                items:
-                  $ref: "../../schema/file.yaml#/File"
-              communities:
-                type: array
-                items:
-                  $ref: "../../schema/community.yaml#/Community"
-              communityUsers:
-                type: array
-                items:
-                  $ref: "../../schema/community.yaml#/CommunityUser"
-              categories:
-                type: array
-                items:
-                  $ref: "../../schema/community.yaml#/CommunityCategory"
-              feeds:
-                type: array
-                items:
-                  $ref: "../../schema/feed.yaml#/Feed"
-              videoStreamings:
-                type: array
-                items:
-                  $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-              videoStreamingChildren:
-                type: array
-                items:
-                  $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-              rooms: 
-                type: array
-                items:
-                  $ref: "../../schema/room.yaml#/Room"
-              roomChildrens:
-                type: array
-                items:
-                  $ref: "../../schema/room.yaml#/Room"
+            $ref: '#/BaseWebhookData'
 
-post-pagination-response-200:
-  description: Post Information
-  content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          posts:
-            type: array
-            items:
-              $ref: "../../schema/post.yaml#/PostV4"
-          postChildren:
-            type: array
-            items:
-              $ref: "../../schema/post.yaml#/PostV4"
-          comments:
-            type: array
-            items:
-              $ref: "../../schema/comment.yaml#/Comment"
-          users:
-            type: array
-            items:
-              $ref: "../../schema/user.yaml#/UserV3"
-          files:
-            type: array
-            items:
-              $ref: "../../schema/file.yaml#/File"
-          communities:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/Community"
-          communityUsers:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/CommunityUser"
-          categories:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/CommunityCategory"
-          feeds:
-            type: array
-            items:
-              $ref: "../../schema/feed.yaml#/Feed"
-          videoStreamings:
-            type: array
-            items:
-              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-          videoStreamingChildren:
-            type: array
-            items:
-              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-          rooms: 
-            type: array
-            items:
-              $ref: "../../schema/room.yaml#/Room"
-          roomChildrens:
-            type: array
-            items:
-              $ref: "../../schema/room.yaml#/Room"
-          paging:
-            type: object
-            properties:
-              next:
-                type: string
-              previous:
-                type: string
 
 PostWithFlagWebhookResponse:
   description: Post Information
@@ -208,62 +131,12 @@ PostWithFlagWebhookResponse:
           event:
             type: string
           data:
-            type: object
-            properties:
-              posts:
-                type: array
-                items:
-                  $ref: "../../schema/post.yaml#/PostV4"
-              postChildren:
-                type: array
-                items:
-                  $ref: "../../schema/post.yaml#/PostV4"
-              comments:
-                type: array
-                items:
-                  $ref: "../../schema/comment.yaml#/Comment"
-              users:
-                type: array
-                items:
-                  $ref: "../../schema/user.yaml#/UserV3"
-              files:
-                type: array
-                items:
-                  $ref: "../../schema/file.yaml#/File"
-              communities:
-                type: array
-                items:
-                  $ref: "../../schema/community.yaml#/Community"
-              communityUsers:
-                type: array
-                items:
-                  $ref: "../../schema/community.yaml#/CommunityUser"
-              categories:
-                type: array
-                items:
-                  $ref: "../../schema/community.yaml#/CommunityCategory"
-              feeds:
-                type: array
-                items:
-                  $ref: "../../schema/feed.yaml#/Feed"
-              videoStreamings:
-                type: array
-                items:
-                  $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-              videoStreamingChildren:
-                type: array
-                items:
-                  $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-              rooms: 
-                type: array
-                items:
-                  $ref: "../../schema/room.yaml#/Room"
-              roomChildrens:
-                type: array
-                items:
-                  $ref: "../../schema/room.yaml#/Room"
-              flaggedUserId:
-                type: string
+            allOf:
+              - $ref: '#/BaseWebhookData'
+              - type: object
+                properties:
+                  flaggedUserId:
+                    type: string
 
 PostWithReactorWebhookResponse:
   description: Post Information
@@ -275,59 +148,9 @@ PostWithReactorWebhookResponse:
           event:
             type: string
           data:
-            type: object
-            properties:
-              posts:
-                type: array
-                items:
-                  $ref: "../../schema/post.yaml#/PostV4"
-              postChildren:
-                type: array
-                items:
-                  $ref: "../../schema/post.yaml#/PostV4"
-              comments:
-                type: array
-                items:
-                  $ref: "../../schema/comment.yaml#/Comment"
-              users:
-                type: array
-                items:
-                  $ref: "../../schema/user.yaml#/UserV3"
-              files:
-                type: array
-                items:
-                  $ref: "../../schema/file.yaml#/File"
-              communities:
-                type: array
-                items:
-                  $ref: "../../schema/community.yaml#/Community"
-              communityUsers:
-                type: array
-                items:
-                  $ref: "../../schema/community.yaml#/CommunityUser"
-              categories:
-                type: array
-                items:
-                  $ref: "../../schema/community.yaml#/CommunityCategory"
-              feeds:
-                type: array
-                items:
-                  $ref: "../../schema/feed.yaml#/Feed"
-              reactor:
-                $ref: "../../schema/reaction.yaml#/Reactor"
-              videoStreamings:
-                type: array
-                items:
-                  $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-              videoStreamingChildren:
-                type: array
-                items:
-                  $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-              rooms: 
-                type: array
-                items:
-                  $ref: "../../schema/room.yaml#/Room"
-              roomChildrens:
-                type: array
-                items:
-                  $ref: "../../schema/room.yaml#/Room"
+            allOf:
+              - $ref: '#/BaseWebhookData'
+              - type: object
+                properties:
+                  reactor:
+                    $ref: "../../schema/reaction.yaml#/Reactor"
