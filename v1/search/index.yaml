@@ -17,7 +17,9 @@ posts:
       - $ref: "./parameter.yaml#/dataTypes"
       - $ref: "./parameter.yaml#/tags"
       - $ref: "./parameter.yaml#/hashtags"
+      - $ref: "./parameter.yaml#/checkStatus"
       - $ref: "./parameter.yaml#/matchingOnlyParentPost"
+      - $ref: "./parameter.yaml#/includeModerationDetails"
       - $ref: "./parameter.yaml#/options.limit"
       - $ref: "./parameter.yaml#/options.after"
       - $ref: "./parameter.yaml#/options.before"
@@ -32,5 +34,44 @@ posts:
         $ref: "../../global/error.yaml#/RateLimitError"
       404:
         $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+comments:
+  get:
+    summary: "Search comments"
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    description: |
+      Search and filter comments with advanced criteria. Admin only.
+
+      **Access Control:**
+      - Admin only with ViewPostAndCommentManagement permission
+    parameters:
+      - $ref: "./parameter.yaml#/checkStatus"
+      - $ref: "./parameter.yaml#/targetFeedType"
+      - $ref: "./parameter.yaml#/targetCommunityIds"
+      - $ref: "./parameter.yaml#/targetContentIds"
+      - $ref: "./parameter.yaml#/targetUserIds"
+      - $ref: "./parameter.yaml#/creatorIds"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/referenceType"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/includeModerationDetails"
+      - $ref: "./parameter.yaml#/options.limit"
+      - $ref: "./parameter.yaml#/options.after"
+      - $ref: "./parameter.yaml#/options.before"
+      - $ref: "./parameter.yaml#/options.token"
+    responses:
+      200:
+        $ref: "../../v4/comment/response.yaml#/SerializedCommentsWithCheckStatus"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"

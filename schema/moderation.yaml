@@ -84,3 +84,63 @@ ModerationSetting:
       type: "string"
       description: "The date/time when a rule is updated or deleted."
       format: "date-time"
+
+CheckNotes:
+  type: "array"
+  items:
+    type: "object"
+    properties:
+      noteId:
+        type: "string"
+        description: "Unique identifier for the check note"
+      userId:
+        type: "string"
+        description: "ID of the admin who created the note"
+      action:
+        type: "string"
+        enum:
+          - check
+          - need-follow-up
+          - add-note
+        description: "Action type of the check note"
+      note:
+        type: "string"
+        maxLength: 250
+        description: "Optional note text (max 250 characters)"
+      createdAt:
+        type: "string"
+        format: "date-time"
+        description: "When the check note was created"
+      updatedAt:
+        type: "string"
+        format: "date-time"
+        description: "When the check note was last updated"
+
+CheckStatus:
+  type: "string"
+  enum:
+    - to-check
+    - follow-up-needed
+    - checked
+  description: "Current check status of the content"
+
+CreateCheckNote:
+  type: "object"
+  required:
+    - action
+  properties:
+    action:
+      type: "string"
+      enum:
+        - check
+        - need-follow-up
+        - add-note
+      description: |
+        Action to take on the content:
+        - `check`: Mark content as checked
+        - `need-follow-up`: Mark content as needing follow-up
+        - `add-note`: Add a note without changing status
+    note:
+      type: "string"
+      maxLength: 250
+      description: "Optional note text (max 250 characters)"

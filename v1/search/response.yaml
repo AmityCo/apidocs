@@ -8,7 +8,14 @@ post-pagination-response-200:
           posts:
             type: array
             items:
-              $ref: "../../schema/post.yaml#/PostV5"
+              allOf: 
+                - $ref: "../../schema/post.yaml#/PostV5"
+                - type: object
+                  properties:
+                    checkNote:
+                      $ref: "../../schema/moderation.yaml#/CheckNotes"
+                    checkStatus:
+                      $ref: "../../schema/moderation.yaml#/CheckStatus"
           postChildren:
             type: array
             items:

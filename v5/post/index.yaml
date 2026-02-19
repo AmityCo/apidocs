@@ -34,3 +34,98 @@ root:
         $ref: "../../global/error.yaml#/NotFoundError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+postId-checks:
+  post:
+    summary: "Add check note to post"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: |
+      Add a check note to a post for content review purposes. Admin only.
+
+      **Check Actions:**
+      - `check`: Mark the post as checked/reviewed
+      - `need-follow-up`: Mark the post as needing follow-up review
+      - `add-note`: Add a note without changing the check status (maximum 5 notes, not included note on check or need-follow-up)
+
+      **Check Status Updates:**
+      - When action is `check`, checkStatus becomes `checked`
+      - When action is `need-follow-up`, checkStatus becomes `follow-up-needed`
+      - When action is `add-note`, checkStatus remains unchanged
+
+      **Access Control:**
+      - Admin only with ManagePostAndComment permission
+    parameters:
+      - name: postId
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: '^[0-9a-fA-F]{24}$'
+        description: "MongoDB ObjectId of the post"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../schema/moderation.yaml#/CreateCheckNote"
+    responses:
+      200:
+        $ref: "./response.yaml#/post-pagination-response-with-check-status"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+postId-checks-noteId:
+  delete:
+    summary: "Delete check note from post"
+    tags:
+      - "Post"
+    security:
+      - BearerAuth: []
+    description: |
+      Delete a specific check note from a post. Admin only.
+
+      **Important Notes:**
+      - Soft deletes the check note (marks as deleted)
+      - Does not affect the post's check status
+      - Admin only with ManagePostAndComment permission
+    parameters:
+      - name: postId
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: '^[0-9a-fA-F]{24}$'
+        description: "MongoDB ObjectId of the post"
+      - name: noteId
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: '^[0-9a-fA-F]{24}$'
+        description: "MongoDB ObjectId of the check note"
+    responses:
+      200:
+        description: "Check note deleted successfully"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
