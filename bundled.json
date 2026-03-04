@@ -63771,6 +63771,200 @@
         }
       }
     },
+    "/api/v1/tags/countByIds": {
+      "get": {
+        "summary": "Count Users by Tag IDs",
+        "tags": [
+          "Tag"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Count the number of users assigned to each specified tag. Admin only.\n\n**Usage:**\n- Accepts up to 20 tag IDs\n- Returns per-tag user counts\n",
+        "parameters": [
+          {
+            "name": "tagIds[]",
+            "in": "query",
+            "required": true,
+            "description": "Array of tag IDs to count users for (max 20)",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f\\d]{24}$"
+              },
+              "maxItems": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Per-tag user counts retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "counts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tagId": {
+                            "type": "string",
+                            "description": "Tag identifier",
+                            "example": "507f1f77bcf86cd799439011"
+                          },
+                          "userCount": {
+                            "type": "integer",
+                            "description": "Number of users assigned to this tag",
+                            "example": 42
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/tags/{tagId}": {
       "get": {
         "summary": "Get Tag by ID",

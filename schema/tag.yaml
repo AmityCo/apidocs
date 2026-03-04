@@ -244,3 +244,20 @@ AssignTagToUsersResponse:
             enum: [USER_NOT_FOUND, TAG_LIMIT_EXCEEDED, TAG_ALREADY_ASSIGNED]
             example: "TAG_LIMIT_EXCEEDED"
       description: Failed assignments with reasons
+
+CountByIdsResponse:
+  type: object
+  properties:
+    counts:
+      type: array
+      items:
+        type: object
+        properties:
+          tagId:
+            type: string
+            description: Tag identifier
+            example: "507f1f77bcf86cd799439011"
+          userCount:
+            type: integer
+            description: Number of users assigned to this tag
+            example: 42

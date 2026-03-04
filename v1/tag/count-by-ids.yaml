@@ -1,0 +1,23 @@
+get:
+  summary: "Count Users by Tag IDs"
+  tags:
+    - "Tag"
+  security:
+    - BearerAuth: []
+  description: |
+    Count the number of users assigned to each specified tag. Admin only.
+
+    **Usage:**
+    - Accepts up to 20 tag IDs
+    - Returns per-tag user counts
+  parameters:
+    - $ref: "./parameter.yaml#/tagIds"
+  responses:
+    200:
+      $ref: "./response.yaml#/count-by-ids-response-200"
+    400:
+      $ref: "../../global/error.yaml#/BadRequestError"
+    403:
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    500:
+      $ref: "../../global/error.yaml#/UnexpectedError"

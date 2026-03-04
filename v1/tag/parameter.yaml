@@ -62,6 +62,18 @@ options.token:
     type: string
     example: "20"
 
+tagIds:
+  name: tagIds[]
+  in: query
+  required: true
+  description: Array of tag IDs to count users for (max 20)
+  schema:
+    type: array
+    items:
+      type: string
+      pattern: "^[a-f\\d]{24}$"
+    maxItems: 20
+
 _tagId:
   name: tagId
   in: path
