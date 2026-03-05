@@ -61,6 +61,36 @@ root:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
+  delete:
+    summary: "Delete products (bulk)"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Delete multiple products from the catalogue in a single request.
+
+      **Access Control:**
+      - Requires admin permissions with ManageProducts flag
+
+      **Important Notes:**
+      - This performs a soft delete (marks as deleted)
+      - Accepts 1-100 product IDs per request
+      - Product feature must be enabled in network settings
+    requestBody:
+      $ref: "./request.yaml#/delete-products-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/product-delete-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
 productId:
   get:
     summary: "Get product by ID"
@@ -116,35 +146,6 @@ productId:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
-  delete:
-    summary: "Delete products (bulk)"
-    tags:
-      - "Product"
-    security:
-      - BearerAuth: []
-    description: |
-      Delete multiple products from the catalogue in a single request.
-
-      **Access Control:**
-      - Requires admin permissions with ManageProducts flag
-
-      **Important Notes:**
-      - This performs a soft delete (marks as deleted)
-      - Accepts 1-100 product IDs per request
-      - Product feature must be enabled in network settings
-    requestBody:
-      $ref: "./request.yaml#/delete-products-request-payload"
-    responses:
-      200:
-        $ref: "./response.yaml#/product-delete-response-200"
-      400:
-        $ref: "../../global/error.yaml#/BadRequestError"
-      403:
-        $ref: "../../global/error.yaml#/ForbiddenError"
-      404:
-        $ref: "../../global/error.yaml#/NotFoundError"
-      500:
-        $ref: "../../global/error.yaml#/UnexpectedError"
 
 search:
   get:

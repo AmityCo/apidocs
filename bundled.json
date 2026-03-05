@@ -63620,6 +63620,252 @@
             }
           }
         }
+      },
+      "delete": {
+        "summary": "Delete products (bulk)",
+        "tags": [
+          "Product"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Delete multiple products from the catalogue in a single request.\n\n**Access Control:**\n- Requires admin permissions with ManageProducts flag\n\n**Important Notes:**\n- This performs a soft delete (marks as deleted)\n- Accepts 1-100 product IDs per request\n- Product feature must be enabled in network settings\n",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "productIds"
+                ],
+                "properties": {
+                  "productIds": {
+                    "type": "array",
+                    "description": "Array of product IDs to delete",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    },
+                    "example": [
+                      "prod-12345",
+                      "prod-67890",
+                      "prod-11111"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response after deleting a product",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/products/{productId}": {
@@ -64232,252 +64478,6 @@
                   "status": "error",
                   "code": 500000,
                   "message": "Parameters validation error!."
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unexpected error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string"
-                    },
-                    "code": {
-                      "type": "number"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "detail": {
-                          "oneOf": [
-                            {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              }
-                            },
-                            {
-                              "type": "object"
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "status": "error",
-                  "code": 500000,
-                  "message": "Unexpected error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete products (bulk)",
-        "tags": [
-          "Product"
-        ],
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "description": "Delete multiple products from the catalogue in a single request.\n\n**Access Control:**\n- Requires admin permissions with ManageProducts flag\n\n**Important Notes:**\n- This performs a soft delete (marks as deleted)\n- Accepts 1-100 product IDs per request\n- Product feature must be enabled in network settings\n",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "productIds"
-                ],
-                "properties": {
-                  "productIds": {
-                    "type": "array",
-                    "description": "Array of product IDs to delete",
-                    "minItems": 1,
-                    "maxItems": 100,
-                    "items": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 100
-                    },
-                    "example": [
-                      "prod-12345",
-                      "prod-67890",
-                      "prod-11111"
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful response after deleting a product",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "success": {
-                          "type": "boolean",
-                          "example": true
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string"
-                    },
-                    "code": {
-                      "type": "number"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "detail": {
-                          "oneOf": [
-                            {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              }
-                            },
-                            {
-                              "type": "object"
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "status": "error",
-                  "code": 400000,
-                  "message": "Bad Request."
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "No permission to access this resource.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string"
-                    },
-                    "code": {
-                      "type": "number"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "detail": {
-                          "oneOf": [
-                            {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              }
-                            },
-                            {
-                              "type": "object"
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "status": "error",
-                  "code": 400300,
-                  "message": "Forbidden error."
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource Not Found error.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string"
-                    },
-                    "code": {
-                      "type": "number"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "detail": {
-                          "oneOf": [
-                            {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              }
-                            },
-                            {
-                              "type": "object"
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "status": "error",
-                  "code": 400400,
-                  "message": "Resource Not Found."
                 }
               }
             }
