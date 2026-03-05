@@ -4,13 +4,9 @@ productId:
   required: true
   description: "The unique identifier of the product"
   schema:
-    type: array
-    minItems: 1
-    maxItems: 20
-    items: 
-      type: string
-      minLength: 1
-      maxLength: 100
+    type: string
+    minLength: 1
+    maxLength: 100
 
 keyword:
   name: keyword
@@ -79,3 +75,68 @@ options-token:
   schema:
     type: string
     maxLength: 1000
+
+productIds:
+  name: productIds
+  in: query
+  required: true
+  description: "Array of product IDs to retrieve (1-100 items)"
+  schema:
+    type: array
+    minItems: 1
+    maxItems: 100
+    items:
+      type: string
+      minLength: 1
+      maxLength: 100
+  style: form
+  explode: false
+
+jobId:
+  name: jobId
+  in: path
+  required: true
+  description: "The unique identifier of the bulk job"
+  schema:
+    type: string
+    minLength: 24
+    maxLength: 24
+    pattern: '^[0-9a-fA-F]{24}$'
+
+operation:
+  name: operation
+  in: query
+  required: true
+  description: "Bulk operation to perform"
+  schema:
+    type: string
+    enum:
+      - insert
+      - update
+
+status:
+  name: status
+  in: query
+  required: false
+  description: "Filter bulk jobs by status (can specify multiple)"
+  schema:
+    type: array
+    minItems: 1
+    maxItems: 3
+    items:
+      type: string
+      enum:
+        - pending
+        - running
+        - done
+  style: form
+  explode: false
+
+fileId:
+  name: fileId
+  in: query
+  required: true
+  description: "ID of the uploaded CSV file for bulk import"
+  schema:
+    type: string
+    maxLength: 100

@@ -51,3 +51,87 @@ product-delete-response-200:
               success:
                 type: boolean
                 example: true
+
+products-count-response-200:
+  description: "Successful response with product count"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+            example: "success"
+          data:
+            type: object
+            properties:
+              count:
+                type: integer
+                description: "Number of products matching the criteria"
+                example: 42
+
+products-list-response-200:
+  description: "Successful response with list of products by IDs"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+            example: "success"
+          data:
+            type: array
+            items:
+              $ref: "../../schema/product.yaml#/Product"
+
+bulk-job-created-response-200:
+  description: "Successful response after creating a bulk job"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+            example: "success"
+          data:
+            $ref: "../../schema/bulk-job.yaml#/BulkJob"
+
+bulk-job-response-200:
+  description: "Successful response with bulk job details"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+            example: "success"
+          data:
+            $ref: "../../schema/bulk-job.yaml#/BulkJob"
+
+bulk-jobs-query-response-200:
+  description: "Successful response with list of bulk jobs"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+            example: "success"
+          data:
+            type: array
+            items:
+              $ref: "../../schema/bulk-job.yaml#/BulkJob"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+                description: "Token for fetching the next page"
+              previous:
+                type: string
+                description: "Token for fetching the previous page"
+

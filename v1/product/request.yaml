@@ -108,3 +108,56 @@ update-product-request-payload:
               - fit
               - fill
             example: "fill"
+
+delete-products-request-payload:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - productIds
+        properties:
+          productIds:
+            type: array
+            description: "Array of product IDs to delete"
+            minItems: 1
+            maxItems: 100
+            items:
+              type: string
+              minLength: 1
+              maxLength: 100
+            example: ["prod-12345", "prod-67890", "prod-11111"]
+
+bulk-create-request-payload:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - fileId
+        properties:
+          fileId:
+            type: string
+            description: "ID of the uploaded CSV file containing product data"
+            maxLength: 100
+            example: "file-abc123xyz"
+
+bulk-start-request-payload:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - operation
+        properties:
+          operation:
+            type: string
+            description: "Operation to perform on the products in the CSV file"
+            enum:
+              - insert
+              - update
+            example: "insert"
+
