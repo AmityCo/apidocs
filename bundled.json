@@ -3489,6 +3489,1202 @@
         }
       }
     },
+    "/api/v2/search/messages": {
+      "get": {
+        "tags": [
+          "Message"
+        ],
+        "summary": "Search messages",
+        "description": "Retrieve messages based on search criteria",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "Keyword for searching",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            }
+          },
+          {
+            "name": "exactMatch",
+            "in": "query",
+            "required": false,
+            "description": "Flag to indicate exact match",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "channelId",
+            "in": "query",
+            "required": false,
+            "description": "Channel ID to scope the search",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "messageFeedId",
+            "in": "query",
+            "required": false,
+            "description": "Message Feed ID to scope the search",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userIds",
+            "in": "query",
+            "required": false,
+            "description": "Array of user public IDs to filter creators",
+            "schema": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 10
+            }
+          },
+          {
+            "name": "types",
+            "in": "query",
+            "required": false,
+            "description": "Array of message types to include",
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "default": [
+                "text"
+              ],
+              "items": {
+                "type": "string",
+                "enum": [
+                  "text",
+                  "image",
+                  "video",
+                  "audio",
+                  "file"
+                ]
+              },
+              "maxItems": 10
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": false,
+            "description": "Array of tags to include",
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 30
+              },
+              "maxItems": 10
+            }
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "required": false,
+            "description": "Additional search options",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "limit": {
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 100,
+                  "default": 20
+                },
+                "orderBy": {
+                  "type": "string",
+                  "enum": [
+                    "desc",
+                    "asc"
+                  ],
+                  "default": "desc"
+                },
+                "sortBy": {
+                  "type": "string",
+                  "enum": [
+                    "createdAt",
+                    "relevance"
+                  ],
+                  "default": "createdAt"
+                },
+                "token": {
+                  "type": "string",
+                  "maxLength": 100
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search messages response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "messages": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "path": {
+                                "type": "string"
+                              },
+                              "messageId": {
+                                "type": "string",
+                                "description": "ID of a message."
+                              },
+                              "channelId": {
+                                "type": "string",
+                                "description": "ID of a channel."
+                              },
+                              "userId": {
+                                "type": "string",
+                                "description": "ID of a user."
+                              },
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "text",
+                                  "image",
+                                  "file",
+                                  "custom",
+                                  "video",
+                                  "audio",
+                                  "imagemap"
+                                ]
+                              },
+                              "data": {
+                                "type": "object",
+                                "description": "Body of a message."
+                              },
+                              "channelSegment": {
+                                "type": "integer",
+                                "description": "A sequence number of a message in channel."
+                              },
+                              "parentId": {
+                                "type": "string",
+                                "description": "ID of a parent message."
+                              },
+                              "fileId": {
+                                "type": "string",
+                                "description": "file key on cloud storage."
+                              },
+                              "tags": {
+                                "type": "array",
+                                "description": "List of tags. They will be used for searching.",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "Additional properties to support custom fields."
+                              },
+                              "flagCount": {
+                                "type": "integer",
+                                "description": "The number of users that has read this message."
+                              },
+                              "hashFlag": {
+                                "type": "object",
+                                "description": "The flag for checking internally that this message is reported or not.",
+                                "properties": {
+                                  "bits": {
+                                    "type": "integer"
+                                  },
+                                  "hashes": {
+                                    "type": "integer"
+                                  },
+                                  "hash": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "childrenNumber": {
+                                "type": "integer",
+                                "description": "A number of comments in this message."
+                              },
+                              "reactionsCount": {
+                                "type": "integer",
+                                "description": "The number of all reactions for this messages."
+                              },
+                              "reactions": {
+                                "type": "object",
+                                "description": "The mapping of reaction with reactionCounter."
+                              },
+                              "myReactions": {
+                                "type": "array",
+                                "description": "The list of my reactions to this message. This property will not exist when it is triggered from an event 'message.didUpdate'.",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "latestReaction": {
+                                "type": "object",
+                                "description": "The latest reaction. This property will exist when it is triggered from an event 'message.didUpdate'.",
+                                "properties": {
+                                  "referenceId": {
+                                    "type": "string",
+                                    "description": "ID of a document."
+                                  },
+                                  "referenceType": {
+                                    "type": "string",
+                                    "description": "Type of document."
+                                  },
+                                  "reactionName": {
+                                    "type": "string"
+                                  },
+                                  "userId": {
+                                    "type": "string"
+                                  },
+                                  "userDisplayName": {
+                                    "type": "string"
+                                  },
+                                  "reactionId": {
+                                    "type": "string"
+                                  },
+                                  "eventName": {
+                                    "type": "string"
+                                  },
+                                  "createdAt": {
+                                    "type": "string",
+                                    "description": "The date/time when a reaction is created.",
+                                    "format": "date-time"
+                                  }
+                                }
+                              },
+                              "isDeleted": {
+                                "type": "boolean",
+                                "description": "A flag to hide a message. Unable to show after hiding. It will be set to true when user deletes a message or a channel of this message is banned."
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "description": "The date/time when a channel is created.",
+                                "format": "date-time"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "description": "The date/time when a channel of this message is banned or this message is deleted.",
+                                "format": "date-time"
+                              },
+                              "editedAt": {
+                                "type": "string",
+                                "description": "The date/time when a message is deleted or updated.",
+                                "format": "date-time"
+                              },
+                              "mentionees": {
+                                "type": "array",
+                                "description": "The object of the mentions type and user who get a notification for the message.",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "description": "type: * `user` - need to specific userIds and notification mentions individual user * `channel` - notification mentions all user in channel\n",
+                                      "enum": [
+                                        "user",
+                                        "channel"
+                                      ]
+                                    },
+                                    "userIds": {
+                                      "type": "array",
+                                      "description": "Array of UserId. if the mention type is a channel, doesn't send userIds",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "userPublicIds": {
+                                      "type": "array",
+                                      "description": "Array of UserPublicId.",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "userInternalIds": {
+                                      "type": "array",
+                                      "description": "Array of UserInternalId.",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "messageFeeds": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "messageFeedId": {
+                                "description": "The ID of the message feed",
+                                "type": "string",
+                                "maxLength": 30,
+                                "example": "a85dca058f5b585f86a29f14"
+                              },
+                              "channelId": {
+                                "description": "Internal ID of the channel that the message feed belongs to",
+                                "type": "string",
+                                "maxLength": 30,
+                                "example": "abc665aed9dbb8d036037eeb"
+                              },
+                              "channelPublicId": {
+                                "description": "ID of the channel that the message feed belongs to",
+                                "type": "string",
+                                "maxLength": 30,
+                                "example": "abc665aed9dbb8d036037eeb"
+                              },
+                              "channelType": {
+                                "description": "Type of the channel that the message feed belongs to",
+                                "type": "string",
+                                "enum": [
+                                  "broadcast",
+                                  "community",
+                                  "conversation",
+                                  "live"
+                                ],
+                                "example": "community"
+                              },
+                              "name": {
+                                "description": "The name of the message feed",
+                                "type": "string",
+                                "maxLength": 100,
+                                "example": "text"
+                              },
+                              "lastMessageId": {
+                                "description": "The ID of the last message created in the message feed",
+                                "type": "string",
+                                "maxLength": 30,
+                                "example": "9530b11ec8de87db22b06b21"
+                              },
+                              "lastMessageTimestamp": {
+                                "description": "The created timestamp of the the last message created in the message feed",
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "creatorId": {
+                                "description": "Creator's ID",
+                                "type": "string",
+                                "maxLength": 30,
+                                "example": "8aa313c8dbb00af911b07672"
+                              },
+                              "path": {
+                                "description": "Object path",
+                                "type": "string",
+                                "maxLength": 200,
+                                "example": "12cba9779cc479e1fcefd1de/chat/f00ab16cbd27d4a9525aea6d/32b468ae0b1bd0cc7976719d/0a003482f0ac53a71e7c9239"
+                              },
+                              "childCount": {
+                                "description": "The number of messages inside the message feed",
+                                "type": "number",
+                                "format": "int32"
+                              },
+                              "isDeleted": {
+                                "description": "Soft delete flag",
+                                "type": "boolean",
+                                "default": false
+                              },
+                              "editedAt": {
+                                "description": "The edited timestamp of the message feed data",
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "createdAt": {
+                                "description": "The created timestamp of the message feed",
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "updatedAt": {
+                                "description": "The updated timestamp of the message feed",
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "messagePreviewId": {
+                                "type": "string",
+                                "description": "ID of a message preview. Depends on network settings. if disabled will be null."
+                              }
+                            },
+                            "required": [
+                              "messageFeedId",
+                              "channelId",
+                              "channelPublicId",
+                              "channelType",
+                              "name",
+                              "creatorId",
+                              "path",
+                              "childCount",
+                              "isDeleted",
+                              "createdAt",
+                              "updatedAt"
+                            ]
+                          }
+                        },
+                        "channels": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "path": {
+                                "type": "string"
+                              },
+                              "channelId": {
+                                "type": "string",
+                                "description": "ID of a channel."
+                              },
+                              "channelInternalId": {
+                                "type": "string"
+                              },
+                              "channelPublicId": {
+                                "type": "string"
+                              },
+                              "isDistinct": {
+                                "type": "boolean"
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "Additional properties to support custom fields."
+                              },
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "standard",
+                                  "private",
+                                  "conversation",
+                                  "broadcast",
+                                  "community",
+                                  "live"
+                                ],
+                                "description": "Channel Type:\n  * `standard` - Standard channel (deprecated) is public everyone can search and join this channel.\n  * `private` - Private channel (deprecated) is private only member can search and found this channel.\n  * `conversation` - Conversation channel is direct chat created by both users.\n  * `broadcast` - Broadcast channel is send message by admin only\n  * `community` - rename from Standard channel\n  * `live` - rename from Private channel\n"
+                              },
+                              "tags": {
+                                "type": "array",
+                                "description": "List of tags. They will be used for searching.",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "isMuted": {
+                                "type": "boolean",
+                                "description": "Is this channel muted? (Computed by using muteTimeout)."
+                              },
+                              "isRateLimited": {
+                                "type": "boolean",
+                                "description": "Is this channel limited sending rate? (Computed by using muteTimeout)."
+                              },
+                              "muteTimeout": {
+                                "type": "string",
+                                "description": "The date/time to suppress muteness.",
+                                "format": "date-time"
+                              },
+                              "rateLimit": {
+                                "type": "integer",
+                                "description": "Number of messages within rate limit."
+                              },
+                              "rateLimitWindow": {
+                                "type": "integer",
+                                "description": "Waiting time interval before reset rateLimit to 0."
+                              },
+                              "rateLimitTimeout": {
+                                "type": "string",
+                                "description": "The date/time to suppress limitation of sending rate.",
+                                "format": "date-time"
+                              },
+                              "displayName": {
+                                "type": "string",
+                                "description": "Channel name for displaying."
+                              },
+                              "messageAutoDeleteEnabled": {
+                                "type": "boolean",
+                                "description": "Is message in this channel will be deleted when the user flagged until flag limit?"
+                              },
+                              "autoDeleteMessageByFlagLimit": {
+                                "type": "number",
+                                "description": "Number of flags that will force a message to be deleted automatically."
+                              },
+                              "memberCount": {
+                                "type": "integer",
+                                "description": "Number of members in channel."
+                              },
+                              "messageCount": {
+                                "type": "integer",
+                                "description": "Number of messages in channel."
+                              },
+                              "lastActivity": {
+                                "type": "string",
+                                "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                                "format": "date-time"
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "description": "The date/time when a channel is created.",
+                                "format": "date-time"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "description": "The date/time when a channel is updated.",
+                                "format": "date-time"
+                              },
+                              "avatarFileId": {
+                                "type": "string"
+                              },
+                              "isDeleted": {
+                                "type": "boolean",
+                                "default": false,
+                                "description": "A flag to deleted a channel."
+                              },
+                              "messagePreviewId": {
+                                "type": "string",
+                                "description": "ID of a message preview. Depends on network settings. if disabled will be null."
+                              },
+                              "isPublic": {
+                                "type": "boolean",
+                                "description": "A flag to public or private a channel."
+                              },
+                              "notificationMode": {
+                                "type": "string",
+                                "enum": [
+                                  "default",
+                                  "silent",
+                                  "subscribe"
+                                ],
+                                "description": "Notification Mode:\n  * `default` - Auto register push notification.\n  * `silent` - Do not send notification.\n  * `subscribe` - Send notification to subscribed users only.\n"
+                              },
+                              "attachedTo": {
+                                "type": "object",
+                                "properties": {
+                                  "postId": {
+                                    "type": "string"
+                                  },
+                                  "videoStreamId": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "required": [
+                              "channelId",
+                              "createdAt",
+                              "updatedAt"
+                            ]
+                          }
+                        },
+                        "users": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "description": "Private ID of a user. (for real-time event)"
+                              },
+                              "path": {
+                                "type": "string",
+                                "description": "Path of a user. (for real-time event)"
+                              },
+                              "userId": {
+                                "type": "string"
+                              },
+                              "userInternalId": {
+                                "type": "string"
+                              },
+                              "userPublicId": {
+                                "type": "string"
+                              },
+                              "roles": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "permissions": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "MUTE_CHANNEL",
+                                    "CLOSE_CHANNEL",
+                                    "EDIT_CHANNEL",
+                                    "EDIT_CHANNEL_RATELIMIT",
+                                    "EDIT_MESSAGE",
+                                    "DELETE_MESSAGE",
+                                    "BAN_USER_FROM_CHANNEL",
+                                    "MUTE_USER_INSIDE_CHANNEL",
+                                    "ADD_CHANNEL_USER",
+                                    "REMOVE_CHANNEL_USER",
+                                    "EDIT_CHANNEL_USER",
+                                    "ASSIGN_CHANNEL_USER_ROLE",
+                                    "BAN_USER",
+                                    "EDIT_USER",
+                                    "ASSIGN_USER_ROLE",
+                                    "EDIT_USER_FEED_POST",
+                                    "DELETE_USER_FEED_POST",
+                                    "EDIT_USER_FEED_COMMENT",
+                                    "DELETE_USER_FEED_COMMENT",
+                                    "ADD_COMMUNITY_USER",
+                                    "REMOVE_COMMUNITY_USER",
+                                    "EDIT_COMMUNITY_USER",
+                                    "BAN_COMMUNITY_USER",
+                                    "MUTE_COMMUNITY_USER",
+                                    "EDIT_COMMUNITY",
+                                    "DELETE_COMMUNITY",
+                                    "EDIT_COMMUNITY_POST",
+                                    "DELETE_COMMUNITY_POST",
+                                    "PIN_COMMUNITY_POST",
+                                    "EDIT_COMMUNITY_COMMENT",
+                                    "DELETE_COMMUNITY_COMMENT",
+                                    "ASSIGN_COMMUNITY_USER_ROLE",
+                                    "CREATE_COMMUNITY_CATEGORY",
+                                    "EDIT_COMMUNITY_CATEGORY",
+                                    "DELETE_COMMUNITY_CATEGORY",
+                                    "CREATE_ROLE",
+                                    "EDIT_ROLE",
+                                    "DELETE_ROLE",
+                                    "MANAGE_COMMUNITY_STORY"
+                                  ]
+                                }
+                              },
+                              "displayName": {
+                                "type": "string"
+                              },
+                              "profileHandle": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "avatarFileId": {
+                                "type": "string"
+                              },
+                              "avatarCustomUrl": {
+                                "type": "string"
+                              },
+                              "flagCount": {
+                                "type": "integer"
+                              },
+                              "hashFlag": {
+                                "type": "object",
+                                "properties": {
+                                  "bits": {
+                                    "type": "integer"
+                                  },
+                                  "hashes": {
+                                    "type": "integer"
+                                  },
+                                  "hash": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "metadata": {
+                                "type": "object"
+                              },
+                              "isGlobalBan": {
+                                "type": "boolean",
+                                "description": "Global ban status. Every user can see this flag."
+                              },
+                              "isBrand": {
+                                "type": "boolean",
+                                "description": "Brand user status."
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "isDeleted": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "userId",
+                              "createdAt",
+                              "updatedAt"
+                            ]
+                          }
+                        },
+                        "files": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "fileId": {
+                                "type": "string",
+                                "description": "Root file key on cloud storage."
+                              },
+                              "fileUrl": {
+                                "type": "string",
+                                "description": "Http link for download file"
+                              },
+                              "type": {
+                                "type": "string",
+                                "description": "File type.",
+                                "enum": [
+                                  "image",
+                                  "file",
+                                  "video"
+                                ]
+                              },
+                              "accessType": {
+                                "type": "string",
+                                "description": "File access type. `network` type requires authentication to download.",
+                                "enum": [
+                                  "public",
+                                  "network"
+                                ],
+                                "default": "public"
+                              },
+                              "altText": {
+                                "type": "string",
+                                "description": "Alternative text for the file.",
+                                "maxLength": 180
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "description": "The date/time when a file is uploaded.",
+                                "format": "date-time"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "description": "The date/time when a file is updated.",
+                                "format": "date-time"
+                              },
+                              "attributes": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "description": "File name."
+                                  },
+                                  "extension": {
+                                    "type": "string",
+                                    "description": "File format."
+                                  },
+                                  "size": {
+                                    "type": "number",
+                                    "description": "File size."
+                                  },
+                                  "mimeType": {
+                                    "type": "string",
+                                    "description": "File mime-type."
+                                  },
+                                  "metadata": {
+                                    "type": "object",
+                                    "description": "File image metadata (width, height etc.).",
+                                    "properties": {
+                                      "exif": {
+                                        "type": "object"
+                                      },
+                                      "gps": {
+                                        "type": "object"
+                                      },
+                                      "height": {
+                                        "type": "number"
+                                      },
+                                      "width": {
+                                        "type": "number"
+                                      },
+                                      "isFull": {
+                                        "type": "boolean"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "roles": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "roleId": {
+                                "type": "string"
+                              },
+                              "displayName": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "description": "The date/time when a role is updated or deleted.",
+                                "format": "date-time"
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "description": "The date/time when a role is created.",
+                                "format": "date-time"
+                              },
+                              "permissions": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "description": "The list of permission for this role. https://docs.amity.co/amity-sdk/core-concepts/user/user-permission#permissions"
+                              },
+                              "isDeleted": {
+                                "type": "boolean",
+                                "default": false
+                              }
+                            },
+                            "required": [
+                              "roleId",
+                              "permissions",
+                              "updatedAt",
+                              "isDeleted"
+                            ]
+                          }
+                        },
+                        "totalCount": {
+                          "type": "number"
+                        },
+                        "paging": {
+                          "type": "object",
+                          "properties": {
+                            "next": {
+                              "type": "string"
+                            },
+                            "prev": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "search": {
+                          "type": "object",
+                          "properties": {
+                            "query": {
+                              "type": "string",
+                              "description": "The search query."
+                            },
+                            "limit": {
+                              "type": "integer",
+                              "description": "Limit on the number of results."
+                            },
+                            "sortBy": {
+                              "type": "string",
+                              "description": "Sorting criteria (e.g., \"relevance\" or \"createdAt\")."
+                            },
+                            "orderBy": {
+                              "type": "string",
+                              "description": "Sorting order (e.g., \"desc\")."
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission denied.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400301,
+                  "message": "User is not a member of a channel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Parameters validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters validation error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error due to a client create the same request with the same parameters exceed the number of time that server limit to.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400311,
+                  "message": "RateLimit Exceed."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v3/channels": {
       "get": {
         "summary": "Query channel",
