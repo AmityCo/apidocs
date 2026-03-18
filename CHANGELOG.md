@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.115.0] - 2026-03-18
+
+### 🚀 Features
+
+- Add user-event-room API with request and response schemas
+- Add more info about first party data API (#469)
+- Support search message v2 (#432)
+
+### 🐛 Bug Fixes
+
+- Change structureType to be an enum (#472)
+
 ## [4.114.0] - 2025-12-24
 
 ### 🚀 Features
@@ -19,6 +31,7 @@ All notable changes to this project will be documented in this file.
 
 - Remove note (#460)
 - Add bundle
+- Update changelog and bump version to 4.114.0 (#466)
 
 ## [4.113.1] - 2025-12-08
 
