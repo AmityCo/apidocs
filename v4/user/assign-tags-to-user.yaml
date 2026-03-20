@@ -1,0 +1,35 @@
+post:
+  summary: "Assign Tags to User"
+  tags:
+    - "User"
+  security:
+    - BearerAuth: []
+  description: |
+    Assign tags to a user. Requires MANAGE_USER_TAG admin permission.
+    
+    **Behavior:**
+    - Replaces the user's existing tags with the new set (not additive)
+    - Maximum 10 tags per user
+    - Filters out non-existent or deleted tags
+    - Tag adjusts usersCount for added/removed tags
+    - Each skipped tag includes a reason in the response
+    
+    **Validations:**
+    - User must exist and not be deleted
+    - All tags must exist and not be deleted
+    - Duplicate tagIds in request are ignored
+  parameters:
+    - $ref: "./parameter.yaml#/_userId"
+  requestBody:
+    $ref: "./request.yaml#/assign-tags-to-user-request-payload"
+  responses:
+    200:
+      $ref: "./response.yaml#/assign-tags-to-user-response-200"
+    400:
+      $ref: "../../global/error.yaml#/BadRequestError"
+    403:
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    404:
+      $ref: "../../global/error.yaml#/NotFoundError"
+    500:
+      $ref: "../../global/error.yaml#/UnexpectedError"

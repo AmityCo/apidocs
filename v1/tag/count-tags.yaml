@@ -1,0 +1,24 @@
+get:
+  summary: "Count Tags"
+  tags:
+    - "Tag"
+  security:
+    - BearerAuth: []
+  description: |
+    Count tags matching filter criteria. Requires VIEW_USER_TAG_MANAGEMENT admin permission.
+    
+    **Filtering:**
+    - By type (currently only 'user')
+    - By deletion status
+    - By keyword (case-insensitive search on name field)
+  parameters:
+    - $ref: "./parameter.yaml#/type"
+    - $ref: "./parameter.yaml#/isDeleted"
+    - $ref: "./parameter.yaml#/keyword"
+  responses:
+    200:
+      $ref: "./response.yaml#/count-tags-response-200"
+    403:
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    500:
+      $ref: "../../global/error.yaml#/UnexpectedError"

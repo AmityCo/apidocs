@@ -1,0 +1,43 @@
+tag-response-200:
+  description: Tag retrieved successfully
+  content:
+    application/json:
+      schema:
+        $ref: '../../schema/tag.yaml#/Tag'
+
+query-tags-response-200:
+  description: Tags retrieved successfully
+  content:
+    application/json:
+      schema:
+        $ref: '../../schema/tag.yaml#/QueryTagsResponse'
+
+delete-tag-response-200:
+  description: Tag deleted successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+
+count-tags-response-200:
+  description: Tag count retrieved successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          count:
+            type: integer
+            description: Number of tags matching the filter criteria
+            example: 42
+
+count-by-ids-response-200:
+  description: Per-tag user counts retrieved successfully
+  content:
+    application/json:
+      schema:
+        $ref: '../../schema/tag.yaml#/CountByIdsResponse'

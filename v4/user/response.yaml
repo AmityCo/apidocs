@@ -112,3 +112,35 @@ me-user-blocks-get-response-200:
               total:
                 type: number
                 description: total number of blockers
+
+assign-tags-to-user-response-200:
+  description: All tags assigned successfully
+  content:
+    application/json:
+      schema:
+        $ref: '../../schema/tag.yaml#/AssignTagsToUserResponse'
+
+assign-tag-to-users-response-200:
+  description: All assignments successful
+  content:
+    application/json:
+      schema:
+        $ref: '../../schema/tag.yaml#/AssignTagToUsersResponse'
+
+assign-tag-to-users-response-206:
+  description: Partial success - some assignments failed
+  content:
+    application/json:
+      schema:
+        $ref: '../../schema/tag.yaml#/AssignTagToUsersResponse'
+
+remove-tag-from-user-response-200:
+  description: Tag removed successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true

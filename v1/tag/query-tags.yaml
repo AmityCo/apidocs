@@ -1,0 +1,30 @@
+get:
+  summary: "Query Tags"
+  tags:
+    - "Tag"
+  security:
+    - BearerAuth: []
+  description: |
+    Query tags with filtering, sorting, and pagination. Available to admin only.
+    
+    **Filtering:**
+    - By type (currently only 'user')
+    - By deletion status (include or exclude deleted tags)
+    - By keyword (case-insensitive search on name field)
+  parameters:
+    - $ref: "./parameter.yaml#/type"
+    - $ref: "./parameter.yaml#/isDeleted"
+    - $ref: "./parameter.yaml#/keyword"
+    - $ref: "./parameter.yaml#/sortBy"
+    - $ref: "./parameter.yaml#/sortOrder"
+    - $ref: "./parameter.yaml#/options.limit"
+    - $ref: "./parameter.yaml#/options.token"
+  responses:
+    200:
+      $ref: "./response.yaml#/query-tags-response-200"
+    400:
+      $ref: "../../global/error.yaml#/BadRequestError"
+    403:
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    500:
+      $ref: "../../global/error.yaml#/UnexpectedError"

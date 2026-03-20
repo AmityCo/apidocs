@@ -1,0 +1,19 @@
+delete:
+  summary: "Delete Tag (Soft Delete)"
+  tags:
+    - "Tag"
+  security:
+    - BearerAuth: []
+  description: |
+    Soft delete a tag. Requires MANAGE_USER_TAG admin permission.
+  parameters:
+    - $ref: "./parameter.yaml#/_tagId"
+  responses:
+    200:
+      $ref: "./response.yaml#/delete-tag-response-200"
+    403:
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    404:
+      $ref: "../../global/error.yaml#/NotFoundError"
+    500:
+      $ref: "../../global/error.yaml#/UnexpectedError"

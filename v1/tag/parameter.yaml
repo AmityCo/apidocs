@@ -1,0 +1,82 @@
+type:
+  name: type
+  in: query
+  description: Filter by tag type
+  schema:
+    type: string
+    enum: [user]
+    example: "user"
+
+isDeleted:
+  name: isDeleted
+  in: query
+  description: Filter by deletion status
+  schema:
+    type: boolean
+    example: false
+
+keyword:
+  name: keyword
+  in: query
+  description: Search keyword for tag name (case-insensitive)
+  schema:
+    type: string
+    example: "VIP"
+
+sortBy:
+  name: sortBy
+  in: query
+  description: Field to sort by
+  schema:
+    type: string
+    enum: [createdAt, updatedAt, name, usersCount]
+    default: createdAt
+    example: "createdAt"
+
+sortOrder:
+  name: sortOrder
+  in: query
+  description: Sort order
+  schema:
+    type: string
+    enum: [asc, desc]
+    default: desc
+    example: "desc"
+
+options.limit:
+  name: options[limit]
+  in: query
+  description: Number of results per page (max 100)
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 20
+    example: 20
+
+options.token:
+  name: options[token]
+  in: query
+  description: Pagination token from previous response
+  schema:
+    type: string
+    example: "20"
+
+tagIds:
+  name: tagIds[]
+  in: query
+  required: true
+  description: Array of tag IDs to count users for (max 20)
+  schema:
+    type: array
+    items:
+      type: string
+      pattern: "^[a-f\\d]{24}$"
+    maxItems: 20
+
+_tagId:
+  name: tagId
+  in: path
+  required: true
+  schema:
+    type: string

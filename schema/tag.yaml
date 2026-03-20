@@ -1,0 +1,263 @@
+Tag:
+  type: object
+  properties:
+    tagId:
+      type: string
+      description: Unique identifier for the tag (MongoDB ObjectId)
+      example: "507f1f77bcf86cd799439011"
+    publicId:
+      type: string
+      description: Public identifier for the tag (same as _id)
+      example: "507f1f77bcf86cd799439011"
+    networkId:
+      type: string
+      description: Network identifier this tag belongs to
+      example: "507f1f77bcf86cd799439012"
+    name:
+      type: string
+      description: Tag name (1-20 characters)
+      example: "VIP"
+    type:
+      type: string
+      enum: [user]
+      description: Type of tag
+      example: "user"
+    description:
+      type: string
+      description: Optional tag description (max 140 characters)
+      example: "VIP members with premium access"
+    backgroundColor:
+      type: string
+      pattern: "^#[0-9A-F]{6}$"
+      description: Hex color code for tag background
+      example: "#FF5733"
+    textColor:
+      type: string
+      pattern: "^#[0-9A-F]{6}$"
+      description: Hex color code for tag text
+      example: "#FFFFFF"
+    metadata:
+      type: object
+      description: Custom metadata for the tag
+      additionalProperties: true
+      example: { "priority": 1, "category": "premium" }
+    usersCount:
+      type: integer
+      description: Number of users assigned to this tag
+      example: 150
+    isDeleted:
+      type: boolean
+      description: Soft deletion flag
+      example: false
+    createdAt:
+      type: string
+      format: date-time
+      description: Tag creation timestamp
+      example: "2024-01-08T10:00:00.000Z"
+    updatedAt:
+      type: string
+      format: date-time
+      description: Tag last update timestamp
+      example: "2024-01-08T10:00:00.000Z"
+
+CreateTagRequest:
+  type: object
+  required:
+    - name
+    - type
+  properties:
+    name:
+      type: string
+      minLength: 1
+      maxLength: 20
+      description: Tag name
+      example: "VIP"
+    publicId:
+      type: string
+      minLength: 1
+      description: Optional custom public identifier for the tag
+      example: "vip-tag"
+    type:
+      type: string
+      enum: [user]
+      description: Type of tag (currently only 'user' is supported)
+      example: "user"
+    description:
+      type: string
+      maxLength: 140
+      description: Optional tag description
+      example: "VIP members with premium access"
+    backgroundColor:
+      type: string
+      pattern: "^#[0-9A-F]{6}$"
+      description: Hex color code for tag background
+      example: "#FF5733"
+    textColor:
+      type: string
+      pattern: "^#[0-9A-F]{6}$"
+      description: Hex color code for tag text
+      example: "#FFFFFF"
+    metadata:
+      type: object
+      description: Custom metadata for the tag
+      additionalProperties: true
+      example: { "priority": 1, "category": "premium" }
+
+UpdateTagRequest:
+  type: object
+  properties:
+    name:
+      type: string
+      minLength: 1
+      maxLength: 20
+      description: Tag name
+      example: "Premium VIP"
+    description:
+      type: string
+      maxLength: 140
+      description: Tag description
+      example: "Premium VIP members"
+    backgroundColor:
+      type: string
+      pattern: "^#[0-9A-F]{6}$"
+      description: Hex color code for tag background
+      example: "#FF5733"
+    textColor:
+      type: string
+      pattern: "^#[0-9A-F]{6}$"
+      description: Hex color code for tag text
+      example: "#FFFFFF"
+    metadata:
+      type: object
+      description: Custom metadata for the tag
+      additionalProperties: true
+      example: { "priority": 2 }
+
+QueryTagsResponse:
+  type: object
+  properties:
+    tags:
+      type: array
+      items:
+        $ref: '#/Tag'
+    paging:
+      type: object
+      properties:
+        next:
+          type: string
+          description: Pagination token for next page
+          example: "20"
+        previous:
+          type: string
+          description: Pagination token for previous page
+          example: "0"
+
+UserTagAssignment:
+  type: object
+  properties:
+    tagId:
+      type: string
+      description: Tag identifier
+      example: "507f1f77bcf86cd799439011"
+    assignedAt:
+      type: string
+      format: date-time
+      description: When the tag was assigned
+      example: "2024-01-08T10:00:00.000Z"
+
+AssignTagsToUserRequest:
+  type: object
+  required:
+    - tagIds
+  properties:
+    tagIds:
+      type: array
+      items:
+        type: string
+      maxItems: 10
+      description: Array of tag IDs to assign (max 10 tags per user)
+      example: ["507f1f77bcf86cd799439011", "507f1f77bcf86cd799439012"]
+
+AssignTagsToUserResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: Whether all tags were assigned successfully
+      example: true
+    assigned:
+      type: array
+      items:
+        type: string
+      description: Successfully assigned tag IDs
+      example: ["507f1f77bcf86cd799439011"]
+    skipped:
+      type: array
+      items:
+        type: object
+        properties:
+          tagId:
+            type: string
+            example: "507f1f77bcf86cd799439012"
+          reason:
+            type: string
+            enum: [TAG_NOT_FOUND, TAG_LIMIT_EXCEEDED, TAG_ALREADY_ASSIGNED]
+            example: "TAG_NOT_FOUND"
+      description: Tags that were skipped with reasons
+
+AssignTagToUsersRequest:
+  type: object
+  required:
+    - userIds
+  properties:
+    userIds:
+      type: array
+      items:
+        type: string
+      maxItems: 100
+      description: Array of user IDs (max from network setting, default 100)
+      example: ["user123", "user456"]
+
+AssignTagToUsersResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: Whether all assignments were successful
+      example: true
+    assigned:
+      type: array
+      items:
+        type: string
+      description: Successfully assigned user IDs
+      example: ["user123"]
+    failed:
+      type: array
+      items:
+        type: object
+        properties:
+          userId:
+            type: string
+            example: "user456"
+          reason:
+            type: string
+            enum: [USER_NOT_FOUND, TAG_LIMIT_EXCEEDED, TAG_ALREADY_ASSIGNED]
+            example: "TAG_LIMIT_EXCEEDED"
+      description: Failed assignments with reasons
+
+CountByIdsResponse:
+  type: object
+  properties:
+    counts:
+      type: array
+      items:
+        type: object
+        properties:
+          tagId:
+            type: string
+            description: Tag identifier
+            example: "507f1f77bcf86cd799439011"
+          userCount:
+            type: integer
+            description: Number of users assigned to this tag
+            example: 42

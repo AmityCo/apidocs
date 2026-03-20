@@ -1,0 +1,19 @@
+get:
+  summary: "Get Tag by ID"
+  tags:
+    - "Tag"
+  security:
+    - BearerAuth: []
+  description: |
+    Retrieve a tag by its ID, available to admin only.
+  parameters:
+    - $ref: "./parameter.yaml#/_tagId"
+  responses:
+    200:
+      $ref: "./response.yaml#/tag-response-200"
+    403:
+      $ref: "../../global/error.yaml#/ForbiddenError"
+    404:
+      $ref: "../../global/error.yaml#/NotFoundError"
+    500:
+      $ref: "../../global/error.yaml#/UnexpectedError"

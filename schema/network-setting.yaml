@@ -265,6 +265,22 @@ UsersNetworkSetting:
           items:
             type: string
           description: This field is for fallback role IDs. If the user does not have any role, this role will be assigned to the user.
+    tags:
+      type: object
+      description: Tag configuration for users
+      properties:
+        maxTagsPerNetwork:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+          description: Maximum number of tags allowed per network
+        maxUsersPerBulkAssignment:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+          description: Maximum number of users allowed per bulk tag assignment operation
 
 PublicUsersNetworkSetting:
   type: object
