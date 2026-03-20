@@ -498,3 +498,45 @@ push-notification:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
+product:
+  get:
+    summary: "Get product configuration"
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: |
+      Get product catalogue configuration settings.
+
+      **Access Control:**
+      - All authenticated users can view product settings
+      - Visitors and bots have read-only access
+    responses:
+      200:
+        $ref: "./response.yaml#/product-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "Update product configuration"
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: |
+      Update product catalogue configuration settings.
+
+      **Access Control:**
+      - Requires admin permissions
+    requestBody:
+      $ref: "./request.yaml#/product-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/product-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

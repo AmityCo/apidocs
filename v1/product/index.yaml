@@ -1,0 +1,399 @@
+root:
+  post:
+    summary: "Create product"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Create a new product in the product catalogue.
+
+      **Access Control:**
+      - Requires admin permissions with ManageProducts flag
+
+      **Important Notes:**
+      - Product ID must be unique within the network
+      - Product URL must be a valid URL
+      - Price must be positive if provided
+      - Currency must be a valid ISO 4217 currency code (3 characters)
+    requestBody:
+      $ref: "./request.yaml#/create-product-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/product-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  get:
+    summary: "Query products"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Query products with optional filters.
+
+      **Access Control:**
+      - All authenticated users can query products
+
+      **Filtering:**
+      - Filter by active status
+      - Filter by deleted status
+      - Sort by createdAt, updatedAt, or productName
+    parameters:
+      - $ref: "./parameter.yaml#/isActive"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/sortOrder"
+      - $ref: "./parameter.yaml#/options-limit"
+      - $ref: "./parameter.yaml#/options-token"
+    responses:
+      200:
+        $ref: "./response.yaml#/products-query-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  delete:
+    summary: "Delete products (bulk)"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Delete multiple products from the catalogue in a single request.
+
+      **Access Control:**
+      - Requires admin permissions with ManageProducts flag
+
+      **Important Notes:**
+      - This performs a soft delete (marks as deleted)
+      - Accepts 1-100 product IDs per request
+      - Product feature must be enabled in network settings
+    requestBody:
+      $ref: "./request.yaml#/delete-products-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/product-delete-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+productId:
+  get:
+    summary: "Get product by ID"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Retrieve a single product by its product ID.
+
+      **Access Control:**
+      - All authenticated users can view products
+    parameters:
+      - $ref: "./parameter.yaml#/productId"
+    responses:
+      200:
+        $ref: "./response.yaml#/product-response-200"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  put:
+    summary: "Update product"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Update an existing product.
+
+      **Access Control:**
+      - Requires admin permissions with ManageProducts flag
+
+      **Important Notes:**
+      - Only provided fields will be updated
+      - Product ID cannot be changed
+    parameters:
+      - $ref: "./parameter.yaml#/productId"
+    requestBody:
+      $ref: "./request.yaml#/update-product-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/product-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+
+search:
+  get:
+    summary: "Search products"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Search products by keyword with optional filters.
+
+      **Access Control:**
+      - All authenticated users can search products
+
+      **Search Features:**
+      - Full-text search on product name
+      - Filter by active/deleted status
+      - Sortable results
+    parameters:
+      - $ref: "./parameter.yaml#/keyword"
+      - $ref: "./parameter.yaml#/isActive"
+      - $ref: "./parameter.yaml#/isDeleted"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/sortOrder"
+      - $ref: "./parameter.yaml#/options-limit"
+      - $ref: "./parameter.yaml#/options-token"
+    responses:
+      200:
+        $ref: "./response.yaml#/products-query-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+count:
+  get:
+    summary: "Count products"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Get the total count of products matching the specified criteria.
+
+      **Access Control:**
+      - Requires admin permissions
+
+      **Important Notes:**
+      - Counts can be filtered by keyword, active status, and deleted status
+      - Product feature must be enabled in network settings
+    parameters:
+      - $ref: "./parameter.yaml#/keyword"
+      - $ref: "./parameter.yaml#/isActive"
+      - $ref: "./parameter.yaml#/isDeleted"
+    responses:
+      200:
+        $ref: "./response.yaml#/products-count-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+list:
+  get:
+    summary: "Get products by IDs"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Retrieve multiple products by their product IDs.
+
+      **Access Control:**
+      - All authenticated users can retrieve products
+
+      **Important Notes:**
+      - Accepts 1-100 product IDs per request
+      - Returns products in the same order as the input IDs
+      - Product feature must be enabled in network settings
+    parameters:
+      - $ref: "./parameter.yaml#/productIds"
+    responses:
+      200:
+        $ref: "./response.yaml#/products-list-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+bulk-sample:
+  get:
+    summary: "Download bulk import sample CSV"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Download a sample CSV file template for bulk product import.
+
+      **Access Control:**
+      - Requires admin permissions
+
+      **Important Notes:**
+      - Returns a 302 redirect to the sample CSV file
+      - Use this template to properly format your bulk import data
+      - Product feature must be enabled in network settings
+    responses:
+      302:
+        description: "Redirect to sample CSV file download URL"
+        headers:
+          Location:
+            schema:
+              type: string
+              format: uri
+            description: "URL to download the sample CSV file"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+bulk-jobs:
+  post:
+    summary: "Create bulk product import job"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Create a new bulk job to import products from a CSV file.
+
+      **Access Control:**
+      - Requires admin permissions with ManageProducts flag
+
+      **Important Notes:**
+      - CSV file must be uploaded first using the file upload API
+      - Job will be created in 'pending' status
+      - Use the start endpoint to begin processing
+      - Job expires in 3 days if not started
+      - Product feature must be enabled in network settings
+    requestBody:
+      $ref: "./request.yaml#/bulk-create-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/bulk-job-created-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  get:
+    summary: "Query bulk product import jobs"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Query bulk import jobs with optional filters and pagination.
+
+      **Access Control:**
+      - Requires admin permissions
+
+      **Filtering:**
+      - Filter by job status (pending, running, done)
+      - Sort by createdAt or updatedAt
+      - Paginated results
+
+      **Important Notes:**
+      - Product feature must be enabled in network settings
+    parameters:
+      - $ref: "./parameter.yaml#/status"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/sortOrder"
+      - $ref: "./parameter.yaml#/options-limit"
+      - $ref: "./parameter.yaml#/options-token"
+    responses:
+      200:
+        $ref: "./response.yaml#/bulk-jobs-query-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+bulk-jobs-jobId:
+  post:
+    summary: "Start bulk product import job"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Start processing a pending bulk import job.
+
+      **Access Control:**
+      - Requires admin permissions with ManageProducts flag
+
+      **Important Notes:**
+      - Job must be in 'pending' status
+      - Job status will change to 'running' once started
+      - Processing happens asynchronously via background workers
+      - Check job status and summary for progress updates
+      - Product feature must be enabled in network settings
+    parameters:
+      - $ref: "./parameter.yaml#/jobId"
+    requestBody:
+      $ref: "./request.yaml#/bulk-start-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/bulk-job-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+  get:
+    summary: "Get bulk product import job by ID"
+    tags:
+      - "Product"
+    security:
+      - BearerAuth: []
+    description: |
+      Retrieve details of a specific bulk import job.
+
+      **Access Control:**
+      - Requires admin permissions
+
+      **Important Notes:**
+      - Returns complete job details including processing summary
+      - Check summary.errorReportFileId for error details if job had failures
+      - Product feature must be enabled in network settings
+    parameters:
+      - $ref: "./parameter.yaml#/jobId"
+    responses:
+      200:
+        $ref: "./response.yaml#/bulk-job-response-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
