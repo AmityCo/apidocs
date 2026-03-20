@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.115.1] - 2026-03-20
+
+### 🚀 Features
+
+- Add products API docs (#468)
+- Update descriptions for upload endpoints from URL to include en… (#471)
+
 ## [4.115.0] - 2026-03-18
 
 ### 🚀 Features
@@ -13,6 +20,10 @@ All notable changes to this project will be documented in this file.
 ### 🐛 Bug Fixes
 
 - Change structureType to be an enum (#472)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.115.0 (#475)
 
 ## [4.114.0] - 2025-12-24
 
