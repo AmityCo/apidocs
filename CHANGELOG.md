@@ -2,12 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.115.2] - 2026-04-08
+
+### 🚀 Features
+
+- Add new post_impressions_last_7d for 1p (#477)
+
 ## [4.115.1] - 2026-03-20
 
 ### 🚀 Features
 
 - Add products API docs (#468)
 - Update descriptions for upload endpoints from URL to include en… (#471)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.115.1 (#476)
 
 ## [4.115.0] - 2026-03-18
 
