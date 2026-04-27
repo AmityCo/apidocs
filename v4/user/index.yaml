@@ -72,6 +72,23 @@ me-user-blocks:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
+me-blocked-by:
+  get:
+    summary: Get Blocking Users
+    description: "Get the list of users who have blocked me\n"
+    tags:
+      - User
+    security:
+      - BearerAuth: []
+    parameters:
+      - $ref: "./parameter.yaml#/limit"
+      - $ref: "./parameter.yaml#/token"
+    responses:
+      200:
+        $ref: "./response.yaml#/me-blocked-by-get-response-200"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
 me-user-blocks_userId:
   post:
     summary: Block a User
