@@ -103,3 +103,64 @@ heartbeat:
         $ref: "../../global/error.yaml#/UnexpectedError"
     security:
       - BearerAuth: []
+
+rooms-roomId-heartbeat:
+  post:
+    summary: Send a room presence heartbeat
+    description: >
+      Send a presence heartbeat for the authenticated user in a given room.
+      Requires the room presence feature to be enabled on the network.
+    tags:
+      - Presence
+    parameters:
+      - $ref: "./parameter.yaml#/roomId"
+    responses:
+      202:
+        $ref: "./response.yaml#/room-heartbeat-response-payload-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+    security:
+      - BearerAuth: []
+
+rooms-roomId-users:
+  get:
+    summary: Get active viewers in a room
+    description: >
+      Get the list of users currently present in a given room.
+        - Sorted by latest heartbeat time
+        - Returns at most 200 viewers per request
+    tags:
+      - Presence
+    parameters:
+      - $ref: "./parameter.yaml#/roomId"
+      - $ref: "./parameter.yaml#/orderBy"
+      - $ref: "./parameter.yaml#/limit"
+    responses:
+      200:
+        $ref: "./response.yaml#/room-users-response-payload-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+    security:
+      - BearerAuth: []
+
+rooms-roomId-users-count:
+  get:
+    summary: Get number of active viewers in a room
+    description: Get the number of users currently present in a given room.
+    tags:
+      - Presence
+    parameters:
+      - $ref: "./parameter.yaml#/roomId"
+    responses:
+      200:
+        $ref: "./response.yaml#/room-users-count-response-payload-200"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+    security:
+      - BearerAuth: []

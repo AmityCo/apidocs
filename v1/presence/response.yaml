@@ -10,6 +10,8 @@ settings-response-payload-200:
             $ref: "../../schema/presence.yaml#/PresenceUserSetting"
           network:
             $ref: "../../schema/presence.yaml#/PresenceNetworkSettingWithoutEnabled"
+          room:
+            $ref: "../../schema/presence.yaml#/PresenceRoomSetting"
 
 settings-user-response-payload-200:
   description: Update presence user setting response
@@ -71,3 +73,55 @@ heartbeat-response-payload-200:
             type: boolean
         required:
           - success
+
+room-heartbeat-response-payload-200:
+  description: Send room heartbeat response
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          success:
+            type: boolean
+        required:
+          - success
+
+room-users-response-payload-200:
+  description: Get room viewers response
+  content:
+    application/json:
+      schema:
+        description: List of room viewers
+        type: object
+        properties:
+          viewers:
+            type: array
+            items:
+              $ref: "../../schema/presence.yaml#/RoomViewer"
+          total:
+            description: Number of viewers returned in this response
+            type: integer
+          limit:
+            description: Maximum number of viewers requested
+            type: integer
+        required:
+          - viewers
+          - total
+          - limit
+
+room-users-count-response-payload-200:
+  description: Get room viewers count response
+  content:
+    application/json:
+      schema:
+        description: Room viewers count
+        type: object
+        properties:
+          count:
+            type: integer
+          referenceTimestamp:
+            type: string
+            format: date-time
+        required:
+          - count
+          - referenceTimestamp
