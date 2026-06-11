@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.116.0] - 2026-06-11
+
+### 🚀 Features
+
+- Add API for room presence (#479)
+
 ## [4.115.2] - 2026-04-08
 
 ### 🚀 Features
 
 - Add new post_impressions_last_7d for 1p (#477)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.115.2 (#478)
 
 ## [4.115.1] - 2026-03-20
 
