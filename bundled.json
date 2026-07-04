@@ -221015,6 +221015,390 @@
         }
       }
     },
+    "/api/v4/me/blockers": {
+      "get": {
+        "summary": "Get Blockers",
+        "description": "Get the list of users who have blocked the current user.\n",
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get blockers list response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "follows": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "from": {
+                            "type": "string"
+                          },
+                          "fromUserPublicId": {
+                            "type": "string"
+                          },
+                          "fromUserInternalId": {
+                            "type": "string"
+                          },
+                          "to": {
+                            "type": "string"
+                          },
+                          "toUserPublicId": {
+                            "type": "string"
+                          },
+                          "toUserInternalId": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "blocked",
+                              "pending",
+                              "accepted",
+                              "none"
+                            ]
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a user. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a user. (for real-time event)"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string"
+                          },
+                          "userPublicId": {
+                            "type": "string"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "MUTE_CHANNEL",
+                                "CLOSE_CHANNEL",
+                                "EDIT_CHANNEL",
+                                "EDIT_CHANNEL_RATELIMIT",
+                                "EDIT_MESSAGE",
+                                "DELETE_MESSAGE",
+                                "BAN_USER_FROM_CHANNEL",
+                                "MUTE_USER_INSIDE_CHANNEL",
+                                "ADD_CHANNEL_USER",
+                                "REMOVE_CHANNEL_USER",
+                                "EDIT_CHANNEL_USER",
+                                "ASSIGN_CHANNEL_USER_ROLE",
+                                "BAN_USER",
+                                "EDIT_USER",
+                                "ASSIGN_USER_ROLE",
+                                "EDIT_USER_FEED_POST",
+                                "DELETE_USER_FEED_POST",
+                                "EDIT_USER_FEED_COMMENT",
+                                "DELETE_USER_FEED_COMMENT",
+                                "ADD_COMMUNITY_USER",
+                                "REMOVE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY_USER",
+                                "BAN_COMMUNITY_USER",
+                                "MUTE_COMMUNITY_USER",
+                                "EDIT_COMMUNITY",
+                                "DELETE_COMMUNITY",
+                                "EDIT_COMMUNITY_POST",
+                                "DELETE_COMMUNITY_POST",
+                                "PIN_COMMUNITY_POST",
+                                "EDIT_COMMUNITY_COMMENT",
+                                "DELETE_COMMUNITY_COMMENT",
+                                "ASSIGN_COMMUNITY_USER_ROLE",
+                                "CREATE_COMMUNITY_CATEGORY",
+                                "EDIT_COMMUNITY_CATEGORY",
+                                "DELETE_COMMUNITY_CATEGORY",
+                                "CREATE_ROLE",
+                                "EDIT_ROLE",
+                                "DELETE_ROLE",
+                                "MANAGE_COMMUNITY_STORY"
+                              ]
+                            }
+                          },
+                          "displayName": {
+                            "type": "string"
+                          },
+                          "profileHandle": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "avatarFileId": {
+                            "type": "string"
+                          },
+                          "avatarCustomUrl": {
+                            "type": "string"
+                          },
+                          "flagCount": {
+                            "type": "integer"
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object"
+                          },
+                          "isGlobalBan": {
+                            "type": "boolean",
+                            "description": "Global ban status. Every user can see this flag."
+                          },
+                          "isBrand": {
+                            "type": "boolean",
+                            "description": "Brand user status."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "isDeleted": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fileId": {
+                            "type": "string",
+                            "description": "Root file key on cloud storage."
+                          },
+                          "fileUrl": {
+                            "type": "string",
+                            "description": "Http link for download file"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "File type.",
+                            "enum": [
+                              "image",
+                              "file",
+                              "video"
+                            ]
+                          },
+                          "accessType": {
+                            "type": "string",
+                            "description": "File access type. `network` type requires authentication to download.",
+                            "enum": [
+                              "public",
+                              "network"
+                            ],
+                            "default": "public"
+                          },
+                          "altText": {
+                            "type": "string",
+                            "description": "Alternative text for the file.",
+                            "maxLength": 180
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is uploaded.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a file is updated.",
+                            "format": "date-time"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "File name."
+                              },
+                              "extension": {
+                                "type": "string",
+                                "description": "File format."
+                              },
+                              "size": {
+                                "type": "number",
+                                "description": "File size."
+                              },
+                              "mimeType": {
+                                "type": "string",
+                                "description": "File mime-type."
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "description": "File image metadata (width, height etc.).",
+                                "properties": {
+                                  "exif": {
+                                    "type": "object"
+                                  },
+                                  "gps": {
+                                    "type": "object"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "isFull": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "paging": {
+                      "type": "object",
+                      "properties": {
+                        "next": {
+                          "type": "string",
+                          "description": "token for getting the next page of data",
+                          "maxLength": 100
+                        },
+                        "previous": {
+                          "type": "string",
+                          "description": "token for getting the previous page of data",
+                          "maxLength": 100
+                        },
+                        "total": {
+                          "type": "number",
+                          "description": "total number of blockers"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v2/users/ban": {
       "post": {
         "summary": "Ban a User",
@@ -254927,6 +255311,62 @@
         }
       }
     },
+    "/webhook/user.didBlock": {
+      "get": {
+        "tags": [
+          "Webhook event"
+        ],
+        "summary": "User Didblock webhook event",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "This is called when a user blocks another user.\n",
+        "responses": {
+          "200": {
+            "description": "Block event information. data contains the follow relationship (from, to, status), users is a list of userInfo, files is a list of file information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "event": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "string"
+                        },
+                        "to": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "none"
+                          ]
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/webhook/user.didClearFlag": {
       "get": {
         "tags": [
@@ -255717,6 +256157,62 @@
                               }
                             }
                           }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/user.didUnblock": {
+      "get": {
+        "tags": [
+          "Webhook event"
+        ],
+        "summary": "User Didunblock webhook event",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "This is called when a user unblocks another user.\n",
+        "responses": {
+          "200": {
+            "description": "Unblock event information. data contains the follow relationship (from, to, status), users is a list of userInfo, files is a list of file information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "event": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "string"
+                        },
+                        "to": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "none"
+                          ]
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
                         }
                       }
                     }
