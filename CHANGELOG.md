@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.116.1] - 2026-07-04
+
+### 🚀 Features
+
+- Add docs for /me/blockers endpoint and block/unblock webhook events (#482)
+
 ## [4.116.0] - 2026-06-11
 
 ### 🚀 Features
 
 - Add API for room presence (#479)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.116.0 (#480)
 
 ## [4.115.2] - 2026-04-08
 
