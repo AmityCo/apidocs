@@ -1,3 +1,15 @@
+user.didBlock:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "User Didblock webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when a user blocks another user.\n"
+    responses:
+      200:
+        description: "Block event information. data contains the follow relationship (from, to, status), users is a list of userInfo, files is a list of file information"
+        $ref: "../../v4/follow/response.yaml#/follow-webhook-response"
 user.didClearFlag:
   get:
     tags:
@@ -34,6 +46,18 @@ user.didFlag:
       200:
         description: "User flag event information. users is a list of userInfo. files is a list of file information"
         $ref: "../../v1/user/response.yaml#/user-webhook-response"
+user.didUnblock:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "User Didunblock webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when a user unblocks another user.\n"
+    responses:
+      200:
+        description: "Unblock event information. data contains the follow relationship (from, to, status), users is a list of userInfo, files is a list of file information"
+        $ref: "../../v4/follow/response.yaml#/follow-webhook-response"
 user.didUnflag:
   get:
     tags:
