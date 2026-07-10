@@ -119,6 +119,64 @@ ModerationNetworkSetting:
     isReportEnabled:
       type: boolean
 
+EnhanceModerationConfidence:
+  type: object
+  required:
+    - category
+    - flagConfidence
+    - blockConfidence
+    - moderationType
+  properties:
+    category:
+      type: string
+      minLength: 1
+      description: Moderation category key.
+      example: hate
+    flagConfidence:
+      type: number
+      minimum: 0
+      description: Threshold at or above which content is flagged.
+      example: 3
+    blockConfidence:
+      type: number
+      minimum: 0
+      description: Threshold at or above which content is blocked.
+      example: 5
+    moderationType:
+      type: string
+      description: Kind of content the confidence row applies to.
+      enum:
+        - text
+        - image
+        - media
+        - video
+
+EnhanceModerationNetworkSetting:
+  type: object
+  properties:
+    enabled:
+      type: boolean
+      default: false
+    commentDeletionBehavior:
+      type: string
+      description: What to remove when a comment trips moderation.
+      enum:
+        - delete_whole_comment
+        - delete_attachment_only
+      default: delete_whole_comment
+    confidences:
+      type: array
+      items:
+        $ref: "#/EnhanceModerationConfidence"
+      default: []
+    userModerationExclusionPatterns:
+      type: array
+      description: Regex patterns for users excluded from moderation.
+      items:
+        type: string
+        minLength: 1
+      default: []
+
 FeedSettingNetworkSetting:
   type: object
   properties:

@@ -111,6 +111,45 @@ moderation:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
+enhance-moderation:
+  get:
+    summary: "Get enhance-moderation configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: >
+      Get the network's enhance-moderation configuration. If the network has
+      never configured it, defaults are returned (`enabled: false`,
+      `commentDeletionBehavior: delete_whole_comment`, and empty `confidences`
+      and `userModerationExclusionPatterns`).
+    responses:
+      200:
+        $ref: "./response.yaml#/enhance-moderation-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  put:
+    summary: "Update enhance-moderation configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: >
+      Update the network's enhance-moderation configuration. Partial update —
+      every field is optional and only the fields you send are written. Sending
+      an empty body is a no-op that returns the existing configuration.
+    requestBody:
+      $ref: "./request.yaml#/enhance-moderation-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/enhance-moderation-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
 prehook:
   get:
     tags:

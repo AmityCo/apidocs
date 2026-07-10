@@ -33,6 +33,27 @@ moderation-response-200:
       schema:
         $ref: "../../schema/network-setting.yaml#/ModerationNetworkSetting"
 
+enhance-moderation-response-200:
+  description: Enhance-moderation configuration
+  content:
+    application/json:
+      schema:
+        $ref: "../../schema/network-setting.yaml#/EnhanceModerationNetworkSetting"
+      example:
+        enabled: true
+        commentDeletionBehavior: delete_whole_comment
+        confidences:
+          - category: hate
+            flagConfidence: 3
+            blockConfidence: 5
+            moderationType: text
+          - category: nudity
+            flagConfidence: 40
+            blockConfidence: 80
+            moderationType: media
+        userModerationExclusionPatterns:
+          - "^admin_"
+
 feed-setting-response-200:
   description: Feed setting check configuration
   content:
