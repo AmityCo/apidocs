@@ -342,3 +342,46 @@ product-put-request-payload:
           enabled:
             type: "boolean"
             description: "Enable or disable the product catalogue feature"
+
+enhance-moderation-put-request-payload:
+  description: >
+    Enhance-moderation configuration. All fields are optional; only the fields
+    you send are written.
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        additionalProperties: false
+        properties:
+          enabled:
+            type: boolean
+            description: Enable or disable enhance-moderation.
+          commentDeletionBehavior:
+            type: string
+            description: What to remove when a comment trips moderation.
+            enum:
+              - delete_whole_comment
+              - delete_attachment_only
+          confidences:
+            type: array
+            minItems: 1
+            maxItems: 100
+            items:
+              $ref: "../../schema/network-setting.yaml#/EnhanceModerationConfidence"
+          userModerationExclusionPatterns:
+            type: array
+            description: Regex patterns for users excluded from moderation.
+            items:
+              type: string
+              minLength: 1
+      example:
+        enabled: true
+        commentDeletionBehavior: delete_attachment_only
+        confidences:
+          - category: hate
+            flagConfidence: 3
+            blockConfidence: 5
+            moderationType: text
+        userModerationExclusionPatterns:
+          - "^admin_"
