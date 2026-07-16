@@ -30,12 +30,23 @@ me-flags_userId:
       - "User"
     parameters:
       - $ref: "./parameter.yaml#/_userId"
-    description: "Report a User by User ID (Flag User).\n"
+    description: |
+      Report a User by User ID (Flag User).
+
+      Optionally include `reportType`, `reason`, and `comment` in the body to categorize the
+      report. Sending no body flags the target as a legacy/unspecified (typeless) report and
+      behaves exactly as before — fully backward compatible, no version bump.
+    requestBody:
+      $ref: "./request.yaml#/me-flags_userId-post-request-payload"
     responses:
       200:
         $ref: "./response.yaml#/me-flags_userId-post-response-200"
+      403:
+        $ref: "../../global/error.yaml#/NumberOfFlagExceedError"
       404:
         $ref: "../../global/error.yaml#/UserNotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/ValidationError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
   delete:
@@ -46,7 +57,11 @@ me-flags_userId:
       - "User"
     parameters:
       - $ref: "./parameter.yaml#/_userId"
-    description: "Unreported a User by User ID (Unflag User).\n"
+    description: |
+      Unreported a User by User ID (Unflag User).
+
+      Withdraws all of the caller's reports on that user (every typed report and the typeless
+      one, hard delete). There is no per-type unflag.
     responses:
       200:
         $ref: "./response.yaml#/me-flags_userId-delete-response-200"
