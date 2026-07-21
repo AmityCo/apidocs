@@ -2,11 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.117.1] - 2026-07-21
+
+### 📚 Documentation
+
+- *(webhook)* Document user.profileReset webhook event (#487)
+
+## [4.117.0] - 2026-07-10
+
+### 🚀 Features
+
+- Add enhance-moderation network setting API (#484)
+
 ## [4.116.1] - 2026-07-04
 
 ### 🚀 Features
 
 - Add docs for /me/blockers endpoint and block/unblock webhook events (#482)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.116.1 (#483)
 
 ## [4.116.0] - 2026-06-11
 
