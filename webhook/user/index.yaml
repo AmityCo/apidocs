@@ -82,3 +82,15 @@ user.didUpdate:
       200:
         description: "User updated event information. users is a list of userInfo. files is a list of file information"
         $ref: "../../v1/user/response.yaml#/user-webhook-response"
+user.profileReset:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "User Profilereset webhook event"
+    security:
+      - BearerAuth: []
+    description: "This is called when a user's profile is reset by an admin (moderation).\n"
+    responses:
+      200:
+        description: "User profile reset event information. users is a list of userInfo. files is a list of file information"
+        $ref: "../../v1/user/response.yaml#/user-webhook-response"
