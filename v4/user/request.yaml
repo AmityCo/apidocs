@@ -25,6 +25,7 @@ me-flags_userId-post-request-payload:
     | no `reportType` + `reason`                                      | 422    |
     | `reportType` outside the enum                                   | 422    |
     | `reason` or `comment` > 300 chars                               | 422    |
+    | `reason` or `comment` empty string (`""`)                        | 422    |
     | `comment` on any type, <= 300 chars                             | 200    |
 
     **Semantics — one report per (reporter, `reportType`):**
@@ -57,6 +58,7 @@ me-flags_userId-post-request-payload:
               behavior=Behavior.
           reason:
             type: "string"
+            minLength: 1
             maxLength: 300
             description: >
               Required if and only if `reportType` is `behavior`; rejected on every other request
@@ -65,5 +67,6 @@ me-flags_userId-post-request-payload:
               off-list values make moderation grouping unreliable.
           comment:
             type: "string"
+            minLength: 1
             maxLength: 300
             description: "Optional free-text note, allowed on all report types (including typeless)."
