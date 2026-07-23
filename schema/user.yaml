@@ -74,6 +74,106 @@ UserV3:
     - createdAt
     - updatedAt
 
+# UserV3 plus moderation detail. Emitted ONLY on the user.didFlag webhook event
+# (core serializes with includeModerationDetails there). Do NOT reference this
+# from regular API responses — those strip these fields.
+UserWithModerationV3:
+  allOf:
+    - $ref: "#/UserV3"
+    - type: object
+      properties:
+        flags:
+          type: array
+          description: >-
+            List of report entries against this user. Each user reports at most
+            one entry per reportType (dedup key = reporter userId + reportType).
+          items:
+            type: object
+            properties:
+              userId:
+                type: string
+                description: Internal ID of the reporter.
+              reportType:
+                type: string
+                enum: ["displayName", "description", "avatarFileId", "behavior"]
+                description: >-
+                  What was reported. displayName/description/avatarFileId are
+                  profile-field reports; behavior is a conduct report. Absent on
+                  legacy (typeless) reports.
+              reason:
+                type: string
+                maxLength: 300
+                description: >-
+                  Free-text reason. Present only when reportType is 'behavior'
+                  (required for behavior, forbidden otherwise).
+              comment:
+                type: string
+                maxLength: 300
+                description: Optional free-text comment from the reporter. Allowed for any report type.
+              createdAt:
+                type: string
+                format: date-time
+        lastFlaggedAt:
+          type: string
+          format: date-time
+          description: When the user was most recently flagged.
+        lastReviewedAt:
+          type: string
+          format: date-time
+          description: When the user was most recently reviewed by a moderator.
+        aiModerations:
+          type: array
+          description: AI moderation results per profile field.
+          items:
+            type: object
+            properties:
+              moderatedField:
+                type: string
+                enum: ["displayName", "description", "avatarFileId"]
+              type:
+                type: string
+                enum: ["text", "image", "video", "livestream"]
+              categories:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    score:
+                      type: number
+                    flagConfidence:
+                      type: number
+                    blockConfidence:
+                      type: number
+              moderatedAction:
+                type: string
+                enum: ["flag", "delete", "reviewed"]
+              moderatedAt:
+                type: string
+                format: date-time
+              clearedAt:
+                type: string
+                format: date-time
+              clearedBy:
+                type: string
+                description: Internal ID of the moderator who cleared this entry.
+        manualReview:
+          type: object
+          description: Latest manual moderation review.
+          properties:
+            reviewedBy:
+              type: string
+              description: Internal ID of the reviewing moderator.
+            reviewedType:
+              type: string
+              enum: ["delete", "clearFlag", "profileReset", "globallyBan"]
+            reviewedAt:
+              type: string
+              format: date-time
+            moderatorNote:
+              type: string
+
 User:
   type: object
   properties:

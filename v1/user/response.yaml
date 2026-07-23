@@ -19,6 +19,27 @@ user-webhook-response:
                 items:
                   $ref: "../../schema/file.yaml#/File"
 
+user-flag-webhook-response:
+  description: User flag webhook response (includes moderation detail)
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          event:
+            type: "string"
+          data:
+            type: object
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: "../../schema/user.yaml#/UserWithModerationV3"
+              files:
+                type: array
+                items:
+                  $ref: "../../schema/file.yaml#/File"
+
 user-last-activity-response-200:
   description: Users last activity report
   content:
