@@ -222260,7 +222260,7 @@
         ],
         "description": "Report a User by User ID (Flag User).\n\nOptionally include `reportType`, `reason`, and `comment` in the body to categorize the\nreport. Sending no body flags the target as a legacy/unspecified (typeless) report and\nbehaves exactly as before — fully backward compatible, no version bump.\n",
         "requestBody": {
-          "description": "Optional report details. Sending no body flags the target as a legacy/unspecified\n(typeless) report — fully backward compatible.\n\n**`reportType`** uses the internal field vocabulary; the client owns the display labels:\n\n| `reportType`   | Label to show |\n|----------------|---------------|\n| `displayName`  | Username      |\n| `description`  | Bio           |\n| `avatarFileId` | Avatar        |\n| `behavior`     | Behavior      |\n\nSend the internal values above, not the labels.\n\n**Validation** (failures are `422 ValidationError`):\n\n| Request                                                          | Result |\n|-----------------------------------------------------------------|--------|\n| `reportType: behavior` + `reason`                               | 200    |\n| `reportType: behavior`, no `reason`                             | 422    |\n| `reportType: displayName` / `description` / `avatarFileId`, no `reason` | 200 |\n| any of the three field types + `reason`                         | 422    |\n| no `reportType` + `reason`                                      | 422    |\n| `reportType` outside the enum                                   | 422    |\n| `reason` or `comment` > 300 chars                               | 422    |\n| `comment` on any type, <= 300 chars                             | 200    |\n\n**Semantics — one report per (reporter, `reportType`):**\n- A reporter holds at most one report per `reportType` on a target (up to 4 typed + 1 typeless).\n- Same reporter + same `reportType` again is a merge-update: provided `reason`/`comment`\n  overwrite; omitted fields keep their prior values.\n- Identical resubmission is a no-op — safe to retry, but does not re-alert moderators.\n- Same reporter + different `reportType` creates a new report.\n- Typeless requests (no `reportType`) dedup only against the reporter's existing typeless\n  report; typed and typeless reports never block each other.\n- Reports are anonymous to the reported user; reporter identity is not exposed to them.\n\nThe new fields are not echoed back in the response.\n",
+          "description": "Optional report details. Sending no body flags the target as a legacy/unspecified\n(typeless) report — fully backward compatible.\n\n**`reportType`** uses the internal field vocabulary; the client owns the display labels:\n\n| `reportType`   | Label to show |\n|----------------|---------------|\n| `displayName`  | Username      |\n| `description`  | Bio           |\n| `avatarFileId` | Avatar        |\n| `behavior`     | Behavior      |\n\nSend the internal values above, not the labels.\n\n**Validation** (failures are `422 ValidationError`):\n\n| Request                                                          | Result |\n|-----------------------------------------------------------------|--------|\n| `reportType: behavior` + `reason`                               | 200    |\n| `reportType: behavior`, no `reason`                             | 422    |\n| `reportType: displayName` / `description` / `avatarFileId`, no `reason` | 200 |\n| any of the three field types + `reason`                         | 422    |\n| no `reportType` + `reason`                                      | 422    |\n| `reportType` outside the enum                                   | 422    |\n| `reason` or `comment` > 300 chars                               | 422    |\n| `reason` or `comment` empty string (`\"\"`)                        | 422    |\n| `comment` on any type, <= 300 chars                             | 200    |\n\n**Semantics — one report per (reporter, `reportType`):**\n- A reporter holds at most one report per `reportType` on a target (up to 4 typed + 1 typeless).\n- Same reporter + same `reportType` again is a merge-update: provided `reason`/`comment`\n  overwrite; omitted fields keep their prior values.\n- Identical resubmission is a no-op — safe to retry, but does not re-alert moderators.\n- Same reporter + different `reportType` creates a new report.\n- Typeless requests (no `reportType`) dedup only against the reporter's existing typeless\n  report; typed and typeless reports never block each other.\n- Reports are anonymous to the reported user; reporter identity is not exposed to them.\n\nThe new fields are not echoed back in the response.\n",
           "required": false,
           "content": {
             "application/json": {
@@ -222279,11 +222279,13 @@
                   },
                   "reason": {
                     "type": "string",
+                    "minLength": 1,
                     "maxLength": 300,
                     "description": "Required if and only if `reportType` is `behavior`; rejected on every other request (profile-field types and typeless). Use a value from the predefined `ReportReasons` taxonomy (the same list used by content flags); it is a free string on the wire, but off-list values make moderation grouping unreliable.\n"
                   },
                   "comment": {
                     "type": "string",
+                    "minLength": 1,
                     "maxLength": 300,
                     "description": "Optional free-text note, allowed on all report types (including typeless)."
                   }
@@ -255999,10 +256001,10 @@
             "BearerAuth": []
           }
         ],
-        "description": "This is called when the user flags are cleared\n",
+        "description": "This is called when the user flags are cleared. Each userInfo includes moderation detail (flags are emptied by the clear).\n",
         "responses": {
           "200": {
-            "description": "User flag cleared event information. users is a list of userInfo. files is a list of file information",
+            "description": "User flag cleared event information. users is a list of userInfo (with moderation detail). files is a list of file information",
             "content": {
               "application/json": {
                 "schema": {
@@ -256017,140 +256019,288 @@
                         "users": {
                           "type": "array",
                           "items": {
-                            "type": "object",
-                            "properties": {
-                              "_id": {
-                                "type": "string",
-                                "description": "Private ID of a user. (for real-time event)"
-                              },
-                              "path": {
-                                "type": "string",
-                                "description": "Path of a user. (for real-time event)"
-                              },
-                              "userId": {
-                                "type": "string"
-                              },
-                              "userInternalId": {
-                                "type": "string"
-                              },
-                              "userPublicId": {
-                                "type": "string"
-                              },
-                              "roles": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                }
-                              },
-                              "permissions": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "enum": [
-                                    "MUTE_CHANNEL",
-                                    "CLOSE_CHANNEL",
-                                    "EDIT_CHANNEL",
-                                    "EDIT_CHANNEL_RATELIMIT",
-                                    "EDIT_MESSAGE",
-                                    "DELETE_MESSAGE",
-                                    "BAN_USER_FROM_CHANNEL",
-                                    "MUTE_USER_INSIDE_CHANNEL",
-                                    "ADD_CHANNEL_USER",
-                                    "REMOVE_CHANNEL_USER",
-                                    "EDIT_CHANNEL_USER",
-                                    "ASSIGN_CHANNEL_USER_ROLE",
-                                    "BAN_USER",
-                                    "EDIT_USER",
-                                    "ASSIGN_USER_ROLE",
-                                    "EDIT_USER_FEED_POST",
-                                    "DELETE_USER_FEED_POST",
-                                    "EDIT_USER_FEED_COMMENT",
-                                    "DELETE_USER_FEED_COMMENT",
-                                    "ADD_COMMUNITY_USER",
-                                    "REMOVE_COMMUNITY_USER",
-                                    "EDIT_COMMUNITY_USER",
-                                    "BAN_COMMUNITY_USER",
-                                    "MUTE_COMMUNITY_USER",
-                                    "EDIT_COMMUNITY",
-                                    "DELETE_COMMUNITY",
-                                    "EDIT_COMMUNITY_POST",
-                                    "DELETE_COMMUNITY_POST",
-                                    "PIN_COMMUNITY_POST",
-                                    "EDIT_COMMUNITY_COMMENT",
-                                    "DELETE_COMMUNITY_COMMENT",
-                                    "ASSIGN_COMMUNITY_USER_ROLE",
-                                    "CREATE_COMMUNITY_CATEGORY",
-                                    "EDIT_COMMUNITY_CATEGORY",
-                                    "DELETE_COMMUNITY_CATEGORY",
-                                    "CREATE_ROLE",
-                                    "EDIT_ROLE",
-                                    "DELETE_ROLE",
-                                    "MANAGE_COMMUNITY_STORY"
-                                  ]
-                                }
-                              },
-                              "displayName": {
-                                "type": "string"
-                              },
-                              "profileHandle": {
-                                "type": "string"
-                              },
-                              "description": {
-                                "type": "string"
-                              },
-                              "avatarFileId": {
-                                "type": "string"
-                              },
-                              "avatarCustomUrl": {
-                                "type": "string"
-                              },
-                              "flagCount": {
-                                "type": "integer"
-                              },
-                              "hashFlag": {
+                            "allOf": [
+                              {
                                 "type": "object",
                                 "properties": {
-                                  "bits": {
-                                    "type": "integer"
+                                  "_id": {
+                                    "type": "string",
+                                    "description": "Private ID of a user. (for real-time event)"
                                   },
-                                  "hashes": {
-                                    "type": "integer"
+                                  "path": {
+                                    "type": "string",
+                                    "description": "Path of a user. (for real-time event)"
                                   },
-                                  "hash": {
+                                  "userId": {
+                                    "type": "string"
+                                  },
+                                  "userInternalId": {
+                                    "type": "string"
+                                  },
+                                  "userPublicId": {
+                                    "type": "string"
+                                  },
+                                  "roles": {
                                     "type": "array",
                                     "items": {
                                       "type": "string"
                                     }
+                                  },
+                                  "permissions": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "enum": [
+                                        "MUTE_CHANNEL",
+                                        "CLOSE_CHANNEL",
+                                        "EDIT_CHANNEL",
+                                        "EDIT_CHANNEL_RATELIMIT",
+                                        "EDIT_MESSAGE",
+                                        "DELETE_MESSAGE",
+                                        "BAN_USER_FROM_CHANNEL",
+                                        "MUTE_USER_INSIDE_CHANNEL",
+                                        "ADD_CHANNEL_USER",
+                                        "REMOVE_CHANNEL_USER",
+                                        "EDIT_CHANNEL_USER",
+                                        "ASSIGN_CHANNEL_USER_ROLE",
+                                        "BAN_USER",
+                                        "EDIT_USER",
+                                        "ASSIGN_USER_ROLE",
+                                        "EDIT_USER_FEED_POST",
+                                        "DELETE_USER_FEED_POST",
+                                        "EDIT_USER_FEED_COMMENT",
+                                        "DELETE_USER_FEED_COMMENT",
+                                        "ADD_COMMUNITY_USER",
+                                        "REMOVE_COMMUNITY_USER",
+                                        "EDIT_COMMUNITY_USER",
+                                        "BAN_COMMUNITY_USER",
+                                        "MUTE_COMMUNITY_USER",
+                                        "EDIT_COMMUNITY",
+                                        "DELETE_COMMUNITY",
+                                        "EDIT_COMMUNITY_POST",
+                                        "DELETE_COMMUNITY_POST",
+                                        "PIN_COMMUNITY_POST",
+                                        "EDIT_COMMUNITY_COMMENT",
+                                        "DELETE_COMMUNITY_COMMENT",
+                                        "ASSIGN_COMMUNITY_USER_ROLE",
+                                        "CREATE_COMMUNITY_CATEGORY",
+                                        "EDIT_COMMUNITY_CATEGORY",
+                                        "DELETE_COMMUNITY_CATEGORY",
+                                        "CREATE_ROLE",
+                                        "EDIT_ROLE",
+                                        "DELETE_ROLE",
+                                        "MANAGE_COMMUNITY_STORY"
+                                      ]
+                                    }
+                                  },
+                                  "displayName": {
+                                    "type": "string"
+                                  },
+                                  "profileHandle": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  },
+                                  "avatarFileId": {
+                                    "type": "string"
+                                  },
+                                  "avatarCustomUrl": {
+                                    "type": "string"
+                                  },
+                                  "flagCount": {
+                                    "type": "integer"
+                                  },
+                                  "hashFlag": {
+                                    "type": "object",
+                                    "properties": {
+                                      "bits": {
+                                        "type": "integer"
+                                      },
+                                      "hashes": {
+                                        "type": "integer"
+                                      },
+                                      "hash": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "metadata": {
+                                    "type": "object"
+                                  },
+                                  "isGlobalBan": {
+                                    "type": "boolean",
+                                    "description": "Global ban status. Every user can see this flag."
+                                  },
+                                  "isBrand": {
+                                    "type": "boolean",
+                                    "description": "Brand user status."
+                                  },
+                                  "createdAt": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                  },
+                                  "isDeleted": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "userId",
+                                  "createdAt",
+                                  "updatedAt"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "flags": {
+                                    "type": "array",
+                                    "description": "List of report entries against this user. Each user reports at most one entry per reportType (dedup key = reporter userId + reportType).",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "userId": {
+                                          "type": "string",
+                                          "description": "Internal ID of the reporter."
+                                        },
+                                        "reportType": {
+                                          "type": "string",
+                                          "enum": [
+                                            "displayName",
+                                            "description",
+                                            "avatarFileId",
+                                            "behavior"
+                                          ],
+                                          "description": "What was reported. displayName/description/avatarFileId are profile-field reports; behavior is a conduct report. Absent on legacy (typeless) reports."
+                                        },
+                                        "reason": {
+                                          "type": "string",
+                                          "maxLength": 300,
+                                          "description": "Free-text reason. Present only when reportType is 'behavior' (required for behavior, forbidden otherwise)."
+                                        },
+                                        "comment": {
+                                          "type": "string",
+                                          "maxLength": 300,
+                                          "description": "Optional free-text comment from the reporter. Allowed for any report type."
+                                        },
+                                        "createdAt": {
+                                          "type": "string",
+                                          "format": "date-time"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "lastFlaggedAt": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "When the user was most recently flagged."
+                                  },
+                                  "lastReviewedAt": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "When the user was most recently reviewed by a moderator."
+                                  },
+                                  "aiModerations": {
+                                    "type": "array",
+                                    "description": "AI moderation results per profile field.",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "moderatedField": {
+                                          "type": "string",
+                                          "enum": [
+                                            "displayName",
+                                            "description",
+                                            "avatarFileId"
+                                          ]
+                                        },
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "text",
+                                            "image",
+                                            "video",
+                                            "livestream"
+                                          ]
+                                        },
+                                        "categories": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "name": {
+                                                "type": "string"
+                                              },
+                                              "score": {
+                                                "type": "number"
+                                              },
+                                              "flagConfidence": {
+                                                "type": "number"
+                                              },
+                                              "blockConfidence": {
+                                                "type": "number"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "moderatedAction": {
+                                          "type": "string",
+                                          "enum": [
+                                            "flag",
+                                            "delete",
+                                            "reviewed"
+                                          ]
+                                        },
+                                        "moderatedAt": {
+                                          "type": "string",
+                                          "format": "date-time"
+                                        },
+                                        "clearedAt": {
+                                          "type": "string",
+                                          "format": "date-time"
+                                        },
+                                        "clearedBy": {
+                                          "type": "string",
+                                          "description": "Internal ID of the moderator who cleared this entry."
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "manualReview": {
+                                    "type": "object",
+                                    "description": "Latest manual moderation review.",
+                                    "properties": {
+                                      "reviewedBy": {
+                                        "type": "string",
+                                        "description": "Internal ID of the reviewing moderator."
+                                      },
+                                      "reviewedType": {
+                                        "type": "string",
+                                        "enum": [
+                                          "delete",
+                                          "clearFlag",
+                                          "profileReset",
+                                          "globallyBan"
+                                        ]
+                                      },
+                                      "reviewedAt": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                      },
+                                      "moderatorNote": {
+                                        "type": "string"
+                                      }
+                                    }
                                   }
                                 }
-                              },
-                              "metadata": {
-                                "type": "object"
-                              },
-                              "isGlobalBan": {
-                                "type": "boolean",
-                                "description": "Global ban status. Every user can see this flag."
-                              },
-                              "isBrand": {
-                                "type": "boolean",
-                                "description": "Brand user status."
-                              },
-                              "createdAt": {
-                                "type": "string",
-                                "format": "date-time"
-                              },
-                              "updatedAt": {
-                                "type": "string",
-                                "format": "date-time"
-                              },
-                              "isDeleted": {
-                                "type": "boolean"
                               }
-                            },
-                            "required": [
-                              "userId",
-                              "createdAt",
-                              "updatedAt"
                             ]
                           }
                         },
@@ -256533,10 +256683,10 @@
             "BearerAuth": []
           }
         ],
-        "description": "This is called when a user is flagged\n",
+        "description": "This is called when a user is flagged. Each userInfo includes a `flags` array with the report entries (reportType, reason, comment, reporter userId) plus moderation detail.\n",
         "responses": {
           "200": {
-            "description": "User flag event information. users is a list of userInfo. files is a list of file information",
+            "description": "User flag event information. users is a list of userInfo (each with the flags/report entries and moderation detail). files is a list of file information",
             "content": {
               "application/json": {
                 "schema": {
@@ -256551,140 +256701,288 @@
                         "users": {
                           "type": "array",
                           "items": {
-                            "type": "object",
-                            "properties": {
-                              "_id": {
-                                "type": "string",
-                                "description": "Private ID of a user. (for real-time event)"
-                              },
-                              "path": {
-                                "type": "string",
-                                "description": "Path of a user. (for real-time event)"
-                              },
-                              "userId": {
-                                "type": "string"
-                              },
-                              "userInternalId": {
-                                "type": "string"
-                              },
-                              "userPublicId": {
-                                "type": "string"
-                              },
-                              "roles": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                }
-                              },
-                              "permissions": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "enum": [
-                                    "MUTE_CHANNEL",
-                                    "CLOSE_CHANNEL",
-                                    "EDIT_CHANNEL",
-                                    "EDIT_CHANNEL_RATELIMIT",
-                                    "EDIT_MESSAGE",
-                                    "DELETE_MESSAGE",
-                                    "BAN_USER_FROM_CHANNEL",
-                                    "MUTE_USER_INSIDE_CHANNEL",
-                                    "ADD_CHANNEL_USER",
-                                    "REMOVE_CHANNEL_USER",
-                                    "EDIT_CHANNEL_USER",
-                                    "ASSIGN_CHANNEL_USER_ROLE",
-                                    "BAN_USER",
-                                    "EDIT_USER",
-                                    "ASSIGN_USER_ROLE",
-                                    "EDIT_USER_FEED_POST",
-                                    "DELETE_USER_FEED_POST",
-                                    "EDIT_USER_FEED_COMMENT",
-                                    "DELETE_USER_FEED_COMMENT",
-                                    "ADD_COMMUNITY_USER",
-                                    "REMOVE_COMMUNITY_USER",
-                                    "EDIT_COMMUNITY_USER",
-                                    "BAN_COMMUNITY_USER",
-                                    "MUTE_COMMUNITY_USER",
-                                    "EDIT_COMMUNITY",
-                                    "DELETE_COMMUNITY",
-                                    "EDIT_COMMUNITY_POST",
-                                    "DELETE_COMMUNITY_POST",
-                                    "PIN_COMMUNITY_POST",
-                                    "EDIT_COMMUNITY_COMMENT",
-                                    "DELETE_COMMUNITY_COMMENT",
-                                    "ASSIGN_COMMUNITY_USER_ROLE",
-                                    "CREATE_COMMUNITY_CATEGORY",
-                                    "EDIT_COMMUNITY_CATEGORY",
-                                    "DELETE_COMMUNITY_CATEGORY",
-                                    "CREATE_ROLE",
-                                    "EDIT_ROLE",
-                                    "DELETE_ROLE",
-                                    "MANAGE_COMMUNITY_STORY"
-                                  ]
-                                }
-                              },
-                              "displayName": {
-                                "type": "string"
-                              },
-                              "profileHandle": {
-                                "type": "string"
-                              },
-                              "description": {
-                                "type": "string"
-                              },
-                              "avatarFileId": {
-                                "type": "string"
-                              },
-                              "avatarCustomUrl": {
-                                "type": "string"
-                              },
-                              "flagCount": {
-                                "type": "integer"
-                              },
-                              "hashFlag": {
+                            "allOf": [
+                              {
                                 "type": "object",
                                 "properties": {
-                                  "bits": {
-                                    "type": "integer"
+                                  "_id": {
+                                    "type": "string",
+                                    "description": "Private ID of a user. (for real-time event)"
                                   },
-                                  "hashes": {
-                                    "type": "integer"
+                                  "path": {
+                                    "type": "string",
+                                    "description": "Path of a user. (for real-time event)"
                                   },
-                                  "hash": {
+                                  "userId": {
+                                    "type": "string"
+                                  },
+                                  "userInternalId": {
+                                    "type": "string"
+                                  },
+                                  "userPublicId": {
+                                    "type": "string"
+                                  },
+                                  "roles": {
                                     "type": "array",
                                     "items": {
                                       "type": "string"
                                     }
+                                  },
+                                  "permissions": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "enum": [
+                                        "MUTE_CHANNEL",
+                                        "CLOSE_CHANNEL",
+                                        "EDIT_CHANNEL",
+                                        "EDIT_CHANNEL_RATELIMIT",
+                                        "EDIT_MESSAGE",
+                                        "DELETE_MESSAGE",
+                                        "BAN_USER_FROM_CHANNEL",
+                                        "MUTE_USER_INSIDE_CHANNEL",
+                                        "ADD_CHANNEL_USER",
+                                        "REMOVE_CHANNEL_USER",
+                                        "EDIT_CHANNEL_USER",
+                                        "ASSIGN_CHANNEL_USER_ROLE",
+                                        "BAN_USER",
+                                        "EDIT_USER",
+                                        "ASSIGN_USER_ROLE",
+                                        "EDIT_USER_FEED_POST",
+                                        "DELETE_USER_FEED_POST",
+                                        "EDIT_USER_FEED_COMMENT",
+                                        "DELETE_USER_FEED_COMMENT",
+                                        "ADD_COMMUNITY_USER",
+                                        "REMOVE_COMMUNITY_USER",
+                                        "EDIT_COMMUNITY_USER",
+                                        "BAN_COMMUNITY_USER",
+                                        "MUTE_COMMUNITY_USER",
+                                        "EDIT_COMMUNITY",
+                                        "DELETE_COMMUNITY",
+                                        "EDIT_COMMUNITY_POST",
+                                        "DELETE_COMMUNITY_POST",
+                                        "PIN_COMMUNITY_POST",
+                                        "EDIT_COMMUNITY_COMMENT",
+                                        "DELETE_COMMUNITY_COMMENT",
+                                        "ASSIGN_COMMUNITY_USER_ROLE",
+                                        "CREATE_COMMUNITY_CATEGORY",
+                                        "EDIT_COMMUNITY_CATEGORY",
+                                        "DELETE_COMMUNITY_CATEGORY",
+                                        "CREATE_ROLE",
+                                        "EDIT_ROLE",
+                                        "DELETE_ROLE",
+                                        "MANAGE_COMMUNITY_STORY"
+                                      ]
+                                    }
+                                  },
+                                  "displayName": {
+                                    "type": "string"
+                                  },
+                                  "profileHandle": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  },
+                                  "avatarFileId": {
+                                    "type": "string"
+                                  },
+                                  "avatarCustomUrl": {
+                                    "type": "string"
+                                  },
+                                  "flagCount": {
+                                    "type": "integer"
+                                  },
+                                  "hashFlag": {
+                                    "type": "object",
+                                    "properties": {
+                                      "bits": {
+                                        "type": "integer"
+                                      },
+                                      "hashes": {
+                                        "type": "integer"
+                                      },
+                                      "hash": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "metadata": {
+                                    "type": "object"
+                                  },
+                                  "isGlobalBan": {
+                                    "type": "boolean",
+                                    "description": "Global ban status. Every user can see this flag."
+                                  },
+                                  "isBrand": {
+                                    "type": "boolean",
+                                    "description": "Brand user status."
+                                  },
+                                  "createdAt": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                  },
+                                  "isDeleted": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "userId",
+                                  "createdAt",
+                                  "updatedAt"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "flags": {
+                                    "type": "array",
+                                    "description": "List of report entries against this user. Each user reports at most one entry per reportType (dedup key = reporter userId + reportType).",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "userId": {
+                                          "type": "string",
+                                          "description": "Internal ID of the reporter."
+                                        },
+                                        "reportType": {
+                                          "type": "string",
+                                          "enum": [
+                                            "displayName",
+                                            "description",
+                                            "avatarFileId",
+                                            "behavior"
+                                          ],
+                                          "description": "What was reported. displayName/description/avatarFileId are profile-field reports; behavior is a conduct report. Absent on legacy (typeless) reports."
+                                        },
+                                        "reason": {
+                                          "type": "string",
+                                          "maxLength": 300,
+                                          "description": "Free-text reason. Present only when reportType is 'behavior' (required for behavior, forbidden otherwise)."
+                                        },
+                                        "comment": {
+                                          "type": "string",
+                                          "maxLength": 300,
+                                          "description": "Optional free-text comment from the reporter. Allowed for any report type."
+                                        },
+                                        "createdAt": {
+                                          "type": "string",
+                                          "format": "date-time"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "lastFlaggedAt": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "When the user was most recently flagged."
+                                  },
+                                  "lastReviewedAt": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "When the user was most recently reviewed by a moderator."
+                                  },
+                                  "aiModerations": {
+                                    "type": "array",
+                                    "description": "AI moderation results per profile field.",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "moderatedField": {
+                                          "type": "string",
+                                          "enum": [
+                                            "displayName",
+                                            "description",
+                                            "avatarFileId"
+                                          ]
+                                        },
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "text",
+                                            "image",
+                                            "video",
+                                            "livestream"
+                                          ]
+                                        },
+                                        "categories": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "name": {
+                                                "type": "string"
+                                              },
+                                              "score": {
+                                                "type": "number"
+                                              },
+                                              "flagConfidence": {
+                                                "type": "number"
+                                              },
+                                              "blockConfidence": {
+                                                "type": "number"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "moderatedAction": {
+                                          "type": "string",
+                                          "enum": [
+                                            "flag",
+                                            "delete",
+                                            "reviewed"
+                                          ]
+                                        },
+                                        "moderatedAt": {
+                                          "type": "string",
+                                          "format": "date-time"
+                                        },
+                                        "clearedAt": {
+                                          "type": "string",
+                                          "format": "date-time"
+                                        },
+                                        "clearedBy": {
+                                          "type": "string",
+                                          "description": "Internal ID of the moderator who cleared this entry."
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "manualReview": {
+                                    "type": "object",
+                                    "description": "Latest manual moderation review.",
+                                    "properties": {
+                                      "reviewedBy": {
+                                        "type": "string",
+                                        "description": "Internal ID of the reviewing moderator."
+                                      },
+                                      "reviewedType": {
+                                        "type": "string",
+                                        "enum": [
+                                          "delete",
+                                          "clearFlag",
+                                          "profileReset",
+                                          "globallyBan"
+                                        ]
+                                      },
+                                      "reviewedAt": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                      },
+                                      "moderatorNote": {
+                                        "type": "string"
+                                      }
+                                    }
                                   }
                                 }
-                              },
-                              "metadata": {
-                                "type": "object"
-                              },
-                              "isGlobalBan": {
-                                "type": "boolean",
-                                "description": "Global ban status. Every user can see this flag."
-                              },
-                              "isBrand": {
-                                "type": "boolean",
-                                "description": "Brand user status."
-                              },
-                              "createdAt": {
-                                "type": "string",
-                                "format": "date-time"
-                              },
-                              "updatedAt": {
-                                "type": "string",
-                                "format": "date-time"
-                              },
-                              "isDeleted": {
-                                "type": "boolean"
                               }
-                            },
-                            "required": [
-                              "userId",
-                              "createdAt",
-                              "updatedAt"
                             ]
                           }
                         },
@@ -256856,10 +257154,10 @@
             "BearerAuth": []
           }
         ],
-        "description": "This is called when a user is unflagged\n",
+        "description": "This is called when a user is unflagged. Each userInfo includes the remaining `flags` entries plus moderation detail.\n",
         "responses": {
           "200": {
-            "description": "User unflag event information. users is a list of userInfo. files is a list of file information",
+            "description": "User unflag event information. users is a list of userInfo (each with remaining flags/report entries and moderation detail). files is a list of file information",
             "content": {
               "application/json": {
                 "schema": {
@@ -256874,140 +257172,288 @@
                         "users": {
                           "type": "array",
                           "items": {
-                            "type": "object",
-                            "properties": {
-                              "_id": {
-                                "type": "string",
-                                "description": "Private ID of a user. (for real-time event)"
-                              },
-                              "path": {
-                                "type": "string",
-                                "description": "Path of a user. (for real-time event)"
-                              },
-                              "userId": {
-                                "type": "string"
-                              },
-                              "userInternalId": {
-                                "type": "string"
-                              },
-                              "userPublicId": {
-                                "type": "string"
-                              },
-                              "roles": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                }
-                              },
-                              "permissions": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "enum": [
-                                    "MUTE_CHANNEL",
-                                    "CLOSE_CHANNEL",
-                                    "EDIT_CHANNEL",
-                                    "EDIT_CHANNEL_RATELIMIT",
-                                    "EDIT_MESSAGE",
-                                    "DELETE_MESSAGE",
-                                    "BAN_USER_FROM_CHANNEL",
-                                    "MUTE_USER_INSIDE_CHANNEL",
-                                    "ADD_CHANNEL_USER",
-                                    "REMOVE_CHANNEL_USER",
-                                    "EDIT_CHANNEL_USER",
-                                    "ASSIGN_CHANNEL_USER_ROLE",
-                                    "BAN_USER",
-                                    "EDIT_USER",
-                                    "ASSIGN_USER_ROLE",
-                                    "EDIT_USER_FEED_POST",
-                                    "DELETE_USER_FEED_POST",
-                                    "EDIT_USER_FEED_COMMENT",
-                                    "DELETE_USER_FEED_COMMENT",
-                                    "ADD_COMMUNITY_USER",
-                                    "REMOVE_COMMUNITY_USER",
-                                    "EDIT_COMMUNITY_USER",
-                                    "BAN_COMMUNITY_USER",
-                                    "MUTE_COMMUNITY_USER",
-                                    "EDIT_COMMUNITY",
-                                    "DELETE_COMMUNITY",
-                                    "EDIT_COMMUNITY_POST",
-                                    "DELETE_COMMUNITY_POST",
-                                    "PIN_COMMUNITY_POST",
-                                    "EDIT_COMMUNITY_COMMENT",
-                                    "DELETE_COMMUNITY_COMMENT",
-                                    "ASSIGN_COMMUNITY_USER_ROLE",
-                                    "CREATE_COMMUNITY_CATEGORY",
-                                    "EDIT_COMMUNITY_CATEGORY",
-                                    "DELETE_COMMUNITY_CATEGORY",
-                                    "CREATE_ROLE",
-                                    "EDIT_ROLE",
-                                    "DELETE_ROLE",
-                                    "MANAGE_COMMUNITY_STORY"
-                                  ]
-                                }
-                              },
-                              "displayName": {
-                                "type": "string"
-                              },
-                              "profileHandle": {
-                                "type": "string"
-                              },
-                              "description": {
-                                "type": "string"
-                              },
-                              "avatarFileId": {
-                                "type": "string"
-                              },
-                              "avatarCustomUrl": {
-                                "type": "string"
-                              },
-                              "flagCount": {
-                                "type": "integer"
-                              },
-                              "hashFlag": {
+                            "allOf": [
+                              {
                                 "type": "object",
                                 "properties": {
-                                  "bits": {
-                                    "type": "integer"
+                                  "_id": {
+                                    "type": "string",
+                                    "description": "Private ID of a user. (for real-time event)"
                                   },
-                                  "hashes": {
-                                    "type": "integer"
+                                  "path": {
+                                    "type": "string",
+                                    "description": "Path of a user. (for real-time event)"
                                   },
-                                  "hash": {
+                                  "userId": {
+                                    "type": "string"
+                                  },
+                                  "userInternalId": {
+                                    "type": "string"
+                                  },
+                                  "userPublicId": {
+                                    "type": "string"
+                                  },
+                                  "roles": {
                                     "type": "array",
                                     "items": {
                                       "type": "string"
                                     }
+                                  },
+                                  "permissions": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "enum": [
+                                        "MUTE_CHANNEL",
+                                        "CLOSE_CHANNEL",
+                                        "EDIT_CHANNEL",
+                                        "EDIT_CHANNEL_RATELIMIT",
+                                        "EDIT_MESSAGE",
+                                        "DELETE_MESSAGE",
+                                        "BAN_USER_FROM_CHANNEL",
+                                        "MUTE_USER_INSIDE_CHANNEL",
+                                        "ADD_CHANNEL_USER",
+                                        "REMOVE_CHANNEL_USER",
+                                        "EDIT_CHANNEL_USER",
+                                        "ASSIGN_CHANNEL_USER_ROLE",
+                                        "BAN_USER",
+                                        "EDIT_USER",
+                                        "ASSIGN_USER_ROLE",
+                                        "EDIT_USER_FEED_POST",
+                                        "DELETE_USER_FEED_POST",
+                                        "EDIT_USER_FEED_COMMENT",
+                                        "DELETE_USER_FEED_COMMENT",
+                                        "ADD_COMMUNITY_USER",
+                                        "REMOVE_COMMUNITY_USER",
+                                        "EDIT_COMMUNITY_USER",
+                                        "BAN_COMMUNITY_USER",
+                                        "MUTE_COMMUNITY_USER",
+                                        "EDIT_COMMUNITY",
+                                        "DELETE_COMMUNITY",
+                                        "EDIT_COMMUNITY_POST",
+                                        "DELETE_COMMUNITY_POST",
+                                        "PIN_COMMUNITY_POST",
+                                        "EDIT_COMMUNITY_COMMENT",
+                                        "DELETE_COMMUNITY_COMMENT",
+                                        "ASSIGN_COMMUNITY_USER_ROLE",
+                                        "CREATE_COMMUNITY_CATEGORY",
+                                        "EDIT_COMMUNITY_CATEGORY",
+                                        "DELETE_COMMUNITY_CATEGORY",
+                                        "CREATE_ROLE",
+                                        "EDIT_ROLE",
+                                        "DELETE_ROLE",
+                                        "MANAGE_COMMUNITY_STORY"
+                                      ]
+                                    }
+                                  },
+                                  "displayName": {
+                                    "type": "string"
+                                  },
+                                  "profileHandle": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  },
+                                  "avatarFileId": {
+                                    "type": "string"
+                                  },
+                                  "avatarCustomUrl": {
+                                    "type": "string"
+                                  },
+                                  "flagCount": {
+                                    "type": "integer"
+                                  },
+                                  "hashFlag": {
+                                    "type": "object",
+                                    "properties": {
+                                      "bits": {
+                                        "type": "integer"
+                                      },
+                                      "hashes": {
+                                        "type": "integer"
+                                      },
+                                      "hash": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "metadata": {
+                                    "type": "object"
+                                  },
+                                  "isGlobalBan": {
+                                    "type": "boolean",
+                                    "description": "Global ban status. Every user can see this flag."
+                                  },
+                                  "isBrand": {
+                                    "type": "boolean",
+                                    "description": "Brand user status."
+                                  },
+                                  "createdAt": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                  },
+                                  "isDeleted": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "userId",
+                                  "createdAt",
+                                  "updatedAt"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "flags": {
+                                    "type": "array",
+                                    "description": "List of report entries against this user. Each user reports at most one entry per reportType (dedup key = reporter userId + reportType).",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "userId": {
+                                          "type": "string",
+                                          "description": "Internal ID of the reporter."
+                                        },
+                                        "reportType": {
+                                          "type": "string",
+                                          "enum": [
+                                            "displayName",
+                                            "description",
+                                            "avatarFileId",
+                                            "behavior"
+                                          ],
+                                          "description": "What was reported. displayName/description/avatarFileId are profile-field reports; behavior is a conduct report. Absent on legacy (typeless) reports."
+                                        },
+                                        "reason": {
+                                          "type": "string",
+                                          "maxLength": 300,
+                                          "description": "Free-text reason. Present only when reportType is 'behavior' (required for behavior, forbidden otherwise)."
+                                        },
+                                        "comment": {
+                                          "type": "string",
+                                          "maxLength": 300,
+                                          "description": "Optional free-text comment from the reporter. Allowed for any report type."
+                                        },
+                                        "createdAt": {
+                                          "type": "string",
+                                          "format": "date-time"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "lastFlaggedAt": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "When the user was most recently flagged."
+                                  },
+                                  "lastReviewedAt": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "When the user was most recently reviewed by a moderator."
+                                  },
+                                  "aiModerations": {
+                                    "type": "array",
+                                    "description": "AI moderation results per profile field.",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "moderatedField": {
+                                          "type": "string",
+                                          "enum": [
+                                            "displayName",
+                                            "description",
+                                            "avatarFileId"
+                                          ]
+                                        },
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "text",
+                                            "image",
+                                            "video",
+                                            "livestream"
+                                          ]
+                                        },
+                                        "categories": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "name": {
+                                                "type": "string"
+                                              },
+                                              "score": {
+                                                "type": "number"
+                                              },
+                                              "flagConfidence": {
+                                                "type": "number"
+                                              },
+                                              "blockConfidence": {
+                                                "type": "number"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "moderatedAction": {
+                                          "type": "string",
+                                          "enum": [
+                                            "flag",
+                                            "delete",
+                                            "reviewed"
+                                          ]
+                                        },
+                                        "moderatedAt": {
+                                          "type": "string",
+                                          "format": "date-time"
+                                        },
+                                        "clearedAt": {
+                                          "type": "string",
+                                          "format": "date-time"
+                                        },
+                                        "clearedBy": {
+                                          "type": "string",
+                                          "description": "Internal ID of the moderator who cleared this entry."
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "manualReview": {
+                                    "type": "object",
+                                    "description": "Latest manual moderation review.",
+                                    "properties": {
+                                      "reviewedBy": {
+                                        "type": "string",
+                                        "description": "Internal ID of the reviewing moderator."
+                                      },
+                                      "reviewedType": {
+                                        "type": "string",
+                                        "enum": [
+                                          "delete",
+                                          "clearFlag",
+                                          "profileReset",
+                                          "globallyBan"
+                                        ]
+                                      },
+                                      "reviewedAt": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                      },
+                                      "moderatorNote": {
+                                        "type": "string"
+                                      }
+                                    }
                                   }
                                 }
-                              },
-                              "metadata": {
-                                "type": "object"
-                              },
-                              "isGlobalBan": {
-                                "type": "boolean",
-                                "description": "Global ban status. Every user can see this flag."
-                              },
-                              "isBrand": {
-                                "type": "boolean",
-                                "description": "Brand user status."
-                              },
-                              "createdAt": {
-                                "type": "string",
-                                "format": "date-time"
-                              },
-                              "updatedAt": {
-                                "type": "string",
-                                "format": "date-time"
-                              },
-                              "isDeleted": {
-                                "type": "boolean"
                               }
-                            },
-                            "required": [
-                              "userId",
-                              "createdAt",
-                              "updatedAt"
                             ]
                           }
                         },
@@ -363286,6 +363732,291 @@
               "referenceId": {
                 "type": "string",
                 "description": "the id used for reference when optimistically create the story. only avaliable in create story API"
+              }
+            }
+          }
+        ]
+      },
+      "UserWithModerationV3": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "Private ID of a user. (for real-time event)"
+              },
+              "path": {
+                "type": "string",
+                "description": "Path of a user. (for real-time event)"
+              },
+              "userId": {
+                "type": "string"
+              },
+              "userInternalId": {
+                "type": "string"
+              },
+              "userPublicId": {
+                "type": "string"
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "permissions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "MUTE_CHANNEL",
+                    "CLOSE_CHANNEL",
+                    "EDIT_CHANNEL",
+                    "EDIT_CHANNEL_RATELIMIT",
+                    "EDIT_MESSAGE",
+                    "DELETE_MESSAGE",
+                    "BAN_USER_FROM_CHANNEL",
+                    "MUTE_USER_INSIDE_CHANNEL",
+                    "ADD_CHANNEL_USER",
+                    "REMOVE_CHANNEL_USER",
+                    "EDIT_CHANNEL_USER",
+                    "ASSIGN_CHANNEL_USER_ROLE",
+                    "BAN_USER",
+                    "EDIT_USER",
+                    "ASSIGN_USER_ROLE",
+                    "EDIT_USER_FEED_POST",
+                    "DELETE_USER_FEED_POST",
+                    "EDIT_USER_FEED_COMMENT",
+                    "DELETE_USER_FEED_COMMENT",
+                    "ADD_COMMUNITY_USER",
+                    "REMOVE_COMMUNITY_USER",
+                    "EDIT_COMMUNITY_USER",
+                    "BAN_COMMUNITY_USER",
+                    "MUTE_COMMUNITY_USER",
+                    "EDIT_COMMUNITY",
+                    "DELETE_COMMUNITY",
+                    "EDIT_COMMUNITY_POST",
+                    "DELETE_COMMUNITY_POST",
+                    "PIN_COMMUNITY_POST",
+                    "EDIT_COMMUNITY_COMMENT",
+                    "DELETE_COMMUNITY_COMMENT",
+                    "ASSIGN_COMMUNITY_USER_ROLE",
+                    "CREATE_COMMUNITY_CATEGORY",
+                    "EDIT_COMMUNITY_CATEGORY",
+                    "DELETE_COMMUNITY_CATEGORY",
+                    "CREATE_ROLE",
+                    "EDIT_ROLE",
+                    "DELETE_ROLE",
+                    "MANAGE_COMMUNITY_STORY"
+                  ]
+                }
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "profileHandle": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "avatarFileId": {
+                "type": "string"
+              },
+              "avatarCustomUrl": {
+                "type": "string"
+              },
+              "flagCount": {
+                "type": "integer"
+              },
+              "hashFlag": {
+                "type": "object",
+                "properties": {
+                  "bits": {
+                    "type": "integer"
+                  },
+                  "hashes": {
+                    "type": "integer"
+                  },
+                  "hash": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "metadata": {
+                "type": "object"
+              },
+              "isGlobalBan": {
+                "type": "boolean",
+                "description": "Global ban status. Every user can see this flag."
+              },
+              "isBrand": {
+                "type": "boolean",
+                "description": "Brand user status."
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "isDeleted": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "userId",
+              "createdAt",
+              "updatedAt"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "flags": {
+                "type": "array",
+                "description": "List of report entries against this user. Each user reports at most one entry per reportType (dedup key = reporter userId + reportType).",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "string",
+                      "description": "Internal ID of the reporter."
+                    },
+                    "reportType": {
+                      "type": "string",
+                      "enum": [
+                        "displayName",
+                        "description",
+                        "avatarFileId",
+                        "behavior"
+                      ],
+                      "description": "What was reported. displayName/description/avatarFileId are profile-field reports; behavior is a conduct report. Absent on legacy (typeless) reports."
+                    },
+                    "reason": {
+                      "type": "string",
+                      "maxLength": 300,
+                      "description": "Free-text reason. Present only when reportType is 'behavior' (required for behavior, forbidden otherwise)."
+                    },
+                    "comment": {
+                      "type": "string",
+                      "maxLength": 300,
+                      "description": "Optional free-text comment from the reporter. Allowed for any report type."
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              },
+              "lastFlaggedAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "When the user was most recently flagged."
+              },
+              "lastReviewedAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "When the user was most recently reviewed by a moderator."
+              },
+              "aiModerations": {
+                "type": "array",
+                "description": "AI moderation results per profile field.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "moderatedField": {
+                      "type": "string",
+                      "enum": [
+                        "displayName",
+                        "description",
+                        "avatarFileId"
+                      ]
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "image",
+                        "video",
+                        "livestream"
+                      ]
+                    },
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "score": {
+                            "type": "number"
+                          },
+                          "flagConfidence": {
+                            "type": "number"
+                          },
+                          "blockConfidence": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "moderatedAction": {
+                      "type": "string",
+                      "enum": [
+                        "flag",
+                        "delete",
+                        "reviewed"
+                      ]
+                    },
+                    "moderatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "clearedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "clearedBy": {
+                      "type": "string",
+                      "description": "Internal ID of the moderator who cleared this entry."
+                    }
+                  }
+                }
+              },
+              "manualReview": {
+                "type": "object",
+                "description": "Latest manual moderation review.",
+                "properties": {
+                  "reviewedBy": {
+                    "type": "string",
+                    "description": "Internal ID of the reviewing moderator."
+                  },
+                  "reviewedType": {
+                    "type": "string",
+                    "enum": [
+                      "delete",
+                      "clearFlag",
+                      "profileReset",
+                      "globallyBan"
+                    ]
+                  },
+                  "reviewedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "moderatorNote": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }

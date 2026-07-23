@@ -17,11 +17,11 @@ user.didClearFlag:
     summary: "User Didclearflag webhook event"
     security:
       - BearerAuth: []
-    description: "This is called when the user flags are cleared\n"
+    description: "This is called when the user flags are cleared. Each userInfo includes moderation detail (flags are emptied by the clear).\n"
     responses:
       200:
-        description: "User flag cleared event information. users is a list of userInfo. files is a list of file information"
-        $ref: "../../v1/user/response.yaml#/user-webhook-response"
+        description: "User flag cleared event information. users is a list of userInfo (with moderation detail). files is a list of file information"
+        $ref: "../../v1/user/response.yaml#/user-flag-webhook-response"
 user.didCreate:
   get:
     tags:
