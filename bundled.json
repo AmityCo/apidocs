@@ -127140,7 +127140,8 @@
                           "lastSeenAt": {
                             "type": "string",
                             "format": "date-time",
-                            "description": "Timestamp when the user last saw this notification"
+                            "nullable": true,
+                            "description": "Timestamp when the user last saw this notification; null if the user has not seen it yet"
                           },
                           "lastOccurredAt": {
                             "type": "string",
@@ -127184,7 +127185,11 @@
                               "reaction",
                               "mention",
                               "reply",
-                              "follow"
+                              "follow",
+                              "event",
+                              "invitation",
+                              "join_request",
+                              "user"
                             ]
                           },
                           "trayItemCategory": {
@@ -127199,7 +127204,13 @@
                               "reaction_on_poll",
                               "reaction_on_comment",
                               "reaction_on_reply",
-                              "follow"
+                              "respond_on_join_request",
+                              "follow",
+                              "event_created",
+                              "event_reminder",
+                              "event_started",
+                              "room_cohost_invite",
+                              "user_profile_reset"
                             ]
                           },
                           "targetId": {
@@ -127216,7 +127227,11 @@
                           },
                           "referenceType": {
                             "type": "string",
-                            "description": "Optional type of the referenced content"
+                            "description": "Optional type of the referenced content",
+                            "enum": [
+                              "post",
+                              "comment"
+                            ]
                           },
                           "actionReferenceId": {
                             "type": "string",
@@ -127225,6 +127240,30 @@
                           "parentId": {
                             "type": "string",
                             "description": "Optional identifier of parent content"
+                          },
+                          "rootId": {
+                            "type": "string",
+                            "description": "Optional identifier of the root content in a thread (e.g. the root post of a reply chain)"
+                          },
+                          "latestCommentId": {
+                            "type": "string",
+                            "description": "Optional identifier of the most recent comment associated with this notification"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Identifier of the network the notification belongs to"
+                          },
+                          "audienceScope": {
+                            "type": "string",
+                            "description": "How recipients are resolved at read time; absent is treated as community-scoped",
+                            "enum": [
+                              "community",
+                              "network"
+                            ]
+                          },
+                          "notifyToUserId": {
+                            "type": "string",
+                            "description": "Optional identifier of the user this notification is directed to"
                           },
                           "data": {
                             "deprecated": true,
@@ -127244,10 +127283,10 @@
                               {
                                 "type": "object",
                                 "required": [
-                                  "reactionName"
+                                  "reactionNames"
                                 ],
                                 "properties": {
-                                  "reactionName": {
+                                  "reactionNames": {
                                     "type": "array",
                                     "items": {
                                       "type": "string"
@@ -127521,6 +127560,140 @@
                                 }
                               }
                             }
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "description": "Event information for any events referenced in notifications (omitted when there are none)",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "User ID of the event creator"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "isInviteOnly": {
+                            "type": "boolean",
+                            "description": "Whether the event is invite-only"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the community where the event is created"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community"
+                            ],
+                            "description": "Origin type of the event (currently only 'community')"
+                          },
+                          "livestreamId": {
+                            "type": "string",
+                            "description": "ID of the livestream (for virtual events without external URL)"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "isLocationVisible": {
+                            "type": "boolean",
+                            "description": "Whether the location is visible to attendees"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 5
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
                           }
                         }
                       }
