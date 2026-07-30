@@ -129,6 +129,25 @@ event-update-response-200:
             type: array
             items:
               $ref: "../../schema/community.yaml#/Community"
+          posts:
+            type: array
+            items:
+              $ref: "../../schema/post.yaml#/Post"
+          rooms:
+            type: array
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+
+event-count-response-200:
+  description: Event count retrieved successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          count:
+            type: integer
+            example: 42
 
 event-delete-response-200:
   description: Event deleted successfully
