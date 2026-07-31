@@ -6,7 +6,22 @@ Event:
       description: Unique identifier for the event
     userId:
       type: string
-      description: User ID of the event creator
+      description: Public user ID of the event creator
+    userInternalId:
+      type: string
+      description: Internal user ID of the event creator
+    userPublicId:
+      type: string
+      description: Public (customer-facing) user ID of the event creator
+    publisherId:
+      type: string
+      description: Public user ID the event was published on behalf of (impersonation). Absent otherwise.
+    publisherInternalId:
+      type: string
+      description: Internal user ID of the publisher
+    publisherPublicId:
+      type: string
+      description: Public (customer-facing) user ID of the publisher
     title:
       type: string
       description: Event title
@@ -30,9 +45,6 @@ Event:
         - ended
         - cancelled
       description: Current status of the event
-    isInviteOnly:
-      type: boolean
-      description: Whether the event is invite-only
     startTime:
       type: string
       format: date-time
@@ -53,21 +65,22 @@ Event:
       description: File ID of the cover image
     originId:
       type: string
-      description: ID of the community where the event is created
+      description: ID of the origin (community ID, or user ID when `originType` is `user`)
     originType:
       type: string
       enum:
         - community
-      description: Origin type of the event (currently only 'community')
-    livestreamId:
-      type: string
-      description: ID of the livestream (for virtual events without external URL)
+        - user
+      description: Origin type of the event
     discussionCommunityId:
       type: string
       description: ID of the event discussion community
-    isLocationVisible:
-      type: boolean
-      description: Whether the location is visible to attendees
+    postId:
+      type: string
+      description: ID of the livestream post backing a `virtual` event. Absent for `in_person` events.
+    path:
+      type: string
+      description: Hierarchy path of the event
     isOriginPublic:
       type: boolean
       description: Whether the origin community is public
@@ -81,8 +94,9 @@ Event:
       type: array
       items:
         type: string
+        maxLength: 100
       description: Event tags for categorization
-      maxItems: 5
+      maxItems: 10
     metadata:
       type: object
       description: Additional metadata
@@ -106,7 +120,13 @@ EventRSVP:
       description: ID of the event
     userId:
       type: string
-      description: User ID of the user who RSVP'd
+      description: Public user ID of the user who RSVP'd
+    userInternalId:
+      type: string
+      description: Internal user ID of the user who RSVP'd
+    userPublicId:
+      type: string
+      description: Public (customer-facing) user ID of the user who RSVP'd
     status:
       type: string
       enum:

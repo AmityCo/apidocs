@@ -6,97 +6,26 @@ eventId:
     type: string
   description: ID of the event
 
-title:
-  name: title
-  in: query
-  required: true
-  schema:
-    type: string
-    minLength: 1
-    maxLength: 60
-  description: Event title
-
-description:
-  name: description
-  in: query
-  schema:
-    type: string
-    maxLength: 1000
-  description: Event description
-
-type:
-  name: type
-  in: query
-  required: true
-  schema:
-    type: string
-    enum:
-      - virtual
-      - in_person
-  description: |
-    Event type
-    * `virtual` - Virtual event (online)
-    * `in_person` - In-person event (physical location)
-
-startTime:
-  name: startTime
-  in: query
-  required: true
-  schema:
-    type: string
-    format: date-time
-  description: Event start time (ISO 8601 format). Must be in the future.
-
-endTime:
-  name: endTime
-  in: query
-  schema:
-    type: string
-    format: date-time
-  description: Event end time (ISO 8601 format). Must be after start time.
-
-location:
-  name: location
-  in: query
-  schema:
-    type: string
-    maxLength: 200
-  description: Physical location address (required for in-person events)
-
-externalUrl:
-  name: externalUrl
-  in: query
-  schema:
-    type: string
-  description: External URL for virtual events (e.g., Zoom, Teams link)
-
-coverImageFileId:
-  name: coverImageFileId
-  in: query
-  schema:
-    type: string
-  description: File ID of the cover image
-
 originType:
   name: originType
   in: query
-  required: true
   schema:
     type: string
     enum:
       - community
+      - user
     default: community
   description: |
-    Origin type of the event (currently only 'community' is supported)
+    Origin type of the event
     * `community` - Event created in a community
+    * `user` - Event created on a user profile
 
 originId:
   name: originId
   in: query
-  required: true
   schema:
     type: string
-  description: ID of the community where the event is created
+  description: ID of the origin (community ID, or user ID when `originType` is `user`)
 
 tags:
   name: tags
@@ -106,7 +35,7 @@ tags:
     maxItems: 5
     items:
       type: string
-      maxLength: 24
+      maxLength: 100
   description: Event tags for categorization
 
 isLocationVisible:
@@ -127,29 +56,13 @@ status:
       - live
       - ended
       - cancelled
-    default: scheduled
   description: |
-    Event status
+    Event status. When omitted, non-admin callers default to `scheduled`;
+    admin callers get every status.
     * `scheduled` - Event is scheduled
     * `live` - Event is currently live
     * `ended` - Event has ended
     * `cancelled` - Event is cancelled
-
-rsvpStatus:
-  name: status
-  in: query
-  required: true
-  schema:
-    type: string
-    enum:
-      - going
-      - interested
-      - not_going
-  description: |
-    RSVP status
-    * `going` - User is going to the event
-    * `interested` - User is interested in the event
-    * `not_going` - User is not going to the event
 
 queryRsvpStatus:
   name: status
@@ -164,6 +77,17 @@ queryRsvpStatus:
         - not_going
     default: [going, interested, not_going]
   description: Filter RSVPs by status
+
+attendeeRsvpStatus:
+  name: status
+  in: query
+  schema:
+    type: string
+    enum:
+      - going
+      - interested
+      - not_going
+  description: Filter attendees by a single RSVP status. When omitted, all statuses are returned.
 
 sortBy:
   name: sortBy
@@ -216,7 +140,17 @@ onlyAttendee:
   schema:
     type: boolean
     default: false
-  description: Filter events where the specified userId has RSVP'd (requires userId parameter)
+  description: |
+    Return only events the specified `userId` hosts or has RSVP'd to as `going` / `interested`.
+    Requires the `userId` parameter — returns 400 without it.
+
+excludeOwnEvents:
+  name: excludeOwnEvents
+  in: query
+  schema:
+    type: boolean
+    default: false
+  description: Exclude events created by the calling user
 
 eventType:
   name: type

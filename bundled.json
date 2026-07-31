@@ -48916,6 +48916,7 @@
                   "title",
                   "type",
                   "startTime",
+                  "endTime",
                   "originType",
                   "originId"
                 ],
@@ -48935,6 +48936,15 @@
                       "virtual",
                       "in_person"
                     ]
+                  },
+                  "streamType": {
+                    "type": "string",
+                    "enum": [
+                      "directStreaming",
+                      "coHosts"
+                    ],
+                    "default": "coHosts",
+                    "description": "Livestream type for virtual events"
                   },
                   "startTime": {
                     "type": "string",
@@ -48957,7 +48967,8 @@
                   "originType": {
                     "type": "string",
                     "enum": [
-                      "community"
+                      "community",
+                      "user"
                     ],
                     "default": "community"
                   },
@@ -48969,12 +48980,17 @@
                     "maxItems": 5,
                     "items": {
                       "type": "string",
-                      "maxLength": 24
+                      "maxLength": 100
                     }
                   },
                   "isLocationVisible": {
                     "type": "boolean",
                     "default": true
+                  },
+                  "liveChatEnabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable live chat on the livestream of a virtual event"
                   },
                   "metadata": {
                     "type": "object"
@@ -49003,7 +49019,27 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the event creator"
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
                           },
                           "title": {
                             "type": "string",
@@ -49034,10 +49070,6 @@
                             ],
                             "description": "Current status of the event"
                           },
-                          "isInviteOnly": {
-                            "type": "boolean",
-                            "description": "Whether the event is invite-only"
-                          },
                           "startTime": {
                             "type": "string",
                             "format": "date-time",
@@ -49063,26 +49095,27 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the community where the event is created"
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community"
+                              "community",
+                              "user"
                             ],
-                            "description": "Origin type of the event (currently only 'community')"
-                          },
-                          "livestreamId": {
-                            "type": "string",
-                            "description": "ID of the livestream (for virtual events without external URL)"
+                            "description": "Origin type of the event"
                           },
                           "discussionCommunityId": {
                             "type": "string",
                             "description": "ID of the event discussion community"
                           },
-                          "isLocationVisible": {
-                            "type": "boolean",
-                            "description": "Whether the location is visible to attendees"
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
                           },
                           "isOriginPublic": {
                             "type": "boolean",
@@ -49099,10 +49132,11 @@
                           "tags": {
                             "type": "array",
                             "items": {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 100
                             },
                             "description": "Event tags for categorization",
-                            "maxItems": 5
+                            "maxItems": 10
                           },
                           "metadata": {
                             "type": "object",
@@ -50333,24 +50367,23 @@
           {
             "name": "originType",
             "in": "query",
-            "required": true,
             "schema": {
               "type": "string",
               "enum": [
-                "community"
+                "community",
+                "user"
               ],
               "default": "community"
             },
-            "description": "Origin type of the event (currently only 'community' is supported)\n* `community` - Event created in a community\n"
+            "description": "Origin type of the event\n* `community` - Event created in a community\n* `user` - Event created on a user profile\n"
           },
           {
             "name": "originId",
             "in": "query",
-            "required": true,
             "schema": {
               "type": "string"
             },
-            "description": "ID of the community where the event is created"
+            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
           },
           {
             "name": "userId",
@@ -50367,7 +50400,16 @@
               "type": "boolean",
               "default": false
             },
-            "description": "Filter events where the specified userId has RSVP'd (requires userId parameter)"
+            "description": "Return only events the specified `userId` hosts or has RSVP'd to as `going` / `interested`.\nRequires the `userId` parameter — returns 400 without it.\n"
+          },
+          {
+            "name": "excludeOwnEvents",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Exclude events created by the calling user"
           },
           {
             "name": "status",
@@ -50379,10 +50421,9 @@
                 "live",
                 "ended",
                 "cancelled"
-              ],
-              "default": "scheduled"
+              ]
             },
-            "description": "Event status\n* `scheduled` - Event is scheduled\n* `live` - Event is currently live\n* `ended` - Event has ended\n* `cancelled` - Event is cancelled\n"
+            "description": "Event status. When omitted, non-admin callers default to `scheduled`;\nadmin callers get every status.\n* `scheduled` - Event is scheduled\n* `live` - Event is currently live\n* `ended` - Event has ended\n* `cancelled` - Event is cancelled\n"
           },
           {
             "name": "type",
@@ -50404,7 +50445,7 @@
               "maxItems": 5,
               "items": {
                 "type": "string",
-                "maxLength": 24
+                "maxLength": 100
               }
             },
             "description": "Event tags for categorization"
@@ -50471,6 +50512,22 @@
               "type": "string"
             },
             "description": "Pagination token"
+          },
+          {
+            "name": "options[before]",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Cursor value to get records before"
+          },
+          {
+            "name": "options[after]",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Cursor value to get records after"
           }
         ],
         "responses": {
@@ -50492,7 +50549,27 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the event creator"
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
                           },
                           "title": {
                             "type": "string",
@@ -50523,10 +50600,6 @@
                             ],
                             "description": "Current status of the event"
                           },
-                          "isInviteOnly": {
-                            "type": "boolean",
-                            "description": "Whether the event is invite-only"
-                          },
                           "startTime": {
                             "type": "string",
                             "format": "date-time",
@@ -50552,26 +50625,27 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the community where the event is created"
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community"
+                              "community",
+                              "user"
                             ],
-                            "description": "Origin type of the event (currently only 'community')"
-                          },
-                          "livestreamId": {
-                            "type": "string",
-                            "description": "ID of the livestream (for virtual events without external URL)"
+                            "description": "Origin type of the event"
                           },
                           "discussionCommunityId": {
                             "type": "string",
                             "description": "ID of the event discussion community"
                           },
-                          "isLocationVisible": {
-                            "type": "boolean",
-                            "description": "Whether the location is visible to attendees"
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
                           },
                           "isOriginPublic": {
                             "type": "boolean",
@@ -50588,10 +50662,11 @@
                           "tags": {
                             "type": "array",
                             "items": {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 100
                             },
                             "description": "Event tags for categorization",
-                            "maxItems": 5
+                            "maxItems": 10
                           },
                           "metadata": {
                             "type": "object",
@@ -51819,6 +51894,311 @@
         }
       }
     },
+    "/api/v1/events/count": {
+      "get": {
+        "summary": "Count events",
+        "tags": [
+          "Event"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Count events matching the given filters. **Admin only** — non-admin callers get 403.\n\nAccepts the same filters as `GET /api/v1/events` except `onlyAttendee`,\nsorting and pagination.\n",
+        "parameters": [
+          {
+            "name": "originType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "community",
+                "user"
+              ],
+              "default": "community"
+            },
+            "description": "Origin type of the event\n* `community` - Event created in a community\n* `user` - Event created on a user profile\n"
+          },
+          {
+            "name": "originId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter events by creator user ID (admin only or the user themselves)"
+          },
+          {
+            "name": "excludeOwnEvents",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Exclude events created by the calling user"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "scheduled",
+                "live",
+                "ended",
+                "cancelled"
+              ]
+            },
+            "description": "Event status. When omitted, non-admin callers default to `scheduled`;\nadmin callers get every status.\n* `scheduled` - Event is scheduled\n* `live` - Event is currently live\n* `ended` - Event has ended\n* `cancelled` - Event is cancelled\n"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "virtual",
+                "in_person"
+              ]
+            },
+            "description": "Filter events by type"
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "maxItems": 5,
+              "items": {
+                "type": "string",
+                "maxLength": 100
+              }
+            },
+            "description": "Event tags for categorization"
+          },
+          {
+            "name": "startTimeGte",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Filter events with start time greater than or equal to this value"
+          },
+          {
+            "name": "startTimeLte",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Filter events with start time less than or equal to this value"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event count retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 42
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400000,
+                  "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error due to a client create the same request with the same parameters exceed the number of time that server limit to.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400311,
+                  "message": "RateLimit Exceed."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/events/me/rsvp": {
       "get": {
         "summary": "Query my RSVPs",
@@ -51871,6 +52251,22 @@
               "type": "string"
             },
             "description": "Pagination token"
+          },
+          {
+            "name": "options[before]",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Cursor value to get records before"
+          },
+          {
+            "name": "options[after]",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Cursor value to get records after"
           }
         ],
         "responses": {
@@ -51892,7 +52288,27 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the event creator"
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
                           },
                           "title": {
                             "type": "string",
@@ -51923,10 +52339,6 @@
                             ],
                             "description": "Current status of the event"
                           },
-                          "isInviteOnly": {
-                            "type": "boolean",
-                            "description": "Whether the event is invite-only"
-                          },
                           "startTime": {
                             "type": "string",
                             "format": "date-time",
@@ -51952,26 +52364,27 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the community where the event is created"
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community"
+                              "community",
+                              "user"
                             ],
-                            "description": "Origin type of the event (currently only 'community')"
-                          },
-                          "livestreamId": {
-                            "type": "string",
-                            "description": "ID of the livestream (for virtual events without external URL)"
+                            "description": "Origin type of the event"
                           },
                           "discussionCommunityId": {
                             "type": "string",
                             "description": "ID of the event discussion community"
                           },
-                          "isLocationVisible": {
-                            "type": "boolean",
-                            "description": "Whether the location is visible to attendees"
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
                           },
                           "isOriginPublic": {
                             "type": "boolean",
@@ -51988,10 +52401,11 @@
                           "tags": {
                             "type": "array",
                             "items": {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 100
                             },
                             "description": "Event tags for categorization",
-                            "maxItems": 5
+                            "maxItems": 10
                           },
                           "metadata": {
                             "type": "object",
@@ -52025,7 +52439,15 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the user who RSVP'd"
+                            "description": "Public user ID of the user who RSVP'd"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the user who RSVP'd"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the user who RSVP'd"
                           },
                           "status": {
                             "type": "string",
@@ -52478,7 +52900,27 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the event creator"
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
                           },
                           "title": {
                             "type": "string",
@@ -52509,10 +52951,6 @@
                             ],
                             "description": "Current status of the event"
                           },
-                          "isInviteOnly": {
-                            "type": "boolean",
-                            "description": "Whether the event is invite-only"
-                          },
                           "startTime": {
                             "type": "string",
                             "format": "date-time",
@@ -52538,26 +52976,27 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the community where the event is created"
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community"
+                              "community",
+                              "user"
                             ],
-                            "description": "Origin type of the event (currently only 'community')"
-                          },
-                          "livestreamId": {
-                            "type": "string",
-                            "description": "ID of the livestream (for virtual events without external URL)"
+                            "description": "Origin type of the event"
                           },
                           "discussionCommunityId": {
                             "type": "string",
                             "description": "ID of the event discussion community"
                           },
-                          "isLocationVisible": {
-                            "type": "boolean",
-                            "description": "Whether the location is visible to attendees"
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
                           },
                           "isOriginPublic": {
                             "type": "boolean",
@@ -52574,10 +53013,11 @@
                           "tags": {
                             "type": "array",
                             "items": {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 100
                             },
                             "description": "Event tags for categorization",
-                            "maxItems": 5
+                            "maxItems": 10
                           },
                           "metadata": {
                             "type": "object",
@@ -52611,7 +53051,15 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the user who RSVP'd"
+                            "description": "Public user ID of the user who RSVP'd"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the user who RSVP'd"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the user who RSVP'd"
                           },
                           "status": {
                             "type": "string",
@@ -53826,6 +54274,7 @@
                   },
                   "description": {
                     "type": "string",
+                    "minLength": 1,
                     "maxLength": 1000
                   },
                   "type": {
@@ -53834,6 +54283,14 @@
                       "virtual",
                       "in_person"
                     ]
+                  },
+                  "streamType": {
+                    "type": "string",
+                    "enum": [
+                      "directStreaming",
+                      "coHosts"
+                    ],
+                    "description": "Livestream type for virtual events"
                   },
                   "startTime": {
                     "type": "string",
@@ -53848,17 +54305,19 @@
                     "maxLength": 200
                   },
                   "externalUrl": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Pass an empty string to clear it"
                   },
                   "coverImageFileId": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Pass an empty string to clear it"
                   },
                   "tags": {
                     "type": "array",
-                    "maxItems": 5,
+                    "maxItems": 10,
                     "items": {
                       "type": "string",
-                      "maxLength": 24
+                      "maxLength": 100
                     }
                   },
                   "status": {
@@ -53894,7 +54353,27 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the event creator"
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
                           },
                           "title": {
                             "type": "string",
@@ -53925,10 +54404,6 @@
                             ],
                             "description": "Current status of the event"
                           },
-                          "isInviteOnly": {
-                            "type": "boolean",
-                            "description": "Whether the event is invite-only"
-                          },
                           "startTime": {
                             "type": "string",
                             "format": "date-time",
@@ -53954,26 +54429,27 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the community where the event is created"
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community"
+                              "community",
+                              "user"
                             ],
-                            "description": "Origin type of the event (currently only 'community')"
-                          },
-                          "livestreamId": {
-                            "type": "string",
-                            "description": "ID of the livestream (for virtual events without external URL)"
+                            "description": "Origin type of the event"
                           },
                           "discussionCommunityId": {
                             "type": "string",
                             "description": "ID of the event discussion community"
                           },
-                          "isLocationVisible": {
-                            "type": "boolean",
-                            "description": "Whether the location is visible to attendees"
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
                           },
                           "isOriginPublic": {
                             "type": "boolean",
@@ -53990,10 +54466,11 @@
                           "tags": {
                             "type": "array",
                             "items": {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 100
                             },
                             "description": "Event tags for categorization",
-                            "maxItems": 5
+                            "maxItems": 10
                           },
                           "metadata": {
                             "type": "object",
@@ -54404,6 +54881,582 @@
                           "channelId",
                           "displayName"
                         ]
+                      }
+                    },
+                    "posts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Private ID of a post. (for real-time event)"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Path of a post. (for real-time event)"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of a post."
+                          },
+                          "parentPostId": {
+                            "type": "string",
+                            "description": "ID of a parent post."
+                          },
+                          "postedUserId": {
+                            "type": "string",
+                            "description": "ID of a creator."
+                          },
+                          "postedUserPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a creator."
+                          },
+                          "postedUserInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a creator."
+                          },
+                          "sharedUserId": {
+                            "type": "string",
+                            "description": "ID of a shared owner."
+                          },
+                          "sharedCount": {
+                            "type": "integer",
+                            "description": "number of shared post."
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "ID of a target."
+                          },
+                          "targetPublicId": {
+                            "type": "string",
+                            "description": "Public ID of a target."
+                          },
+                          "targetInternalId": {
+                            "type": "string",
+                            "description": "Internal ID of a target."
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "enum": [
+                              "user",
+                              "community",
+                              "content"
+                            ],
+                            "description": "Type of a target (user, community, content)."
+                          },
+                          "dataType": {
+                            "type": "string",
+                            "enum": [
+                              "text",
+                              "image",
+                              "file",
+                              "video",
+                              "liveStream"
+                            ],
+                            "description": "Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).",
+                            "default": "text"
+                          },
+                          "data": {
+                            "type": "object",
+                            "description": "Body of a post. (It can be anything when dataType is not text, image, file)",
+                            "properties": {
+                              "title": {
+                                "type": "string",
+                                "description": "Title of a post.",
+                                "maxLength": 150
+                              },
+                              "text": {
+                                "type": "string",
+                                "description": "post text."
+                              },
+                              "fileId": {
+                                "type": "string",
+                                "description": "file key on cloud storage (for image, file post)."
+                              },
+                              "thumbnailFileId": {
+                                "type": "string",
+                                "description": "video thumbnail file id (for video post)."
+                              },
+                              "videoFileId": {
+                                "type": "object",
+                                "description": "video file id for each quality (for video post).",
+                                "properties": {
+                                  "original": {
+                                    "type": "string",
+                                    "description": "original file id"
+                                  },
+                                  "low": {
+                                    "type": "string",
+                                    "description": "low video quality file id"
+                                  },
+                                  "medium": {
+                                    "type": "string",
+                                    "description": "medium video quality file id"
+                                  },
+                                  "high": {
+                                    "type": "string",
+                                    "description": "high video quality file id"
+                                  }
+                                }
+                              },
+                              "streamId": {
+                                "type": "string",
+                                "description": "parent video streaming id (for video streaming post) - must be a parent stream"
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional properties to support custom fields."
+                          },
+                          "flagCount": {
+                            "type": "integer",
+                            "description": "The number of users that has read this post."
+                          },
+                          "hashFlag": {
+                            "type": "object",
+                            "description": "The flag for checking internally that this post is reported or not.",
+                            "properties": {
+                              "bits": {
+                                "type": "integer"
+                              },
+                              "hashes": {
+                                "type": "integer"
+                              },
+                              "hash": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "editedAt": {
+                            "type": "string",
+                            "description": "The date/time when text or metadata of post is updated.",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The date/time when a post is created.",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "description": "The date/time when a post is updated or deleted.",
+                            "format": "date-time"
+                          },
+                          "reactions": {
+                            "type": "object",
+                            "description": "The mapping of reaction with reactionCounter.",
+                            "example": {
+                              "like": 1
+                            }
+                          },
+                          "reactionsCount": {
+                            "type": "integer",
+                            "description": "The number of all reactions for this post.",
+                            "example": 1
+                          },
+                          "myReactions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "like"
+                            },
+                            "description": "The list of my reactions to this post."
+                          },
+                          "commentsCount": {
+                            "type": "integer",
+                            "description": "The number of all comments for this post.",
+                            "example": 1
+                          },
+                          "comments": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a comment."
+                            }
+                          },
+                          "children": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "ID of a children post."
+                            }
+                          },
+                          "childrenNumber": {
+                            "type": "integer",
+                            "description": "The number of all children posts for this post."
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "A flag to deleted a post."
+                          },
+                          "hasFlaggedComment": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that comments inside post is reported or not."
+                          },
+                          "hasFlaggedChildren": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "The flag for checking internally that children post is reported or not."
+                          },
+                          "feedId": {
+                            "type": "string",
+                            "description": "Feed public id"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "minItems": 0,
+                            "maxItems": 5,
+                            "items": {
+                              "type": "string",
+                              "maxLength": 24
+                            }
+                          },
+                          "hashtags": {
+                            "type": "array",
+                            "minItems": 0,
+                            "maxItems": 30,
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100,
+                              "example": "technology"
+                            },
+                            "example": [
+                              "technology",
+                              "programming",
+                              "web_development",
+                              "JavaScript",
+                              "AI_trends"
+                            ],
+                            "description": "Hashtags associated with the post."
+                          },
+                          "mentionees": {
+                            "type": "array",
+                            "description": "The object of the mentions type and user who get a notification from the post.",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "description": "type: * `user` - need to specific userIds and notification mentions individual user\n",
+                                  "enum": [
+                                    "user"
+                                  ]
+                                },
+                                "userIds": {
+                                  "type": "array",
+                                  "description": "Array of UserId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "userPublicIds": {
+                                  "type": "array",
+                                  "description": "Array of UserPublicId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "userInternalIds": {
+                                  "type": "array",
+                                  "description": "Array of UserInternalId.",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "impression": {
+                            "type": "integer"
+                          },
+                          "reach": {
+                            "type": "integer"
+                          },
+                          "structureType": {
+                            "type": "string",
+                            "description": "Structure type of the post",
+                            "enum": [
+                              "file",
+                              "image",
+                              "video",
+                              "audio",
+                              "text",
+                              "liveStream",
+                              "poll",
+                              "clip",
+                              "room",
+                              "mixed"
+                            ],
+                            "example": "text"
+                          }
+                        },
+                        "required": [
+                          "postId",
+                          "data"
+                        ]
+                      }
+                    },
+                    "rooms": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal room ID"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "directStreaming",
+                              "coHosts"
+                            ],
+                            "description": "Type of room * directStreaming - single participant streaming * coHosts - More than one participant\n"
+                          },
+                          "targetId": {
+                            "type": "string",
+                            "description": "ID of the target of the entity that room belongs to"
+                          },
+                          "targetType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Target of the entity that room belongs to"
+                          },
+                          "referenceType": {
+                            "type": "string",
+                            "description": "Entity that room is associated with",
+                            "enum": [
+                              "post"
+                            ]
+                          },
+                          "referenceId": {
+                            "type": "string",
+                            "description": "Entity ID that room is associated with"
+                          },
+                          "liveChannelId": {
+                            "type": "string",
+                            "description": "Associated live channel ID for chat"
+                          },
+                          "liveChatEnabled": {
+                            "type": "boolean",
+                            "description": "Whether live channel is enabled"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Room title"
+                          },
+                          "roomId": {
+                            "type": "string",
+                            "description": "Public room ID"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Room description"
+                          },
+                          "thumbnailFileId": {
+                            "type": "string",
+                            "description": "Thumbnail file ID"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "idle",
+                              "live",
+                              "waitingReconnect",
+                              "ended",
+                              "recorded"
+                            ],
+                            "description": "Status of room * idle - room is just created * live - broadcasting is active * waitingReconnect - broadcaster disconnected, waiting for reconnection * ended - broadcasting stopped * recorded - room recordings available\n"
+                          },
+                          "participants": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "coHost",
+                                    "host"
+                                  ]
+                                },
+                                "userId": {
+                                  "type": "string"
+                                },
+                                "userInternalId": {
+                                  "type": "string",
+                                  "example": "64be1f6cb9b4106b5a6bbf3f"
+                                }
+                              }
+                            },
+                            "description": "List of room streaming participants"
+                          },
+                          "livePlaybackUrl": {
+                            "type": "string",
+                            "description": "Live playback URL",
+                            "example": "https://stream.example.com/someid.m3u8?token=token"
+                          },
+                          "liveThumbnailUrl": {
+                            "type": "string",
+                            "description": "Live thumbnail URL",
+                            "example": "https://image.example.com/someid/thumbnail.png?token=token"
+                          },
+                          "recordedPlaybackInfos": {
+                            "type": "array",
+                            "description": "Recorded playback URLs and thumbnails",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string",
+                                  "description": "Recorded playback URL",
+                                  "example": "https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/watch"
+                                },
+                                "thumbnailUrl": {
+                                  "type": "string",
+                                  "description": "Recorded thumbnail URL",
+                                  "example": "https://apix.eu.amity.co/api/v1/rooms/roomid/recorded/someid/thumbnail"
+                                }
+                              }
+                            }
+                          },
+                          "durationSeconds": {
+                            "type": "number",
+                            "description": "Duration of the broadcast in seconds (only for ended/recorded rooms)"
+                          },
+                          "moderation": {
+                            "type": "object",
+                            "description": "Moderation information including flagged and terminated labels",
+                            "properties": {
+                              "flagLabels": {
+                                "type": "array",
+                                "description": "Labels that triggered flag actions",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category": {
+                                      "type": "string",
+                                      "description": "Moderation category"
+                                    },
+                                    "threshold": {
+                                      "type": "number",
+                                      "description": "Threshold value that triggered the flag"
+                                    },
+                                    "detectedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the flag was detected"
+                                    }
+                                  }
+                                }
+                              },
+                              "terminateLabels": {
+                                "type": "array",
+                                "description": "Labels that triggered terminate actions",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category": {
+                                      "type": "string",
+                                      "description": "Moderation category"
+                                    },
+                                    "threshold": {
+                                      "type": "number",
+                                      "description": "Threshold value that triggered termination"
+                                    },
+                                    "detectedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "When the termination was detected"
+                                    }
+                                  }
+                                }
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Last moderation update timestamp"
+                              }
+                            }
+                          },
+                          "parentRoomId": {
+                            "type": "string",
+                            "description": "Parent room ID for child streams"
+                          },
+                          "childRoomIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Child room IDs",
+                            "default": []
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Creation timestamp"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "Room creator user public ID"
+                          },
+                          "creatorInternalId": {
+                            "type": "string",
+                            "example": "64be1f6cb9b4106b5a6bbf3f",
+                            "description": "Room creator user internal ID"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Last update timestamp"
+                          },
+                          "liveAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting started"
+                          },
+                          "endedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When broadcasting ended"
+                          },
+                          "recordedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "When recording became available"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether room is deleted"
+                          },
+                          "deletedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Deletion timestamp"
+                          },
+                          "deletedBy": {
+                            "type": "string",
+                            "description": "User who deleted the room"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Room path for realtime events"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Custom metadata"
+                          }
+                        }
                       }
                     }
                   }
@@ -54916,7 +55969,27 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the event creator"
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
                           },
                           "title": {
                             "type": "string",
@@ -54947,10 +56020,6 @@
                             ],
                             "description": "Current status of the event"
                           },
-                          "isInviteOnly": {
-                            "type": "boolean",
-                            "description": "Whether the event is invite-only"
-                          },
                           "startTime": {
                             "type": "string",
                             "format": "date-time",
@@ -54976,26 +56045,27 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the community where the event is created"
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community"
+                              "community",
+                              "user"
                             ],
-                            "description": "Origin type of the event (currently only 'community')"
-                          },
-                          "livestreamId": {
-                            "type": "string",
-                            "description": "ID of the livestream (for virtual events without external URL)"
+                            "description": "Origin type of the event"
                           },
                           "discussionCommunityId": {
                             "type": "string",
                             "description": "ID of the event discussion community"
                           },
-                          "isLocationVisible": {
-                            "type": "boolean",
-                            "description": "Whether the location is visible to attendees"
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
                           },
                           "isOriginPublic": {
                             "type": "boolean",
@@ -55012,10 +56082,11 @@
                           "tags": {
                             "type": "array",
                             "items": {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 100
                             },
                             "description": "Event tags for categorization",
-                            "maxItems": 5
+                            "maxItems": 10
                           },
                           "metadata": {
                             "type": "object",
@@ -55049,7 +56120,15 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the user who RSVP'd"
+                            "description": "Public user ID of the user who RSVP'd"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the user who RSVP'd"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the user who RSVP'd"
                           },
                           "status": {
                             "type": "string",
@@ -55600,7 +56679,27 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the event creator"
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
                           },
                           "title": {
                             "type": "string",
@@ -55631,10 +56730,6 @@
                             ],
                             "description": "Current status of the event"
                           },
-                          "isInviteOnly": {
-                            "type": "boolean",
-                            "description": "Whether the event is invite-only"
-                          },
                           "startTime": {
                             "type": "string",
                             "format": "date-time",
@@ -55660,26 +56755,27 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the community where the event is created"
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community"
+                              "community",
+                              "user"
                             ],
-                            "description": "Origin type of the event (currently only 'community')"
-                          },
-                          "livestreamId": {
-                            "type": "string",
-                            "description": "ID of the livestream (for virtual events without external URL)"
+                            "description": "Origin type of the event"
                           },
                           "discussionCommunityId": {
                             "type": "string",
                             "description": "ID of the event discussion community"
                           },
-                          "isLocationVisible": {
-                            "type": "boolean",
-                            "description": "Whether the location is visible to attendees"
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
                           },
                           "isOriginPublic": {
                             "type": "boolean",
@@ -55696,10 +56792,11 @@
                           "tags": {
                             "type": "array",
                             "items": {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 100
                             },
                             "description": "Event tags for categorization",
-                            "maxItems": 5
+                            "maxItems": 10
                           },
                           "metadata": {
                             "type": "object",
@@ -55733,7 +56830,15 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the user who RSVP'd"
+                            "description": "Public user ID of the user who RSVP'd"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the user who RSVP'd"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the user who RSVP'd"
                           },
                           "status": {
                             "type": "string",
@@ -56245,22 +57350,14 @@
             "name": "status",
             "in": "query",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "going",
-                  "interested",
-                  "not_going"
-                ]
-              },
-              "default": [
+              "type": "string",
+              "enum": [
                 "going",
                 "interested",
                 "not_going"
               ]
             },
-            "description": "Filter RSVPs by status"
+            "description": "Filter attendees by a single RSVP status. When omitted, all statuses are returned."
           },
           {
             "name": "options[limit]",
@@ -56280,6 +57377,22 @@
               "type": "string"
             },
             "description": "Pagination token"
+          },
+          {
+            "name": "options[before]",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Cursor value to get records before"
+          },
+          {
+            "name": "options[after]",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Cursor value to get records after"
           }
         ],
         "responses": {
@@ -56301,7 +57414,27 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the event creator"
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
                           },
                           "title": {
                             "type": "string",
@@ -56332,10 +57465,6 @@
                             ],
                             "description": "Current status of the event"
                           },
-                          "isInviteOnly": {
-                            "type": "boolean",
-                            "description": "Whether the event is invite-only"
-                          },
                           "startTime": {
                             "type": "string",
                             "format": "date-time",
@@ -56361,26 +57490,27 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the community where the event is created"
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community"
+                              "community",
+                              "user"
                             ],
-                            "description": "Origin type of the event (currently only 'community')"
-                          },
-                          "livestreamId": {
-                            "type": "string",
-                            "description": "ID of the livestream (for virtual events without external URL)"
+                            "description": "Origin type of the event"
                           },
                           "discussionCommunityId": {
                             "type": "string",
                             "description": "ID of the event discussion community"
                           },
-                          "isLocationVisible": {
-                            "type": "boolean",
-                            "description": "Whether the location is visible to attendees"
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
                           },
                           "isOriginPublic": {
                             "type": "boolean",
@@ -56397,10 +57527,11 @@
                           "tags": {
                             "type": "array",
                             "items": {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 100
                             },
                             "description": "Event tags for categorization",
-                            "maxItems": 5
+                            "maxItems": 10
                           },
                           "metadata": {
                             "type": "object",
@@ -56434,7 +57565,15 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the user who RSVP'd"
+                            "description": "Public user ID of the user who RSVP'd"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the user who RSVP'd"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the user who RSVP'd"
                           },
                           "status": {
                             "type": "string",
@@ -56931,7 +58070,27 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the event creator"
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
                           },
                           "title": {
                             "type": "string",
@@ -56962,10 +58121,6 @@
                             ],
                             "description": "Current status of the event"
                           },
-                          "isInviteOnly": {
-                            "type": "boolean",
-                            "description": "Whether the event is invite-only"
-                          },
                           "startTime": {
                             "type": "string",
                             "format": "date-time",
@@ -56991,26 +58146,27 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the community where the event is created"
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community"
+                              "community",
+                              "user"
                             ],
-                            "description": "Origin type of the event (currently only 'community')"
-                          },
-                          "livestreamId": {
-                            "type": "string",
-                            "description": "ID of the livestream (for virtual events without external URL)"
+                            "description": "Origin type of the event"
                           },
                           "discussionCommunityId": {
                             "type": "string",
                             "description": "ID of the event discussion community"
                           },
-                          "isLocationVisible": {
-                            "type": "boolean",
-                            "description": "Whether the location is visible to attendees"
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
                           },
                           "isOriginPublic": {
                             "type": "boolean",
@@ -57027,10 +58183,11 @@
                           "tags": {
                             "type": "array",
                             "items": {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 100
                             },
                             "description": "Event tags for categorization",
-                            "maxItems": 5
+                            "maxItems": 10
                           },
                           "metadata": {
                             "type": "object",
@@ -57064,7 +58221,15 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the user who RSVP'd"
+                            "description": "Public user ID of the user who RSVP'd"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the user who RSVP'd"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the user who RSVP'd"
                           },
                           "status": {
                             "type": "string",

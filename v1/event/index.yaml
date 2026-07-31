@@ -27,6 +27,7 @@ root:
               - title
               - type
               - startTime
+              - endTime
               - originType
               - originId
             properties:
@@ -40,6 +41,11 @@ root:
               type:
                 type: string
                 enum: [virtual, in_person]
+              streamType:
+                type: string
+                enum: [directStreaming, coHosts]
+                default: coHosts
+                description: Livestream type for virtual events
               startTime:
                 type: string
                 format: date-time
@@ -55,7 +61,7 @@ root:
                 type: string
               originType:
                 type: string
-                enum: [community]
+                enum: [community, user]
                 default: community
               originId:
                 type: string
@@ -64,10 +70,14 @@ root:
                 maxItems: 5
                 items:
                   type: string
-                  maxLength: 24
+                  maxLength: 100
               isLocationVisible:
                 type: boolean
                 default: true
+              liveChatEnabled:
+                type: boolean
+                default: true
+                description: Enable live chat on the livestream of a virtual event
               metadata:
                 type: object
     responses:
@@ -108,6 +118,7 @@ root:
       - $ref: "./parameter.yaml#/originId"
       - $ref: "./parameter.yaml#/userId"
       - $ref: "./parameter.yaml#/onlyAttendee"
+      - $ref: "./parameter.yaml#/excludeOwnEvents"
       - $ref: "./parameter.yaml#/status"
       - $ref: "./parameter.yaml#/eventType"
       - $ref: "./parameter.yaml#/tags"
@@ -117,6 +128,8 @@ root:
       - $ref: "./parameter.yaml#/orderBy"
       - $ref: "./parameter.yaml#/options.limit"
       - $ref: "./parameter.yaml#/options.token"
+      - $ref: "./parameter.yaml#/options.before"
+      - $ref: "./parameter.yaml#/options.after"
     responses:
       200:
         $ref: "./response.yaml#/event-query-response-200"
@@ -126,6 +139,40 @@ root:
         $ref: "../../global/error.yaml#/ForbiddenError"
       404:
         $ref: "../../global/error.yaml#/NotFoundError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+count:
+  get:
+    summary: "Count events"
+    tags:
+      - "Event"
+    security:
+      - BearerAuth: []
+    description: |
+      Count events matching the given filters. **Admin only** — non-admin callers get 403.
+
+      Accepts the same filters as `GET /api/v1/events` except `onlyAttendee`,
+      sorting and pagination.
+    parameters:
+      - $ref: "./parameter.yaml#/originType"
+      - $ref: "./parameter.yaml#/originId"
+      - $ref: "./parameter.yaml#/userId"
+      - $ref: "./parameter.yaml#/excludeOwnEvents"
+      - $ref: "./parameter.yaml#/status"
+      - $ref: "./parameter.yaml#/eventType"
+      - $ref: "./parameter.yaml#/tags"
+      - $ref: "./parameter.yaml#/startTimeGte"
+      - $ref: "./parameter.yaml#/startTimeLte"
+    responses:
+      200:
+        $ref: "./response.yaml#/event-count-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
       429:
         $ref: "../../global/error.yaml#/RateLimitError"
       500:
@@ -188,10 +235,15 @@ eventId:
                 maxLength: 60
               description:
                 type: string
+                minLength: 1
                 maxLength: 1000
               type:
                 type: string
                 enum: [virtual, in_person]
+              streamType:
+                type: string
+                enum: [directStreaming, coHosts]
+                description: Livestream type for virtual events
               startTime:
                 type: string
                 format: date-time
@@ -203,14 +255,16 @@ eventId:
                 maxLength: 200
               externalUrl:
                 type: string
+                description: Pass an empty string to clear it
               coverImageFileId:
                 type: string
+                description: Pass an empty string to clear it
               tags:
                 type: array
-                maxItems: 5
+                maxItems: 10
                 items:
                   type: string
-                  maxLength: 24
+                  maxLength: 100
               status:
                 type: string
                 enum: [cancelled]
@@ -272,6 +326,8 @@ me-rsvp:
       - $ref: "./parameter.yaml#/queryRsvpStatus"
       - $ref: "./parameter.yaml#/options.limit"
       - $ref: "./parameter.yaml#/options.token"
+      - $ref: "./parameter.yaml#/options.before"
+      - $ref: "./parameter.yaml#/options.after"
     responses:
       200:
         $ref: "./response.yaml#/my-rsvps-response-200"
@@ -381,9 +437,11 @@ eventId-rsvp:
       - Supports pagination
     parameters:
       - $ref: "./parameter.yaml#/eventId"
-      - $ref: "./parameter.yaml#/queryRsvpStatus"
+      - $ref: "./parameter.yaml#/attendeeRsvpStatus"
       - $ref: "./parameter.yaml#/options.limit"
       - $ref: "./parameter.yaml#/options.token"
+      - $ref: "./parameter.yaml#/options.before"
+      - $ref: "./parameter.yaml#/options.after"
     responses:
       200:
         $ref: "./response.yaml#/rsvp-query-response-200"
