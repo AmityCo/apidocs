@@ -33,9 +33,9 @@ TrayItemData:
           description: Name of the community where the action occurred
     - type: object
       required:
-        - reactionName
+        - reactionNames
       properties:
-        reactionName:
+        reactionNames:
           type: array
           items:
             type: string
@@ -68,7 +68,8 @@ NotificationTrayItem:
     lastSeenAt:
       type: string
       format: date-time
-      description: Timestamp when the user last saw this notification
+      nullable: true
+      description: Timestamp when the user last saw this notification; null if the user has not seen it yet
     lastOccurredAt:
       type: string
       format: date-time
@@ -92,6 +93,10 @@ NotificationTrayItem:
         - mention
         - reply
         - follow
+        - event
+        - invitation
+        - join_request
+        - user
     trayItemCategory:
       type: string
       description: More specific category for certain action types
@@ -104,7 +109,13 @@ NotificationTrayItem:
         - reaction_on_poll
         - reaction_on_comment
         - reaction_on_reply
+        - respond_on_join_request
         - follow
+        - event_created
+        - event_reminder
+        - event_started
+        - room_cohost_invite
+        - user_profile_reset
     targetId:
       type: string
       description: Identifier of the content being acted upon
@@ -117,12 +128,33 @@ NotificationTrayItem:
     referenceType:
       type: string
       description: Optional type of the referenced content
+      enum:
+        - post
+        - comment
     actionReferenceId:
       type: string
       description: Optional identifier of the specific action object
     parentId:
       type: string
       description: Optional identifier of parent content
+    rootId:
+      type: string
+      description: Optional identifier of the root content in a thread (e.g. the root post of a reply chain)
+    latestCommentId:
+      type: string
+      description: Optional identifier of the most recent comment associated with this notification
+    networkId:
+      type: string
+      description: Identifier of the network the notification belongs to
+    audienceScope:
+      type: string
+      description: How recipients are resolved at read time; absent is treated as community-scoped
+      enum:
+        - community
+        - network
+    notifyToUserId:
+      type: string
+      description: Optional identifier of the user this notification is directed to
     data:
       deprecated: true
       $ref: '#/TrayItemData'
@@ -177,6 +209,11 @@ GetNotificationTrayResponse:
             description: File information for any media referenced in notifications
             items:
               $ref: '../../schema/file.yaml#/File'
+          events:
+            type: array
+            description: Event information for any events referenced in notifications (omitted when there are none)
+            items:
+              $ref: '../../schema/event.yaml#/Event'
 
 GetNotificationTraySeenResponse:
   description: Response containing the user's notification tray seen timestamps
