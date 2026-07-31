@@ -2,11 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.0.0] - 2026-07-31
+
+### 🚀 Features
+
+- Add post_sentiments_latest (#489)
+- Add report categorization fields to flag user endpoint (#485)
+- Add noti-tray docs (#490)
+- Update event related api docs (#491)
+
+### 📚 Documentation
+
+- *(webhook)* Document user.profileReset webhook event (#487)
+
+## [4.117.0] - 2026-07-10
+
+### 🚀 Features
+
+- Add enhance-moderation network setting API (#484)
+
 ## [4.116.1] - 2026-07-04
 
 ### 🚀 Features
 
 - Add docs for /me/blockers endpoint and block/unblock webhook events (#482)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.116.1 (#483)
 
 ## [4.116.0] - 2026-06-11
 
