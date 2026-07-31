@@ -15,6 +15,10 @@ All notable changes to this project will be documented in this file.
 
 - *(webhook)* Document user.profileReset webhook event (#487)
 
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.117.0 (#493)
+
 ## [4.117.0] - 2026-07-10
 
 ### 🚀 Features
