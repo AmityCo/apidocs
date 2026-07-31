@@ -3,7 +3,7 @@
   "info": {
     "title": "Social+ Cloud SDK",
     "description": "## Using Social+ APIs\n\nOur API documentation explains all API endpoints used in Social+ Cloud. All APIs, with the exception of some authentication APIs, require an access token for authentication and authorization. APIs can be used either in Admin or User context. When used in user context, you will only be able to fetch data related to that user only.\nFor Administrators who are using our API documentation in making server-to-server API calls, you need an Admin Access token to connect to the Social+ server. Refer to\n[this documentation](https://docs.social.plus/console/settings#admin-api-access-token)\nfor the instructions on how to generate an admin access token.\n\nAll backend endpoints that support Social+ Cloud SDK are included here. To easily differentiate the type of each endpoint, we added a prefix in each endpoint's path.\n\n- REST API Endpoint: **`/v1, /v2, /v3, /v4, or /v5 ...`**\n- Webhook Event: **`/webhook ...`**\n\n---\n\n## **Schema Definitions**\n\nThis section provides detailed descriptions of the key schemas used in Social+ Cloud. Understanding these schemas is essential for effectively integrating our features into your applications. Each schema entry includes a concise description and highlights its core functionality and relationships within the platform. These definitions will help you grasp the structure and purpose of various components, ensuring a seamless and efficient development experience.\n\n### **User**\n\nA User represents an individual who interacts with the Social+ Cloud. Users can create profiles, join communities, post content, comment, react, and engage with other users.\n\n### **Role**\n\nA Role defines the permissions and access levels for Users within the Social+ Cloud. Roles can be assigned to manage and moderate content, ensuring a controlled and safe environment for all users.\n\n### **Channel**\n\nA Channel is a primary structure used to implement various chat messaging capabilities within an application. Channels serve as containers for Subchannels, enabling a hierarchical organization of conversations. This structure allows developers to manage and navigate different chat threads efficiently.\n\n### **Subchannel**\n\nA Subchannel is a subdivision within a Channel for specific conversation threads. Subchannels host all messages and interactions, providing organized discussions within a larger channel. Users can individually create, update, delete, and manage subchannels. Moderation actions, such as banning and muting, are applied at the channel level, affecting all subchannels.\n\n### **ChannelUser**\n\nA ChannelUser represents an individual user within a specific Channel. This schema tracks user participation, roles, and permissions within the channel. Each ChannelUser can interact in subchannels, participate in discussions, and engage with other members. Users can be assigned roles with varying permissions, such as admin, moderator, or member, allowing for tailored access and control. Moderation actions like banning or muting a ChannelUser affect their participation across all subchannels within the channel.\n\n### **Message**\n\nA Message facilitates real-time communication among channel users. Messages can contain up to 20,000 characters or weigh up to 100KB for custom content. For larger binary data, such as files, it's recommended to upload the data to a cloud storage service like AWS S3 and include the URL in the message. The SDK supports various message types, including text and image, built on a standard message layer.\n\n### **Community**\n\nA Community is a feature that allows users to share their posts and comments and engage with each other within the app. Communities provide a dedicated space for discussing specific topics or interests.\n\n### **CommunityUser**\n\nA CommunityUser represents an individual user within a specific Community. This schema tracks user participation, roles, and interactions within the community. CommunityUsers can join public or private communities, participate in discussions, and engage with other members. Each user can have different roles with varying permissions, such as admin, moderator, or member, which control their access and actions within the community. Moderation actions, like banning or muting, can be applied to CommunityUsers to maintain a safe and respectful environment.\n\n### **CommunityCategory**\n\nA CommunityCategory helps organize and manage communities by categorizing them into specific groups. This categorization allows users to easily sort and filter communities based on their interests or needs.\n\n### **Post**\n\nA Post is a piece of content created and shared by a user within a network or community. Posts can include text, images, videos, or other elements. Users can create, view, and interact with posts in a social feed, which can be displayed in chronological order and customized using various settings. Post types supported by Social+ include text, image, video, file, live stream, poll, and custom posts. The parent post serves as a container for text data, while each multimedia element (e.g., image, video) is treated as a separate child post. Both parent and child posts support reactions and comments, allowing users to engage comprehensively with content.\n\n### **Comment**\n\nA Comment in Social+ Cloud is a user-generated response to specific content, such as a post or story. Comments enable users to engage in conversations, express thoughts, opinions, and emotions, fostering a sense of community around the content.\n\n**Comment Reference Types:**\n\n- **Post Type Comment:** Designed for regular posts like text updates, photos, or videos. These comments are associated with the post and displayed beneath it, promoting conversation and interaction.\n- **Story Type Comment:** Similar to post type comments but associated with stories, driving user engagement and discussion around short-lived content.\n- **Content Type Comment:** Intended for content-specific such as articles or specialized content, providing a more organized and contextual commenting experience.\n\n### **Reaction**\n\nA Reaction is a user interaction on messages, posts, or comments, such as like, dislike, or love. The type of reactions is customizable. Currently, reactions are supported for Posts, Messages, and Comments.\n\n**Reaction Reference Types:**\n\n- **Comment Reference Type:** Allows users to query reactions on a specific comment, showing how others have responded to it.\n- **Post Reference Type:** Allows users to query reactions on a specific post, highlighting user engagement with the post.\n- **Story Reference Type:** Allows users to query reactions on a specific story, showing user reactions to the story.\n\n### **File**\n\nA File in Social+ Cloud supports file upload and download, enabling file-sharing within applications. It handles various file types, including images, videos, audio, and documents, with a maximum size of 1 GB. This functionality allows users to share files directly in chats or social feeds, enhancing engagement and interaction.\n\n### **Follow**\n\nA Follow schema in Social+ Cloud defines one-directional relationships between users, essential for social networking features. When user A follows user B, user A can see user B's updates in their feed, but user B does not need to reciprocate. This schema helps manage visibility and accessibility of user-generated content in user feeds.\n\n---\n\n## Select Region Endpoint\n\nBefore making server-to-server API calls, be sure to select the correct API endpoint for your region in the **Servers** dropdown below.\n",
-    "version": "4.116.1"
+    "version": "4.117.0"
   },
   "servers": [
     {
@@ -128741,7 +128741,27 @@
                           },
                           "userId": {
                             "type": "string",
-                            "description": "User ID of the event creator"
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
                           },
                           "title": {
                             "type": "string",
@@ -128772,10 +128792,6 @@
                             ],
                             "description": "Current status of the event"
                           },
-                          "isInviteOnly": {
-                            "type": "boolean",
-                            "description": "Whether the event is invite-only"
-                          },
                           "startTime": {
                             "type": "string",
                             "format": "date-time",
@@ -128801,26 +128817,27 @@
                           },
                           "originId": {
                             "type": "string",
-                            "description": "ID of the community where the event is created"
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
                           },
                           "originType": {
                             "type": "string",
                             "enum": [
-                              "community"
+                              "community",
+                              "user"
                             ],
-                            "description": "Origin type of the event (currently only 'community')"
-                          },
-                          "livestreamId": {
-                            "type": "string",
-                            "description": "ID of the livestream (for virtual events without external URL)"
+                            "description": "Origin type of the event"
                           },
                           "discussionCommunityId": {
                             "type": "string",
                             "description": "ID of the event discussion community"
                           },
-                          "isLocationVisible": {
-                            "type": "boolean",
-                            "description": "Whether the location is visible to attendees"
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
                           },
                           "isOriginPublic": {
                             "type": "boolean",
@@ -128837,10 +128854,11 @@
                           "tags": {
                             "type": "array",
                             "items": {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 100
                             },
                             "description": "Event tags for categorization",
-                            "maxItems": 5
+                            "maxItems": 10
                           },
                           "metadata": {
                             "type": "object",
