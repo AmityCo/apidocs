@@ -6,7 +6,10 @@ root:
     security:
       - BearerAuth: []
     description: |
-      Query posts
+      Query posts.
+
+      Event posts (`structureType: event`) are excluded from this endpoint — query them through
+      `GET /api/v5/posts`.
     parameters:
       - $ref: "./parameter.yaml#/targetId"
       - $ref: "./parameter.yaml#/targetType"
@@ -71,6 +74,19 @@ root:
 
         ### Room post
         - When `dataType` is `room` and `roomId` is in `data`, the post will be created as a room post
+
+        ### Event post
+        - When `dataType` is `event` and `eventId` is in `data`, the post will be created as an event post
+        - `data.title` and `data.text` are optional and hold the author's own caption; the event's title,
+          description, cover image and start time are read from the `events` object in the response and are
+          never copied onto the post
+        - The parent post gets `dataType: text` and `structureType: event`; a single child post carries
+          `dataType: event` with `data.eventId`
+        - An event created in a **private** community may only be posted into that same community; a `400`
+          is returned for any other target
+        - `attachments` and product tags are rejected with `400`
+        - `data.eventId` is immutable — it cannot be changed with `PUT /api/v4/posts/{postId}`
+        - Event posts are only returned by `GET /api/v5/posts`; v3 and v4 queries exclude them
 
       required: true
       content:

@@ -65,6 +65,13 @@ post-response-200:
             type: array
             items:
               $ref: "../../schema/poll.yaml#/Poll"
+          events:
+            type: array
+            description: >
+              Events referenced by event posts, looked up by `postChildren[].data.eventId`. A deleted
+              event is absent from this collection.
+            items:
+              $ref: "../../schema/event.yaml#/Event"
 
 PostWebhookResponse:
   description: Post Information

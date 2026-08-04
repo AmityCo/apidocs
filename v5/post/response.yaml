@@ -57,6 +57,13 @@ post-pagination-response-200:
             type: array
             items:
               $ref: "../../schema/room.yaml#/Room"
+          events:
+            type: array
+            description: >
+              Events referenced by event posts, looked up by `postChildren[].data.eventId`. A deleted
+              event is absent from this collection — render the card as deleted, the post still exists.
+            items:
+              $ref: "../../schema/event.yaml#/Event"
           paging:
             type: object
             properties:

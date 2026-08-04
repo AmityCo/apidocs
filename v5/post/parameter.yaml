@@ -150,7 +150,12 @@ dataTypes:
         - audio
         - room
         - event
-  description: Post data type to filter (include child posts too). A custom data type in `a.b` form is also accepted.
+  description: |
+    Post data type to filter (include child posts too). A custom data type in `a.b` form is also accepted.
+
+    `event` is accepted on v5 only. As with `poll`, `liveStream` and `room`, the filter matches the
+    child post, so `matchingOnlyParentPost=false` is required — the parent of an event post has
+    `dataType: text`. Follow `parentPostId` to get the parent.
 
 tags:
   name: tags

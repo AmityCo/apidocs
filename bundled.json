@@ -49858,6 +49858,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -51388,6 +51389,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -53788,6 +53790,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -55192,6 +55195,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -58802,7 +58806,8 @@
                                             "file",
                                             "video",
                                             "liveStream",
-                                            "clip"
+                                            "clip",
+                                            "event"
                                           ],
                                           "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
                                           "default": "text"
@@ -58885,6 +58890,17 @@
                                                     "fit"
                                                   ],
                                                   "default": "fill"
+                                                }
+                                              }
+                                            },
+                                            {
+                                              "type": "object",
+                                              "title": "event post",
+                                              "description": "Event post data, carried by the child post only (`dataType: event`). The parent post of an event post has `dataType: text` and `structureType: event`.\n",
+                                              "properties": {
+                                                "eventId": {
+                                                  "type": "string",
+                                                  "description": "ID of the referenced event. Matches `eventId` in the `events` collection of the response. Absent from `events` when the event has been deleted.\n"
                                                 }
                                               }
                                             }
@@ -59075,6 +59091,7 @@
                                             "poll",
                                             "clip",
                                             "room",
+                                            "event",
                                             "mixed"
                                           ],
                                           "example": "text"
@@ -59163,7 +59180,8 @@
                                             "image",
                                             "file",
                                             "video",
-                                            "liveStream"
+                                            "liveStream",
+                                            "event"
                                           ],
                                           "description": "Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).",
                                           "default": "text"
@@ -59213,6 +59231,10 @@
                                             "streamId": {
                                               "type": "string",
                                               "description": "parent video streaming id (for video streaming post) - must be a parent stream"
+                                            },
+                                            "eventId": {
+                                              "type": "string",
+                                              "description": "ID of the referenced event (for the child post of an event post). Matches `eventId` in the `events` collection of the response.\n"
                                             }
                                           }
                                         },
@@ -61422,6 +61444,158 @@
                                         },
                                         "closedIn": {
                                           "type": "number"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "events": {
+                                    "type": "array",
+                                    "description": "Events referenced by event posts, looked up by `postChildren[].data.eventId`. A deleted event is absent from this collection.\n",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "eventId": {
+                                          "type": "string",
+                                          "description": "Unique identifier for the event"
+                                        },
+                                        "userId": {
+                                          "type": "string",
+                                          "description": "Public user ID of the event creator"
+                                        },
+                                        "userInternalId": {
+                                          "type": "string",
+                                          "description": "Internal user ID of the event creator"
+                                        },
+                                        "userPublicId": {
+                                          "type": "string",
+                                          "description": "Public (customer-facing) user ID of the event creator"
+                                        },
+                                        "publisherId": {
+                                          "type": "string",
+                                          "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                                        },
+                                        "publisherInternalId": {
+                                          "type": "string",
+                                          "description": "Internal user ID of the publisher"
+                                        },
+                                        "publisherPublicId": {
+                                          "type": "string",
+                                          "description": "Public (customer-facing) user ID of the publisher"
+                                        },
+                                        "title": {
+                                          "type": "string",
+                                          "description": "Event title",
+                                          "minLength": 1,
+                                          "maxLength": 60
+                                        },
+                                        "description": {
+                                          "type": "string",
+                                          "description": "Event description",
+                                          "maxLength": 1000
+                                        },
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "virtual",
+                                            "in_person"
+                                          ],
+                                          "description": "Event type (virtual or in-person)"
+                                        },
+                                        "status": {
+                                          "type": "string",
+                                          "enum": [
+                                            "scheduled",
+                                            "live",
+                                            "ended",
+                                            "cancelled"
+                                          ],
+                                          "description": "Current status of the event"
+                                        },
+                                        "startTime": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "description": "Event start time (ISO 8601 format)"
+                                        },
+                                        "endTime": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "description": "Event end time (ISO 8601 format)"
+                                        },
+                                        "location": {
+                                          "type": "string",
+                                          "description": "Physical location address (for in-person events)",
+                                          "maxLength": 200
+                                        },
+                                        "externalUrl": {
+                                          "type": "string",
+                                          "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                                        },
+                                        "coverImageFileId": {
+                                          "type": "string",
+                                          "description": "File ID of the cover image"
+                                        },
+                                        "originId": {
+                                          "type": "string",
+                                          "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                                        },
+                                        "originType": {
+                                          "type": "string",
+                                          "enum": [
+                                            "community",
+                                            "user"
+                                          ],
+                                          "description": "Origin type of the event"
+                                        },
+                                        "discussionCommunityId": {
+                                          "type": "string",
+                                          "description": "ID of the event discussion community"
+                                        },
+                                        "postId": {
+                                          "type": "string",
+                                          "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                                        },
+                                        "path": {
+                                          "type": "string",
+                                          "description": "Hierarchy path of the event"
+                                        },
+                                        "isOriginPublic": {
+                                          "type": "boolean",
+                                          "description": "Whether the origin community is public"
+                                        },
+                                        "rsvpCount": {
+                                          "type": "integer",
+                                          "description": "Number of users who RSVP'd as 'going'"
+                                        },
+                                        "interestedCount": {
+                                          "type": "integer",
+                                          "description": "Number of users who RSVP'd as 'interested'"
+                                        },
+                                        "tags": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "string",
+                                            "maxLength": 100
+                                          },
+                                          "description": "Event tags for categorization",
+                                          "maxItems": 10
+                                        },
+                                        "metadata": {
+                                          "type": "object",
+                                          "description": "Additional metadata"
+                                        },
+                                        "isDeleted": {
+                                          "type": "boolean",
+                                          "description": "Whether the event is deleted"
+                                        },
+                                        "createdAt": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "description": "Event creation timestamp"
+                                        },
+                                        "updatedAt": {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "description": "Event last update timestamp"
                                         }
                                       }
                                     }
@@ -69558,6 +69732,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -69878,6 +70053,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -71159,6 +71335,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -71479,6 +71656,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -73208,6 +73386,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -73528,6 +73707,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -75268,6 +75448,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -75588,6 +75769,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -76899,6 +77081,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -77219,6 +77402,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -78165,7 +78349,8 @@
                               "file",
                               "video",
                               "liveStream",
-                              "clip"
+                              "clip",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -78248,6 +78433,17 @@
                                       "fit"
                                     ],
                                     "default": "fill"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "title": "event post",
+                                "description": "Event post data, carried by the child post only (`dataType: event`). The parent post of an event post has `dataType: text` and `structureType: event`.\n",
+                                "properties": {
+                                  "eventId": {
+                                    "type": "string",
+                                    "description": "ID of the referenced event. Matches `eventId` in the `events` collection of the response. Absent from `events` when the event has been deleted.\n"
                                   }
                                 }
                               }
@@ -78438,6 +78634,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -78526,7 +78723,8 @@
                               "image",
                               "file",
                               "video",
-                              "liveStream"
+                              "liveStream",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -78576,6 +78774,10 @@
                               "streamId": {
                                 "type": "string",
                                 "description": "parent video streaming id (for video streaming post) - must be a parent stream"
+                              },
+                              "eventId": {
+                                "type": "string",
+                                "description": "ID of the referenced event (for the child post of an event post). Matches `eventId` in the `events` collection of the response.\n"
                               }
                             }
                           },
@@ -80662,6 +80864,158 @@
                         }
                       }
                     },
+                    "events": {
+                      "type": "array",
+                      "description": "Events referenced by event posts, looked up by `postChildren[].data.eventId`. A deleted event is absent from this collection — render the card as deleted, the post still exists.\n",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
+                          }
+                        }
+                      }
+                    },
                     "paging": {
                       "type": "object",
                       "properties": {
@@ -81010,7 +81364,8 @@
                                   "file",
                                   "video",
                                   "liveStream",
-                                  "clip"
+                                  "clip",
+                                  "event"
                                 ],
                                 "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
                                 "default": "text"
@@ -81093,6 +81448,17 @@
                                           "fit"
                                         ],
                                         "default": "fill"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "type": "object",
+                                    "title": "event post",
+                                    "description": "Event post data, carried by the child post only (`dataType: event`). The parent post of an event post has `dataType: text` and `structureType: event`.\n",
+                                    "properties": {
+                                      "eventId": {
+                                        "type": "string",
+                                        "description": "ID of the referenced event. Matches `eventId` in the `events` collection of the response. Absent from `events` when the event has been deleted.\n"
                                       }
                                     }
                                   }
@@ -81283,6 +81649,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -81603,6 +81970,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -82650,7 +83018,8 @@
                                   "file",
                                   "video",
                                   "liveStream",
-                                  "clip"
+                                  "clip",
+                                  "event"
                                 ],
                                 "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
                                 "default": "text"
@@ -82733,6 +83102,17 @@
                                           "fit"
                                         ],
                                         "default": "fill"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "type": "object",
+                                    "title": "event post",
+                                    "description": "Event post data, carried by the child post only (`dataType: event`). The parent post of an event post has `dataType: text` and `structureType: event`.\n",
+                                    "properties": {
+                                      "eventId": {
+                                        "type": "string",
+                                        "description": "ID of the referenced event. Matches `eventId` in the `events` collection of the response. Absent from `events` when the event has been deleted.\n"
                                       }
                                     }
                                   }
@@ -82923,6 +83303,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -83243,6 +83624,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -91550,6 +91932,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -91870,6 +92253,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -93503,6 +93887,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -93823,6 +94208,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -95469,6 +95855,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -95789,6 +96176,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -97663,6 +98051,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -97983,6 +98372,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -130508,6 +130898,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -130828,6 +131219,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -132874,6 +133266,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -133194,6 +133587,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -135237,6 +135631,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -135557,6 +135952,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -137459,6 +137855,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -137779,6 +138176,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -139306,6 +139704,11 @@
                             "type": "string",
                             "maxLength": 100,
                             "description": "Room ID for room post."
+                          },
+                          "eventId": {
+                            "type": "string",
+                            "maxLength": 100,
+                            "description": "Event ID for event post. Required when `dataType` is `event`."
                           }
                         }
                       },
@@ -139358,7 +139761,7 @@
                       "dataType": {
                         "type": "string",
                         "example": "upstra.customtype",
-                        "description": "Accept \"liveStream\", \"poll\", \"room\" or Custom type. Custom type must be in dot separated string format or system defined format (ex. \"some.customtype\", \"com.foo.bar\")."
+                        "description": "Accept \"liveStream\", \"poll\", \"room\", \"event\" or Custom type. Custom type must be in dot separated string format or system defined format (ex. \"some.customtype\", \"com.foo.bar\")."
                       },
                       "targetType": {
                         "type": "string",
@@ -139823,7 +140226,8 @@
                                   "file",
                                   "video",
                                   "liveStream",
-                                  "clip"
+                                  "clip",
+                                  "event"
                                 ],
                                 "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
                                 "default": "text"
@@ -139906,6 +140310,17 @@
                                           "fit"
                                         ],
                                         "default": "fill"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "type": "object",
+                                    "title": "event post",
+                                    "description": "Event post data, carried by the child post only (`dataType: event`). The parent post of an event post has `dataType: text` and `structureType: event`.\n",
+                                    "properties": {
+                                      "eventId": {
+                                        "type": "string",
+                                        "description": "ID of the referenced event. Matches `eventId` in the `events` collection of the response. Absent from `events` when the event has been deleted.\n"
                                       }
                                     }
                                   }
@@ -140096,6 +140511,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -140951,6 +141367,11 @@
                             "type": "string",
                             "maxLength": 100,
                             "description": "Room ID for room post."
+                          },
+                          "eventId": {
+                            "type": "string",
+                            "maxLength": 100,
+                            "description": "Event ID for event post. Required when `dataType` is `event`."
                           }
                         }
                       },
@@ -141003,7 +141424,7 @@
                       "dataType": {
                         "type": "string",
                         "example": "upstra.customtype",
-                        "description": "Accept \"liveStream\", \"poll\", \"room\" or Custom type. Custom type must be in dot separated string format or system defined format (ex. \"some.customtype\", \"com.foo.bar\")."
+                        "description": "Accept \"liveStream\", \"poll\", \"room\", \"event\" or Custom type. Custom type must be in dot separated string format or system defined format (ex. \"some.customtype\", \"com.foo.bar\")."
                       },
                       "targetType": {
                         "type": "string",
@@ -141281,7 +141702,8 @@
                                   "file",
                                   "video",
                                   "liveStream",
-                                  "clip"
+                                  "clip",
+                                  "event"
                                 ],
                                 "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
                                 "default": "text"
@@ -141364,6 +141786,17 @@
                                           "fit"
                                         ],
                                         "default": "fill"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "type": "object",
+                                    "title": "event post",
+                                    "description": "Event post data, carried by the child post only (`dataType: event`). The parent post of an event post has `dataType: text` and `structureType: event`.\n",
+                                    "properties": {
+                                      "eventId": {
+                                        "type": "string",
+                                        "description": "ID of the referenced event. Matches `eventId` in the `events` collection of the response. Absent from `events` when the event has been deleted.\n"
                                       }
                                     }
                                   }
@@ -141554,6 +141987,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -146070,6 +146504,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -146390,6 +146825,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -148956,6 +149392,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -149276,6 +149713,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -151757,6 +152195,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -152077,6 +152516,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -154672,6 +155112,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -154992,6 +155433,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -157610,6 +158052,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -157930,6 +158373,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -160456,6 +160900,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -160776,6 +161221,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -163324,6 +163770,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -163644,6 +164091,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -166218,6 +166666,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -166538,6 +166987,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -168978,6 +169428,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -169298,6 +169749,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -171822,6 +172274,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -172142,6 +172595,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -174294,7 +174748,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Query posts\n",
+        "description": "Query posts.\n\nEvent posts (`structureType: event`) are excluded from this endpoint — query them through\n`GET /api/v5/posts`.\n",
         "parameters": [
           {
             "name": "targetId",
@@ -174543,7 +174997,8 @@
                               "image",
                               "file",
                               "video",
-                              "liveStream"
+                              "liveStream",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -174593,6 +175048,10 @@
                               "streamId": {
                                 "type": "string",
                                 "description": "parent video streaming id (for video streaming post) - must be a parent stream"
+                              },
+                              "eventId": {
+                                "type": "string",
+                                "description": "ID of the referenced event (for the child post of an event post). Matches `eventId` in the `events` collection of the response.\n"
                               }
                             }
                           },
@@ -174852,7 +175311,8 @@
                               "image",
                               "file",
                               "video",
-                              "liveStream"
+                              "liveStream",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -174902,6 +175362,10 @@
                               "streamId": {
                                 "type": "string",
                                 "description": "parent video streaming id (for video streaming post) - must be a parent stream"
+                              },
+                              "eventId": {
+                                "type": "string",
+                                "description": "ID of the referenced event (for the child post of an event post). Matches `eventId` in the `events` collection of the response.\n"
                               }
                             }
                           },
@@ -177194,7 +177658,7 @@
         ],
         "description": "Create a post\n",
         "requestBody": {
-          "description": "information of a post to be created.\n\nrequire text or at least 1 attachments\n\n### Custom post\n- When `dataType` is set as the custom name (dot separated string format, see the `dataType` field section), `data` payload can be anything but it will not support normal data capability (ex. `text` data will not be created)\nand `data` payload size will be limit to `100kb`\n- `attachments` will be ignored, users need to keep them in `data` field and handle the file info by themselves\n\n### Image, File, Video post\n- Put `type` with file id in `attachments`\n- Image and File data can be picked from `fileId` in `data` object in child post\n- Video fileId for each resolution will be in `videoFileId` in `data` object in child post\n\n### Live streaming post\n- When put `dataType` as `liveStream` and `streamId` in `data`, post will be created as live streaming post\n- `attachments` will be ignored\n- Video streaming info will be in `videoStreamings` object in response\n\n### Poll post\n- When put `dataType` as `poll` and `pollId` in `data`, post will be created as poll post\n- `attachments` will be ignored\n- Poll info will be in `polls` object in response\n\n### Clip post\n- Put `type = clip` with `fileId` (from POST /v4/clips) in `attachments`\n- Optionally we can add `isMuted` on the attachment to set the clip to mute for displaying on UI.\n- Optionally we can add `displayMode` on the attachment to set the clip displayMode for displaying on UI.\n- `fileId`, `isMuted`, `displayMode` will be in `data` object in child post\n\n### Room post\n- When `dataType` is `room` and `roomId` is in `data`, the post will be created as a room post\n",
+          "description": "information of a post to be created.\n\nrequire text or at least 1 attachments\n\n### Custom post\n- When `dataType` is set as the custom name (dot separated string format, see the `dataType` field section), `data` payload can be anything but it will not support normal data capability (ex. `text` data will not be created)\nand `data` payload size will be limit to `100kb`\n- `attachments` will be ignored, users need to keep them in `data` field and handle the file info by themselves\n\n### Image, File, Video post\n- Put `type` with file id in `attachments`\n- Image and File data can be picked from `fileId` in `data` object in child post\n- Video fileId for each resolution will be in `videoFileId` in `data` object in child post\n\n### Live streaming post\n- When put `dataType` as `liveStream` and `streamId` in `data`, post will be created as live streaming post\n- `attachments` will be ignored\n- Video streaming info will be in `videoStreamings` object in response\n\n### Poll post\n- When put `dataType` as `poll` and `pollId` in `data`, post will be created as poll post\n- `attachments` will be ignored\n- Poll info will be in `polls` object in response\n\n### Clip post\n- Put `type = clip` with `fileId` (from POST /v4/clips) in `attachments`\n- Optionally we can add `isMuted` on the attachment to set the clip to mute for displaying on UI.\n- Optionally we can add `displayMode` on the attachment to set the clip displayMode for displaying on UI.\n- `fileId`, `isMuted`, `displayMode` will be in `data` object in child post\n\n### Room post\n- When `dataType` is `room` and `roomId` is in `data`, the post will be created as a room post\n\n### Event post\n- When `dataType` is `event` and `eventId` is in `data`, the post will be created as an event post\n- `data.title` and `data.text` are optional and hold the author's own caption; the event's title,\n  description, cover image and start time are read from the `events` object in the response and are\n  never copied onto the post\n- The parent post gets `dataType: text` and `structureType: event`; a single child post carries\n  `dataType: event` with `data.eventId`\n- An event created in a **private** community may only be posted into that same community; a `400`\n  is returned for any other target\n- `attachments` and product tags are rejected with `400`\n- `data.eventId` is immutable — it cannot be changed with `PUT /api/v4/posts/{postId}`\n- Event posts are only returned by `GET /api/v5/posts`; v3 and v4 queries exclude them\n",
           "required": true,
           "content": {
             "application/json": {
@@ -177238,6 +177702,11 @@
                         "type": "string",
                         "maxLength": 100,
                         "description": "Room ID for room post."
+                      },
+                      "eventId": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "description": "Event ID for event post. Required when `dataType` is `event`."
                       }
                     }
                   },
@@ -177290,7 +177759,7 @@
                   "dataType": {
                     "type": "string",
                     "example": "upstra.customtype",
-                    "description": "Accept \"liveStream\", \"poll\", \"room\" or Custom type. Custom type must be in dot separated string format or system defined format (ex. \"some.customtype\", \"com.foo.bar\")."
+                    "description": "Accept \"liveStream\", \"poll\", \"room\", \"event\" or Custom type. Custom type must be in dot separated string format or system defined format (ex. \"some.customtype\", \"com.foo.bar\")."
                   },
                   "targetType": {
                     "type": "string",
@@ -177540,7 +178009,8 @@
                               "file",
                               "video",
                               "liveStream",
-                              "clip"
+                              "clip",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -177623,6 +178093,17 @@
                                       "fit"
                                     ],
                                     "default": "fill"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "title": "event post",
+                                "description": "Event post data, carried by the child post only (`dataType: event`). The parent post of an event post has `dataType: text` and `structureType: event`.\n",
+                                "properties": {
+                                  "eventId": {
+                                    "type": "string",
+                                    "description": "ID of the referenced event. Matches `eventId` in the `events` collection of the response. Absent from `events` when the event has been deleted.\n"
                                   }
                                 }
                               }
@@ -177813,6 +178294,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -177901,7 +178383,8 @@
                               "image",
                               "file",
                               "video",
-                              "liveStream"
+                              "liveStream",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -177951,6 +178434,10 @@
                               "streamId": {
                                 "type": "string",
                                 "description": "parent video streaming id (for video streaming post) - must be a parent stream"
+                              },
+                              "eventId": {
+                                "type": "string",
+                                "description": "ID of the referenced event (for the child post of an event post). Matches `eventId` in the `events` collection of the response.\n"
                               }
                             }
                           },
@@ -180160,6 +180647,158 @@
                           },
                           "closedIn": {
                             "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "description": "Events referenced by event posts, looked up by `postChildren[].data.eventId`. A deleted event is absent from this collection.\n",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
                           }
                         }
                       }
@@ -180603,7 +181242,8 @@
                               "file",
                               "video",
                               "liveStream",
-                              "clip"
+                              "clip",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -180686,6 +181326,17 @@
                                       "fit"
                                     ],
                                     "default": "fill"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "title": "event post",
+                                "description": "Event post data, carried by the child post only (`dataType: event`). The parent post of an event post has `dataType: text` and `structureType: event`.\n",
+                                "properties": {
+                                  "eventId": {
+                                    "type": "string",
+                                    "description": "ID of the referenced event. Matches `eventId` in the `events` collection of the response. Absent from `events` when the event has been deleted.\n"
                                   }
                                 }
                               }
@@ -180876,6 +181527,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -180964,7 +181616,8 @@
                               "image",
                               "file",
                               "video",
-                              "liveStream"
+                              "liveStream",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -181014,6 +181667,10 @@
                               "streamId": {
                                 "type": "string",
                                 "description": "parent video streaming id (for video streaming post) - must be a parent stream"
+                              },
+                              "eventId": {
+                                "type": "string",
+                                "description": "ID of the referenced event (for the child post of an event post). Matches `eventId` in the `events` collection of the response.\n"
                               }
                             }
                           },
@@ -183223,6 +183880,158 @@
                           },
                           "closedIn": {
                             "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "description": "Events referenced by event posts, looked up by `postChildren[].data.eventId`. A deleted event is absent from this collection.\n",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
                           }
                         }
                       }
@@ -183785,7 +184594,8 @@
                               "file",
                               "video",
                               "liveStream",
-                              "clip"
+                              "clip",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -183868,6 +184678,17 @@
                                       "fit"
                                     ],
                                     "default": "fill"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "title": "event post",
+                                "description": "Event post data, carried by the child post only (`dataType: event`). The parent post of an event post has `dataType: text` and `structureType: event`.\n",
+                                "properties": {
+                                  "eventId": {
+                                    "type": "string",
+                                    "description": "ID of the referenced event. Matches `eventId` in the `events` collection of the response. Absent from `events` when the event has been deleted.\n"
                                   }
                                 }
                               }
@@ -184058,6 +184879,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -184146,7 +184968,8 @@
                               "image",
                               "file",
                               "video",
-                              "liveStream"
+                              "liveStream",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -184196,6 +185019,10 @@
                               "streamId": {
                                 "type": "string",
                                 "description": "parent video streaming id (for video streaming post) - must be a parent stream"
+                              },
+                              "eventId": {
+                                "type": "string",
+                                "description": "ID of the referenced event (for the child post of an event post). Matches `eventId` in the `events` collection of the response.\n"
                               }
                             }
                           },
@@ -186408,6 +187235,158 @@
                           }
                         }
                       }
+                    },
+                    "events": {
+                      "type": "array",
+                      "description": "Events referenced by event posts, looked up by `postChildren[].data.eventId`. A deleted event is absent from this collection.\n",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -186648,7 +187627,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Query posts, (this will include new post dataType `clip` in the response).\n",
+        "description": "Query posts, (this will include new post dataType `clip` in the response).\n\nEvent posts are returned on v5 only — identify them by `structureType: event`, not by `dataType`\n(the parent post of an event post has `dataType: text`). The referenced events arrive in the\n`events` collection.\n",
         "parameters": [
           {
             "name": "targetId",
@@ -186658,6 +187637,18 @@
               "maxLength": 900
             },
             "description": "ID of the target."
+          },
+          {
+            "name": "targetIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 900
+              }
+            },
+            "description": "IDs of multiple targets to filter by."
           },
           {
             "name": "targetType",
@@ -186673,6 +187664,18 @@
               ]
             },
             "description": "Type of the target.\n* `community` - Community\n* `user` - User\n* `content` - Content\n* `all` - All\n"
+          },
+          {
+            "name": "creatorIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 900
+              }
+            },
+            "description": "Filter posts by their creator user IDs."
           },
           {
             "name": "sortBy",
@@ -186708,6 +187711,14 @@
             "description": "Filter by deleted status"
           },
           {
+            "name": "isHidden",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Filter by hidden status. Only honoured for admin callers; ignored otherwise."
+          },
+          {
             "name": "feedType",
             "in": "query",
             "schema": {
@@ -186727,21 +187738,25 @@
             "schema": {
               "type": "array",
               "minItems": 1,
-              "maxItems": 6,
+              "maxItems": 10,
               "items": {
                 "type": "string",
                 "maxLength": 100,
                 "enum": [
+                  "text",
                   "video",
                   "image",
                   "file",
                   "liveStream",
                   "poll",
-                  "clip"
+                  "clip",
+                  "audio",
+                  "room",
+                  "event"
                 ]
               }
             },
-            "description": "Post data type to filter (include child posts too)."
+            "description": "Post data type to filter (include child posts too). A custom data type in `a.b` form is also accepted.\n\n`event` is accepted on v5 only. As with `poll`, `liveStream` and `room`, the filter matches the\nchild post, so `matchingOnlyParentPost=false` is required — the parent of an event post has\n`dataType: text`. Follow `parentPostId` to get the parent.\n"
           },
           {
             "name": "tags",
@@ -186765,6 +187780,85 @@
               "default": true
             },
             "description": "An option to filter only parent post. If `true` will return only parent post, else will return both parent and child posts\n"
+          },
+          {
+            "name": "excludeEventDiscussion",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Exclude posts that belong to an event discussion."
+          },
+          {
+            "name": "includePostedFeed",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "maxItems": 2,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "user",
+                  "community"
+                ]
+              }
+            },
+            "description": "Also include posts from the given feeds.\n* `user` - posts posted on a user feed\n* `community` - posts posted on a community feed\n"
+          },
+          {
+            "name": "includeModerationDetails",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Include moderation details in the response."
+          },
+          {
+            "name": "includeMixedStructure",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "An option to include mixed structure posts (posts that have different data types in parent and child posts)\n"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "example": "2026-01-31"
+            },
+            "description": "Admin only. Inclusive start of the `createdAt` range, as a calendar date (`YYYY-MM-DD`)\ninterpreted in `timeZone`. Non-admin callers passing this get a permission error.\n"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "example": "2026-02-28"
+            },
+            "description": "Admin only. Inclusive end of the `createdAt` range, as a calendar date (`YYYY-MM-DD`)\ninterpreted in `timeZone`. Non-admin callers passing this get a permission error.\n"
+          },
+          {
+            "name": "timeZone",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "Asia/Bangkok"
+            },
+            "description": "Admin only. IANA time zone used to resolve `startDate` / `endDate` into instants.\nDefaults to `UTC` when omitted. Non-admin callers passing this get a permission error.\n"
+          },
+          {
+            "name": "useKeySetPagination",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            },
+            "description": "Use keyset (cursor) pagination instead of skip/limit pagination."
           },
           {
             "name": "options[limit]",
@@ -186814,15 +187908,6 @@
               "example": "options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==",
               "description": "Pagination token"
             }
-          },
-          {
-            "name": "includeMixedStructure",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            },
-            "description": "An option to include mixed structure posts (posts that have different data types in parent and child posts)\n"
           }
         ],
         "responses": {
@@ -186911,7 +187996,8 @@
                               "file",
                               "video",
                               "liveStream",
-                              "clip"
+                              "clip",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -186994,6 +188080,17 @@
                                       "fit"
                                     ],
                                     "default": "fill"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "title": "event post",
+                                "description": "Event post data, carried by the child post only (`dataType: event`). The parent post of an event post has `dataType: text` and `structureType: event`.\n",
+                                "properties": {
+                                  "eventId": {
+                                    "type": "string",
+                                    "description": "ID of the referenced event. Matches `eventId` in the `events` collection of the response. Absent from `events` when the event has been deleted.\n"
                                   }
                                 }
                               }
@@ -187184,6 +188281,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -187272,7 +188370,8 @@
                               "image",
                               "file",
                               "video",
-                              "liveStream"
+                              "liveStream",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -187322,6 +188421,10 @@
                               "streamId": {
                                 "type": "string",
                                 "description": "parent video streaming id (for video streaming post) - must be a parent stream"
+                              },
+                              "eventId": {
+                                "type": "string",
+                                "description": "ID of the referenced event (for the child post of an event post). Matches `eventId` in the `events` collection of the response.\n"
                               }
                             }
                           },
@@ -189404,6 +190507,158 @@
                           "metadata": {
                             "type": "object",
                             "description": "Custom metadata"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "description": "Events referenced by event posts, looked up by `postChildren[].data.eventId`. A deleted event is absent from this collection — render the card as deleted, the post still exists.\n",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
                           }
                         }
                       }
@@ -201857,7 +203112,8 @@
                               "file",
                               "video",
                               "liveStream",
-                              "clip"
+                              "clip",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -201940,6 +203196,17 @@
                                       "fit"
                                     ],
                                     "default": "fill"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "title": "event post",
+                                "description": "Event post data, carried by the child post only (`dataType: event`). The parent post of an event post has `dataType: text` and `structureType: event`.\n",
+                                "properties": {
+                                  "eventId": {
+                                    "type": "string",
+                                    "description": "ID of the referenced event. Matches `eventId` in the `events` collection of the response. Absent from `events` when the event has been deleted.\n"
                                   }
                                 }
                               }
@@ -202130,6 +203397,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -202218,7 +203486,8 @@
                               "image",
                               "file",
                               "video",
-                              "liveStream"
+                              "liveStream",
+                              "event"
                             ],
                             "description": "Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).",
                             "default": "text"
@@ -202268,6 +203537,10 @@
                               "streamId": {
                                 "type": "string",
                                 "description": "parent video streaming id (for video streaming post) - must be a parent stream"
+                              },
+                              "eventId": {
+                                "type": "string",
+                                "description": "ID of the referenced event (for the child post of an event post). Matches `eventId` in the `events` collection of the response.\n"
                               }
                             }
                           },
@@ -204192,6 +205465,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -204512,6 +205786,7 @@
                               "poll",
                               "clip",
                               "room",
+                              "event",
                               "mixed"
                             ],
                             "example": "text"
@@ -232434,7 +233709,8 @@
                             "file",
                             "video",
                             "liveStream",
-                            "clip"
+                            "clip",
+                            "event"
                           ],
                           "description": "Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).",
                           "default": "text"
@@ -232517,6 +233793,17 @@
                                     "fit"
                                   ],
                                   "default": "fill"
+                                }
+                              }
+                            },
+                            {
+                              "type": "object",
+                              "title": "event post",
+                              "description": "Event post data, carried by the child post only (`dataType: event`). The parent post of an event post has `dataType: text` and `structureType: event`.\n",
+                              "properties": {
+                                "eventId": {
+                                  "type": "string",
+                                  "description": "ID of the referenced event. Matches `eventId` in the `events` collection of the response. Absent from `events` when the event has been deleted.\n"
                                 }
                               }
                             }
@@ -232707,6 +233994,7 @@
                             "poll",
                             "clip",
                             "room",
+                            "event",
                             "mixed"
                           ],
                           "example": "text"
@@ -242950,6 +244238,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -244095,6 +245384,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -245240,6 +246530,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -247988,6 +249279,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -248787,6 +250079,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -249586,6 +250879,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -250385,6 +251679,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -251718,6 +253013,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -252863,6 +254159,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -254008,6 +255305,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -254807,6 +256105,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -255952,6 +257251,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -257097,6 +258397,7 @@
                                       "poll",
                                       "clip",
                                       "room",
+                                      "event",
                                       "mixed"
                                     ],
                                     "example": "text"
@@ -275966,6 +277267,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -276286,6 +277588,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -278581,6 +279884,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -278901,6 +280205,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -281161,6 +282466,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -281481,6 +282787,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -283741,6 +285048,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -284061,6 +285369,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -286321,6 +287630,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -286641,6 +287951,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -288901,6 +290212,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -289221,6 +290533,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -291484,6 +292797,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -291804,6 +293118,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -294099,6 +295414,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -294419,6 +295735,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -296682,6 +297999,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -297002,6 +298320,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -299262,6 +300581,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
@@ -299582,6 +300902,7 @@
                                   "poll",
                                   "clip",
                                   "room",
+                                  "event",
                                   "mixed"
                                 ],
                                 "example": "text"
