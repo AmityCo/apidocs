@@ -10,6 +10,8 @@ blacklist-records:
       - $ref: "./parameter.yaml#/authorization"
       - $ref: "./parameter.yaml#/content-type"
       - $ref: "./parameter.yaml#/regexs"
+      - $ref: "./parameter.yaml#/category"
+      - $ref: "./parameter.yaml#/sortBy"
     responses:
       200:
         $ref: "./response.yaml#/blacklist-records-get-response-payload-200"
@@ -53,6 +55,8 @@ blacklist-records:
         description: "OK"
       404:
         $ref: "../../global/error.yaml#/NotFoundError404"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError500"
   delete:
@@ -93,6 +97,39 @@ blacklist-records_ruleId:
         $ref: "./response.yaml#/blacklist-records_ruleId-put-response-payload-200"
       404:
         $ref: "../../global/error.yaml#/NotFoundError404"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError500"
+
+blacklist-export:
+  get:
+    summary: "Export blacklist rules as a text file."
+    tags:
+      - "Moderation"
+    security:
+      - ApiKeyAuth: []
+    description: "Export all blacklist rules for the network as a plain-text file, one word per line. Filtered by category.\n\nRequires admin authentication with the `ManageModerationSetting` permission.\n"
+    parameters:
+      - $ref: "./parameter.yaml#/authorization"
+      - $ref: "./parameter.yaml#/category"
+    responses:
+      200:
+        description: "Plain-text file with one blacklist word per line."
+        headers:
+          Content-Disposition:
+            schema:
+              type: "string"
+            example: 'attachment; filename="block-words-content.txt"'
+        content:
+          text/plain:
+            schema:
+              type: "string"
+              example: "badword1\nbadword2\nbadword3\n"
+      401:
+        $ref: "../../global/error.yaml#/UnAuthorizedError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      422:
+        $ref: "../../global/error.yaml#/UnProcessableError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError500"
 

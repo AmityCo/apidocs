@@ -36,3 +36,28 @@ ruleId:
   required: true
   schema:
     type: string
+
+category:
+  name: "category"
+  in: "query"
+  description: "The category of block words to export. Defaults to content."
+  required: false
+  schema:
+    type: "string"
+    enum:
+      - "content"
+      - "user"
+    default: "content"
+
+sortBy:
+  name: "sortBy"
+  in: "query"
+  description: "Sort order for blacklist rules."
+  required: false
+  schema:
+    type: "string"
+    enum:
+      - "firstCreated"
+      - "lastCreated"
+      - "lastUpdated"
+    default: "firstCreated"

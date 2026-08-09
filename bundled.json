@@ -103268,6 +103268,7 @@
                 "properties": {
                   "regexs": {
                     "type": "array",
+                    "maxItems": 10000,
                     "items": {
                       "type": "string"
                     }
@@ -103307,6 +103308,7 @@
                 "properties": {
                   "regexs": {
                     "type": "array",
+                    "maxItems": 10000,
                     "items": {
                       "type": "string"
                     }
@@ -103393,6 +103395,35 @@
               "items": {
                 "type": "string"
               }
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "The category of block words to export. Defaults to content.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "content",
+                "user"
+              ],
+              "default": "content"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Sort order for blacklist rules.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "firstCreated",
+                "lastCreated",
+                "lastUpdated"
+              ],
+              "default": "firstCreated"
             }
           }
         ],
@@ -103730,6 +103761,7 @@
                 "properties": {
                   "regexs": {
                     "type": "array",
+                    "maxItems": 10000,
                     "items": {
                       "type": "string"
                     }
@@ -103789,6 +103821,50 @@
                   "status": "error",
                   "code": 404,
                   "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters validation error!."
                 }
               }
             }
@@ -104128,6 +104204,241 @@
                   "status": "error",
                   "code": 404,
                   "message": "Resource Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/blacklist/export": {
+      "get": {
+        "summary": "Export blacklist rules as a text file.",
+        "tags": [
+          "Moderation"
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "Export all blacklist rules for the network as a plain-text file, one word per line. Filtered by category.\n\nRequires admin authentication with the `ManageModerationSetting` permission.\n",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "The category of block words to export. Defaults to content.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "content",
+                "user"
+              ],
+              "default": "content"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plain-text file with one blacklist word per line.",
+            "headers": {
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "attachment; filename=\"block-words-content.txt\""
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "badword1\nbadword2\nbadword3\n"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400100,
+                  "message": "Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No permission to access this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400300,
+                  "message": "Forbidden error."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters validation error!."
                 }
               }
             }
@@ -104928,6 +105239,7 @@
                 "properties": {
                   "regexs": {
                     "type": "array",
+                    "maxItems": 10000,
                     "items": {
                       "type": "string"
                     }
@@ -106049,6 +106361,50 @@
                   "status": "error",
                   "code": 400000,
                   "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters validation error!."
                 }
               }
             }
