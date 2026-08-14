@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.119.0] - 2026-08-14
+
+### 🚀 Features
+
+- Add video metadata doc (#496)
+- *(post)* Document event post type (#495)
+
+### 📚 Documentation
+
+- *(v5-post)* Document missing query posts parameters (#498)
+
 ## [4.118.0] - 2026-07-31
 
 ### 🚀 Features
@@ -18,6 +29,7 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Update changelog and bump version to 4.117.0 (#493)
+- Update changelog and bump version to 4.118.0 (#494)
 
 ## [4.117.0] - 2026-07-10
 
