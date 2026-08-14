@@ -6,6 +6,26 @@ targetId:
     maxLength: 900
   description: ID of the target.
 
+targetIds:
+  name: targetIds
+  in: query
+  schema:
+    type: array
+    items:
+      type: string
+      maxLength: 900
+  description: IDs of multiple targets to filter by.
+
+creatorIds:
+  name: creatorIds
+  in: query
+  schema:
+    type: array
+    items:
+      type: string
+      maxLength: 900
+  description: Filter posts by their creator user IDs.
+
 targetType:
   name: targetType
   in: query
@@ -115,18 +135,22 @@ dataTypes:
   schema:
     type: array
     minItems: 1
-    maxItems: 6
+    maxItems: 10
     items:
       type: string
       maxLength: 100
       enum:
+        - text
         - video
         - image
         - file
         - liveStream
         - poll
         - clip
-  description: Post data type to filter (include child posts too).
+        - audio
+        - room
+        - event
+  description: Post data type to filter (include child posts too). A custom data type in `a.b` form is also accepted.
 
 tags:
   name: tags
@@ -157,3 +181,80 @@ includeMixedStructure:
     default: false
   description: |
     An option to include mixed structure posts (posts that have different data types in parent and child posts)
+
+useKeySetPagination:
+  name: useKeySetPagination
+  in: query
+  schema:
+    type: boolean
+    default: true
+  description: Use keyset (cursor) pagination instead of skip/limit pagination.
+
+includeModerationDetails:
+  name: includeModerationDetails
+  in: query
+  schema:
+    type: boolean
+  description: Include moderation details in the response.
+
+includePostedFeed:
+  name: includePostedFeed
+  in: query
+  schema:
+    type: array
+    maxItems: 2
+    items:
+      type: string
+      enum:
+        - user
+        - community
+  description: |
+    Also include posts from the given feeds.
+    * `user` - posts posted on a user feed
+    * `community` - posts posted on a community feed
+
+excludeEventDiscussion:
+  name: excludeEventDiscussion
+  in: query
+  schema:
+    type: boolean
+  description: Exclude posts that belong to an event discussion.
+
+isHidden:
+  name: isHidden
+  in: query
+  schema:
+    type: boolean
+  description: Filter by hidden status. Only honoured for admin callers; ignored otherwise.
+
+startDate:
+  name: startDate
+  in: query
+  schema:
+    type: string
+    pattern: '^\d{4}-\d{2}-\d{2}$'
+    example: "2026-01-31"
+  description: |
+    Admin only. Inclusive start of the `createdAt` range, as a calendar date (`YYYY-MM-DD`)
+    interpreted in `timeZone`. Non-admin callers passing this get a permission error.
+
+endDate:
+  name: endDate
+  in: query
+  schema:
+    type: string
+    pattern: '^\d{4}-\d{2}-\d{2}$'
+    example: "2026-02-28"
+  description: |
+    Admin only. Inclusive end of the `createdAt` range, as a calendar date (`YYYY-MM-DD`)
+    interpreted in `timeZone`. Non-admin callers passing this get a permission error.
+
+timeZone:
+  name: timeZone
+  in: query
+  schema:
+    type: string
+    example: "Asia/Bangkok"
+  description: |
+    Admin only. IANA time zone used to resolve `startDate` / `endDate` into instants.
+    Defaults to `UTC` when omitted. Non-admin callers passing this get a permission error.
