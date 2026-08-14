@@ -7,6 +7,10 @@ root:
       - BearerAuth: []
     description: |
       Query posts, (this will include new post dataType `clip` in the response).
+
+      Event posts are returned on v5 only — identify them by `structureType: event`, not by `dataType`
+      (the parent post of an event post has `dataType: text`). The referenced events arrive in the
+      `events` collection.
     parameters:
       - $ref: "./parameter.yaml#/targetId"
       - $ref: "./parameter.yaml#/targetIds"

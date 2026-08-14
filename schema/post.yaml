@@ -499,6 +499,7 @@ PostV4:
         - file
         - video
         - liveStream
+        - event
       description: Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).
       default: text
     data:
@@ -536,6 +537,11 @@ PostV4:
         streamId:
           type: string
           description: parent video streaming id (for video streaming post) - must be a parent stream
+        eventId:
+          type: string
+          description: >
+            ID of the referenced event (for the child post of an event post). Matches `eventId` in the
+            `events` collection of the response.
     metadata:
       type: object
       description: Additional properties to support custom fields.
@@ -727,6 +733,7 @@ PostV5:
         - video
         - liveStream
         - clip
+        - event
       description: Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).
       default: text
     data:
@@ -786,6 +793,17 @@ PostV5:
               description: display mode for the video.
               enum: ["fill", "fit"]
               default: "fill"
+        - type: object
+          title: event post
+          description: >
+            Event post data, carried by the child post only (`dataType: event`). The parent post of an
+            event post has `dataType: text` and `structureType: event`.
+          properties:
+            eventId:
+              type: string
+              description: >
+                ID of the referenced event. Matches `eventId` in the `events` collection of the response.
+                Absent from `events` when the event has been deleted.
     metadata:
       type: object
       description: Additional properties to support custom fields.
@@ -959,6 +977,10 @@ CreatePost:
           type: "string"
           maxLength: 100
           description: "Room ID for room post."
+        eventId:
+          type: "string"
+          maxLength: 100
+          description: "Event ID for event post. Required when `dataType` is `event`."
     attachments:
       type: "array"
       maxItems: 10
@@ -996,7 +1018,7 @@ CreatePost:
     dataType:
       type: "string"
       example: "upstra.customtype"
-      description: 'Accept "liveStream", "poll", "room" or Custom type. Custom type must be in dot separated string format or system defined format (ex. "some.customtype", "com.foo.bar").'
+      description: 'Accept "liveStream", "poll", "room", "event" or Custom type. Custom type must be in dot separated string format or system defined format (ex. "some.customtype", "com.foo.bar").'
     targetType:
       type: "string"
       enum:
