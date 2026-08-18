@@ -126036,6 +126036,29 @@
                       "type": "boolean",
                       "description": "This field is for enabling or disabling the video streaming feature."
                     },
+                    "customSlateUrl": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "URL of the custom slate image shown while a stream is not live. `null` clears it and falls back to the default slate.",
+                      "default": null
+                    },
+                    "viewerCountDisplayMode": {
+                      "type": "string",
+                      "description": "Client directive for showing the live viewer count. `always` shows it, `hidden` never shows it, `above-minimum` shows it only when the viewer count reaches `viewerCountDisplayMinimum`. Not enforced by the backend.",
+                      "enum": [
+                        "always",
+                        "hidden",
+                        "above-minimum"
+                      ],
+                      "default": "always"
+                    },
+                    "viewerCountDisplayMinimum": {
+                      "type": "integer",
+                      "description": "Inclusive threshold used with `viewerCountDisplayMode: above-minimum`; clients display the count when viewers >= this value.",
+                      "minimum": 1,
+                      "maximum": 1000,
+                      "default": 50
+                    },
                     "moderation": {
                       "type": "object",
                       "description": "This field is for moderation configuration.",
@@ -126245,6 +126268,29 @@
                     "type": "boolean",
                     "description": "This field is for enabling or disabling the video streaming feature."
                   },
+                  "customSlateUrl": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "URL of the custom slate image shown while a stream is not live. `null` clears it and falls back to the default slate.",
+                    "default": null
+                  },
+                  "viewerCountDisplayMode": {
+                    "type": "string",
+                    "description": "Client directive for showing the live viewer count. `always` shows it, `hidden` never shows it, `above-minimum` shows it only when the viewer count reaches `viewerCountDisplayMinimum`. Not enforced by the backend.",
+                    "enum": [
+                      "always",
+                      "hidden",
+                      "above-minimum"
+                    ],
+                    "default": "always"
+                  },
+                  "viewerCountDisplayMinimum": {
+                    "type": "integer",
+                    "description": "Inclusive threshold used with `viewerCountDisplayMode: above-minimum`; clients display the count when viewers >= this value.",
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "default": 50
+                  },
                   "moderation": {
                     "type": "object",
                     "description": "This field is for moderation configuration.",
@@ -126304,6 +126350,29 @@
                     "enabled": {
                       "type": "boolean",
                       "description": "This field is for enabling or disabling the video streaming feature."
+                    },
+                    "customSlateUrl": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "URL of the custom slate image shown while a stream is not live. `null` clears it and falls back to the default slate.",
+                      "default": null
+                    },
+                    "viewerCountDisplayMode": {
+                      "type": "string",
+                      "description": "Client directive for showing the live viewer count. `always` shows it, `hidden` never shows it, `above-minimum` shows it only when the viewer count reaches `viewerCountDisplayMinimum`. Not enforced by the backend.",
+                      "enum": [
+                        "always",
+                        "hidden",
+                        "above-minimum"
+                      ],
+                      "default": "always"
+                    },
+                    "viewerCountDisplayMinimum": {
+                      "type": "integer",
+                      "description": "Inclusive threshold used with `viewerCountDisplayMode: above-minimum`; clients display the count when viewers >= this value.",
+                      "minimum": 1,
+                      "maximum": 1000,
+                      "default": 50
                     },
                     "moderation": {
                       "type": "object",
