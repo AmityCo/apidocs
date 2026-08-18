@@ -128718,9 +128718,11 @@
             "name": "deviceId",
             "description": "device id",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "string",
-              "minLength": 1
+              "minLength": 1,
+              "maxLength": 150
             }
           }
         ],
@@ -128856,6 +128858,7 @@
               "properties": {
                 "token": {
                   "type": "string",
+                  "maxLength": 1000,
                   "description": "Token for pagination to retrieve the next or previous page of results"
                 },
                 "limit": {
@@ -128993,7 +128996,12 @@
                           },
                           "targetType": {
                             "type": "string",
-                            "description": "Type of content being acted upon"
+                            "description": "Type of content being acted upon",
+                            "enum": [
+                              "user",
+                              "community",
+                              "room"
+                            ]
                           },
                           "referenceId": {
                             "type": "string",
@@ -129752,6 +129760,8 @@
                 "properties": {
                   "trayItems": {
                     "type": "array",
+                    "minItems": 1,
+                    "maxItems": 100,
                     "description": "List of notification items to mark as seen",
                     "items": {
                       "type": "object",
@@ -129762,7 +129772,8 @@
                       "properties": {
                         "id": {
                           "type": "string",
-                          "description": "Identifier of the notification tray item"
+                          "pattern": "^[a-fA-F0-9]{24}$",
+                          "description": "Identifier of the notification tray item (24-character hex ObjectId)"
                         },
                         "lastSeenAt": {
                           "type": "string",
@@ -129940,6 +129951,9 @@
                               "conversation-text-message.created",
                               "conversation-image-message.created",
                               "conversation-file-message.created",
+                              "text-message.created",
+                              "image-message.created",
+                              "file-message.created",
                               "post.created",
                               "post.approved",
                               "post.need-reviewing",
@@ -129960,8 +129974,12 @@
                               "community.roleAdded",
                               "community.updated",
                               "story.created",
+                              "story.reacted",
                               "story-comment.created",
-                              "video-streaming.didStart"
+                              "video-streaming.didStart",
+                              "event.created",
+                              "event.started",
+                              "event.reminder"
                             ]
                           },
                           "moduleName": {
@@ -130197,8 +130215,7 @@
                   },
                   "notifiableEvents": {
                     "type": "array",
-                    "minItems": 1,
-                    "maxItems": 7,
+                    "maxItems": 38,
                     "items": {
                       "type": "object",
                       "properties": {
@@ -130214,6 +130231,9 @@
                             "conversation-text-message.created",
                             "conversation-image-message.created",
                             "conversation-file-message.created",
+                            "text-message.created",
+                            "image-message.created",
+                            "file-message.created",
                             "post.created",
                             "post.approved",
                             "post.need-reviewing",
@@ -130233,7 +130253,13 @@
                             "follow.accepted",
                             "community.roleAdded",
                             "community.updated",
-                            "video-streaming.didStart"
+                            "story.created",
+                            "story.reacted",
+                            "story-comment.created",
+                            "video-streaming.didStart",
+                            "event.created",
+                            "event.started",
+                            "event.reminder"
                           ]
                         },
                         "moduleName": {

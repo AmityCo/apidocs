@@ -60,6 +60,8 @@ MarkItemsSeenRequest:
         properties:
           trayItems:
             type: array
+            minItems: 1
+            maxItems: 100
             description: "List of notification items to mark as seen"
             items:
               type: object
@@ -69,7 +71,8 @@ MarkItemsSeenRequest:
               properties:
                 id:
                   type: string
-                  description: "Identifier of the notification tray item"
+                  pattern: "^[a-fA-F0-9]{24}$"
+                  description: "Identifier of the notification tray item (24-character hex ObjectId)"
                 lastSeenAt:
                   type: string
                   format: date-time

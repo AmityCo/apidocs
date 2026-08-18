@@ -25,8 +25,7 @@ setting-post-request-payload:
             maxLength: 900
           notifiableEvents:
             type: "array"
-            minItems: 1
-            maxItems: 7
+            maxItems: 38
             items:
               type: "object"
               properties:
@@ -42,6 +41,9 @@ setting-post-request-payload:
                     - "conversation-text-message.created"
                     - "conversation-image-message.created"
                     - "conversation-file-message.created"
+                    - "text-message.created"
+                    - "image-message.created"
+                    - "file-message.created"
                     - "post.created"
                     - "post.approved"
                     - "post.need-reviewing"
@@ -61,7 +63,13 @@ setting-post-request-payload:
                     - "follow.accepted"
                     - "community.roleAdded"
                     - "community.updated"
+                    - "story.created"
+                    - "story.reacted"
+                    - "story-comment.created"
                     - "video-streaming.didStart"
+                    - "event.created"
+                    - "event.started"
+                    - "event.reminder"
                 moduleName:
                   type: "string"
                   enum:
