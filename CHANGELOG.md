@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.120.0] - 2026-08-31
+
+### 🚀 Features
+
+- Add missing informations on push noti notifiableEvents, and others (#501)
+- *(network-setting)* Document livestream viewer count + custom slate (#502)
+
 ## [4.119.0] - 2026-08-14
 
 ### 🚀 Features
@@ -12,6 +19,10 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation
 
 - *(v5-post)* Document missing query posts parameters (#498)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.119.0 (#500)
 
 ## [4.118.0] - 2026-07-31
 
