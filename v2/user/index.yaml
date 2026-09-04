@@ -40,6 +40,55 @@ unban:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
+mute:
+  post:
+    summary: "Mute a User"
+    tags:
+      - "User"
+    security:
+      - BearerAuth: []
+    description: >
+      Mute a user across the network. A muted user can still sign in and read,
+      but creating, editing or deleting content — posts, comments, messages,
+      stories, reactions, polls — is rejected with `400313 UserIsGlobalMuted`.
+      Brand users cannot be muted.
+    requestBody:
+      $ref: "./request.yaml#/mute-post-request-payload"
+    responses:
+      200:
+        description: "OK"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/ValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+unmute:
+  post:
+    summary: "Unmute a User"
+    tags:
+      - "User"
+    security:
+      - BearerAuth: []
+    description: "Remove a user's network-wide mute.\n"
+    requestBody:
+      $ref: "./request.yaml#/common-post-request-payload"
+      description: "User to be unmuted\n"
+    responses:
+      200:
+        description: "OK"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
 _userId-flags:
   delete:
     summary: "Clear Flag a User"
