@@ -591,8 +591,7 @@ files:
       Update how the network handles files: the delivery path (`useLegacyFileDownload`) and
       whether an upload that pre-moderation refused is kept for review (`reservedForReview`).
 
-      This leaf has no GET of its own — the saved values are readable inside the full network
-      setting payload. The response is read back after the write, not echoed from the request.
+      The response is read back after the write, not echoed from the request.
     requestBody:
       $ref: "./request.yaml#/files-put-request-payload"
     responses:
@@ -609,10 +608,13 @@ sentiment-analysis:
     tags:
       - "Network Setting"
     security:
-      - BearerAuth: []
+      - ApiKeyAuth: []
     description: |
       Update the network's sentiment analysis settings, including the `customPost` block that
       extends the analysis to custom post types.
+
+      This leaf is served on the `/v1` API-key surface, not on `/api/v3` like the other network
+      setting leaves, and it is admin only.
     requestBody:
       $ref: "./request.yaml#/sentiment-analysis-put-request-payload"
     responses:

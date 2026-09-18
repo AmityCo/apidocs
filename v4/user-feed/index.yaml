@@ -1,25 +1,29 @@
 _userId:
   get:
-    summary: "Query user feed v4"
+    summary: "Query user feed"
     tags:
       - "Feed"
     security:
       - BearerAuth: []
     description: |
-      Query posts in user feed.
+      Query the posts published on one user's feed.
+
+      Event posts are returned here — identify them by `structureType: event`, not by `dataType`,
+      and filter for them with `dataTypes[]=event` together with `matchingOnlyParentPost=false`,
+      because the filter matches the child post while the parent carries `dataType: text`.
+
+      Posts that belong to an event discussion are always left out of this feed.
     parameters:
       - $ref: "./parameter.yaml#/_userId"
-      - $ref: "./parameter.yaml#/sortBy"
-      - $ref: "./parameter.yaml#/isDeleted"
-      - $ref: "./parameter.yaml#/dataTypes"
-      - $ref: "./parameter.yaml#/matchingOnlyParentPost"
-      - $ref: "./parameter.yaml#/includePostedFeed"
-      - $ref: "./parameter.yaml#/options.limit"
-      - $ref: "./parameter.yaml#/options.after"
-      - $ref: "./parameter.yaml#/options.before"
-      - $ref: "./parameter.yaml#/options.updatedAt"
-      - $ref: "./parameter.yaml#/options.token"
-      - $ref: "./parameter.yaml#/includeMixedStructure"
+      - $ref: "../../v5/post/parameter.yaml#/sortBy"
+      - $ref: "../../v5/post/parameter.yaml#/isDeleted"
+      - $ref: "../../v5/post/parameter.yaml#/hasFlag"
+      - $ref: "../../v5/post/parameter.yaml#/dataTypes"
+      - $ref: "../../v5/post/parameter.yaml#/matchingOnlyParentPost"
+      - $ref: "../../v5/post/parameter.yaml#/includePostedFeed"
+      - $ref: "../../v5/post/parameter.yaml#/includeMixedStructure"
+      - $ref: "../../v5/post/parameter.yaml#/options.limit"
+      - $ref: "../../v5/post/parameter.yaml#/options.token"
     responses:
       200:
         $ref: "../../v5/post/response.yaml#/post-pagination-response-200"

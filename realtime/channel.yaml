@@ -202,7 +202,7 @@ channel.roleAdded:
       - "Realtime event"
     responses:
       200:
-        $ref: "#/ChannelRoleChangedResponse"
+        $ref: "../v3/realtime/channel/response.yaml#/RoleChangedResponse"
 channel.roleRemoved:
   get:
     security: []
@@ -211,50 +211,4 @@ channel.roleRemoved:
       - "Realtime event"
     responses:
       200:
-        $ref: "#/ChannelRoleChangedResponse"
-
-ChannelRoleChangedResponse:
-  description: The affected members with the roles and permissions they now hold
-  content:
-    application/json:
-      schema:
-        allOf:
-          - type: object
-            properties:
-              id:
-                type: string
-                description: The message ID.
-              data:
-                type: object
-                properties:
-                  channelId:
-                    type: string
-                  setterId:
-                    type: string
-                    description: ID of the user that changed the roles.
-                  roles:
-                    type: array
-                    description: The roles named in the request that caused the event.
-                    items:
-                      type: string
-                  users:
-                    type: array
-                    description: The affected members, each with the roles they hold after the change.
-                    items:
-                      type: object
-                      properties:
-                        userId:
-                          type: string
-                        roles:
-                          type: array
-                          items:
-                            type: string
-                        permissions:
-                          type: array
-                          items:
-                            type: string
-                  channels:
-                    type: array
-                    items:
-                      $ref: "../schema/channel.yaml#/ChannelV3"
-          - $ref: '../schema/realtime.yaml#/Wrapper'
+        $ref: "../v3/realtime/channel/response.yaml#/RoleChangedResponse"

@@ -502,6 +502,7 @@ SentimentAnalysisNetworkSetting:
       default: false
     monthlyQuota:
       type: integer
+      minimum: 1
       default: 10000
       description: Number of contents that may be analysed each month.
     profiles:
@@ -509,19 +510,29 @@ SentimentAnalysisNetworkSetting:
       minItems: 1
       items:
         type: object
+        required:
+          - name
+          - companyName
+          - companyBackstory
+          - topics
         properties:
           name:
             type: string
+            minLength: 1
           companyName:
             type: string
+            minLength: 1
           companyBackstory:
             type: string
+            minLength: 1
           topics:
             type: array
             minItems: 1
             maxItems: 100
             items:
               type: object
+              required:
+                - name
               properties:
                 name:
                   type: string
@@ -530,6 +541,8 @@ SentimentAnalysisNetworkSetting:
                 createdAt:
                   type: string
                   format: date-time
+                  readOnly: true
+                  description: Stamped by the server; a value sent on a write is dropped.
     customPost:
       $ref: "#/SentimentAnalysisCustomPostSetting"
 
@@ -547,6 +560,7 @@ SentimentAnalysisCustomPostSetting:
       maxItems: 100
       items:
         type: string
+        minLength: 1
       default: []
       description: |
         The custom post dataTypes to analyse, in `a.b` form. Only custom dataTypes are accepted —

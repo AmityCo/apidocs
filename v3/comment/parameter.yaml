@@ -190,25 +190,16 @@ includePending:
     type: boolean
     default: false
 
-review-queue-communityId:
-  name: communityId
-  in: path
-  required: true
-  description: ID of the community whose review queue is read.
-  schema:
-    type: string
-    maxLength: 900
-
-review-queue-postId:
+postId:
   name: postId
   in: query
   required: false
-  description: Restrict the queue to the comments written on one post.
+  description: Restrict the result to the comments written on one post.
   schema:
     type: string
     maxLength: 900
 
-review-queue-startDate:
+startDate:
   name: startDate
   in: query
   required: false
@@ -219,7 +210,7 @@ review-queue-startDate:
     type: string
     pattern: '^\d{4}-\d{2}-\d{2}$'
 
-review-queue-endDate:
+endDate:
   name: endDate
   in: query
   required: false
@@ -228,7 +219,7 @@ review-queue-endDate:
     type: string
     pattern: '^\d{4}-\d{2}-\d{2}$'
 
-review-queue-timeZone:
+timeZone:
   name: timeZone
   in: query
   required: false
@@ -238,10 +229,11 @@ review-queue-timeZone:
     type: string
     example: Asia/Bangkok
 
-review-queue-options:
+options-pagination:
   name: options
   in: query
   required: false
+  description: Skip/limit pagination. This endpoint has no scrollable form.
   schema:
     type: object
     properties:
