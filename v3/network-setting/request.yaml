@@ -97,6 +97,10 @@ social-put-request-payload:
             default: false
           isAllowEditPostWhenReviewingEnabled:
             type: "boolean"
+          isAllowEditCommentWhenReviewingEnabled:
+            type: "boolean"
+            default: true
+            description: "Allow the author of a comment held for review to edit it while it waits for a decision."
           showOnlyMyFeed:
             type: "boolean"
             default: false
@@ -385,3 +389,21 @@ enhance-moderation-put-request-payload:
             moderationType: text
         userModerationExclusionPatterns:
           - "^admin_"
+
+files-put-request-payload:
+  description: "file handling for the network. Both switches are global to the network.\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: "../../schema/network-setting.yaml#/FilesNetworkSetting"
+
+sentiment-analysis-put-request-payload:
+  description: |
+    sentiment analysis configuration for the network. Unknown keys inside `customPost` are
+    rejected rather than dropped, so the server-stamped `effectiveAt` cannot be supplied.
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: "../../schema/network-setting.yaml#/SentimentAnalysisNetworkSetting"

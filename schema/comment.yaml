@@ -89,6 +89,8 @@ Comment:
       type: boolean
       default: false
       description: A flag to deleted a comment.
+    approvalStatus:
+      $ref: "#/Comment_approvalStatus"
     editedAt:
       type: string
       description: The date/time when comment is updated.
@@ -240,6 +242,8 @@ CommentForRealtime:
       type: boolean
       default: false
       description: A flag to deleted a comment.
+    approvalStatus:
+      $ref: "#/Comment_approvalStatus"
     editedAt:
       type: string
       description: The date/time when comment is updated.
@@ -309,3 +313,14 @@ CommentAttachment:
   required:
     - type
     - fileId
+
+Comment_approvalStatus:
+  type: string
+  enum:
+    - pending
+    - approved
+    - rejected
+  description: |
+    Review state of the comment. Absent when the comment was never gated for review, which
+    means it is visible. `pending` is held for review and hidden from everyone but its author
+    and the reviewers, `rejected` is declined and deleted.

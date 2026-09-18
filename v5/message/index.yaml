@@ -205,3 +205,60 @@ user_creatorId:
         description: "Parameters validation error"
     security:
       - BearerAuth: []
+
+_messageId-pin:
+  post:
+    summary: "pin a message in its channel."
+    tags:
+      - "Message"
+    security:
+      - BearerAuth: []
+    description: |
+      Pin a message so the channel surfaces it above the conversation. The pinned message is
+      returned on the channel payload as `pinnedMessage`, and the channel broadcasts
+      `channel.messagePinned` on its realtime topic.
+
+      Only a `live` channel accepts a pin, and it holds one pinned message at a time — pinning a
+      second message replaces the first. The caller needs the channel's `PinMessage` permission,
+      or admin `ModerateChannel`.
+
+      The request is rejected when the message is deleted, when it is already the pinned message,
+      when its author is banned from the channel, or when its author is globally banned.
+    parameters:
+      - $ref: "./parameter.yaml#/_messageId"
+    responses:
+      200:
+        $ref: "../../v3/channel/response.yaml#/common-channels-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+  delete:
+    summary: "unpin a message from its channel."
+    tags:
+      - "Message"
+    security:
+      - BearerAuth: []
+    description: |
+      Clear the channel's pin. The channel broadcasts `channel.messageUnpinned` on its realtime
+      topic and its `pinnedMessage` becomes `null`. The caller needs the channel's `PinMessage`
+      permission, or admin `ModerateChannel`.
+
+      The request is rejected when the message is not the one currently pinned.
+    parameters:
+      - $ref: "./parameter.yaml#/_messageId"
+    responses:
+      200:
+        $ref: "../../v3/channel/response.yaml#/common-channels-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

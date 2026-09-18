@@ -86,6 +86,8 @@ Community:
       type: boolean
       default: false
       description: Determines that this community require an authorize user to review post before post is published
+    needApprovalOnCommentCreation:
+      $ref: "#/Community_needApprovalOnCommentCreation"
     moderatorMemberCount:
       type: integer
     allowCommentInStory:
@@ -210,6 +212,8 @@ CommunityForRealtime:
       type: boolean
       default: false
       description: Determines that this community require an authorize user to review post before post is published
+    needApprovalOnCommentCreation:
+      $ref: "#/Community_needApprovalOnCommentCreation"
     moderatorMemberCount:
       type: integer
     allowCommentInStory:
@@ -360,3 +364,10 @@ JoinRequest:
       type: string
       nullable: true
       description: Internal ID of the responder.
+
+Community_needApprovalOnCommentCreation:
+  type: boolean
+  default: false
+  description: |
+    Determines that this community requires an authorised user to review a comment before it is
+    published. Existing pending comments stay in the review queue when this is turned off.

@@ -579,3 +579,48 @@ product:
         $ref: "../../global/error.yaml#/ForbiddenError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
+
+files:
+  put:
+    summary: "Update file configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - BearerAuth: []
+    description: |
+      Update how the network handles files: the delivery path (`useLegacyFileDownload`) and
+      whether an upload that pre-moderation refused is kept for review (`reservedForReview`).
+
+      The response is read back after the write, not echoed from the request.
+    requestBody:
+      $ref: "./request.yaml#/files-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/files-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+sentiment-analysis:
+  put:
+    summary: "Update sentiment analysis configuration."
+    tags:
+      - "Network Setting"
+    security:
+      - ApiKeyAuth: []
+    description: |
+      Update the network's sentiment analysis settings, including the `customPost` block that
+      extends the analysis to custom post types.
+
+      This leaf is served on the `/v1` API-key surface, not on `/api/v3` like the other network
+      setting leaves, and it is admin only.
+    requestBody:
+      $ref: "./request.yaml#/sentiment-analysis-put-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/sentiment-analysis-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"

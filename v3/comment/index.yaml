@@ -23,6 +23,7 @@ root:
       - $ref: "./parameter.yaml#/sortBy"
       - $ref: "./parameter.yaml#/options"
       - $ref: "./parameter.yaml#/dataTypes"
+      - $ref: "./parameter.yaml#/includePending"
     responses:
       200:
         $ref: "./response.yaml#/root-get-response-200"
@@ -211,6 +212,96 @@ list:
     responses:
       200:
         $ref: "./response.yaml#/common-post-response-200"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_commentId-approve:
+  post:
+    summary: "approve a comment held for review."
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    description: |
+      Publish a comment that is held for review. The caller needs the community's
+      `ReviewCommunityComment` permission, or admin `ManagePostAndComment`.
+
+      A reviewer cannot decide on their own comment. A comment that is already approved,
+      already declined, or deleted cannot be approved.
+    parameters:
+      - $ref: "./parameter.yaml#/commentId"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-post-response-200"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_commentId-decline:
+  post:
+    summary: "decline a comment held for review."
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    description: |
+      Reject a comment that is held for review. The comment is deleted in the same step and its
+      attachments are released, so declining is terminal — a declined comment cannot be approved
+      later. The caller needs the community's `ReviewCommunityComment` permission, or admin
+      `ManagePostAndComment`, and cannot decide on their own comment.
+    parameters:
+      - $ref: "./parameter.yaml#/commentId"
+    requestBody:
+      $ref: "./request.yaml#/_commentId-decline-request-payload"
+    responses:
+      200:
+        $ref: "./response.yaml#/common-post-response-200"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
+      429:
+        $ref: "../../global/error.yaml#/RateLimitError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
+_communityId-comments-review-queue:
+  get:
+    summary: "query the comments held for review in a community."
+    tags:
+      - "Comment"
+    security:
+      - BearerAuth: []
+    description: |
+      Query the comments of one community that are waiting for a review decision, newest request
+      first. The caller needs the community's `ReviewCommunityComment` permission, or admin
+      `ManagePostAndComment`.
+
+      The queue does not consult the community's `needApprovalOnCommentCreation` setting: turning
+      that setting off leaves the existing backlog in place rather than draining it.
+    parameters:
+      - $ref: "../community/parameter.yaml#/communityId"
+      - $ref: "./parameter.yaml#/postId"
+      - $ref: "./parameter.yaml#/startDate"
+      - $ref: "./parameter.yaml#/endDate"
+      - $ref: "./parameter.yaml#/timeZone"
+      - $ref: "./parameter.yaml#/options-pagination"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/PermissionDeniedError"
       429:
         $ref: "../../global/error.yaml#/RateLimitError"
       404:

@@ -80,6 +80,12 @@ paths:
     $ref: "./v3/comment/index.yaml#/list"
   /api/v3/comments/{commentId}/flags:
     $ref: "./v3/comment/index.yaml#/_commentId-flags"
+  /api/v3/comments/{commentId}/approve:
+    $ref: "./v3/comment/index.yaml#/_commentId-approve"
+  /api/v3/comments/{commentId}/decline:
+    $ref: "./v3/comment/index.yaml#/_commentId-decline"
+  /api/v3/communities/{communityId}/comments/review-queue:
+    $ref: "./v3/comment/index.yaml#/_communityId-comments-review-queue"
   /api/v4/comments/{commentId}:
     $ref: "./v4/comment/index.yaml#/_commentId"
   /api/v3/communities:
@@ -323,6 +329,8 @@ paths:
     $ref: "./v5/message/index.yaml#/_messageId-flags-all"
   /api/v5/messages/{messageId}/flags:
     $ref: "./v5/message/index.yaml#/_messageId-flags"
+  /api/v5/messages/{messageId}/pin:
+    $ref: "./v5/message/index.yaml#/_messageId-pin"
   /api/v5/messages/list:
     $ref: "./v5/message/index.yaml#/list"
   /api/v5/messages/user/{creatorId}:
@@ -347,6 +355,10 @@ paths:
     $ref: "./v3/network-setting/index.yaml#/prehook"
   /api/v3/network-settings/social:
     $ref: "./v3/network-setting/index.yaml#/social"
+  /api/v3/network-settings/files:
+    $ref: "./v3/network-setting/index.yaml#/files"
+  /v1/network-settings/sentiment-analysis:
+    $ref: "./v3/network-setting/index.yaml#/sentiment-analysis"
   /api/v3/network-settings/semantic-search:
     $ref: "./v3/network-setting/index.yaml#/semantic-search"
   /api/v3/network-settings/users:
@@ -563,6 +575,10 @@ paths:
     $ref: "./webhook/channel/index.yaml#/channel.didUpdateMeta"
   /webhook/file.didDelete:
     $ref: "./webhook/file/index.yaml#/file.didDelete"
+  /webhook/file.didReject:
+    $ref: "./webhook/file/index.yaml#/file.didReject"
+  /webhook/file.didUpload:
+    $ref: "./webhook/file/index.yaml#/file.didUpload"
   /webhook/follow.didAcceptRequest:
     $ref: "./webhook/follow/index.yaml#/follow.didAcceptRequest"
   /webhook/follow.didCancelRequest:
@@ -659,6 +675,8 @@ paths:
     $ref: "./webhook/user/index.yaml#/user.profileReset"
   /webhook/v3.comment.didAddReaction:
     $ref: "./webhook/comment-v3/index.yaml#/comment.didAddReaction"
+  /webhook/v3.comment.didApprove:
+    $ref: "./webhook/comment-v3/index.yaml#/comment.didApprove"
   /webhook/v3.comment.didCreate:
     $ref: "./webhook/comment-v3/index.yaml#/comment.didCreate"
   /webhook/v3.comment.didDelete:
@@ -753,6 +771,14 @@ paths:
     $ref: "./realtime/channel.yaml#/channel.membersAdded"
   /realtime/channel.membersRemoved:
     $ref: "./realtime/channel.yaml#/channel.membersRemoved"
+  /realtime/channel.messagePinned:
+    $ref: "./realtime/channel.yaml#/channel.messagePinned"
+  /realtime/channel.messageUnpinned:
+    $ref: "./realtime/channel.yaml#/channel.messageUnpinned"
+  /realtime/channel.roleAdded:
+    $ref: "./realtime/channel.yaml#/channel.roleAdded"
+  /realtime/channel.roleRemoved:
+    $ref: "./realtime/channel.yaml#/channel.roleRemoved"
   /realtime/channel.unbanned:
     $ref: "./realtime/channel.yaml#/channel.unbanned"
   /realtime/channel.updated:
