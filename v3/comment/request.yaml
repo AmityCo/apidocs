@@ -135,3 +135,16 @@ _commentId-flag-request-payload:
             description: "Additional details about the flag"
         required:
           - "commentId"
+
+_commentId-decline-request-payload:
+  description: "reason the comment was declined\n"
+  required: false
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          reason:
+            type: "string"
+            maxLength: 250
+            description: "Why the comment was declined. Stored on the comment's approval record."

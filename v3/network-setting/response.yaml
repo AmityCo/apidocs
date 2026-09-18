@@ -355,3 +355,23 @@ product-response-200:
               enabled:
                 type: boolean
                 description: Whether the product catalogue feature is enabled
+
+files-response-200:
+  description: File configuration
+  content:
+    application/json:
+      schema:
+        $ref: "../../schema/network-setting.yaml#/FilesNetworkSetting"
+
+sentiment-analysis-response-200:
+  description: Analytic configuration, carrying the updated sentiment analysis settings
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          analyticConfigs:
+            type: object
+            properties:
+              sentimentAnalysisSetting:
+                $ref: "../../schema/network-setting.yaml#/SentimentAnalysisNetworkSetting"

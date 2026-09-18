@@ -238,6 +238,8 @@ ChannelV3:
           type: string
         roomId:
           type: string
+    pinnedMessage:
+      $ref: "#/Channel_pinnedMessage"
   required:
     - channelId
     - createdAt
@@ -294,3 +296,19 @@ ChannelUserV3:
 Channel_messagePreviewId:
   type: string
   description: ID of a message preview. Depends on network settings. if disabled will be null.
+
+Channel_pinnedMessage:
+  description: |
+    The message currently pinned in the channel, or `null` when nothing is pinned. Only a `live`
+    channel can hold a pin, and a channel holds at most one at a time.
+  allOf:
+    - $ref: "./message.yaml#/MessagePreviews"
+    - type: object
+      properties:
+        pinnedBy:
+          type: string
+          description: ID of the user that pinned the message.
+        pinnedAt:
+          type: string
+          format: date-time
+          description: The date/time when the message was pinned.

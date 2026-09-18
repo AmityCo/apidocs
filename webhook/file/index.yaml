@@ -38,3 +38,84 @@ file.didDelete:
                     extension: "png"
                     size: 8658
                     mimeType: "image/png"
+file.didUpload:
+  get:
+    security: []
+    tags:
+      - "Webhook event"
+    summary: "File Didupload webhook event"
+    description: |
+      Sent when a caller uploads a file. Files the platform derives from another file — a
+      thumbnail or a transcode — carry a `derived` origin and stay silent.
+    responses:
+      200:
+        description: "The uploaded file and the user that uploaded it"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                networkId:
+                  type: "string"
+                  description: "Network ID where the event occurred"
+                event:
+                  type: "string"
+                  enum:
+                    - "file.didUpload"
+                data:
+                  type: "object"
+                  properties:
+                    user:
+                      $ref: "../../schema/user.yaml#/UserV3"
+                    file:
+                      $ref: "../../schema/file.yaml#/File"
+file.didReject:
+  get:
+    security: []
+    tags:
+      - "Webhook event"
+    summary: "File Didreject webhook event"
+    description: |
+      Sent when pre-moderation refuses an upload while the network's
+      `PUT /api/v3/network-settings/files` `reservedForReview` switch is on, which keeps the
+      bytes so the decision can be reviewed. The rejected file raises this event instead of
+      `file.didUpload`.
+    responses:
+      200:
+        description: "The refused file, the user that uploaded it, and why it was refused"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                networkId:
+                  type: "string"
+                  description: "Network ID where the event occurred"
+                event:
+                  type: "string"
+                  enum:
+                    - "file.didReject"
+                data:
+                  type: "object"
+                  properties:
+                    user:
+                      $ref: "../../schema/user.yaml#/UserV3"
+                    file:
+                      $ref: "../../schema/file.yaml#/File"
+                    rejection:
+                      type: "object"
+                      properties:
+                        reason:
+                          type: "string"
+                          description: "Why the upload was refused."
+                        source:
+                          type: "string"
+                          description: "Which moderation pass refused it."
+                        labels:
+                          type: "array"
+                          description: "The moderation labels that breached their threshold."
+                          items:
+                            type: "object"
+                        thresholds:
+                          type: "object"
+                          description: "The image moderation thresholds in force at the time."

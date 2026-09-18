@@ -178,3 +178,87 @@ preserve-edited-at:
   schema:
     type: boolean
     default: false
+
+includePending:
+  name: includePending
+  in: query
+  required: false
+  description: |
+    Include comments that are held for review. Admin only — an ordinary caller that sends it is
+    rejected. Left out, an admin read returns only comments that are visible to their audience.
+  schema:
+    type: boolean
+    default: false
+
+review-queue-communityId:
+  name: communityId
+  in: path
+  required: true
+  description: ID of the community whose review queue is read.
+  schema:
+    type: string
+    maxLength: 900
+
+review-queue-postId:
+  name: postId
+  in: query
+  required: false
+  description: Restrict the queue to the comments written on one post.
+  schema:
+    type: string
+    maxLength: 900
+
+review-queue-startDate:
+  name: startDate
+  in: query
+  required: false
+  description: |
+    Earliest comment creation date to return, as `YYYY-MM-DD`. The range is read against
+    `createdAt` — when the comment was written — not against the time it entered the queue.
+  schema:
+    type: string
+    pattern: '^\d{4}-\d{2}-\d{2}$'
+
+review-queue-endDate:
+  name: endDate
+  in: query
+  required: false
+  description: Latest comment creation date to return, as `YYYY-MM-DD`.
+  schema:
+    type: string
+    pattern: '^\d{4}-\d{2}-\d{2}$'
+
+review-queue-timeZone:
+  name: timeZone
+  in: query
+  required: false
+  description: |
+    IANA time zone the `startDate` and `endDate` boundaries are resolved in. Defaults to `UTC`.
+  schema:
+    type: string
+    example: Asia/Bangkok
+
+review-queue-options:
+  name: options
+  in: query
+  required: false
+  schema:
+    type: object
+    properties:
+      limit:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+        example: options[limit]=10
+        description: Page size
+      skip:
+        type: integer
+        minimum: 0
+        example: options[skip]=0
+        description: Number of records to skip
+      token:
+        type: string
+        maxLength: 1000
+        example: options[token]=eyJza2lwIjoyMCwibGlABDFRffewfQ==
+        description: Pagination token

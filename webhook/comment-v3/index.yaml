@@ -97,3 +97,17 @@ comment.didModerate:
     responses:
       200:
         $ref: "../../v3/comment/response.yaml#/comment-webhook-response"
+comment.didApprove:
+  get:
+    tags:
+      - "Webhook event"
+    summary: "Comment Didapprove webhook event"
+    security:
+      - BearerAuth: []
+    description: |
+      This is called when a comment held for review is approved and becomes visible.
+      There is no matching decline event: declining deletes the comment, so it reports through
+      `comment.didDelete`.
+    responses:
+      200:
+        $ref: "../../v3/comment/response.yaml#/comment-webhook-response"

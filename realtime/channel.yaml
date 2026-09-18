@@ -139,3 +139,122 @@ channel.setMutedUsers:
                         actor:
                           type: string
                 - $ref: '../schema/realtime.yaml#/Wrapper'
+channel.messagePinned:
+  get:
+    security: []
+    summary: "a message was pinned in the channel"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: The channel and its new pinned message
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The message ID.
+                    data:
+                      type: object
+                      properties:
+                        channelId:
+                          type: string
+                        pinnedMessage:
+                          $ref: "../schema/channel.yaml#/Channel_pinnedMessage"
+                        users:
+                          type: array
+                          description: The author of the pinned message.
+                          items:
+                            $ref: "../schema/user.yaml#/UserV3"
+                - $ref: '../schema/realtime.yaml#/Wrapper'
+channel.messageUnpinned:
+  get:
+    security: []
+    summary: "the channel's pinned message was cleared"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        description: The channel whose pin was cleared
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The message ID.
+                    data:
+                      type: object
+                      properties:
+                        channelId:
+                          type: string
+                - $ref: '../schema/realtime.yaml#/Wrapper'
+channel.roleAdded:
+  get:
+    security: []
+    summary: "roles were added to channel members"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        $ref: "#/ChannelRoleChangedResponse"
+channel.roleRemoved:
+  get:
+    security: []
+    summary: "roles were removed from channel members"
+    tags:
+      - "Realtime event"
+    responses:
+      200:
+        $ref: "#/ChannelRoleChangedResponse"
+
+ChannelRoleChangedResponse:
+  description: The affected members with the roles and permissions they now hold
+  content:
+    application/json:
+      schema:
+        allOf:
+          - type: object
+            properties:
+              id:
+                type: string
+                description: The message ID.
+              data:
+                type: object
+                properties:
+                  channelId:
+                    type: string
+                  setterId:
+                    type: string
+                    description: ID of the user that changed the roles.
+                  roles:
+                    type: array
+                    description: The roles named in the request that caused the event.
+                    items:
+                      type: string
+                  users:
+                    type: array
+                    description: The affected members, each with the roles they hold after the change.
+                    items:
+                      type: object
+                      properties:
+                        userId:
+                          type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                        permissions:
+                          type: array
+                          items:
+                            type: string
+                  channels:
+                    type: array
+                    items:
+                      $ref: "../schema/channel.yaml#/ChannelV3"
+          - $ref: '../schema/realtime.yaml#/Wrapper'
