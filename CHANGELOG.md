@@ -2,12 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.121.0] - 2026-09-18
+
+### 🚀 Features
+
+- Document the August/September 2026 core surfaces (#507)
+
 ## [4.120.0] - 2026-08-31
 
 ### 🚀 Features
 
 - Add missing informations on push noti notifiableEvents, and others (#501)
 - *(network-setting)* Document livestream viewer count + custom slate (#502)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.120.0 (#504)
 
 ## [4.119.0] - 2026-08-14
 
