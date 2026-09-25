@@ -9,7 +9,7 @@ blocklists-post-request-payload:
         properties:
           regexs:
             type: "array"
-            minItems: 0
+            minItems: 1
             maxItems: 100
             items:
               type: "string"
@@ -18,6 +18,16 @@ blocklists-post-request-payload:
           isMatchExactWord:
             type: "boolean"
             default: false
+          category:
+            type: "string"
+            enum:
+              - "content"
+              - "user"
+            default: "content"
+            description: >
+              Which rule set the words are added to. `content` rules are matched
+              against user-generated content, `user` rules are matched against
+              user profile fields.
         required:
           - regexs
 
@@ -32,7 +42,7 @@ allowlists-post-request-payload:
         properties:
           regexs:
             type: "array"
-            minItems: 0
+            minItems: 1
             maxItems: 100
             items:
               type: "string"

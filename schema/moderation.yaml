@@ -8,6 +8,16 @@ BlacklistRule:
       description: "Rule of blacklist."
     isMatchExactWord:
       type: "boolean"
+    category:
+      type: "string"
+      enum:
+        - "content"
+        - "user"
+      default: "content"
+      description: >
+        Which rule set the word belongs to. `content` rules are matched against
+        user-generated content, `user` rules are matched against user profile
+        fields. A word may exist once per category.
     isEnabled:
       type: "boolean"
       description: "A flag to enabled a rule."

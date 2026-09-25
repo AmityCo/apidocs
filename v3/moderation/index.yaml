@@ -40,8 +40,7 @@ allowlists-verify:
   post:
     tags:
       - Moderation
-    security:
-      - BearerAuth: []
+    security: []
     summary: Verify allowlist
     description: Verify URLs with the allowlist rules.
     operationId: verifyAllowlist
@@ -86,6 +85,7 @@ blocklists:
       - "Moderation"
     parameters:
       - $ref: "./parameter.yaml#/regex"
+      - $ref: "./parameter.yaml#/category"
       - $ref: "./parameter.yaml#/sortBy"
       - $ref: "./parameter.yaml#/options"
     responses:
@@ -119,8 +119,7 @@ blocklists-verify:
   post:
     tags:
       - Moderation
-    security:
-      - BearerAuth: []
+    security: []
     summary: Verify blocklist
     description: Verify texts with the blocklist rules.
     operationId: verifyBlocklist
