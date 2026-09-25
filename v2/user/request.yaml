@@ -9,3 +9,24 @@ common-post-request-payload:
             type: "string"
         required:
           - "userId"
+
+mute-post-request-payload:
+  description: "User to be muted, and for how long\n"
+  required: true
+  content:
+    application/json:
+      schema:
+        type: "object"
+        properties:
+          userId:
+            type: "string"
+          mutePeriod:
+            type: "number"
+            default: -1
+            description: "mute period (milliseconds). -1 or omitted mutes forever."
+          moderatorNote:
+            type: "string"
+            maxLength: 250
+            description: "Optional note kept on the user's moderation record."
+        required:
+          - "userId"
