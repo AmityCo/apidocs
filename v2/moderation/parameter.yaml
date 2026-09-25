@@ -12,13 +12,59 @@ content-type:
   schema:
     type: "string"
 
-regexs:
-  name: "regexs"
+regex:
+  name: "regex"
+  in: "query"
+  description: "Search rules whose regex starts with this keyword."
+  schema:
+    type: "string"
+
+category:
+  name: "category"
+  in: "query"
+  description: >
+    Which rule set to read. `content` rules are matched against user-generated
+    content, `user` rules are matched against user profile fields.
+  schema:
+    type: "string"
+    enum:
+      - "content"
+      - "user"
+    default: "content"
+
+sortBy:
+  name: "sortBy"
   in: "query"
   schema:
-    type: "array"
-    items:
-      type: "string"
+    type: "string"
+    enum:
+      - "firstCreated"
+      - "lastCreated"
+      - "lastUpdated"
+    default: "firstCreated"
+
+options:
+  name: "options"
+  in: "query"
+  style: "deepObject"
+  explode: true
+  schema:
+    type: "object"
+    properties:
+      after:
+        type: "string"
+        maxLength: 24
+      before:
+        type: "string"
+        maxLength: 24
+      limit:
+        type: "number"
+        maximum: 100
+        description: "limit amount of result"
+      token:
+        type: "string"
+        maxLength: 1000
+        description: "pagination token"
 
 ruleIds:
   in: query

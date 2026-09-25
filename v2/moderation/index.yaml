@@ -9,7 +9,10 @@ blacklist-records:
     parameters:
       - $ref: "./parameter.yaml#/authorization"
       - $ref: "./parameter.yaml#/content-type"
-      - $ref: "./parameter.yaml#/regexs"
+      - $ref: "./parameter.yaml#/regex"
+      - $ref: "./parameter.yaml#/category"
+      - $ref: "./parameter.yaml#/sortBy"
+      - $ref: "./parameter.yaml#/options"
     responses:
       200:
         $ref: "./response.yaml#/blacklist-records-get-response-payload-200"
@@ -107,7 +110,7 @@ whitelist-records:
     parameters:
       - $ref: "./parameter.yaml#/authorization"
       - $ref: "./parameter.yaml#/content-type"
-      - $ref: "./parameter.yaml#/regexs"
+      - $ref: "./parameter.yaml#/regex"
     responses:
       200:
         $ref: "./response.yaml#/whitelist-records-get-response-payload-200"
@@ -126,7 +129,7 @@ whitelist-records:
       - $ref: "./parameter.yaml#/authorization"
       - $ref: "./parameter.yaml#/content-type"
     requestBody:
-      $ref: "./request.yaml#/records-put-request-payload"
+      $ref: "./request.yaml#/whitelist-records-put-request-payload"
     responses:
       200:
         description: "OK"
@@ -145,7 +148,7 @@ whitelist-records:
       - $ref: "./parameter.yaml#/authorization"
       - $ref: "./parameter.yaml#/content-type"
     requestBody:
-      $ref: "./request.yaml#/records-post-request-payload"
+      $ref: "./request.yaml#/whitelist-records-post-request-payload"
     responses:
       200:
         description: "OK"
