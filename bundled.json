@@ -115024,9 +115024,19 @@
                 "properties": {
                   "regexs": {
                     "type": "array",
+                    "maxItems": 20000,
                     "items": {
                       "type": "string"
                     }
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "content",
+                      "user"
+                    ],
+                    "default": "content",
+                    "description": "Which rule set the words belong to. `content` rules are matched against user-generated content, `user` rules are matched against user profile fields.\n"
                   }
                 },
                 "required": [
@@ -115063,9 +115073,23 @@
                 "properties": {
                   "regexs": {
                     "type": "array",
+                    "minItems": 1,
+                    "maxItems": 20000,
                     "items": {
                       "type": "string"
                     }
+                  },
+                  "isMatchExactWord": {
+                    "type": "boolean"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "content",
+                      "user"
+                    ],
+                    "default": "content",
+                    "description": "Which rule set the words are added to. `content` rules are matched against user-generated content, `user` rules are matched against user profile fields.\n"
                   }
                 },
                 "required": [
@@ -115142,12 +115166,65 @@
             }
           },
           {
-            "name": "regexs",
+            "name": "regex",
+            "in": "query",
+            "description": "Search rules whose regex starts with this keyword.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Which rule set to read. `content` rules are matched against user-generated content, `user` rules are matched against user profile fields.\n",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "content",
+                "user"
+              ],
+              "default": "content"
+            }
+          },
+          {
+            "name": "sortBy",
             "in": "query",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
+              "type": "string",
+              "enum": [
+                "firstCreated",
+                "lastCreated",
+                "lastUpdated"
+              ],
+              "default": "firstCreated"
+            }
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "after": {
+                  "type": "string",
+                  "maxLength": 24
+                },
+                "before": {
+                  "type": "string",
+                  "maxLength": 24
+                },
+                "limit": {
+                  "type": "number",
+                  "maximum": 100,
+                  "description": "limit amount of result"
+                },
+                "token": {
+                  "type": "string",
+                  "maxLength": 1000,
+                  "description": "pagination token"
+                }
               }
             }
           }
@@ -115180,6 +115257,15 @@
                               },
                               "isMatchExactWord": {
                                 "type": "boolean"
+                              },
+                              "category": {
+                                "type": "string",
+                                "enum": [
+                                  "content",
+                                  "user"
+                                ],
+                                "default": "content",
+                                "description": "Which rule set the word belongs to. `content` rules are matched against user-generated content, `user` rules are matched against user profile fields. A word may exist once per category.\n"
                               },
                               "isEnabled": {
                                 "type": "boolean",
@@ -115332,7 +115418,7 @@
           }
         ],
         "requestBody": {
-          "description": "Rules information to be refreshed.\n",
+          "description": "Rules information to be refreshed. Replaces every rule of the given category with the list sent.\n",
           "required": true,
           "content": {
             "application/json": {
@@ -115341,9 +115427,19 @@
                 "properties": {
                   "regexs": {
                     "type": "array",
+                    "maxItems": 20000,
                     "items": {
                       "type": "string"
                     }
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "content",
+                      "user"
+                    ],
+                    "default": "content",
+                    "description": "Which rule set the words belong to. `content` rules are matched against user-generated content, `user` rules are matched against user profile fields.\n"
                   }
                 },
                 "required": [
@@ -115486,12 +115582,23 @@
                 "properties": {
                   "regexs": {
                     "type": "array",
+                    "minItems": 1,
+                    "maxItems": 20000,
                     "items": {
                       "type": "string"
                     }
                   },
                   "isMatchExactWord": {
                     "type": "boolean"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "content",
+                      "user"
+                    ],
+                    "default": "content",
+                    "description": "Which rule set the words belong to. `content` rules are matched against user-generated content, `user` rules are matched against user profile fields.\n"
                   }
                 },
                 "required": [
@@ -115815,6 +115922,15 @@
                         },
                         "isMatchExactWord": {
                           "type": "boolean"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "content",
+                            "user"
+                          ],
+                          "default": "content",
+                          "description": "Which rule set the word belongs to. `content` rules are matched against user-generated content, `user` rules are matched against user profile fields. A word may exist once per category.\n"
                         },
                         "isEnabled": {
                           "type": "boolean",
@@ -116156,15 +116272,21 @@
                   },
                   "maxRepetitionTimeout": {
                     "type": "integer",
-                    "minimum": 0
+                    "minimum": 0,
+                    "maximum": 86400,
+                    "description": "Seconds. Maximum 86400 (24 hours)."
                   },
                   "blacklistMuteTimeout": {
                     "type": "integer",
-                    "minimum": 0
+                    "minimum": 0,
+                    "maximum": 86400,
+                    "description": "Seconds. Maximum 86400 (24 hours)."
                   },
                   "whitelistMuteTimeout": {
                     "type": "integer",
-                    "minimum": 0
+                    "minimum": 0,
+                    "maximum": 86400,
+                    "description": "Seconds. Maximum 86400 (24 hours)."
                   },
                   "maxRepetitionMuteTimeout": {
                     "type": "integer",
@@ -116177,20 +116299,24 @@
                     "type": "object",
                     "properties": {
                       "nudity": {
-                        "type": "number",
-                        "minimum": 0
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 100
                       },
                       "suggestive": {
-                        "type": "number",
-                        "minimum": 0
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 100
                       },
                       "violence": {
-                        "type": "number",
-                        "minimum": 0
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 100
                       },
                       "disturbing": {
-                        "type": "number",
-                        "minimum": 0
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 100
                       }
                     }
                   }
@@ -116343,13 +116469,11 @@
             }
           },
           {
-            "name": "regexs",
+            "name": "regex",
             "in": "query",
+            "description": "Search rules whose regex starts with this keyword.",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "type": "string"
             }
           }
         ],
@@ -116687,9 +116811,6 @@
                     "items": {
                       "type": "string"
                     }
-                  },
-                  "isMatchExactWord": {
-                    "type": "boolean"
                   }
                 },
                 "required": [
@@ -117146,7 +117267,8 @@
             "name": "regex",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "maxLength": 100
             },
             "description": "search keyword from start"
           },
@@ -117158,7 +117280,8 @@
               "enum": [
                 "firstCreated",
                 "lastCreated"
-              ]
+              ],
+              "default": "lastCreated"
             }
           },
           {
@@ -117170,10 +117293,12 @@
               "type": "object",
               "properties": {
                 "after": {
-                  "type": "number"
+                  "type": "string",
+                  "maxLength": 24
                 },
                 "before": {
-                  "type": "number"
+                  "type": "string",
+                  "maxLength": 24
                 },
                 "limit": {
                   "type": "number",
@@ -117181,6 +117306,7 @@
                 },
                 "token": {
                   "type": "string",
+                  "maxLength": 1000,
                   "description": "pagination token"
                 }
               }
@@ -117366,7 +117492,7 @@
                 "properties": {
                   "regexs": {
                     "type": "array",
-                    "minItems": 0,
+                    "minItems": 1,
                     "maxItems": 100,
                     "items": {
                       "type": "string",
@@ -117505,9 +117631,23 @@
             "name": "regex",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "maxLength": 100
             },
             "description": "search keyword from start"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Which rule set to read. `content` rules are matched against user-generated content, `user` rules are matched against user profile fields.\n",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "content",
+                "user"
+              ],
+              "default": "content"
+            }
           },
           {
             "name": "sortBy",
@@ -117517,7 +117657,8 @@
               "enum": [
                 "firstCreated",
                 "lastCreated"
-              ]
+              ],
+              "default": "lastCreated"
             }
           },
           {
@@ -117529,10 +117670,12 @@
               "type": "object",
               "properties": {
                 "after": {
-                  "type": "number"
+                  "type": "string",
+                  "maxLength": 24
                 },
                 "before": {
-                  "type": "number"
+                  "type": "string",
+                  "maxLength": 24
                 },
                 "limit": {
                   "type": "number",
@@ -117540,6 +117683,7 @@
                 },
                 "token": {
                   "type": "string",
+                  "maxLength": 1000,
                   "description": "pagination token"
                 }
               }
@@ -117568,6 +117712,15 @@
                           "isMatchExactWord": {
                             "type": "boolean",
                             "description": "word have to be equally match"
+                          },
+                          "category": {
+                            "type": "string",
+                            "enum": [
+                              "content",
+                              "user"
+                            ],
+                            "default": "content",
+                            "description": "rule set the word belongs to"
                           },
                           "isDeleted": {
                             "type": "boolean"
@@ -117729,7 +117882,7 @@
                 "properties": {
                   "regexs": {
                     "type": "array",
-                    "minItems": 0,
+                    "minItems": 1,
                     "maxItems": 100,
                     "items": {
                       "type": "string",
@@ -117740,6 +117893,15 @@
                   "isMatchExactWord": {
                     "type": "boolean",
                     "default": false
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "content",
+                      "user"
+                    ],
+                    "default": "content",
+                    "description": "Which rule set the words are added to. `content` rules are matched against user-generated content, `user` rules are matched against user profile fields.\n"
                   }
                 },
                 "required": [
@@ -117861,11 +118023,7 @@
         "tags": [
           "Moderation"
         ],
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
+        "security": [],
         "summary": "Verify allowlist",
         "description": "Verify URLs with the allowlist rules.",
         "operationId": "verifyAllowlist",
@@ -118041,11 +118199,7 @@
         "tags": [
           "Moderation"
         ],
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
+        "security": [],
         "summary": "Verify blocklist",
         "description": "Verify texts with the blocklist rules.",
         "operationId": "verifyBlocklist",
@@ -136499,10 +136653,12 @@
                   "type": "object",
                   "properties": {
                     "isWhitelistEnabled": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "default": true
                     },
                     "isReportEnabled": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "default": false
                     }
                   }
                 }
@@ -136640,10 +136796,12 @@
                   "type": "object",
                   "properties": {
                     "isWhitelistEnabled": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "default": true
                     },
                     "isReportEnabled": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "default": false
                     }
                   }
                 }
