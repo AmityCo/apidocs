@@ -233375,7 +233375,7 @@
         ],
         "description": "Report a User by User ID (Flag User).\n\nOptionally include `reportType`, `reason`, and `comment` in the body to categorize the\nreport. Sending no body flags the target as a legacy/unspecified (typeless) report and\nbehaves exactly as before — fully backward compatible, no version bump.\n",
         "requestBody": {
-          "description": "Optional report details. Sending no body flags the target as a legacy/unspecified\n(typeless) report — fully backward compatible.\n\n**`reportType`** uses the internal field vocabulary; the client owns the display labels:\n\n| `reportType`   | Label to show |\n|----------------|---------------|\n| `displayName`  | Username      |\n| `description`  | Bio           |\n| `avatarFileId` | Avatar        |\n| `behavior`     | Behavior      |\n\nSend the internal values above, not the labels.\n\n**Validation** (failures are `422 ValidationError`):\n\n| Request                                                          | Result |\n|-----------------------------------------------------------------|--------|\n| `reportType: behavior` + `reason`                               | 200    |\n| `reportType: behavior`, no `reason`                             | 422    |\n| `reportType: displayName` / `description` / `avatarFileId`, no `reason` | 200 |\n| any of the three field types + `reason`                         | 422    |\n| no `reportType` + `reason`                                      | 422    |\n| `reportType` outside the enum                                   | 422    |\n| `reason` or `comment` > 300 chars                               | 422    |\n| `reason` or `comment` empty string (`\"\"`)                        | 422    |\n| `comment` on any type, <= 300 chars                             | 200    |\n\n**Semantics — one report per (reporter, `reportType`):**\n- A reporter holds at most one report per `reportType` on a target (up to 4 typed + 1 typeless).\n- Same reporter + same `reportType` again is a merge-update: provided `reason`/`comment`\n  overwrite; omitted fields keep their prior values.\n- Identical resubmission is a no-op — safe to retry, but does not re-alert moderators.\n- Same reporter + different `reportType` creates a new report.\n- Typeless requests (no `reportType`) dedup only against the reporter's existing typeless\n  report; typed and typeless reports never block each other.\n- Reports are anonymous to the reported user; reporter identity is not exposed to them.\n\nThe new fields are not echoed back in the response.\n",
+          "description": "Optional report details. Sending no body flags the target as a legacy/unspecified\n(typeless) report — fully backward compatible.\n\n**`reportType`** uses the internal field vocabulary; the client owns the display labels:\n\n| `reportType`   | Label to show |\n|----------------|---------------|\n| `displayName`  | Username      |\n| `description`  | Bio           |\n| `avatarFileId` | Avatar        |\n| `behavior`     | Behavior      |\n\nSend the internal values above, not the labels.\n\n**Validation** (failures are `422 ValidationError`):\n\n| Request                                                          | Result |\n|-----------------------------------------------------------------|--------|\n| `reportType: behavior` + `reason`                               | 200    |\n| `reportType: behavior`, no `reason`                             | 422    |\n| `reportType: displayName` / `description` / `avatarFileId`, no `reason` | 200 |\n| any of the three field types + `reason`                         | 422    |\n| no `reportType` + `reason`                                      | 422    |\n| `reportType` outside the enum                                   | 422    |\n| `reason` or `comment` > 300 chars                               | 422    |\n| `reason` or `comment` empty string (`\"\"`)                        | 422    |\n| `comment` on any type, <= 300 chars                             | 200    |\n\n**Semantics — one report per (reporter, `reportType`):**\n- A reporter holds at most one report per `reportType` on a target (up to 4 typed + 1 typeless).\n- Same reporter + same `reportType` again is a merge-update: provided `reason`/`comment`\n  overwrite; omitted fields keep their prior values.\n- Identical resubmission is a no-op — safe to retry, but does not re-alert moderators.\n- Same reporter + different `reportType` creates a new report.\n- Typeless requests (no `reportType`) dedup only against the reporter's existing typeless\n  report; typed and typeless reports never block each other.\n- Reports are anonymous to the reported user; reporter identity is not exposed to them.\n\nThe new fields are not echoed back in the response; read the caller's reports back with\n`GET /api/v4/users/{userId}/isFlagByMe`.\n",
           "required": false,
           "content": {
             "application/json": {
@@ -234100,6 +234100,246 @@
                       }
                     }
                   }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400400,
+                  "message": "User Not Found."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v4/users/{userId}/isFlagByMe": {
+      "get": {
+        "summary": "Get My Reports on a User",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "description": "User public id"
+          }
+        ],
+        "description": "Returns whether the caller reported the given user, with each of the caller's own reports\non that user: the `reportType`, `reason` and `comment` sent to\n`POST /api/v4/me/flags/{userId}`, and when the report was first filed.\n\n- Only the caller's reports are returned. Other users' reports on the same target are never\n  exposed.\n- The caller holds at most one report per `reportType`, plus one typeless report.\n- Every field is always present. A field the report does not carry is `null`:\n  `reportType: null` is a typeless (legacy) report, and `createdAt: null` is a report filed\n  before report types were introduced.\n- A caller with no reports on the user gets `isFlagByMe: false` and an empty `flags` array.\n\nVisitor users cannot call this endpoint.\n",
+        "responses": {
+          "200": {
+            "description": "The caller's reports on the user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "isFlagByMe",
+                    "flags"
+                  ],
+                  "properties": {
+                    "isFlagByMe": {
+                      "type": "boolean",
+                      "description": "`true` when the caller holds at least one report on the user."
+                    },
+                    "flags": {
+                      "type": "array",
+                      "description": "The caller's own reports on the user. Empty when `isFlagByMe` is `false`.",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "reportType",
+                          "reason",
+                          "comment",
+                          "createdAt"
+                        ],
+                        "properties": {
+                          "reportType": {
+                            "type": "string",
+                            "nullable": true,
+                            "enum": [
+                              "displayName",
+                              "description",
+                              "avatarFileId",
+                              "behavior",
+                              null
+                            ],
+                            "description": "`null` for a typeless (legacy) report."
+                          },
+                          "reason": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Set only on `behavior` reports; `null` otherwise."
+                          },
+                          "comment": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true,
+                            "description": "When the report was first filed. `null` for reports filed before report types existed."
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "isFlagByMe": true,
+                  "flags": [
+                    {
+                      "reportType": "behavior",
+                      "reason": "spam",
+                      "comment": "Keeps posting ads",
+                      "createdAt": "2026-09-28T07:40:00.000Z"
+                    },
+                    {
+                      "reportType": "displayName",
+                      "reason": null,
+                      "comment": "Offensive name",
+                      "createdAt": "2026-09-28T07:41:00.000Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400100,
+                  "message": "Unauthorized"
                 }
               }
             }
