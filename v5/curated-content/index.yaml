@@ -1,0 +1,36 @@
+pool:
+  get:
+    summary: "Get a curated content topic's post pool."
+    tags:
+      - "Feed"
+    security:
+      - BearerAuth: []
+    description: |
+      Returns the published post pool of a curated content topic, ranked, for rendering
+      the curated content widget. The pool is rebuilt by the nightly job, or right away when
+      an admin saves a topic with an approved preview.
+
+      Posts are filtered for the viewer before they are returned: posts by authors the viewer
+      has blocked, posts by authors banned from the post's community, posts by unsafe authors,
+      posts excluded by an admin, posts with negative sentiment, and posts the viewer cannot
+      view are all dropped. `limit` is applied after this filtering.
+
+      User, visitor, and bot sessions can call this endpoint. Curated content must be enabled
+      for the network.
+
+      An inactive topic returns `404` to non-admin callers, the same as a deleted topic.
+      Admins can still read an inactive topic's pool.
+    parameters:
+      - $ref: "./parameter.yaml#/topicId"
+      - $ref: "./parameter.yaml#/limit"
+    responses:
+      200:
+        $ref: "./response.yaml#/pool-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      404:
+        $ref: "../../global/error.yaml#/NotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
