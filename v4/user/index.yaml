@@ -70,6 +70,39 @@ me-flags_userId:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
+_userId-isFlagByMe:
+  get:
+    summary: "Get My Reports on a User"
+    security:
+      - BearerAuth: []
+    tags:
+      - "User"
+    parameters:
+      - $ref: "./parameter.yaml#/_userId"
+    description: |
+      Returns whether the caller reported the given user, with each of the caller's own reports
+      on that user: the `reportType`, `reason` and `comment` sent to
+      `POST /api/v4/me/flags/{userId}`, and when the report was first filed.
+
+      - Only the caller's reports are returned. Other users' reports on the same target are never
+        exposed.
+      - The caller holds at most one report per `reportType`, plus one typeless report.
+      - Every field is always present. A field the report does not carry is `null`:
+        `reportType: null` is a typeless (legacy) report, and `createdAt: null` is a report filed
+        before report types were introduced.
+      - A caller with no reports on the user gets `isFlagByMe: false` and an empty `flags` array.
+
+      Visitor users cannot call this endpoint.
+    responses:
+      200:
+        $ref: "./response.yaml#/_userId-isFlagByMe-get-response-200"
+      401:
+        $ref: "../../global/error.yaml#/UnAuthorizedError"
+      404:
+        $ref: "../../global/error.yaml#/UserNotFoundError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
 me-user-blocks:
   get:
     summary: Get Blocked Users

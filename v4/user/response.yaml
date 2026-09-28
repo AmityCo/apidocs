@@ -25,6 +25,64 @@ me-flags_userId-post-response-200:
             items:
               $ref: "../../schema/file.yaml#/File"
 
+_userId-isFlagByMe-get-response-200:
+  description: The caller's reports on the user
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - isFlagByMe
+          - flags
+        properties:
+          isFlagByMe:
+            type: boolean
+            description: "`true` when the caller holds at least one report on the user."
+          flags:
+            type: array
+            description: The caller's own reports on the user. Empty when `isFlagByMe` is `false`.
+            items:
+              type: object
+              required:
+                - reportType
+                - reason
+                - comment
+                - createdAt
+              properties:
+                reportType:
+                  type: string
+                  nullable: true
+                  enum:
+                    - displayName
+                    - description
+                    - avatarFileId
+                    - behavior
+                    - null
+                  description: "`null` for a typeless (legacy) report."
+                reason:
+                  type: string
+                  nullable: true
+                  description: Set only on `behavior` reports; `null` otherwise.
+                comment:
+                  type: string
+                  nullable: true
+                createdAt:
+                  type: string
+                  format: date-time
+                  nullable: true
+                  description: When the report was first filed. `null` for reports filed before report types existed.
+      example:
+        isFlagByMe: true
+        flags:
+          - reportType: behavior
+            reason: spam
+            comment: Keeps posting ads
+            createdAt: "2026-09-28T07:40:00.000Z"
+          - reportType: displayName
+            reason: null
+            comment: Offensive name
+            createdAt: "2026-09-28T07:41:00.000Z"
+
 me-flags_userId-delete-response-200:
   description: Unflag user response
   content:
