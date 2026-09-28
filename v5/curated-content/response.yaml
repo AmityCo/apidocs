@@ -1,0 +1,88 @@
+pool-get-response-200:
+  description: |
+    The topic's pool. `posts` is in ranked order. The other collections hold the entities
+    the posts reference, in the same shape as `GET /api/v5/posts`, and are present only when
+    the pool has posts. There is no paging.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          topic:
+            type: object
+            properties:
+              topicId:
+                type: string
+                description: "The topic's public id."
+                example: "summer-picks"
+              topicName:
+                type: string
+                example: "Summer picks"
+              refreshedAt:
+                type: string
+                format: date-time
+                nullable: true
+                description: "When the pool was last built. `null` if it has never been built."
+              poolSize:
+                type: integer
+                description: "Number of posts in `posts`."
+          posts:
+            type: array
+            items:
+              $ref: "../../schema/post.yaml#/PostV5"
+          postChildren:
+            type: array
+            items:
+              $ref: "../../schema/post.yaml#/PostV4"
+          comments:
+            type: array
+            items:
+              $ref: "../../schema/comment.yaml#/Comment"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          communities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          communityUsers:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/CommunityUser"
+          categories:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/CommunityCategory"
+          feeds:
+            type: array
+            items:
+              $ref: "../../schema/feed.yaml#/Feed"
+          videoStreamings:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+          videoStreamingChildren:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+          polls:
+            type: array
+            items:
+              $ref: "../../schema/poll.yaml#/Poll"
+          rooms:
+            type: array
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          roles:
+            type: array
+            items:
+              $ref: "../../schema/role.yaml#/RoleV3"
+          products:
+            type: array
+            items:
+              $ref: "../../schema/product.yaml#/Product"
