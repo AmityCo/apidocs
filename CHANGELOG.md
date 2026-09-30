@@ -2,11 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.122.0] - 2026-09-30
+
+### 🚀 Features
+
+- *(user)* Document GET /api/v4/users/{userId}/isFlagByMe (#513)
+- Document GET /api/v5/curated-content/pool (#512)
+
 ## [4.121.0] - 2026-09-18
 
 ### 🚀 Features
 
 - Document the August/September 2026 core surfaces (#507)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.121.0 (#508)
 
 ## [4.120.0] - 2026-08-31
 
