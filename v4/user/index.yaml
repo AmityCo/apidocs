@@ -57,16 +57,27 @@ me-flags_userId:
       - "User"
     parameters:
       - $ref: "./parameter.yaml#/_userId"
+      - $ref: "./parameter.yaml#/unflagReportType"
     description: |
       Unreported a User by User ID (Unflag User).
 
-      Withdraws all of the caller's reports on that user (every typed report and the typeless
-      one, hard delete). There is no per-type unflag.
+      Without `reportType`, withdraws all of the caller's reports on that user (every typed report
+      and the typeless one, hard delete). With `reportType`, withdraws only the caller's report of
+      that type; `untyped` withdraws only the typeless one. Use
+      `GET /api/v4/users/{userId}/isFlagByMe` to see which reports the caller holds.
+
+      - Other users' reports on the same target are never touched.
+      - If the caller holds no matching report, the call still answers 200 and changes nothing.
+      - `untyped` is accepted here only. `POST /api/v4/me/flags/{userId}` rejects it.
+      - `hashFlag` on the user lists reporters, not report types: the caller stays in it until
+        their last report on the user is withdrawn.
     responses:
       200:
         $ref: "./response.yaml#/me-flags_userId-delete-response-200"
       404:
         $ref: "../../global/error.yaml#/UserNotFoundError"
+      422:
+        $ref: "../../global/error.yaml#/ValidationError"
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 

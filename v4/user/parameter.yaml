@@ -39,6 +39,17 @@ hardDeleteComment:
     type: "boolean"
     default: false
   description: "true - it will hard delete this user comments after user is deleted."
+unflagReportType:
+  in: query
+  name: reportType
+  required: false
+  schema:
+    type: "string"
+    enum: ["behavior", "displayName", "description", "avatarFileId", "untyped"]
+  description: |
+    Which of the caller's reports to withdraw. Omit it to withdraw all of them.
+    `untyped` withdraws only the typeless report, the one filed without a `reportType`.
+
 description: "Delete user from system. User display name will be replaced with \"Deleted user\".\n\nContent that is created from the user will be able to be wiped depend on the options.\n\n**This API allow only admin user to call**\n"
 
 limit:
