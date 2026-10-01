@@ -236690,9 +236690,25 @@
               "maximum": 50
             },
             "description": "User public id"
+          },
+          {
+            "in": "query",
+            "name": "reportType",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "behavior",
+                "displayName",
+                "description",
+                "avatarFileId",
+                "untyped"
+              ]
+            },
+            "description": "Which of the caller's reports to withdraw. Omit it to withdraw all of them.\n`untyped` withdraws only the typeless report, the one filed without a `reportType`.\n"
           }
         ],
-        "description": "Unreported a User by User ID (Unflag User).\n\nWithdraws all of the caller's reports on that user (every typed report and the typeless\none, hard delete). There is no per-type unflag.\n",
+        "description": "Unreported a User by User ID (Unflag User).\n\nWithout `reportType`, withdraws all of the caller's reports on that user (every typed report\nand the typeless one, hard delete). With `reportType`, withdraws only the caller's report of\nthat type; `untyped` withdraws only the typeless one. Use\n`GET /api/v4/users/{userId}/isFlagByMe` to see which reports the caller holds.\n\n- Other users' reports on the same target are never touched.\n- If the caller holds no matching report, the call still answers 200 and changes nothing.\n- `untyped` is accepted here only. `POST /api/v4/me/flags/{userId}` rejects it.\n- `hashFlag` on the user lists reporters, not report types: the caller stays in it until\n  their last report on the user is withdrawn.\n",
         "responses": {
           "200": {
             "description": "Unflag user response",
@@ -236977,6 +236993,55 @@
                   "status": "error",
                   "code": 400400,
                   "message": "User Not Found."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Put a wrong request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters error.",
+                  "data": {
+                    "detail": [
+                      "The 'data.text' field length must be less than or equal to 20000 characters long."
+                    ]
+                  }
                 }
               }
             }
