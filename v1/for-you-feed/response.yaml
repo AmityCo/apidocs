@@ -1,0 +1,144 @@
+root-get-response-200:
+  description: |
+    One page of the For You feed. `posts` is in ranked order. The other collections hold the
+    entities the posts reference, in the same shape as `GET /api/v5/posts`.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          posts:
+            type: array
+            items:
+              $ref: "../../schema/post.yaml#/PostV5"
+          postChildren:
+            type: array
+            items:
+              $ref: "../../schema/post.yaml#/PostV4"
+          comments:
+            type: array
+            items:
+              $ref: "../../schema/comment.yaml#/Comment"
+          users:
+            type: array
+            items:
+              $ref: "../../schema/user.yaml#/UserV3"
+          files:
+            type: array
+            items:
+              $ref: "../../schema/file.yaml#/File"
+          communities:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/Community"
+          communityUsers:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/CommunityUser"
+          categories:
+            type: array
+            items:
+              $ref: "../../schema/community.yaml#/CommunityCategory"
+          feeds:
+            type: array
+            items:
+              $ref: "../../schema/feed.yaml#/Feed"
+          videoStreamings:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+          videoStreamingChildren:
+            type: array
+            items:
+              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+          polls:
+            type: array
+            items:
+              $ref: "../../schema/poll.yaml#/Poll"
+          rooms:
+            type: array
+            items:
+              $ref: "../../schema/room.yaml#/Room"
+          roles:
+            type: array
+            items:
+              $ref: "../../schema/role.yaml#/RoleV3"
+          products:
+            type: array
+            items:
+              $ref: "../../schema/product.yaml#/Product"
+          feedMetadata:
+            type: array
+            description: "Ranking details for each post on this page."
+            items:
+              $ref: "#/FeedMetadata"
+          paging:
+            type: object
+            properties:
+              next:
+                type: string
+                description: "Cursor for the next page. Absent on the last page."
+              previous:
+                type: string
+                description: "Cursor for the previous page. Absent on the first page."
+              expiredAt:
+                type: string
+                format: date-time
+                description: "When the feed snapshot expires. Cursors stop working after this time."
+
+FeedMetadata:
+  type: object
+  properties:
+    postId:
+      type: string
+    feedInjectionType:
+      type: string
+      enum:
+        - "ranked"
+        - "exploration"
+        - "live_stream"
+      description: "How the post got into the feed."
+    feedSnapshotPosition:
+      type: integer
+      description: "Position of the post in the whole snapshot."
+    feedPagePosition:
+      type: integer
+      description: "Position of the post on this page."
+    feedScoredRank:
+      type: integer
+      nullable: true
+    feedFinalScore:
+      type: number
+      nullable: true
+    feedRelevanceScore:
+      type: number
+      nullable: true
+    feedPopularityScore:
+      type: number
+      nullable: true
+    feedFreshnessScore:
+      type: number
+      nullable: true
+    feedAffinityScore:
+      type: number
+      nullable: true
+    feedMmrScore:
+      type: number
+      nullable: true
+    feedMmrPenalty:
+      type: number
+      nullable: true
+    feedMmrLambda:
+      type: number
+      nullable: true
+    feedPersonalizationStage:
+      type: integer
+      nullable: true
+    authorId:
+      type: string
+    targetId:
+      type: string
+    targetType:
+      type: string
+    dataType:
+      type: string

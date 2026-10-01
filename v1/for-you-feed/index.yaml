@@ -1,0 +1,30 @@
+root:
+  get:
+    summary: "Get For You feed."
+    tags:
+      - "Feed"
+    security:
+      - BearerAuth: []
+    description: |
+      Returns the user's personalized For You feed: posts ranked for the user by relevance,
+      popularity, freshness, and affinity, with some exploration posts and live streams
+      mixed in.
+
+      A request without `options[token]` builds a new feed snapshot for the user and returns
+      its first page. Pass `paging.next` or `paging.previous` as `options[token]` to page
+      through that snapshot. The snapshot expires at `paging.expiredAt`; after that, start
+      again without a token.
+
+      For You feed must be enabled for the network, otherwise the request fails with `403`.
+    parameters:
+      - $ref: "./parameter.yaml#/options"
+      - $ref: "./parameter.yaml#/dataTypes"
+    responses:
+      200:
+        $ref: "./response.yaml#/root-get-response-200"
+      400:
+        $ref: "../../global/error.yaml#/BadRequestError"
+      403:
+        $ref: "../../global/error.yaml#/ForbiddenError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
