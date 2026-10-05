@@ -19,15 +19,7 @@ blocklists-post-request-payload:
             type: "boolean"
             default: false
           category:
-            type: "string"
-            enum:
-              - "content"
-              - "user"
-            default: "content"
-            description: >
-              Which rule set the words are added to. `content` rules are matched
-              against user-generated content, `user` rules are matched against
-              user profile fields.
+            $ref: "../../schema/moderation.yaml#/RuleCategory"
         required:
           - regexs
 

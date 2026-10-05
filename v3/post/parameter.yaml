@@ -35,10 +35,7 @@ dataType:
   name: "dataType"
   in: "query"
   schema:
-    type: "string"
-    maxLength: 100
-    pattern: '(\w+\.)+\w+'
-  example: "upstra.customtype"
+    $ref: "../../schema/post.yaml#/CustomPostDataType"
   description: 'must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")'
   deprecated: true
 
@@ -98,11 +95,7 @@ dataTypes:
             - "file"
             - "liveStream"
           description: "Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`"
-        - type: "string"
-          maxLength: 100
-          pattern: '(\w+\.)+\w+'
-          example: "upstra.customtype"
-          description: 'custom post type - must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")'
+        - $ref: "../../schema/post.yaml#/CustomPostDataType"
 
 tags:
   name: "tags"
@@ -163,6 +156,7 @@ postType:
       - "post"
       - "story"
     default: "post"
+  description: "Whether `postId` refers to a post or a story."
 
 ignoreBlockList:
   name: "ignoreBlockList"

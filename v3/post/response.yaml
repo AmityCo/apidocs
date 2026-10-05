@@ -1,74 +1,77 @@
+post-payload:
+  type: object
+  properties:
+    posts:
+      type: array
+      items:
+        $ref: "../../schema/post.yaml#/Post"
+    postChildren:
+      type: array
+      items:
+        $ref: "../../schema/post.yaml#/Post"
+    comments:
+      type: array
+      items:
+        $ref: "../../schema/comment.yaml#/Comment"
+    users:
+      type: array
+      items:
+        $ref: "../../schema/user.yaml#/UserV3"
+    files:
+      type: array
+      items:
+        $ref: "../../schema/file.yaml#/File"
+    communities:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/Community"
+    communityUsers:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/CommunityUser"
+    categories:
+      type: array
+      items:
+        $ref: "../../schema/community.yaml#/CommunityCategory"
+    feeds:
+      type: array
+      items:
+        $ref: "../../schema/feed.yaml#/Feed"
+    videoStreamings:
+      type: array
+      items:
+        $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+    videoStreamingChildren:
+      type: array
+      items:
+        $ref: "../../schema/video-streaming.yml#/VideoStreaming"
+    rooms: 
+      type: array
+      items:
+        $ref: "../../schema/room.yaml#/Room"
+    roomChildrens:
+      type: array
+      items:
+        $ref: "../../schema/room.yaml#/Room"
+    polls:
+      type: array
+      items:
+        $ref: "../../schema/poll.yaml#/Poll"
+    events:
+      type: array
+      items:
+        $ref: "../../schema/event.yaml#/Event"
+    products:
+      type: array
+      items:
+        $ref: "../../schema/product.yaml#/Product"
+
 common-response-200:
   description: Post Information
   content:
     application/json:
       schema:
-        type: object
-        properties:
-          posts:
-            type: array
-            items:
-              $ref: "../../schema/post.yaml#/Post"
-          postChildren:
-            type: array
-            items:
-              $ref: "../../schema/post.yaml#/Post"
-          comments:
-            type: array
-            items:
-              $ref: "../../schema/comment.yaml#/Comment"
-          users:
-            type: array
-            items:
-              $ref: "../../schema/user.yaml#/UserV3"
-          files:
-            type: array
-            items:
-              $ref: "../../schema/file.yaml#/File"
-          communities:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/Community"
-          communityUsers:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/CommunityUser"
-          categories:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/CommunityCategory"
-          feeds:
-            type: array
-            items:
-              $ref: "../../schema/feed.yaml#/Feed"
-          videoStreamings:
-            type: array
-            items:
-              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-          videoStreamingChildren:
-            type: array
-            items:
-              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-          rooms: 
-            type: array
-            items:
-              $ref: "../../schema/room.yaml#/Room"
-          roomChildrens:
-            type: array
-            items:
-              $ref: "../../schema/room.yaml#/Room"
-          polls:
-            type: array
-            items:
-              $ref: "../../schema/poll.yaml#/Poll"
-          events:
-            type: array
-            items:
-              $ref: "../../schema/event.yaml#/Event"
-          products:
-            type: array
-            items:
-              $ref: "../../schema/product.yaml#/Product"
+        $ref: "#/post-payload"
 
 post-webhook-response:
   description: Post Information
@@ -140,83 +143,21 @@ root-get-response-200:
   content:
     application/json:
       schema:
-        type: object
-        properties:
-          posts:
-            type: array
-            items:
-              $ref: "../../schema/post.yaml#/Post"
-          postChildren:
-            type: array
-            items:
-              $ref: "../../schema/post.yaml#/Post"
-          comments:
-            type: array
-            items:
-              $ref: "../../schema/comment.yaml#/Comment"
-          users:
-            type: array
-            items:
-              $ref: "../../schema/user.yaml#/UserV3"
-          roles:
-            type: array
-            items:
-              $ref: "../../schema/role.yaml#/RoleV3"
-          files:
-            type: array
-            items:
-              $ref: "../../schema/file.yaml#/File"
-          communities:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/Community"
-          communityUsers:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/CommunityUser"
-          categories:
-            type: array
-            items:
-              $ref: "../../schema/community.yaml#/CommunityCategory"
-          feeds:
-            type: array
-            items:
-              $ref: "../../schema/feed.yaml#/Feed"
-          videoStreamings:
-            type: array
-            items:
-              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-          videoStreamingChildren:
-            type: array
-            items:
-              $ref: "../../schema/video-streaming.yml#/VideoStreaming"
-          rooms: 
-            type: array
-            items:
-              $ref: "../../schema/room.yaml#/Room"
-          roomChildrens:
-            type: array
-            items:
-              $ref: "../../schema/room.yaml#/Room"
-          polls:
-            type: array
-            items:
-              $ref: "../../schema/poll.yaml#/Poll"
-          events:
-            type: array
-            items:
-              $ref: "../../schema/event.yaml#/Event"
-          products:
-            type: array
-            items:
-              $ref: "../../schema/product.yaml#/Product"
-          paging:
-            type: object
+        allOf:
+          - $ref: "#/post-payload"
+          - type: object
             properties:
-              next:
-                type: string
-              previous:
-                type: string
+              roles:
+                type: array
+                items:
+                  $ref: "../../schema/role.yaml#/RoleV3"
+              paging:
+                type: object
+                properties:
+                  next:
+                    type: string
+                  previous:
+                    type: string
 
 post-with-flag-webhook-response:
   description: Post Information

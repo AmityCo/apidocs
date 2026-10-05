@@ -1,4 +1,4 @@
-records-put-request-payload:
+blacklist-records-put-request-payload:
   description: >
     Rules information to be refreshed. Replaces every rule of the given
     category with the list sent.
@@ -14,15 +14,7 @@ records-put-request-payload:
             items:
               type: "string"
           category:
-            type: "string"
-            enum:
-              - "content"
-              - "user"
-            default: "content"
-            description: >
-              Which rule set the words belong to. `content` rules are matched
-              against user-generated content, `user` rules are matched against
-              user profile fields.
+            $ref: "../../schema/moderation.yaml#/RuleCategory"
         required:
           - "regexs"
 
@@ -41,7 +33,7 @@ whitelist-records-put-request-payload:
         required:
           - "regexs"
 
-records-post-request-payload:
+blacklist-records-post-request-payload:
   description: "Rules information to be added.\n"
   required: true
   content:
@@ -58,15 +50,7 @@ records-post-request-payload:
           isMatchExactWord:
             type: "boolean"
           category:
-            type: "string"
-            enum:
-              - "content"
-              - "user"
-            default: "content"
-            description: >
-              Which rule set the words belong to. `content` rules are matched
-              against user-generated content, `user` rules are matched against
-              user profile fields.
+            $ref: "../../schema/moderation.yaml#/RuleCategory"
         required:
           - "regexs"
 

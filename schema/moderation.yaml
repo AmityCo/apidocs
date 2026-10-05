@@ -9,15 +9,7 @@ BlacklistRule:
     isMatchExactWord:
       type: "boolean"
     category:
-      type: "string"
-      enum:
-        - "content"
-        - "user"
-      default: "content"
-      description: >
-        Which rule set the word belongs to. `content` rules are matched against
-        user-generated content, `user` rules are matched against user profile
-        fields. A word may exist once per category.
+      $ref: "#/RuleCategory"
     isEnabled:
       type: "boolean"
       description: "A flag to enabled a rule."
@@ -94,3 +86,14 @@ ModerationSetting:
       type: "string"
       description: "The date/time when a rule is updated or deleted."
       format: "date-time"
+
+RuleCategory:
+  type: "string"
+  enum:
+    - "content"
+    - "user"
+  default: "content"
+  description: >
+    Which rule set a blacklist word belongs to. `content` rules are matched
+    against user-generated content, `user` rules are matched against user
+    profile fields. A word may exist once per category.

@@ -1103,3 +1103,11 @@ CreatePost:
       example: "507f1f77bcf86cd799439011"
   required:
     - "data"
+
+CustomPostDataType:
+  type: "string"
+  maxLength: 100
+  # Unanchored on purpose: core's CUSTOM_POST_TYPE_PATTERN is /(\w+\.)+\w+/, so any value containing a dotted segment passes.
+  pattern: '(\w+\.)+\w+'
+  example: "upstra.customtype"
+  description: 'custom post type - must be in namespace like format (ex. "upstra.customtype", "com.eko.birthday")'
