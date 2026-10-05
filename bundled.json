@@ -159860,7 +159860,8 @@
             "schema": {
               "type": "string",
               "maxLength": 900
-            }
+            },
+            "description": "Required for non-admin users when `targetType` is `user` or `community`. Must not be set when `targetType` is `all`."
           },
           {
             "name": "targetType",
@@ -159871,9 +159872,11 @@
               "enum": [
                 "community",
                 "user",
-                "content"
+                "content",
+                "all"
               ]
-            }
+            },
+            "description": "`all` queries across all targets and cannot be combined with `targetId`. It is restricted for non-admin users."
           },
           {
             "name": "sortBy",
@@ -159894,7 +159897,8 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "maxLength": 900
+              "maxLength": 100,
+              "pattern": "(\\w+\\.)+\\w+"
             },
             "example": "upstra.customtype",
             "description": "must be in namespace like format (ex. \"upstra.customtype\", \"com.eko.birthday\")",
@@ -159943,6 +159947,7 @@
             "description": "Child post data type to filter. Only applied if the option `matchingOnlyParentPost` is `false`. The value in array could be oneOf:\n  * `video`\n  * `image`\n  * `file`\n  * `liveStream`\n  * custom post type\n    * must be a string in namespace like format (ex. `upstra.customtype`, `com.eko.birthday`)\n",
             "schema": {
               "type": "array",
+              "minItems": 1,
               "maxItems": 10,
               "items": {
                 "oneOf": [
@@ -159958,6 +159963,8 @@
                   },
                   {
                     "type": "string",
+                    "maxLength": 100,
+                    "pattern": "(\\w+\\.)+\\w+",
                     "example": "upstra.customtype",
                     "description": "custom post type - must be in namespace like format (ex. \"upstra.customtype\", \"com.eko.birthday\")"
                   }
@@ -159986,6 +159993,20 @@
               "default": true
             },
             "description": "An option whether to filter only parent post or not. If `true` will return only parent posts, else will return both parent and child posts"
+          },
+          {
+            "name": "feedType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "reviewing",
+                "published",
+                "declined"
+              ],
+              "default": "published"
+            },
+            "description": "Feed type to filter. Only admins can query `reviewing` or `declined` posts across all targets."
           }
         ],
         "responses": {
@@ -162593,6 +162614,347 @@
                           "metadata": {
                             "type": "object",
                             "description": "Custom metadata"
+                          }
+                        }
+                      }
+                    },
+                    "polls": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "pollId": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "example": "64be1f6cb9b4106b5a6bbf3f"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "example": "User123"
+                          },
+                          "title": {
+                            "type": "string",
+                            "maxLength": 150,
+                            "description": "Poll title with maximum 150 characters"
+                          },
+                          "question": {
+                            "type": "string",
+                            "description": "question."
+                          },
+                          "answers": {
+                            "type": "array",
+                            "maxItems": 10,
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "dataType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "text",
+                                    "image"
+                                  ]
+                                },
+                                "data": {
+                                  "type": "string"
+                                },
+                                "fileId": {
+                                  "description": "image fileId, required only when dataType is image",
+                                  "type": "string"
+                                },
+                                "voteCount": {
+                                  "type": "number",
+                                  "default": 0
+                                },
+                                "isVotedByUser": {
+                                  "type": "boolean",
+                                  "default": false
+                                },
+                                "id": {
+                                  "type": "string",
+                                  "description": "Option id"
+                                }
+                              }
+                            }
+                          },
+                          "answerType": {
+                            "type": "string"
+                          },
+                          "closedAt": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "isVoted": {
+                            "type": "boolean",
+                            "default": false
+                          },
+                          "status": {
+                            "type": "string",
+                            "default": "open"
+                          },
+                          "closedIn": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
+                          }
+                        }
+                      }
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal MongoDB ID",
+                            "example": "64a1b2c3d4e5f6g7h8i9j0k1"
+                          },
+                          "productId": {
+                            "type": "string",
+                            "description": "Unique identifier for the product",
+                            "example": "prod-12345"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network ID the product belongs to",
+                            "example": "network-abc123"
+                          },
+                          "productName": {
+                            "type": "string",
+                            "description": "Name of the product",
+                            "example": "Premium Headphones"
+                          },
+                          "productUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product page",
+                            "example": "https://example.com/products/premium-headphones"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Product status",
+                            "enum": [
+                              "active",
+                              "archived"
+                            ],
+                            "example": "active"
+                          },
+                          "price": {
+                            "type": "number",
+                            "description": "Product price",
+                            "example": 99.99
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "ISO 4217 currency code",
+                            "example": "USD"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product thumbnail image",
+                            "example": "https://example.com/images/headphones-thumb.jpg"
+                          },
+                          "thumbnailMode": {
+                            "type": "string",
+                            "description": "How the thumbnail should be displayed",
+                            "enum": [
+                              "fit",
+                              "fill"
+                            ],
+                            "example": "fit"
+                          },
+                          "importSource": {
+                            "type": "string",
+                            "description": "How the product was imported",
+                            "enum": [
+                              "manual",
+                              "csv"
+                            ],
+                            "example": "manual"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "User ID who created the product",
+                            "example": "user-xyz789"
+                          },
+                          "updatedBy": {
+                            "type": "string",
+                            "description": "User ID who last updated the product",
+                            "example": "user-xyz789"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was created",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was last updated",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the product is deleted",
+                            "example": false
                           }
                         }
                       }
@@ -165543,6 +165905,261 @@
                           }
                         }
                       }
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
+                          }
+                        }
+                      }
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal MongoDB ID",
+                            "example": "64a1b2c3d4e5f6g7h8i9j0k1"
+                          },
+                          "productId": {
+                            "type": "string",
+                            "description": "Unique identifier for the product",
+                            "example": "prod-12345"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network ID the product belongs to",
+                            "example": "network-abc123"
+                          },
+                          "productName": {
+                            "type": "string",
+                            "description": "Name of the product",
+                            "example": "Premium Headphones"
+                          },
+                          "productUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product page",
+                            "example": "https://example.com/products/premium-headphones"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Product status",
+                            "enum": [
+                              "active",
+                              "archived"
+                            ],
+                            "example": "active"
+                          },
+                          "price": {
+                            "type": "number",
+                            "description": "Product price",
+                            "example": 99.99
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "ISO 4217 currency code",
+                            "example": "USD"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product thumbnail image",
+                            "example": "https://example.com/images/headphones-thumb.jpg"
+                          },
+                          "thumbnailMode": {
+                            "type": "string",
+                            "description": "How the thumbnail should be displayed",
+                            "enum": [
+                              "fit",
+                              "fill"
+                            ],
+                            "example": "fit"
+                          },
+                          "importSource": {
+                            "type": "string",
+                            "description": "How the product was imported",
+                            "enum": [
+                              "manual",
+                              "csv"
+                            ],
+                            "example": "manual"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "User ID who created the product",
+                            "example": "user-xyz789"
+                          },
+                          "updatedBy": {
+                            "type": "string",
+                            "description": "User ID who last updated the product",
+                            "example": "user-xyz789"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was created",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was last updated",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the product is deleted",
+                            "example": false
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -165705,6 +166322,36 @@
               "type": "string",
               "maxLength": 900
             }
+          },
+          {
+            "name": "postType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "post",
+                "story"
+              ],
+              "default": "post"
+            }
+          },
+          {
+            "name": "ignoreBlockList",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Return content from blocked users."
+          },
+          {
+            "name": "includeModerationDetails",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Include moderation details in the response."
           }
         ],
         "responses": {
@@ -168357,6 +169004,261 @@
                           },
                           "closedIn": {
                             "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
+                          }
+                        }
+                      }
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal MongoDB ID",
+                            "example": "64a1b2c3d4e5f6g7h8i9j0k1"
+                          },
+                          "productId": {
+                            "type": "string",
+                            "description": "Unique identifier for the product",
+                            "example": "prod-12345"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network ID the product belongs to",
+                            "example": "network-abc123"
+                          },
+                          "productName": {
+                            "type": "string",
+                            "description": "Name of the product",
+                            "example": "Premium Headphones"
+                          },
+                          "productUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product page",
+                            "example": "https://example.com/products/premium-headphones"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Product status",
+                            "enum": [
+                              "active",
+                              "archived"
+                            ],
+                            "example": "active"
+                          },
+                          "price": {
+                            "type": "number",
+                            "description": "Product price",
+                            "example": 99.99
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "ISO 4217 currency code",
+                            "example": "USD"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product thumbnail image",
+                            "example": "https://example.com/images/headphones-thumb.jpg"
+                          },
+                          "thumbnailMode": {
+                            "type": "string",
+                            "description": "How the thumbnail should be displayed",
+                            "enum": [
+                              "fit",
+                              "fill"
+                            ],
+                            "example": "fit"
+                          },
+                          "importSource": {
+                            "type": "string",
+                            "description": "How the product was imported",
+                            "enum": [
+                              "manual",
+                              "csv"
+                            ],
+                            "example": "manual"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "User ID who created the product",
+                            "example": "user-xyz789"
+                          },
+                          "updatedBy": {
+                            "type": "string",
+                            "description": "User ID who last updated the product",
+                            "example": "user-xyz789"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was created",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was last updated",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the product is deleted",
+                            "example": false
                           }
                         }
                       }
@@ -171288,6 +172190,261 @@
                           },
                           "closedIn": {
                             "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
+                          }
+                        }
+                      }
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal MongoDB ID",
+                            "example": "64a1b2c3d4e5f6g7h8i9j0k1"
+                          },
+                          "productId": {
+                            "type": "string",
+                            "description": "Unique identifier for the product",
+                            "example": "prod-12345"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network ID the product belongs to",
+                            "example": "network-abc123"
+                          },
+                          "productName": {
+                            "type": "string",
+                            "description": "Name of the product",
+                            "example": "Premium Headphones"
+                          },
+                          "productUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product page",
+                            "example": "https://example.com/products/premium-headphones"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Product status",
+                            "enum": [
+                              "active",
+                              "archived"
+                            ],
+                            "example": "active"
+                          },
+                          "price": {
+                            "type": "number",
+                            "description": "Product price",
+                            "example": 99.99
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "ISO 4217 currency code",
+                            "example": "USD"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product thumbnail image",
+                            "example": "https://example.com/images/headphones-thumb.jpg"
+                          },
+                          "thumbnailMode": {
+                            "type": "string",
+                            "description": "How the thumbnail should be displayed",
+                            "enum": [
+                              "fit",
+                              "fill"
+                            ],
+                            "example": "fit"
+                          },
+                          "importSource": {
+                            "type": "string",
+                            "description": "How the product was imported",
+                            "enum": [
+                              "manual",
+                              "csv"
+                            ],
+                            "example": "manual"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "User ID who created the product",
+                            "example": "user-xyz789"
+                          },
+                          "updatedBy": {
+                            "type": "string",
+                            "description": "User ID who last updated the product",
+                            "example": "user-xyz789"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was created",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was last updated",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the product is deleted",
+                            "example": false
                           }
                         }
                       }
@@ -174245,6 +175402,261 @@
                           }
                         }
                       }
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
+                          }
+                        }
+                      }
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal MongoDB ID",
+                            "example": "64a1b2c3d4e5f6g7h8i9j0k1"
+                          },
+                          "productId": {
+                            "type": "string",
+                            "description": "Unique identifier for the product",
+                            "example": "prod-12345"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network ID the product belongs to",
+                            "example": "network-abc123"
+                          },
+                          "productName": {
+                            "type": "string",
+                            "description": "Name of the product",
+                            "example": "Premium Headphones"
+                          },
+                          "productUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product page",
+                            "example": "https://example.com/products/premium-headphones"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Product status",
+                            "enum": [
+                              "active",
+                              "archived"
+                            ],
+                            "example": "active"
+                          },
+                          "price": {
+                            "type": "number",
+                            "description": "Product price",
+                            "example": 99.99
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "ISO 4217 currency code",
+                            "example": "USD"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product thumbnail image",
+                            "example": "https://example.com/images/headphones-thumb.jpg"
+                          },
+                          "thumbnailMode": {
+                            "type": "string",
+                            "description": "How the thumbnail should be displayed",
+                            "enum": [
+                              "fit",
+                              "fill"
+                            ],
+                            "example": "fit"
+                          },
+                          "importSource": {
+                            "type": "string",
+                            "description": "How the product was imported",
+                            "enum": [
+                              "manual",
+                              "csv"
+                            ],
+                            "example": "manual"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "User ID who created the product",
+                            "example": "user-xyz789"
+                          },
+                          "updatedBy": {
+                            "type": "string",
+                            "description": "User ID who last updated the product",
+                            "example": "user-xyz789"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was created",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was last updated",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the product is deleted",
+                            "example": false
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -177104,6 +178516,261 @@
                           },
                           "closedIn": {
                             "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
+                          }
+                        }
+                      }
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal MongoDB ID",
+                            "example": "64a1b2c3d4e5f6g7h8i9j0k1"
+                          },
+                          "productId": {
+                            "type": "string",
+                            "description": "Unique identifier for the product",
+                            "example": "prod-12345"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network ID the product belongs to",
+                            "example": "network-abc123"
+                          },
+                          "productName": {
+                            "type": "string",
+                            "description": "Name of the product",
+                            "example": "Premium Headphones"
+                          },
+                          "productUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product page",
+                            "example": "https://example.com/products/premium-headphones"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Product status",
+                            "enum": [
+                              "active",
+                              "archived"
+                            ],
+                            "example": "active"
+                          },
+                          "price": {
+                            "type": "number",
+                            "description": "Product price",
+                            "example": 99.99
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "ISO 4217 currency code",
+                            "example": "USD"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product thumbnail image",
+                            "example": "https://example.com/images/headphones-thumb.jpg"
+                          },
+                          "thumbnailMode": {
+                            "type": "string",
+                            "description": "How the thumbnail should be displayed",
+                            "enum": [
+                              "fit",
+                              "fill"
+                            ],
+                            "example": "fit"
+                          },
+                          "importSource": {
+                            "type": "string",
+                            "description": "How the product was imported",
+                            "enum": [
+                              "manual",
+                              "csv"
+                            ],
+                            "example": "manual"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "User ID who created the product",
+                            "example": "user-xyz789"
+                          },
+                          "updatedBy": {
+                            "type": "string",
+                            "description": "User ID who last updated the product",
+                            "example": "user-xyz789"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was created",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was last updated",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the product is deleted",
+                            "example": false
                           }
                         }
                       }
@@ -179988,6 +181655,261 @@
                           },
                           "closedIn": {
                             "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
+                          }
+                        }
+                      }
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal MongoDB ID",
+                            "example": "64a1b2c3d4e5f6g7h8i9j0k1"
+                          },
+                          "productId": {
+                            "type": "string",
+                            "description": "Unique identifier for the product",
+                            "example": "prod-12345"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network ID the product belongs to",
+                            "example": "network-abc123"
+                          },
+                          "productName": {
+                            "type": "string",
+                            "description": "Name of the product",
+                            "example": "Premium Headphones"
+                          },
+                          "productUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product page",
+                            "example": "https://example.com/products/premium-headphones"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Product status",
+                            "enum": [
+                              "active",
+                              "archived"
+                            ],
+                            "example": "active"
+                          },
+                          "price": {
+                            "type": "number",
+                            "description": "Product price",
+                            "example": 99.99
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "ISO 4217 currency code",
+                            "example": "USD"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product thumbnail image",
+                            "example": "https://example.com/images/headphones-thumb.jpg"
+                          },
+                          "thumbnailMode": {
+                            "type": "string",
+                            "description": "How the thumbnail should be displayed",
+                            "enum": [
+                              "fit",
+                              "fill"
+                            ],
+                            "example": "fit"
+                          },
+                          "importSource": {
+                            "type": "string",
+                            "description": "How the product was imported",
+                            "enum": [
+                              "manual",
+                              "csv"
+                            ],
+                            "example": "manual"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "User ID who created the product",
+                            "example": "user-xyz789"
+                          },
+                          "updatedBy": {
+                            "type": "string",
+                            "description": "User ID who last updated the product",
+                            "example": "user-xyz789"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was created",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was last updated",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the product is deleted",
+                            "example": false
                           }
                         }
                       }
@@ -182901,6 +184823,261 @@
                           }
                         }
                       }
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
+                          }
+                        }
+                      }
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal MongoDB ID",
+                            "example": "64a1b2c3d4e5f6g7h8i9j0k1"
+                          },
+                          "productId": {
+                            "type": "string",
+                            "description": "Unique identifier for the product",
+                            "example": "prod-12345"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network ID the product belongs to",
+                            "example": "network-abc123"
+                          },
+                          "productName": {
+                            "type": "string",
+                            "description": "Name of the product",
+                            "example": "Premium Headphones"
+                          },
+                          "productUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product page",
+                            "example": "https://example.com/products/premium-headphones"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Product status",
+                            "enum": [
+                              "active",
+                              "archived"
+                            ],
+                            "example": "active"
+                          },
+                          "price": {
+                            "type": "number",
+                            "description": "Product price",
+                            "example": 99.99
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "ISO 4217 currency code",
+                            "example": "USD"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product thumbnail image",
+                            "example": "https://example.com/images/headphones-thumb.jpg"
+                          },
+                          "thumbnailMode": {
+                            "type": "string",
+                            "description": "How the thumbnail should be displayed",
+                            "enum": [
+                              "fit",
+                              "fill"
+                            ],
+                            "example": "fit"
+                          },
+                          "importSource": {
+                            "type": "string",
+                            "description": "How the product was imported",
+                            "enum": [
+                              "manual",
+                              "csv"
+                            ],
+                            "example": "manual"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "User ID who created the product",
+                            "example": "user-xyz789"
+                          },
+                          "updatedBy": {
+                            "type": "string",
+                            "description": "User ID who last updated the product",
+                            "example": "user-xyz789"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was created",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was last updated",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the product is deleted",
+                            "example": false
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -183019,9 +185196,28 @@
               "maxItems": 100,
               "items": {
                 "type": "string",
-                "maxLength": 50
+                "maxLength": 128
               }
-            }
+            },
+            "required": true
+          },
+          {
+            "name": "ignoreBlockList",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Return content from blocked users."
+          },
+          {
+            "name": "includeModerationDetails",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Include moderation details in the response."
           }
         ],
         "responses": {
@@ -185674,6 +187870,261 @@
                           },
                           "closedIn": {
                             "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
+                          }
+                        }
+                      }
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal MongoDB ID",
+                            "example": "64a1b2c3d4e5f6g7h8i9j0k1"
+                          },
+                          "productId": {
+                            "type": "string",
+                            "description": "Unique identifier for the product",
+                            "example": "prod-12345"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network ID the product belongs to",
+                            "example": "network-abc123"
+                          },
+                          "productName": {
+                            "type": "string",
+                            "description": "Name of the product",
+                            "example": "Premium Headphones"
+                          },
+                          "productUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product page",
+                            "example": "https://example.com/products/premium-headphones"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Product status",
+                            "enum": [
+                              "active",
+                              "archived"
+                            ],
+                            "example": "active"
+                          },
+                          "price": {
+                            "type": "number",
+                            "description": "Product price",
+                            "example": 99.99
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "ISO 4217 currency code",
+                            "example": "USD"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product thumbnail image",
+                            "example": "https://example.com/images/headphones-thumb.jpg"
+                          },
+                          "thumbnailMode": {
+                            "type": "string",
+                            "description": "How the thumbnail should be displayed",
+                            "enum": [
+                              "fit",
+                              "fill"
+                            ],
+                            "example": "fit"
+                          },
+                          "importSource": {
+                            "type": "string",
+                            "description": "How the product was imported",
+                            "enum": [
+                              "manual",
+                              "csv"
+                            ],
+                            "example": "manual"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "User ID who created the product",
+                            "example": "user-xyz789"
+                          },
+                          "updatedBy": {
+                            "type": "string",
+                            "description": "User ID who last updated the product",
+                            "example": "user-xyz789"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was created",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was last updated",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the product is deleted",
+                            "example": false
                           }
                         }
                       }
@@ -188534,6 +190985,261 @@
                           },
                           "closedIn": {
                             "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "eventId": {
+                            "type": "string",
+                            "description": "Unique identifier for the event"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "Public user ID of the event creator"
+                          },
+                          "userInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the event creator"
+                          },
+                          "userPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the event creator"
+                          },
+                          "publisherId": {
+                            "type": "string",
+                            "description": "Public user ID the event was published on behalf of (impersonation). Absent otherwise."
+                          },
+                          "publisherInternalId": {
+                            "type": "string",
+                            "description": "Internal user ID of the publisher"
+                          },
+                          "publisherPublicId": {
+                            "type": "string",
+                            "description": "Public (customer-facing) user ID of the publisher"
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Event title",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Event description",
+                            "maxLength": 1000
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "virtual",
+                              "in_person"
+                            ],
+                            "description": "Event type (virtual or in-person)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "scheduled",
+                              "live",
+                              "ended",
+                              "cancelled"
+                            ],
+                            "description": "Current status of the event"
+                          },
+                          "startTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event start time (ISO 8601 format)"
+                          },
+                          "endTime": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event end time (ISO 8601 format)"
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "Physical location address (for in-person events)",
+                            "maxLength": 200
+                          },
+                          "externalUrl": {
+                            "type": "string",
+                            "description": "External URL for virtual events (e.g., Zoom, Teams)"
+                          },
+                          "coverImageFileId": {
+                            "type": "string",
+                            "description": "File ID of the cover image"
+                          },
+                          "originId": {
+                            "type": "string",
+                            "description": "ID of the origin (community ID, or user ID when `originType` is `user`)"
+                          },
+                          "originType": {
+                            "type": "string",
+                            "enum": [
+                              "community",
+                              "user"
+                            ],
+                            "description": "Origin type of the event"
+                          },
+                          "discussionCommunityId": {
+                            "type": "string",
+                            "description": "ID of the event discussion community"
+                          },
+                          "postId": {
+                            "type": "string",
+                            "description": "ID of the livestream post backing a `virtual` event. Absent for `in_person` events."
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "Hierarchy path of the event"
+                          },
+                          "isOriginPublic": {
+                            "type": "boolean",
+                            "description": "Whether the origin community is public"
+                          },
+                          "rsvpCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'going'"
+                          },
+                          "interestedCount": {
+                            "type": "integer",
+                            "description": "Number of users who RSVP'd as 'interested'"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 100
+                            },
+                            "description": "Event tags for categorization",
+                            "maxItems": 10
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the event is deleted"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event creation timestamp"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Event last update timestamp"
+                          }
+                        }
+                      }
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "description": "Internal MongoDB ID",
+                            "example": "64a1b2c3d4e5f6g7h8i9j0k1"
+                          },
+                          "productId": {
+                            "type": "string",
+                            "description": "Unique identifier for the product",
+                            "example": "prod-12345"
+                          },
+                          "networkId": {
+                            "type": "string",
+                            "description": "Network ID the product belongs to",
+                            "example": "network-abc123"
+                          },
+                          "productName": {
+                            "type": "string",
+                            "description": "Name of the product",
+                            "example": "Premium Headphones"
+                          },
+                          "productUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product page",
+                            "example": "https://example.com/products/premium-headphones"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "Product status",
+                            "enum": [
+                              "active",
+                              "archived"
+                            ],
+                            "example": "active"
+                          },
+                          "price": {
+                            "type": "number",
+                            "description": "Product price",
+                            "example": 99.99
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "ISO 4217 currency code",
+                            "example": "USD"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the product thumbnail image",
+                            "example": "https://example.com/images/headphones-thumb.jpg"
+                          },
+                          "thumbnailMode": {
+                            "type": "string",
+                            "description": "How the thumbnail should be displayed",
+                            "enum": [
+                              "fit",
+                              "fill"
+                            ],
+                            "example": "fit"
+                          },
+                          "importSource": {
+                            "type": "string",
+                            "description": "How the product was imported",
+                            "enum": [
+                              "manual",
+                              "csv"
+                            ],
+                            "example": "manual"
+                          },
+                          "createdBy": {
+                            "type": "string",
+                            "description": "User ID who created the product",
+                            "example": "user-xyz789"
+                          },
+                          "updatedBy": {
+                            "type": "string",
+                            "description": "User ID who last updated the product",
+                            "example": "user-xyz789"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was created",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the product was last updated",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "isDeleted": {
+                            "type": "boolean",
+                            "description": "Whether the product is deleted",
+                            "example": false
                           }
                         }
                       }
