@@ -163029,6 +163029,50 @@
               }
             }
           },
+          "403": {
+            "description": "Permission denied.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400301,
+                  "message": "Permission denied"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Resource Not Found error.",
             "content": {
@@ -166353,7 +166397,7 @@
               "type": "boolean",
               "default": false
             },
-            "description": "Return content from blocked users."
+            "description": "Admin only. Returns content from blocked users. On `GET /api/v3/posts/{postId}` a non-admin caller gets 403; on `GET /api/v3/posts/list` it is ignored for non-admin callers."
           },
           {
             "name": "includeModerationDetails",
@@ -166362,7 +166406,7 @@
               "type": "boolean",
               "default": false
             },
-            "description": "Include moderation details in the response."
+            "description": "Admin only. Includes moderation details (flags, review and hide records) in the response. Non-admin callers get 403."
           }
         ],
         "responses": {
@@ -169319,6 +169363,50 @@
                   "status": "error",
                   "code": 400000,
                   "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission denied.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400301,
+                  "message": "Permission denied"
                 }
               }
             }
@@ -185219,7 +185307,7 @@
               "type": "boolean",
               "default": false
             },
-            "description": "Return content from blocked users."
+            "description": "Admin only. Returns content from blocked users. On `GET /api/v3/posts/{postId}` a non-admin caller gets 403; on `GET /api/v3/posts/list` it is ignored for non-admin callers."
           },
           {
             "name": "includeModerationDetails",
@@ -185228,7 +185316,7 @@
               "type": "boolean",
               "default": false
             },
-            "description": "Include moderation details in the response."
+            "description": "Admin only. Includes moderation details (flags, review and hide records) in the response. Non-admin callers get 403."
           }
         ],
         "responses": {
@@ -188185,6 +188273,50 @@
                   "status": "error",
                   "code": 400000,
                   "message": "Bad Request."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission denied.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400301,
+                  "message": "Permission denied"
                 }
               }
             }
