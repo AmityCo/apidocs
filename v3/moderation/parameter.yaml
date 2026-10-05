@@ -3,6 +3,7 @@ regex:
   in: "query"
   schema:
     type: "string"
+    maxLength: 100
   description: "search keyword from start"
 
 sortBy:
@@ -13,6 +14,7 @@ sortBy:
     enum:
       - "firstCreated"
       - "lastCreated"
+    default: "lastCreated"
 
 options:
   name: "options"
@@ -23,14 +25,17 @@ options:
     type: "object"
     properties:
       after:
-        type: "number"
+        type: "string"
+        maxLength: 24
       before:
-        type: "number"
+        type: "string"
+        maxLength: 24
       limit:
         type: "number"
         description: "limit amount of result"
       token:
         type: "string"
+        maxLength: 1000
         description: "pagination token"
 
 authorization:

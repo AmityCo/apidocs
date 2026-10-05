@@ -17,6 +17,7 @@ root:
       - $ref: "./parameter.yaml#/dataTypes"
       - $ref: "./parameter.yaml#/tags"
       - $ref: "./parameter.yaml#/matchingOnlyParentPost"
+      - $ref: "./parameter.yaml#/feedType"
     responses:
       200:
         $ref: "./response.yaml#/root-get-response-200"
@@ -57,6 +58,9 @@ _postId:
     description: "Get a post by ID\n"
     parameters:
       - $ref: "./parameter.yaml#/_postId"
+      - $ref: "./parameter.yaml#/postType"
+      - $ref: "./parameter.yaml#/ignoreBlockList"
+      - $ref: "./parameter.yaml#/includeModerationDetails"
     responses:
       200:
         $ref: "./response.yaml#/common-response-200"
@@ -228,6 +232,8 @@ list:
     description: "Get list of post\n"
     parameters:
       - $ref: "./parameter.yaml#/postIds"
+      - $ref: "./parameter.yaml#/ignoreBlockList"
+      - $ref: "./parameter.yaml#/includeModerationDetails"
     responses:
       200:
         $ref: "./response.yaml#/common-response-200"
