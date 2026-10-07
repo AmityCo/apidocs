@@ -2,12 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
-## [4.122.0] - 2026-09-30
+## [4.123.0] - 2026-10-07
+
+### 🐛 Bug Fixes
+
+- *(post)* Document includeModerationDetails as admin-only on v3 post reads (#518)
+
+## [4.122.0] - 2026-10-05
 
 ### 🚀 Features
 
 - *(user)* Document GET /api/v4/users/{userId}/isFlagByMe (#513)
 - Document GET /api/v5/curated-content/pool (#512)
+- *(user)* Document reportType on DELETE /api/v4/me/flags/{userId} (#515)
+- Document GET /api/v1/feeds/for-you (#516)
+
+### 🐛 Bug Fixes
+
+- Correct moderation blacklist/whitelist and v3 post docs to match core (#517)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.122.0 (#514)
 
 ## [4.121.0] - 2026-09-18
 
