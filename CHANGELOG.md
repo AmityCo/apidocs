@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.123.1] - 2026-10-09
+
+### 🚀 Features
+
+- Document sortBy=lastMessage and lastMessageAt on channels (#510)
+
 ## [4.123.0] - 2026-10-07
 
 ### 🐛 Bug Fixes
 
 - *(post)* Document includeModerationDetails as admin-only on v3 post reads (#518)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.123.0 (#519)
 
 ## [4.122.0] - 2026-10-05
 
