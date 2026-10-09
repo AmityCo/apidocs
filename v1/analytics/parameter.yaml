@@ -32,3 +32,58 @@ limit:
     type: number
     default: 10
     description: number of user in a page
+
+contentIds:
+  name: contentIds
+  in: query
+  required: false
+  schema:
+    type: array
+    items:
+      type: string
+      pattern: '^[a-f\d]{24}$'
+    minItems: 1
+    maxItems: 100
+  description: Array of content IDs to retrieve quality scores for. Cannot be used with `levels` or pagination options.
+  example: ["60e4b1b4b3b2b5c4c4b3b2b5", "60e4b1b4b3b2b5c4c4b3b2b6"]
+
+contentsType:
+  name: contentsType
+  in: query
+  required: false
+  schema:
+    type: string
+    enum: [post.text]
+    default: post.text
+  description: Type of content to query. Currently only supports post.text
+
+levels:
+  name: levels
+  in: query
+  required: false
+  schema:
+    type: array
+    items:
+      type: string
+      enum: [excellent, good, fair, weak, broken]
+    minItems: 1
+    maxItems: 5
+  description: |
+    Filter contents by quality level. Quality levels map to score ranges:
+    - excellent: score >= 5
+    - good: 4 <= score < 5
+    - fair: 3 <= score < 4
+    - weak: 2 <= score < 3
+    - broken: 1 <= score < 2
+  example: ["excellent", "good"]
+
+contentsQualityLimit:
+  name: limit
+  in: query
+  required: false
+  schema:
+    type: number
+    minimum: 1
+    maximum: 100
+    default: 10
+  description: Number of contents per page. Only used with `levels` parameter.
