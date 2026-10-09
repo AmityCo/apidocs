@@ -84,6 +84,11 @@ ChannelV1:
       type: string
       description: The date/time when a user last did something related to the channel such as add/remove members .
       format: date-time
+    lastMessageAt:
+      type: string
+      nullable: true
+      description: The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.
+      format: date-time
     createdAt:
       type: string
       description: The date/time when a channel is created.
@@ -198,6 +203,11 @@ ChannelV3:
     lastActivity:
       type: string
       description: The date/time when a user last did something related to the channel such as add/remove members .
+      format: date-time
+    lastMessageAt:
+      type: string
+      nullable: true
+      description: The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.
       format: date-time
     createdAt:
       type: string

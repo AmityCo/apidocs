@@ -118,10 +118,19 @@ sortBy:
     type: "string"
     enum:
       - "lastActivity"
+      - "lastMessage"
       - "lastCreated"
       - "firstCreated"
       - "displayName"
     default: "lastActivity"
+  description: |
+    Order of the returned channels, newest first for the time-based values.
+      * `lastActivity` (default) - by `lastActivity`: moves on new messages and on member changes (add, remove, ban) and channel close.
+      * `lastMessage` - by `lastMessageAt`: moves on new messages only; member changes do not affect it. A channel with no messages sorts by its creation time.
+      * `lastCreated` / `firstCreated` - by creation time.
+      * `displayName` - alphabetical.
+
+    `lastMessage` is being rolled out per environment. Where it is not available yet, it answers `422` with code `500000`.
 
 users-sortBy:
   name: "sortBy"

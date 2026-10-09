@@ -2886,6 +2886,12 @@
                                 "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                 "format": "date-time"
                               },
+                              "lastMessageAt": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                "format": "date-time"
+                              },
                               "createdAt": {
                                 "type": "string",
                                 "description": "The date/time when a channel is created.",
@@ -4138,6 +4144,12 @@
                                 "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                 "format": "date-time"
                               },
+                              "lastMessageAt": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                "format": "date-time"
+                              },
                               "createdAt": {
                                 "type": "string",
                                 "description": "The date/time when a channel is created.",
@@ -4976,12 +4988,14 @@
               "type": "string",
               "enum": [
                 "lastActivity",
+                "lastMessage",
                 "lastCreated",
                 "firstCreated",
                 "displayName"
               ],
               "default": "lastActivity"
-            }
+            },
+            "description": "Order of the returned channels, newest first for the time-based values.\n  * `lastActivity` (default) - by `lastActivity`: moves on new messages and on member changes (add, remove, ban) and channel close.\n  * `lastMessage` - by `lastMessageAt`: moves on new messages only; member changes do not affect it. A channel with no messages sorts by its creation time.\n  * `lastCreated` / `firstCreated` - by creation time.\n  * `displayName` - alphabetical.\n\n`lastMessage` is being rolled out per environment. Where it is not available yet, it answers `422` with code `500000`.\n"
           },
           {
             "name": "options",
@@ -5107,6 +5121,12 @@
                           "lastActivity": {
                             "type": "string",
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                            "format": "date-time"
+                          },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                             "format": "date-time"
                           },
                           "createdAt": {
@@ -5815,6 +5835,55 @@
               }
             }
           },
+          "422": {
+            "description": "Put a wrong request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters error.",
+                  "data": {
+                    "detail": [
+                      "The 'data.text' field length must be less than or equal to 20000 characters long."
+                    ]
+                  }
+                }
+              }
+            }
+          },
           "429": {
             "description": "Error due to a client create the same request with the same parameters exceed the number of time that server limit to.",
             "content": {
@@ -6117,6 +6186,12 @@
                           "lastActivity": {
                             "type": "string",
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                            "format": "date-time"
+                          },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                             "format": "date-time"
                           },
                           "createdAt": {
@@ -7213,6 +7288,12 @@
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                             "format": "date-time"
                           },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                            "format": "date-time"
+                          },
                           "createdAt": {
                             "type": "string",
                             "description": "The date/time when a channel is created.",
@@ -8127,6 +8208,12 @@
                           "lastActivity": {
                             "type": "string",
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                            "format": "date-time"
+                          },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                             "format": "date-time"
                           },
                           "createdAt": {
@@ -9245,6 +9332,12 @@
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                             "format": "date-time"
                           },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                            "format": "date-time"
+                          },
                           "createdAt": {
                             "type": "string",
                             "description": "The date/time when a channel is created.",
@@ -10145,6 +10238,12 @@
                           "lastActivity": {
                             "type": "string",
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                            "format": "date-time"
+                          },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                             "format": "date-time"
                           },
                           "createdAt": {
@@ -11325,6 +11424,12 @@
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                             "format": "date-time"
                           },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                            "format": "date-time"
+                          },
                           "createdAt": {
                             "type": "string",
                             "description": "The date/time when a channel is created.",
@@ -12272,6 +12377,12 @@
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                             "format": "date-time"
                           },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                            "format": "date-time"
+                          },
                           "createdAt": {
                             "type": "string",
                             "description": "The date/time when a channel is created.",
@@ -13185,6 +13296,12 @@
                           "lastActivity": {
                             "type": "string",
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                            "format": "date-time"
+                          },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                             "format": "date-time"
                           },
                           "createdAt": {
@@ -14115,6 +14232,12 @@
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                             "format": "date-time"
                           },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                            "format": "date-time"
+                          },
                           "createdAt": {
                             "type": "string",
                             "description": "The date/time when a channel is created.",
@@ -15041,6 +15164,12 @@
                           "lastActivity": {
                             "type": "string",
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                            "format": "date-time"
+                          },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                             "format": "date-time"
                           },
                           "createdAt": {
@@ -15976,6 +16105,12 @@
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                             "format": "date-time"
                           },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                            "format": "date-time"
+                          },
                           "createdAt": {
                             "type": "string",
                             "description": "The date/time when a channel is created.",
@@ -16891,6 +17026,12 @@
                           "lastActivity": {
                             "type": "string",
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                            "format": "date-time"
+                          },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                             "format": "date-time"
                           },
                           "createdAt": {
@@ -17824,6 +17965,12 @@
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                             "format": "date-time"
                           },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                            "format": "date-time"
+                          },
                           "createdAt": {
                             "type": "string",
                             "description": "The date/time when a channel is created.",
@@ -18722,6 +18869,12 @@
                           "lastActivity": {
                             "type": "string",
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                            "format": "date-time"
+                          },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                             "format": "date-time"
                           },
                           "createdAt": {
@@ -19720,6 +19873,12 @@
                           "lastActivity": {
                             "type": "string",
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                            "format": "date-time"
+                          },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                             "format": "date-time"
                           },
                           "createdAt": {
@@ -131381,6 +131540,12 @@
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                             "format": "date-time"
                           },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                            "format": "date-time"
+                          },
                           "createdAt": {
                             "type": "string",
                             "description": "The date/time when a channel is created.",
@@ -132295,6 +132460,12 @@
                           "lastActivity": {
                             "type": "string",
                             "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                            "format": "date-time"
+                          },
+                          "lastMessageAt": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                             "format": "date-time"
                           },
                           "createdAt": {
@@ -253282,6 +253453,12 @@
                                 "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                 "format": "date-time"
                               },
+                              "lastMessageAt": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                "format": "date-time"
+                              },
                               "createdAt": {
                                 "type": "string",
                                 "description": "The date/time when a channel is created.",
@@ -253589,6 +253766,12 @@
                               "lastActivity": {
                                 "type": "string",
                                 "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                                "format": "date-time"
+                              },
+                              "lastMessageAt": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                                 "format": "date-time"
                               },
                               "createdAt": {
@@ -253900,6 +254083,12 @@
                                 "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                 "format": "date-time"
                               },
+                              "lastMessageAt": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                "format": "date-time"
+                              },
                               "createdAt": {
                                 "type": "string",
                                 "description": "The date/time when a channel is created.",
@@ -254131,6 +254320,12 @@
                               "lastActivity": {
                                 "type": "string",
                                 "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                                "format": "date-time"
+                              },
+                              "lastMessageAt": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                                 "format": "date-time"
                               },
                               "createdAt": {
@@ -254439,6 +254634,12 @@
                                 "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                 "format": "date-time"
                               },
+                              "lastMessageAt": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                "format": "date-time"
+                              },
                               "createdAt": {
                                 "type": "string",
                                 "description": "The date/time when a channel is created.",
@@ -254745,6 +254946,12 @@
                                 "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                 "format": "date-time"
                               },
+                              "lastMessageAt": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                "format": "date-time"
+                              },
                               "createdAt": {
                                 "type": "string",
                                 "description": "The date/time when a channel is created.",
@@ -255049,6 +255256,12 @@
                               "lastActivity": {
                                 "type": "string",
                                 "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                                "format": "date-time"
+                              },
+                              "lastMessageAt": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                                 "format": "date-time"
                               },
                               "createdAt": {
@@ -255360,6 +255573,12 @@
                                 "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                 "format": "date-time"
                               },
+                              "lastMessageAt": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                "format": "date-time"
+                              },
                               "createdAt": {
                                 "type": "string",
                                 "description": "The date/time when a channel is created.",
@@ -255661,6 +255880,12 @@
                               "lastActivity": {
                                 "type": "string",
                                 "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                                "format": "date-time"
+                              },
+                              "lastMessageAt": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                                 "format": "date-time"
                               },
                               "createdAt": {
@@ -259793,6 +260018,12 @@
                                 "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                 "format": "date-time"
                               },
+                              "lastMessageAt": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                "format": "date-time"
+                              },
                               "createdAt": {
                                 "type": "string",
                                 "description": "The date/time when a channel is created.",
@@ -260940,6 +261171,12 @@
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                     "format": "date-time"
                                   },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                    "format": "date-time"
+                                  },
                                   "createdAt": {
                                     "type": "string",
                                     "description": "The date/time when a channel is created.",
@@ -261501,6 +261738,12 @@
                                   "lastActivity": {
                                     "type": "string",
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                                    "format": "date-time"
+                                  },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                                     "format": "date-time"
                                   },
                                   "createdAt": {
@@ -326488,6 +326731,12 @@
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                     "format": "date-time"
                                   },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                    "format": "date-time"
+                                  },
                                   "createdAt": {
                                     "type": "string",
                                     "description": "The date/time when a channel is created.",
@@ -327074,6 +327323,12 @@
                                   "lastActivity": {
                                     "type": "string",
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                                    "format": "date-time"
+                                  },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                                     "format": "date-time"
                                   },
                                   "createdAt": {
@@ -327664,6 +327919,12 @@
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                     "format": "date-time"
                                   },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                    "format": "date-time"
+                                  },
                                   "createdAt": {
                                     "type": "string",
                                     "description": "The date/time when a channel is created.",
@@ -328250,6 +328511,12 @@
                                   "lastActivity": {
                                     "type": "string",
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                                    "format": "date-time"
+                                  },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                                     "format": "date-time"
                                   },
                                   "createdAt": {
@@ -328840,6 +329107,12 @@
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                     "format": "date-time"
                                   },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                    "format": "date-time"
+                                  },
                                   "createdAt": {
                                     "type": "string",
                                     "description": "The date/time when a channel is created.",
@@ -329428,6 +329701,12 @@
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                     "format": "date-time"
                                   },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                    "format": "date-time"
+                                  },
                                   "createdAt": {
                                     "type": "string",
                                     "description": "The date/time when a channel is created.",
@@ -330014,6 +330293,12 @@
                                   "lastActivity": {
                                     "type": "string",
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                                    "format": "date-time"
+                                  },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                                     "format": "date-time"
                                   },
                                   "createdAt": {
@@ -331008,6 +331293,12 @@
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                     "format": "date-time"
                                   },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                    "format": "date-time"
+                                  },
                                   "createdAt": {
                                     "type": "string",
                                     "description": "The date/time when a channel is created.",
@@ -331355,6 +331646,12 @@
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
                                     "format": "date-time"
                                   },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
+                                    "format": "date-time"
+                                  },
                                   "createdAt": {
                                     "type": "string",
                                     "description": "The date/time when a channel is created.",
@@ -331663,6 +331960,12 @@
                                   "lastActivity": {
                                     "type": "string",
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                                    "format": "date-time"
+                                  },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                                     "format": "date-time"
                                   },
                                   "createdAt": {
@@ -332251,6 +332554,12 @@
                                   "lastActivity": {
                                     "type": "string",
                                     "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                                    "format": "date-time"
+                                  },
+                                  "lastMessageAt": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                                     "format": "date-time"
                                   },
                                   "createdAt": {
@@ -388766,6 +389075,12 @@
                         "lastActivity": {
                           "type": "string",
                           "description": "The date/time when a user last did something related to the channel such as add/remove members .",
+                          "format": "date-time"
+                        },
+                        "lastMessageAt": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "The date/time of the channel's newest message, or its creation time if it has none. Member changes do not affect it. `null` only for channels created before this field existed, until they are backfilled.",
                           "format": "date-time"
                         },
                         "createdAt": {
