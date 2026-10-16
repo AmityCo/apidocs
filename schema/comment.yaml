@@ -329,7 +329,7 @@ CommentGifAttachment:
   description: |
     A GIF sent as a link. Core stores the address as sent and never fetches it, so a GIF has no `fileId`.
     A comment holds one GIF and no other attachment; text is optional. No other key is allowed
-    (a GIF has no alt text). Leave an optional field out when it has no value: `null` is refused.
+    (a GIF has no alt text, and no provider or provider ID). Leave an optional field out when it has no value: `null` is refused.
     Creating or editing a comment with a GIF needs the `comment-gif-attachment` release flag.
   properties:
     type:
@@ -353,16 +353,6 @@ CommentGifAttachment:
       minimum: 1
       maximum: 4096
       example: 270
-    provider:
-      type: string
-      maxLength: 100
-      example: giphy
-      description: Name of the GIF provider, stored as sent.
-    providerId:
-      type: string
-      maxLength: 100
-      example: l0MYt5jPR6QX5pnqM
-      description: ID of the GIF at the provider, stored as sent.
   required:
     - type
     - url
