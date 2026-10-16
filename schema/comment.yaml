@@ -47,6 +47,7 @@ Comment:
           - text
           - image
           - video
+          - gif
     data:
       type: object
       description: Body of a comment.
@@ -206,6 +207,7 @@ CommentForRealtime:
           - text
           - image
           - video
+          - gif
     data:
       type: object
       description: Body of a comment.
@@ -301,6 +303,14 @@ CommentForRealtime:
     - commentId
 
 CommentAttachment:
+  description: |
+    One attachment of a comment: an uploaded file (`image` or `video`) or a GIF link (`gif`).
+    A comment with a GIF holds that one attachment only.
+  oneOf:
+    - $ref: "#/CommentFileAttachment"
+    - $ref: "#/CommentGifAttachment"
+
+CommentFileAttachment:
   type: object
   properties:
     type:
@@ -313,6 +323,49 @@ CommentAttachment:
   required:
     - type
     - fileId
+
+CommentGifAttachment:
+  type: object
+  description: |
+    A GIF sent as a link. Core stores the address as sent and never fetches it, so a GIF has no `fileId`.
+    A comment holds one GIF and no other attachment; text is optional. No other key is allowed
+    (a GIF has no alt text). Leave an optional field out when it has no value: `null` is refused.
+    Creating or editing a comment with a GIF needs the `comment-gif-attachment` release flag.
+  properties:
+    type:
+      type: string
+      enum:
+        - gif
+    url:
+      type: string
+      maxLength: 2000
+      example: https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif
+      description: |
+        An `https` link whose path ends in `.gif` (any case; a query string is fine). The host must pass
+        the network's Allow list when it is on.
+    width:
+      type: integer
+      minimum: 1
+      maximum: 4096
+      example: 480
+    height:
+      type: integer
+      minimum: 1
+      maximum: 4096
+      example: 270
+    provider:
+      type: string
+      maxLength: 100
+      example: giphy
+      description: Name of the GIF provider, stored as sent.
+    providerId:
+      type: string
+      maxLength: 100
+      example: l0MYt5jPR6QX5pnqM
+      description: ID of the GIF at the provider, stored as sent.
+  required:
+    - type
+    - url
 
 Comment_approvalStatus:
   type: string
