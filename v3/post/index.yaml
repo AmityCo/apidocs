@@ -37,7 +37,10 @@ root:
       - "Post"
     security:
       - BearerAuth: []
-    description: "Create a post\n"
+    description: |
+      Create a post.
+
+      A `gif` attachment, or `dataType: gif`, is refused with `400`: use `POST /api/v4/posts`.
     requestBody:
       $ref: "./request.yaml#/root-post-request-payload"
     responses:
@@ -82,7 +85,10 @@ _postId:
       - "Post"
     security:
       - BearerAuth: []
-    description: "Update a post\n"
+    description: |
+      Update a post.
+
+      A `gif` attachment in the body, or an edit of a GIF child post, is refused with `400`: use `PUT /api/v4/posts/{postId}`.
     parameters:
       - $ref: "./parameter.yaml#/_postId"
       - $ref: "./parameter.yaml#/preserve-edited-at"

@@ -87,21 +87,29 @@ _postId-put-request-payload:
                     type: "string"
           attachments:
             type: "array"
+            maxItems: 10
+            description: |
+              The full list of attachments to keep, 1 to 10 in total. Leave `attachments` out to change nothing.
+              A GIF child is matched by its `url` alone (each GIF `url` can appear once): a matched GIF is kept and
+              takes the `width` and `height` you send, a field you leave out keeps its old value, a new `url`
+              creates a GIF, and a GIF missing from the list is deleted. `[]` removes every attachment and leaves a text post.
             items:
-              type: "object"
-              description: "attachment info"
-              properties:
-                fileId:
-                  type: "string"
-                  example: "57b916d38eaf8010caddfb7759a2d06c"
-                  description: "file id for attachment"
-                type:
-                  type: "string"
-                  description: "attachment type"
-                  enum:
-                    - "image"
-                    - "file"
-                    - "video"
+              oneOf:
+                - type: "object"
+                  description: "attachment info"
+                  properties:
+                    fileId:
+                      type: "string"
+                      example: "57b916d38eaf8010caddfb7759a2d06c"
+                      description: "file id for attachment"
+                    type:
+                      type: "string"
+                      description: "attachment type"
+                      enum:
+                        - "image"
+                        - "file"
+                        - "video"
+                - $ref: "../../schema/post.yaml#/PostGifAttachment"
           reason:
             type: "string"
             maxLength: 300
