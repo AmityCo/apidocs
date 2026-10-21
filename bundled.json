@@ -200555,7 +200555,7 @@
             "BearerAuth": []
           }
         ],
-        "description": "Update a post.\n\n### GIF attachments\n- `attachments` is the full list to keep. GIFs are matched by `url` alone; see the `attachments` field of the request body\n- `[]` removes every attachment and leaves a text post, and the answer can still show the old `structureType`\n- Needs the `post-gif-attachment` release flag when the list holds a GIF; the v3 post routes refuse GIFs\n",
+        "description": "Update a post.\n\n### GIF attachments\n- `attachments` is the full list to keep. GIFs are matched by `url` alone; see the `attachments` field of the request body\n- `[]` removes every attachment and leaves a text post, and the answer can still show the old `structureType`\n- Needs the `post-gif-attachment` release flag when the list holds a GIF; the v3 post routes refuse GIFs\n- A GIF child post is not edited on its own: `PUT` on a post of `dataType: gif` with `data` answers `400` (\"A gif is edited through the attachments of its parent post.\") and writes nothing. Edit the parent's `attachments` instead. An edit without `data`, such as `metadata`, still works\n",
         "parameters": [
           {
             "name": "postId",
