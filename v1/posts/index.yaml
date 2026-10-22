@@ -3,7 +3,10 @@ schedule:
     tags:
       - "Post"
     summary: "Create a scheduled post"
-    description: "Create a new scheduled post for the authenticated user"
+    description: |
+      Create a new scheduled post for the authenticated user.
+
+      `postData.attachments` can hold GIFs (`type: gif`) as on `POST /api/v4/posts`; they are checked when the post is scheduled and again when it is published.
     security:
       - BearerAuth: []
     requestBody:
@@ -106,7 +109,7 @@ schedule_id:
     tags:
       - "Post"
     summary: "Update a scheduled post"
-    description: "Update an existing scheduled post. Users can only update their own posts, admins can update their own posts and any brand user's posts."
+    description: "Update an existing scheduled post. Users can only update their own posts, admins can update their own posts and any brand user's posts. `postData.attachments` can hold GIFs as on `PUT /api/v4/posts/{postId}`."
     security:
       - BearerAuth: []
     parameters:
