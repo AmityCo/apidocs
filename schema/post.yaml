@@ -51,8 +51,9 @@ Post:
         - image
         - file
         - video
+        - gif
         - liveStream
-      description: Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).
+      description: Type of a post (ex. text, image, file, video, gif or anything in namespace like format (a.b.c.d)).
       default: text
     data:
       type: object
@@ -282,8 +283,9 @@ PostForRealtime:
         - image
         - file
         - video
+        - gif
         - liveStream
-      description: Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).
+      description: Type of a post (ex. text, image, file, video, gif or anything in namespace like format (a.b.c.d)).
       default: text
     data:
       type: object
@@ -498,9 +500,10 @@ PostV4:
         - image
         - file
         - video
+        - gif
         - liveStream
         - event
-      description: Type of a post (ex. text, image, file, video or anything in namespace like format (a.b.c.d)).
+      description: Type of a post (ex. text, image, file, video, gif or anything in namespace like format (a.b.c.d)).
       default: text
     data:
       type: object
@@ -731,10 +734,11 @@ PostV5:
         - image
         - file
         - video
+        - gif
         - liveStream
         - clip
         - event
-      description: Type of a post (ex. text, image, file, video, clip or anything in namespace like format (a.b.c.d)).
+      description: Type of a post (ex. text, image, file, video, clip, gif or anything in namespace like format (a.b.c.d)).
       default: text
     data:
       description: Body of a post. Can be different types based on content type.
@@ -984,37 +988,40 @@ CreatePost:
     attachments:
       type: "array"
       maxItems: 10
-      description: "Array of attachments."
+      description: |
+        Array of attachments, up to 10 in total. An `image`, `file` or `video` needs its `fileId`; a `gif` is a link with no file.
       items:
-        type: "object"
-        description: "Attachment info"
-        required:
-          - fileId
-          - type
-        properties:
-          fileId:
-            type: "string"
-            maxLength: 100
-            example: "57b916d38eaf8010caddfb7759a2d06c"
-            description: "File ID for attachment."
-          type:
-            type: "string"
-            description: "Attachment type."
-            enum:
-              - "image"
-              - "file"
-              - "video"
-          displayMode:
-            type: "string"
-            enum: ["fill", "fit"]
-            default: "fit"
-            description: "Display mode for the clip."
-            example: "fit"
-          isMuted:
-            type: "boolean"
-            default: false
-            description: "Whether the video should be muted or not."
-            example: false
+        oneOf:
+          - type: "object"
+            description: "Attachment info"
+            required:
+              - fileId
+              - type
+            properties:
+              fileId:
+                type: "string"
+                maxLength: 100
+                example: "57b916d38eaf8010caddfb7759a2d06c"
+                description: "File ID for attachment."
+              type:
+                type: "string"
+                description: "Attachment type."
+                enum:
+                  - "image"
+                  - "file"
+                  - "video"
+              displayMode:
+                type: "string"
+                enum: ["fill", "fit"]
+                default: "fit"
+                description: "Display mode for the clip."
+                example: "fit"
+              isMuted:
+                type: "boolean"
+                default: false
+                description: "Whether the video should be muted or not."
+                example: false
+          - $ref: "#/PostGifAttachment"
     dataType:
       type: "string"
       example: "upstra.customtype"
@@ -1103,6 +1110,35 @@ CreatePost:
       example: "507f1f77bcf86cd799439011"
   required:
     - "data"
+
+PostGifAttachment:
+  type: "object"
+  description: |
+    A GIF sent as a link, so it has no `fileId`. Needs the `post-gif-attachment` release flag.
+  properties:
+    type:
+      type: "string"
+      enum:
+        - "gif"
+    url:
+      type: "string"
+      maxLength: 2000
+      example: "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
+      description: |
+        An `https` link that ends in `.gif`.
+    width:
+      type: "integer"
+      minimum: 1
+      maximum: 4096
+      example: 480
+    height:
+      type: "integer"
+      minimum: 1
+      maximum: 4096
+      example: 270
+  required:
+    - "type"
+    - "url"
 
 CustomPostDataType:
   type: "string"

@@ -59,7 +59,8 @@ root-post-request-payload:
             example: "2022-07-07T04:24:20.444Z"
           attachments:
             type: "array"
-            description: "The attachments/medias to be included in the comment"
+            description: |
+              The attachments/medias to be included in the comment: an `image` or `video` (by `fileId`), or one `gif` link.
             items:
               $ref: "../../schema/comment.yaml#/CommentAttachment"
         required:
@@ -105,7 +106,9 @@ _commentId-put-request-payload:
                     type: "string"
           attachments:
             type: "array"
-            description: "The attachments/medias to be included in the comment"
+            description: |
+              The attachments/medias of the comment. Leave `attachments` out to keep them, send a new list to replace them,
+              or send `[]` to remove them.
             items:
               $ref: "../../schema/comment.yaml#/CommentAttachment"
           reason:

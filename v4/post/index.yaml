@@ -108,7 +108,10 @@ _postId:
       - "Post"
     security:
       - BearerAuth: []
-    description: "Update a post\n"
+    description: |
+      Update a post.
+
+      `attachments` is the full list to keep. Leave it out to change nothing, or send `[]` to remove every attachment.
     parameters:
       - $ref: "./parameter.yaml#/_postId"
       - $ref: "./parameter.yaml#/preserve-edited-at"

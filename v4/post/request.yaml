@@ -87,21 +87,27 @@ _postId-put-request-payload:
                     type: "string"
           attachments:
             type: "array"
+            maxItems: 10
+            description: |
+              The full list of attachments to keep, up to 10 in total. Leave `attachments` out to change nothing,
+              or send `[]` to remove every attachment and leave a text post.
             items:
-              type: "object"
-              description: "attachment info"
-              properties:
-                fileId:
-                  type: "string"
-                  example: "57b916d38eaf8010caddfb7759a2d06c"
-                  description: "file id for attachment"
-                type:
-                  type: "string"
-                  description: "attachment type"
-                  enum:
-                    - "image"
-                    - "file"
-                    - "video"
+              oneOf:
+                - type: "object"
+                  description: "attachment info"
+                  properties:
+                    fileId:
+                      type: "string"
+                      example: "57b916d38eaf8010caddfb7759a2d06c"
+                      description: "file id for attachment"
+                    type:
+                      type: "string"
+                      description: "attachment type"
+                      enum:
+                        - "image"
+                        - "file"
+                        - "video"
+                - $ref: "../../schema/post.yaml#/PostGifAttachment"
           reason:
             type: "string"
             maxLength: 300
