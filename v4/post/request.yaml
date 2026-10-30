@@ -89,10 +89,8 @@ _postId-put-request-payload:
             type: "array"
             maxItems: 10
             description: |
-              The full list of attachments to keep, up to 10 in total. Leave `attachments` out to change nothing.
-              A GIF child is matched by its `url` alone (each GIF `url` can appear once): a matched GIF is kept and
-              takes the `width` and `height` you send, a field you leave out keeps its old value, a new `url`
-              creates a GIF, and a GIF missing from the list is deleted. `[]` removes every attachment and leaves a text post.
+              The full list of attachments to keep, up to 10 in total. Leave `attachments` out to change nothing,
+              or send `[]` to remove every attachment and leave a text post.
             items:
               oneOf:
                 - type: "object"

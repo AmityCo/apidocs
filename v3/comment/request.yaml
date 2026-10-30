@@ -60,9 +60,7 @@ root-post-request-payload:
           attachments:
             type: "array"
             description: |
-              The attachments/medias to be included in the comment. An `image` or `video` needs its `fileId`.
-              A `gif` is a link with no file; a comment with a GIF holds that one attachment only, and a GIF-only
-              comment (no `data`) is valid. A refused GIF answers 400, and a host the Allow list blocks answers 403.
+              The attachments/medias to be included in the comment: an `image` or `video` (by `fileId`), or one `gif` link.
             items:
               $ref: "../../schema/comment.yaml#/CommentAttachment"
         required:
@@ -109,8 +107,8 @@ _commentId-put-request-payload:
           attachments:
             type: "array"
             description: |
-              The attachments/medias of the comment. Leave `attachments` out to keep them, send a `gif` to replace
-              the GIF, or send `[]` to remove the GIF and keep the text. A comment with a GIF holds that one attachment only.
+              The attachments/medias of the comment. Leave `attachments` out to keep them, send a new list to replace them,
+              or send `[]` to remove them.
             items:
               $ref: "../../schema/comment.yaml#/CommentAttachment"
           reason:

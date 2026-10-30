@@ -154,10 +154,6 @@ dataTypes:
   description: |
     Post data type to filter (include child posts too). A custom data type in `a.b` form is also accepted.
 
-    `gif` is accepted on v5 only. It matches the `gif` child post, so `matchingOnlyParentPost=false` is required and the
-    answer lists the GIFs themselves; follow `parentPostId` to get the parent. A post that holds a GIF beside other media
-    (`structureType: mixed`) is returned only when `includeMixedStructure=true` is sent too.
-
     `event` is accepted on v5 only. As with `poll`, `liveStream` and `room`, the filter matches the
     child post, so `matchingOnlyParentPost=false` is required — the parent of an event post has
     `dataType: text`. Follow `parentPostId` to get the parent.
@@ -190,8 +186,7 @@ includeMixedStructure:
     type: boolean
     default: false
   description: |
-    An option to include mixed structure posts (posts that have different data types in parent and child posts).
-    A post that holds a GIF beside other media is a mixed post.
+    An option to include mixed structure posts (posts that have different data types in parent and child posts)
 
 useKeySetPagination:
   name: useKeySetPagination
