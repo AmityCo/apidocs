@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.123.2] - 2026-10-30
+
+### 💼 Other
+
+- *(post-comment)* Support gif attachment (#522)
+
 ## [4.123.1] - 2026-10-09
 
 ### 🚀 Features
 
 - Document sortBy=lastMessage and lastMessageAt on channels (#510)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.123.1 (#520)
 
 ## [4.123.0] - 2026-10-07
 
