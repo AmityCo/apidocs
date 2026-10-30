@@ -90,7 +90,7 @@ root:
 
         ### GIF post
         - Put `type = gif` with `url` (and optionally `width` and `height`) in `attachments`. A GIF is a link, not a file, so it has no `fileId`
-        - GIFs can sit beside images, videos, files, clips and audio: 1 to 10 attachments in all, each GIF `url` once. `productTags` on a GIF is refused with `400`
+        - GIFs can sit beside images, videos, files, clips and audio: up to 10 attachments in all, each GIF `url` once. `productTags` on a GIF is refused with `400`
         - Each GIF becomes a child post with `dataType: gif` and `data: { url, width, height }` (in `postChildren`); the parent has `dataType: text`
         - `structureType` is `gif` when every attachment is a GIF and `mixed` when other media sit beside them. A mixed post is left out of default feeds and post queries unless `includeMixedStructure=true` is sent
         - A GIF whose host the network's Allow list blocks answers `403` with code `400309`
