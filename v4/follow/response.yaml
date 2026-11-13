@@ -66,6 +66,41 @@ follow-pagination-response-200:
               prev:
                 type: string
 
+follow-ids-response-200:
+  description: The signed-in user's follows, as ids and statuses, the most recently changed first
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - follows
+        properties:
+          follows:
+            type: array
+            maxItems: 5000
+            items:
+              type: object
+              required:
+                - userId
+                - status
+              properties:
+                userId:
+                  type: string
+                  description: The followed user's public id
+                status:
+                  type: string
+                  enum:
+                    - accepted
+                    - pending
+      example:
+        follows:
+          - userId: base
+            status: accepted
+          - userId: eve
+            status: pending
+          - userId: air
+            status: accepted
+
 follow-custom-notification-response:
   description: Follow Response Object
   type: object
