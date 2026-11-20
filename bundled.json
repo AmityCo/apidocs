@@ -103459,6 +103459,224 @@
         }
       }
     },
+    "/api/v4/me/following-ids": {
+      "get": {
+        "summary": "Get my following ids",
+        "tags": [
+          "Follow"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Get whom the signed-in user follows, as user ids and follow statuses only, in one response with no paging.\n\n- Answers at most 5,000 entries, the most recently changed first.\n- `status` picks the follows: `all` (default) gives accepted follows and pending requests, `accepted` or `pending` one of them.\n- The same rules as `GET /api/v4/me/following`: when follow requests are turned off for the network, `pending` gives an empty list and `all` gives accepted follows only. A deleted user is in the answer exactly when that list shows them.\n- No user objects, files or paging. Use it to tell which users on a screen the signed-in user follows.\n",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "pending",
+                "accepted"
+              ],
+              "default": "all"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The signed-in user's follows, as ids and statuses, the most recently changed first",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "follows"
+                  ],
+                  "properties": {
+                    "follows": {
+                      "type": "array",
+                      "maxItems": 5000,
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "userId",
+                          "status"
+                        ],
+                        "properties": {
+                          "userId": {
+                            "type": "string",
+                            "description": "The followed user's public id"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "accepted",
+                              "pending"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "follows": [
+                    {
+                      "userId": "base",
+                      "status": "accepted"
+                    },
+                    {
+                      "userId": "eve",
+                      "status": "pending"
+                    },
+                    {
+                      "userId": "air",
+                      "status": "accepted"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 400100,
+                  "message": "Unauthorized"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Parameters validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Parameters validation error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "detail": {
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "object"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "status": "error",
+                  "code": 500000,
+                  "message": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v4/users/{userId}/following": {
       "get": {
         "summary": "Get other following list.",

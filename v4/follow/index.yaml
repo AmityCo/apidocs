@@ -18,6 +18,32 @@ following:
       500:
         $ref: "../../global/error.yaml#/UnexpectedError"
 
+following-ids:
+  get:
+    summary: "Get my following ids"
+    tags:
+      - "Follow"
+    security:
+      - BearerAuth: []
+    description: |
+      Get whom the signed-in user follows, as user ids and follow statuses only, in one response with no paging.
+
+      - Answers at most 5,000 entries, the most recently changed first.
+      - `status` picks the follows: `all` (default) gives accepted follows and pending requests, `accepted` or `pending` one of them.
+      - The same rules as `GET /api/v4/me/following`: when follow requests are turned off for the network, `pending` gives an empty list and `all` gives accepted follows only. A deleted user is in the answer exactly when that list shows them.
+      - No user objects, files or paging. Use it to tell which users on a screen the signed-in user follows.
+    parameters:
+      - $ref: "./parameter.yaml#/status"
+    responses:
+      200:
+        $ref: "./response.yaml#/follow-ids-response-200"
+      401:
+        $ref: "../../global/error.yaml#/UnAuthorizedError"
+      422:
+        $ref: "../../global/error.yaml#/ParameterValidationError"
+      500:
+        $ref: "../../global/error.yaml#/UnexpectedError"
+
 following_userId:
   post:
     summary: "Follow user."
