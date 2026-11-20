@@ -2,11 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.124.0] - 2026-11-20
+
+### 🚀 Features
+
+- *(network-setting)* Document following-feed settings and showFollowingUserCommunityPost (#526)
+- *(follow)* Document GET /api/v4/me/following-ids (PDT-6830) (#525)
+
+### 💼 Other
+
+- *(post-comment)* Support gif attachment (#522)
+
 ## [4.123.1] - 2026-10-09
 
 ### 🚀 Features
 
 - Document sortBy=lastMessage and lastMessageAt on channels (#510)
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog and bump version to 4.123.1 (#520)
 
 ## [4.123.0] - 2026-10-07
 
