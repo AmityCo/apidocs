@@ -75994,7 +75994,7 @@
             "name": "sortBy",
             "in": "query",
             "required": false,
-            "description": "Sort by option\n  * customRanking: Sort by custom ranking\n  * lastCreated: Sort by last created\n",
+            "description": "Sort by option\n  * customRanking: Sort by custom ranking\n  * lastCreated: Sort by last created. The feed content follows the `social.followingFeed`\n    network setting. A key that is not set uses the same key from `social.globalFeed`.\n",
             "schema": {
               "type": "string",
               "enum": [
@@ -139760,6 +139760,30 @@
                   "showFollowingPost": {
                     "type": "boolean"
                   },
+                  "showFollowingUserCommunityPost": {
+                    "type": "boolean",
+                    "description": "Sets `globalFeed.showFollowingUserCommunityPost`. When `true`, the feed adds posts\nthat followed users create in public communities, whether or not the viewer is a\nmember of the community.\n"
+                  },
+                  "followingFeedShowMyPost": {
+                    "type": "boolean",
+                    "description": "Sets `followingFeed.showMyPost`."
+                  },
+                  "followingFeedShowFollowingPost": {
+                    "type": "boolean",
+                    "description": "Sets `followingFeed.showFollowingPost`."
+                  },
+                  "followingFeedShowCommunityPost": {
+                    "type": "boolean",
+                    "description": "Sets `followingFeed.showCommunityPost`."
+                  },
+                  "followingFeedShowEveryonePost": {
+                    "type": "boolean",
+                    "description": "Sets `followingFeed.showEveryonePost`."
+                  },
+                  "followingFeedShowFollowingUserCommunityPost": {
+                    "type": "boolean",
+                    "description": "Sets `followingFeed.showFollowingUserCommunityPost`.\n\nThe `followingFeedShow*` fields apply only to `GET /api/v1/me/following-feeds`\nwith `sortBy=lastCreated`. A key that was never set uses the same `globalFeed` key.\n"
+                  },
                   "isAllowMentionedChannelEnabled": {
                     "type": "boolean"
                   },
@@ -139858,8 +139882,39 @@
                         "showFollowingPost": {
                           "type": "boolean"
                         },
+                        "showFollowingUserCommunityPost": {
+                          "type": "boolean",
+                          "default": false,
+                          "description": "Add posts that followed users create in public communities, whether or not the\nviewer is a member of the community. When `showMyPost` is also `true`, the viewer's\nown posts in public communities are added too. Posts in private communities and\nposts by blocked users are never added.\n\nApplies to `GET /api/v4/me/global-feeds`. It also applies to\n`GET /api/v1/me/following-feeds` with `sortBy=lastCreated` when\n`followingFeed.showFollowingUserCommunityPost` is not set.\n"
+                        },
                         "maxGlobalPinnedPost": {
                           "type": "number"
+                        }
+                      }
+                    },
+                    "followingFeed": {
+                      "type": "object",
+                      "description": "Feed settings for `GET /api/v1/me/following-feeds` with `sortBy=lastCreated`. The\ndefault `sortBy=customRanking` ignores them.\n\nThese keys have no defaults. When a key is not set, the following feed uses the\nsame key from `globalFeed`. The response returns only the keys that were set. After a\nkey is set, you cannot reset it to fall back to `globalFeed` again; set it to the\nvalue you want instead.\n\nTo change these keys, use the `followingFeedShow*` fields on\n`PUT /api/v3/network-settings/social`.\n",
+                      "properties": {
+                        "showMyPost": {
+                          "type": "boolean",
+                          "description": "Show the viewer's own posts."
+                        },
+                        "showFollowingPost": {
+                          "type": "boolean",
+                          "description": "Show posts on the feeds of users the viewer follows."
+                        },
+                        "showCommunityPost": {
+                          "type": "boolean",
+                          "description": "Show posts in communities the viewer has joined."
+                        },
+                        "showEveryonePost": {
+                          "type": "boolean",
+                          "description": "Show posts on the user feeds of all users."
+                        },
+                        "showFollowingUserCommunityPost": {
+                          "type": "boolean",
+                          "description": "Show posts that followed users create in public communities, whether or not the\nviewer is a member. See `globalFeed.showFollowingUserCommunityPost`.\n"
                         }
                       }
                     },
@@ -140048,8 +140103,39 @@
                         "showFollowingPost": {
                           "type": "boolean"
                         },
+                        "showFollowingUserCommunityPost": {
+                          "type": "boolean",
+                          "default": false,
+                          "description": "Add posts that followed users create in public communities, whether or not the\nviewer is a member of the community. When `showMyPost` is also `true`, the viewer's\nown posts in public communities are added too. Posts in private communities and\nposts by blocked users are never added.\n\nApplies to `GET /api/v4/me/global-feeds`. It also applies to\n`GET /api/v1/me/following-feeds` with `sortBy=lastCreated` when\n`followingFeed.showFollowingUserCommunityPost` is not set.\n"
+                        },
                         "maxGlobalPinnedPost": {
                           "type": "number"
+                        }
+                      }
+                    },
+                    "followingFeed": {
+                      "type": "object",
+                      "description": "Feed settings for `GET /api/v1/me/following-feeds` with `sortBy=lastCreated`. The\ndefault `sortBy=customRanking` ignores them.\n\nThese keys have no defaults. When a key is not set, the following feed uses the\nsame key from `globalFeed`. The response returns only the keys that were set. After a\nkey is set, you cannot reset it to fall back to `globalFeed` again; set it to the\nvalue you want instead.\n\nTo change these keys, use the `followingFeedShow*` fields on\n`PUT /api/v3/network-settings/social`.\n",
+                      "properties": {
+                        "showMyPost": {
+                          "type": "boolean",
+                          "description": "Show the viewer's own posts."
+                        },
+                        "showFollowingPost": {
+                          "type": "boolean",
+                          "description": "Show posts on the feeds of users the viewer follows."
+                        },
+                        "showCommunityPost": {
+                          "type": "boolean",
+                          "description": "Show posts in communities the viewer has joined."
+                        },
+                        "showEveryonePost": {
+                          "type": "boolean",
+                          "description": "Show posts on the user feeds of all users."
+                        },
+                        "showFollowingUserCommunityPost": {
+                          "type": "boolean",
+                          "description": "Show posts that followed users create in public communities, whether or not the\nviewer is a member. See `globalFeed.showFollowingUserCommunityPost`.\n"
                         }
                       }
                     },

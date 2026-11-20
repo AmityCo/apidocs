@@ -112,6 +112,31 @@ social-put-request-payload:
             type: "boolean"
           showFollowingPost:
             type: "boolean"
+          showFollowingUserCommunityPost:
+            type: "boolean"
+            description: |
+              Sets `globalFeed.showFollowingUserCommunityPost`. When `true`, the feed adds posts
+              that followed users create in public communities, whether or not the viewer is a
+              member of the community.
+          followingFeedShowMyPost:
+            type: "boolean"
+            description: "Sets `followingFeed.showMyPost`."
+          followingFeedShowFollowingPost:
+            type: "boolean"
+            description: "Sets `followingFeed.showFollowingPost`."
+          followingFeedShowCommunityPost:
+            type: "boolean"
+            description: "Sets `followingFeed.showCommunityPost`."
+          followingFeedShowEveryonePost:
+            type: "boolean"
+            description: "Sets `followingFeed.showEveryonePost`."
+          followingFeedShowFollowingUserCommunityPost:
+            type: "boolean"
+            description: |
+              Sets `followingFeed.showFollowingUserCommunityPost`.
+
+              The `followingFeedShow*` fields apply only to `GET /api/v1/me/following-feeds`
+              with `sortBy=lastCreated`. A key that was never set uses the same `globalFeed` key.
           isAllowMentionedChannelEnabled:
             type: "boolean"
           disallowNonMemberInteractInCommunity:

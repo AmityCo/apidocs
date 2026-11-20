@@ -67,8 +67,51 @@ SocialNetworkSetting:
           type: boolean
         showFollowingPost:
           type: boolean
+        showFollowingUserCommunityPost:
+          type: boolean
+          default: false
+          description: |
+            Add posts that followed users create in public communities, whether or not the
+            viewer is a member of the community. When `showMyPost` is also `true`, the viewer's
+            own posts in public communities are added too. Posts in private communities and
+            posts by blocked users are never added.
+
+            Applies to `GET /api/v4/me/global-feeds`. It also applies to
+            `GET /api/v1/me/following-feeds` with `sortBy=lastCreated` when
+            `followingFeed.showFollowingUserCommunityPost` is not set.
         maxGlobalPinnedPost:
           type: number
+    followingFeed:
+      type: object
+      description: |
+        Feed settings for `GET /api/v1/me/following-feeds` with `sortBy=lastCreated`. The
+        default `sortBy=customRanking` ignores them.
+
+        These keys have no defaults. When a key is not set, the following feed uses the
+        same key from `globalFeed`. The response returns only the keys that were set. After a
+        key is set, you cannot reset it to fall back to `globalFeed` again; set it to the
+        value you want instead.
+
+        To change these keys, use the `followingFeedShow*` fields on
+        `PUT /api/v3/network-settings/social`.
+      properties:
+        showMyPost:
+          type: boolean
+          description: Show the viewer's own posts.
+        showFollowingPost:
+          type: boolean
+          description: Show posts on the feeds of users the viewer follows.
+        showCommunityPost:
+          type: boolean
+          description: Show posts in communities the viewer has joined.
+        showEveryonePost:
+          type: boolean
+          description: Show posts on the user feeds of all users.
+        showFollowingUserCommunityPost:
+          type: boolean
+          description: |
+            Show posts that followed users create in public communities, whether or not the
+            viewer is a member. See `globalFeed.showFollowingUserCommunityPost`.
     story:
       type: object
       properties:
